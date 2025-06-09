@@ -1,5 +1,3 @@
-#generate_master_payout.py
-
 import os
 import pandas as pd
 import uuid
@@ -9,7 +7,7 @@ def process_uploaded_files(file_paths, output_folder):
         "(B) Service Fee  & Payment Mechanism Fee",
         "(13) Taxes on Service & Payment Mechanism Fees (B) * 18%",
         "(18) TDS 194O amount",
-        "(20) GST to be paid by Restaurant partner to Govt.",
+        "(19) GST paid by Zomato on behalf of restaurant - under section 9(5)",
         "Order Level Payout  (A) - (E) + (F)",
         "Restaurant ID",
         "A) Investments in growth services Adjusted Amount",
@@ -54,10 +52,10 @@ def process_uploaded_files(file_paths, output_folder):
                 "Service fee & payment mechanism fees\n[(11) + (12)]",
                 "Taxes on service & payment mechanism fees\n(B) * 18%",
                 "TDS 194O amount",
-                "GST to be paid by Restaurant partner to Govt.",
                 "Order level Payout\n(A) - (E) + (F)",
                 "Res. ID"
             ]
+            # We will check GST column separately due to flexible name
             missing = [col for col in required_cols if col not in order_df.columns]
             if missing:
                 logs.append(f"🔴 Skipped: Missing columns {missing}")
@@ -66,11 +64,19 @@ def process_uploaded_files(file_paths, output_folder):
             def safe_sum(col):
                 return pd.to_numeric(order_df[col], errors='coerce').sum()
 
+            # Find GST column flexibly
+            gst_cols = [col for col in order_df.columns if "gst paid by zomato" in str(col).lower()]
+            if gst_cols:
+                gst_col = gst_cols[0]
+            else:
+                logs.append("⚠️ GST column with 'GST paid by Zomato' not found, defaulting to 0")
+                gst_col = None
+
             row = {
                 "(B) Service Fee  & Payment Mechanism Fee": safe_sum("Service fee & payment mechanism fees\n[(11) + (12)]"),
                 "(13) Taxes on Service & Payment Mechanism Fees (B) * 18%": safe_sum("Taxes on service & payment mechanism fees\n(B) * 18%"),
                 "(18) TDS 194O amount": safe_sum("TDS 194O amount"),
-                "(20) GST to be paid by Restaurant partner to Govt.": max(0, safe_sum("GST to be paid by Restaurant partner to Govt.")),
+                "(19) GST paid by Zomato on behalf of restaurant - under section 9(5)": max(0, safe_sum(gst_col)) if gst_col else 0,
                 "Order Level Payout  (A) - (E) + (F)": safe_sum("Order level Payout\n(A) - (E) + (F)")
             }
 
