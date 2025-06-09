@@ -7,7 +7,7 @@ from flask_dance.contrib.google import google
 from flask_mail import Mail, Message
 
 # --- Load environment variables ---
-load_dotenv()
+# load_dotenv() # only when not in production
 
 # --- Initialize Flask App ---
 app = Flask(__name__)
