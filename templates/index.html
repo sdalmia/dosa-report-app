@@ -4,183 +4,10 @@
   <meta charset="UTF-8" />
   <title>Dosa Coffee Report Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    /* Custom colors matching logo */
-    .border-coffee {
-      border-color: #6f4e37 !important;
-    }
-    .btn-coffee {
-      background-color: #3a8d7f;
-      color: #fff;
-    }
-    .btn-coffee:hover {
-      background-color: #2a665b;
-      color: #fff;
-    }
-    .file-list {
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid #dee2e6;
-      padding: 10px;
-      border-radius: 5px;
-      background: #fafafa;
-    }
-  </style>
-</head>
-<body>
-  <div class="container py-5">
-    <div class="text-center mb-4">
-      <img
-        src="{{ url_for('static', filename='logo.png') }}"
-        alt="Dosa Coffee Logo"
-        style="max-width: 200px; height: auto"
-      />
-    </div>
-
-    <div class="card border border-coffee mb-3 shadow-sm">
-      <div class="card-header bg-coffee text-white">
-        <h5 class="mb-0">About this Tool</h5>
-      </div>
-      <div class="card-body text-dark">
-        <p class="card-text">
-          This tool allows you to upload multiple Zomato Settlement Report Excel
-          files and generates a consolidated master payout report for Dosa Coffee.
-        </p>
-        <p><strong>Usage Guidelines:</strong></p>
-        <ul>
-          <li>
-            Upload one or more <code>.xlsx</code> settlement files exported from
-            Zomato.
-          </li>
-          <li>
-            The reports must contain sheets named <code>Order Level</code>,
-            <code>Addition Deductions Details</code>, and <code>Summary</code>.
-          </li>
-          <li>
-            The tool extracts relevant payout and tax columns, sums data across
-            files, and outputs a master Excel file.
-          </li>
-          <li>
-            Processing may take some time depending on the number and size of files
-            uploaded.
-          </li>
-        </ul>
-
-        <a href="{{ url_for('static', filename='sample_template.xlsx') }}" 
-           class="btn btn-outline-coffee btn-sm mt-3"
-           download>
-          📥 Download Sample Zomato Settlement Template
-        </a>
-      </div>
-    </div>
-
-    <h2 class="mb-4">📊 Dosa Coffee Report Uploader</h2>
-
-    <form method="POST" enctype="multipart/form-data" onsubmit="showSpinner()">
-      <div class="mb-3">
-        <label for="files" class="form-label">Upload Zomato Settlement Files (.xlsx):</label>
-        <input
-          type="file"
-          class="form-control"
-          id="files"
-          name="files"
-          multiple
-          required
-          onchange="updateFileList()"
-        />
-      </div>
-
-      <!-- Side by side file list and download button -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="file-list flex-grow-1 me-3" id="fileList">
-          <em>No files selected</em>
-        </div>
-
-        {% if download_link %}
-        <a
-          class="btn btn-coffee"
-          href="{{ download_link }}"
-          download
-          >⬇️ Download Master Report</a
-        >
-        {% endif %}
-      </div>
-
-      <button type="submit" class="btn btn-coffee" id="submit-btn">
-        Generate Master File
-      </button>
-    </form>
-
-    <!-- Loading spinner -->
-    <div
-      id="loadingSpinner"
-      class="text-center mt-4"
-      style="display: none"
-      role="status"
-      aria-live="polite"
-      aria-busy="true"
-    >
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Processing...</span>
-      </div>
-      <div class="mt-2">Processing your files, please wait...</div>
-    </div>
-
-    <!-- Logs -->
-    {% if logs %}
-    <div class="mt-4">
-      <h5 class="mb-3">📝 Processing Log</h5>
-      <ul class="list-group">
-        {% for line in logs %}
-        <li class="list-group-item">{{ line }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-  </div>
-
-  <footer class="mt-5 py-4 border-top bg-light text-center text-muted small">
-    <div class="container">
-      <p class="mb-1">&copy; {{ current_year }} Dalgreen Foods Private Limited. All rights
-        reserved.</p>
-      <p class="mb-0 fst-italic">
-        This software is provided &ldquo;as is&rdquo; without warranty of any kind.
-        Users must ensure compliance with applicable laws and regulations.
-        Dalgreen Foods Private Limited is not responsible for any data loss or inaccuracies.
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    function showSpinner() {
-      document.getElementById("submit-btn").disabled = true;
-      document.getElementById("loadingSpinner").style.display = "block";
-    }
-
-    function updateFileList() {
-      const input = document.getElementById('files');
-      const fileList = document.getElementById('fileList');
-      if (input.files.length === 0) {
-        fileList.innerHTML = '<em>No files selected</em>';
-      } else {
-        const names = Array.from(input.files).map(f => `<li>${f.name}</li>`).join('');
-        fileList.innerHTML = `<ul class="mb-0">${names}</ul>`;
-      }
-    }
-  </script>
-
-  <style>
-    /* Custom colors */
-    .border-coffee {
-      border-color: #6f4e37 !important;
-    }
-    .bg-coffee {
-      background-color: #6f4e37 !important;
-    }
+    .border-coffee { border-color: #6f4e37 !important; }
+    .bg-coffee { background-color: #6f4e37 !important; }
     .btn-coffee {
       background-color: #3a8d7f;
       color: #fff;
@@ -198,10 +25,130 @@
       background-color: #6f4e37;
       color: #fff;
     }
+    .file-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      border-radius: 5px;
+      background: #fafafa;
+    }
   </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="container py-3 d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Dosa Coffee Logo" style="height: 50px;" class="me-3" />
+      <h4 class="mb-0">Dosa Coffee - Zomato Settlement Report Uploader</h4>
+    </div>
+    <div>
+      {% if session['user_name'] %}
+        <span class="me-2">Hi, {{ session['user_name'] }}</span>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+      {% endif %}
+    </div>
+  </div>
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  ></script>
+  <div class="container">
+    <!-- About Card -->
+    <div class="card border border-coffee mb-4 shadow-sm">
+      <div class="card-header bg-coffee text-white">
+        <h5 class="mb-0">About this Tool</h5>
+      </div>
+      <div class="card-body text-dark">
+        <p>This tool allows you to upload multiple Zomato Settlement Report Excel files and generates a consolidated master payout report for Dosa Coffee.</p>
+        <p><strong>Usage Guidelines:</strong></p>
+        <ul>
+          <li>Upload one or more <code>.xlsx</code> settlement files exported from Zomato.</li>
+          <li>Each report must contain sheets named <code>Order Level</code>, <code>Addition Deductions Details</code>, and <code>Summary</code>.</li>
+          <li>The tool extracts relevant payout and tax columns, sums data across files, and outputs a master Excel file.</li>
+          <li>Processing time may vary based on file size and number.</li>
+        </ul>
+        <a href="{{ url_for('static', filename='sample_template.xlsx') }}" class="btn btn-outline-coffee btn-sm mt-3" download>
+          📥 Download Sample Zomato Settlement Template
+        </a>
+      </div>
+    </div>
+
+    <!-- Upload form -->
+    {% if session['user_name'] %}
+      <form method="POST" enctype="multipart/form-data" onsubmit="showSpinner()">
+        <div class="mb-3">
+          <label for="files" class="form-label">Upload Zomato Settlement Files (.xlsx):</label>
+          <input type="file" class="form-control" id="files" name="files" multiple required onchange="updateFileList()" />
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="file-list flex-grow-1 me-3" id="fileList">
+            <em>No files selected</em>
+          </div>
+          {% if download_link %}
+            <a class="btn btn-coffee" href="{{ download_link }}" download>
+              ⬇️ Download Master Report
+            </a>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-coffee" id="submit-btn">Generate Master File</button>
+      </form>
+
+      <!-- Spinner -->
+      <div id="loadingSpinner" class="text-center mt-4" style="display: none" role="status" aria-live="polite" aria-busy="true">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Processing...</span>
+        </div>
+        <div class="mt-2">Processing your files, please wait...</div>
+      </div>
+    {% else %}
+      <div class="alert alert-info mt-4" role="alert">
+        Please <a href="/login/google">login with Google</a> to access the report uploader.
+      </div>
+    {% endif %}
+
+    <!-- Logs -->
+    {% if logs %}
+      <div class="mt-4">
+        <h5 class="mb-3">📝 Processing Log</h5>
+        <ul class="list-group">
+          {% for line in logs %}
+            <li class="list-group-item">{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-5 py-4 border-top bg-light text-center text-muted small">
+    <div class="container">
+      <p class="mb-1">&copy; {{ current_year }} Dalgreen Foods Private Limited. All rights reserved.</p>
+      <p class="mb-0 fst-italic">
+        This software is provided “as is” without warranty of any kind.
+        Users must ensure compliance with applicable laws and regulations.
+        Dalgreen Foods Private Limited is not responsible for any data loss or inaccuracies.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function showSpinner() {
+      document.getElementById("submit-btn").disabled = true;
+      document.getElementById("loadingSpinner").style.display = "block";
+    }
+
+    function updateFileList() {
+      const input = document.getElementById('files');
+      const fileList = document.getElementById('fileList');
+      if (input.files.length === 0) {
+        fileList.innerHTML = '<em>No files selected</em>';
+      } else {
+        const names = Array.from(input.files).map(f => `<li>${f.name}</li>`).join('');
+        fileList.innerHTML = `<ul class="mb-0">${names}</ul>`;
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
