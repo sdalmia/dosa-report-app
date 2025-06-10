@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Dosa Coffee{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-5 text-light">Command Centre</h1>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <!-- Zomato Uploader -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-upload me-3 fs-2 text-primary"></i>
+            <h5 class="card-title mb-0">Zomato Settlement Uploader</h5>
+          </div>
+          <p class="card-text">Upload multiple settlement Excel files and receive a master payout report.</p>
+          <a href="{{ url_for('uploader.upload_index') }}" class="btn btn-primary btn-sm">Open Tool</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Tool -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-geo-alt-fill me-3 fs-2 text-info"></i>
+            <h5 class="card-title mb-0">Location Finder</h5>
+          </div>
+          <p class="card-text">Our very own location finding tool to identify high-potential sites. (Coming Soon)</p>
+          <button class="btn btn-outline-secondary btn-sm" disabled>Coming Soon</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trello -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-kanban-fill me-3 fs-2 text-info"></i>
+            <h5 class="card-title mb-0">Trello</h5>
+          </div>
+          <p class="card-text">Organize team tasks, workflows, and project timelines visually with Trello.</p>
+          <a href="https://trello.com/" target="_blank" class="btn btn-info btn-sm">Go to Trello</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keka -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-people-fill me-3 fs-2 text-warning"></i>
+            <h5 class="card-title mb-0">Keka</h5>
+          </div>
+          <p class="card-text">Manage payroll, attendance, and employee performance with Keka HR software.</p>
+          <a href="https://www.keka.com/" target="_blank" class="btn btn-warning btn-sm">Go to Keka</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Posist Insights -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-graph-up-arrow me-3 fs-2 text-warning"></i>
+            <h5 class="card-title mb-0">Insights</h5>
+          </div>
+          <p class="card-text">Log in to Posist Insights to access performance analytics and dashboards.</p>
+          <a href="https://insights.posist.co/login" target="_blank" class="btn btn-warning btn-sm">Go to Insights</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posist -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-box me-3 fs-2 text-success"></i>
+            <h5 class="card-title mb-0">Posist</h5>
+          </div>
+          <p class="card-text">Manage restaurant operations and billing through Posist platform.</p>
+          <a href="https://dosacoffee.posist.biz/login" target="_blank" class="btn btn-success btn-sm">Go to Posist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fame Pilot -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-megaphone-fill me-3 fs-2 text-danger"></i>
+            <h5 class="card-title mb-0">Fame Pilot</h5>
+          </div>
+          <p class="card-text">Handle online reputation and customer feedback with Fame Pilot.</p>
+          <a href="https://famepilot.com/" target="_blank" class="btn btn-danger btn-sm">Go to Fame Pilot</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reelo -->
+    <div class="col">
+      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-stars me-3 fs-2 text-primary"></i>
+            <h5 class="card-title mb-0">Reelo</h5>
+          </div>
+          <p class="card-text">Automate customer loyalty and engagement through Reelo’s CRM tools.</p>
+          <a href="https://app.reelo.io/" target="_blank" class="btn btn-primary btn-sm">Go to Reelo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

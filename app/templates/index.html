@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Reports - Dosa Coffee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-light">About this Tool</h2>
+  <p class="text-light">
+    This tool allows you to upload multiple Zomato Settlement Report Excel files and generates a consolidated master payout report for Dosa Coffee.
+  </p>
+  <ul class="text-light">
+    <li>Upload one or more <code>.xlsx</code> settlement files exported from Zomato.</li>
+    <li>Each report must contain sheets named <strong>Order Level</strong>, <strong>Addition Deductions Details</strong>, and <strong>Summary</strong>.</li>
+    <li>The tool extracts relevant payout and tax columns, sums data across files, and outputs a master Excel file.</li>
+    <li>Processing time may vary based on file size and number.</li>
+  </ul>
+  <a href="{{ url_for('static', filename='template.xlsx') }}" class="btn btn-sm btn-outline-light mb-5">📥 Download Template File</a>
+
+  <div class="row">
+    <!-- Left column: Form + Spinner -->
+    <div class="col-md-4">
+      <div class="bg-dark border border-secondary rounded p-4 mb-4">
+        <form action="{{ url_for('uploader.upload_index') }}" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="files" class="form-label text-light">Upload Zomato Reports</label>
+            <input class="form-control" type="file" name="files" id="files" multiple required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Generate Master Report</button>
+        </form>
+
+        <!-- Spinner -->
+        <div id="loadingSpinner" class="text-center mt-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2 text-light">Processing your files, please wait...</p>
+        </div>
+
+        {% if download_link %}
+        <div class="mt-4 text-center">
+          <a href="{{ download_link }}" class="btn btn-success">⬇️ Download Master Report</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right column: Logs -->
+    <div class="col-md-8">
+      <div style="max-height: 400px; overflow-y: auto;" class="bg-dark border border-secondary rounded p-3">
+        <h5 class="text-light">Logs</h5>
+        <pre class="text-light" style="font-size: 0.9rem;">
+{% for log in logs %}
+{{ log }}
+{% endfor %}
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelector('form').addEventListener('submit', function () {
+    document.getElementById('loadingSpinner').style.display = 'block';
+  });
+</script>
+{% endblock %}
