@@ -7,3 +7,4 @@ Flask-Dance[google]
 Flask-Login
 python-dotenv
 Flask-Mail
+Flask-Session
