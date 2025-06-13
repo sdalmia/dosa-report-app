@@ -8,3 +8,4 @@ Flask-Login
 python-dotenv
 Flask-Mail
 Flask-Session
+Flask-SQLAlchemy

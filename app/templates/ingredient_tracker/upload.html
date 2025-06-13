@@ -1,0 +1,53 @@
+
+{% extends 'base.html' %}
+{% block title %}Upload Ingredient Prices{% endblock %}
+
+{% block content %}
+<h2 class="text-light mb-4">Upload Ingredient Price Files</h2>
+
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+  <div id="file-date-pairs"></div>
+
+  <!-- Add another file input -->
+  <button type="button" class="btn btn-outline-light btn-sm my-3" onclick="addFileInput()">Add File</button>
+
+  <button class="btn btn-primary" type="submit">Upload</button>
+</form>
+
+<!-- Convert .xls files info -->
+<p class="text-light mt-4">
+  Having a .xls file? Please convert it to .xlsx using 
+  <a href="https://cloudconvert.com/xls-to-xlsx" target="_blank" class="text-warning">this free online converter</a>.
+</p>
+
+<p class="text-light mt-4">
+  Stock Entry Posist Reports
+  <a href="https://dosacoffee.posist.biz/eStock/reports/entryReport#" target="_blank" class="text-warning">Download here</a>.
+</p>
+
+<!-- Back to dashboard -->
+<a href="{{ url_for('ingredient_tracker.dashboard') }}" class="btn btn-secondary mt-3">← Back to Dashboard</a>
+
+<script>
+  let pairCount = 0;
+
+  function addFileInput() {
+    pairCount++;
+    const container = document.createElement('div');
+    container.className = "mb-3";
+    container.innerHTML = `
+      <label class="form-label text-light">File ${pairCount}</label>
+      <input type="file" name="files" class="form-control mb-2" required>
+      <label class="form-label text-light">Date for File ${pairCount}</label>
+      <input type="date" name="report_dates" class="form-control" required>
+      <hr class="text-light">
+    `;
+    document.getElementById('file-date-pairs').appendChild(container);
+  }
+
+  // Start with one file input by default
+  window.onload = addFileInput;
+</script>
+{% endblock %}
+
+

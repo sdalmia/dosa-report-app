@@ -11,6 +11,10 @@ class Config:
     UPLOAD_FOLDER = 'uploads'
     OUTPUT_FOLDER = 'outputs'
 
+    # Database
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///app.db")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     # Mail Settings
     # MAIL_SERVER = os.getenv('MAIL_SERVER')
     # MAIL_PORT = int(os.getenv('MAIL_PORT', 587))

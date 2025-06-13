@@ -4,6 +4,7 @@ from flask_mail import Mail
 from flask_session import Session
 from dotenv import load_dotenv
 from .config import Config
+from .extensions import db
 
 def create_app():
     load_dotenv()
@@ -35,6 +36,12 @@ def create_app():
     from .mail import configure_mail, mail
     configure_mail(app)
     mail.init_app(app)
+
+     # ✅ Database setup
+    db.init_app(app)
+    from app.models import IngredientPrice
+    with app.app_context():
+        db.create_all()
 
     # ✅ Register blueprints last
     from .routes import register_routes

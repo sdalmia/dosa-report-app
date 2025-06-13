@@ -1,3 +1,5 @@
 .env
 flask_session/
 flask_session_dir/
+__pycache__/
+*.pyc

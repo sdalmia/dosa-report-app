@@ -1,13 +1,19 @@
 import os
-from flask import Blueprint, render_template, request, send_file, session
+from flask import Blueprint, render_template, request, send_file, session, make_response
 from flask_dance.contrib.google import google
 from generate_master_payout import process_uploaded_files
 from flask_mail import Message
 from app.mail import mail
+from app.routes.main import login_required
 
 uploader_bp = Blueprint('uploader', __name__)
 
+# Always resolve outputs relative to this file (inside /app/routes)
+BASE_DIR = os.path.dirname(__file__)  # -> /dosa-report-app/app/routes
+OUTPUT_FOLDER = os.path.join(BASE_DIR, "outputs")
+
 @uploader_bp.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload_index():
     logs = []
     download_link = None
@@ -23,7 +29,13 @@ def upload_index():
         file_paths = []
 
         upload_dir = os.getenv("UPLOAD_FOLDER", "uploads")
-        output_dir = os.getenv("OUTPUT_FOLDER", "outputs")
+        # output_dir = os.getenv("OUTPUT_FOLDER", "outputs")
+
+        output_dir = os.path.join(os.path.dirname(__file__), os.getenv("OUTPUT_FOLDER", "outputs"))
+
+        print ("✅ Output folder Current | We are in Uploader.py and the Base Directory is :" + str(os.path.dirname(__file__)))
+        print ("✅ Output folder Current | We are in Uploader.py and the output path is :" + str(output_dir))
+
         os.makedirs(upload_dir, exist_ok=True)
         os.makedirs(output_dir, exist_ok=True)
 
@@ -36,7 +48,7 @@ def upload_index():
         try:
             print("Sending Files for Processing!")
 
-            output_file, logs = process_uploaded_files(file_paths, output_dir)
+            output_file, logs, output_filename = process_uploaded_files(file_paths, OUTPUT_FOLDER)
 
             if output_file:
                 # Attempt to send email
@@ -57,7 +69,7 @@ def upload_index():
                 except Exception as e:
                     logs.append(f"⚠️ Failed to send email: {e}")
 
-                download_link = f"/download/{os.path.basename(output_file)}"
+                download_link = f"/download/{output_filename}"
 
         except Exception as e:
             logs.append(f"❌ Error during processing: {e}")
@@ -65,10 +77,15 @@ def upload_index():
     return render_template('index.html', logs=logs, download_link=download_link)
 
 
+
+
 @uploader_bp.route('/download/<filename>')
+@login_required
 def download_file(filename):
-    output_folder = os.getenv("OUTPUT_FOLDER", "outputs")
-    path = os.path.join(output_folder, filename)
+
+    # output_folder =  os.getenv("OUTPUT_FOLDER", "outputs")
+
+    path = os.path.join(OUTPUT_FOLDER, filename)
 
     print(f"📥 Attempting download: {filename}")
     print(f"📂 Full path: {path}")

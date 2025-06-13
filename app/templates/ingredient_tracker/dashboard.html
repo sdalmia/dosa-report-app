@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}Ingredient Price Tracker - Dosa Coffee{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container mt-5">
+  <h1 class="text-light text-center mb-4">Ingredient Price Tracker</h1>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+  body {
+    background-color: #121212;
+    color: #f8f9fa;
+  }
+
+  .form-control {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+    border: 1px solid #444;
+  }
+
+  .form-control:focus {
+    background-color: #2c2c2c;
+    color: #fff;
+    border-color: #666;
+    box-shadow: none;
+  }
+
+  .form-label {
+    color: #f8f9fa;
+  }
+
+  #charts-container {
+    background-color: #1b1b1b;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+
+  .tt-menu {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+    border: 1px solid #555;
+    border-radius: 0.25rem;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .tt-suggestion {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .tt-suggestion:hover {
+    background-color: #2c2c2c;
+  }
+
+  .robinhood-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: rgba(33, 37, 41, 0.9);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .robinhood-stats .stat {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .robinhood-stats .label {
+    font-size: 0.85rem;
+    color: #adb5bd;
+    margin-bottom: 0.25rem;
+  }
+
+  .robinhood-stats .value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f8f9fa;
+  }
+</style>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- jQuery (required by Typeahead.js) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Typeahead.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+
+  <!-- Always-visible Upload Button -->
+<div class="text-end mb-3">
+  <a href="{{ url_for('ingredient_tracker.upload') }}" class="btn btn-warning">Upload New Files</a>
+</div>
+
+<div class="container py-4">
+
+<div class="mb-4">
+  <label for="ingredient-search" class="form-label text-light">Search Ingredient:</label>
+  <input type="text" class="form-control typeahead" id="ingredient-search" placeholder="Type to search...">
+  <datalist id="ingredients-list">
+    {% for name in all_ingredients %}
+      <option value="{{ name }}">
+    {% endfor %}
+  </datalist>
+</div>
+
+<div id="charts-container">
+  <!-- This will hold the selected ingredient's chart -->
+</div>
+
+
+
+
+<script>
+  const ingredientData = {{ ingredient_data | tojson }};
+  const allIngredients = {{ all_ingredients | tojson }};
+  const ingredientStats = {{ ingredient_stats | tojson }};
+  const chartContainer = document.getElementById('charts-container');
+
+  // Bloodhound setup and Typeahead init
+  const ingredientEngine = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.whitespace,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: allIngredients
+  });
+
+  $('#ingredient-search').typeahead(
+    { hint: true, highlight: true, minLength: 1 },
+    { name: 'ingredients', source: ingredientEngine }
+  );
+
+  $('#ingredient-search').bind('typeahead:select', function(ev, ingredient) {
+    renderChart(ingredient);
+  });
+
+  function renderChart(ingredient) {
+    const records = ingredientData[ingredient];
+    const stats = ingredientStats[ingredient];
+    chartContainer.innerHTML = '';
+
+    if (records && records.length > 0) {
+      const dates = records.map(p => p.date);
+      const prices = records.map(p => p.unit_price);
+
+      const chartDivId = `chart-${ingredient.replace(/\s+/g, '-')}`;
+      const chartDiv = document.createElement('div');
+      chartDiv.id = chartDivId;
+      chartDiv.classList.add('mb-4');
+      chartContainer.appendChild(chartDiv);
+
+      Plotly.newPlot(chartDivId, [{
+        x: dates,
+        y: prices,
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: ingredient
+      }], {
+        title: `${ingredient} Price Trend`,
+        xaxis: { title: 'Date' },
+        yaxis: { title: 'Unit Price (₹)' }
+      });
+
+      if (stats) {
+        const statBlock = document.createElement('div');
+        statBlock.className = 'text-light small mt-3';
+        statBlock.innerHTML = `
+          <div class="robinhood-stats mt-3">
+            <div class="stat">
+              <div class="label">52-week Low</div>
+              <div class="value">₹${stats.low}</div>
+            </div>
+            <div class="stat">
+              <div class="label">52-week High</div>
+              <div class="value">₹${stats.high}</div>
+            </div>
+            <div class="stat">
+              <div class="label">Average Price</div>
+              <div class="value">₹${stats.avg}</div>
+            </div>
+            <div class="stat">
+              <div class="label">Total Entries</div>
+              <div class="value">${stats.count}</div>
+            </div>
+          </div>
+        `;
+
+        chartContainer.appendChild(statBlock);
+      }
+    } else {
+      chartContainer.innerHTML = `<div class="text-warning">No data found for <strong>${ingredient}</strong>.</div>`;
+    }
+  }
+</script>
+
+
+
+<script>
+  const searchInput = document.getElementById('ingredient-search');
+
+  searchInput.addEventListener('change', function () {
+    this.dispatchEvent(new Event('input'));
+  });
+
+</script>
+
+
+{% endblock %}

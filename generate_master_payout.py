@@ -9,8 +9,10 @@ def process_uploaded_files(file_paths, output_folder):
         "(19) GST paid by Zomato on behalf of restaurant - under section 9(5)",
         "Order Level Payout  (A) - (E) + (F)",
         "Restaurant ID",
+        "Restaurant ID (with -J)",
         "A) Investments in growth services Adjusted Amount",
-        "B) Investment in Hyperpure"
+        "B) Investment in Hyperpure",
+        "Bank Amount"
     ]
 
     master_data = []
@@ -59,7 +61,8 @@ def process_uploaded_files(file_paths, output_folder):
                 "(18) TDS 194O amount": safe_sum("TDS 194O amount"),
                 "(19) GST paid by Zomato on behalf of restaurant - under section 9(5)": safe_sum(gst_col) if gst_col else 0,
                 "Order Level Payout  (A) - (E) + (F)": safe_sum("Order level Payout\n(A) - (E) + (F)"),
-                "Restaurant ID": order_df["Res. ID"].dropna().iloc[0] if not order_df["Res. ID"].dropna().empty else "UNKNOWN"
+                "Restaurant ID": order_df["Res. ID"].dropna().iloc[0] if not order_df["Res. ID"].dropna().empty else "UNKNOWN",
+                "Restaurant ID (with -J)": f'{order_df["Res. ID"].dropna().iloc[0] if not order_df["Res. ID"].dropna().empty else "UNKNOWN"}-J',
             }
 
             header_row_ded = deductions_df[deductions_df.astype(str).apply(lambda r: r.str.contains("Adjusted amount", na=False)).any(axis=1)]
@@ -79,6 +82,13 @@ def process_uploaded_files(file_paths, output_folder):
             row["A) Investments in growth services Adjusted Amount"] = extract_adjusted("Total Ads & miscellaneous services")
             row["B) Investment in Hyperpure"] = extract_adjusted("Total Hyperpure")
 
+            # print('New Column Bank Account added')
+            row["Bank Amount"] = row["Order Level Payout  (A) - (E) + (F)"]-row["A) Investments in growth services Adjusted Amount"]-row["B) Investment in Hyperpure"]
+
+            # print("🔍 Row preview:")
+            # for k, v in row.items():
+            #     print(f"  {k}: {v}")
+
             master_data.append(row)
             logs.append(f"✅ Done: {os.path.basename(file)}")
 
@@ -87,11 +97,27 @@ def process_uploaded_files(file_paths, output_folder):
 
     if master_data:
         master_df = pd.DataFrame(master_data, columns=columns)
-        output_filename = "Dosa_Coffee_Master_output.xlsx"
+
+        # print("📋 Final DataFrame columns:", master_df.columns.tolist())
+
+
+        # master_df = pd.DataFrame(master_data)
+        # master_df = master_df[[col for col in columns if col in master_df.columns]]
+
+        # output_filename = "Dosa_Coffee_Master_output.xlsx"
+
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H")
+        output_filename = f"Dosa_Report_{timestamp}.xlsx"
+
         output_path = os.path.join(output_folder, output_filename)
+
+        print("✅ Writing to folder:", output_folder)
+        print("📄 Final file path:", output_path)
+
         master_df.to_excel(output_path, index=False)
         logs.append(f"✅ File ready: {output_path}")
-        return output_path, logs
+        return output_path, logs, output_filename
     else:
         logs.append("⚠️ No valid data found to export.")
         return None, logs
