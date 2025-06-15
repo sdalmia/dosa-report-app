@@ -6,11 +6,7 @@
 
 {% block content %}
 
-<div class="container mt-5">
-  <h1 class="text-light text-center mb-4">Ingredient Price Tracker</h1>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <style>
+<style>
   body {
     background-color: #121212;
     color: #f8f9fa;
@@ -88,8 +84,62 @@
     font-weight: 600;
     color: #f8f9fa;
   }
+
+  #ingredient-search {
+    color: #ffffff !important;
+    caret-color: #ffffff; /* Makes the cursor white */
+  }
+
+  #ingredient-search::placeholder {
+    color: #ffffff !important;        /* Placeholder text */
+    opacity: 0.6;                     /* Optional: slight fade for contrast */
+  }
+
+  .ingredient-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
+}
+
+.ingredient-buttons::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ingredient-buttons::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 3px;
+}
+
+.ingredient-btn {
+  background-color: #1f1f1f;
+  color: #f0f0f0;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #333;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ingredient-btn:hover {
+  background-color: #2d2d2d;
+}
+
+.ingredient-btn.active {
+  background-color: #35c759;
+  color: #000;
+  border-color: #35c759;
+}
 </style>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <!-- jQuery (required by Typeahead.js) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -97,11 +147,26 @@
 <!-- Typeahead.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Toast container -->
+<div id="toast-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
+
   <!-- Always-visible Upload Button -->
 <div class="text-end mb-3">
   <a href="{{ url_for('ingredient_tracker.upload') }}" class="btn btn-warning">Upload New Files</a>
 </div>
 
+<div class="card bg-dark text-white shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <h5 class="card-title text-info fw-bold">Ingredient Price Tracker</h5>
+    <p class="card-text text-light">
+      The Ingredient Tracker is a simple yet powerful tool within the Dosa Command Centre that helps track ingredient cost trends over time. 
+      By uploading your monthly consolidated purchase reports, the tool extracts and stores unit-level pricing data, calculates 52-week highs and lows, 
+      and visualizes price movements for each item. It’s designed to give your team better visibility into raw material inflation and cost control.
+    </p>
+  </div>
+</div>
 <div class="container py-4">
 
 <div class="mb-4">
@@ -112,6 +177,17 @@
       <option value="{{ name }}">
     {% endfor %}
   </datalist>
+</div>
+
+<div class="ingredient-buttons">
+  {% for ingredient in top_ingredients %}
+    <button
+      class="btn-default ingredient-btn"
+      onclick="showIngredientChart('{{ ingredient }}')"
+    >
+      {{ ingredient }}
+    </button>
+  {% endfor %}
 </div>
 
 <div id="charts-container">
@@ -212,6 +288,72 @@
   });
 
 </script>
+
+<script>
+  function showIngredientChart(ingredientName) {
+    renderChart(ingredientName);
+  }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (topIngredients.length > 0) {
+      renderChart(topIngredients[0]);
+
+      document.querySelectorAll('.ingredient-buttons button').forEach(btn => {
+        btn.classList.remove('bg-green-500');
+        btn.classList.add('bg-[#202525]');
+      });
+
+      const clickedBtn = Array.from(document.querySelectorAll('.ingredient-buttons button'))
+        .find(btn => btn.textContent.trim() === ingredientName);
+
+      if (clickedBtn) {
+        clickedBtn.classList.remove('bg-[#202525]');
+        clickedBtn.classList.add('bg-green-500', 'text-black');
+      }
+    }
+  });
+
+  const topIngredients = {{ top_ingredients | tojson }};
+</script>
+
+<script>
+  function showToast(message, category = "info") {
+    const bg = category === "success" ? "bg-success" :
+               category === "error" ? "bg-danger" :
+               category === "warning" ? "bg-warning" : "bg-secondary";
+
+    const toastHTML = `
+      <div class="toast align-items-center text-white ${bg} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    `;
+
+    const container = document.getElementById("toast-container");
+    container.insertAdjacentHTML("beforeend", toastHTML);
+
+    // Auto-dismiss after 4 seconds
+    setTimeout(() => {
+      container.lastElementChild?.remove();
+    }, 4000);
+  }
+</script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        {% for category, message in messages %}
+          showToast("{{ message }}", "{{ category }}");
+        {% endfor %}
+      });
+    </script>
+  {% endif %}
+{% endwith %}
 
 
 {% endblock %}

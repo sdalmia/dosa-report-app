@@ -6,6 +6,7 @@ from app.extensions import db
 from app.models import IngredientPrice
 from statistics import mean
 from app.routes.main import login_required
+import os
 
 ingredient_bp = Blueprint('ingredient_tracker', __name__, url_prefix='/ingredient-tracker')
 
@@ -18,6 +19,18 @@ def dashboard():
     from collections import defaultdict
     ingredient_data = defaultdict(list)
     ingredient_stats = {}
+
+    from operator import itemgetter
+    # Aggregate total amount per ingredient
+    ingredient_totals = defaultdict(float)
+
+    for entry in entries:
+        if entry.ingredient_name:
+            ingredient_totals[entry.ingredient_name] += entry.amount or 0
+
+    # Get top 20 ingredients by amount
+    top_ingredients = sorted(ingredient_totals.items(), key=itemgetter(1), reverse=True)[:20]
+    top_ingredient_names = [name for name, _ in top_ingredients]
 
     def safe_entry(entry):
         return {
@@ -55,7 +68,8 @@ def dashboard():
         entries=entries,
         ingredient_data=ingredient_data,
         ingredient_stats=ingredient_stats,
-        all_ingredients=all_ingredients
+        all_ingredients=all_ingredients,
+        top_ingredients=top_ingredient_names
     )
 
 
@@ -74,11 +88,13 @@ def upload():
         for i, file in enumerate(files):
             
             if file.filename.endswith('.xlsx'):
+
                 print("Opening the file...")
 
                 try:
+
                     # Read the file without assuming a header
-                    raw_df = pd.read_excel(file, header=None)
+                    raw_df = pd.read_excel(file, header=None) 
 
                     print("Dropping the first 3 rows from " + file.filename)
                     cleaned_df = raw_df.iloc[3:].reset_index(drop=True)
@@ -124,8 +140,7 @@ def upload():
                             print(f"Error processing row: {e}")
 
                     db.session.commit()
-                    flash('Files processed and data stored successfully.', 'success')
-
+                    flash("✅ File uploaded successfully!", "success")
                 except Exception as e:
                     flash(f"Failed to process file: {e}", 'danger')
                     print(f"File processing error: {e}")

@@ -3,3 +3,4 @@ flask_session/
 flask_session_dir/
 __pycache__/
 *.pyc
+.DS_Store
