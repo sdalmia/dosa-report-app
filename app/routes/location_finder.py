@@ -160,7 +160,7 @@ def get_location_name(lat, lng):
     return "Unknown Location"
 
 
-def compute_new_score(places, lat, lng):
+def compute_new_score(places, lat, lng, radius):
     if not places:
         return 0
 
@@ -170,8 +170,11 @@ def compute_new_score(places, lat, lng):
     # Total reviews of the area = total food activity
     total_reviews = sum(p.get("user_ratings_total", 0) for p in places)
 
-    TARGET_REVIEWS = 25000  # healthy area threshold
+    TARGET_REVIEWS = 50 * radius  # healthy area threshold
+    print("target reviews : ",TARGET_REVIEWS)
+    print("total reviews : ",total_reviews)
     energy_score = min(total_reviews / TARGET_REVIEWS, 1.0) * 6
+    print("Energy score: ",energy_score)
 
 
     # --------------------------------------
@@ -259,23 +262,6 @@ def compute_new_score(places, lat, lng):
         "transport_score": transport_score
     }
 
-# -----------------------------
-# Extract lat/lng from ANY Google Maps link
-# -----------------------------
-def extract_lat_lng_from_url(url: str):
-    # Look for coordinate patterns like: 22.5726,88.3639
-    print("Inside extract_lat_lng_from_url()\n\n\n")
-    pattern = r"(-?\d{1,3}\.\d+),\s*(-?\d{1,3}\.\d+)"
-    match = re.search(pattern, url)
-
-    if match:
-        try:
-            return float(match.group(1)), float(match.group(2))
-        except:
-            return None, None
-
-    return None, None
-
 
 # -----------------------------
 # Main route
@@ -285,10 +271,13 @@ def location_finder():
     if request.method == 'POST':
 
         print("Inside POST of location_finder()\n\n\n")
-        maps_url = request.form.get("maps_url", "").strip()
 
-        # Extract coordinates from pasted Google Maps link
-        lat, lng = extract_lat_lng_from_url(maps_url)
+        lat = float(request.form.get("latitude"))
+        lng = float(request.form.get("longitude"))
+        location_name = request.form.get("location_name")
+        place_id = request.form.get("place_id")
+        radius = int(request.form.get("radius", 500))  # Default = 500m
+
 
         print("lat and lng extracted\n")
         print("latitude: ",lat,"\n")
@@ -302,7 +291,7 @@ def location_finder():
         location_name = get_location_name(lat, lng)
 
 
-        places = fetch_eateries(lat, lng, 500)
+        places = fetch_eateries(lat, lng, radius)
         places = sorted(
         places,
             key=lambda p: p.get("user_ratings_total", 0),
@@ -315,7 +304,7 @@ def location_finder():
 
 
         # Scoring logic (basic version)
-        result = compute_new_score(places,lat, lng)
+        result = compute_new_score(places,lat, lng, radius)
         score = result["score"]
 
 
@@ -326,11 +315,12 @@ def location_finder():
             places=places,
             latitude=lat,
             longitude=lng,
-            maps_url=maps_url,
             location_name=location_name,
             GOOGLE_MAPS_API_KEY=GOOGLE_API_KEY
         )
 
     # GET request → show form
-    return render_template("location_finder_form.html",brand_profiles={})
+    return render_template("location_finder_form.html",
+        GOOGLE_MAPS_API_KEY=GOOGLE_API_KEY
+        )
 

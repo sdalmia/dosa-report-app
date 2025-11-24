@@ -4,9 +4,6 @@
 
 {% block content %}
 
-
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Location Score Result</title>
@@ -18,19 +15,13 @@
 </head>
 <body class="bg-light">
 <div class="container py-5">
-<!--     <h1 class="mb-3">Location Score Result</h1>
 
-    <p class="mb-1">
-        <strong>Latitude:</strong> {{ latitude }},
-        <strong>Longitude:</strong> {{ longitude }}
-    </p>
-    <div class="alert alert-info fs-4">
-        Location Score: <strong>{{ score }} / 10</strong>
-    </div>
-
-    <a href="{{ url_for('location_finder.location_finder') }}" class="btn btn-secondary mb-4">
-        Score another location
-    </a> -->
+<!-- SCORE ANOTHER LOCATION BUTTON -->
+<a href="{{ url_for('location_finder.location_finder') }}"
+   class="btn btn-light btn-lg"
+   style="font-weight: 600; border-radius: 10px;">
+    Score Another Location
+</a>
 
 <style>
 .premium-score-box {
@@ -105,14 +96,8 @@
 
         <div class="score-category">{{ location_name }}</div>
     </div>
-
-    <!-- SCORE ANOTHER LOCATION BUTTON -->
-    <a href="{{ url_for('location_finder.location_finder') }}"
-       class="btn btn-light btn-lg"
-       style="font-weight: 600; border-radius: 10px;">
-        Score Another Location
-    </a>
 </div>
+
 
 
     <div class="card mt-4 mb-4 shadow-sm">
@@ -147,12 +132,7 @@
                 <div class="col">
                   <span class="badge bg-secondary fs-6">Reviews</span><br>
                   <span class="fw-bold">{{ breakdown.total_reviews }}</span>
-                </div>
-
-                <div class="col">
-                  <span class="badge bg-danger fs-6">Cuisines</span><br>
-                  <span class="fw-bold">{{ breakdown.unique_cuisines }}</span>
-                </div>
+                </div
 
             </div>
         </div>
@@ -322,6 +302,5 @@ window.onload = initHeatmap;
 </script>
 
 </body>
-</html>
 
 {% endblock %}

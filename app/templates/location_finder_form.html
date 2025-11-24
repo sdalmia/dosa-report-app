@@ -4,8 +4,6 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Location Finder – Score a Spot</title>
@@ -32,16 +30,41 @@
     </div>
     <form method="POST" class="card p-4 shadow-sm bg-white mt-3">
         <div class="mb-3">
-          <label for="maps_url" class="form-label">Google Maps Link</label>
-          <input
-              type="text"
-              class="form-control"
-              id="maps_url"
-              name="maps_url"
-              placeholder="Paste any Google Maps link here"
-              required
-          >
-          <div class="form-text text-muted">Example: https://maps.app.goo.gl/abc123</div>
+
+          <div class="mb-3">
+                <label for="autocomplete" class="form-label">Search Location</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="autocomplete"
+                    placeholder="Search for a place"
+                    required
+                >
+                <small class="text-muted">Type a location or landmark</small>
+            </div>
+
+            <!-- Hidden fields to send to Flask -->
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+            <input type="hidden" name="location_name" id="location_name">
+            <input type="hidden" name="place_id" id="place_id">
+
+        </div>
+
+        <div class="mb-3">
+            <label for="radius" class="form-label">Search Radius (meters)</label>
+            <input
+                type="number"
+                class="form-control"
+                id="radius"
+                name="radius"
+                placeholder="500"
+                value="500"
+                min="50"
+                max="5000"
+                required
+            >
+            <div class="form-text text-muted">Default = 500 meters</div>
         </div>
 
         <button type="submit" class="btn btn-primary">Get Score</button>
@@ -54,8 +77,38 @@
     });
 </script>
 
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
+
+<script>
+let autocomplete;
+
+function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete"),
+        { types: ["geocode", "establishment"] }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+            alert("No details available for selected location.");
+            return;
+        }
+
+        document.getElementById("latitude").value = place.geometry.location.lat();
+        document.getElementById("longitude").value = place.geometry.location.lng();
+        document.getElementById("location_name").value = place.formatted_address || place.name;
+        document.getElementById("place_id").value = place.place_id;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initAutocomplete);
+</script>
+
+
+
 </body>
-</html>
 
 {% endblock %}
 
