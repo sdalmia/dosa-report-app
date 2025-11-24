@@ -1,0 +1,61 @@
+<!-- templates/location_finder_form.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Location Finder – Score a Spot</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    >
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4">Location Finder Tool</h1>
+    <div class="alert alert-secondary mb-3">
+      <h5 class="mb-2">What this tool does</h5>
+      <p class="mb-1">
+        This Location Intelligence tool analyses any Google Maps location and calculates its business
+        potential on a 0–10 scale. It looks at nearby eateries, total reviews (area energy), ratings,
+        cuisine diversity, anchor brands (like Starbucks, McDonald’s, etc.), and transport connectivity
+        (metro, bus, main roads) to give you a clear, data-backed view of how strong a site really is.
+      </p>
+    </div>
+    <div id="loader" style="display:none; text-align:center; margin-bottom:20px;">
+    <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Checking the Energy near the location… Please wait</p>
+    </div>
+    <form method="POST" class="card p-4 shadow-sm bg-white mt-3">
+        <div class="mb-3">
+          <label for="maps_url" class="form-label">Google Maps Link</label>
+          <input
+              type="text"
+              class="form-control"
+              id="maps_url"
+              name="maps_url"
+              placeholder="Paste any Google Maps link here"
+              required
+          >
+          <div class="form-text text-muted">Example: https://maps.app.goo.gl/abc123</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Get Score</button>
+    </form>
+</div>
+<script>
+    document.querySelector("form").addEventListener("submit", function() {
+        const loader = document.getElementById("loader");
+        loader.style.display = "block";
+    });
+</script>
+
+</body>
+</html>
+
+{% endblock %}
+

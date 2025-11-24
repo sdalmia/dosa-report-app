@@ -1,0 +1,327 @@
+<!-- templates/location_finder_result.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Location Score Result</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    >
+</head>
+<body class="bg-light">
+<div class="container py-5">
+<!--     <h1 class="mb-3">Location Score Result</h1>
+
+    <p class="mb-1">
+        <strong>Latitude:</strong> {{ latitude }},
+        <strong>Longitude:</strong> {{ longitude }}
+    </p>
+    <div class="alert alert-info fs-4">
+        Location Score: <strong>{{ score }} / 10</strong>
+    </div>
+
+    <a href="{{ url_for('location_finder.location_finder') }}" class="btn btn-secondary mb-4">
+        Score another location
+    </a> -->
+
+<style>
+.premium-score-box {
+    background: linear-gradient(135deg, #4da0ff 0%, #005eff 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.premium-score-badge {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    border: 3px solid rgba(255,255,255,0.35);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.score-details-text {
+    margin-left: 24px;
+}
+
+.score-label {
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.score-category {
+    font-size: 26px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+</style>
+
+<div class="premium-score-box my-4">
+
+    <!-- SCORE BADGE -->
+    <div class="d-flex align-items-center">
+        <div class="premium-score-badge">
+            {{ score }}
+        </div>
+
+        <div class="score-details-text">
+            <div class="score-label">Location Score</div>
+
+            <!-- Dynamically label score category -->
+            {% if score >= 9 %}
+                <div class="score-category">🔥 Excellent</div>
+            {% elif score >= 7 %}
+                <div class="score-category">⭐ Strong</div>
+            {% elif score >= 5 %}
+                <div class="score-category">👍 Good</div>
+            {% else %}
+                <div class="score-category">⚠️ Weak</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="score-details-text">
+        <div class="score-label">Selected Location:</div>
+
+        <div class="score-category">{{ location_name }}</div>
+    </div>
+
+    <!-- SCORE ANOTHER LOCATION BUTTON -->
+    <a href="{{ url_for('location_finder.location_finder') }}"
+       class="btn btn-light btn-lg"
+       style="font-weight: 600; border-radius: 10px;">
+        Score Another Location
+    </a>
+</div>
+
+
+    <div class="card mt-4 mb-4 shadow-sm">
+        <div class="card-body">
+             <div class="row text-center">
+
+                <div class="col">
+                  <span class="badge bg-primary fs-6">Energy</span><br>
+                  <span class="fw-bold">{{ breakdown.energy_score }}/6</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-success fs-6">Quality</span><br>
+                  <span class="fw-bold">{{ breakdown.quality_score }}/1</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-warning text-dark fs-6">Anchor</span><br>
+                  <span class="fw-bold">{{ breakdown.anchor_score }}/1</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-info text-dark fs-6">Diversity</span><br>
+                  <span class="fw-bold">{{ breakdown.diversity_score }}/1</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-dark fs-6">Transport</span><br>
+                  <span class="fw-bold">{{ breakdown.transport_score|round(2) }}/1</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-secondary fs-6">Reviews</span><br>
+                  <span class="fw-bold">{{ breakdown.total_reviews }}</span>
+                </div>
+
+                <div class="col">
+                  <span class="badge bg-danger fs-6">Cuisines</span><br>
+                  <span class="fw-bold">{{ breakdown.unique_cuisines }}</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div id="heatmap" style="height: 500px; width: 100%;"></div>
+        </div>
+    </div>
+
+    <h3 class="mt-4 mb-3">Nearby Businesses (Google Places)</h3>
+    {% if places %}
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Types</th>
+                    <th>Rating</th>
+                    <th>Reviews</th>
+                    <th>Google Maps</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in places %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>
+                            {% if p.cuisine %}
+                                {{ p.cuisine }}
+                            {% endif %}
+                        </td>
+                        <td>{{ p.rating if p.rating is defined else "-" }}</td>
+                        <td>{{ p.user_ratings_total if p.user_ratings_total is defined else 0 }}</td>
+                        <td>
+                            {% if p.place_id %}
+                                <a
+                                  href="https://www.google.com/maps/place/?q=place_id:{{ p.place_id }}"
+                                  target="_blank"
+                                  class="btn btn-sm btn-outline-primary"
+                                >
+                                    View
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No places found in this radius.</p>
+    {% endif %}
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=visualization,places"></script>
+
+<script>
+function initHeatmap() {
+    // Center the map on the selected location
+    const center = { lat: {{ latitude }}, lng: {{ longitude }} };
+
+    const map = new google.maps.Map(document.getElementById("heatmap"), {
+        zoom: 14,
+        center: center,
+        mapTypeId: "roadmap"
+    });
+
+    initMap(map)
+
+    // Convert backend data into heatmap format
+    const places = {{ places | tojson }};
+
+    const heatmapData = places.map(p => {
+        if (!p.geometry || !p.geometry.location) return null;
+
+        return {
+            location: new google.maps.LatLng(
+                p.geometry.location.lat,
+                p.geometry.location.lng
+            ),
+            weight: p.user_ratings_total || 1   // fallback in case of missing reviews
+        };
+    }).filter(Boolean); // remove null entries
+
+    // Create the heatmap layer
+    const heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatmapData,
+        map: map
+    });
+
+    // Heatmap customization (optional)
+    heatmap.set("radius", 40);       // default 20
+    heatmap.set("opacity", 0.6);     // default 0.7
+    heatmap.set("maxIntensity", 3000);
+}
+
+
+function initMap(map) {
+    // Center map at the user’s chosen location
+    const center = { lat: {{ latitude }}, lng: {{ longitude }} };
+
+    // Marker for the chosen location
+    new google.maps.Marker({
+        position: center,
+        map: map,
+        title: "Selected Location",
+        icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }
+    });
+
+    // Add markers for all places passed from Flask
+    const places = {{ places | tojson }};
+
+    places.forEach(p => {
+        if (!p.geometry || !p.geometry.location) return;
+
+        const position = {
+            lat: p.geometry.location.lat,
+            lng: p.geometry.location.lng
+        };
+
+        // Info text for the popup
+        const infoContent = `
+            <div style="min-width: 180px;">
+                <strong>${p.name}</strong><br>
+                Rating: ${p.rating || "N/A"} ⭐<br>
+                Reviews: ${p.user_ratings_total || 0}<br>
+                Cuisine: ${p.cuisine || "Unknown"}
+            </div>
+        `;
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: infoContent
+        });
+
+        // Marker (red bubble)
+        const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: p.name,
+            icon: {
+                url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            }
+        });
+
+        // Hover → show info window
+        marker.addListener("mouseover", () => {
+            infoWindow.setContent(infoContent);
+            infoWindow.open(map, marker);
+        });
+
+        // Move mouse away → close popup
+        marker.addListener("mouseout", () => {
+            infoWindow.close();
+        });
+    });
+}
+
+// run on page load
+window.onload = initHeatmap;
+</script>
+
+</body>
+</html>
+
+{% endblock %}
