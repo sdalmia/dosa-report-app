@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amsterdam Places Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f7f5; color: #1f2937; }
+    .app { display: grid; grid-template-columns: 360px 1fr; height: 100vh; }
+    .sidebar { background: #fff; border-right: 1px solid #e5e7eb; overflow: auto; padding: 18px 16px; }
+    .title { font-size: 22px; font-weight: 700; margin: 0 0 6px 0; }
+    .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 16px; line-height: 1.4; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    button { border: 1px solid #e5e7eb; background: #fff; border-radius: 10px; padding: 10px 12px; font-size: 14px; cursor: pointer; }
+    button.active { background: #0f766e; color: white; border-color: #0f766e; }
+    .status { font-size: 13px; color: #6b7280; margin: 8px 0 14px; line-height: 1.4; }
+    .places { display: grid; gap: 10px; }
+    .place { border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; padding: 12px; cursor: pointer; }
+    .place h3 { margin: 0 0 6px; font-size: 15px; }
+    .meta { font-size: 12px; color: #6b7280; display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge { background: #f3f4f6; border-radius: 999px; padding: 4px 8px; }
+    #map { width: 100%; height: 100vh; }
+    .fav { color: #b45309; font-weight: 600; }
+    @media (max-width: 900px) { .app { grid-template-columns: 1fr; grid-template-rows: 44vh 56vh; } .sidebar { border-right: 0; border-bottom: 1px solid #e5e7eb; } #map { height: 56vh; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1 class="title">Amsterdam List Map</h1>
+      <div class="subtitle">Pins your saved Amsterdam spots and shows your live location when you allow location access.</div>
+      <div class="controls">
+        <button id="showAllBtn" class="active">All</button>
+        <button data-filter="Restaurant">Restaurants</button>
+        <button data-filter="Cafe">Cafés</button>
+        <button data-filter="Coffeeshop">Coffeeshops</button>
+        <button data-filter="Hangout">Hangouts</button>
+        <button data-filter="Museum">Museums</button>
+      </div>
+      <div class="controls">
+        <button id="locateBtn">Show My Live Location</button>
+        <button id="fitBtn">Fit All Pins</button>
+      </div>
+      <div class="status" id="status">Loading map…</div>
+      <div class="places" id="placesList"></div>
+    </aside>
+    <main id="map"></main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    const places = [
+      { name: "Bolenius", category: "Restaurant", visited: false, favorite: false },
+      { name: "Daalder", category: "Restaurant", visited: true, favorite: false },
+      { name: "De Kas", category: "Restaurant", visited: true, favorite: false },
+      { name: "Cecconi’s Amsterdam", category: "Restaurant", visited: false, favorite: false },
+      { name: "Izakaya Amsterdam", category: "Restaurant", visited: false, favorite: false },
+      { name: "Momo Amsterdam", category: "Restaurant", visited: true, favorite: false },
+      { name: "Maama Makan Amsterdam", category: "Restaurant", visited: false, favorite: false },
+      { name: "Bar B Q Cantina Amsterdam", category: "Restaurant", visited: true, favorite: false },
+      { name: "Thrill Grill Amsterdam", category: "Restaurant", visited: true, favorite: false },
+      { name: "Wagamama Amsterdam", category: "Restaurant", visited: false, favorite: false },
+      { name: "Coffee & Coconuts Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Pancakes Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Van Wonderen Stroopwafels", category: "Cafe", visited: false, favorite: false },
+      { name: "Van Stapele Koekmakerij", category: "Cafe", visited: false, favorite: true },
+      { name: "Polaberry Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Fabel Friet Amsterdam", category: "Cafe", visited: false, favorite: true },
+      { name: "Smelt Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Chun Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Salvo Bake House Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Hans Egstorf Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Lindt Hot Chocolate Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Rudi’s Original Stroopwafels", category: "Cafe", visited: false, favorite: false },
+      { name: "Laurens Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Fikkisimo Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Esh Pita Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "nNea Pizza Amsterdam", category: "Cafe", visited: false, favorite: false },
+      { name: "Green House Centrum", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "The Bulldog Amsterdam", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "Barney’s Coffeeshop Amsterdam", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "Dampkring Amsterdam", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "Baba Coffeeshop Amsterdam", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "Yellow Mellow Amsterdam", category: "Coffeeshop", visited: false, favorite: false },
+      { name: "Flying Pig Amsterdam", category: "Hangout", visited: false, favorite: false },
+      { name: "Rijksmuseum", category: "Museum", visited: false, favorite: false },
+      { name: "Van Gogh Museum", category: "Museum", visited: false, favorite: false },
+      { name: "Moco Museum Amsterdam", category: "Museum", visited: false, favorite: false }
+    ];
+    const colors = { Restaurant: '#dc2626', Cafe: '#2563eb', Coffeeshop: '#16a34a', Hangout: '#7c3aed', Museum: '#ea580c', User: '#0f766e' };
+    const map = L.map('map').setView([52.3676, 4.9041], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+    const markersLayer = L.layerGroup().addTo(map);
+    const statusEl = document.getElementById('status');
+    const placesListEl = document.getElementById('placesList');
+    let userMarker = null; let userAccuracyCircle = null; let watchId = null; let activeFilter = 'All';
+    function makeIcon(color){ return L.divIcon({ className:'', html:`<div style="width:16px;height:16px;background:${color};border:2px solid white;border-radius:50%;box-shadow:0 0 0 2px rgba(0,0,0,.18)"></div>`, iconSize:[16,16], iconAnchor:[8,8] }); }
+    function popupHtml(place){ return `<div><strong>${place.name}</strong><br/>${place.category}<br/>${place.visited ? '✅ Already visited<br/>' : ''}${place.favorite ? '⭐ Priority<br/>' : ''}${place.address ? `<span style="color:#6b7280">${place.address}</span>` : ''}</div>`; }
+    function renderPlacesList(){ const filtered = places.filter(p => activeFilter==='All'||p.category===activeFilter); placesListEl.innerHTML = filtered.map(p => `<div class="place" onclick="focusPlace(${places.indexOf(p)})"><h3>${p.name} ${p.favorite ? '<span class="fav">★</span>' : ''}</h3><div class="meta"><span class="badge">${p.category}</span>${p.visited ? '<span class="badge">Visited</span>' : '<span class="badge">Not visited yet</span>'}${p.lat ? '<span class="badge">Pinned</span>' : '<span class="badge">Finding pin…</span>'}</div></div>`).join(''); }
+    function refreshMarkers(){ markersLayer.clearLayers(); places.filter(p => p.marker && (activeFilter==='All'||p.category===activeFilter)).forEach(p => markersLayer.addLayer(p.marker)); if (userMarker) markersLayer.addLayer(userMarker); if (userAccuracyCircle) markersLayer.addLayer(userAccuracyCircle); renderPlacesList(); }
+    window.focusPlace = function(index){ const p = places[index]; if (!p.lat) return; map.setView([p.lat,p.lon], 16); if (p.marker) p.marker.openPopup(); };
+    async function geocodePlace(place){ const q = encodeURIComponent(`${place.name}, Amsterdam, Netherlands`); const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${q}`; try { const res = await fetch(url, { headers: { 'Accept': 'application/json' } }); const data = await res.json(); if (data && data.length) { place.lat = parseFloat(data[0].lat); place.lon = parseFloat(data[0].lon); place.address = data[0].display_name; place.marker = L.marker([place.lat,place.lon], { icon: makeIcon(colors[place.category]||'#64748b') }).bindPopup(popupHtml(place)); } } catch(e) { console.error(place.name, e); } refreshMarkers(); statusEl.textContent = `Pinned ${places.filter(p=>p.lat).length} of ${places.length} places.`; }
+    async function geocodeAll(){ statusEl.textContent = 'Looking up your saved places in Amsterdam…'; renderPlacesList(); for (const p of places) { await geocodePlace(p); await new Promise(r => setTimeout(r, 300)); } const withPins = places.filter(p=>p.marker); if (withPins.length) { map.fitBounds(L.featureGroup(withPins.map(p=>p.marker)).getBounds().pad(0.15)); } statusEl.textContent += ' Ready.'; }
+    function startLiveLocation(){ if (!navigator.geolocation) { statusEl.textContent = 'This browser does not support live location.'; return; } statusEl.textContent = 'Requesting live location access…'; if (watchId!==null) navigator.geolocation.clearWatch(watchId); watchId = navigator.geolocation.watchPosition(pos => { const { latitude, longitude, accuracy } = pos.coords; if (!userMarker) userMarker = L.marker([latitude,longitude], { icon: makeIcon(colors.User) }).bindPopup('You are here'); else userMarker.setLatLng([latitude,longitude]); if (!userAccuracyCircle) userAccuracyCircle = L.circle([latitude,longitude], { radius: accuracy }); else { userAccuracyCircle.setLatLng([latitude,longitude]); userAccuracyCircle.setRadius(accuracy); } refreshMarkers(); map.setView([latitude,longitude], Math.max(map.getZoom(), 15)); statusEl.textContent = `Live location active. Accuracy: about ${Math.round(accuracy)} meters.`; }, err => { statusEl.textContent = 'Location permission was denied or unavailable. In Safari, open Site Settings and allow location.'; console.error(err); }, { enableHighAccuracy:true, maximumAge:5000, timeout:10000 }); }
+    document.getElementById('locateBtn').addEventListener('click', startLiveLocation);
+    document.getElementById('fitBtn').addEventListener('click', ()=>{ const layers = places.filter(p=>p.marker && (activeFilter==='All'||p.category===activeFilter)).map(p=>p.marker); if (userMarker) layers.push(userMarker); if (!layers.length) return; map.fitBounds(L.featureGroup(layers).getBounds().pad(0.15)); });
+    document.getElementById('showAllBtn').addEventListener('click', ()=>{ activeFilter='All'; document.querySelectorAll('.controls button[data-filter], #showAllBtn').forEach(b=>b.classList.remove('active')); document.getElementById('showAllBtn').classList.add('active'); refreshMarkers(); });
+    document.querySelectorAll('button[data-filter]').forEach(btn => btn.addEventListener('click', ()=>{ activeFilter = btn.dataset.filter; document.querySelectorAll('.controls button[data-filter], #showAllBtn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); refreshMarkers(); }));
+    renderPlacesList(); geocodeAll();
+  </script>
+</body>
+</html>
