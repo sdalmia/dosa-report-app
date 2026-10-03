@@ -121,9 +121,18 @@ class StoreHealthTests(unittest.TestCase):
             self.assertEqual(round(sum(float(row[3]) for row in east), 2), 755019.97)
             self.assertEqual(sum(int(float(row[4])) for row in east), 1555)
         with (root / "sales_pred_vs_actual.csv").open(encoding="utf-8-sig", newline="") as handle:
-            reader = csv.reader(handle)
-            self.assertEqual(tuple(next(reader)), CALENDAR_COLUMNS)
-            self.assertEqual(sum(1 for _ in reader), 33)
+            reader = csv.DictReader(handle)
+            self.assertEqual(tuple(reader.fieldnames), CALENDAR_COLUMNS)
+            calendar_rows = list(reader)
+            self.assertEqual(len(calendar_rows), 990)
+            self.assertEqual(len({row["store"] for row in calendar_rows}), 33)
+            self.assertEqual(min(row["date"] for row in calendar_rows), "2026-10-03")
+            self.assertEqual(max(row["date"] for row in calendar_rows), "2026-11-01")
+            self.assertTrue(all(row["actual_net"] == "" for row in calendar_rows))
+            self.assertTrue(all(row["variance_vs_mid"] == "" for row in calendar_rows))
+            self.assertTrue(all(row["variance_pct"] == "" for row in calendar_rows))
+            self.assertEqual(sum(1 for row in calendar_rows if row["pred_mid"]), 900)
+            self.assertEqual(sum(1 for row in calendar_rows if row["status"] == "not_on_deployment_report"), 90)
 
     def test_login_required(self):
         anon = self.app.test_client()
@@ -337,6 +346,47 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("Newest date in the file", html)
         self.assertEqual(html.count("<optgroup"), 0)
 
+    def test_store_share_calendar_shows_the_band_and_leaves_actual_blank(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        index = self.get("/store-health")
+        ideal = self.get(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Ideal Plaza (01/0001)')}")
+        self.assertEqual(html_lib.unescape(cell(ideal, "calendar_share_label")), (
+            "Low, mid, and high are this store's share of the network judgment band, not a separate model."
+        ))
+        self.assertIn("2026-10-03", ideal)
+        self.assertIn("2026-11-01", ideal)
+        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', ideal)), 30)
+        self.assertEqual(cell(ideal, "pred_low", "2026-10-03"), "₹77,206.26")
+        self.assertEqual(cell(ideal, "pred_mid", "2026-10-03"), "₹87,734.39")
+        self.assertEqual(cell(ideal, "pred_high", "2026-10-03"), "₹98,262.51")
+        self.assertEqual(cell(ideal, "actual_net", "2026-10-03"), "")
+        self.assertEqual(cell(ideal, "variance_vs_mid", "2026-10-03"), "")
+        self.assertEqual(cell(ideal, "variance_pct", "2026-10-03"), "")
+        self.assertEqual(cell(ideal, "tier", "2026-10-03"), "Weather caution")
+        self.assertEqual(cell(ideal, "drivers", "2026-10-03"), "Normal weekend tier, with first-week Kolkata rain risk")
+        self.assertEqual(cell(ideal, "status", "2026-10-03"), "Share of the network band")
+        self.assertEqual(cell(ideal, "weekday", "2026-10-03"), "Saturday")
+        self.assertIn("not a separate store model", cell(ideal, "notes", "2026-10-03"))
+        self.assertNotIn("₹0", cell(ideal, "actual_net", "2026-10-03") or "x")
+        self.assertNotEqual(cell(ideal, "pred_mid", "2026-11-01"), "")
+        self.assertEqual(cell(ideal, "actual_net", "2026-11-01"), "")
+
+        for label in (
+            "GK1 Cloud Kitchen (02/0002)",
+            "Chattarpur (02/0005)",
+            "Dosa Coffee - Events & Catering",
+        ):
+            page = self.get(f"/store-health/{self._option_slug(index, label)}")
+            self.assertEqual(cell(page, "pred_low", "2026-10-03"), "", label)
+            self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "", label)
+            self.assertEqual(cell(page, "pred_high", "2026-10-03"), "", label)
+            self.assertEqual(cell(page, "actual_net", "2026-10-03"), "", label)
+            self.assertEqual(cell(page, "status", "2026-10-03"), "Not on the deployment report", label)
+            self.assertIn("Blank is not zero.", cell(page, "notes", "2026-10-03"))
+            self.assertIn("Not on the Posist historical deployment report", cell(page, "calendar_absent_note"))
+            self.assertNotIn("₹0", page[page.index('id="sales-calendar"'):])
+
     def test_calendar_only_name_stays_out_of_the_picker(self):
         self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
         self.write(
@@ -363,7 +413,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn('data-posist-state="ready"', html)
         self.assertIn('data-calendar-state="ready"', html)
         self.assertEqual(cell(html, "posist_newest_date"), "2 Oct 2026")
-        self.assertEqual(cell(html, "calendar_newest_date"), "2 Oct 2026")
+        self.assertEqual(cell(html, "calendar_newest_date"), "1 Nov 2026")
         self.assertRegex(cell(html, "posist_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
         self.assertRegex(cell(html, "calendar_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
         self.assertRegex(html, r'<option value=""[^>]*selected')
@@ -405,11 +455,11 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(page, "variance_vs_mid", "2026-10-02"), "")
         self.assertEqual(cell(page, "variance_pct", "2026-10-02"), "")
         self.assertEqual(cell(page, "tier", "2026-10-02"), "")
-        self.assertEqual(cell(page, "actual_net", "2026-10-02"), "₹1,52,678.98")
-        self.assertEqual(cell(page, "status", "2026-10-02"), "Actual, provisional end of day")
-        self.assertEqual(cell(page, "drivers", "2026-10-02"), "Gandhi Jayanti")
+        self.assertEqual(cell(page, "actual_net", "2026-10-02"), "")
+        self.assertEqual(cell(page, "status", "2026-10-02"), "")
+        self.assertEqual(cell(page, "drivers", "2026-10-02"), "")
         self.assertEqual(cell(page, "notes", "2026-10-02"), "")
-        self.assertEqual(cell(page, "weekday", "2026-10-02"), "Friday")
+        self.assertEqual(cell(page, "weekday", "2026-10-02"), "")
 
         ideal = self.get(f"/store-health/{self._option_slug(html, 'Dosa Coffee - Ideal Plaza (01/0001)')}")
         self.assertEqual(cell(ideal, "gross"), "₹35,34,169.91")
@@ -540,7 +590,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn('data-field="reelo_newest_date"', index)
         self.assertNotIn('data-field="famepilot_newest_date"', index)
         self.assertEqual(cell(index, "posist_newest_date"), "2 Oct 2026")
-        self.assertEqual(cell(index, "calendar_newest_date"), "2 Oct 2026")
+        self.assertEqual(cell(index, "calendar_newest_date"), "1 Nov 2026")
 
         def open_store(label):
             slug = self._option_slug(index, label)

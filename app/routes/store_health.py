@@ -5,6 +5,7 @@ from app.store_health.contract import load_feeds
 from app.store_health.present import (
     build_view,
     business_today,
+    calendar_bounds,
     format_date,
     grouped_stores,
     list_stores,
@@ -20,8 +21,8 @@ store_health_bp = Blueprint("store_health", __name__)
 @login_required
 def page(store_id=None):
     today = business_today()
-    selection = parse_range(request.args, today)
     feeds = load_feeds()
+    selection = parse_range(request.args, today, default_span=calendar_bounds(feeds))
     stores = list_stores(feeds)
     token = (store_id or request.args.get("store") or "").strip()
     store = resolve_store(stores, token)
