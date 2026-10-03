@@ -1,11 +1,15 @@
 import csv
 import html as html_lib
+import io
 import os
 import re
 import tempfile
 import unittest
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
+from unittest.mock import patch
+
+from pypdf import PdfReader
 
 _DB = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
 os.environ["DATABASE_URL"] = "sqlite:///" + _DB.name
@@ -20,18 +24,29 @@ from app.store_health.contract import (
     POSIST_COLUMNS,
     REELO_COLUMNS,
     load_calendar,
+    load_feeds,
     load_posist,
     parse_number,
 )
-from app.store_health.stores import unique_store_label
+from app.store_health.stores import store_from_label, unique_store_label
+from app.store_health.context_slots import (
+    HOLIDAY_DISCONNECTED,
+    NEWS_DISCONNECTED,
+    WEATHER_NO_CITY,
+    parse_holiday_ics,
+    parse_news_rss,
+    published_within_days,
+    weather_from_payload,
+)
+from app.store_health.insights import build_insights
 from app.store_health.present import (
+    IST,
     business_today,
     format_count,
     format_money,
     format_pct,
+    list_stores,
 )
-
-
 POSIST_HEADER = ",".join(POSIST_COLUMNS)
 CALENDAR_HEADER = ",".join(CALENDAR_COLUMNS)
 
@@ -65,8 +80,14 @@ class StoreHealthTests(unittest.TestCase):
         os.environ["STORE_HEALTH_DATA_DIR"] = self.data.name
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
+        self.context = patch(
+            "app.store_health.context_slots.fetch_city_context",
+            return_value=None,
+        )
+        self.context.start()
 
     def tearDown(self):
+        self.context.stop()
         os.environ.pop("STORE_HEALTH_DATA_DIR", None)
         self.data.cleanup()
 
@@ -241,7 +262,14 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "main_threat"), "")
         self.assertIn("reelo.csv is missing.", html)
         self.assertIn("famepilot.csv is missing.", html)
-        self.assertIn("No ops, CRM, or cost insights are on file for this store.", html)
+        self.assertNotIn("No ops, CRM, or cost insights are on file for this store.", html)
+        self.assertIn("Ask the store what changed in that bill count.", html)
+        self.assertIn("Clear those unsettled bills before the next close.", html)
+        self.assertIn("famepilot.csv is not on file for this store.", html)
+        self.assertIn("No void-ticket action is on file.", html)
+        self.assertNotIn("Void bills are blank", html)
+        self.assertIn(">Print<", html)
+        self.assertNotIn("7,087", html)
 
     def test_other_store_does_not_inherit_the_sample(self):
         self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
@@ -766,6 +794,217 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(quest, "times_redeemed"), "86")
         self.assertIn("26 Sep 26 - 02 Oct 26 (7 days)", quest)
         self.assertIn("not a verified 30-day range", quest)
+
+    def test_famepilot_or_reelo_row_builds_insight_from_that_row_only(self):
+        self.write(
+            "famepilot.csv",
+            "posist_store,famepilot_location,rating,review_count,main_threat,private_rating,private_review_count,overall_reviews\n"
+            "Only Fame (01/0099),Somewhere,2.18,11,Missing Item,3.10,4,15\n"
+            'Tie Store (01/0098),Somewhere else,4.00,8,"tie: Missing Item, Quality Issue",,,\n',
+        )
+        self.write(
+            "reelo.csv",
+            "posist_store,reelo_store,date_range,match_status,times_rewards_redeemed,redemption_rate,"
+            "redemption_revenue_inr,avg_revenue_per_redemption_inr,points_issued,sales_total_inr_last30d,"
+            "visits_last30d,phones_valid_visits,phones_blocked_visits,phone_capture_pct,customers_with_purchase,"
+            "active_customers,inactive_customers,note\n"
+            "Only Reelo (01/0097),Reelo Name,03 Sep 26 - 03 Oct 26,matched,4,10%,,,,,,,3,,,,,\n",
+        )
+        feeds = load_feeds(self.data.name)
+        stores = {store.label: store for store in list_stores(feeds)}
+        fame = build_insights(feeds, stores["Only Fame (01/0099)"])
+        tie = build_insights(feeds, stores["Tie Store (01/0098)"])
+        reelo = build_insights(feeds, stores["Only Reelo (01/0097)"])
+        self.assertTrue(fame["has_insight"])
+        self.assertTrue(tie["has_insight"])
+        self.assertTrue(reelo["has_insight"])
+        fame_crm = " ".join(fame["crm"])
+        tie_crm = " ".join(tie["crm"])
+        reelo_crm = " ".join(reelo["crm"])
+        self.assertIn("2.18", fame_crm)
+        self.assertIn("11", fame_crm)
+        self.assertIn("Missing Item", fame_crm)
+        self.assertIn("Check the last Missing Item tickets.", fame_crm)
+        self.assertIn("not a verified 30-day range", fame_crm)
+        self.assertNotIn("₹", " ".join(fame["ops"] + fame["crm"] + fame["cost"]))
+        self.assertIn("tie:", tie_crm)
+        self.assertIn("Missing Item", tie_crm)
+        self.assertIn("Quality Issue", tie_crm)
+        self.assertNotIn("Main complaint is Missing Item.", tie_crm)
+        self.assertIn("10%", reelo_crm)
+        self.assertIn("4", reelo_crm)
+        self.assertIn("Blocked visits are 3", reelo_crm)
+        self.assertNotIn("2.18", reelo_crm)
+        self.assertNotIn("₹", " ".join(reelo["ops"] + reelo["crm"] + reelo["cost"]))
+        page = self.get("/store-health?store=only-fame-01-0099")
+        self.assertNotIn("No ops, CRM, or cost insights are on file for this store.", page)
+        self.assertIn("Check the last Missing Item tickets.", page)
+        self.assertIn("not a verified 30-day range", page)
+        self.assertIn(">Print<", page)
+
+    def test_store_with_no_rows_stays_empty(self):
+        feeds = load_feeds(self.data.name)
+        empty = build_insights(feeds, store_from_label("Nowhere Cafe"))
+        self.assertFalse(empty["has_insight"])
+        self.assertEqual(empty["ops"], [])
+        self.assertEqual(empty["crm"], [])
+        self.assertEqual(empty["cost"], [])
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER + "\nBlank Voids,2026-10-02,,100,4,,,,,,,,,,,,,\n",
+        )
+        feeds = load_feeds(self.data.name)
+        store = list_stores(feeds)[0]
+        blank = build_insights(feeds, store)
+        text = " ".join(blank["ops"] + blank["cost"])
+        self.assertIn("Void bills are blank in posist_daily.csv", text)
+        self.assertNotIn("Void bills in the Posist window", text)
+        self.assertNotIn("are 0", text)
+
+    def test_no_city_leaves_context_slots_disconnected(self):
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER + "\nNo Region Cafe,2026-10-02,10,,,,,,,,,,,,,,,\n",
+        )
+        html = self.get("/store-health?store=no-region-cafe&day=2026-10-02")
+        self.assertIn(HOLIDAY_DISCONNECTED, html)
+        self.assertIn(NEWS_DISCONNECTED, html)
+        self.assertIn(WEATHER_NO_CITY, html)
+        self.assertNotIn("Open-Meteo", html)
+        self.assertNotIn("Office Holidays", html)
+
+    def test_context_slots_render_a_fetched_payload(self):
+        self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
+        payload = {
+            "fetched_at": datetime(2026, 10, 3, 12, 0, tzinfo=IST),
+            "holiday": [{"date": date(2099, 1, 1), "name": "Fixture Holiday"}],
+            "news": {
+                "feed_url": "https://news.google.com/rss/search?q=Delhi+NCR",
+                "items": [
+                    {
+                        "title": "Fixture Headline",
+                        "publisher": "Fixture Paper",
+                        "published": "Sat, 03 Oct 2026 12:00:00 GMT",
+                    }
+                ],
+            },
+            "weather": {
+                "api_place": "Delhi, Delhi, India",
+                "timezone": "Asia/Kolkata",
+                "observed_at": "2026-10-03T17:45",
+                "temperature_c": "21.5",
+                "precipitation_mm": None,
+                "weather": "Clear sky",
+                "days": [
+                    {
+                        "date": "2026-10-03",
+                        "high_c": "30",
+                        "low_c": "20",
+                        "precipitation_mm": None,
+                        "weather": "Clear sky",
+                    }
+                ],
+                "source_url": "https://api.open-meteo.com/v1/forecast",
+            },
+        }
+        self.context.stop()
+        try:
+            with patch("app.store_health.context_slots.fetch_city_context", return_value=payload):
+                html = self.get(f"/store-health/{GURGAON_SLUG}")
+        finally:
+            self.context.start()
+        self.assertIn("Fixture Holiday", html)
+        self.assertIn("1 Jan 2099", html)
+        self.assertIn("Office Holidays", html)
+        self.assertIn("Fixture Headline", html)
+        self.assertIn("Fixture Paper", html)
+        self.assertIn("Sat, 03 Oct 2026 12:00:00 GMT", html)
+        self.assertIn("Google News RSS", html)
+        self.assertIn("Delhi, Delhi, India", html)
+        self.assertIn("21.5", html)
+        self.assertIn("Open-Meteo", html)
+        self.assertIn("Precipitation is blank, not zero.", html)
+        self.assertIn("precipitation is blank, not zero", html)
+        self.assertIn("Fetched 3 Oct 2026, 12:00 pm IST.", html)
+
+    def test_parsers_keep_source_values_and_skip_blanks(self):
+        events = parse_holiday_ics(
+            "BEGIN:VCALENDAR\nBEGIN:VEVENT\nSUMMARY:Fixture Holiday\n"
+            "DTSTART;VALUE=DATE:20990101\nEND:VEVENT\nEND:VCALENDAR\n"
+        )
+        self.assertEqual(events, [{"date": date(2099, 1, 1), "name": "Fixture Holiday"}])
+        items = parse_news_rss(
+            "<?xml version='1.0'?><rss><channel>"
+            "<item><title>Fixture Headline - Fixture Paper</title>"
+            "<pubDate>Sat, 03 Oct 2026 12:00:00 GMT</pubDate></item>"
+            "<item><title>No date</title></item>"
+            "</channel></rss>"
+        )
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["title"], "Fixture Headline")
+        self.assertEqual(items[0]["publisher"], "Fixture Paper")
+        piped = parse_news_rss(
+            "<?xml version='1.0'?><rss><channel><item>"
+            "<title>Delhi headline| SCC Times - SCC Online</title>"
+            "<pubDate>Sat, 03 Oct 2026 12:00:00 GMT</pubDate></item></channel></rss>"
+        )
+        self.assertEqual(piped[0]["title"], "Delhi headline")
+        self.assertEqual(piped[0]["publisher"], "SCC Online")
+        now = datetime(2026, 10, 3, 12, tzinfo=IST)
+        self.assertTrue(published_within_days("Sat, 03 Oct 2026 12:00:00 GMT", now=now))
+        self.assertFalse(published_within_days("Wed, 12 Aug 2026 07:00:00 GMT", now=now))
+        self.assertFalse(published_within_days("not a date", now=now))
+        weather = weather_from_payload(
+            {"name": "Delhi", "admin1": "Delhi", "country": "India"},
+            {
+                "timezone": "Asia/Kolkata",
+                "current": {"time": "2026-10-03T17:45", "temperature_2m": 21.5, "weather_code": 0, "precipitation": None},
+                "daily": {
+                    "time": ["2026-10-03"],
+                    "temperature_2m_max": [30],
+                    "temperature_2m_min": [None],
+                    "precipitation_sum": [None],
+                    "weather_code": [0],
+                },
+            },
+            "https://api.open-meteo.com/v1/forecast",
+        )
+        self.assertIsNone(weather["precipitation_mm"])
+        self.assertEqual(weather["temperature_c"], "21.5")
+        self.assertIsNone(weather["days"][0]["precipitation_mm"])
+        self.assertIsNone(weather["days"][0]["low_c"])
+
+    def test_print_downloads_a_pdf_of_the_selected_store(self):
+        self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
+        self.write(
+            "sales_pred_vs_actual.csv",
+            CALENDAR_HEADER
+            + "\nGurgaon Sec-15 (02/0010),2026-10-02,Fri,A,,,70000,62912.34,,,,,\n",
+        )
+        anon = self.app.test_client()
+        blocked = anon.get(f"/store-health/{GURGAON_SLUG}/print?start=2026-10-01&end=2026-10-03&day=2026-10-02")
+        self.assertEqual(blocked.status_code, 302)
+        response = self.client.get(f"/store-health/{GURGAON_SLUG}/print?start=2026-10-01&end=2026-10-03&day=2026-10-02")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.mimetype, "application/pdf")
+        self.assertTrue(response.data.startswith(b"%PDF"))
+        self.assertIn("attachment", response.headers["Content-Disposition"])
+        self.assertIn("store-health-", response.headers["Content-Disposition"])
+        reader = PdfReader(io.BytesIO(response.data))
+        text = "\n".join(page.extract_text() or "" for page in reader.pages)
+        self.assertIn("Gurgaon Sec-15 (02/0010)", text)
+        self.assertIn("2026-10-01", text)
+        self.assertIn("2026-10-03", text)
+        self.assertIn("Ops", text)
+        self.assertIn("CRM", text)
+        self.assertIn("Cost", text)
+        self.assertIn("Holiday calendar", text)
+        self.assertIn("Local current affairs", text)
+        self.assertIn("Weather", text)
+        self.assertIn("₹62,912.34", text)
+        self.assertIn(HOLIDAY_DISCONNECTED, text)
+        self.assertIn(NEWS_DISCONNECTED, text)
+        self.assertNotIn("7,087", text)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"

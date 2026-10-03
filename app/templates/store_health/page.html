@@ -126,6 +126,10 @@
   }
   .insight-col { border-style: solid; border-color: rgba(255,255,255,0.08); }
   .insight-col h3, .map-slot h3 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+  .insight-item { margin: 0 0 0.65rem; font-size: 0.88rem; line-height: 1.4; }
+  .context-meta { color: #ced4da; font-size: 0.78rem; margin: 0.15rem 0 0.45rem; }
+  .context-list { margin: 0; padding-left: 1.1rem; }
+  .context-list li { margin: 0.28rem 0; font-size: 0.86rem; }
   .cal-scroll { overflow-x: auto; max-width: 100%; }
   .dow-grid, .cal-grid {
     display: grid;
@@ -193,7 +197,12 @@
 
 <div class="store-health py-4">
   <p class="eyebrow mb-1"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none">Command Centre</a> / Store Health</p>
-  <h1 class="mb-2">{% if store %}{{ store.label }}{% else %}Choose a store{% endif %}</h1>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <h1 class="mb-0">{% if store %}{{ store.label }}{% else %}Choose a store{% endif %}</h1>
+    {% if store %}
+      <a class="btn btn-outline-light" id="print-store" href="{{ url_for('store_health.print_pdf', store_id=store.id, start=selection.start_input, end=selection.end_input, day=selection.day_input) }}">Print</a>
+    {% endif %}
+  </div>
   {% if store %}
     <ul class="identity">
       {% if store.region %}<li>{{ store.region }}</li>{% endif %}
@@ -559,16 +568,88 @@
           <p class="box-source">Ops, CRM, and cost, with room for context</p>
         </div>
       </div>
-      <p class="empty-state">No ops, CRM, or cost insights are on file for this store.</p>
+      {% if not store %}
+        <p class="empty-state">Choose a store to see ops, CRM, and cost insights.</p>
+      {% elif not insights.has_insight %}
+        <p class="empty-state">No ops, CRM, or cost insights are on file for this store.</p>
+      {% endif %}
       <div class="row g-3 mb-3">
-        <div class="col-md-4"><div class="insight-col" id="ops"><h3>Ops</h3></div></div>
-        <div class="col-md-4"><div class="insight-col" id="crm"><h3>CRM</h3></div></div>
-        <div class="col-md-4"><div class="insight-col" id="cost"><h3>Cost</h3></div></div>
+        <div class="col-md-4">
+          <div class="insight-col" id="ops">
+            <h3>Ops</h3>
+            {% for item in insights.ops %}<p class="insight-item">{{ item }}</p>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="insight-col" id="crm">
+            <h3>CRM</h3>
+            {% for item in insights.crm %}<p class="insight-item">{{ item }}</p>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="insight-col" id="cost">
+            <h3>Cost</h3>
+            {% for item in insights.cost %}<p class="insight-item">{{ item }}</p>{% endfor %}
+          </div>
+        </div>
       </div>
       <div class="row g-3">
-        <div class="col-md-4"><div class="map-slot" id="holiday-calendar"><h3>Holiday calendar</h3></div></div>
-        <div class="col-md-4"><div class="map-slot" id="local-current-affairs"><h3>Local current affairs</h3></div></div>
-        <div class="col-md-4"><div class="map-slot" id="weather"><h3>Weather</h3></div></div>
+        <div class="col-md-4">
+          <div class="map-slot" id="holiday-calendar">
+            <h3>Holiday calendar</h3>
+            {% if store %}
+              {% if context_slots.holiday.connected %}
+                <p class="context-meta">{{ context_slots.holiday.place }}. {{ context_slots.holiday.source }}{% if context_slots.holiday.fetched_at %} Fetched {{ context_slots.holiday.fetched_at }}.{% endif %}</p>
+                {% if context_slots.holiday.entries %}
+                  <ul class="context-list">
+                    {% for item in context_slots.holiday.entries %}
+                      <li>{{ item.date }}: {{ item.name }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+                {% if context_slots.holiday.message %}<p class="insight-item">{{ context_slots.holiday.message }}</p>{% endif %}
+              {% else %}
+                <p class="insight-item">{{ context_slots.holiday.message }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="map-slot" id="local-current-affairs">
+            <h3>Local current affairs</h3>
+            {% if store %}
+              {% if context_slots.news.connected %}
+                <p class="context-meta">{{ context_slots.news.place }}. {{ context_slots.news.source }}{% if context_slots.news.fetched_at %} Fetched {{ context_slots.news.fetched_at }}.{% endif %}</p>
+                <ul class="context-list">
+                  {% for item in context_slots.news.entries %}
+                    <li>{{ item.line }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="insight-item">{{ context_slots.news.message }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="map-slot" id="weather">
+            <h3>Weather</h3>
+            {% if store %}
+              {% if context_slots.weather.connected %}
+                <p class="insight-item">{{ context_slots.weather.summary }}</p>
+                {% if context_slots.weather.days %}
+                  <ul class="context-list">
+                    {% for day in context_slots.weather.days %}
+                      <li>{{ day.line }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              {% else %}
+                <p class="insight-item">{{ context_slots.weather.message }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
       </div>
     </section>
 
