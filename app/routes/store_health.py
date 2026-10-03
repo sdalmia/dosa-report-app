@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, send_file
+import logging
 from io import BytesIO
+
+from flask import Blueprint, render_template, request, send_file
 
 from app.routes.main import login_required
 from app.store_health.context_slots import build_context_slots
@@ -18,6 +20,7 @@ from app.store_health.present import (
 )
 
 store_health_bp = Blueprint("store_health", __name__)
+log = logging.getLogger(__name__)
 
 
 def _assemble(token, args):
@@ -29,6 +32,8 @@ def _assemble(token, args):
     view = build_view(feeds, store, selection, today)
     insights = build_insights(feeds, store)
     context_slots = build_context_slots(store, today)
+    for warning in feeds.get("warnings") or []:
+        log.warning("%s", warning)
     return {
         "today": today,
         "selection": selection,
@@ -57,7 +62,6 @@ def page(store_id=None):
         unknown_token=packed["token"] if packed["token"] and store is None else "",
         groups=grouped_stores(packed["stores"]),
         selection=selection,
-        warnings=packed["feeds"]["warnings"],
         day_label=format_date(selection["day"]) if selection["day"] else "",
         match_keys=sorted(store.match_keys(), key=str.lower) if store else [],
         insights=packed["insights"],
@@ -80,7 +84,6 @@ def print_pdf(store_id):
         packed["view"],
         packed["insights"],
         packed["context_slots"],
-        packed["feeds"]["warnings"],
     )
     filename = f"store-health-{store.id}.pdf"
     response = send_file(
