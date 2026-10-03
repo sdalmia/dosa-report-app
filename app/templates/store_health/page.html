@@ -659,6 +659,9 @@
         <div>
           <h2 id="calendar-title">Sales calendar</h2>
           <p class="box-source">Predicted versus actual Net</p>
+          {% if calendar_share_label %}
+            <p class="box-source" data-field="calendar_share_label">{{ calendar_share_label }}</p>
+          {% endif %}
           {% if freshness.calendar.state == "ready" %}
             <p class="box-source">File last saved {{ freshness.calendar.saved_at }}. Newest date in the file {{ freshness.calendar.newest_date }}.</p>
           {% else %}
@@ -685,6 +688,8 @@
         <p class="empty-state">{{ selection.error }}</p>
       {% elif not store %}
         <p class="empty-state">Choose a store to see predicted and actual Net.</p>
+      {% elif calendar_absent_note %}
+        <p class="empty-state" data-field="calendar_absent_note">{{ calendar_absent_note }}</p>
       {% elif day_count and not filled_actual_days and not filled_prediction_days %}
         <p class="empty-state">No predicted or actual Net in this range.</p>
       {% elif day_count %}
@@ -708,8 +713,11 @@
                   <div class="cal-cell {% if cell.iso == selection.day_input %}is-selected{% endif %} {% if cell.iso == today_iso %}is-today{% endif %}">
                     <a class="day-num" href="{{ day_href }}">{{ cell.date.day }} {{ cell.chrome_weekday }}</a>
                     {% if cell.fields.tier %}<div class="cal-line"><span>Tier</span><b>{{ cell.fields.tier }}</b></div>{% endif %}
+                    <div class="cal-line"><span>Low</span><b>{{ cell.fields.pred_low }}</b></div>
                     <div class="cal-line"><span>Mid</span><b>{{ cell.fields.pred_mid }}</b></div>
+                    <div class="cal-line"><span>High</span><b>{{ cell.fields.pred_high }}</b></div>
                     <div class="cal-line"><span>Actual</span><b>{{ cell.fields.actual_net }}</b></div>
+                    {% if cell.fields.drivers %}<div class="cal-line"><span>Driver</span><b>{{ cell.fields.drivers }}</b></div>{% endif %}
                     {% if cell.fields.status %}<div class="cal-line"><span>Status</span><b>{{ cell.fields.status }}</b></div>{% endif %}
                   </div>
                 {% else %}
@@ -767,7 +775,7 @@
     <summary>Where these figures come from</summary>
     <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
     <p><code>{{ posist_columns|join(", ") }}</code></p>
-    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Status is pending, actual, or actual_provisional_eod. Variance is shown only when the file has it.</p>
+    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. Actual, variance, and variance percent stay blank until the file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
     <p><code>{{ calendar_columns|join(", ") }}</code></p>
     <p class="mb-2">Keka reads <code>data/store_health/keka.csv</code>. Headcount is registered employees, not people on shift. Primary lead is the largest reporting line, not a confirmed single store manager. The row joins the Posist label in posist_store. A shorter label is used only when it matches one store. Match status is shown as written, including inferred and no keka match.</p>
     <p><code>{{ keka_columns|join(", ") }}</code></p>

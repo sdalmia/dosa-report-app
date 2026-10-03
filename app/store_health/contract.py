@@ -13,7 +13,7 @@ posist_daily.csv — one row per store per date
 sales_pred_vs_actual.csv — network shape, plus store on a store calendar
     date, weekday, tier, pred_low, pred_high, pred_mid, actual_net,
     variance_vs_mid, variance_pct, status, drivers, notes
-    status: pending | actual | actual_provisional_eod
+    status: pending | actual | actual_provisional_eod | share_of_network_band | not_on_deployment_report
 
 Money is rupees unless the column name ends with _L (already in lakhs).
 """
@@ -151,7 +151,13 @@ CALENDAR_PERCENTS = {"variance_pct"}
 CALENDAR_TEXT = {"weekday", "tier", "status", "drivers", "notes"}
 
 ALLOWED_SOURCE = {"live", "historical"}
-ALLOWED_STATUS = {"pending", "actual", "actual_provisional_eod"}
+ALLOWED_STATUS = {
+    "pending",
+    "actual",
+    "actual_provisional_eod",
+    "share_of_network_band",
+    "not_on_deployment_report",
+}
 
 
 def data_directory():
@@ -346,7 +352,8 @@ def load_calendar(directory=None):
                             _warn(
                                 warnings,
                                 f"{CALENDAR_FILE} row {index} status is {text!r}. "
-                                "Expected pending, actual, or actual_provisional_eod.",
+                                "Expected pending, actual, actual_provisional_eod, "
+                                "share_of_network_band, or not_on_deployment_report.",
                             )
                     else:
                         parsed[field] = text

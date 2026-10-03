@@ -33,7 +33,12 @@ STATUS_LABELS = {
     "pending": "Pending",
     "actual": "Actual",
     "actual_provisional_eod": "Actual, provisional end of day",
+    "share_of_network_band": "Share of the network band",
+    "not_on_deployment_report": "Not on the deployment report",
 }
+CALENDAR_SHARE_LABEL = (
+    "Low, mid, and high are this store's share of the network judgment band, not a separate model."
+)
 
 KEKA_CAVEAT = (
     "Headcount is registered employees, not people on shift. "
@@ -408,15 +413,31 @@ def resolve_store(stores, token):
     return None
 
 
-def parse_range(args, today):
+def calendar_bounds(feeds):
+    """First and last dates in the store calendar, when the file has any."""
+    days = [day for (_store, day) in feeds.get("calendar") or {}]
+    if not days:
+        return None
+    return min(days), max(days)
+
+
+def parse_range(args, today, default_span=None):
     raw_start = (args.get("start") or "").strip()
     raw_end = (args.get("end") or "").strip()
     raw_day = (args.get("day") or "").strip()
     error = None
     start = end = None
     if not raw_start and not raw_end:
-        end = today
-        start = today - timedelta(days=13)
+        if (
+            default_span
+            and default_span[0]
+            and default_span[1]
+            and (default_span[1] - default_span[0]).days + 1 <= MAX_RANGE_DAYS
+        ):
+            start, end = default_span
+        else:
+            end = today
+            start = today - timedelta(days=13)
         raw_start = start.isoformat()
         raw_end = end.isoformat()
     else:
@@ -441,8 +462,11 @@ def parse_range(args, today):
             error = error or "The Posist day is not a valid date."
             raw_day = ""
     elif end is not None:
-        day = end
-        raw_day = end.isoformat()
+        if start is not None and start <= today <= end:
+            day = today
+        else:
+            day = end
+        raw_day = day.isoformat()
     return {
         "start": start,
         "end": end,
@@ -618,10 +642,29 @@ def present_famepilot(feeds, store):
     }
 
 
+def calendar_story(feeds, store):
+    """How to label this store's calendar bands. Does not invent a figure."""
+    share = False
+    absent_note = ""
+    if store is not None:
+        for (name, _day), row in feeds["calendar"].items():
+            if name not in store.match_keys():
+                continue
+            if row.get("status") == "share_of_network_band":
+                share = True
+            elif row.get("status") == "not_on_deployment_report" and row.get("notes") and not absent_note:
+                absent_note = row["notes"]
+    return {
+        "share_label": CALENDAR_SHARE_LABEL if share else "",
+        "absent_note": "" if share else absent_note,
+    }
+
+
 def build_view(feeds, store, selection, today):
     days = calendar_days(feeds, store, selection["start"], selection["end"])
     filled = sum(1 for day in days if day["fields"]["actual_net"])
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
+    story = calendar_story(feeds, store)
     described = describe_feeds(feeds["directory"])
     return {
         "posist": posist_window(feeds, store),
@@ -629,6 +672,8 @@ def build_view(feeds, store, selection, today):
         "weeks": calendar_weeks(days),
         "filled_actual_days": filled,
         "filled_prediction_days": predicted,
+        "calendar_share_label": story["share_label"],
+        "calendar_absent_note": story["absent_note"],
         "day_count": len(days),
         "today_iso": today.isoformat() if today else "",
         "posist_columns": POSIST_COLUMNS,
