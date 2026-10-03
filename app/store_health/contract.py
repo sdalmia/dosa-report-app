@@ -29,6 +29,8 @@ IST = ZoneInfo("Asia/Kolkata")
 
 POSIST_FILE = "posist_daily.csv"
 CALENDAR_FILE = "sales_pred_vs_actual.csv"
+KEKA_FILE = "keka.csv"
+AUDIT_FILE = "mystery_audit.csv"
 
 POSIST_COLUMNS = (
     "store",
@@ -67,6 +69,26 @@ CALENDAR_VALUE_COLUMNS = (
     "notes",
 )
 CALENDAR_COLUMNS = ("store",) + CALENDAR_VALUE_COLUMNS
+
+KEKA_COLUMNS = (
+    "posist_store",
+    "keka_location",
+    "headcount",
+    "primary_lead",
+    "other_leads",
+    "match_status",
+    "note",
+)
+
+AUDIT_COLUMNS = (
+    "store",
+    "period",
+    "avg_score",
+    "weekday_score",
+    "weekend_score",
+    "note",
+    "status",
+)
 
 POSIST_MONEY = {
     "net",
@@ -308,14 +330,97 @@ def load_calendar(directory=None):
     return rows, warnings
 
 
+def _text_cell(value):
+    if _blank(value):
+        return None
+    return str(value).strip()
+
+
+def load_keka(directory=None):
+    """Rows from keka.csv. Cells stay text, including headcount written as words."""
+    directory = Path(directory) if directory else data_directory()
+    warnings = []
+    path = directory / KEKA_FILE
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    if "posist_store" not in table[0]:
+        _warn(warnings, f"{KEKA_FILE} is missing posist_store.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("posist_store"))
+        if not store:
+            _warn(warnings, f"{KEKA_FILE} row {index} has no posist_store, so it was skipped.")
+            continue
+        parsed = {field: _text_cell(raw.get(field)) for field in KEKA_COLUMNS}
+        parsed["posist_store"] = store
+        rows.append(parsed)
+    return rows, warnings
+
+
+def is_brand_audit(row):
+    status = (row.get("status") or "").strip().casefold()
+    store = (row.get("store") or "").strip().casefold()
+    return status == "brand aggregate" or store == "brand"
+
+
+def load_audit(directory=None):
+    """Mystery-audit rows. Scores stay as written, including notes that are not numbers."""
+    directory = Path(directory) if directory else data_directory()
+    warnings = []
+    path = directory / AUDIT_FILE
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    if "store" not in table[0]:
+        _warn(warnings, f"{AUDIT_FILE} is missing store.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("store"))
+        if not store:
+            _warn(warnings, f"{AUDIT_FILE} row {index} has no store, so it was skipped.")
+            continue
+        parsed = {field: _text_cell(raw.get(field)) for field in AUDIT_COLUMNS}
+        parsed["store"] = store
+        rows.append(parsed)
+    return rows, warnings
+
+
 def load_feeds(directory=None):
+    from app.store_health.stores import assign_rows
+
     directory = Path(directory) if directory else data_directory()
     posist, posist_warnings = load_posist(directory)
     calendar, calendar_warnings = load_calendar(directory)
+    keka, keka_warnings = load_keka(directory)
+    audit, audit_warnings = load_audit(directory)
+    labels = sorted({store for store, _day in posist})
+    keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", labels)
+    audit_stores = [row for row in audit if not is_brand_audit(row)]
+    brand_rows = [row for row in audit if is_brand_audit(row)]
+    audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
+    if labels:
+        for row in keka_unmatched:
+            _warn(
+                keka_warnings,
+                f"{KEKA_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
+            )
+        for row in audit_unmatched:
+            _warn(
+                audit_warnings,
+                f"{AUDIT_FILE} row {row.get('store')!r} does not match one Posist store, so it was not applied.",
+            )
     return {
         "posist": posist,
         "calendar": calendar,
-        "warnings": posist_warnings + calendar_warnings,
+        "keka": keka,
+        "keka_by_store": keka_by_store,
+        "audit": audit,
+        "audit_by_store": audit_by_store,
+        "audit_brand": brand_rows[-1] if brand_rows else None,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + audit_warnings,
         "directory": directory,
     }
 

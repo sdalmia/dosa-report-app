@@ -178,6 +178,15 @@
   }
   .feed-time h3 { font-size: 1rem; margin: 0 0 0.25rem; }
   .feed-time p { margin: 0.1rem 0; }
+  .caveat {
+    color: #f8f9fa;
+    background: rgba(251, 146, 60, 0.14);
+    border-radius: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+  .brand-audit { margin-top: 0.9rem; }
 </style>
 
 <div class="store-health py-4">
@@ -324,10 +333,58 @@
         <span class="box-index">2</span>
         <div>
           <h2 id="audit-title">Mystery Audit</h2>
-          <p class="box-source">For this store</p>
+          <p class="box-source">For this store{% if audit.fields.audit_period %} · {{ audit.fields.audit_period }}{% endif %}</p>
         </div>
       </div>
-      <p class="empty-state mb-0">No mystery audit is on file for this store.</p>
+      {% if audit.state == "missing" %}
+        <p class="empty-state">mystery_audit.csv is missing.</p>
+      {% elif audit.state == "empty" %}
+        <p class="empty-state">mystery_audit.csv is empty.</p>
+      {% endif %}
+      {% if not store %}
+        <p class="empty-state">Choose a store to see its mystery audit.</p>
+      {% elif not audit.has_row %}
+        <p class="empty-state">No mystery audit is on file for this store.</p>
+      {% endif %}
+      <div class="metric-grid">
+        <article class="metric">
+          <h3>Average</h3>
+          <p class="value" data-field="audit_avg">{{ audit.fields.audit_avg }}</p>
+        </article>
+        <article class="metric">
+          <h3>Weekday</h3>
+          <p class="value" data-field="audit_weekday">{{ audit.fields.audit_weekday }}</p>
+        </article>
+        <article class="metric">
+          <h3>Weekend</h3>
+          <p class="value" data-field="audit_weekend">{{ audit.fields.audit_weekend }}</p>
+        </article>
+      </div>
+      <p class="sub"><span class="sub-label">Status</span> <span data-field="audit_status">{{ audit.fields.audit_status }}</span></p>
+      <p class="sub"><span class="sub-label">Note</span> <span data-field="audit_note">{{ audit.fields.audit_note }}</span></p>
+      <p class="sub"><span class="sub-label">Period</span> <span data-field="audit_period">{{ audit.fields.audit_period }}</span></p>
+      {% if audit.has_brand %}
+        <div class="insight-col brand-audit" id="brand-audit">
+          <h3>Brand aggregate</h3>
+          <p class="box-source">Not a store score. Period {{ audit.fields.brand_period }}.</p>
+          <div class="metric-grid">
+            <article class="metric">
+              <h3>Average</h3>
+              <p class="value" data-field="brand_avg">{{ audit.fields.brand_avg }}</p>
+            </article>
+            <article class="metric">
+              <h3>Weekday</h3>
+              <p class="value" data-field="brand_weekday">{{ audit.fields.brand_weekday }}</p>
+            </article>
+            <article class="metric">
+              <h3>Weekend</h3>
+              <p class="value" data-field="brand_weekend">{{ audit.fields.brand_weekend }}</p>
+            </article>
+          </div>
+          <p class="sub"><span class="sub-label">Status</span> <span data-field="brand_status">{{ audit.fields.brand_status }}</span></p>
+          <p class="sub"><span class="sub-label">Note</span> <span data-field="brand_note">{{ audit.fields.brand_note }}</span></p>
+        </div>
+      {% endif %}
     </section>
 
     <section id="staff" class="health-box box-staff" aria-labelledby="staff-title">
@@ -338,17 +395,38 @@
           <p class="box-source">Keka</p>
         </div>
       </div>
-      <p class="empty-state">Store manager and staff strength are not connected. They will come from Keka.</p>
+      <p class="caveat" id="keka-caveat">{{ keka.caveat }}</p>
+      {% if keka.state == "missing" %}
+        <p class="empty-state">keka.csv is missing.</p>
+      {% elif keka.state == "empty" %}
+        <p class="empty-state">keka.csv is empty.</p>
+      {% elif not store %}
+        <p class="empty-state">Choose a store to see its Keka row.</p>
+      {% elif not keka.has_row %}
+        <p class="empty-state">No Keka row matches this store.</p>
+      {% elif keka.no_match %}
+        <p class="empty-state">No Keka match. No manager is on file.</p>
+      {% endif %}
       <div class="metric-grid">
         <article class="metric">
-          <h3>Store manager</h3>
-          <p class="value" data-field="store_manager"></p>
+          <h3>Primary lead</h3>
+          <p class="value" data-field="primary_lead">{{ keka.fields.primary_lead }}</p>
         </article>
         <article class="metric">
-          <h3>Staff strength</h3>
-          <p class="value" data-field="staff_strength"></p>
+          <h3>Registered employees</h3>
+          <p class="value" data-field="headcount">{{ keka.fields.headcount }}</p>
+        </article>
+        <article class="metric">
+          <h3>Keka location</h3>
+          <p class="value" data-field="keka_location">{{ keka.fields.keka_location }}</p>
+        </article>
+        <article class="metric">
+          <h3>Other leads</h3>
+          <p class="value" data-field="other_leads">{{ keka.fields.other_leads }}</p>
         </article>
       </div>
+      <p class="sub"><span class="sub-label">Match status</span> <span data-field="match_status">{{ keka.fields.match_status }}</span></p>
+      <p class="sub"><span class="sub-label">Note</span> <span data-field="keka_note">{{ keka.fields.keka_note }}</span></p>
     </section>
 
     <section id="famepilot" class="health-box box-fame" aria-labelledby="fame-title">
@@ -523,7 +601,11 @@
     <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
     <p><code>{{ posist_columns|join(", ") }}</code></p>
     <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Status is pending, actual, or actual_provisional_eod. Variance is shown only when the file has it.</p>
-    <p class="mb-0"><code>{{ calendar_columns|join(", ") }}</code></p>
+    <p><code>{{ calendar_columns|join(", ") }}</code></p>
+    <p class="mb-2">Keka reads <code>data/store_health/keka.csv</code>. Headcount is registered employees, not people on shift. Primary lead is the largest reporting line, not a confirmed single store manager. The row joins the Posist label in posist_store. A shorter label is used only when it matches one store. Match status is shown as written, including inferred and no keka match.</p>
+    <p><code>{{ keka_columns|join(", ") }}</code></p>
+    <p class="mb-2">Mystery audit reads <code>data/store_health/mystery_audit.csv</code>. Scores stay as written. A store with no row stays empty. The Brand row is the brand aggregate, not that store's score.</p>
+    <p class="mb-0"><code>{{ audit_columns|join(", ") }}</code></p>
   </details>
 </div>
 {% endblock %}

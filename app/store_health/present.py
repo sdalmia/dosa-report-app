@@ -4,15 +4,20 @@ from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from app.store_health.contract import (
+    AUDIT_COLUMNS,
+    AUDIT_FILE,
     CALENDAR_COLUMNS,
     CALENDAR_MONEY,
     CALENDAR_PERCENTS,
     CALENDAR_VALUE_COLUMNS,
+    KEKA_COLUMNS,
+    KEKA_FILE,
     POSIST_COLUMNS,
     POSIST_COUNTS,
     POSIST_MONEY,
     POSIST_PERCENTS,
     describe_feeds,
+    parse_number,
 )
 from app.store_health.stores import Store, store_from_label
 
@@ -25,6 +30,11 @@ STATUS_LABELS = {
     "actual": "Actual",
     "actual_provisional_eod": "Actual, provisional end of day",
 }
+
+KEKA_CAVEAT = (
+    "Headcount is registered employees, not people on shift. "
+    "Primary lead is the largest reporting line, not a confirmed single store manager."
+)
 
 
 def business_today():
@@ -333,6 +343,86 @@ def parse_range(args, today):
     }
 
 
+def _file_state(directory, filename, rows):
+    if not (directory / filename).exists():
+        return "missing"
+    if not rows:
+        return "empty"
+    return "ready"
+
+
+def _text(row, field):
+    if row is None:
+        return ""
+    value = row.get(field)
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def present_keka(feeds, store):
+    row = feeds["keka_by_store"].get(store.label) if store else None
+    status = _text(row, "match_status")
+    no_match = status.casefold() == "no keka match"
+    headcount = ""
+    primary = ""
+    location = ""
+    other = ""
+    note = ""
+    if row is not None and not no_match:
+        raw_headcount = _text(row, "headcount")
+        if parse_number(raw_headcount) is not None:
+            headcount = raw_headcount
+        raw_primary = _text(row, "primary_lead")
+        if raw_primary.casefold() != "no keka match":
+            primary = raw_primary
+        raw_location = _text(row, "keka_location")
+        if raw_location.casefold() != "no keka location":
+            location = raw_location
+        other = _text(row, "other_leads")
+        note = _text(row, "note")
+    return {
+        "state": _file_state(feeds["directory"], KEKA_FILE, feeds["keka"]),
+        "caveat": KEKA_CAVEAT,
+        "has_row": row is not None,
+        "no_match": no_match,
+        "fields": {
+            "keka_location": location,
+            "headcount": headcount,
+            "primary_lead": primary,
+            "other_leads": other,
+            "match_status": status,
+            "keka_note": note,
+        },
+    }
+
+
+def _audit_display(row, prefix):
+    mapping = (
+        ("period", "period"),
+        ("avg_score", "avg"),
+        ("weekday_score", "weekday"),
+        ("weekend_score", "weekend"),
+        ("note", "note"),
+        ("status", "status"),
+    )
+    return {f"{prefix}_{name}": _text(row, source) for source, name in mapping}
+
+
+def present_audit(feeds, store):
+    row = feeds["audit_by_store"].get(store.label) if store else None
+    brand = feeds.get("audit_brand")
+    fields = {}
+    fields.update(_audit_display(row, "audit"))
+    fields.update(_audit_display(brand, "brand"))
+    return {
+        "state": _file_state(feeds["directory"], AUDIT_FILE, feeds["audit"]),
+        "has_row": row is not None,
+        "has_brand": brand is not None,
+        "fields": fields,
+    }
+
+
 def build_view(feeds, store, selection, today):
     days = calendar_days(feeds, store, selection["start"], selection["end"])
     filled = sum(1 for day in days if day["fields"]["actual_net"])
@@ -348,6 +438,10 @@ def build_view(feeds, store, selection, today):
         "today_iso": today.isoformat() if today else "",
         "posist_columns": POSIST_COLUMNS,
         "calendar_columns": CALENDAR_COLUMNS,
+        "keka_columns": KEKA_COLUMNS,
+        "audit_columns": AUDIT_COLUMNS,
+        "keka": present_keka(feeds, store),
+        "audit": present_audit(feeds, store),
         "freshness": {
             "posist": present_freshness(described["posist"]),
             "calendar": present_freshness(described["calendar"]),

@@ -13,12 +13,15 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.store_health.contract import (
+    AUDIT_COLUMNS,
     CALENDAR_COLUMNS,
+    KEKA_COLUMNS,
     POSIST_COLUMNS,
     load_calendar,
     load_posist,
     parse_number,
 )
+from app.store_health.stores import unique_store_label
 from app.store_health.present import (
     business_today,
     format_count,
@@ -138,13 +141,17 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(html.count("<optgroup"), 0)
         self.assertEqual(cell(html, "net"), "")
         self.assertEqual(cell(html, "void_bills"), "")
-        self.assertEqual(cell(html, "store_manager"), "")
+        self.assertEqual(cell(html, "primary_lead"), "")
+        self.assertEqual(cell(html, "headcount"), "")
         self.assertEqual(cell(html, "rating"), "")
         self.assertEqual(cell(html, "complaints"), "")
         self.assertEqual(cell(html, "threats"), "")
         self.assertNotIn("62912", html)
-        self.assertIn("No mystery audit is on file for this store.", html)
-        self.assertIn("They will come from Keka.", html)
+        self.assertIn("Choose a store to see its mystery audit.", html)
+        self.assertIn("mystery_audit.csv is missing.", html)
+        self.assertIn("keka.csv is missing.", html)
+        self.assertIn("Headcount is registered employees, not people on shift.", html)
+        self.assertIn("not a confirmed single store manager.", html)
         self.assertIn("No Reelo data is on file for this store.", html)
         self.assertIn("Holiday calendar", html)
         self.assertIn("Local current affairs", html)
@@ -208,8 +215,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("network driver", html)
         self.assertNotIn("No daily Posist row", html)
         self.assertIn("No mystery audit is on file for this store.", html)
-        self.assertEqual(cell(html, "store_manager"), "")
-        self.assertEqual(cell(html, "staff_strength"), "")
+        self.assertEqual(cell(html, "primary_lead"), "")
+        self.assertEqual(cell(html, "headcount"), "")
         self.assertEqual(cell(html, "rating"), "")
         self.assertEqual(cell(html, "threats"), "")
         self.assertIn("No Reelo data is on file for this store.", html)
@@ -388,6 +395,176 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(events_page, "apb"), "₹0")
         self.assertEqual(cell(events_page, "net_wow_pct"), "0%")
         self.assertIn(">East</li>", events_page)
+
+    def _option_slug(self, html, label):
+        match = re.search(
+            rf'<option value="([^"]+)"[^>]*>{re.escape(html_lib.escape(label))}</option>',
+            html,
+        )
+        self.assertIsNotNone(match, label)
+        return match.group(1)
+
+    def test_ambiguous_short_label_is_not_applied(self):
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER
+            + "\n"
+            + "Dosa Coffee - Salt Lake (002),2026-10-02,1,,,,,,,,,,,,,,,,East\n"
+            + "Dosa Coffee - Salt Lake Sec-1 (0009),2026-10-02,2,,,,,,,,,,,,,,,,East\n"
+            + "Gurgaon Sec 10 (02/0014),2026-10-02,3,,,,,,,,,,,,,,,,North\n",
+        )
+        self.write(
+            "keka.csv",
+            "posist_store,keka_location,headcount,primary_lead,other_leads,match_status,note\n"
+            "Salt Lake,Somewhere,10,Should Not Attach,none,matched,note\n"
+            "Gurgaon Sec 10,Gurgaon Sec 10,24,Anil Singh Bisht (ARM),none,matched,note\n",
+        )
+        index = self.get("/store-health")
+        salt = self._option_slug(index, "Dosa Coffee - Salt Lake (002)")
+        sec1 = self._option_slug(index, "Dosa Coffee - Salt Lake Sec-1 (0009)")
+        sec10 = self._option_slug(index, "Gurgaon Sec 10 (02/0014)")
+        salt_page = self.get(f"/store-health/{salt}?day=2026-10-02")
+        sec1_page = self.get(f"/store-health/{sec1}?day=2026-10-02")
+        sec10_page = self.get(f"/store-health/{sec10}?day=2026-10-02")
+        self.assertEqual(cell(salt_page, "primary_lead"), "")
+        self.assertEqual(cell(salt_page, "headcount"), "")
+        self.assertNotIn("Should Not Attach", salt_page)
+        self.assertEqual(cell(sec1_page, "primary_lead"), "")
+        self.assertNotIn("Should Not Attach", sec1_page)
+        self.assertEqual(cell(sec10_page, "primary_lead"), "Anil Singh Bisht (ARM)")
+        self.assertEqual(cell(sec10_page, "headcount"), "24")
+        self.assertEqual(cell(sec10_page, "match_status"), "matched")
+        self.assertIsNone(unique_store_label("Salt Lake", [
+            "Dosa Coffee - Salt Lake (002)",
+            "Dosa Coffee - Salt Lake Sec-1 (0009)",
+        ]))
+        self.assertIn("does not match one Posist store", salt_page)
+
+    def test_keka_and_mystery_audit_drop(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        with (root / "keka.csv").open(encoding="utf-8-sig", newline="") as handle:
+            keka_rows = list(csv.DictReader(handle))
+        with (root / "mystery_audit.csv").open(encoding="utf-8-sig", newline="") as handle:
+            audit_rows = list(csv.DictReader(handle))
+        self.assertEqual(len(keka_rows), 33)
+        self.assertEqual(tuple(keka_rows[0].keys()), KEKA_COLUMNS)
+        self.assertEqual(len(audit_rows), 13)
+        self.assertEqual(tuple(audit_rows[0].keys()), AUDIT_COLUMNS)
+        self.assertEqual(sum(1 for row in audit_rows if row["status"] == "brand aggregate"), 1)
+        self.assertEqual(sum(1 for row in keka_rows if row["match_status"] == "no keka match"), 4)
+
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        index = self.get("/store-health")
+        self.assertIn("Headcount is registered employees, not people on shift.", index)
+        self.assertIn("not a confirmed single store manager.", index)
+        self.assertIn("Brand aggregate", index)
+        self.assertEqual(cell(index, "brand_avg"), "88.3%")
+        self.assertEqual(cell(index, "brand_weekday"), "not provided in one-pager")
+        self.assertEqual(cell(index, "brand_status"), "brand aggregate")
+        self.assertEqual(cell(index, "audit_avg"), "")
+        self.assertEqual(cell(index, "primary_lead"), "")
+        self.assertIn("No Famepilot rating, complaint, or threat is on file for this store.", index)
+        self.assertIn("No Reelo data is on file for this store.", index)
+        self.assertEqual(cell(index, "posist_newest_date"), "2 Oct 2026")
+        self.assertEqual(cell(index, "calendar_newest_date"), "2 Oct 2026")
+
+        def open_store(label):
+            slug = self._option_slug(index, label)
+            return self.get(f"/store-health/{slug}?start=2026-10-02&end=2026-10-02&day=2026-10-02")
+
+        ideal = open_store("Dosa Coffee - Ideal Plaza (01/0001)")
+        self.assertEqual(cell(ideal, "headcount"), "102")
+        self.assertEqual(cell(ideal, "primary_lead"), "Dipankar Saha (RGM)")
+        self.assertEqual(cell(ideal, "keka_location"), "Ideal Plaza")
+        self.assertEqual(cell(ideal, "match_status"), "matched")
+        self.assertEqual(cell(ideal, "audit_avg"), "not in cycle")
+        self.assertEqual(cell(ideal, "audit_status"), "not in cycle")
+        self.assertEqual(cell(ideal, "audit_period"), "August 2026")
+        self.assertEqual(cell(ideal, "brand_avg"), "88.3%")
+        self.assertNotEqual(cell(ideal, "audit_avg"), cell(ideal, "brand_avg"))
+
+        salt = open_store("Dosa Coffee - Salt Lake (002)")
+        self.assertEqual(cell(salt, "match_status"), "inferred")
+        self.assertEqual(cell(salt, "keka_location"), "Salt Lake Sec 3")
+        self.assertEqual(cell(salt, "headcount"), "51")
+        self.assertEqual(cell(salt, "primary_lead"), "Sk Jamiruddin (RGM)")
+
+        faridabad = open_store("Sec 15 Faridabad (02/0007)")
+        self.assertEqual(cell(faridabad, "match_status"), "inferred")
+        self.assertEqual(cell(faridabad, "keka_location"), "Faridabad")
+        self.assertEqual(cell(faridabad, "headcount"), "47")
+        self.assertEqual(cell(faridabad, "primary_lead"), "Mohammad Javed Idrishi (SM)")
+
+        sec10 = open_store("Gurgaon Sec 10 (02/0014)")
+        self.assertEqual(cell(sec10, "match_status"), "matched")
+        self.assertEqual(cell(sec10, "keka_location"), "Gurgaon Sec 10")
+        self.assertEqual(cell(sec10, "headcount"), "24")
+        self.assertEqual(cell(sec10, "primary_lead"), "Anil Singh Bisht (ARM)")
+
+        new_town = open_store("Dosa Coffee - New Town - Cloud Kitchen (01/0013)")
+        self.assertEqual(cell(new_town, "keka_location"), "Cloud Kitchen New Town")
+        self.assertEqual(cell(new_town, "headcount"), "13")
+        self.assertEqual(cell(new_town, "primary_lead"), "Prodip Kumar Ghosh (ARM)")
+        self.assertEqual(cell(new_town, "audit_avg"), "not in cycle")
+        self.assertEqual(cell(new_town, "audit_note"), "Not in August 2026 audit cycle")
+
+        jasola = open_store("Pacific mall, Jasola (02/0011)")
+        self.assertEqual(cell(jasola, "keka_location"), "Jasola Pacific Mall")
+        self.assertEqual(cell(jasola, "headcount"), "60")
+        self.assertEqual(cell(jasola, "audit_avg"), "84.0%")
+        self.assertEqual(cell(jasola, "audit_weekend"), "73.3%")
+        self.assertEqual(cell(jasola, "audit_note"), "Weekend crash")
+
+        sec31 = open_store("Sec 31 - Gurgaon (02/0016)")
+        self.assertEqual(cell(sec31, "keka_location"), "Gurgaon Sec 31")
+        self.assertEqual(cell(sec31, "match_status"), "matched")
+
+        forum = open_store("Dosa Coffee - Forum (0003)")
+        self.assertEqual(cell(forum, "audit_avg"), "64.7%")
+        self.assertEqual(cell(forum, "audit_weekday"), "40.9% (1-10)")
+        self.assertEqual(cell(forum, "audit_weekend"), "recovered (score not provided in one-pager)")
+        self.assertEqual(cell(forum, "audit_note"), "Weekday POS outage; weekend recovered")
+        self.assertEqual(cell(forum, "audit_status"), "scored")
+        self.assertEqual(cell(forum, "other_leads"), "none")
+
+        connaught = open_store("Connaught place (02/0012)")
+        self.assertEqual(cell(connaught, "net"), "₹1,52,678.98")
+        self.assertEqual(cell(connaught, "headcount"), "73")
+        self.assertEqual(cell(connaught, "primary_lead"), "Ashwani Kumar (RGM)")
+        self.assertEqual(cell(connaught, "match_status"), "matched")
+        self.assertEqual(cell(connaught, "audit_avg"), "79.9%")
+        self.assertEqual(cell(connaught, "audit_weekday"), "not provided in one-pager")
+        self.assertEqual(cell(connaught, "audit_weekend"), "74.4% (4-10)")
+        self.assertEqual(cell(connaught, "audit_period"), "August 2026")
+        self.assertEqual(cell(connaught, "brand_avg"), "88.3%")
+        self.assertEqual(cell(connaught, "rating"), "")
+        self.assertIn("No Reelo data is on file for this store.", connaught)
+
+        kalkaji = open_store("Kalkaji (02/0004)")
+        self.assertEqual(cell(kalkaji, "audit_avg"), "")
+        self.assertEqual(cell(kalkaji, "audit_weekday"), "")
+        self.assertEqual(cell(kalkaji, "audit_weekend"), "")
+        self.assertEqual(cell(kalkaji, "audit_status"), "")
+        self.assertIn("No mystery audit is on file for this store.", kalkaji)
+        self.assertEqual(cell(kalkaji, "brand_avg"), "88.3%")
+        self.assertEqual(cell(kalkaji, "headcount"), "39")
+        self.assertEqual(cell(kalkaji, "primary_lead"), "Deepak Nagar (RGM)")
+
+        for label in (
+            "Dosa Coffee - Food Truck - 1 (0008)",
+            "Dosa Coffee - Events & Catering",
+            "GK1 Cloud Kitchen (02/0002)",
+            "Chattarpur (02/0005)",
+        ):
+            page = open_store(label)
+            self.assertEqual(cell(page, "match_status"), "no keka match", label)
+            self.assertEqual(cell(page, "primary_lead"), "", label)
+            self.assertEqual(cell(page, "headcount"), "", label)
+            self.assertEqual(cell(page, "keka_location"), "", label)
+            self.assertIn("No Keka match. No manager is on file.", page)
+            self.assertNotIn("Dipankar Saha", page)
+
+        self.assertNotIn("does not match one Posist store", index)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
