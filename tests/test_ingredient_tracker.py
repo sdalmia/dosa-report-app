@@ -153,6 +153,93 @@ class UploadHistoryTests(unittest.TestCase):
         self.assertEqual([point['date'] for point in points], ['2025-01-15'])
         self.assertEqual(points[0]['unit_price'], 45)
 
+    def _upload_sheet(self, rows, report_date, filename='entry.xlsx'):
+        import pandas as pd
+        buffer = io.BytesIO()
+        pd.DataFrame(rows).to_excel(buffer, index=False, header=False)
+        buffer.seek(0)
+        self._login()
+        response = self.client.post(
+            '/ingredient-tracker/upload',
+            data={
+                'files': (buffer, filename),
+                'report_dates': report_date,
+            },
+            content_type='multipart/form-data',
+        )
+        self.assertEqual(response.status_code, 302)
+        return response
+
+    def test_nine_column_stock_entry_appends_and_keeps_history(self):
+        # Current Posist Stock Entry shape: 9 columns. Assigning the old 12
+        # names raises "Expected axis has 9 elements, new values have 12 elements".
+        self._upload_sheet(
+            [
+                ['Stock Entry Report'] + [''] * 8,
+                ['Kolkata Warehouse'] + [''] * 8,
+                ['01-10-2026 to 02-10-2026'] + [''] * 8,
+                ['Item Code', 'Item Name', 'Quantity', 'Unit', 'Unit Price', 'Amount', 'Discount', 'GST Tax', 'Total'],
+                [141, 'Tomato', 10, 'Kg', 52, 520, 0, 18, 538],
+                [10, 'Onion', 4, 'Kg', 28, 112, 0, 0, 112],
+            ],
+            '2026-10-01',
+            filename='kolkata-entry.xlsx',
+        )
+
+        points = self._tomato_points()
+        self.assertEqual([point['date'] for point in points], ['2025-01-15', '2026-10-01'])
+        self.assertEqual([point['unit_price'] for point in points], [45, 52])
+
+        with self.app.app_context():
+            onion = IngredientPrice.query.filter_by(ingredient_name='Onion').order_by(IngredientPrice.date).all()
+            self.assertEqual([(row.date, row.unit_price) for row in onion], [
+                (date(2025, 2, 2), 30),
+                (date(2026, 10, 1), 28),
+            ])
+            tomato = IngredientPrice.query.filter_by(ingredient_name='Tomato', date=date(2026, 10, 1)).one()
+            self.assertEqual(tomato.gst_tax, 18)
+
+    def test_two_row_consolidated_header_still_loads(self):
+        self._upload_sheet(
+            [
+                ['CONSOLIDATED ENTRY AND SALE REPORT'] + [''] * 11,
+                ['Item Code', 'Item Name', 'Quantity', 'Unit', 'Unit Price', 'Amount', 'Discount', 'GST Tax', '', 'IGST Tax', 'Non GST Tax', 'Total'],
+                ['', '', '', '', '', '', '', 'CGST Tax', 'SGST Tax', '', '', ''],
+                [141, 'Tomato', 6, 'Kg', 48, 288, 0, 5, 5, 0, 0, 298],
+            ],
+            '2026-10-02',
+            filename='consolidated.xlsx',
+        )
+        points = self._tomato_points()
+        self.assertEqual([point['date'] for point in points], ['2025-01-15', '2026-10-02'])
+        self.assertEqual(points[-1]['unit_price'], 48)
+        with self.app.app_context():
+            row = IngredientPrice.query.filter_by(ingredient_name='Tomato', date=date(2026, 10, 2)).one()
+            self.assertEqual(row.cgst_tax, 5)
+            self.assertEqual(row.sgst_tax, 5)
+
+    def test_entry_report_dates_accumulate_across_days(self):
+        header = [
+            'Vendor Name', 'Date', 'Transaction Number', 'User Name', 'Invoice Number',
+            'Batch Number', 'PR Number', 'PO Number', 'Item Code', 'Item Name', 'Comment',
+            'Quantity', 'Unit', 'Unit Price', 'Sub Total', 'Discount', 'Total Tax', 'Total',
+        ]
+        self._upload_sheet(
+            [
+                ['Stock Entry Report'] + [''] * 17,
+                header,
+                ['Delhi Warehouse', '01-10-2026', 1, 'Warehouse', '1', '-', '-', '-', 141, 'Tomato', '-', 8, 'Kg', 60, 480, 0, 0, 480],
+                ['Delhi Warehouse', '02-10-2026', 2, 'Warehouse', '2', '-', '-', '-', 141, 'Tomato', '-', 9, 'Kg', 61, 549, 0, 0, 549],
+            ],
+            '2026-10-01',
+            filename='delhi-entry.xlsx',
+        )
+        points = self._tomato_points()
+        self.assertEqual(
+            [(point['date'], point['unit_price']) for point in points],
+            [('2025-01-15', 45), ('2026-10-01', 60), ('2026-10-02', 61)],
+        )
+
     def test_upload_page_still_links_to_posist(self):
         self._login()
         response = self.client.get('/ingredient-tracker/upload')
