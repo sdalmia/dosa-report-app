@@ -392,7 +392,8 @@ def _posist_lines(view):
     apb = fields.get("apb") or ""
     lines.append(f"Net: {net}" if net else "Net:")
     lines.append(f"Bills: {bills}" if bills else "Bills:")
-    lines.append(f"APB: {apb}" if apb else "APB:")
+    # The window figure is summed gross divided by summed bills, not a Posist print.
+    lines.append(f"APB, gross divided by bills: {apb}" if apb else "APB, gross divided by bills:")
     return lines
 
 

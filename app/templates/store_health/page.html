@@ -107,6 +107,12 @@
     font-variant-numeric: tabular-nums;
     margin: 0;
   }
+  .metric .note {
+    margin: 0.35rem 0 0;
+    color: #9aa0a6;
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
   .sub { display: flex; justify-content: space-between; gap: 0.6rem; margin: 0.35rem 0 0; font-size: 0.82rem; }
   .sub-label { color: #9aa0a6; }
   .sub-value { min-width: 1.4rem; text-align: right; font-variant-numeric: tabular-nums; }
@@ -321,6 +327,7 @@
         <article class="metric">
           <h3>APB</h3>
           <p class="value" data-field="apb">{{ posist.fields.apb }}</p>
+          <p class="note" data-field="apb_basis">Gross divided by bills</p>
         </article>
       </div>
     </section>
