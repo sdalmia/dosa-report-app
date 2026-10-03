@@ -9,6 +9,7 @@ from app.store_health.contract import (
     AUDIT_FILE,
     CALENDAR_FILE,
     FAMEPILOT_FILE,
+    KEKA_ACTIVE_FILE,
     KEKA_FILE,
     POSIST_FILE,
     REELO_FILE,
@@ -104,7 +105,10 @@ def _ops(feeds, store):
     if keka["has_row"]:
         lines.append(_keka_line(keka))
     else:
-        gaps.append(_gap(KEKA_FILE))
+        if keka.get("active_state") == "missing":
+            gaps.append(_gap(KEKA_ACTIVE_FILE))
+        if keka.get("lead_state") == "missing":
+            gaps.append(_gap(KEKA_FILE))
     return lines, gaps
 
 
@@ -194,26 +198,22 @@ def _audit_action(note):
 
 
 def _keka_line(keka):
-    if keka["no_match"]:
-        return "keka.csv has no match for this store. No manager is on file, so there is no lead to confirm for the next service."
     fields = keka["fields"]
     sentences = []
-    headcount = fields.get("headcount") or ""
-    lead = fields.get("primary_lead") or ""
-    if headcount:
-        sentences.append(f"Registered headcount is {headcount}.")
+    active = fields.get("active_employees") or ""
+    if keka.get("active_state") == "missing":
+        sentences.append("keka_active.csv is missing. Do not treat active employees as zero.")
+    elif keka.get("unmatched") or not active:
+        sentences.append("Active employees are unmatched, not zero.")
     else:
-        sentences.append("Headcount is blank in keka.csv. Do not treat staffing as zero.")
+        sentences.append(f"Active employees are {active}.")
+    lead = fields.get("primary_lead") or ""
     if lead:
         sentences.append(f"Primary lead on file is {lead}.")
-        sentences.append(
-            "Headcount is registered employees, not people on shift, and the lead is the largest reporting line, not a confirmed single store manager."
-        )
+        sentences.append("The lead is the largest reporting line, not a confirmed single store manager.")
         sentences.append(f"Confirm who is covering the next service with {lead}.")
     else:
         sentences.append("No primary lead is on file, so there is no named person to confirm for the next service.")
-    if (fields.get("match_status") or "").casefold() == "inferred":
-        sentences.append("Match status is inferred.")
     return " ".join(sentences)
 
 

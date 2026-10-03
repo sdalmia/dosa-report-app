@@ -57,7 +57,7 @@ _LABELS = {
     "unsettled_amount": "Unsettled amount",
     "void_bills": "Void bills",
     "keka_location": "Keka location",
-    "headcount": "Registered employees",
+    "active_employees": "Active employees",
     "primary_lead": "Primary lead",
     "other_leads": "Other leads",
     "match_status": "Match status",
@@ -430,20 +430,23 @@ def _keka_lines(view):
     lines = []
     if keka.get("caveat"):
         lines.append(keka["caveat"])
-    state = keka.get("state")
-    if state == "missing":
+    if keka.get("active_state") == "missing":
+        lines.append("keka_active.csv is missing.")
+    elif keka.get("active_state") == "empty":
+        lines.append("keka_active.csv is empty.")
+    if keka.get("lead_state") == "missing":
         lines.append("keka.csv is missing.")
-    elif state == "empty":
+    elif keka.get("lead_state") == "empty":
         lines.append("keka.csv is empty.")
     if not keka.get("has_row"):
         lines.append("No Keka row matches this store.")
-    elif keka.get("no_match"):
-        lines.append("No Keka match. No manager is on file.")
     else:
+        if keka.get("unmatched"):
+            lines.append("Unmatched. Not zero.")
         lines.extend(
             _pairs(
                 keka.get("fields") or {},
-                ["primary_lead", "headcount", "keka_location", "other_leads", "match_status", "keka_note"],
+                ["primary_lead", "active_employees", "keka_location", "other_leads", "match_status"],
             )
         )
     return lines

@@ -12,6 +12,8 @@ from app.store_health.contract import (
     CALENDAR_MONEY,
     CALENDAR_PERCENTS,
     CALENDAR_VALUE_COLUMNS,
+    KEKA_ACTIVE_COLUMNS,
+    KEKA_ACTIVE_FILE,
     KEKA_COLUMNS,
     KEKA_FILE,
     REELO_COLUMNS,
@@ -49,7 +51,9 @@ TIER_BORDER_CLASS = {
 }
 
 KEKA_CAVEAT = (
-    "Headcount is registered employees, not people on shift. "
+    "Active employees as of 3 Oct 2026. Keka has no Active flag. "
+    "The count is the Org Locations employee count minus people on the Relieved Employees report. "
+    "People still in notice stay in the count. A blank is unmatched, not zero. "
     "Primary lead is the largest reporting line, not a confirmed single store manager."
 )
 REELO_PHONE_CAVEAT = "Phone capture is valid visits / (valid + blocked) x 100."
@@ -426,7 +430,12 @@ def list_stores(feeds):
         store = _with_free_id(store_from_label(store_name, region), used_ids)
         used_ids.add(store.id)
         stores.append(store)
-    outside_rows = (feeds.get("keka") or []) + (feeds.get("reelo") or []) + (feeds.get("famepilot") or [])
+    outside_rows = (
+        (feeds.get("keka") or [])
+        + (feeds.get("keka_active") or [])
+        + (feeds.get("reelo") or [])
+        + (feeds.get("famepilot") or [])
+    )
     for store_name in extra_store_labels(outside_rows, list(latest)):
         store = _with_free_id(store_from_label(store_name, ""), used_ids)
         used_ids.add(store.id)
@@ -543,39 +552,54 @@ def _text(row, field):
     return str(value).strip()
 
 
+def _staff_unmatched(status):
+    text = (status or "").strip().casefold()
+    return text == "no keka match" or text.startswith("unmatched")
+
+
+def _staff_status(status):
+    text = (status or "").strip()
+    if text.casefold() == "no keka match":
+        return "unmatched"
+    return text
+
+
 def present_keka(feeds, store):
-    row = feeds["keka_by_store"].get(store.label) if store else None
-    status = _text(row, "match_status")
-    no_match = status.casefold() == "no keka match"
-    headcount = ""
-    primary = ""
+    lead_row = feeds["keka_by_store"].get(store.label) if store else None
+    active_row = (feeds.get("keka_active_by_store") or {}).get(store.label) if store else None
+    status = _text(active_row, "match_status")
+    unmatched = active_row is not None and _staff_unmatched(status)
+    active = ""
     location = ""
-    other = ""
-    note = ""
-    if row is not None and not no_match:
-        raw_headcount = _text(row, "headcount")
-        if parse_number(raw_headcount) is not None:
-            headcount = raw_headcount
-        raw_primary = _text(row, "primary_lead")
-        if raw_primary.casefold() != "no keka match":
-            primary = raw_primary
-        raw_location = _text(row, "keka_location")
-        if raw_location.casefold() != "no keka location":
+    if active_row is not None and status.casefold() == "matched":
+        raw_active = _text(active_row, "active_employees")
+        if parse_number(raw_active) is not None:
+            active = raw_active
+        raw_location = _text(active_row, "keka_location")
+        if raw_location.casefold() not in {"", "no keka location"}:
             location = raw_location
-        other = _text(row, "other_leads")
-        note = _text(row, "note")
+    primary = ""
+    other = ""
+    lead_status = _text(lead_row, "match_status").casefold()
+    if lead_row is not None and lead_status != "no keka match":
+        raw_primary = _text(lead_row, "primary_lead")
+        if raw_primary.casefold() not in {"", "no keka match"}:
+            primary = raw_primary
+        raw_other = _text(lead_row, "other_leads")
+        if raw_other.casefold() not in {"", "no keka match"}:
+            other = raw_other
     return {
-        "state": _file_state(feeds["directory"], KEKA_FILE, feeds["keka"]),
+        "active_state": _file_state(feeds["directory"], KEKA_ACTIVE_FILE, feeds.get("keka_active") or []),
+        "lead_state": _file_state(feeds["directory"], KEKA_FILE, feeds.get("keka") or []),
         "caveat": KEKA_CAVEAT,
-        "has_row": row is not None,
-        "no_match": no_match,
+        "has_row": active_row is not None or lead_row is not None,
+        "unmatched": unmatched,
         "fields": {
             "keka_location": location,
-            "headcount": headcount,
+            "active_employees": active,
             "primary_lead": primary,
             "other_leads": other,
-            "match_status": status,
-            "keka_note": note,
+            "match_status": _staff_status(status),
         },
     }
 
@@ -733,6 +757,7 @@ def build_view(feeds, store, selection, today):
         "posist_columns": POSIST_COLUMNS,
         "calendar_columns": CALENDAR_COLUMNS,
         "keka_columns": KEKA_COLUMNS,
+        "keka_active_columns": KEKA_ACTIVE_COLUMNS,
         "audit_columns": AUDIT_COLUMNS,
         "reelo_columns": REELO_COLUMNS,
         "famepilot_columns": FAMEPILOT_COLUMNS,

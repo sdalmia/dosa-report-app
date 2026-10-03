@@ -410,16 +410,22 @@
         </div>
       </div>
       <p class="caveat" id="keka-caveat">{{ keka.caveat }}</p>
-      {% if keka.state == "missing" %}
+      {% if keka.active_state == "missing" %}
+        <p class="empty-state">keka_active.csv is missing.</p>
+      {% elif keka.active_state == "empty" %}
+        <p class="empty-state">keka_active.csv is empty.</p>
+      {% endif %}
+      {% if keka.lead_state == "missing" %}
         <p class="empty-state">keka.csv is missing.</p>
-      {% elif keka.state == "empty" %}
+      {% elif keka.lead_state == "empty" %}
         <p class="empty-state">keka.csv is empty.</p>
-      {% elif not store %}
+      {% endif %}
+      {% if not store %}
         <p class="empty-state">Choose a store to see its Keka row.</p>
       {% elif not keka.has_row %}
         <p class="empty-state">No Keka row matches this store.</p>
-      {% elif keka.no_match %}
-        <p class="empty-state">No Keka match. No manager is on file.</p>
+      {% elif keka.unmatched %}
+        <p class="empty-state">Unmatched. Not zero.</p>
       {% endif %}
       <div class="metric-grid">
         <article class="metric">
@@ -427,8 +433,8 @@
           <p class="value" data-field="primary_lead">{{ keka.fields.primary_lead }}</p>
         </article>
         <article class="metric">
-          <h3>Registered employees</h3>
-          <p class="value" data-field="headcount">{{ keka.fields.headcount }}</p>
+          <h3>Active employees</h3>
+          <p class="value" data-field="active_employees">{{ keka.fields.active_employees }}</p>
         </article>
         <article class="metric">
           <h3>Keka location</h3>
@@ -440,7 +446,6 @@
         </article>
       </div>
       <p class="sub"><span class="sub-label">Match status</span> <span data-field="match_status">{{ keka.fields.match_status }}</span></p>
-      <p class="sub"><span class="sub-label">Note</span> <span data-field="keka_note">{{ keka.fields.keka_note }}</span></p>
     </section>
 
     <section id="famepilot" class="health-box box-fame" aria-labelledby="fame-title">
@@ -722,8 +727,8 @@
     <p class="mb-2">Menu mix is not on file. The command centre only links out to Posist Insights. This repo has no item sales file, so share, quantity, and item net are not listed.</p>
     <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. A day keeps the calendar file's actual when that cell has a figure, including zero. Otherwise it uses that day's Posist net, or gross when net is blank. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
     <p><code>{{ calendar_columns|join(", ") }}</code></p>
-    <p class="mb-2">Keka reads <code>data/store_health/keka.csv</code>. Headcount is registered employees, not people on shift. Primary lead is the largest reporting line, not a confirmed single store manager. The row joins the Posist label in posist_store. A shorter label is used only when it matches one store. Match status is shown as written, including inferred and no keka match.</p>
-    <p><code>{{ keka_columns|join(", ") }}</code></p>
+    <p class="mb-2">Active employees read <code>data/store_health/keka_active.csv</code>. Keka has no Active flag. The count is the Org Locations employee count minus people on the Relieved Employees report, as of 3 Oct 2026. People still in notice stay in the count. A blank is unmatched, not zero. The old <code>keka.csv</code> headcount is not used. Primary lead still comes from <code>keka.csv</code> and is the largest reporting line, not a confirmed single store manager. <code>posist_store</code> joins a Posist label only when it matches one store.</p>
+    <p><code>{{ keka_active_columns|join(", ") }}</code></p>
     <p class="mb-2">Mystery audit reads <code>data/store_health/mystery_audit.csv</code>. Scores stay as written. A store with no row stays empty. The Brand row is the brand aggregate, not that store's score.</p>
     <p><code>{{ audit_columns|join(", ") }}</code></p>
     <p class="mb-2">Reelo reads <code>data/store_health/reelo.csv</code>. The window on this drop is Last 30 Days, 03 Sep 2026 to 03 Oct 2026. Phone capture is valid visits / (valid + blocked) x 100. A shorter posist_store label joins only when it matches one store. Match status <code>not in Reelo</code> is shown as those words. <code>inferred</code> is not a confirmed address match.</p>

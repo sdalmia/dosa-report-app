@@ -201,7 +201,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("Expected live", html)
         self.assertNotIn("Further file warnings", html)
         self.assertEqual(cell(html, "primary_lead"), "")
-        self.assertEqual(cell(html, "headcount"), "")
+        self.assertEqual(cell(html, "active_employees"), "")
         self.assertEqual(cell(html, "rating"), "")
         self.assertEqual(cell(html, "review_count"), "")
         self.assertEqual(cell(html, "main_threat"), "")
@@ -209,7 +209,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Choose a store to see its mystery audit.", html)
         self.assertIn("mystery_audit.csv is missing.", html)
         self.assertIn("keka.csv is missing.", html)
-        self.assertIn("Headcount is registered employees, not people on shift.", html)
+        self.assertIn("keka_active.csv is missing.", html)
+        self.assertIn("A blank is unmatched, not zero.", html)
+        self.assertNotIn("Headcount is registered employees", html)
+        self.assertNotIn("Registered employees", html)
         self.assertIn("not a confirmed single store manager.", html)
         self.assertIn("reelo.csv is missing.", html)
         self.assertIn("famepilot.csv is missing.", html)
@@ -278,7 +281,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("No daily Posist row", html)
         self.assertIn("No mystery audit is on file for this store.", html)
         self.assertEqual(cell(html, "primary_lead"), "")
-        self.assertEqual(cell(html, "headcount"), "")
+        self.assertEqual(cell(html, "active_employees"), "")
         self.assertEqual(cell(html, "rating"), "")
         self.assertEqual(cell(html, "main_threat"), "")
         self.assertIn("reelo.csv is missing.", html)
@@ -651,7 +654,13 @@ class StoreHealthTests(unittest.TestCase):
             "keka.csv",
             "posist_store,keka_location,headcount,primary_lead,other_leads,match_status,note\n"
             "Salt Lake,Somewhere,10,Should Not Attach,none,matched,note\n"
-            "Gurgaon Sec 10,Gurgaon Sec 10,24,Anil Singh Bisht (ARM),none,matched,note\n",
+            "Gurgaon Sec 10,Gurgaon Sec 10,99,Anil Singh Bisht (ARM),none,matched,note\n",
+        )
+        self.write(
+            "keka_active.csv",
+            "posist_store,active_employees,keka_location,match_status,definition\n"
+            "Salt Lake,5,Somewhere,matched,definition\n"
+            "Gurgaon Sec 10,7,Gurgaon Sec 10,matched,definition\n",
         )
         index = self.get("/store-health")
         salt = self._option_slug(index, "Dosa Coffee - Salt Lake (002)")
@@ -661,12 +670,13 @@ class StoreHealthTests(unittest.TestCase):
         sec1_page = self.get(f"/store-health/{sec1}?day=2026-10-02")
         sec10_page = self.get(f"/store-health/{sec10}?day=2026-10-02")
         self.assertEqual(cell(salt_page, "primary_lead"), "")
-        self.assertEqual(cell(salt_page, "headcount"), "")
+        self.assertEqual(cell(salt_page, "active_employees"), "")
         self.assertNotIn("Should Not Attach", salt_page)
         self.assertEqual(cell(sec1_page, "primary_lead"), "")
         self.assertNotIn("Should Not Attach", sec1_page)
         self.assertEqual(cell(sec10_page, "primary_lead"), "Anil Singh Bisht (ARM)")
-        self.assertEqual(cell(sec10_page, "headcount"), "24")
+        self.assertEqual(cell(sec10_page, "active_employees"), "7")
+        self.assertNotIn("99", cell(sec10_page, "active_employees"))
         self.assertEqual(cell(sec10_page, "match_status"), "matched")
         self.assertIsNone(unique_store_label("Salt Lake", [
             "Dosa Coffee - Salt Lake (002)",
@@ -691,10 +701,16 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(tuple(audit_rows[0].keys()), AUDIT_COLUMNS)
         self.assertEqual(sum(1 for row in audit_rows if row["status"] == "brand aggregate"), 1)
         self.assertEqual(sum(1 for row in keka_rows if row["match_status"] == "no keka match"), 4)
+        with (root / "keka_active.csv").open(encoding="utf-8-sig", newline="") as handle:
+            active_rows = list(csv.DictReader(handle))
+        self.assertEqual(len(active_rows), 33)
+        self.assertEqual(sum(1 for row in active_rows if (row["active_employees"] or "").strip()), 27)
 
         os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
         index = self.get("/store-health")
-        self.assertIn("Headcount is registered employees, not people on shift.", index)
+        self.assertIn("A blank is unmatched, not zero.", index)
+        self.assertNotIn("Headcount is registered employees", index)
+        self.assertNotIn("Registered employees", index)
         self.assertIn("not a confirmed single store manager.", index)
         self.assertIn("Brand aggregate", index)
         self.assertEqual(cell(index, "brand_avg"), "88.3%")
@@ -720,10 +736,13 @@ class StoreHealthTests(unittest.TestCase):
             return self.get(f"/store-health/{slug}?start=2026-10-02&end=2026-10-02&day=2026-10-02")
 
         ideal = open_store("Dosa Coffee - Ideal Plaza (01/0001)")
-        self.assertEqual(cell(ideal, "headcount"), "102")
+        self.assertEqual(cell(ideal, "active_employees"), "23")
+        self.assertNotIn('data-field="headcount"', ideal)
         self.assertEqual(cell(ideal, "primary_lead"), "Dipankar Saha (RGM)")
         self.assertEqual(cell(ideal, "keka_location"), "Ideal Plaza")
         self.assertEqual(cell(ideal, "match_status"), "matched")
+        self.assertNotIn("Registered employees", ideal)
+        self.assertNotIn("registered employees", ideal)
         self.assertEqual(cell(ideal, "audit_avg"), "not in cycle")
         self.assertEqual(cell(ideal, "audit_status"), "not in cycle")
         self.assertEqual(cell(ideal, "audit_period"), "August 2026")
@@ -731,33 +750,42 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotEqual(cell(ideal, "audit_avg"), cell(ideal, "brand_avg"))
 
         salt = open_store("Dosa Coffee - Salt Lake (002)")
-        self.assertEqual(cell(salt, "match_status"), "inferred")
-        self.assertEqual(cell(salt, "keka_location"), "Salt Lake Sec 3")
-        self.assertEqual(cell(salt, "headcount"), "51")
+        self.assertEqual(cell(salt, "match_status"), "unmatched — Keka location is Salt Lake Sec 3, not confirmed")
+        self.assertEqual(cell(salt, "keka_location"), "")
+        self.assertEqual(cell(salt, "active_employees"), "")
+        self.assertIn("Unmatched. Not zero.", salt)
+        self.assertNotIn(">51<", salt)
+        self.assertNotIn(">0<", cell(salt, "active_employees") or "x")
         self.assertEqual(cell(salt, "primary_lead"), "Sk Jamiruddin (RGM)")
 
         faridabad = open_store("Sec 15 Faridabad (02/0007)")
-        self.assertEqual(cell(faridabad, "match_status"), "inferred")
-        self.assertEqual(cell(faridabad, "keka_location"), "Faridabad")
-        self.assertEqual(cell(faridabad, "headcount"), "47")
+        self.assertEqual(cell(faridabad, "match_status"), "unmatched — Keka name is Faridabad, sector not confirmed")
+        self.assertEqual(cell(faridabad, "keka_location"), "")
+        self.assertEqual(cell(faridabad, "active_employees"), "")
+        self.assertIn("Unmatched. Not zero.", faridabad)
+        self.assertNotIn(">47<", faridabad)
         self.assertEqual(cell(faridabad, "primary_lead"), "Mohammad Javed Idrishi (SM)")
 
         sec10 = open_store("Gurgaon Sec 10 (02/0014)")
         self.assertEqual(cell(sec10, "match_status"), "matched")
         self.assertEqual(cell(sec10, "keka_location"), "Gurgaon Sec 10")
-        self.assertEqual(cell(sec10, "headcount"), "24")
+        self.assertEqual(cell(sec10, "active_employees"), "7")
         self.assertEqual(cell(sec10, "primary_lead"), "Anil Singh Bisht (ARM)")
+
+        lake = open_store("Dosa Coffee - Lake road 01/0015")
+        self.assertEqual(cell(lake, "active_employees"), "17")
+        self.assertNotIn(">52<", lake)
 
         new_town = open_store("Dosa Coffee - New Town - Cloud Kitchen (01/0013)")
         self.assertEqual(cell(new_town, "keka_location"), "Cloud Kitchen New Town")
-        self.assertEqual(cell(new_town, "headcount"), "13")
+        self.assertEqual(cell(new_town, "active_employees"), "5")
         self.assertEqual(cell(new_town, "primary_lead"), "Prodip Kumar Ghosh (ARM)")
         self.assertEqual(cell(new_town, "audit_avg"), "not in cycle")
         self.assertEqual(cell(new_town, "audit_note"), "Not in August 2026 audit cycle")
 
         jasola = open_store("Pacific mall, Jasola (02/0011)")
         self.assertEqual(cell(jasola, "keka_location"), "Jasola Pacific Mall")
-        self.assertEqual(cell(jasola, "headcount"), "60")
+        self.assertEqual(cell(jasola, "active_employees"), "16")
         self.assertEqual(cell(jasola, "audit_avg"), "84.0%")
         self.assertEqual(cell(jasola, "audit_weekend"), "73.3%")
         self.assertEqual(cell(jasola, "audit_note"), "Weekend crash")
@@ -778,7 +806,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(connaught, "net"), "₹39,04,104")
         self.assertNotIn('data-field="gross"', connaught)
         self.assertEqual(cell(connaught, "bills"), "5,510")
-        self.assertEqual(cell(connaught, "headcount"), "73")
+        self.assertEqual(cell(connaught, "active_employees"), "25")
         self.assertEqual(cell(connaught, "primary_lead"), "Ashwani Kumar (RGM)")
         self.assertEqual(cell(connaught, "match_status"), "matched")
         self.assertEqual(cell(connaught, "audit_avg"), "79.9%")
@@ -798,7 +826,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(kalkaji, "audit_status"), "")
         self.assertIn("No mystery audit is on file for this store.", kalkaji)
         self.assertEqual(cell(kalkaji, "brand_avg"), "88.3%")
-        self.assertEqual(cell(kalkaji, "headcount"), "39")
+        self.assertEqual(cell(kalkaji, "active_employees"), "13")
         self.assertEqual(cell(kalkaji, "primary_lead"), "Deepak Nagar (RGM)")
 
         for label in (
@@ -808,11 +836,12 @@ class StoreHealthTests(unittest.TestCase):
             "Chattarpur (02/0005)",
         ):
             page = open_store(label)
-            self.assertEqual(cell(page, "match_status"), "no keka match", label)
+            self.assertEqual(cell(page, "match_status"), "unmatched", label)
             self.assertEqual(cell(page, "primary_lead"), "", label)
-            self.assertEqual(cell(page, "headcount"), "", label)
+            self.assertEqual(cell(page, "active_employees"), "", label)
             self.assertEqual(cell(page, "keka_location"), "", label)
-            self.assertIn("No Keka match. No manager is on file.", page)
+            self.assertIn("Unmatched. Not zero.", page)
+            self.assertNotIn(">0<", cell(page, "active_employees") or "x")
             self.assertNotIn("Dipankar Saha", page)
 
         self.assertNotIn("does not match one Posist store", index)
@@ -862,7 +891,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(salt, "reelo_store"), "Dosa Coffee Saltlake JC21")
         self.assertIn("Salt Lake Sec 3", cell(salt, "reelo_note"))
         self.assertIn("Not a confirmed address match.", cell(salt, "reelo_note"))
-        self.assertEqual(cell(salt, "keka_location"), "Salt Lake Sec 3")
+        self.assertEqual(cell(salt, "keka_location"), "")
+        self.assertEqual(cell(salt, "active_employees"), "")
+        self.assertIn("Unmatched. Not zero.", salt)
         self.assertEqual(cell(salt, "famepilot_location"), "01/0002 / Dosa Coffee- Saltlake Sec 3")
         self.assertIn("by code 0002", cell(salt, "famepilot_note"))
         self.assertEqual(cell(salt, "rating"), "4.51")
