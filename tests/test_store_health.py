@@ -68,6 +68,14 @@ def cell(html, field, day=None):
     return match.group(1).strip()
 
 
+def calendar_cell_class(html, day):
+    marker = f'data-field="tier" data-date="{day}"'
+    index = html.index(marker)
+    start = html.rfind('class="cal-cell', 0, index)
+    end = html.find('"', start + 7)
+    return html[start + 7 : end]
+
+
 class StoreHealthTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -405,12 +413,39 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotEqual(cell(ideal, "pred_mid", "2026-11-01"), "")
         self.assertEqual(cell(ideal, "actual_net", "2026-11-01"), "")
 
+        tier_borders = {
+            "2026-10-03": ("Weather caution", "tier-weather-caution", "#e8b931"),
+            "2026-10-10": ("Puja / festive", "tier-puja-festive", "#f472b6"),
+            "2026-10-25": ("Holiday", "tier-holiday", "#7c6af7"),
+            "2026-10-27": ("Working weekday", "tier-working-weekday", "#8b949e"),
+            "2026-10-31": ("Weekend", "tier-weekend", "#3db8e0"),
+        }
+        for day, (name, css_class, colour) in tier_borders.items():
+            self.assertEqual(cell(ideal, "tier", day), name)
+            self.assertIn(css_class, calendar_cell_class(ideal, day))
+            self.assertIn(f".cal-cell.{css_class} {{ border: 3px solid {colour}; }}", ideal)
+            self.assertEqual(cell(ideal, "actual_net", day), "")
+        self.assertEqual(len({item[1] for item in tier_borders.values()}), 5)
+        for _name, css_class, _colour in tier_borders.values():
+            rule = re.search(rf"\.cal-cell\.{css_class}\s*\{{([^}}]*)\}}", ideal)
+            self.assertIsNotNone(rule, css_class)
+            self.assertNotIn("background", rule.group(1))
+
+        salt = self.get(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Salt Lake (002)')}")
+        for day, (_name, css_class, _colour) in tier_borders.items():
+            self.assertEqual(calendar_cell_class(ideal, day).split()[1], css_class)
+            self.assertIn(css_class, calendar_cell_class(salt, day))
+
         for label in (
             "GK1 Cloud Kitchen (02/0002)",
             "Chattarpur (02/0005)",
             "Dosa Coffee - Events & Catering",
         ):
             page = self.get(f"/store-health/{self._option_slug(index, label)}")
+            for day, (_name, css_class, _colour) in tier_borders.items():
+                self.assertIn(css_class, calendar_cell_class(page, day), label)
+                self.assertEqual(cell(page, "pred_mid", day), "", label)
+                self.assertEqual(cell(page, "actual_net", day), "", label)
             self.assertEqual(cell(page, "pred_low", "2026-10-03"), "", label)
             self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "", label)
             self.assertEqual(cell(page, "pred_high", "2026-10-03"), "", label)

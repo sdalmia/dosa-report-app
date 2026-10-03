@@ -39,6 +39,14 @@ STATUS_LABELS = {
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."
 )
+# Same border class for a tier on every store. Colour is a border, not a cell fill.
+TIER_BORDER_CLASS = {
+    "Weather caution": "tier-weather-caution",
+    "Puja / festive": "tier-puja-festive",
+    "Holiday": "tier-holiday",
+    "Weekend": "tier-weekend",
+    "Working weekday": "tier-working-weekday",
+}
 
 KEKA_CAVEAT = (
     "Headcount is registered employees, not people on shift. "
@@ -322,12 +330,14 @@ def calendar_days(feeds, store, start, end):
         fields = {field: _calendar_field(row, field) for field in CALENDAR_VALUE_COLUMNS if field != "date"}
         figure_fields = ("pred_low", "pred_high", "pred_mid", "actual_net")
         has_figure = any(fields[name] for name in figure_fields)
+        tier = row.get("tier") if row else ""
         days.append(
             {
                 "date": cursor,
                 "iso": cursor.isoformat(),
                 "label": format_date(cursor),
                 "chrome_weekday": cursor.strftime("%a"),
+                "tier_class": TIER_BORDER_CLASS.get(tier or "", ""),
                 "fields": fields,
                 "has_figure": has_figure,
                 "variance_negative": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] < 0),
