@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <circle cx="64" cy="64" r="62" fill="#006491"/>
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <text x="64" y="72" text-anchor="middle" font-family="DejaVu Sans" font-size="18" font-weight="700" fill="#ffffff">Domino's</text>
+</svg>

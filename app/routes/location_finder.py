@@ -1,9 +1,16 @@
 # location_finder.py – Updated to accept Google Maps URL instead of lat/lng
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, url_for
 import requests
 import os
-import re
+
+from app.brand_search import PlacesLookupError, find_brand_outlets
+from app.brands import (
+    annotate_place,
+    build_positioning,
+    known_brand_choices,
+    site_verdict,
+)
 
 location_finder_bp = Blueprint('location_finder', __name__)
 
@@ -161,8 +168,10 @@ def get_location_name(lat, lng):
 
 
 def compute_new_score(places, lat, lng, radius):
-    if not places:
-        return 0
+    # Food signals are zero when Google returns no eateries. Transport is
+    # still scored from the same factors. An early `return 0` used to crash
+    # the result page, which expects this dict.
+    places = places or []
 
     # --------------------------------------
     # 1. ENERGY SCORE (0 – 8 points)
@@ -263,6 +272,26 @@ def compute_new_score(places, lat, lng, radius):
     }
 
 
+def _render_form(**extra):
+    context = {
+        "GOOGLE_MAPS_API_KEY": GOOGLE_API_KEY,
+        "known_brands": known_brand_choices(),
+        "error": None,
+        "brand": "",
+        "region": "",
+    }
+    context.update(extra)
+    return render_template("location_finder_form.html", **context)
+
+
+def _with_logos(places):
+    for place in places:
+        annotate_place(place)
+        logo = place.get("logo")
+        place["logo_url"] = url_for("static", filename=logo) if logo else None
+    return places
+
+
 # -----------------------------
 # Main route
 # -----------------------------
@@ -272,46 +301,49 @@ def location_finder():
 
         print("Inside POST of location_finder()\n\n\n")
 
-        lat = float(request.form.get("latitude"))
-        lng = float(request.form.get("longitude"))
-        location_name = request.form.get("location_name")
-        place_id = request.form.get("place_id")
-        radius = int(request.form.get("radius", 500))  # Default = 500m
+        try:
+            lat = float(request.form.get("latitude"))
+            lng = float(request.form.get("longitude"))
+        except (TypeError, ValueError):
+            return _render_form(error="Choose a location from the suggestions so the site can be scored.")
 
+        try:
+            radius = int(request.form.get("radius", 500))
+        except (TypeError, ValueError):
+            radius = 500
+        radius = min(max(radius, 50), 5000)
 
         print("lat and lng extracted\n")
         print("latitude: ",lat,"\n")
         print("longitude: ",lng,"\n")
 
-        if lat is None or lng is None:
-            flash("Unable to extract coordinates from the Google Maps link.", "danger")
-            print("Unable to extract coordinates from the Google Maps link.")
-            return redirect(url_for("location_finder.location_finder"))
-
         location_name = get_location_name(lat, lng)
-
 
         places = fetch_eateries(lat, lng, radius)
         places = sorted(
-        places,
+            places,
             key=lambda p: p.get("user_ratings_total", 0),
             reverse=True
         )
 
         for p in places:
             p["cuisine"] = get_cuisine(p)
-        print("cuisine list: \n",p["cuisine"])
+        if places:
+            print("cuisine list: \n", places[-1]["cuisine"])
 
-
-        # Scoring logic (basic version)
-        result = compute_new_score(places,lat, lng, radius)
+        # Same 0–10 factors as before. A higher score is a stronger restaurant site.
+        result = compute_new_score(places, lat, lng, radius)
         score = result["score"]
-
+        _with_logos(places)
+        positioning = build_positioning(places)
+        verdict = site_verdict(score, result)
 
         return render_template(
             "location_finder_result.html",
             score=score,
             breakdown=result,
+            verdict=verdict,
+            positioning=positioning,
             places=places,
             latitude=lat,
             longitude=lng,
@@ -320,7 +352,39 @@ def location_finder():
         )
 
     # GET request → show form
-    return render_template("location_finder_form.html",
-        GOOGLE_MAPS_API_KEY=GOOGLE_API_KEY
+    return _render_form()
+
+
+@location_finder_bp.route("/location-finder/brand", methods=["POST"])
+def location_finder_brand():
+    brand = (request.form.get("brand") or "").strip()
+    region = (request.form.get("region") or "").strip()
+    try:
+        found = find_brand_outlets(brand, region, GOOGLE_API_KEY)
+    except PlacesLookupError as exc:
+        return _render_form(error=str(exc), brand=brand, region=region)
+    except requests.RequestException:
+        return _render_form(
+            error="Could not reach Google Places. Try again.",
+            brand=brand,
+            region=region,
         )
+
+    places = _with_logos(found["places"])
+    area = found["region"]
+    return render_template(
+        "location_finder_brand.html",
+        brand=brand,
+        region_name=area["name"],
+        region_query=region,
+        places=places,
+        latitude=area["lat"],
+        longitude=area["lng"],
+        sw=area["sw"],
+        ne=area["ne"],
+        truncated=found["truncated"],
+        known_brands=known_brand_choices(),
+        outlet_count=len(places),
+        GOOGLE_MAPS_API_KEY=GOOGLE_API_KEY,
+    )
 

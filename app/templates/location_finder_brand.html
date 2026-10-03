@@ -1,0 +1,158 @@
+<!-- templates/location_finder_brand.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}{{ brand }} in {{ region_name }}{% endblock %}
+
+{% block content %}
+<div class="lf-page">
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <a href="{{ url_for('location_finder.location_finder') }}" class="btn btn-light">Score a single site</a>
+    </div>
+
+    <h1 class="mb-2">{{ brand }} in {{ region_name }}</h1>
+    <p class="mb-1">
+        {{ outlet_count }} outlet{{ '' if outlet_count == 1 else 's' }} matched this brand inside the area Google resolved.
+        Known brands use their logo. This map is for brand positioning. It is not a site score.
+    </p>
+    {% if truncated %}
+    <p class="text-secondary">
+        Google Places returns a limited number of places in each search circle.
+        This area was too wide to cover completely, so some outlets may be missing.
+    </p>
+    {% endif %}
+
+    <div class="card p-4 shadow-sm bg-white my-4">
+        <h2 class="h5">Change brand or place</h2>
+        <form method="POST" action="{{ url_for('location_finder.location_finder_brand') }}" class="row g-3">
+            <div class="col-md-5">
+                <label for="brand" class="form-label">Brand</label>
+                <input class="form-control" id="brand" name="brand" list="known-brands" value="{{ brand }}" required>
+                <datalist id="known-brands">
+                    {% for item in known_brands %}
+                    <option value="{{ item.name }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="col-md-5">
+                <label for="region" class="form-label">City or region</label>
+                <input class="form-control" id="region" name="region" value="{{ region_query }}" required>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Update map</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="brand-map" style="height: 560px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
+
+    <h2 class="h4 mt-4 mb-3">Outlets</h2>
+    {% if places %}
+    <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Bill band</th>
+                    <th>Rating</th>
+                    <th>Reviews</th>
+                    <th>Google Maps</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in places %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        {% if p.logo_url %}
+                        <img src="{{ p.logo_url }}" alt="" width="24" height="24" class="me-1">
+                        {% endif %}
+                        {{ p.name }}
+                    </td>
+                    <td>{{ p.vicinity or p.formatted_address or "-" }}</td>
+                    <td>{{ p.bill_band or "Unavailable" }}</td>
+                    <td>{{ p.rating if p.rating is defined else "-" }}</td>
+                    <td>{{ p.user_ratings_total if p.user_ratings_total is defined else 0 }}</td>
+                    <td>
+                        {% if p.place_id %}
+                        <a href="https://www.google.com/maps/place/?q=place_id:{{ p.place_id }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                        {% else %}-{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No outlets for {{ brand }} came back inside {{ region_name }}. The place name has to match the brand.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.lf-page {
+    background: #f4f6f8;
+    color: #1c1f23;
+    border-radius: 16px;
+    padding: 28px 24px 32px;
+    margin-bottom: 24px;
+}
+.lf-page h1, .lf-page h2, .lf-page p, .lf-page label, .lf-page td, .lf-page th { color: #1c1f23; }
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
+<script>
+function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char];
+    });
+}
+
+function initBrandMap() {
+    const center = { lat: {{ latitude }}, lng: {{ longitude }} };
+    const map = new google.maps.Map(document.getElementById("brand-map"), {
+        zoom: 12,
+        center: center,
+        mapTypeId: "roadmap"
+    });
+    const outlets = {{ places | tojson }};
+    const bounds = new google.maps.LatLngBounds();
+
+    outlets.forEach(place => {
+        if (!place.geometry || !place.geometry.location) return;
+        const position = {
+            lat: place.geometry.location.lat,
+            lng: place.geometry.location.lng
+        };
+        bounds.extend(position);
+        const icon = place.logo_url ? {
+            url: place.logo_url,
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(20, 20)
+        } : undefined;
+        const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: place.name,
+            icon: icon
+        });
+        const info = new google.maps.InfoWindow({
+            content: `<div style="min-width:180px;"><strong>${esc(place.name)}</strong><br>${esc(place.vicinity || "")}<br>Bill: ${esc(place.bill_band || "Unavailable")}</div>`
+        });
+        marker.addListener("click", () => info.open(map, marker));
+    });
+
+    if (outlets.length) {
+        map.fitBounds(bounds);
+    } else {
+        map.fitBounds(new google.maps.LatLngBounds(
+            { lat: {{ sw.lat }}, lng: {{ sw.lng }} },
+            { lat: {{ ne.lat }}, lng: {{ ne.lng }} }
+        ));
+    }
+}
+window.onload = initBrandMap;
+</script>
+{% endblock %}
