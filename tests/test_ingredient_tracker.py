@@ -170,9 +170,76 @@ class UploadHistoryTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         return response
 
+    def _upload_book(self, sheets, report_date, filename='entry.xlsx'):
+        import pandas as pd
+        buffer = io.BytesIO()
+        with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+            for name, rows in sheets:
+                pd.DataFrame(rows).to_excel(writer, sheet_name=name, index=False, header=False)
+        buffer.seek(0)
+        self._login()
+        response = self.client.post(
+            '/ingredient-tracker/upload',
+            data={
+                'files': (buffer, filename),
+                'report_dates': report_date,
+            },
+            content_type='multipart/form-data',
+        )
+        self.assertEqual(response.status_code, 302)
+        return response
+
+    def test_twelve_column_stock_entry_appends_and_keeps_history(self):
+        # Current Posist Stock Entry shape. A 9-column cover sheet makes the
+        # old parser assign 12 names and raise "Expected axis has 9 elements,
+        # new values have 12 elements" before the entry sheets are read.
+        header = [
+            'Item Code', 'Item Name', 'Quantity', 'Unit', 'Unit Price',
+            'Amount', 'Discount', 'CGST Tax', 'SGST Tax', 'IGST Tax', 'Non GST Tax', 'Total',
+        ]
+        self._upload_book(
+            [
+                ('Cover', [
+                    ['Kolkata and Delhi warehouse entry reports'] + [''] * 8,
+                    ['01-10-2026 to 02-10-2026'] + [''] * 8,
+                ]),
+                ('Kolkata', [
+                    ['Stock Entry Report', '', '', '', '', '', '', '', '', '', '', ''],
+                    ['Kolkata Warehouse', '', '', '', '', '', '', '', '', '', '', ''],
+                    ['01-10-2026', '', '', '', '', '', '', '', '', '', '', ''],
+                    header,
+                    [141, 'Tomato', 10, 'Kg', 52, 520, 0, 9, 9, 0, 0, 538],
+                ]),
+                ('Delhi', [
+                    ['Stock Entry Report', '', '', '', '', '', '', '', '', '', '', ''],
+                    ['Delhi Warehouse', '', '', '', '', '', '', '', '', '', '', ''],
+                    ['02-10-2026', '', '', '', '', '', '', '', '', '', '', ''],
+                    header,
+                    [10, 'Onion', 4, 'Kg', 28, 112, 0, 1, 1, 0, 0, 114],
+                ]),
+            ],
+            '2026-10-01',
+            filename='kolkata-delhi-entry.xlsx',
+        )
+
+        points = self._tomato_points()
+        self.assertEqual([point['date'] for point in points], ['2025-01-15', '2026-10-01'])
+        self.assertEqual([point['unit_price'] for point in points], [45, 52])
+
+        with self.app.app_context():
+            onion = IngredientPrice.query.filter_by(ingredient_name='Onion').order_by(IngredientPrice.date).all()
+            self.assertEqual([(row.date, row.unit_price) for row in onion], [
+                (date(2025, 2, 2), 30),
+                (date(2026, 10, 2), 28),
+            ])
+            tomato = IngredientPrice.query.filter_by(ingredient_name='Tomato', date=date(2026, 10, 1)).one()
+            self.assertEqual(tomato.cgst_tax, 9)
+            self.assertEqual(tomato.sgst_tax, 9)
+            self.assertEqual(tomato.total, 538)
+
     def test_nine_column_stock_entry_appends_and_keeps_history(self):
-        # Current Posist Stock Entry shape: 9 columns. Assigning the old 12
-        # names raises "Expected axis has 9 elements, new values have 12 elements".
+        # A sheet whose own header is a single GST Tax column still loads.
+        # Forcing that 9-name list onto the 12-column export is what the upload rejects.
         self._upload_sheet(
             [
                 ['Stock Entry Report'] + [''] * 8,

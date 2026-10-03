@@ -43,14 +43,14 @@ def _dedupe_key(name, report_date, unit_price, quantity, amount):
     )
 
 
+# Current Posist Stock Entry sheets use this 12-column header. A leading
+# sheet in the same workbook can be narrower; assigning these 12 names to
+# that sheet raises "Length mismatch: Expected axis has 9 elements, new
+# values have 12 elements" and the entry sheets never get read.
 _LEGACY_12_COLUMNS = [
     'Item Code', 'Item Name', 'Quantity', 'Unit', 'Unit Price',
     'Amount', 'Discount', 'CGST Tax', 'SGST Tax',
     'IGST Tax', 'Non GST Tax', 'Total',
-]
-_COMPACT_9_COLUMNS = [
-    'Item Code', 'Item Name', 'Quantity', 'Unit', 'Unit Price',
-    'Amount', 'Discount', 'GST Tax', 'Total',
 ]
 _COLUMN_ALIASES = (
     ('item_code', ('item code',)),
@@ -97,41 +97,47 @@ def _unique_headers(names):
 
 
 def _named_table(raw_df, names, data_start):
+    """Align the body to the header width without dropping columns.
+
+    Empty tax columns are part of the 12-column Stock Entry layout. Dropping
+    them leaves 9 columns, and writing the 12 header names back raises
+    "Length mismatch: Expected axis has 9 elements, new values have 12 elements".
+    """
     body = raw_df.iloc[data_start:].copy()
-    width = min(len(names), body.shape[1])
+    width = max(len(names), body.shape[1])
+    names = list(names) + [''] * (width - len(names))
+    if body.shape[1] < width:
+        for index in range(body.shape[1], width):
+            body[index] = None
     body = body.iloc[:, :width]
     body.columns = _unique_headers(names[:width])
     return body.reset_index(drop=True)
 
 
-def _stock_entry_table(raw_df):
-    """Use the sheet's own header row instead of a fixed column count.
-
-    Consolidated exports use 12 columns, with CGST/SGST on a second header line
-    under GST Tax. Current Stock Entry exports can be narrower (9 columns once
-    the tax split is a single GST Tax column) or the wider entry report that
-    includes Vendor, Date, and Sub Total. Forcing 12 names onto those sheets
-    raises "Length mismatch: Expected axis has 9 elements, new values have 12".
-    """
-    header_idx = None
+def _header_index(raw_df):
     for idx in range(len(raw_df)):
         labels = [_norm_label(value) for value in raw_df.iloc[idx].tolist()]
         if 'item name' in labels and ('quantity' in labels or 'qty' in labels or 'item code' in labels):
-            header_idx = idx
-            break
+            return idx
+    return None
 
+
+def _stock_entry_table(raw_df):
+    """Read the sheet's own header instead of forcing a 9-column layout.
+
+    The current Stock Entry export is 12 columns: Item Code, Item Name,
+    Quantity, Unit, Unit Price, Amount, Discount, then the tax columns and
+    Total. Consolidated workbooks put CGST Tax and SGST Tax on the next row
+    under a merged GST Tax cell; that blank cell still counts as a column.
+    """
+    header_idx = _header_index(raw_df)
     if header_idx is None:
-        compacted = raw_df.dropna(axis=1, how='all')
-        if compacted.shape[1] == 12:
-            names = _LEGACY_12_COLUMNS
-        elif compacted.shape[1] == 9:
-            names = _COMPACT_9_COLUMNS
-        else:
-            raise ValueError(
-                f'Unrecognized Posist export ({compacted.shape[1]} columns) '
-                'and no Item Name header was found.'
-            )
-        return _named_table(compacted, names, 0)
+        if raw_df.shape[1] == 12:
+            return _named_table(raw_df, _LEGACY_12_COLUMNS, 0)
+        raise ValueError(
+            f'Unrecognized Posist export ({raw_df.shape[1]} columns) '
+            'and no Item Name header was found.'
+        )
 
     names = [_cell_text(value) for value in raw_df.iloc[header_idx].tolist()]
     data_start = header_idx + 1
@@ -187,7 +193,41 @@ def _parse_report_date(value, fallback):
     return parsed.date()
 
 
+_DATE_IN_TEXT = re.compile(r'\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b')
+
+
+def _dates_in_value(value):
+    if isinstance(value, datetime):
+        return [value.date()]
+    if isinstance(value, date):
+        return [value]
+    found = []
+    for day, month, year in _DATE_IN_TEXT.findall(_cell_text(value)):
+        full_year = int(year) + (2000 if len(year) == 2 else 0)
+        try:
+            found.append(date(full_year, int(month), int(day)))
+        except ValueError:
+            continue
+    return found
+
+
+def _sheet_fallback_date(raw_df, fallback_date):
+    """Use a single date printed above the header, such as a warehouse sheet dated 01-10-2026."""
+    header_idx = _header_index(raw_df)
+    if header_idx is None:
+        return fallback_date
+    found = []
+    for idx in range(header_idx):
+        for value in raw_df.iloc[idx].tolist():
+            found.extend(_dates_in_value(value))
+    unique = list(dict.fromkeys(found))
+    if len(unique) == 1:
+        return unique[0]
+    return fallback_date
+
+
 def extract_stock_entries(raw_df, fallback_date):
+    sheet_date = _sheet_fallback_date(raw_df, fallback_date)
     table = _stock_entry_table(raw_df)
     columns = _map_columns(list(table.columns))
     if 'ingredient_name' not in columns or 'unit_price' not in columns:
@@ -232,9 +272,37 @@ def extract_stock_entries(raw_df, fallback_date):
             'non_gst_tax': _optional_number(row, columns, 'non_gst_tax'),
             'gst_tax': _optional_number(row, columns, 'gst_tax'),
             'total': _optional_number(row, columns, 'total'),
-            'date': _parse_report_date(row[columns['line_date']], fallback_date) if 'line_date' in columns else fallback_date,
+            'date': _parse_report_date(row[columns['line_date']], sheet_date) if 'line_date' in columns else sheet_date,
         })
     return entries
+
+
+def extract_workbook(source, fallback_date):
+    """Parse every sheet. A narrow cover sheet is not the stock entry table.
+
+    Kolkata and Delhi warehouse reports are often separate sheets in one
+    workbook, each with the 12-column Item Name header. The first sheet can
+    be a 9-column cover; that is what makes a fixed 12-name assignment raise
+    the length mismatch before the entry sheets are read.
+    """
+    sheets = pd.read_excel(source, header=None, sheet_name=None)
+    frames = list(sheets.values()) if isinstance(sheets, dict) else [sheets]
+    records = []
+    header_error = None
+    for frame in frames:
+        if frame is None or frame.empty:
+            continue
+        try:
+            records.extend(extract_stock_entries(frame, fallback_date))
+        except ValueError as exc:
+            if 'no Item Name header' in str(exc):
+                continue
+            header_error = exc
+    if records:
+        return records
+    if header_error:
+        raise header_error
+    raise ValueError('No ingredient rows were found in this file.')
 
 
 def build_ingredient_chart_data(entries):
@@ -347,13 +415,10 @@ def upload():
 
                 try:
 
-                    # Read the file without assuming a header. The header row is
-                    # located inside the sheet so a 9-column Stock Entry export and
-                    # the older 12-column consolidated export both load.
-                    raw_df = pd.read_excel(file, header=None)
-                    print("Number of columns in raw_df:", raw_df.shape[1])
+                    # Read every sheet and use its Item Name header. Do not force a
+                    # 9-column layout onto the 12-column Stock Entry export.
                     parsed_date = datetime.strptime(dates[i], '%Y-%m-%d').date()
-                    records = extract_stock_entries(raw_df, parsed_date)
+                    records = extract_workbook(file, parsed_date)
                     print("Parsed ingredient rows:", len(records))
 
                     # Keep previously stored dates. Only skip a row when this exact
