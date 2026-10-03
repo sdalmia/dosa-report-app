@@ -219,6 +219,18 @@ def _dates_in_window(start, end):
     return days
 
 
+def _window_apb(gross, bills):
+    """Window APB is summed gross divided by summed bills.
+
+    The daily apb column is that day's gross divided by that day's bills.
+    Averaging those days is a different number, so the window does not use it.
+    No bills means there is no APB. Do not invent one.
+    """
+    if gross is None or bills is None or bills == 0:
+        return None
+    return float(gross) / float(bills)
+
+
 def posist_window(feeds, store):
     """One total per store across the dates that store actually has."""
     display = {field: "" for field in POSIST_COLUMNS if field not in {"store", "date"}}
@@ -250,13 +262,13 @@ def posist_window(feeds, store):
         "net": _sum_present(rows, "net", "money"),
         "gross": _sum_present(rows, "gross", "money"),
         "bills": _sum_present(rows, "bills", "count"),
-        "apb": _sum_present(rows, "apb", "money"),
         "unsettled_bills": _sum_present(rows, "unsettled_bills", "count"),
         "unsettled_amount": _sum_present(rows, "unsettled_amount", "money"),
         "void_bills": _sum_present(rows, "void_bills", "count"),
     }
     for field, value in summed.items():
         display[field] = _posist_field({field: value}, field)
+    display["apb"] = _posist_field({"apb": _window_apb(summed["gross"], summed["bills"])}, "apb")
     store_days = sorted({row["date"] for row in rows})
     result["days_summed"] = str(len(store_days))
     if start is not None and end is not None:
