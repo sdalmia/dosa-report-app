@@ -205,6 +205,21 @@
     margin-bottom: 0.85rem;
   }
   .brand-audit { margin-top: 0.9rem; }
+  .menu-mix-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .menu-mix-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) auto auto auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.45rem 0.6rem;
+    background: rgba(0,0,0,0.28);
+    border-radius: 0.55rem;
+  }
+  .menu-mix-row .name { font-weight: 650; overflow-wrap: anywhere; }
+  .menu-mix-row .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @media (max-width: 720px) {
+    .menu-mix-row { grid-template-columns: 1fr 1fr; }
+  }
 </style>
 
 <div class="store-health py-4">
@@ -336,10 +351,23 @@
       <div class="box-head">
         <div>
           <h2 id="menu-mix-title">Menu mix</h2>
-          <p class="box-source">Posist Insights</p>
+          <p class="box-source">Posist Insights{% if menu_mix.period_label %} · <span data-field="menu_mix_period">{{ menu_mix.period_label }}</span>{% endif %}</p>
         </div>
       </div>
-      <p class="empty-state" data-field="menu_mix">Menu mix is not on file.</p>
+      {% if menu_mix.has_items %}
+        <ol class="menu-mix-list">
+          {% for item in menu_mix.entries %}
+            <li class="menu-mix-row" data-field="menu_item">
+              <span class="name">{{ item.item }}</span>
+              <span class="num">{{ item.sales }}</span>
+              <span class="num">{{ item.orders }} orders</span>
+              <span class="num">{{ item.contribution }}</span>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="empty-state" data-field="menu_mix">{{ menu_mix.empty }}</p>
+      {% endif %}
     </section>
 
     <section id="mystery-audit" class="health-box box-audit" aria-labelledby="audit-title">
@@ -724,8 +752,8 @@
     <summary>Where these figures come from</summary>
     <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
     <p><code>{{ posist_columns|join(", ") }}</code></p>
-    <p class="mb-2">Menu mix is not on file. The command centre only links out to Posist Insights. This repo has no item sales file, so share, quantity, and item net are not listed.</p>
-    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. A day keeps the calendar file's actual when that cell has a figure, including zero. Otherwise it uses that day's Posist net, or gross when net is blank. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
+    <p class="mb-2">Menu mix reads <code>data/store_health/menu_mix.csv</code> from Posist Insights Menu Analysis. Columns are store, item, total sales, total orders, contribution percent, period start, and period end. The box lists the top items for the dates present in that file. When the file covers more than 30 days, only the latest 30 days present are listed. A store with no matching rows says menu mix is not on file for this store.</p>
+    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code> and shows the next 30 days from today in Asia/Kolkata. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. A day keeps the calendar file's actual when that cell has a figure, including zero. Otherwise it uses that same day's Posist net, or that same day's gross when net is blank. A day with no row stays blank. A later day does not reuse an earlier day's gross. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
     <p><code>{{ calendar_columns|join(", ") }}</code></p>
     <p class="mb-2">Active employees read <code>data/store_health/keka_active.csv</code>. Keka has no Active flag. The count is the Org Locations employee count minus people on the Relieved Employees report, as of 3 Oct 2026. People still in notice stay in the count. A blank is unmatched, not zero. The old <code>keka.csv</code> headcount is not used. Primary lead still comes from <code>keka.csv</code> and is the largest reporting line, not a confirmed single store manager. <code>posist_store</code> joins a Posist label only when it matches one store.</p>
     <p><code>{{ keka_active_columns|join(", ") }}</code></p>

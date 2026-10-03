@@ -34,6 +34,7 @@ KEKA_ACTIVE_FILE = "keka_active.csv"
 AUDIT_FILE = "mystery_audit.csv"
 REELO_FILE = "reelo.csv"
 FAMEPILOT_FILE = "famepilot.csv"
+MENU_MIX_FILE = "menu_mix.csv"
 
 POSIST_COLUMNS = (
     "store",
@@ -130,6 +131,16 @@ FAMEPILOT_COLUMNS = (
     "private_rating",
     "private_review_count",
     "overall_reviews",
+)
+
+MENU_MIX_COLUMNS = (
+    "store",
+    "item",
+    "total_sales",
+    "total_orders",
+    "contribution_pct",
+    "period_start",
+    "period_end",
 )
 
 POSIST_MONEY = {
@@ -478,8 +489,51 @@ def load_famepilot(directory=None):
     return _load_store_rows(directory, FAMEPILOT_FILE, FAMEPILOT_COLUMNS, "posist_store")
 
 
+def load_menu_mix(directory=None):
+    """Item rows from Posist Insights Menu Analysis. Every row is kept.
+
+    A blank sales, order, or contribution cell stays blank. This does not
+    invent an item or turn a blank into zero.
+    """
+    directory = Path(directory) if directory else data_directory()
+    warnings = []
+    path = directory / MENU_MIX_FILE
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    required = ("store", "item", "period_start", "period_end")
+    missing = [name for name in required if name not in table[0]]
+    if missing:
+        _warn(warnings, f"{MENU_MIX_FILE} is missing {', '.join(missing)}.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("store"))
+        item = _text_cell(raw.get("item"))
+        start = parse_date(raw.get("period_start"))
+        end = parse_date(raw.get("period_end"))
+        if not store or not item or start is None or end is None or end < start:
+            _warn(warnings, f"{MENU_MIX_FILE} row {index} has no store, item, or period, so it was skipped.")
+            continue
+        parsed = {
+            "store": store,
+            "item": item,
+            "total_sales": parse_number(raw.get("total_sales")),
+            "total_orders": parse_number(raw.get("total_orders")),
+            "contribution_pct": parse_number(raw.get("contribution_pct")),
+            "period_start": start,
+            "period_end": end,
+        }
+        for field in ("total_sales", "total_orders", "contribution_pct"):
+            cell = raw.get(field)
+            if parsed[field] is None and not _blank(cell):
+                _warn(warnings, f"{MENU_MIX_FILE} row {index} {field} is not a number, so it was left blank.")
+        rows.append(parsed)
+    return rows, warnings
+
+
 def load_feeds(directory=None):
-    from app.store_health.stores import assign_rows, extra_store_labels
+    from app.store_health.stores import assign_rows, extra_store_labels, match_menu_store
 
     directory = Path(directory) if directory else data_directory()
     posist, posist_warnings = load_posist(directory)
@@ -489,6 +543,7 @@ def load_feeds(directory=None):
     audit, audit_warnings = load_audit(directory)
     reelo, reelo_warnings = load_reelo(directory)
     famepilot, famepilot_warnings = load_famepilot(directory)
+    menu_mix, menu_mix_warnings = load_menu_mix(directory)
     labels = sorted({store for store, _day in posist})
     # Stores that never appear on the deployment report still have Keka, Reelo,
     # and Famepilot rows. Join those to the same labels the picker shows.
@@ -501,6 +556,25 @@ def load_feeds(directory=None):
     audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
     reelo_by_store, reelo_unmatched = assign_rows(reelo, "posist_store", join_labels)
     famepilot_by_store, famepilot_unmatched = assign_rows(famepilot, "posist_store", join_labels)
+    menu_mix_by_store = {}
+    unmatched_menu_stores = []
+    if join_labels or labels:
+        seen_menu = set()
+        targets = join_labels or labels
+        for row in menu_mix:
+            label = match_menu_store(row.get("store"), targets)
+            if label is None:
+                if row.get("store") not in seen_menu:
+                    seen_menu.add(row.get("store"))
+                    unmatched_menu_stores.append(row)
+                continue
+            menu_mix_by_store.setdefault(label, []).append(row)
+    if labels or join_labels:
+        for row in unmatched_menu_stores:
+            _warn(
+                menu_mix_warnings,
+                f"{MENU_MIX_FILE} store {row.get('store')!r} does not match one store, so it was not applied.",
+            )
     if labels:
         for row in keka_unmatched:
             _warn(
@@ -541,7 +615,9 @@ def load_feeds(directory=None):
         "reelo_by_store": reelo_by_store,
         "famepilot": famepilot,
         "famepilot_by_store": famepilot_by_store,
-        "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings,
+        "menu_mix": menu_mix,
+        "menu_mix_by_store": menu_mix_by_store,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings + menu_mix_warnings,
         "directory": directory,
     }
 

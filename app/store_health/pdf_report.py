@@ -159,7 +159,7 @@ def render_store_pdf(store, selection, view, insights, context_slots, warnings=N
     pdf.ln(1)
 
     _section_box(pdf, "Posist window", _posist_lines(view), GOLD)
-    _section_box(pdf, "Menu mix", ["Menu mix is not on file."], GOLD)
+    _section_box(pdf, "Menu mix", _menu_lines(view), GOLD)
     _calendar_section(pdf, view)
     _section_box(pdf, "Mystery audit", _audit_lines(view), PURPLE)
     _section_box(pdf, "Keka", _keka_lines(view), ORANGE)
@@ -367,6 +367,25 @@ def _pairs(fields, keys):
         line = _pair(fields, key)
         if line:
             lines.append(line)
+    return lines
+
+
+def _menu_lines(view):
+    mix = view.get("menu_mix") or {}
+    if not mix.get("has_items"):
+        return [mix.get("empty") or "Menu mix is not on file."]
+    lines = []
+    if mix.get("period_label"):
+        lines.append(mix["period_label"])
+    for item in mix.get("entries") or []:
+        bits = [item.get("item") or ""]
+        if item.get("sales"):
+            bits.append(item["sales"])
+        if item.get("orders"):
+            bits.append(f"{item['orders']} orders")
+        if item.get("contribution"):
+            bits.append(item["contribution"])
+        lines.append(" · ".join(bit for bit in bits if bit))
     return lines
 
 

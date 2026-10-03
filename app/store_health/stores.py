@@ -135,6 +135,65 @@ def extra_store_labels(rows, posist_labels):
     return kept
 
 
+def _name_and_code(label):
+    """Split a store label into name words and a store code.
+
+    A leading 01 or 02 in front of the code is the region, not the store.
+    Food Truck - 1 keeps the 1 in the name. 0002 and 002 are the same code.
+    """
+    words = label_words(label)
+    code = None
+    if len(words) >= 2 and words[-2] in {"01", "02"} and words[-1].isdigit() and len(words[-1]) >= 3:
+        code = str(int(words[-1]))
+        words = words[:-2]
+    elif words and words[-1].isdigit() and len(words[-1]) >= 3:
+        code = str(int(words[-1]))
+        words = words[:-1]
+    return words, code
+
+
+def _is_subsequence(short, long):
+    if not short:
+        return False
+    index = 0
+    for token in long:
+        if index < len(short) and token == short[index]:
+            index += 1
+    return index == len(short)
+
+
+def match_menu_store(file_label, posist_labels):
+    """Return the one Store Health label this menu-mix name clearly is.
+
+    Ideal Plaza (01/0001) matches Ideal Plaza. Connaught Place matches
+    Connaught place (02/0012). A name that fits two stores matches neither.
+    """
+    wanted_name, wanted_code = _name_and_code(file_label)
+    if not wanted_name:
+        return None
+    hits = []
+    for label in posist_labels:
+        text = str(label).strip()
+        if not text:
+            continue
+        name, code = _name_and_code(text)
+        if wanted_code is not None and code is not None and wanted_code != code:
+            continue
+        shorter, longer = (wanted_name, name) if len(wanted_name) <= len(name) else (name, wanted_name)
+        if not _is_subsequence(shorter, longer):
+            continue
+        hits.append(text)
+    if wanted_code is not None:
+        coded = [label for label in hits if _name_and_code(label)[1] == wanted_code]
+        if len(coded) == 1:
+            return coded[0]
+        if len(coded) > 1:
+            return None
+    if len(hits) == 1:
+        return hits[0]
+    return None
+
+
 def assign_rows(rows, label_key, posist_labels):
     """Map Posist labels to the one file row that names them.
 
