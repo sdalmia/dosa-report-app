@@ -661,7 +661,12 @@ def calendar_story(feeds, store):
 
 
 def build_view(feeds, store, selection, today):
-    days = calendar_days(feeds, store, selection["start"], selection["end"])
+    # The calendar is the dates in the file, not a chosen from-to range.
+    span = calendar_bounds(feeds) if store else None
+    if span:
+        days = calendar_days(feeds, store, span[0], span[1])
+    else:
+        days = []
     filled = sum(1 for day in days if day["fields"]["actual_net"])
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
     story = calendar_story(feeds, store)
