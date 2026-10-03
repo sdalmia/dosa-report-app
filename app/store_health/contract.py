@@ -8,7 +8,7 @@ posist_daily.csv — one row per store per date
     net_wow_pct, bills_wow_pct, apb_wow_pct,
     net_last_same_weekday, bills_last_same_weekday, apb_last_same_weekday,
     unsettled_bills, unsettled_amount, void_bills,
-    source (live|historical), provisional (bool), region
+    source (live|historical|historical-total-revenue), provisional (bool), region
 
 sales_pred_vs_actual.csv — network shape, plus store on a store calendar
     date, weekday, tier, pred_low, pred_high, pred_mid, actual_net,
@@ -150,7 +150,7 @@ CALENDAR_MONEY = {
 CALENDAR_PERCENTS = {"variance_pct"}
 CALENDAR_TEXT = {"weekday", "tier", "status", "drivers", "notes"}
 
-ALLOWED_SOURCE = {"live", "historical"}
+ALLOWED_SOURCE = {"live", "historical", "historical-total-revenue"}
 ALLOWED_STATUS = {
     "pending",
     "actual",
@@ -291,7 +291,11 @@ def load_posist(directory=None):
                     text = str(cell).strip().lower()
                     parsed[field] = text
                     if text not in ALLOWED_SOURCE:
-                        _warn(warnings, f"{POSIST_FILE} row {index} source is {text!r}. Expected live or historical.")
+                        _warn(
+                            warnings,
+                            f"{POSIST_FILE} row {index} source is {text!r}. "
+                            "Expected live, historical, or historical-total-revenue.",
+                        )
             elif field == "region":
                 parsed[field] = None if _blank(cell) else str(cell).strip()
             else:

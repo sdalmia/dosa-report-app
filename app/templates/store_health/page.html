@@ -312,34 +312,15 @@
       <div class="metric-grid">
         <article class="metric">
           <h3>Net</h3>
-          <p class="value" data-field="net">{{ posist.fields.net }}</p>
-          <p class="sub"><span class="sub-label">Gross</span><span class="sub-value" data-field="gross">{{ posist.fields.gross }}</span></p>
-          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="net_last_same_weekday">{{ posist.fields.net_last_same_weekday }}</span></p>
+          <p class="value" data-field="net">{% if posist.fields.net %}{{ posist.fields.net }}{% else %}{{ posist.fields.gross }}{% endif %}</p>
         </article>
         <article class="metric">
           <h3>Bills</h3>
           <p class="value" data-field="bills">{{ posist.fields.bills }}</p>
-          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="bills_last_same_weekday">{{ posist.fields.bills_last_same_weekday }}</span></p>
         </article>
         <article class="metric">
           <h3>APB</h3>
           <p class="value" data-field="apb">{{ posist.fields.apb }}</p>
-          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="apb_last_same_weekday">{{ posist.fields.apb_last_same_weekday }}</span></p>
-        </article>
-        <article class="metric">
-          <h3>Week over week</h3>
-          <p class="sub"><span class="sub-label">Net</span><span class="sub-value" data-field="net_wow_pct">{{ posist.fields.net_wow_pct }}</span></p>
-          <p class="sub"><span class="sub-label">Bills</span><span class="sub-value" data-field="bills_wow_pct">{{ posist.fields.bills_wow_pct }}</span></p>
-          <p class="sub"><span class="sub-label">APB</span><span class="sub-value" data-field="apb_wow_pct">{{ posist.fields.apb_wow_pct }}</span></p>
-        </article>
-        <article class="metric">
-          <h3>Unsettled</h3>
-          <p class="sub"><span class="sub-label">Amount</span><span class="sub-value" data-field="unsettled_amount">{{ posist.fields.unsettled_amount }}</span></p>
-          <p class="sub"><span class="sub-label">Bills</span><span class="sub-value" data-field="unsettled_bills">{{ posist.fields.unsettled_bills }}</span></p>
-        </article>
-        <article class="metric">
-          <h3>Voids</h3>
-          <p class="value" data-field="void_bills">{{ posist.fields.void_bills }}</p>
         </article>
       </div>
     </section>
