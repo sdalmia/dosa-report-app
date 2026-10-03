@@ -9,6 +9,7 @@ from app.store_health.pdf_report import render_store_pdf
 from app.store_health.present import (
     build_view,
     business_today,
+    calendar_bounds,
     format_date,
     grouped_stores,
     list_stores,
@@ -21,8 +22,8 @@ store_health_bp = Blueprint("store_health", __name__)
 
 def _assemble(token, args):
     today = business_today()
-    selection = parse_range(args, today)
     feeds = load_feeds()
+    selection = parse_range(args, today, default_span=calendar_bounds(feeds))
     stores = list_stores(feeds)
     store = resolve_store(stores, token)
     view = build_view(feeds, store, selection, today)
