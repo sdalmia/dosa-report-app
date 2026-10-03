@@ -353,6 +353,12 @@ def _posist_daily_actual(row):
 
 
 def calendar_days(feeds, store, start, end):
+    """One cell per day in the window.
+
+    A calendar row is shown as written, including a real zero. When that row
+    has no actual, the same day's Posist net is used, or that day's gross when
+    net is blank. A later day never reuses an earlier day's gross.
+    """
     if start is None or end is None:
         return []
     days = []
@@ -476,6 +482,16 @@ def calendar_bounds(feeds):
     if not days:
         return None
     return min(days), max(days)
+
+
+FORWARD_CALENDAR_DAYS = 30
+
+
+def forward_calendar_bounds(today):
+    """The next 30 days from today in Asia/Kolkata, including today."""
+    if today is None:
+        return None
+    return today, today + timedelta(days=FORWARD_CALENDAR_DAYS - 1)
 
 
 def parse_range(args, today, default_span=None):
@@ -732,9 +748,102 @@ def calendar_story(feeds, store):
     }
 
 
+MENU_MIX_LIMIT = 10
+MENU_MIX_DAYS = 30
+
+
+def _period_days(start, end):
+    days = set()
+    if start is None or end is None or end < start:
+        return days
+    cursor = start
+    while cursor <= end:
+        days.add(cursor)
+        cursor += timedelta(days=1)
+    return days
+
+
+def menu_mix_window(rows):
+    """Latest 30 days that actually appear in the menu-mix file.
+
+    The label is those dates. A file that is one calendar month is not renamed
+    to a rolling 30 days.
+    """
+    days = set()
+    for row in rows or []:
+        days.update(_period_days(row.get("period_start"), row.get("period_end")))
+    if not days:
+        return None, None, set()
+    kept = sorted(days)[-MENU_MIX_DAYS:]
+    return kept[0], kept[-1], set(kept)
+
+
+def _period_inside(row, kept):
+    covered = _period_days(row.get("period_start"), row.get("period_end"))
+    return bool(covered) and covered <= kept
+
+
+def menu_period_label(start, end):
+    if start is None or end is None:
+        return ""
+    if start.year == end.year and start.month == end.month:
+        return f"{start.day}–{end.day} {start.strftime('%b %Y')}"
+    if start.year == end.year:
+        return f"{start.day} {start.strftime('%b')}–{end.day} {end.strftime('%b %Y')}"
+    return f"{format_date(start)}–{format_date(end)}"
+
+
+def format_share(value):
+    if value is None:
+        return ""
+    return f"{float(value):.2f}%"
+
+
+def present_menu_mix(feeds, store):
+    """Top items for one store from the dates present in menu_mix.csv."""
+    directory = feeds.get("directory")
+    state = _file_state(directory, "menu_mix.csv", feeds.get("menu_mix") or []) if directory else "missing"
+    result = {
+        "state": state,
+        "has_items": False,
+        "period_label": "",
+        "empty": "Menu mix is not on file.",
+        "entries": [],
+    }
+    if store is None or state in {"missing", "empty"}:
+        return result
+    rows = (feeds.get("menu_mix_by_store") or {}).get(store.label) or []
+    start, end, kept = menu_mix_window(feeds.get("menu_mix") or [])
+    chosen = [row for row in rows if _period_inside(row, kept)]
+    if not chosen:
+        result["empty"] = "Menu mix is not on file for this store."
+        return result
+    chosen.sort(
+        key=lambda row: (
+            -(row["total_sales"] if row.get("total_sales") is not None else float("-inf")),
+            (row.get("item") or "").casefold(),
+        )
+    )
+    items = []
+    for row in chosen[:MENU_MIX_LIMIT]:
+        items.append(
+            {
+                "item": row.get("item") or "",
+                "sales": format_money(row.get("total_sales"), "total_sales"),
+                "orders": format_count(row.get("total_orders")),
+                "contribution": format_share(row.get("contribution_pct")),
+            }
+        )
+    result["has_items"] = True
+    result["period_label"] = menu_period_label(start, end)
+    result["empty"] = ""
+    result["entries"] = items
+    return result
+
+
 def build_view(feeds, store, selection, today):
-    # The calendar is the dates in the file, not a chosen from-to range.
-    span = calendar_bounds(feeds) if store else None
+    # The calendar is the next 30 days from today, not the dates in the file.
+    span = forward_calendar_bounds(today) if store else None
     if span:
         days = calendar_days(feeds, store, span[0], span[1])
     else:
@@ -762,6 +871,7 @@ def build_view(feeds, store, selection, today):
         "reelo_columns": REELO_COLUMNS,
         "famepilot_columns": FAMEPILOT_COLUMNS,
         "keka": present_keka(feeds, store),
+        "menu_mix": present_menu_mix(feeds, store),
         "audit": present_audit(feeds, store),
         "reelo": present_reelo(feeds, store),
         "fame": present_famepilot(feeds, store),
