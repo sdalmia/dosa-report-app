@@ -279,11 +279,23 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("reelo.csv is missing.", html)
         self.assertIn("famepilot.csv is missing.", html)
         self.assertNotIn("No ops, CRM, or cost insights are on file for this store.", html)
-        self.assertIn("Ask the store what changed in that bill count.", html)
-        self.assertIn("Clear those unsettled bills before the next close.", html)
-        self.assertIn("famepilot.csv is not on file for this store.", html)
-        self.assertIn("No void-ticket action is on file.", html)
+        self.assertIn("Find what cut that bill count before the next same weekday.", html)
+        self.assertIn("-4.55%", html)
+        self.assertIn("105 bills", html)
+        self.assertIn("110 on the last same weekday", html)
+        self.assertIn("Clear the 5 unsettled bills (₹4,048) before the next close.", html)
+        self.assertIn("net was +6.54%", html)
+        self.assertIn("₹62,912.34", html)
+        self.assertIn("₹59,049.24", html)
+        self.assertIn("APB was ₹599.17, +11.62% from ₹536.81", html)
+        self.assertIn("There is no mystery audit score to act on.", html)
+        self.assertIn("Void bills are 0. Leave voids alone.", html)
+        self.assertIn("variance versus mid is -₹150", html)
+        self.assertNotIn("famepilot.csv is not on file", html)
+        self.assertNotIn("do not treat", html)
         self.assertNotIn("Void bills are blank", html)
+        self.assertNotIn("mystery_audit.csv is not on file", html)
+        self.assertNotIn("no margin action", html)
         self.assertIn(">Print<", html)
         self.assertNotIn("7,087", html)
 
@@ -903,23 +915,27 @@ class StoreHealthTests(unittest.TestCase):
             "redemption_revenue_inr,avg_revenue_per_redemption_inr,points_issued,sales_total_inr_last30d,"
             "visits_last30d,phones_valid_visits,phones_blocked_visits,phone_capture_pct,customers_with_purchase,"
             "active_customers,inactive_customers,note\n"
-            "Only Reelo (01/0097),Reelo Name,03 Sep 26 - 03 Oct 26,matched,4,10%,,,,,,,3,,,,,\n",
+            "Only Reelo (01/0097),Reelo Name,03 Sep 26 - 03 Oct 26,matched,4,10%,,,,,,,3,,,,,\n"
+            "Full Capture (01/0096),Reelo Name,03 Sep 26 - 03 Oct 26,matched,2,5%,,,,,,,5,100%,,,,\n",
         )
         feeds = load_feeds(self.data.name)
         stores = {store.label: store for store in list_stores(feeds)}
         fame = build_insights(feeds, stores["Only Fame (01/0099)"])
         tie = build_insights(feeds, stores["Tie Store (01/0098)"])
         reelo = build_insights(feeds, stores["Only Reelo (01/0097)"])
+        captured = build_insights(feeds, stores["Full Capture (01/0096)"])
         self.assertTrue(fame["has_insight"])
         self.assertTrue(tie["has_insight"])
         self.assertTrue(reelo["has_insight"])
+        self.assertTrue(captured["has_insight"])
         fame_crm = " ".join(fame["crm"])
         tie_crm = " ".join(tie["crm"])
         reelo_crm = " ".join(reelo["crm"])
+        captured_crm = " ".join(captured["crm"])
         self.assertIn("2.18", fame_crm)
         self.assertIn("11", fame_crm)
         self.assertIn("Missing Item", fame_crm)
-        self.assertIn("Check the last Missing Item tickets.", fame_crm)
+        self.assertIn("Close Missing Item tickets before the next shift.", fame_crm)
         self.assertIn("not a verified 30-day range", fame_crm)
         self.assertNotIn("₹", " ".join(fame["ops"] + fame["crm"] + fame["cost"]))
         self.assertIn("tie:", tie_crm)
@@ -931,9 +947,12 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Blocked visits are 3", reelo_crm)
         self.assertNotIn("2.18", reelo_crm)
         self.assertNotIn("₹", " ".join(reelo["ops"] + reelo["crm"] + reelo["cost"]))
+        self.assertIn("Phone capture is 100%. Capture is fine.", captured_crm)
+        self.assertNotIn("Clear those", captured_crm)
+        self.assertNotIn(".csv", captured_crm)
         page = self.get("/store-health?store=only-fame-01-0099")
         self.assertNotIn("No ops, CRM, or cost insights are on file for this store.", page)
-        self.assertIn("Check the last Missing Item tickets.", page)
+        self.assertIn("Close Missing Item tickets before the next shift.", page)
         self.assertIn("not a verified 30-day range", page)
         self.assertIn(">Print<", page)
 
@@ -951,9 +970,14 @@ class StoreHealthTests(unittest.TestCase):
         feeds = load_feeds(self.data.name)
         store = list_stores(feeds)[0]
         blank = build_insights(feeds, store)
-        text = " ".join(blank["ops"] + blank["cost"])
-        self.assertIn("Void bills are blank in posist_daily.csv", text)
-        self.assertNotIn("Void bills in the Posist window", text)
+        text = " ".join(blank["ops"] + blank["crm"] + blank["cost"])
+        self.assertIn("₹100", text)
+        self.assertIn("4 bills", text)
+        self.assertIn("There is no mystery audit score to act on.", text)
+        self.assertNotIn("Void bills are blank", text)
+        self.assertNotIn("posist_daily", text)
+        self.assertNotIn(".csv", text)
+        self.assertNotIn("do not treat", text)
         self.assertNotIn("are 0", text)
 
     def test_no_city_leaves_context_slots_disconnected(self):
@@ -1194,7 +1218,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(page, "drivers", "2026-10-02"), "Gandhi Jayanti")
         self.assertEqual(cell(page, "actual_net", "2026-10-01"), "₹1,13,726.94")
         self.assertEqual(cell(page, "pred_mid", "2026-10-01"), "")
-        self.assertNotIn("₹1,66,950.16", page)
+        calendar = page.split('id="sales-calendar"', 1)[1].split("<details", 1)[0]
+        self.assertNotIn("₹1,66,950.16", calendar)
+        self.assertIn("gross was ₹1,66,950.16", page.split('id="cost"', 1)[1].split('id="holiday-calendar"', 1)[0])
 
     def test_csv_load_warnings_stay_off_the_page_and_the_pdf(self):
         self.write(
