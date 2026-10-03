@@ -158,24 +158,63 @@
   .range-note { color: #adb5bd; font-size: 0.85rem; }
   .contract { color: #ced4da; }
   .contract code { color: #f8f9fa; }
+  .last-updated {
+    background: #1b1b1b;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    margin: 0 0 1.25rem;
+  }
+  .last-updated h2 {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #adb5bd;
+    margin: 0 0 0.7rem;
+  }
+  .feed-times { display: grid; gap: 0.75rem; }
+  @media (min-width: 768px) {
+    .feed-times { grid-template-columns: 1fr 1fr; }
+  }
+  .feed-time h3 { font-size: 1rem; margin: 0 0 0.25rem; }
+  .feed-time p { margin: 0.1rem 0; }
 </style>
 
 <div class="store-health py-4">
   <p class="eyebrow mb-1"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none">Command Centre</a> / Store Health</p>
   <h1 class="mb-2">{% if store %}{{ store.label }}{% else %}Choose a store{% endif %}</h1>
-  {% if store and store.public_name != store.label %}
-    <p class="public-name mb-2">{{ store.public_name }}</p>
-  {% endif %}
   {% if store %}
     <ul class="identity">
-      {% if store.deployment_code %}<li>Code {{ store.deployment_code }}</li>{% endif %}
       {% if store.region %}<li>{{ store.region }}</li>{% endif %}
-      {% if store.format %}<li>{{ store.format }}</li>{% endif %}
     </ul>
-    <p class="match-hint">Rows match this store when the store column is {% for key in match_keys %}{{ key }}{% if not loop.last %} or {% endif %}{% endfor %}.</p>
+    <p class="match-hint">Rows match this store when the store column is {{ store.label }}.</p>
   {% else %}
-    <p class="match-hint mb-3">No store is selected. Pick any outlet. Figures stay blank until a file has a row for that store.</p>
+    <p class="match-hint mb-3">Pick a Posist deployment label. The list is the store column in posist_daily.csv, written exactly as it appears there.</p>
   {% endif %}
+
+  <section id="last-updated" class="last-updated" aria-label="Last updated" data-posist-state="{{ freshness.posist.state }}" data-calendar-state="{{ freshness.calendar.state }}">
+    <h2>Last updated</h2>
+    <div class="feed-times">
+      <article class="feed-time">
+        <h3>Posist daily</h3>
+        {% if freshness.posist.state == "ready" %}
+          <p>File last saved: <time data-field="posist_saved_at">{{ freshness.posist.saved_at }}</time></p>
+          <p>Newest date in the file: <span data-field="posist_newest_date">{{ freshness.posist.newest_date }}</span></p>
+        {% else %}
+          <p>{{ freshness.posist.detail }}</p>
+        {% endif %}
+      </article>
+      <article class="feed-time">
+        <h3>Predicted vs actual</h3>
+        {% if freshness.calendar.state == "ready" %}
+          <p>File last saved: <time data-field="calendar_saved_at">{{ freshness.calendar.saved_at }}</time></p>
+          <p>Newest date in the file: <span data-field="calendar_newest_date">{{ freshness.calendar.newest_date }}</span></p>
+        {% else %}
+          <p>{{ freshness.calendar.detail }}</p>
+        {% endif %}
+      </article>
+    </div>
+  </section>
 
   {% if unknown_store %}
     <p class="empty-state">No store matches “{{ unknown_token }}”. Choose one from the list.</p>
@@ -215,6 +254,11 @@
         <div>
           <h2 id="posist-title">Posist Insights</h2>
           <p class="box-source">Daily sales row{% if day_label %} · {{ day_label }}{% endif %}</p>
+          {% if freshness.posist.state == "ready" %}
+            <p class="box-source">File last saved {{ freshness.posist.saved_at }}. Newest date in the file {{ freshness.posist.newest_date }}.</p>
+          {% else %}
+            <p class="box-source">{{ freshness.posist.detail }}</p>
+          {% endif %}
         </div>
       </div>
       <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
@@ -370,6 +414,11 @@
         <div>
           <h2 id="calendar-title">Sales calendar</h2>
           <p class="box-source">Predicted versus actual Net</p>
+          {% if freshness.calendar.state == "ready" %}
+            <p class="box-source">File last saved {{ freshness.calendar.saved_at }}. Newest date in the file {{ freshness.calendar.newest_date }}.</p>
+          {% else %}
+            <p class="box-source">{{ freshness.calendar.detail }}</p>
+          {% endif %}
         </div>
       </div>
       <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
@@ -471,7 +520,7 @@
 
   <details class="mt-4 contract">
     <summary>Where these figures come from</summary>
-    <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. Money is rupees, not lakhs, unless a column name ends in <code>_L</code>.</p>
+    <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
     <p><code>{{ posist_columns|join(", ") }}</code></p>
     <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Status is pending, actual, or actual_provisional_eod. Variance is shown only when the file has it.</p>
     <p class="mb-0"><code>{{ calendar_columns|join(", ") }}</code></p>

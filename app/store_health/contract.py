@@ -8,7 +8,7 @@ posist_daily.csv — one row per store per date
     net_wow_pct, bills_wow_pct, apb_wow_pct,
     net_last_same_weekday, bills_last_same_weekday, apb_last_same_weekday,
     unsettled_bills, unsettled_amount, void_bills,
-    source (live|historical), provisional (bool)
+    source (live|historical), provisional (bool), region
 
 sales_pred_vs_actual.csv — network shape, plus store on a store calendar
     date, weekday, tier, pred_low, pred_high, pred_mid, actual_net,
@@ -20,8 +20,11 @@ Money is rupees unless the column name ends with _L (already in lakhs).
 
 import csv
 import os
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+IST = ZoneInfo("Asia/Kolkata")
 
 
 POSIST_FILE = "posist_daily.csv"
@@ -45,6 +48,7 @@ POSIST_COLUMNS = (
     "void_bills",
     "source",
     "provisional",
+    "region",
 )
 
 # Network file shape. Store calendars use these columns plus store.
@@ -226,6 +230,8 @@ def load_posist(directory=None):
                     parsed[field] = text
                     if text not in ALLOWED_SOURCE:
                         _warn(warnings, f"{POSIST_FILE} row {index} source is {text!r}. Expected live or historical.")
+            elif field == "region":
+                parsed[field] = None if _blank(cell) else str(cell).strip()
             else:
                 value = parse_number(cell)
                 if value is None and not _blank(cell):
@@ -311,6 +317,47 @@ def load_feeds(directory=None):
         "calendar": calendar,
         "warnings": posist_warnings + calendar_warnings,
         "directory": directory,
+    }
+
+
+def describe_feed_file(path):
+    """Say whether a feed file is missing, empty, or has a real last-updated time.
+
+    A missing or empty file does not get a timestamp. When rows exist, the
+    result includes the file's mtime and the newest date column. Callers label
+    those two facts separately.
+    """
+    path = Path(path)
+    name = path.name
+    if not path.exists():
+        return {"state": "missing", "detail": f"{name} is missing.", "saved_at": None, "newest_date": None}
+    try:
+        saved_at = datetime.fromtimestamp(path.stat().st_mtime, IST)
+    except OSError:
+        return {"state": "unreadable", "detail": f"{name} could not be read.", "saved_at": None, "newest_date": None}
+    warnings = []
+    table = _read_dicts(path, warnings)
+    if any("not UTF-8" in warning or "could not be read" in warning or "not valid CSV" in warning or "no header" in warning for warning in warnings):
+        return {"state": "unreadable", "detail": warnings[0], "saved_at": None, "newest_date": None}
+    dates = []
+    data_rows = 0
+    for raw in table or []:
+        data_rows += 1
+        day = parse_date(raw.get("date"))
+        if day is not None:
+            dates.append(day)
+    if data_rows == 0:
+        return {"state": "empty", "detail": f"{name} is empty.", "saved_at": None, "newest_date": None}
+    if not dates:
+        return {"state": "undated", "detail": f"{name} has no dated rows.", "saved_at": None, "newest_date": None}
+    return {"state": "ready", "detail": "", "saved_at": saved_at, "newest_date": max(dates)}
+
+
+def describe_feeds(directory=None):
+    directory = Path(directory) if directory else data_directory()
+    return {
+        "posist": describe_feed_file(directory / POSIST_FILE),
+        "calendar": describe_feed_file(directory / CALENDAR_FILE),
     }
 
 

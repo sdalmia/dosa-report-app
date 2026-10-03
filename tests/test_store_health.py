@@ -1,4 +1,5 @@
 import csv
+import html as html_lib
 import os
 import re
 import tempfile
@@ -24,7 +25,6 @@ from app.store_health.present import (
     format_money,
     format_pct,
 )
-from app.store_health.stores import CATALOGUE
 
 
 POSIST_HEADER = ",".join(POSIST_COLUMNS)
@@ -32,8 +32,9 @@ CALENDAR_HEADER = ",".join(CALENDAR_COLUMNS)
 
 SAMPLE_POSIST = (
     "Gurgaon Sec-15 (02/0010),2026-10-02,62912.34,67393.99,105,599.17,"
-    "+6.54,-4.55,+11.62,59049.24,110,536.81,5,4048,0,live,true"
+    "+6.54,-4.55,+11.62,59049.24,110,536.81,5,4048,0,live,true,North"
 )
+GURGAON_SLUG = "gurgaon-sec-15-02-0010"
 
 
 def cell(html, field, day=None):
@@ -88,30 +89,23 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIsNone(parse_number(""))
         self.assertIsNone(parse_number("abc"))
         self.assertEqual(parse_number("0"), 0.0)
+        self.assertEqual(parse_number("0.00"), 0.0)
         self.assertEqual(parse_number("+6.54"), 6.54)
+        self.assertEqual(parse_number("152,678.98"), 152678.98)
+        self.assertEqual(parse_number("47.66%"), 47.66)
+        self.assertEqual(format_money(152678.98, "net"), "₹1,52,678.98")
+        self.assertIsNone(parse_number(""))
 
-    def test_catalogue_has_no_invented_deployment_codes(self):
-        self.assertEqual(len(CATALOGUE), 28)
-        coded = [store for store in CATALOGUE if store.deployment_code]
-        self.assertEqual([store.id for store in coded], ["ncr-gurugram-sector-15"])
-        gurgaon = coded[0]
-        self.assertEqual(gurgaon.posist_deployment_name, "Dosa Coffee - Gurgaon Sec-15 (02/0010)")
-        self.assertEqual(gurgaon.deployment_code, "02/0010")
-        self.assertEqual(gurgaon.region, "North")
-        self.assertEqual(gurgaon.format, "Delhi-NCR")
-        self.assertIn("Gurgaon Sec-15 (02/0010)", gurgaon.match_keys())
-        regions = {store.region for store in CATALOGUE}
-        formats = {store.format for store in CATALOGUE}
-        self.assertEqual(regions, {"East", "North"})
-        self.assertEqual(formats, {"Kolkata", "Delhi-NCR"})
-
-    def test_shipped_files_match_the_contract_and_have_no_rows(self):
+    def test_shipped_files_keep_tony_headers(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
-        posist = (root / "posist_daily.csv").read_text(encoding="utf-8").strip()
-        calendar = (root / "sales_pred_vs_actual.csv").read_text(encoding="utf-8").strip()
-        self.assertEqual(posist, POSIST_HEADER)
-        self.assertEqual(calendar, CALENDAR_HEADER)
-        self.assertNotIn("62912", posist)
+        with (root / "posist_daily.csv").open(encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            self.assertEqual(tuple(next(reader)), POSIST_COLUMNS)
+            self.assertEqual(sum(1 for _ in reader), 33)
+        with (root / "sales_pred_vs_actual.csv").open(encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            self.assertEqual(tuple(next(reader)), CALENDAR_COLUMNS)
+            self.assertEqual(sum(1 for _ in reader), 33)
 
     def test_login_required(self):
         anon = self.app.test_client()
@@ -135,7 +129,13 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Choose a store", html)
         self.assertIn(">Choose a store</option>", html)
         self.assertRegex(html, r'<option value=""[^>]*selected')
-        self.assertLess(html.index("Sector 3, Salt Lake"), html.index("Gurgaon Sec-15"))
+        self.assertNotIn("Sector 3, Salt Lake", html)
+        self.assertNotIn("Gurgaon Sec-15", html)
+        self.assertIn("posist_daily.csv is missing.", html)
+        self.assertIn("sales_pred_vs_actual.csv is missing.", html)
+        self.assertNotIn("File last saved", html)
+        self.assertNotIn("Newest date in the file", html)
+        self.assertEqual(html.count("<optgroup"), 0)
         self.assertEqual(cell(html, "net"), "")
         self.assertEqual(cell(html, "void_bills"), "")
         self.assertEqual(cell(html, "store_manager"), "")
@@ -167,12 +167,13 @@ class StoreHealthTests(unittest.TestCase):
             + ",2026-10-02,Fri,A,1,2,3,4,1,1,pending,network driver,network note\n",
         )
         html = self.get(
-            "/store-health/ncr-gurugram-sector-15?start=2026-10-01&end=2026-10-03&day=2026-10-02"
+            f"/store-health/{GURGAON_SLUG}?start=2026-10-01&end=2026-10-03&day=2026-10-02"
         )
-        self.assertIn("Dosa Coffee - Gurgaon Sec-15 (02/0010)", html)
-        self.assertIn("Code 02/0010", html)
+        self.assertIn(">Gurgaon Sec-15 (02/0010)</option>", html)
+        self.assertNotIn("Dosa Coffee - Gurgaon", html)
+        self.assertNotIn("Gurugram Sector-15", html)
+        self.assertNotIn("Delhi-NCR", html)
         self.assertIn(">North</li>", html)
-        self.assertIn(">Delhi-NCR</li>", html)
         self.assertEqual(cell(html, "net"), "₹62,912.34")
         self.assertEqual(cell(html, "gross"), "₹67,393.99")
         self.assertEqual(cell(html, "bills"), "105")
@@ -221,19 +222,18 @@ class StoreHealthTests(unittest.TestCase):
             Path(self.data.name, "posist_daily.csv").read_text(encoding="utf-8")
             + '"Sector 3, Salt Lake",2026-10-02,1000,,,,,,,,,,,,,,\n',
         )
-        html = self.get("/store-health?store=kolkata-sector-3-salt-lake&start=2026-10-02&end=2026-10-02&day=2026-10-02")
+        html = self.get("/store-health?store=sector-3-salt-lake&start=2026-10-02&end=2026-10-02&day=2026-10-02")
         self.assertEqual(cell(html, "net"), "₹1,000")
         self.assertEqual(cell(html, "gross"), "")
         self.assertEqual(cell(html, "bills"), "")
         self.assertEqual(cell(html, "void_bills"), "")
         self.assertEqual(cell(html, "net_wow_pct"), "")
         self.assertNotIn("62,912", html)
-        self.assertIn(">East</li>", html)
-        self.assertIn(">Kolkata</li>", html)
+        self.assertIn(">Sector 3, Salt Lake</option>", html)
 
     def test_blank_day_for_a_chosen_store(self):
         self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
-        html = self.get("/store-health?store=ncr-kalkaji&start=2026-10-02&end=2026-10-02&day=2026-10-02")
+        html = self.get(f"/store-health/{GURGAON_SLUG}?start=2026-10-01&end=2026-10-01&day=2026-10-01")
         self.assertIn("No daily Posist row for this store on this date.", html)
         self.assertEqual(cell(html, "net"), "")
         self.assertEqual(cell(html, "bills"), "")
@@ -254,7 +254,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Dosa Coffee - New Outlet (09/0007)", listed)
         opened = self.get("/store-health?store=dosa-coffee-new-outlet-09-0007&day=2026-10-02&start=2026-10-02&end=2026-10-02")
         self.assertEqual(cell(opened, "net"), "₹10")
-        self.assertIn("Code 09/0007", opened)
+        self.assertIn(">Dosa Coffee - New Outlet (09/0007)</option>", opened)
         self.assertNotIn(">North</li>", opened)
         self.assertNotIn(">East</li>", opened)
 
@@ -296,6 +296,98 @@ class StoreHealthTests(unittest.TestCase):
         self.get("/upload")
         self.get("/ingredient-tracker/")
         self.get("/location-finder")
+
+    def test_empty_files_do_not_invent_a_timestamp(self):
+        self.write("posist_daily.csv", POSIST_HEADER + "\n")
+        self.write("sales_pred_vs_actual.csv", CALENDAR_HEADER + "\n")
+        html = self.get("/store-health")
+        self.assertIn("posist_daily.csv is empty.", html)
+        self.assertIn("sales_pred_vs_actual.csv is empty.", html)
+        self.assertNotIn("File last saved", html)
+        self.assertNotIn("Newest date in the file", html)
+        self.assertEqual(html.count("<optgroup"), 0)
+
+    def test_calendar_only_name_stays_out_of_the_picker(self):
+        self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
+        self.write(
+            "sales_pred_vs_actual.csv",
+            CALENDAR_HEADER + "\nDosa Coffee - Calendar Only (09/0099),2026-10-02,Friday,,,,,,10,,,,,\n",
+        )
+        html = self.get("/store-health")
+        self.assertNotIn("Calendar Only", html)
+        self.assertIn(">Gurgaon Sec-15 (02/0010)</option>", html)
+
+    def test_tony_drop_uses_exact_labels_and_last_updated(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        html = self.get("/store-health")
+        with (root / "posist_daily.csv").open(encoding="utf-8-sig", newline="") as handle:
+            names = [row["store"] for row in csv.DictReader(handle)]
+        self.assertEqual(len(set(names)), 33)
+        for name in names:
+            self.assertIn(f">{html_lib.escape(name)}</option>", html)
+        self.assertNotIn(">Salt Lake</option>", html)
+        self.assertNotIn(">Gurgaon Sec-15</option>", html)
+        self.assertNotIn("Sector 3, Salt Lake", html)
+        self.assertIn("Dosa Coffee - Calcutta Swiming Club (0007)", html)
+        self.assertIn('data-posist-state="ready"', html)
+        self.assertIn('data-calendar-state="ready"', html)
+        self.assertEqual(cell(html, "posist_newest_date"), "2 Oct 2026")
+        self.assertEqual(cell(html, "calendar_newest_date"), "2 Oct 2026")
+        self.assertRegex(cell(html, "posist_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
+        self.assertRegex(cell(html, "calendar_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
+        self.assertRegex(html, r'<option value=""[^>]*selected')
+        self.assertEqual(cell(html, "net"), "")
+
+        match = re.search(r'<option value="([^"]+)"[^>]*>Connaught place \(02/0012\)</option>', html)
+        self.assertIsNotNone(match)
+        page = self.get(f"/store-health/{match.group(1)}?start=2026-10-02&end=2026-10-02&day=2026-10-02")
+        self.assertEqual(cell(page, "net"), "₹1,52,678.98")
+        self.assertEqual(cell(page, "gross"), "")
+        self.assertEqual(cell(page, "bills"), "218")
+        self.assertEqual(cell(page, "apb"), "₹700.36")
+        self.assertEqual(cell(page, "net_wow_pct"), "+47.66%")
+        self.assertEqual(cell(page, "bills_wow_pct"), "+30.54%")
+        self.assertEqual(cell(page, "apb_wow_pct"), "+13.11%")
+        self.assertEqual(cell(page, "net_last_same_weekday"), "₹1,03,402.35")
+        self.assertEqual(cell(page, "bills_last_same_weekday"), "167")
+        self.assertEqual(cell(page, "apb_last_same_weekday"), "₹619.18")
+        self.assertEqual(cell(page, "unsettled_bills"), "11")
+        self.assertEqual(cell(page, "unsettled_amount"), "₹10,018")
+        self.assertEqual(cell(page, "void_bills"), "4")
+        self.assertEqual(cell(page, "source"), "Live")
+        self.assertEqual(cell(page, "provisional"), "Provisional")
+        self.assertIn(">North</li>", page)
+        self.assertEqual(cell(page, "pred_mid", "2026-10-02"), "")
+        self.assertEqual(cell(page, "pred_low", "2026-10-02"), "")
+        self.assertEqual(cell(page, "pred_high", "2026-10-02"), "")
+        self.assertEqual(cell(page, "variance_vs_mid", "2026-10-02"), "")
+        self.assertEqual(cell(page, "variance_pct", "2026-10-02"), "")
+        self.assertEqual(cell(page, "tier", "2026-10-02"), "")
+        self.assertEqual(cell(page, "actual_net", "2026-10-02"), "₹1,52,678.98")
+        self.assertEqual(cell(page, "status", "2026-10-02"), "Actual, provisional end of day")
+        self.assertEqual(cell(page, "drivers", "2026-10-02"), "Gandhi Jayanti")
+        self.assertEqual(cell(page, "notes", "2026-10-02"), "")
+        self.assertEqual(cell(page, "weekday", "2026-10-02"), "Friday")
+
+        gk = re.search(r'<option value="([^"]+)"[^>]*>GK1 Cloud Kitchen \(02/0002\)</option>', page)
+        gk_page = self.get(f"/store-health/{gk.group(1)}?day=2026-10-02&start=2026-10-02&end=2026-10-02")
+        self.assertEqual(cell(gk_page, "net"), "₹0")
+        self.assertEqual(cell(gk_page, "bills"), "0")
+        self.assertEqual(cell(gk_page, "apb"), "")
+        self.assertEqual(cell(gk_page, "gross"), "")
+        self.assertEqual(cell(gk_page, "net_wow_pct"), "")
+
+        events = re.search(
+            r'<option value="([^"]+)"[^>]*>Dosa Coffee - Events &amp; Catering</option>',
+            page,
+        )
+        events_page = self.get(f"/store-health/{events.group(1)}?day=2026-10-02&start=2026-10-02&end=2026-10-02")
+        self.assertEqual(cell(events_page, "net"), "₹0")
+        self.assertEqual(cell(events_page, "gross"), "")
+        self.assertEqual(cell(events_page, "apb"), "₹0")
+        self.assertEqual(cell(events_page, "net_wow_pct"), "0%")
+        self.assertIn(">East</li>", events_page)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
