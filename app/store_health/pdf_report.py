@@ -142,7 +142,7 @@ class _StorePdf(FPDF):
 
 
 def render_store_pdf(store, selection, view, insights, context_slots, warnings=None):
-    """One store on paper. Insights, city slots, and file warnings stay on the screen page."""
+    """One store on paper. Insights and city slots stay on the screen page."""
     del selection, insights, context_slots, warnings
     pdf = _StorePdf(store.label)
     pdf.add_page()
@@ -385,29 +385,15 @@ def _posist_lines(view):
         lines.append(f"Days summed: {posist['days_summed']}.")
     if posist.get("missing_label"):
         lines.append(posist["missing_label"])
-    filled = _pairs(
-        posist.get("fields") or {},
-        [
-            "net",
-            "gross",
-            "bills",
-            "apb",
-            "net_last_same_weekday",
-            "bills_last_same_weekday",
-            "apb_last_same_weekday",
-            "net_wow_pct",
-            "bills_wow_pct",
-            "apb_wow_pct",
-            "unsettled_amount",
-            "unsettled_bills",
-            "void_bills",
-        ],
-    )
-    if filled:
-        lines.extend(filled)
-    elif posist.get("has_row"):
-        lines.append("This store is on the Posist report, and the summed cells are blank. A blank is not zero.")
-    return lines or ["Posist has no figures for this store."]
+    fields = posist.get("fields") or {}
+    # Net on the sheet is the gross total when the net column is blank.
+    net = fields.get("net") or fields.get("gross") or ""
+    bills = fields.get("bills") or ""
+    apb = fields.get("apb") or ""
+    lines.append(f"Net: {net}" if net else "Net:")
+    lines.append(f"Bills: {bills}" if bills else "Bills:")
+    lines.append(f"APB: {apb}" if apb else "APB:")
+    return lines
 
 
 def _audit_lines(view):
