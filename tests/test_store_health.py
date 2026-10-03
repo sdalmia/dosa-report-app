@@ -5,7 +5,7 @@ import os
 import re
 import tempfile
 import unittest
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -202,11 +202,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Holiday calendar", html)
         self.assertIn("Local current affairs", html)
         self.assertIn("Weather", html)
-        today = business_today()
-        start = today - timedelta(days=13)
-        self.assertIn(start.isoformat(), html)
-        self.assertIn(today.isoformat(), html)
-        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', html)), 14)
+        self.assertNotIn('id="range-start"', html)
+        self.assertNotIn('id="range-end"', html)
+        self.assertNotIn("Show range", html)
+        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', html)), 0)
         self.assertIn("Choose a store to see predicted and actual Net.", html)
 
     def test_sample_row_renders_and_missing_calendar_cells_stay_blank(self):
@@ -254,9 +253,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-02"), "")
         self.assertEqual(cell(html, "variance_pct", "2026-10-02"), "")
         self.assertEqual(cell(html, "status", "2026-10-02"), "")
-        self.assertEqual(cell(html, "weekday", "2026-10-01"), "")
-        self.assertEqual(cell(html, "pred_mid", "2026-10-01"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-01"), "")
+        self.assertEqual(cell(html, "weekday", "2026-10-02"), "Fri")
+        self.assertNotIn('data-date="2026-10-01"', html)
         self.assertEqual(cell(html, "actual_net", "2026-10-03"), "₹0")
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-03"), "-₹150")
         self.assertEqual(cell(html, "variance_pct", "2026-10-03"), "-100%")
@@ -306,7 +304,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "net"), "₹62,912.34")
         self.assertEqual(cell(html, "bills"), "105")
         self.assertEqual(cell(html, "void_bills"), "0")
-        self.assertIn("No predicted or actual Net in this range.", html)
+        self.assertNotIn('id="range-start"', html)
+        self.assertNotIn("in this range", html)
+        self.assertNotIn('data-date="2026-10-01"', html)
 
     def test_date_range_and_feed_only_store(self):
         self.write(
@@ -315,7 +315,8 @@ class StoreHealthTests(unittest.TestCase):
         )
         self.write("sales_pred_vs_actual.csv", CALENDAR_HEADER + "\n")
         html = self.get("/store-health?start=2026-10-05&end=2026-10-01")
-        self.assertIn("The end date is before the start date.", html)
+        self.assertNotIn('id="range-start"', html)
+        self.assertNotIn("The end date is before the start date.", html)
         self.assertNotIn('data-date="2026-10-05"', html)
         listed = self.get("/store-health")
         self.assertIn("Dosa Coffee - New Outlet (09/0007)", listed)
@@ -382,6 +383,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(html_lib.unescape(cell(ideal, "calendar_share_label")), (
             "Low, mid, and high are this store's share of the network judgment band, not a separate model."
         ))
+        self.assertNotIn('id="range-start"', ideal)
+        self.assertNotIn("Show range", ideal)
+        self.assertNotIn("3 Oct 2026 through 1 Nov 2026", ideal)
+        self.assertNotIn("Actual Net is filled on", ideal)
         self.assertIn("2026-10-03", ideal)
         self.assertIn("2026-11-01", ideal)
         self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', ideal)), 30)
@@ -477,17 +482,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("Not a full window", page)
         self.assertNotIn("Not on the Posist deployment report", page)
         self.assertIn(">North</li>", page)
-        self.assertEqual(cell(page, "pred_mid", "2026-10-02"), "")
-        self.assertEqual(cell(page, "pred_low", "2026-10-02"), "")
-        self.assertEqual(cell(page, "pred_high", "2026-10-02"), "")
-        self.assertEqual(cell(page, "variance_vs_mid", "2026-10-02"), "")
-        self.assertEqual(cell(page, "variance_pct", "2026-10-02"), "")
-        self.assertEqual(cell(page, "tier", "2026-10-02"), "")
-        self.assertEqual(cell(page, "actual_net", "2026-10-02"), "")
-        self.assertEqual(cell(page, "status", "2026-10-02"), "")
-        self.assertEqual(cell(page, "drivers", "2026-10-02"), "")
-        self.assertEqual(cell(page, "notes", "2026-10-02"), "")
-        self.assertEqual(cell(page, "weekday", "2026-10-02"), "")
+        self.assertNotIn('data-date="2026-10-02"', page)
+        self.assertNotIn('id="range-start"', page)
+        self.assertNotIn("Show range", page)
+        self.assertNotIn("3 Oct 2026 through 1 Nov 2026", page)
 
         ideal = self.get(f"/store-health/{self._option_slug(html, 'Dosa Coffee - Ideal Plaza (01/0001)')}")
         self.assertEqual(cell(ideal, "gross"), "₹35,34,169.91")

@@ -277,8 +277,6 @@
         {% endfor %}
       </select>
     </div>
-    <input type="hidden" name="start" value="{{ selection.start_input }}">
-    <input type="hidden" name="end" value="{{ selection.end_input }}">
     <input type="hidden" name="day" value="{{ selection.day_input }}">
     <div class="col-lg-4">
       <button type="submit" class="btn btn-outline-light">Open store</button>
@@ -669,31 +667,12 @@
           {% endif %}
         </div>
       </div>
-      <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
-        {% if store %}<input type="hidden" name="store" value="{{ store.id }}">{% endif %}
-        <input type="hidden" name="day" value="{{ selection.day_input }}">
-        <div class="col-sm-6 col-md-3">
-          <label for="range-start" class="form-label">Start</label>
-          <input id="range-start" class="form-control" type="date" name="start" value="{{ selection.start_input }}" required>
-        </div>
-        <div class="col-sm-6 col-md-3">
-          <label for="range-end" class="form-label">End</label>
-          <input id="range-end" class="form-control" type="date" name="end" value="{{ selection.end_input }}" required>
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-outline-light btn-sm">Show range</button>
-        </div>
-      </form>
-      {% if selection.error %}
-        <p class="empty-state">{{ selection.error }}</p>
-      {% elif not store %}
+      {% if not store %}
         <p class="empty-state">Choose a store to see predicted and actual Net.</p>
       {% elif calendar_absent_note %}
         <p class="empty-state" data-field="calendar_absent_note">{{ calendar_absent_note }}</p>
       {% elif day_count and not filled_actual_days and not filled_prediction_days %}
-        <p class="empty-state">No predicted or actual Net in this range.</p>
-      {% elif day_count %}
-        <p class="range-note">Actual Net is filled on {{ filled_actual_days }} of {{ day_count }} days. A prediction is filled on {{ filled_prediction_days }} of {{ day_count }} days. A blank cell is not zero.</p>
+        <p class="empty-state">No predicted or actual Net for this store.</p>
       {% endif %}
 
       {% if weeks %}
@@ -706,19 +685,23 @@
               {% for cell in week %}
                 {% if cell %}
                   {% if store %}
-                    {% set day_href = url_for('store_health.page', store=store.id, start=selection.start_input, end=selection.end_input, day=cell.iso) %}
+                    {% set day_href = url_for('store_health.page', store=store.id, day=cell.iso) %}
                   {% else %}
-                    {% set day_href = url_for('store_health.page', start=selection.start_input, end=selection.end_input, day=cell.iso) %}
+                    {% set day_href = url_for('store_health.page', day=cell.iso) %}
                   {% endif %}
                   <div class="cal-cell {% if cell.iso == selection.day_input %}is-selected{% endif %} {% if cell.iso == today_iso %}is-today{% endif %}">
                     <a class="day-num" href="{{ day_href }}">{{ cell.date.day }} {{ cell.chrome_weekday }}</a>
-                    {% if cell.fields.tier %}<div class="cal-line"><span>Tier</span><b>{{ cell.fields.tier }}</b></div>{% endif %}
-                    <div class="cal-line"><span>Low</span><b>{{ cell.fields.pred_low }}</b></div>
-                    <div class="cal-line"><span>Mid</span><b>{{ cell.fields.pred_mid }}</b></div>
-                    <div class="cal-line"><span>High</span><b>{{ cell.fields.pred_high }}</b></div>
-                    <div class="cal-line"><span>Actual</span><b>{{ cell.fields.actual_net }}</b></div>
-                    {% if cell.fields.drivers %}<div class="cal-line"><span>Driver</span><b>{{ cell.fields.drivers }}</b></div>{% endif %}
-                    {% if cell.fields.status %}<div class="cal-line"><span>Status</span><b>{{ cell.fields.status }}</b></div>{% endif %}
+                    <div class="cal-line"><span>Tier</span><b data-field="tier" data-date="{{ cell.iso }}">{{ cell.fields.tier }}</b></div>
+                    <div class="cal-line"><span>Low</span><b data-field="pred_low" data-date="{{ cell.iso }}">{{ cell.fields.pred_low }}</b></div>
+                    <div class="cal-line"><span>Mid</span><b data-field="pred_mid" data-date="{{ cell.iso }}">{{ cell.fields.pred_mid }}</b></div>
+                    <div class="cal-line"><span>High</span><b data-field="pred_high" data-date="{{ cell.iso }}">{{ cell.fields.pred_high }}</b></div>
+                    <div class="cal-line"><span>Actual</span><b data-field="actual_net" data-date="{{ cell.iso }}">{{ cell.fields.actual_net }}</b></div>
+                    <div class="cal-line"><span>Driver</span><b data-field="drivers" data-date="{{ cell.iso }}">{{ cell.fields.drivers }}</b></div>
+                    <span hidden data-field="weekday" data-date="{{ cell.iso }}">{{ cell.fields.weekday }}</span>
+                    <span hidden data-field="variance_vs_mid" data-date="{{ cell.iso }}">{{ cell.fields.variance_vs_mid }}</span>
+                    <span hidden data-field="variance_pct" data-date="{{ cell.iso }}">{{ cell.fields.variance_pct }}</span>
+                    <span hidden data-field="status" data-date="{{ cell.iso }}">{{ cell.fields.status }}</span>
+                    <span hidden data-field="notes" data-date="{{ cell.iso }}">{{ cell.fields.notes }}</span>
                   </div>
                 {% else %}
                   <div class="cal-cell pad"></div>
@@ -726,46 +709,6 @@
               {% endfor %}
             </div>
           {% endfor %}
-        </div>
-
-        <div class="cal-scroll">
-          <table class="cal-table" id="sales-calendar-table">
-            <caption class="text-start text-secondary pb-2">Every column from the store calendar. Blank means the file has no figure.</caption>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Weekday</th>
-                <th>Tier</th>
-                <th class="num">Pred low</th>
-                <th class="num">Pred high</th>
-                <th class="num">Pred mid</th>
-                <th class="num">Actual Net</th>
-                <th class="num">Variance vs mid</th>
-                <th class="num">Variance %</th>
-                <th>Status</th>
-                <th>Drivers</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for day in days %}
-                <tr>
-                  <th scope="row">{{ day.label }}</th>
-                  <td data-field="weekday" data-date="{{ day.iso }}">{{ day.fields.weekday }}</td>
-                  <td data-field="tier" data-date="{{ day.iso }}">{{ day.fields.tier }}</td>
-                  <td class="num" data-field="pred_low" data-date="{{ day.iso }}">{{ day.fields.pred_low }}</td>
-                  <td class="num" data-field="pred_high" data-date="{{ day.iso }}">{{ day.fields.pred_high }}</td>
-                  <td class="num" data-field="pred_mid" data-date="{{ day.iso }}">{{ day.fields.pred_mid }}</td>
-                  <td class="num" data-field="actual_net" data-date="{{ day.iso }}">{{ day.fields.actual_net }}</td>
-                  <td class="num {% if day.variance_negative %}var-down{% elif day.variance_positive %}var-up{% endif %}" data-field="variance_vs_mid" data-date="{{ day.iso }}">{{ day.fields.variance_vs_mid }}</td>
-                  <td class="num" data-field="variance_pct" data-date="{{ day.iso }}">{{ day.fields.variance_pct }}</td>
-                  <td data-field="status" data-date="{{ day.iso }}">{{ day.fields.status }}</td>
-                  <td data-field="drivers" data-date="{{ day.iso }}">{{ day.fields.drivers }}</td>
-                  <td data-field="notes" data-date="{{ day.iso }}">{{ day.fields.notes }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
         </div>
       {% endif %}
     </section>
