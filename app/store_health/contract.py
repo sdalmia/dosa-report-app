@@ -8,7 +8,7 @@ posist_daily.csv — one row per store per date
     net_wow_pct, bills_wow_pct, apb_wow_pct,
     net_last_same_weekday, bills_last_same_weekday, apb_last_same_weekday,
     unsettled_bills, unsettled_amount, void_bills,
-    source (live|historical), provisional (bool)
+    source (live|historical), provisional (bool), region
 
 sales_pred_vs_actual.csv — network shape, plus store on a store calendar
     date, weekday, tier, pred_low, pred_high, pred_mid, actual_net,
@@ -20,12 +20,17 @@ Money is rupees unless the column name ends with _L (already in lakhs).
 
 import csv
 import os
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+IST = ZoneInfo("Asia/Kolkata")
 
 
 POSIST_FILE = "posist_daily.csv"
 CALENDAR_FILE = "sales_pred_vs_actual.csv"
+KEKA_FILE = "keka.csv"
+AUDIT_FILE = "mystery_audit.csv"
 
 POSIST_COLUMNS = (
     "store",
@@ -45,6 +50,7 @@ POSIST_COLUMNS = (
     "void_bills",
     "source",
     "provisional",
+    "region",
 )
 
 # Network file shape. Store calendars use these columns plus store.
@@ -63,6 +69,26 @@ CALENDAR_VALUE_COLUMNS = (
     "notes",
 )
 CALENDAR_COLUMNS = ("store",) + CALENDAR_VALUE_COLUMNS
+
+KEKA_COLUMNS = (
+    "posist_store",
+    "keka_location",
+    "headcount",
+    "primary_lead",
+    "other_leads",
+    "match_status",
+    "note",
+)
+
+AUDIT_COLUMNS = (
+    "store",
+    "period",
+    "avg_score",
+    "weekday_score",
+    "weekend_score",
+    "note",
+    "status",
+)
 
 POSIST_MONEY = {
     "net",
@@ -226,6 +252,8 @@ def load_posist(directory=None):
                     parsed[field] = text
                     if text not in ALLOWED_SOURCE:
                         _warn(warnings, f"{POSIST_FILE} row {index} source is {text!r}. Expected live or historical.")
+            elif field == "region":
+                parsed[field] = None if _blank(cell) else str(cell).strip()
             else:
                 value = parse_number(cell)
                 if value is None and not _blank(cell):
@@ -302,15 +330,139 @@ def load_calendar(directory=None):
     return rows, warnings
 
 
+def _text_cell(value):
+    if _blank(value):
+        return None
+    return str(value).strip()
+
+
+def load_keka(directory=None):
+    """Rows from keka.csv. Cells stay text, including headcount written as words."""
+    directory = Path(directory) if directory else data_directory()
+    warnings = []
+    path = directory / KEKA_FILE
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    if "posist_store" not in table[0]:
+        _warn(warnings, f"{KEKA_FILE} is missing posist_store.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("posist_store"))
+        if not store:
+            _warn(warnings, f"{KEKA_FILE} row {index} has no posist_store, so it was skipped.")
+            continue
+        parsed = {field: _text_cell(raw.get(field)) for field in KEKA_COLUMNS}
+        parsed["posist_store"] = store
+        rows.append(parsed)
+    return rows, warnings
+
+
+def is_brand_audit(row):
+    status = (row.get("status") or "").strip().casefold()
+    store = (row.get("store") or "").strip().casefold()
+    return status == "brand aggregate" or store == "brand"
+
+
+def load_audit(directory=None):
+    """Mystery-audit rows. Scores stay as written, including notes that are not numbers."""
+    directory = Path(directory) if directory else data_directory()
+    warnings = []
+    path = directory / AUDIT_FILE
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    if "store" not in table[0]:
+        _warn(warnings, f"{AUDIT_FILE} is missing store.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("store"))
+        if not store:
+            _warn(warnings, f"{AUDIT_FILE} row {index} has no store, so it was skipped.")
+            continue
+        parsed = {field: _text_cell(raw.get(field)) for field in AUDIT_COLUMNS}
+        parsed["store"] = store
+        rows.append(parsed)
+    return rows, warnings
+
+
 def load_feeds(directory=None):
+    from app.store_health.stores import assign_rows
+
     directory = Path(directory) if directory else data_directory()
     posist, posist_warnings = load_posist(directory)
     calendar, calendar_warnings = load_calendar(directory)
+    keka, keka_warnings = load_keka(directory)
+    audit, audit_warnings = load_audit(directory)
+    labels = sorted({store for store, _day in posist})
+    keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", labels)
+    audit_stores = [row for row in audit if not is_brand_audit(row)]
+    brand_rows = [row for row in audit if is_brand_audit(row)]
+    audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
+    if labels:
+        for row in keka_unmatched:
+            _warn(
+                keka_warnings,
+                f"{KEKA_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
+            )
+        for row in audit_unmatched:
+            _warn(
+                audit_warnings,
+                f"{AUDIT_FILE} row {row.get('store')!r} does not match one Posist store, so it was not applied.",
+            )
     return {
         "posist": posist,
         "calendar": calendar,
-        "warnings": posist_warnings + calendar_warnings,
+        "keka": keka,
+        "keka_by_store": keka_by_store,
+        "audit": audit,
+        "audit_by_store": audit_by_store,
+        "audit_brand": brand_rows[-1] if brand_rows else None,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + audit_warnings,
         "directory": directory,
+    }
+
+
+def describe_feed_file(path):
+    """Say whether a feed file is missing, empty, or has a real last-updated time.
+
+    A missing or empty file does not get a timestamp. When rows exist, the
+    result includes the file's mtime and the newest date column. Callers label
+    those two facts separately.
+    """
+    path = Path(path)
+    name = path.name
+    if not path.exists():
+        return {"state": "missing", "detail": f"{name} is missing.", "saved_at": None, "newest_date": None}
+    try:
+        saved_at = datetime.fromtimestamp(path.stat().st_mtime, IST)
+    except OSError:
+        return {"state": "unreadable", "detail": f"{name} could not be read.", "saved_at": None, "newest_date": None}
+    warnings = []
+    table = _read_dicts(path, warnings)
+    if any("not UTF-8" in warning or "could not be read" in warning or "not valid CSV" in warning or "no header" in warning for warning in warnings):
+        return {"state": "unreadable", "detail": warnings[0], "saved_at": None, "newest_date": None}
+    dates = []
+    data_rows = 0
+    for raw in table or []:
+        data_rows += 1
+        day = parse_date(raw.get("date"))
+        if day is not None:
+            dates.append(day)
+    if data_rows == 0:
+        return {"state": "empty", "detail": f"{name} is empty.", "saved_at": None, "newest_date": None}
+    if not dates:
+        return {"state": "undated", "detail": f"{name} has no dated rows.", "saved_at": None, "newest_date": None}
+    return {"state": "ready", "detail": "", "saved_at": saved_at, "newest_date": max(dates)}
+
+
+def describe_feeds(directory=None):
+    directory = Path(directory) if directory else data_directory()
+    return {
+        "posist": describe_feed_file(directory / POSIST_FILE),
+        "calendar": describe_feed_file(directory / CALENDAR_FILE),
     }
 
 

@@ -4,16 +4,22 @@ from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from app.store_health.contract import (
+    AUDIT_COLUMNS,
+    AUDIT_FILE,
     CALENDAR_COLUMNS,
     CALENDAR_MONEY,
     CALENDAR_PERCENTS,
     CALENDAR_VALUE_COLUMNS,
+    KEKA_COLUMNS,
+    KEKA_FILE,
     POSIST_COLUMNS,
     POSIST_COUNTS,
     POSIST_MONEY,
     POSIST_PERCENTS,
+    describe_feeds,
+    parse_number,
 )
-from app.store_health.stores import CATALOGUE, Store, store_from_feed
+from app.store_health.stores import Store, store_from_label
 
 
 IST = ZoneInfo("Asia/Kolkata")
@@ -25,9 +31,40 @@ STATUS_LABELS = {
     "actual_provisional_eod": "Actual, provisional end of day",
 }
 
+KEKA_CAVEAT = (
+    "Headcount is registered employees, not people on shift. "
+    "Primary lead is the largest reporting line, not a confirmed single store manager."
+)
+
 
 def business_today():
     return datetime.now(IST).date()
+
+
+def format_ist(value):
+    if value is None:
+        return ""
+    local = value.astimezone(IST)
+    hour = int(local.strftime("%I"))
+    minute = local.strftime("%M")
+    ampm = local.strftime("%p").lower()
+    return f"{local.day} {local.strftime('%b %Y')}, {hour}:{minute} {ampm} IST"
+
+
+def present_freshness(status):
+    if status["state"] != "ready":
+        return {
+            "state": status["state"],
+            "detail": status["detail"],
+            "saved_at": "",
+            "newest_date": "",
+        }
+    return {
+        "state": "ready",
+        "detail": "",
+        "saved_at": format_ist(status["saved_at"]),
+        "newest_date": format_date(status["newest_date"]),
+    }
 
 
 def group_indian(digits):
@@ -204,51 +241,49 @@ def calendar_weeks(days):
     return [cells[index : index + 7] for index in range(0, len(cells), 7)]
 
 
-def _free_id(candidate, ids):
+def _with_free_id(candidate, ids):
     if candidate.id not in ids:
         return candidate
     suffix = 2
     while True:
         new_id = f"{candidate.id}-{suffix}"[:80]
         if new_id not in ids:
-            return Store(
-                id=new_id,
-                public_name=candidate.public_name,
-                region="",
-                format="",
-                posist_deployment_name=candidate.posist_deployment_name,
-                deployment_code=candidate.deployment_code,
-                extra_keys=candidate.extra_keys,
-            )
+            return Store(id=new_id, label=candidate.label, region=candidate.region)
         suffix += 1
 
 
 def list_stores(feeds):
-    stores = list(CATALOGUE)
-    known = set()
-    for store in stores:
-        known.update(store.match_keys())
-    seen = set()
-    for table in (feeds["posist"], feeds["calendar"]):
-        for store_name, _day in table:
-            if store_name in known or store_name in seen:
-                continue
-            seen.add(store_name)
-            extra = _free_id(store_from_feed(store_name), {store.id for store in stores})
-            stores.append(extra)
-            known.update(extra.match_keys())
+    """Picker entries are the exact store cells in posist_daily.csv."""
+    latest = {}
+    for (store_name, day), row in feeds["posist"].items():
+        current = latest.get(store_name)
+        if current is None or day >= current[0]:
+            region = row.get("region") or ""
+            latest[store_name] = (day, region.strip() if isinstance(region, str) else "")
+    stores = []
+    used_ids = set()
+    for store_name in sorted(latest, key=str.casefold):
+        _day, region = latest[store_name]
+        store = _with_free_id(store_from_label(store_name, region), used_ids)
+        used_ids.add(store.id)
+        stores.append(store)
     return stores
 
 
 def grouped_stores(stores):
-    groups = []
     buckets = {}
     for store in stores:
-        label = store.format or "From the sales files"
-        if label not in buckets:
-            buckets[label] = []
-            groups.append((label, buckets[label]))
-        buckets[label].append(store)
+        buckets.setdefault(store.region or "", []).append(store)
+    for items in buckets.values():
+        items.sort(key=lambda store: store.label.casefold())
+    groups = []
+    for name in ("East", "North"):
+        if name in buckets:
+            groups.append((name, buckets.pop(name)))
+    for name in sorted(key for key in buckets if key):
+        groups.append((name, buckets[name]))
+    if "" in buckets:
+        groups.append(("Region not in the file", buckets[""]))
     return groups
 
 
@@ -308,10 +343,91 @@ def parse_range(args, today):
     }
 
 
+def _file_state(directory, filename, rows):
+    if not (directory / filename).exists():
+        return "missing"
+    if not rows:
+        return "empty"
+    return "ready"
+
+
+def _text(row, field):
+    if row is None:
+        return ""
+    value = row.get(field)
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def present_keka(feeds, store):
+    row = feeds["keka_by_store"].get(store.label) if store else None
+    status = _text(row, "match_status")
+    no_match = status.casefold() == "no keka match"
+    headcount = ""
+    primary = ""
+    location = ""
+    other = ""
+    note = ""
+    if row is not None and not no_match:
+        raw_headcount = _text(row, "headcount")
+        if parse_number(raw_headcount) is not None:
+            headcount = raw_headcount
+        raw_primary = _text(row, "primary_lead")
+        if raw_primary.casefold() != "no keka match":
+            primary = raw_primary
+        raw_location = _text(row, "keka_location")
+        if raw_location.casefold() != "no keka location":
+            location = raw_location
+        other = _text(row, "other_leads")
+        note = _text(row, "note")
+    return {
+        "state": _file_state(feeds["directory"], KEKA_FILE, feeds["keka"]),
+        "caveat": KEKA_CAVEAT,
+        "has_row": row is not None,
+        "no_match": no_match,
+        "fields": {
+            "keka_location": location,
+            "headcount": headcount,
+            "primary_lead": primary,
+            "other_leads": other,
+            "match_status": status,
+            "keka_note": note,
+        },
+    }
+
+
+def _audit_display(row, prefix):
+    mapping = (
+        ("period", "period"),
+        ("avg_score", "avg"),
+        ("weekday_score", "weekday"),
+        ("weekend_score", "weekend"),
+        ("note", "note"),
+        ("status", "status"),
+    )
+    return {f"{prefix}_{name}": _text(row, source) for source, name in mapping}
+
+
+def present_audit(feeds, store):
+    row = feeds["audit_by_store"].get(store.label) if store else None
+    brand = feeds.get("audit_brand")
+    fields = {}
+    fields.update(_audit_display(row, "audit"))
+    fields.update(_audit_display(brand, "brand"))
+    return {
+        "state": _file_state(feeds["directory"], AUDIT_FILE, feeds["audit"]),
+        "has_row": row is not None,
+        "has_brand": brand is not None,
+        "fields": fields,
+    }
+
+
 def build_view(feeds, store, selection, today):
     days = calendar_days(feeds, store, selection["start"], selection["end"])
     filled = sum(1 for day in days if day["fields"]["actual_net"])
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
+    described = describe_feeds(feeds["directory"])
     return {
         "posist": posist_for_day(feeds, store, selection["day"]),
         "days": days,
@@ -322,4 +438,12 @@ def build_view(feeds, store, selection, today):
         "today_iso": today.isoformat() if today else "",
         "posist_columns": POSIST_COLUMNS,
         "calendar_columns": CALENDAR_COLUMNS,
+        "keka_columns": KEKA_COLUMNS,
+        "audit_columns": AUDIT_COLUMNS,
+        "keka": present_keka(feeds, store),
+        "audit": present_audit(feeds, store),
+        "freshness": {
+            "posist": present_freshness(described["posist"]),
+            "calendar": present_freshness(described["calendar"]),
+        },
     }
