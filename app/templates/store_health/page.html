@@ -36,7 +36,7 @@
     border-color: #8d8d8d;
     box-shadow: none;
   }
-  .health-stack { display: grid; gap: 1rem; }
+  .health-stack { display: grid; gap: 1rem; min-width: 0; }
   @media (min-width: 992px) {
     .health-stack { grid-template-columns: 1fr 1fr; }
     .span-full { grid-column: 1 / -1; }
@@ -49,6 +49,8 @@
     border-radius: 0.85rem;
     padding: 1.05rem 1.1rem 1.15rem;
     box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+    min-width: 0;
+    max-width: 100%;
   }
   .box-posist { --accent: #f5c518; }
   .box-audit { --accent: #a78bfa; }
@@ -124,7 +126,7 @@
   }
   .insight-col { border-style: solid; border-color: rgba(255,255,255,0.08); }
   .insight-col h3, .map-slot h3 { font-size: 0.95rem; margin: 0 0 0.4rem; }
-  .cal-scroll { overflow-x: auto; }
+  .cal-scroll { overflow-x: auto; max-width: 100%; }
   .dow-grid, .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
