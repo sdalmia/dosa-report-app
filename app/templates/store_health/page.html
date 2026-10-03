@@ -203,7 +203,7 @@
     <p class="match-hint mb-3">Pick a Posist deployment label. The list is the store column in posist_daily.csv, written exactly as it appears there.</p>
   {% endif %}
 
-  <section id="last-updated" class="last-updated" aria-label="Last updated" data-posist-state="{{ freshness.posist.state }}" data-calendar-state="{{ freshness.calendar.state }}">
+  <section id="last-updated" class="last-updated" aria-label="Last updated" data-posist-state="{{ freshness.posist.state }}" data-calendar-state="{{ freshness.calendar.state }}" data-reelo-state="{{ freshness.reelo.state }}" data-famepilot-state="{{ freshness.famepilot.state }}">
     <h2>Last updated</h2>
     <div class="feed-times">
       <article class="feed-time">
@@ -222,6 +222,24 @@
           <p>Newest date in the file: <span data-field="calendar_newest_date">{{ freshness.calendar.newest_date }}</span></p>
         {% else %}
           <p>{{ freshness.calendar.detail }}</p>
+        {% endif %}
+      </article>
+      <article class="feed-time">
+        <h3>Reelo</h3>
+        {% if freshness.reelo.state == "saved" %}
+          <p>File last saved: <time data-field="reelo_saved_at">{{ freshness.reelo.saved_at }}</time></p>
+          <p>Window: <span data-field="reelo_window">{{ reelo.window }}</span></p>
+        {% else %}
+          <p>{{ freshness.reelo.detail }}</p>
+        {% endif %}
+      </article>
+      <article class="feed-time">
+        <h3>Famepilot</h3>
+        {% if freshness.famepilot.state == "saved" %}
+          <p>File last saved: <time data-field="famepilot_saved_at">{{ freshness.famepilot.saved_at }}</time></p>
+          <p data-field="famepilot_window">{{ fame.window }}</p>
+        {% else %}
+          <p>{{ freshness.famepilot.detail }}</p>
         {% endif %}
       </article>
     </div>
@@ -436,24 +454,48 @@
         <span class="box-index">4</span>
         <div>
           <h2 id="fame-title">Famepilot</h2>
-          <p class="box-source">Ratings, complaints, threats</p>
+          <p class="box-source">Public reviews, private reviews, and the main complaint</p>
+          {% if fame.state == "saved" %}
+            <p class="box-source" id="famepilot-window">{{ fame.window }}</p>
+            <p class="box-source">File last saved {{ freshness.famepilot.saved_at }}.</p>
+          {% elif fame.state == "missing" %}
+            <p class="box-source">{{ freshness.famepilot.detail }}</p>
+          {% endif %}
         </div>
       </div>
-      <p class="empty-state">No Famepilot rating, complaint, or threat is on file for this store.</p>
+      {% if fame.state == "missing" %}
+        <p class="empty-state">famepilot.csv is missing.</p>
+      {% elif fame.state == "empty" %}
+        <p class="empty-state">famepilot.csv is empty.</p>
+      {% elif not store %}
+        <p class="empty-state">Choose a store to see its Famepilot row.</p>
+      {% elif not fame.has_row %}
+        <p class="empty-state">No Famepilot row matches this store.</p>
+      {% elif fame.no_location %}
+        <p class="empty-state">No Famepilot location.</p>
+      {% endif %}
       <div class="metric-grid">
         <article class="metric">
-          <h3>Rating</h3>
-          <p class="value" data-field="rating"></p>
+          <h3>Public rating</h3>
+          <p class="value" data-field="rating">{{ fame.fields.rating }}</p>
+          <p class="sub"><span class="sub-label">Public reviews</span><span class="sub-value" data-field="review_count">{{ fame.fields.review_count }}</span></p>
         </article>
         <article class="metric">
-          <h3>Complaints</h3>
-          <p class="value" data-field="complaints"></p>
+          <h3>Private rating</h3>
+          <p class="value" data-field="private_rating">{{ fame.fields.private_rating }}</p>
+          <p class="sub"><span class="sub-label">Private reviews</span><span class="sub-value" data-field="private_review_count">{{ fame.fields.private_review_count }}</span></p>
         </article>
         <article class="metric">
-          <h3>Threats</h3>
-          <p class="value" data-field="threats"></p>
+          <h3>Overall reviews</h3>
+          <p class="value" data-field="overall_reviews">{{ fame.fields.overall_reviews }}</p>
+        </article>
+        <article class="metric">
+          <h3>Main threat</h3>
+          <p class="value" data-field="main_threat">{{ fame.fields.main_threat }}</p>
         </article>
       </div>
+      <p class="sub"><span class="sub-label">Famepilot location</span> <span data-field="famepilot_location">{{ fame.fields.famepilot_location }}</span></p>
+      <p class="sub"><span class="sub-label">Match note</span> <span data-field="famepilot_note">{{ fame.fields.famepilot_note }}</span></p>
     </section>
 
     <section id="reelo" class="health-box box-reelo" aria-labelledby="reelo-title">
@@ -462,9 +504,63 @@
         <div>
           <h2 id="reelo-title">Reelo</h2>
           <p class="box-source">For this store</p>
+          {% if reelo.state == "saved" %}
+            <p class="box-source">Window: {{ reelo.window }}</p>
+            <p class="box-source">File last saved {{ freshness.reelo.saved_at }}.</p>
+          {% elif reelo.state == "missing" %}
+            <p class="box-source">{{ freshness.reelo.detail }}</p>
+          {% endif %}
         </div>
       </div>
-      <p class="empty-state mb-0">No Reelo data is on file for this store.</p>
+      <p class="caveat" id="reelo-caveat">{{ reelo.phone_caveat }}</p>
+      {% if reelo.state == "missing" %}
+        <p class="empty-state">reelo.csv is missing.</p>
+      {% elif reelo.state == "empty" %}
+        <p class="empty-state">reelo.csv is empty.</p>
+      {% elif not store %}
+        <p class="empty-state">Choose a store to see its Reelo row.</p>
+      {% elif not reelo.has_row %}
+        <p class="empty-state">No Reelo row matches this store.</p>
+      {% elif reelo.not_in_reelo %}
+        <p class="empty-state">not in Reelo</p>
+      {% endif %}
+      <div class="metric-grid">
+        <article class="metric">
+          <h3>Redemption rate</h3>
+          <p class="value" data-field="redemption_rate">{{ reelo.fields.redemption_rate }}</p>
+          <p class="sub"><span class="sub-label">Times redeemed</span><span class="sub-value" data-field="times_redeemed">{{ reelo.fields.times_redeemed }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Redemption revenue</h3>
+          <p class="value" data-field="redemption_revenue">{{ reelo.fields.redemption_revenue }}</p>
+          <p class="sub"><span class="sub-label">Average per redemption</span><span class="sub-value" data-field="avg_redemption_revenue">{{ reelo.fields.avg_redemption_revenue }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Phone capture</h3>
+          <p class="value" data-field="phone_capture">{{ reelo.fields.phone_capture }}</p>
+          <p class="sub"><span class="sub-label">Valid visits</span><span class="sub-value" data-field="phones_valid">{{ reelo.fields.phones_valid }}</span></p>
+          <p class="sub"><span class="sub-label">Blocked visits</span><span class="sub-value" data-field="phones_blocked">{{ reelo.fields.phones_blocked }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Visits</h3>
+          <p class="value" data-field="visits">{{ reelo.fields.visits }}</p>
+          <p class="sub"><span class="sub-label">Active customers</span><span class="sub-value" data-field="active_customers">{{ reelo.fields.active_customers }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Points issued</h3>
+          <p class="value" data-field="points_issued">{{ reelo.fields.points_issued }}</p>
+          <p class="sub"><span class="sub-label">Sales, last 30 days</span><span class="sub-value" data-field="sales_total">{{ reelo.fields.sales_total }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Customers with a purchase</h3>
+          <p class="value" data-field="customers_with_purchase">{{ reelo.fields.customers_with_purchase }}</p>
+          <p class="sub"><span class="sub-label">Inactive customers</span><span class="sub-value" data-field="inactive_customers">{{ reelo.fields.inactive_customers }}</span></p>
+        </article>
+      </div>
+      <p class="sub"><span class="sub-label">Reelo store</span> <span data-field="reelo_store">{{ reelo.fields.reelo_store }}</span></p>
+      <p class="sub"><span class="sub-label">Date range in the file</span> <span data-field="reelo_date_range">{{ reelo.fields.reelo_date_range }}</span></p>
+      <p class="sub"><span class="sub-label">Match status</span> <span data-field="reelo_match_status">{{ reelo.fields.reelo_match_status }}</span></p>
+      <p class="sub"><span class="sub-label">Note</span> <span data-field="reelo_note">{{ reelo.fields.reelo_note }}</span></p>
     </section>
 
     <section id="insights" class="health-box box-insights span-full" aria-labelledby="insights-title">
@@ -607,7 +703,11 @@
     <p class="mb-2">Keka reads <code>data/store_health/keka.csv</code>. Headcount is registered employees, not people on shift. Primary lead is the largest reporting line, not a confirmed single store manager. The row joins the Posist label in posist_store. A shorter label is used only when it matches one store. Match status is shown as written, including inferred and no keka match.</p>
     <p><code>{{ keka_columns|join(", ") }}</code></p>
     <p class="mb-2">Mystery audit reads <code>data/store_health/mystery_audit.csv</code>. Scores stay as written. A store with no row stays empty. The Brand row is the brand aggregate, not that store's score.</p>
-    <p class="mb-0"><code>{{ audit_columns|join(", ") }}</code></p>
+    <p><code>{{ audit_columns|join(", ") }}</code></p>
+    <p class="mb-2">Reelo reads <code>data/store_health/reelo.csv</code>. The window on this drop is Last 30 Days, 03 Sep 2026 to 03 Oct 2026. Phone capture is valid visits / (valid + blocked) x 100. A shorter posist_store label joins only when it matches one store. Match status <code>not in Reelo</code> is shown as those words. <code>inferred</code> is not a confirmed address match.</p>
+    <p><code>{{ reelo_columns|join(", ") }}</code></p>
+    <p class="mb-2">Famepilot reads <code>data/store_health/famepilot.csv</code>. Public rating and public review count are one pair. Private rating, private review count, and overall reviews are shown when the cell has a value. A tie in main threat is shown in full. The capture used the Past 30 days preset; the dates printed on screen were 26 Sep 26 - 02 Oct 26 (7 days), which is not a verified 30-day range. A blank location is no Famepilot location, and the rating stays blank.</p>
+    <p class="mb-0"><code>{{ famepilot_columns|join(", ") }}</code></p>
   </details>
 </div>
 {% endblock %}

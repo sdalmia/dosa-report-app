@@ -6,12 +6,16 @@ from zoneinfo import ZoneInfo
 from app.store_health.contract import (
     AUDIT_COLUMNS,
     AUDIT_FILE,
+    FAMEPILOT_COLUMNS,
+    FAMEPILOT_FILE,
     CALENDAR_COLUMNS,
     CALENDAR_MONEY,
     CALENDAR_PERCENTS,
     CALENDAR_VALUE_COLUMNS,
     KEKA_COLUMNS,
     KEKA_FILE,
+    REELO_COLUMNS,
+    REELO_FILE,
     POSIST_COLUMNS,
     POSIST_COUNTS,
     POSIST_MONEY,
@@ -35,6 +39,14 @@ KEKA_CAVEAT = (
     "Headcount is registered employees, not people on shift. "
     "Primary lead is the largest reporting line, not a confirmed single store manager."
 )
+REELO_PHONE_CAVEAT = "Phone capture is valid visits / (valid + blocked) x 100."
+REELO_WINDOW = "Last 30 Days, 03 Sep 2026 to 03 Oct 2026."
+FAMEPILOT_WINDOW = (
+    "Past 30 days preset. The dates printed on screen were 26 Sep 26 - 02 Oct 26 (7 days). "
+    "Those printed dates are not a verified 30-day range."
+)
+SALT_LAKE_FAMEPILOT_LOCATION = "01/0002 / Dosa Coffee- Saltlake Sec 3"
+SALT_LAKE_FAMEPILOT_NOTE = 'Matched "01/0002 / Dosa Coffee- Saltlake Sec 3" by code 0002.'
 
 
 def business_today():
@@ -52,6 +64,13 @@ def format_ist(value):
 
 
 def present_freshness(status):
+    if status["state"] == "saved":
+        return {
+            "state": "saved",
+            "detail": "",
+            "saved_at": format_ist(status["saved_at"]),
+            "newest_date": "",
+        }
     if status["state"] != "ready":
         return {
             "state": status["state"],
@@ -423,6 +442,90 @@ def present_audit(feeds, store):
     }
 
 
+_REELO_MONEY = {
+    "redemption_revenue_inr",
+    "avg_revenue_per_redemption_inr",
+    "sales_total_inr_last30d",
+}
+
+
+def _reelo_value(row, field):
+    raw = _text(row, field)
+    if raw.casefold() == "not in reelo":
+        return ""
+    if field in _REELO_MONEY:
+        number = parse_number(raw)
+        if number is None:
+            return ""
+        return format_money(number, field)
+    if field == "phone_capture_pct":
+        if not raw or parse_number(raw) is None:
+            return ""
+        if raw.endswith("%"):
+            return raw
+        return f"{raw}%"
+    return raw
+
+
+def present_reelo(feeds, store):
+    row = feeds["reelo_by_store"].get(store.label) if store else None
+    status = _text(row, "match_status")
+    not_in = status.casefold() == "not in reelo"
+    fields = {
+        "reelo_store": _text(row, "reelo_store"),
+        "reelo_date_range": _text(row, "date_range"),
+        "reelo_match_status": status,
+        "times_redeemed": _reelo_value(row, "times_rewards_redeemed"),
+        "redemption_rate": _reelo_value(row, "redemption_rate"),
+        "redemption_revenue": _reelo_value(row, "redemption_revenue_inr"),
+        "avg_redemption_revenue": _reelo_value(row, "avg_revenue_per_redemption_inr"),
+        "points_issued": _reelo_value(row, "points_issued"),
+        "sales_total": _reelo_value(row, "sales_total_inr_last30d"),
+        "visits": _reelo_value(row, "visits_last30d"),
+        "phones_valid": _reelo_value(row, "phones_valid_visits"),
+        "phones_blocked": _reelo_value(row, "phones_blocked_visits"),
+        "phone_capture": _reelo_value(row, "phone_capture_pct"),
+        "customers_with_purchase": _reelo_value(row, "customers_with_purchase"),
+        "active_customers": _reelo_value(row, "active_customers"),
+        "inactive_customers": _reelo_value(row, "inactive_customers"),
+        "reelo_note": _text(row, "note"),
+    }
+    return {
+        "state": _file_state(feeds["directory"], REELO_FILE, feeds["reelo"]),
+        "phone_caveat": REELO_PHONE_CAVEAT,
+        "window": REELO_WINDOW,
+        "has_row": row is not None,
+        "not_in_reelo": not_in,
+        "fields": fields,
+    }
+
+
+def present_famepilot(feeds, store):
+    row = feeds["famepilot_by_store"].get(store.label) if store else None
+    location = _text(row, "famepilot_location")
+    no_location = row is not None and not location
+    note = ""
+    if location == SALT_LAKE_FAMEPILOT_LOCATION:
+        note = SALT_LAKE_FAMEPILOT_NOTE
+    fields = {
+        "famepilot_location": location,
+        "rating": "" if no_location else _text(row, "rating"),
+        "review_count": "" if no_location else _text(row, "review_count"),
+        "main_threat": "" if no_location else _text(row, "main_threat"),
+        "private_rating": "" if no_location else _text(row, "private_rating"),
+        "private_review_count": "" if no_location else _text(row, "private_review_count"),
+        "overall_reviews": "" if no_location else _text(row, "overall_reviews"),
+        "famepilot_note": note,
+    }
+    return {
+        "state": _file_state(feeds["directory"], FAMEPILOT_FILE, feeds["famepilot"]),
+        "window": FAMEPILOT_WINDOW,
+        "has_row": row is not None,
+        "no_location": no_location,
+        "fields": fields,
+    }
+
+
 def build_view(feeds, store, selection, today):
     days = calendar_days(feeds, store, selection["start"], selection["end"])
     filled = sum(1 for day in days if day["fields"]["actual_net"])
@@ -440,10 +543,16 @@ def build_view(feeds, store, selection, today):
         "calendar_columns": CALENDAR_COLUMNS,
         "keka_columns": KEKA_COLUMNS,
         "audit_columns": AUDIT_COLUMNS,
+        "reelo_columns": REELO_COLUMNS,
+        "famepilot_columns": FAMEPILOT_COLUMNS,
         "keka": present_keka(feeds, store),
         "audit": present_audit(feeds, store),
+        "reelo": present_reelo(feeds, store),
+        "fame": present_famepilot(feeds, store),
         "freshness": {
             "posist": present_freshness(described["posist"]),
             "calendar": present_freshness(described["calendar"]),
+            "reelo": present_freshness(described["reelo"]),
+            "famepilot": present_freshness(described["famepilot"]),
         },
     }
