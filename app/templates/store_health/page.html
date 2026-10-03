@@ -282,7 +282,7 @@
         <span class="box-index">1</span>
         <div>
           <h2 id="posist-title">Posist Insights</h2>
-          <p class="box-source">Daily sales row{% if day_label %} · {{ day_label }}{% endif %}</p>
+          <p class="box-source">Last window{% if posist.window_label %} · <span data-field="posist_window">{{ posist.window_label }}</span>{% else %}<span data-field="posist_window"></span>{% endif %}</p>
           {% if freshness.posist.state == "ready" %}
             <p class="box-source">File last saved {{ freshness.posist.saved_at }}. Newest date in the file {{ freshness.posist.newest_date }}.</p>
           {% else %}
@@ -290,29 +290,17 @@
           {% endif %}
         </div>
       </div>
-      <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
-        {% if store %}<input type="hidden" name="store" value="{{ store.id }}">{% endif %}
-        <input type="hidden" name="start" value="{{ selection.start_input }}">
-        <input type="hidden" name="end" value="{{ selection.end_input }}">
-        <div class="col-sm-6 col-md-4">
-          <label for="posist-day" class="form-label">Posist day</label>
-          <input id="posist-day" class="form-control" type="date" name="day" value="{{ selection.day_input }}">
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-outline-light btn-sm">Show this day</button>
-        </div>
-      </form>
-      {% if posist.fields.source_label or posist.fields.provisional_label %}
-        <div class="badges">
-          {% if posist.fields.source_label %}<span class="badge-soft" data-field="source">{{ posist.fields.source_label }}</span>{% endif %}
-          {% if posist.fields.provisional_label %}<span class="badge-soft" data-field="provisional">{{ posist.fields.provisional_label }}</span>{% endif %}
-        </div>
-      {% endif %}
       {% if not store %}
-        <p class="empty-state">Choose a store to load its Posist row.</p>
-      {% elif not posist.has_row %}
-        <p class="empty-state">No daily Posist row for this store on this date.</p>
+        <p class="empty-state">Choose a store to load its Posist total.</p>
+      {% elif posist.not_on_report %}
+        <p class="empty-state">Not on the Posist deployment report.</p>
       {% endif %}
+      {% if posist.days_summed %}
+        <p class="box-source">Days summed: <span data-field="posist_days">{{ posist.days_summed }}</span></p>
+      {% else %}
+        <span hidden data-field="posist_days"></span>
+      {% endif %}
+      <p class="box-source" data-field="posist_missing">{{ posist.missing_label }}</p>
       <div class="metric-grid">
         <article class="metric">
           <h3>Net</h3>

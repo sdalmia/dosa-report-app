@@ -454,7 +454,7 @@ def load_famepilot(directory=None):
 
 
 def load_feeds(directory=None):
-    from app.store_health.stores import assign_rows
+    from app.store_health.stores import assign_rows, extra_store_labels
 
     directory = Path(directory) if directory else data_directory()
     posist, posist_warnings = load_posist(directory)
@@ -464,12 +464,15 @@ def load_feeds(directory=None):
     reelo, reelo_warnings = load_reelo(directory)
     famepilot, famepilot_warnings = load_famepilot(directory)
     labels = sorted({store for store, _day in posist})
-    keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", labels)
+    # Stores that never appear on the deployment report still have Keka, Reelo,
+    # and Famepilot rows. Join those to the same labels the picker shows.
+    join_labels = list(labels) + extra_store_labels(keka + reelo + famepilot, labels)
+    keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", join_labels)
     audit_stores = [row for row in audit if not is_brand_audit(row)]
     brand_rows = [row for row in audit if is_brand_audit(row)]
     audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
-    reelo_by_store, reelo_unmatched = assign_rows(reelo, "posist_store", labels)
-    famepilot_by_store, famepilot_unmatched = assign_rows(famepilot, "posist_store", labels)
+    reelo_by_store, reelo_unmatched = assign_rows(reelo, "posist_store", join_labels)
+    famepilot_by_store, famepilot_unmatched = assign_rows(famepilot, "posist_store", join_labels)
     if labels:
         for row in keka_unmatched:
             _warn(

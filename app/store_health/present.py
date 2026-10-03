@@ -23,7 +23,7 @@ from app.store_health.contract import (
     describe_feeds,
     parse_number,
 )
-from app.store_health.stores import Store, store_from_label
+from app.store_health.stores import Store, extra_store_labels, store_from_label
 
 
 IST = ZoneInfo("Asia/Kolkata")
@@ -171,6 +171,89 @@ def _posist_field(row, field):
     return str(value)
 
 
+def _sum_present(rows, field, kind):
+    """Sum cells that exist. A blank cell is not zero, and an all-blank column stays blank."""
+    values = [row.get(field) for row in rows if row.get(field) is not None]
+    if not values:
+        return None
+    if kind == "money":
+        cents = 0
+        for value in values:
+            cents += int(round(float(value) * 100))
+        return cents / 100.0
+    total = 0
+    for value in values:
+        number = float(value)
+        if not number.is_integer():
+            return sum(float(item) for item in values)
+        total += int(number)
+    return total
+
+
+def _window_bounds(feeds):
+    days = [day for (_store, day) in feeds["posist"]]
+    if not days:
+        return None, None
+    return min(days), max(days)
+
+
+def _dates_in_window(start, end):
+    days = []
+    cursor = start
+    while cursor <= end:
+        days.append(cursor)
+        cursor += timedelta(days=1)
+    return days
+
+
+def posist_window(feeds, store):
+    """One total per store across the dates that store actually has."""
+    display = {field: "" for field in POSIST_COLUMNS if field not in {"store", "date"}}
+    display["source_label"] = ""
+    display["provisional_label"] = ""
+    start, end = _window_bounds(feeds)
+    window_label = ""
+    if start is not None and end is not None:
+        window_label = f"{format_date(start)} through {format_date(end)}"
+    result = {
+        "has_row": False,
+        "not_on_report": False,
+        "window_label": window_label,
+        "days_summed": "",
+        "missing_label": "",
+        "fields": display,
+    }
+    if store is None:
+        return result
+    rows = []
+    for (store_name, _day), row in feeds["posist"].items():
+        if store_name in store.match_keys():
+            rows.append(row)
+    if not rows:
+        result["not_on_report"] = True
+        return result
+    result["has_row"] = True
+    summed = {
+        "net": _sum_present(rows, "net", "money"),
+        "gross": _sum_present(rows, "gross", "money"),
+        "bills": _sum_present(rows, "bills", "count"),
+        "apb": _sum_present(rows, "apb", "money"),
+        "unsettled_bills": _sum_present(rows, "unsettled_bills", "count"),
+        "unsettled_amount": _sum_present(rows, "unsettled_amount", "money"),
+        "void_bills": _sum_present(rows, "void_bills", "count"),
+    }
+    for field, value in summed.items():
+        display[field] = _posist_field({field: value}, field)
+    store_days = sorted({row["date"] for row in rows})
+    result["days_summed"] = str(len(store_days))
+    if start is not None and end is not None:
+        missing = [day for day in _dates_in_window(start, end) if day not in set(store_days)]
+        if missing:
+            listed = ", ".join(format_date(day) for day in missing)
+            result["missing_label"] = f"Not a full window. Missing {listed}."
+    return result
+
+
 def posist_for_day(feeds, store, day):
     display = {field: "" for field in POSIST_COLUMNS if field not in {"store", "date"}}
     display["source_label"] = ""
@@ -272,7 +355,11 @@ def _with_free_id(candidate, ids):
 
 
 def list_stores(feeds):
-    """Picker entries are the exact store cells in posist_daily.csv."""
+    """Picker entries are the exact store cells in posist_daily.csv.
+
+    A store that is on Keka, Reelo, or Famepilot but missing from the Posist
+    report stays in the list under the exact label from those files.
+    """
     latest = {}
     for (store_name, day), row in feeds["posist"].items():
         current = latest.get(store_name)
@@ -284,6 +371,11 @@ def list_stores(feeds):
     for store_name in sorted(latest, key=str.casefold):
         _day, region = latest[store_name]
         store = _with_free_id(store_from_label(store_name, region), used_ids)
+        used_ids.add(store.id)
+        stores.append(store)
+    outside_rows = (feeds.get("keka") or []) + (feeds.get("reelo") or []) + (feeds.get("famepilot") or [])
+    for store_name in extra_store_labels(outside_rows, list(latest)):
+        store = _with_free_id(store_from_label(store_name, ""), used_ids)
         used_ids.add(store.id)
         stores.append(store)
     return stores
@@ -532,7 +624,7 @@ def build_view(feeds, store, selection, today):
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
     described = describe_feeds(feeds["directory"])
     return {
-        "posist": posist_for_day(feeds, store, selection["day"]),
+        "posist": posist_window(feeds, store),
         "days": days,
         "weeks": calendar_weeks(days),
         "filled_actual_days": filled,
