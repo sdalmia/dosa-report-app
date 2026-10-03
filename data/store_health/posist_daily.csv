@@ -1,34 +1,862 @@
 store,date,net,gross,bills,apb,net_wow_pct,bills_wow_pct,apb_wow_pct,net_last_same_weekday,bills_last_same_weekday,apb_last_same_weekday,unsettled_bills,unsettled_amount,void_bills,source,provisional,region
-Connaught place (02/0012),2026-10-02,"152,678.98",,218,700.36,47.66%,30.54%,13.11%,"103,402.35",167,619.18,11,10018,4,live,true,North
-"Pacific mall, Jasola (02/0011)",2026-10-02,"136,504.67",,213,640.87,113.34%,86.84%,14.18%,"63,983.66",114,561.26,4,2762,0,live,true,North
-Model Town (02/0013),2026-10-02,"96,605.22",,135,715.59,52.45%,6.30%,43.42%,"63,366.72",127,498.95,7,3539,0,live,true,North
-Rohini Sec-7 (02/0008),2026-10-02,"96,520.68",,167,577.97,35.63%,11.33%,21.82%,"71,164.87",150,474.43,8,4997,0,live,true,North
-Sec 18 Noida (02/0001),2026-10-02,"79,713.34",,140,569.38,47.52%,-2.78%,51.73%,"54,035.98",144,375.25,4,2736,1,live,true,North
-Paschim Vihar (02/0003),2026-10-02,"69,905.31",,120,582.54,138.65%,87.50%,27.28%,"29,292.52",64,457.70,3,2828,0,live,true,North
-Gurgaon Sec-15 (02/0010),2026-10-02,"64,787.34",,107,605.49,9.72%,-2.73%,12.79%,"59,049.24",110,536.81,3,2079,0,live,true,North
-Kalkaji (02/0004),2026-10-02,"51,912.64",,117,443.70,0.48%,-4.88%,5.63%,"51,665.66",123,420.05,3,1838,1,live,true,North
-Shalimar Bagh (02/0015),2026-10-02,"52,537.92",,87,603.88,89.22%,38.10%,37.02%,"27,765.30",63,440.72,3,2312,0,live,true,North
-Sec 15 Faridabad (02/0007),2026-10-02,"41,251.98",,81,509.28,119.83%,62.00%,35.70%,"18,765.24",50,375.30,0,0,0,live,true,North
-Sec 31 - Gurgaon (02/0016),2026-10-02,"38,703.64",,71,545.12,49.84%,16.39%,28.74%,"25,829.49",61,423.43,1,257,0,live,true,North
-Gurgaon DLF (02/0009),2026-10-02,"37,579.94",,73,514.79,-36.38%,-54.94%,41.19%,"59,066.34",162,364.61,13,4579,0,live,true,North
-Sec 143 Noida (02/0006),2026-10-02,"32,448.64",,68,477.19,-27.28%,-31.31%,5.87%,"44,620.95",99,450.72,4,2502,0,live,true,North
-Gurgaon Sec 10 (02/0014),2026-10-02,"20,498.54",,46,445.62,-5.01%,-9.80%,5.31%,"21,580.30",51,423.14,1,1418,1,live,true,North
-GK1 Cloud Kitchen (02/0002),2026-10-02,0.00,,0,,,,,,,,0,0,0,live,true,North
-Chattarpur (02/0005),2026-10-02,0.00,,0,,,,,,,,0,0,0,live,true,North
-Dosa Coffee - Salt Lake Sec-1 (0009),2026-10-02,132382.21,,212,624.44,147.24,53.62,60.94,53543.53,138,388.00,0,0,0,live,true,East
-Dosa Coffee - Ideal Plaza (01/0001),2026-10-02,118895.11,,244,487.28,15.65,-3.56,19.92,102801.71,253,406.33,6,3158,1,live,true,East
-Dosa Coffee - Lake road 01/0015,2026-10-02,118351.35,,204,580.15,114.00,67.21,27.98,55304.52,122,453.32,0,0,1,live,true,East
-Dosa Coffee - Rangoli Mall (01/0010),2026-10-02,92549.93,,165,560.91,183.36,117.11,30.52,32661.26,76,429.75,0,0,1,live,true,East
-Dosa Coffee - Salt Lake (002),2026-10-02,90989.62,,169,538.40,21.44,7.64,12.82,74926.71,157,477.24,3,237,0,live,true,East
-Dosa Coffee - James long Sarani (01/0011),2026-10-02,76157.59,,151,504.35,46.71,27.97,14.65,51910.76,118,439.92,0,0,1,live,true,East
-Dosa Coffee - Rosedale Plaza(0006),2026-10-02,75243.79,,191,393.95,57.36,27.33,23.58,47817.79,150,318.79,0,0,1,live,true,East
-Dosa Coffee - Manisquare (0004),2026-10-02,74972.29,,14,5355.16,41.70,-50.00,183.41,52907.92,28,1889.57,0,0,0,live,true,East
-Dosa Coffee - Kalikapur (01/0014),2026-10-02,62466.56,,130,480.51,91.27,49.43,28.00,32658.73,87,375.39,0,0,0,live,true,East
-Dosa Coffee - Lake Town (0005),2026-10-02,57769.92,,153,377.58,68.78,61.05,4.80,34227.43,95,360.29,0,0,1,live,true,East
-Dosa Coffee - Quest Mall (01/0016),2026-10-02,57387.45,,156,367.87,84.57,56.00,18.31,31093.35,100,310.93,1,270,0,live,true,East
-Dosa Coffee - Santoshpur (01/0012),2026-10-02,53174.58,,128,415.43,82.33,48.84,22.50,29164.03,86,339.12,4,2168,0,live,true,East
-Dosa Coffee - Forum (0003),2026-10-02,35056.82,,64,547.76,73.79,28.00,35.77,20172.27,0,403.45,0,0,0,live,true,East
-Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-10-02,32138.81,,100,321.39,60.32,35.14,18.63,20047.22,74,270.91,0,0,0,live,true,East
-Dosa Coffee - Calcutta Swiming Club (0007),2026-10-02,9177.26,,14,655.52,143.52,133.33,4.36,3768.64,0,628.11,0,0,0,live,true,East
-Dosa Coffee - Food Truck - 1 (0008),2026-10-02,0.00,,0,0.00,-100.00,-100.00,0.00,2376.21,0,0.00,0,0,0,live,true,East
-Dosa Coffee - Events & Catering,2026-10-02,0.00,,0,0.00,0.00,0.00,0.00,0.00,0,0.00,0,0,0,live,true,East
+Connaught place (02/0012),2026-09-04,,113726.94,176,,,-10.66%,,,197,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-05,,166816.73,246,,,0.00%,,,246,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-06,,210986.17,263,,,6.91%,,,246,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-07,,69605.60,119,,,-54.75%,,,263,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-08,,105946.05,172,,,44.54%,,,119,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-09,,97970.62,150,,,-12.79%,,,172,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-10,,106909.44,166,,,10.67%,,,150,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-11,,70737.23,118,,,0.00%,,,118,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-12,,150714.60,222,,,88.14%,,,118,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-13,,175995.20,265,,,19.37%,,,222,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-14,,93420.30,156,,,0.00%,,,156,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-15,,95027.26,165,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-16,,104332.99,150,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-17,,98744.97,176,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-18,,114310.45,170,,,-3.41%,,,176,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-19,,183902.78,251,,,47.65%,,,170,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-20,,151458.44,230,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-21,,87443.62,153,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-22,,113835.94,187,,,0.00%,,,187,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-23,,106547.09,181,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-24,,114916.81,172,,,-4.97%,,,181,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-25,,109480.73,167,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-26,,220959.51,276,,,0.00%,,,276,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-27,,231912.15,262,,,-5.07%,,,276,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-28,,95315.80,151,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-29,,181044.30,196,,,0.00%,,,196,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-09-30,,255572.51,172,,,0.00%,,,172,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-10-01,,109519.61,175,,,,,,,,,,,historical-total-revenue,false,North
+Connaught place (02/0012),2026-10-02,,166950.16,223,,,27.43%,,,175,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-04,,82673.83,136,,,28.30%,,,106,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-05,,116736.72,189,,,0.00%,,,189,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-06,,131220.63,222,,,17.46%,,,189,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-07,,60021.67,120,,,-45.95%,,,222,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-08,,82339.13,147,,,22.50%,,,120,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-09,,50931.75,109,,,-25.85%,,,147,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-10,,79770.65,140,,,28.44%,,,109,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-11,,81904.33,132,,,0.00%,,,132,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-12,,123318.32,212,,,60.61%,,,132,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-13,,147758.67,226,,,6.60%,,,212,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-14,,79732.34,127,,,0.00%,,,127,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-15,,83395.99,148,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-16,,51419.23,106,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-17,,50891.35,94,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-18,,61577.34,111,,,18.09%,,,94,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-19,,116386.28,194,,,74.77%,,,111,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-20,,122482.37,195,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-21,,59851.53,117,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-22,,70918.39,126,,,0.00%,,,126,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-23,,65053.03,110,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-24,,60966.72,114,,,3.64%,,,110,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-25,,67716.16,114,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-26,,111202.72,172,,,0.00%,,,172,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-27,,120879.92,197,,,14.53%,,,172,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-28,,52809.41,108,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-29,,80338.04,136,,,0.00%,,,136,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-09-30,,62192.89,103,,,0.00%,,,103,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-10-01,,73771.04,127,,,,,,,,,,,historical-total-revenue,false,North
+"Pacific mall, Jasola (02/0011)",2026-10-02,,151856.95,225,,,77.17%,,,127,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-04,,82579.29,171,,,56.88%,,,109,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-05,,83471.48,143,,,0.00%,,,143,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-06,,95985.11,164,,,14.69%,,,143,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-07,,53211.17,96,,,-41.46%,,,164,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-08,,54356.30,109,,,13.54%,,,96,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-09,,49196.95,89,,,-18.35%,,,109,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-10,,82017.46,142,,,59.55%,,,89,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-11,,55785.49,110,,,0.00%,,,110,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-12,,83539.16,153,,,39.09%,,,110,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-13,,99324.72,175,,,14.38%,,,153,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-14,,57322.79,116,,,0.00%,,,116,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-15,,52623.08,101,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-16,,54464.11,109,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-17,,53678.79,113,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-18,,64625.58,115,,,1.77%,,,113,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-19,,77462.76,143,,,24.35%,,,115,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-20,,109836.88,165,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-21,,60092.66,120,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-22,,67568.34,120,,,0.00%,,,120,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-23,,58371.89,118,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-24,,54138.79,111,,,-5.93%,,,118,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-25,,68942.50,127,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-26,,83951.32,148,,,0.00%,,,148,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-27,,96588.50,165,,,11.49%,,,148,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-28,,54330.38,101,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-29,,65191.84,128,,,0.00%,,,128,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-09-30,,73572.44,130,,,0.00%,,,130,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-10-01,,56325.74,91,,,,,,,,,,,historical-total-revenue,false,North
+Model Town (02/0013),2026-10-02,,111672.15,148,,,62.64%,,,91,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-04,,83387.43,188,,,12.57%,,,167,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-05,,112690.72,235,,,0.00%,,,235,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-06,,131873.97,236,,,0.43%,,,235,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-07,,60866.61,125,,,-47.03%,,,236,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-08,,69995.92,143,,,14.40%,,,125,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-09,,66594.50,125,,,-12.59%,,,143,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-10,,55917.14,116,,,-7.20%,,,125,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-11,,82448.12,160,,,0.00%,,,160,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-12,,89387.32,158,,,-1.25%,,,160,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-13,,110204.86,212,,,34.18%,,,158,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-14,,74025.98,150,,,0.00%,,,150,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-15,,68863.69,149,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-16,,62289.62,132,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-17,,65243.28,150,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-18,,68954.00,154,,,2.67%,,,150,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-19,,107146.37,202,,,31.17%,,,154,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-20,,129100.43,241,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-21,,83940.03,123,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-22,,72706.68,147,,,0.00%,,,147,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-23,,65512.09,126,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-24,,74183.64,147,,,16.67%,,,126,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-25,,77751.01,150,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-26,,98317.07,174,,,0.00%,,,174,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-27,,125580.79,222,,,27.59%,,,174,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-28,,54902.05,123,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-29,,71408.96,132,,,0.00%,,,132,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-09-30,,69509.96,131,,,0.00%,,,131,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-10-01,,77278.22,129,,,,,,,,,,,historical-total-revenue,false,North
+Rohini Sec-7 (02/0008),2026-10-02,,107887.27,172,,,33.33%,,,129,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-04,,55032.74,144,,,-2.04%,,,147,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-05,,89405.82,187,,,0.00%,,,187,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-06,,81487.34,150,,,-19.79%,,,187,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-07,,62365.07,144,,,-4.00%,,,150,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-08,,52660.09,134,,,-6.94%,,,144,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-09,,46695.05,107,,,-20.15%,,,134,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-10,,47978.28,122,,,14.02%,,,107,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-11,,53825.29,139,,,0.00%,,,139,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-12,,108440.60,200,,,43.88%,,,139,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-13,,95920.40,189,,,-5.50%,,,200,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-14,,60590.07,147,,,0.00%,,,147,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-15,,53442.08,138,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-16,,49722.24,128,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-17,,60765.22,155,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-18,,52496.47,138,,,-10.97%,,,155,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-19,,87389.50,177,,,28.26%,,,138,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-20,,83485.05,172,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-21,,48790.60,124,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-22,,58682.87,122,,,0.00%,,,122,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-23,,62243.36,140,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-24,,58863.18,144,,,2.86%,,,140,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-25,,59778.95,144,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-26,,89458.14,172,,,0.00%,,,172,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-27,,100548.30,179,,,4.07%,,,172,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-28,,48381.36,113,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-29,,51980.93,130,,,0.00%,,,130,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-09-30,,56177.92,112,,,0.00%,,,112,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-10-01,,65551.99,131,,,,,,,,,,,historical-total-revenue,false,North
+Sec 18 Noida (02/0001),2026-10-02,,89422.42,146,,,11.45%,,,131,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-04,,42854.46,81,,,20.90%,,,67,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-05,,51692.79,114,,,0.00%,,,114,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-06,,62969.78,117,,,2.63%,,,114,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-07,,31105.63,75,,,-35.90%,,,117,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-08,,37691.12,65,,,-13.33%,,,75,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-09,,29220.60,64,,,-1.54%,,,65,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-10,,35222.54,77,,,20.31%,,,64,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-11,,50275.15,97,,,0.00%,,,97,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-12,,53222.02,101,,,4.12%,,,97,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-13,,71529.15,130,,,28.71%,,,101,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-14,,30492.34,65,,,0.00%,,,65,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-15,,29729.68,69,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-16,,30335.97,75,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-17,,34284.53,89,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-18,,38768.69,81,,,-8.99%,,,89,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-19,,57831.19,90,,,11.11%,,,81,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-20,,61084.61,127,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-21,,34046.09,69,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-22,,30887.07,66,,,0.00%,,,66,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-23,,32825.99,80,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-24,,38897.76,79,,,-1.25%,,,80,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-25,,32042.44,64,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-26,,55316.10,94,,,0.00%,,,94,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-27,,70984.20,132,,,40.43%,,,94,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-28,,32279.94,73,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-29,,28243.03,70,,,0.00%,,,70,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-09-30,,37665.33,77,,,0.00%,,,77,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-10-01,,45757.31,85,,,,,,,,,,,historical-total-revenue,false,North
+Paschim Vihar (02/0003),2026-10-02,,78629.53,123,,,44.71%,,,85,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-04,,71815.19,120,,,5.26%,,,114,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-05,,60212.15,118,,,0.00%,,,118,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-06,,86966.29,146,,,23.73%,,,118,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-07,,34850.78,73,,,-50.00%,,,146,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-08,,43656.50,90,,,23.29%,,,73,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-09,,42602.07,94,,,4.44%,,,90,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-10,,51731.54,111,,,18.09%,,,94,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-11,,59185.59,97,,,0.00%,,,97,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-12,,79636.22,143,,,47.42%,,,97,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-13,,78613.54,144,,,0.70%,,,143,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-14,,46186.38,94,,,0.00%,,,94,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-15,,47325.55,102,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-16,,39371.21,93,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-17,,46594.10,113,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-18,,68159.26,123,,,8.85%,,,113,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-19,,80627.38,144,,,17.07%,,,123,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-20,,89970.76,138,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-21,,36711.97,75,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-22,,40159.11,96,,,0.00%,,,96,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-23,,50953.22,97,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-24,,44653.21,105,,,8.25%,,,97,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-25,,63816.12,110,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-26,,77481.97,147,,,0.00%,,,147,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-27,,99836.60,177,,,20.41%,,,147,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-28,,51821.53,108,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-29,,38980.65,93,,,0.00%,,,93,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-09-30,,63197.18,87,,,0.00%,,,87,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-10-01,,57996.77,115,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec-15 (02/0010),2026-10-02,,73956.92,116,,,0.87%,,,115,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-04,,65217.70,160,,,28.00%,,,125,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-05,,53666.51,142,,,0.00%,,,142,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-06,,78176.72,170,,,19.72%,,,142,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-07,,47105.58,112,,,-34.12%,,,170,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-08,,63884.39,152,,,35.71%,,,112,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-09,,45216.14,111,,,-26.97%,,,152,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-10,,58514.90,140,,,26.13%,,,111,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-11,,61236.76,140,,,0.00%,,,140,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-12,,66031.68,143,,,2.14%,,,140,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-13,,88134.74,202,,,41.26%,,,143,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-14,,58807.06,137,,,0.00%,,,137,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-15,,61128.58,147,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-16,,65027.29,158,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-17,,60000.15,155,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-18,,61929.25,140,,,-9.68%,,,155,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-19,,70721.11,142,,,1.43%,,,140,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-20,,91270.84,175,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-21,,42682.35,120,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-22,,50970.99,132,,,0.00%,,,132,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-23,,53498.68,135,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-24,,53190.87,131,,,-2.96%,,,135,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-25,,58050.39,123,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-26,,65238.37,155,,,0.00%,,,155,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-27,,92719.41,216,,,39.35%,,,155,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-28,,51298.22,120,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-29,,64487.42,158,,,0.00%,,,158,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-09-30,,52395.10,136,,,0.00%,,,136,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-10-01,,51737.14,118,,,,,,,,,,,historical-total-revenue,false,North
+Kalkaji (02/0004),2026-10-02,,62762.33,126,,,6.78%,,,118,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-04,,45566.50,88,,,-11.11%,,,99,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-05,,56294.53,105,,,0.00%,,,105,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-06,,96733.54,129,,,22.86%,,,105,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-07,,39206.32,72,,,-44.19%,,,129,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-08,,44773.19,88,,,22.22%,,,72,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-09,,37381.23,67,,,-23.86%,,,88,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-10,,35888.47,77,,,14.93%,,,67,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-11,,37758.26,66,,,0.00%,,,66,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-12,,60535.92,106,,,60.61%,,,66,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-13,,72525.48,125,,,17.92%,,,106,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-14,,33844.40,73,,,0.00%,,,73,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-15,,40093.24,80,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-16,,48437.78,89,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-17,,41266.96,76,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-18,,53069.28,87,,,14.47%,,,76,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-19,,59596.70,91,,,4.60%,,,87,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-20,,81602.38,120,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-21,,41278.56,87,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-22,,41489.17,79,,,0.00%,,,79,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-23,,47532.88,83,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-24,,44079.16,87,,,4.82%,,,83,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-25,,29861.16,63,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-26,,87288.10,137,,,0.00%,,,137,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-27,,91151.42,145,,,5.84%,,,137,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-28,,42329.13,83,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-29,,40656.66,86,,,0.00%,,,86,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-09-30,,38160.95,81,,,0.00%,,,81,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-10-01,,34950.47,76,,,,,,,,,,,historical-total-revenue,false,North
+Shalimar Bagh (02/0015),2026-10-02,,58707.63,89,,,17.11%,,,76,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-04,,44554.45,105,,,72.13%,,,61,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-05,,25997.52,79,,,0.00%,,,79,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-06,,47435.12,99,,,25.32%,,,79,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-07,,21634.88,54,,,-45.45%,,,99,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-08,,27643.30,71,,,31.48%,,,54,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-09,,21430.60,61,,,-14.08%,,,71,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-10,,26175.69,60,,,-1.64%,,,61,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-11,,32556.79,73,,,0.00%,,,73,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-12,,41600.34,90,,,23.29%,,,73,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-13,,48592.88,103,,,14.44%,,,90,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-14,,31748.71,67,,,0.00%,,,67,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-15,,38257.34,89,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-16,,28287.96,62,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-17,,27246.02,76,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-18,,34183.28,87,,,14.47%,,,76,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-19,,50403.94,89,,,2.30%,,,87,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-20,,51810.05,101,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-21,,21260.43,57,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-22,,35136.91,79,,,0.00%,,,79,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-23,,29857.44,73,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-24,,27338.58,66,,,-9.59%,,,73,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-25,,21369.50,50,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-26,,47229.29,87,,,0.00%,,,87,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-27,,59215.05,112,,,28.74%,,,87,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-28,,20334.34,52,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-29,,27546.18,65,,,0.00%,,,65,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-09-30,,21097.87,55,,,0.00%,,,55,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-10-01,,28346.27,58,,,,,,,,,,,historical-total-revenue,false,North
+Sec 15 Faridabad (02/0007),2026-10-02,,46358.30,83,,,43.10%,,,58,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-04,,27554.80,65,,,4.84%,,,62,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-05,,34836.50,57,,,0.00%,,,57,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-06,,47056.38,83,,,45.61%,,,57,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-07,,27953.13,58,,,-30.12%,,,83,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-08,,31038.32,81,,,39.66%,,,58,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-09,,36478.44,60,,,-25.93%,,,81,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-10,,16530.10,40,,,-33.33%,,,60,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-11,,28822.01,62,,,0.00%,,,62,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-12,,52539.17,89,,,43.55%,,,62,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-13,,52941.99,97,,,8.99%,,,89,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-14,,27399.10,63,,,0.00%,,,63,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-15,,25299.38,55,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-16,,27513.56,60,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-17,,36660.85,78,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-18,,39844.51,78,,,0.00%,,,78,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-19,,50758.19,83,,,6.41%,,,78,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-20,,54913.38,113,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-21,,30636.35,75,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-22,,26086.61,63,,,0.00%,,,63,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-23,,29582.37,67,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-24,,29246.09,65,,,-2.99%,,,67,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-25,,28382.34,61,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-26,,61794.03,115,,,0.00%,,,115,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-27,,45746.89,90,,,-21.74%,,,115,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-28,,23682.78,53,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-29,,31296.33,67,,,0.00%,,,67,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-09-30,,20934.54,50,,,0.00%,,,50,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-10-01,,34926.79,63,,,,,,,,,,,historical-total-revenue,false,North
+Sec 31 - Gurgaon (02/0016),2026-10-02,,42883.47,74,,,17.46%,,,63,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-04,,50535.36,151,,,-27.75%,,,209,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-05,,40538.00,125,,,0.00%,,,125,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-06,,54515.84,135,,,8.00%,,,125,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-07,,86715.16,188,,,39.26%,,,135,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-08,,87363.88,194,,,3.19%,,,188,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-09,,64153.07,170,,,-12.37%,,,194,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-10,,71199.91,181,,,6.47%,,,170,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-11,,72807.99,184,,,0.00%,,,184,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-12,,51617.47,144,,,-21.74%,,,184,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-13,,57355.04,165,,,14.58%,,,144,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-14,,66200.55,161,,,0.00%,,,161,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-15,,73749.57,200,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-16,,78692.78,194,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-17,,89882.41,240,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-18,,80486.17,198,,,-17.50%,,,240,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-19,,57447.35,162,,,-18.18%,,,198,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-20,,53771.53,149,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-21,,53005.59,149,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-22,,84762.91,204,,,0.00%,,,204,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-23,,77682.82,185,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-24,,78174.30,210,,,13.51%,,,185,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-25,,64936.66,162,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-26,,52054.40,138,,,0.00%,,,138,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-27,,55789.38,143,,,3.62%,,,138,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-28,,60417.66,164,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-29,,75016.52,193,,,0.00%,,,193,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-09-30,,80763.51,181,,,0.00%,,,181,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-10-01,,71076.28,154,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon DLF (02/0009),2026-10-02,,47577.97,88,,,-42.86%,,,154,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-04,,40203.86,85,,,16.44%,,,73,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-05,,40696.40,98,,,0.00%,,,98,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-06,,49287.59,87,,,-11.22%,,,98,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-07,,30994.92,50,,,-42.53%,,,87,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-08,,31566.43,71,,,42.00%,,,50,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-09,,31147.84,76,,,7.04%,,,71,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-10,,30524.33,69,,,-9.21%,,,76,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-11,,34948.05,81,,,0.00%,,,81,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-12,,52038.29,99,,,22.22%,,,81,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-13,,60199.95,143,,,44.44%,,,99,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-14,,29508.02,76,,,0.00%,,,76,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-15,,26448.61,68,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-16,,19066.11,53,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-17,,35861.69,83,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-18,,31396.73,87,,,4.82%,,,83,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-19,,58711.56,114,,,31.03%,,,87,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-20,,45357.23,92,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-21,,23547.37,70,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-22,,27513.87,58,,,0.00%,,,58,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-23,,24967.74,56,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-24,,33939.87,75,,,33.93%,,,56,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-25,,48987.94,99,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-26,,50373.86,85,,,0.00%,,,85,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-27,,62084.82,105,,,23.53%,,,85,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-28,,21290.71,58,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-29,,30284.73,69,,,0.00%,,,69,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-09-30,,34697.61,79,,,0.00%,,,79,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-10-01,,25089.59,54,,,,,,,,,,,historical-total-revenue,false,North
+Sec 143 Noida (02/0006),2026-10-02,,40971.24,78,,,44.44%,,,54,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-04,,20408.00,43,,,-8.51%,,,47,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-05,,16556.05,39,,,0.00%,,,39,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-06,,25811.77,59,,,51.28%,,,39,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-07,,14099.64,40,,,-32.20%,,,59,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-08,,24462.57,58,,,45.00%,,,40,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-09,,23739.52,58,,,0.00%,,,58,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-10,,16793.62,50,,,-13.79%,,,58,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-11,,19271.63,48,,,0.00%,,,48,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-12,,32368.68,80,,,66.67%,,,48,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-13,,33616.43,82,,,2.50%,,,80,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-14,,21670.31,55,,,0.00%,,,55,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-15,,21317.46,48,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-16,,8899.72,35,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-17,,19904.64,53,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-18,,21229.63,62,,,16.98%,,,53,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-19,,32533.96,58,,,-6.45%,,,62,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-20,,32501.51,71,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-21,,18107.22,48,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-22,,15814.85,41,,,0.00%,,,41,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-23,,12408.71,36,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-24,,14969.95,36,,,0.00%,,,36,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-25,,23644.08,51,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-26,,24534.95,58,,,0.00%,,,58,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-27,,32886.42,63,,,8.62%,,,58,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-28,,10162.27,31,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-29,,21728.06,54,,,0.00%,,,54,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-09-30,,22139.29,60,,,0.00%,,,60,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-10-01,,22046.13,48,,,,,,,,,,,historical-total-revenue,false,North
+Gurgaon Sec 10 (02/0014),2026-10-02,,24990.64,50,,,4.17%,,,48,,,,,historical-total-revenue,false,North
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-04,,70631.00,161,,,24.81%,,,129,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-05,,102228.30,176,,,0.00%,,,176,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-06,,132220.21,190,,,7.95%,,,176,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-07,,59905.11,122,,,0.00%,,,122,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-08,,68448.94,136,,,0.00%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-09,,72651.26,141,,,3.68%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-10,,73904.08,138,,,-2.13%,,,141,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-11,,84128.97,132,,,-4.35%,,,138,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-12,,108471.15,187,,,0.00%,,,187,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-13,,136044.19,207,,,10.70%,,,187,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-14,,71302.90,141,,,-31.88%,,,207,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-15,,92983.96,153,,,0.00%,,,153,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-16,,59880.78,117,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-17,,65405.38,139,,,0.00%,,,139,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-18,,88189.99,160,,,0.00%,,,160,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-19,,121933.05,198,,,0.00%,,,198,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-20,,142948.53,207,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-21,,80259.91,134,,,0.00%,,,134,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-22,,68765.58,131,,,0.00%,,,131,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-23,,54623.36,113,,,0.00%,,,113,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-24,,80493.00,148,,,30.97%,,,113,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-25,,57996.77,138,,,-6.76%,,,148,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-26,,111874.59,185,,,34.06%,,,138,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-27,,174376.76,237,,,28.11%,,,185,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-28,,68176.91,141,,,0.00%,,,141,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-29,,74882.12,141,,,0.00%,,,141,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-09-30,,73011.52,138,,,-2.13%,,,141,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-10-01,,59891.30,114,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake Sec-1 (0009),2026-10-02,,142366.15,212,,,0.00%,,,212,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-04,,133990.04,325,,,34.30%,,,242,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-05,,146438.07,299,,,0.00%,,,299,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-06,,183418.33,352,,,17.73%,,,299,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-07,,92769.25,211,,,0.00%,,,211,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-08,,99953.44,224,,,0.00%,,,224,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-09,,88280.68,228,,,1.79%,,,224,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-10,,98342.14,227,,,-0.44%,,,228,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-11,,83055.60,183,,,-19.38%,,,227,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-12,,122396.69,241,,,0.00%,,,241,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-13,,154641.79,303,,,25.73%,,,241,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-14,,98417.74,215,,,-29.04%,,,303,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-15,,104202.38,242,,,0.00%,,,242,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-16,,107736.93,238,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-17,,110347.58,220,,,0.00%,,,220,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-18,,91493.29,213,,,0.00%,,,213,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-19,,162025.85,285,,,0.00%,,,285,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-20,,182018.84,322,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-21,,91866.22,231,,,0.00%,,,231,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-22,,94267.32,228,,,0.00%,,,228,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-23,,116584.32,240,,,0.00%,,,240,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-24,,88161.82,205,,,-14.58%,,,240,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-25,,113506.22,253,,,23.41%,,,205,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-26,,151629.19,301,,,18.97%,,,253,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-27,,188512.86,343,,,13.95%,,,301,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-28,,148051.29,285,,,0.00%,,,285,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-29,,108403.52,273,,,-4.21%,,,285,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-09-30,,124441.01,268,,,-1.83%,,,273,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-10-01,,114127.87,257,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Ideal Plaza (01/0001),2026-10-02,,135089.63,254,,,0.00%,,,254,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-04,,84990.08,170,,,25.00%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-05,,116788.85,200,,,0.00%,,,200,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-06,,178298.58,244,,,22.00%,,,200,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-07,,53023.11,115,,,0.00%,,,115,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-08,,70311.15,147,,,0.00%,,,147,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-09,,65257.28,127,,,-13.61%,,,147,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-10,,74191.98,144,,,13.39%,,,127,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-11,,72368.06,141,,,-2.08%,,,144,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-12,,121872.89,211,,,0.00%,,,211,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-13,,147288.99,261,,,23.70%,,,211,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-14,,74128.98,149,,,-42.91%,,,261,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-15,,61189.51,117,,,0.00%,,,117,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-16,,63495.46,124,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-17,,72284.74,136,,,0.00%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-18,,79884.58,155,,,0.00%,,,155,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-19,,127070.98,205,,,0.00%,,,205,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-20,,164963.75,236,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-21,,61658.17,125,,,0.00%,,,125,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-22,,67182.79,136,,,0.00%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-23,,62599.03,121,,,0.00%,,,121,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-24,,59006.82,139,,,14.88%,,,121,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-25,,60229.06,122,,,-12.23%,,,139,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-26,,113009.98,215,,,76.23%,,,122,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-27,,178566.97,282,,,31.16%,,,215,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-28,,69544.94,133,,,0.00%,,,133,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-29,,65725.07,136,,,2.26%,,,133,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-09-30,,72797.27,132,,,-2.94%,,,136,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-10-01,,92197.48,152,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake road 01/0015,2026-10-02,,128192.08,204,,,0.00%,,,204,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-04,,29769.77,68,,,0.00%,,,68,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-05,,37768.47,88,,,0.00%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-06,,92146.00,163,,,85.23%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-07,,24377.09,55,,,0.00%,,,55,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-08,,24958.78,62,,,0.00%,,,62,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-09,,40564.82,80,,,29.03%,,,62,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-10,,39597.15,76,,,-5.00%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-11,,37854.62,84,,,10.53%,,,76,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-12,,62651.06,128,,,0.00%,,,128,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-13,,78665.46,152,,,18.75%,,,128,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-14,,44597.79,97,,,-36.18%,,,152,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-15,,34576.94,67,,,0.00%,,,67,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-16,,25728.50,63,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-17,,36471.61,66,,,0.00%,,,66,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-18,,72093.38,116,,,0.00%,,,116,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-19,,64949.89,118,,,0.00%,,,118,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-20,,87676.42,159,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-21,,36700.61,82,,,0.00%,,,82,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-22,,33393.64,73,,,0.00%,,,73,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-23,,24927.08,55,,,0.00%,,,55,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-24,,22080.69,47,,,-14.55%,,,55,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-25,,35359.97,76,,,61.70%,,,47,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-26,,74102.13,133,,,75.00%,,,76,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-27,,94093.78,155,,,16.54%,,,133,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-28,,32093.58,66,,,0.00%,,,66,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-29,,38629.84,65,,,-1.52%,,,66,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-09-30,,32047.30,65,,,0.00%,,,65,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-10-01,,47848.22,83,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rangoli Mall (01/0010),2026-10-02,,98467.16,165,,,0.00%,,,165,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-04,,94590.43,204,,,7.37%,,,190,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-05,,103845.85,171,,,0.00%,,,171,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-06,,113926.74,184,,,7.60%,,,171,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-07,,68797.91,149,,,0.00%,,,149,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-08,,81972.41,176,,,0.00%,,,176,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-09,,76174.79,170,,,-3.41%,,,176,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-10,,83695.31,170,,,0.00%,,,170,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-11,,98341.66,195,,,14.71%,,,170,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-12,,114545.18,214,,,0.00%,,,214,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-13,,100252.19,176,,,-17.76%,,,214,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-14,,92791.20,178,,,1.14%,,,176,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-15,,89239.95,187,,,0.00%,,,187,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-16,,70805.93,154,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-17,,92032.74,161,,,0.00%,,,161,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-18,,78697.52,162,,,0.00%,,,162,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-19,,118629.16,219,,,0.00%,,,219,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-20,,102519.55,173,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-21,,88038.90,165,,,0.00%,,,165,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-22,,82902.39,168,,,0.00%,,,168,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-23,,90894.69,177,,,0.00%,,,177,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-24,,83679.79,166,,,-6.21%,,,177,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-25,,80307.67,157,,,-5.42%,,,166,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-26,,123296.55,242,,,54.14%,,,157,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-27,,103054.30,181,,,-25.21%,,,242,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-28,,60561.53,134,,,0.00%,,,134,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-29,,89684.76,193,,,44.03%,,,134,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-09-30,,80039.11,167,,,-13.47%,,,193,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-10-01,,96182.86,191,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Salt Lake (002),2026-10-02,,98347.78,169,,,0.00%,,,169,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-04,,59480.61,147,,,47.00%,,,100,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-05,,67046.98,137,,,0.00%,,,137,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-06,,81867.90,153,,,11.68%,,,137,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-07,,50023.21,110,,,0.00%,,,110,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-08,,53636.10,120,,,0.00%,,,120,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-09,,43553.70,90,,,-25.00%,,,120,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-10,,48702.32,116,,,28.89%,,,90,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-11,,48452.10,116,,,0.00%,,,116,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-12,,88693.14,163,,,0.00%,,,163,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-13,,85647.94,172,,,5.52%,,,163,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-14,,65714.39,143,,,-16.86%,,,172,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-15,,44285.59,103,,,0.00%,,,103,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-16,,41840.38,99,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-17,,46388.26,114,,,0.00%,,,114,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-18,,77021.74,144,,,0.00%,,,144,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-19,,89976.25,161,,,0.00%,,,161,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-20,,84896.70,153,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-21,,48751.91,106,,,0.00%,,,106,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-22,,50525.50,113,,,0.00%,,,113,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-23,,32948.57,88,,,0.00%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-24,,33031.71,87,,,-1.14%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-25,,56751.37,118,,,35.63%,,,87,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-26,,94839.62,190,,,61.02%,,,118,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-27,,92161.70,153,,,-19.47%,,,190,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-28,,45398.99,111,,,0.00%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-29,,46007.26,103,,,-7.21%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-09-30,,57474.75,117,,,13.59%,,,103,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-10-01,,59905.55,130,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - James long Sarani (01/0011),2026-10-02,,83673.37,151,,,0.00%,,,151,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-04,,93551.63,254,,,48.54%,,,171,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-05,,96645.59,275,,,0.00%,,,275,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-06,,92779.79,239,,,-13.09%,,,275,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-07,,53123.47,137,,,0.00%,,,137,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-08,,53881.85,144,,,0.00%,,,144,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-09,,48438.26,118,,,-18.06%,,,144,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-10,,58515.67,171,,,44.92%,,,118,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-11,,61922.85,177,,,3.51%,,,171,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-12,,105711.13,265,,,0.00%,,,265,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-13,,108474.85,250,,,-5.66%,,,265,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-14,,56911.22,158,,,-36.80%,,,250,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-15,,64575.52,151,,,0.00%,,,151,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-16,,53360.63,146,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-17,,60772.87,159,,,0.00%,,,159,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-18,,83499.30,187,,,0.00%,,,187,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-19,,101629.57,227,,,0.00%,,,227,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-20,,105858.90,241,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-21,,55189.47,148,,,0.00%,,,148,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-22,,58082.22,158,,,0.00%,,,158,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-23,,49558.19,139,,,0.00%,,,139,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-24,,75773.92,194,,,39.57%,,,139,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-25,,53161.08,150,,,-22.68%,,,194,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-26,,103933.09,240,,,60.00%,,,150,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-27,,128981.49,275,,,14.58%,,,240,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-28,,50948.71,143,,,0.00%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-29,,64381.21,187,,,30.77%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-09-30,,58276.49,168,,,-10.16%,,,187,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-10-01,,65621.71,182,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Rosedale Plaza(0006),2026-10-02,,81786.66,191,,,0.00%,,,191,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-04,,49182.41,16,,,-11.11%,,,18,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-05,,64868.13,16,,,0.00%,,,16,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-06,,86582.09,14,,,-12.50%,,,16,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-07,,44057.42,10,,,0.00%,,,10,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-08,,45215.60,14,,,0.00%,,,14,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-09,,49742.35,9,,,-35.71%,,,14,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-10,,52486.33,12,,,33.33%,,,9,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-11,,48651.34,13,,,8.33%,,,12,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-12,,85488.79,22,,,0.00%,,,22,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-13,,84038.36,16,,,-27.27%,,,22,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-14,,51592.75,12,,,-25.00%,,,16,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-15,,41045.79,18,,,0.00%,,,18,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-16,,50451.78,21,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-17,,42211.32,18,,,0.00%,,,18,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-18,,54244.99,12,,,0.00%,,,12,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-19,,90767.33,20,,,0.00%,,,20,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-20,,82391.59,22,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-21,,39373.67,8,,,0.00%,,,8,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-22,,52553.67,13,,,0.00%,,,13,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-23,,39693.30,16,,,0.00%,,,16,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-24,,54953.11,14,,,-12.50%,,,16,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-25,,56129.91,28,,,100.00%,,,14,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-26,,84305.08,23,,,-17.86%,,,28,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-27,,85830.97,24,,,4.35%,,,23,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-28,,55689.90,19,,,0.00%,,,19,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-29,,50435.10,24,,,26.32%,,,19,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-09-30,,52827.95,15,,,-37.50%,,,24,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-10-01,,49991.59,13,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Manisquare (0004),2026-10-02,,78989.39,14,,,0.00%,,,14,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-04,,54608.62,126,,,31.25%,,,96,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-05,,69233.11,143,,,0.00%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-06,,67369.02,133,,,-6.99%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-07,,40337.52,92,,,0.00%,,,92,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-08,,43027.40,99,,,0.00%,,,99,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-09,,35874.38,82,,,-17.17%,,,99,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-10,,44775.52,87,,,6.10%,,,82,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-11,,42022.00,82,,,-5.75%,,,87,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-12,,64596.29,111,,,0.00%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-13,,66911.49,131,,,18.02%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-14,,52863.91,116,,,-11.45%,,,131,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-15,,42452.25,84,,,0.00%,,,84,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-16,,34139.33,76,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-17,,39801.44,100,,,0.00%,,,100,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-18,,52782.46,116,,,0.00%,,,116,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-19,,74916.37,132,,,0.00%,,,132,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-20,,75226.94,123,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-21,,38024.37,95,,,0.00%,,,95,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-22,,41455.68,86,,,0.00%,,,86,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-23,,37850.84,82,,,0.00%,,,82,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-24,,46637.75,93,,,13.41%,,,82,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-25,,35753.90,87,,,-6.45%,,,93,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-26,,69829.03,143,,,64.37%,,,87,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-27,,70009.09,153,,,6.99%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-28,,40581.78,90,,,0.00%,,,90,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-29,,37478.00,81,,,-10.00%,,,90,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-09-30,,48671.06,106,,,30.86%,,,81,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-10-01,,44743.00,89,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Kalikapur (01/0014),2026-10-02,,67731.87,130,,,0.00%,,,130,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-04,,68493.59,161,,,64.29%,,,98,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-05,,56452.49,152,,,0.00%,,,152,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-06,,64333.92,148,,,-2.63%,,,152,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-07,,42202.68,89,,,0.00%,,,89,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-08,,40028.16,83,,,0.00%,,,83,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-09,,47701.96,117,,,40.96%,,,83,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-10,,38583.85,94,,,-19.66%,,,117,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-11,,44165.28,112,,,19.15%,,,94,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-12,,68698.01,143,,,0.00%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-13,,80311.50,164,,,14.69%,,,143,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-14,,39378.58,102,,,-37.80%,,,164,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-15,,41499.46,106,,,0.00%,,,106,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-16,,33697.83,86,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-17,,45349.87,109,,,0.00%,,,109,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-18,,57960.73,133,,,0.00%,,,133,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-19,,54635.27,122,,,0.00%,,,122,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-20,,72537.19,148,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-21,,50194.29,108,,,0.00%,,,108,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-22,,39534.64,95,,,0.00%,,,95,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-23,,34684.08,88,,,0.00%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-24,,47964.81,119,,,35.23%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-25,,37836.99,95,,,-20.17%,,,119,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-26,,65182.92,155,,,63.16%,,,95,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-27,,71626.80,156,,,0.65%,,,155,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-28,,28842.40,65,,,0.00%,,,65,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-29,,43170.11,103,,,58.46%,,,65,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-09-30,,48730.27,104,,,0.97%,,,103,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-10-01,,39041.75,105,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Lake Town (0005),2026-10-02,,63404.33,153,,,0.00%,,,153,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-04,,35950.01,107,,,50.70%,,,71,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-05,,44600.21,125,,,0.00%,,,125,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-06,,68477.14,190,,,52.00%,,,125,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-07,,38885.66,115,,,0.00%,,,115,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-08,,30364.62,80,,,0.00%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-09,,19214.15,70,,,-12.50%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-10,,24414.66,71,,,1.43%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-11,,25175.56,68,,,-4.23%,,,71,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-12,,50952.22,130,,,0.00%,,,130,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-13,,55852.13,150,,,15.38%,,,130,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-14,,33013.60,94,,,-37.33%,,,150,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-15,,37997.54,106,,,0.00%,,,106,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-16,,27989.80,73,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-17,,30992.96,94,,,0.00%,,,94,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-18,,34010.12,94,,,0.00%,,,94,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-19,,36389.13,92,,,0.00%,,,92,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-20,,49024.52,139,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-21,,31862.45,103,,,0.00%,,,103,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-22,,31237.75,88,,,0.00%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-23,,32339.78,99,,,0.00%,,,99,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-24,,25881.52,69,,,-30.30%,,,99,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-25,,32647.96,100,,,44.93%,,,69,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-26,,51365.00,134,,,34.00%,,,100,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-27,,54103.01,155,,,15.67%,,,134,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-28,,33256.29,85,,,0.00%,,,85,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-29,,31024.44,88,,,3.53%,,,85,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-09-30,,22397.52,64,,,-27.27%,,,88,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-10-01,,21978.84,76,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Quest Mall (01/0016),2026-10-02,,60721.57,158,,,0.00%,,,158,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-04,,51666.12,119,,,26.60%,,,94,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-05,,54501.71,122,,,0.00%,,,122,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-06,,48833.25,105,,,-13.93%,,,122,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-07,,30194.84,65,,,0.00%,,,65,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-08,,42224.95,101,,,0.00%,,,101,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-09,,34312.83,76,,,-24.75%,,,101,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-10,,44878.92,93,,,22.37%,,,76,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-11,,36627.42,85,,,-8.60%,,,93,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-12,,47113.99,111,,,0.00%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-13,,57326.06,116,,,4.50%,,,111,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-14,,47047.29,99,,,-14.66%,,,116,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-15,,34126.27,90,,,0.00%,,,90,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-16,,30875.06,76,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-17,,43834.28,100,,,0.00%,,,100,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-18,,72275.53,139,,,0.00%,,,139,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-19,,68656.36,131,,,0.00%,,,131,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-20,,59264.18,106,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-21,,35427.22,85,,,0.00%,,,85,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-22,,36437.27,83,,,0.00%,,,83,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-23,,33893.78,72,,,0.00%,,,72,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-24,,32160.34,90,,,25.00%,,,72,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-25,,32564.75,86,,,-4.44%,,,90,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-26,,56323.28,124,,,44.19%,,,86,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-27,,65418.72,127,,,2.42%,,,124,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-28,,42968.73,101,,,0.00%,,,101,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-29,,49000.07,101,,,0.00%,,,101,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-09-30,,36430.14,79,,,-21.78%,,,101,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-10-01,,40476.29,91,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Santoshpur (01/0012),2026-10-02,,61288.99,133,,,0.00%,,,133,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-04,,21273.68,57,,,-1.72%,,,58,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-05,,28348.30,70,,,0.00%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-06,,45255.10,111,,,58.57%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-07,,21969.02,44,,,0.00%,,,44,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-08,,23835.78,62,,,0.00%,,,62,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-09,,20948.39,51,,,-17.74%,,,62,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-10,,19988.80,49,,,-3.92%,,,51,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-11,,23810.82,46,,,-6.12%,,,49,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-12,,37545.32,80,,,0.00%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-13,,40394.71,70,,,-12.50%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-14,,23329.18,46,,,-34.29%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-15,,19367.40,42,,,0.00%,,,42,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-16,,23641.17,44,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-17,,17583.35,34,,,0.00%,,,34,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-18,,21011.18,49,,,0.00%,,,49,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-19,,35667.68,76,,,0.00%,,,76,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-20,,47386.02,86,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-21,,20914.59,39,,,0.00%,,,39,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-22,,15174.21,37,,,0.00%,,,37,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-23,,20860.91,29,,,0.00%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-24,,18108.72,37,,,27.59%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-25,,21180.86,50,,,35.14%,,,37,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-26,,47048.00,86,,,72.00%,,,50,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-27,,42907.14,79,,,-8.14%,,,86,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-28,,15327.00,29,,,0.00%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-29,,22975.92,43,,,48.28%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-09-30,,20425.15,42,,,-2.33%,,,43,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-10-01,,25669.55,48,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Forum (0003),2026-10-02,,36809.71,64,,,0.00%,,,64,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-04,,33836.40,101,,,31.17%,,,77,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-05,,31611.22,93,,,0.00%,,,93,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-06,,30488.08,76,,,-18.28%,,,93,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-07,,20827.26,55,,,0.00%,,,55,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-08,,35659.83,87,,,0.00%,,,87,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-09,,21518.89,56,,,-35.63%,,,87,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-10,,29093.81,80,,,42.86%,,,56,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-11,,23622.27,60,,,-25.00%,,,80,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-12,,25114.90,74,,,0.00%,,,74,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-13,,36613.28,92,,,24.32%,,,74,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-14,,10028.51,28,,,-69.57%,,,92,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-16,,9547.47,32,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-17,,25408.97,70,,,0.00%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-18,,35761.16,96,,,0.00%,,,96,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-19,,30943.58,77,,,0.00%,,,77,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-20,,41665.34,87,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-21,,28189.64,71,,,0.00%,,,71,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-22,,25491.70,68,,,0.00%,,,68,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-23,,23344.27,70,,,0.00%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-24,,28524.25,84,,,20.00%,,,70,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-25,,22984.08,74,,,-11.90%,,,84,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-26,,42418.05,126,,,70.27%,,,74,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-27,,30154.31,72,,,-42.86%,,,126,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-28,,27176.96,78,,,0.00%,,,78,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-29,,25627.77,72,,,-7.69%,,,78,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-09-30,,19474.38,56,,,-22.22%,,,72,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-10-01,,30628.35,88,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),2026-10-02,,36955.48,100,,,0.00%,,,100,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-04,,3924.06,7,,,40.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-05,,5349.08,7,,,0.00%,,,7,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-06,,12816.09,15,,,114.29%,,,7,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-07,,3156.03,5,,,0.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-08,,3861.06,5,,,0.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-09,,2844.02,3,,,-40.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-10,,3849.09,5,,,66.67%,,,3,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-11,,4994.99,7,,,40.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-12,,4104.01,10,,,0.00%,,,10,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-13,,8322.09,10,,,0.00%,,,10,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-14,,2982.05,3,,,-70.00%,,,10,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-15,,3465.02,4,,,0.00%,,,4,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-16,,1752.01,2,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-17,,3087.03,5,,,0.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-18,,3777.06,6,,,0.00%,,,6,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-19,,4506.00,7,,,0.00%,,,7,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-20,,7773.13,11,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-21,,2562.04,5,,,0.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-22,,2898.06,4,,,0.00%,,,4,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-23,,2757.04,5,,,0.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-24,,1974.04,4,,,-20.00%,,,5,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-25,,3957.03,6,,,50.00%,,,4,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-26,,4800.04,8,,,33.33%,,,6,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-27,,9816.13,18,,,125.00%,,,8,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-28,,2040.00,4,,,0.00%,,,4,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-29,,4170.07,9,,,125.00%,,,4,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-09-30,,5136.05,8,,,-11.11%,,,9,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-10-01,,3243.06,5,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Calcutta Swiming Club (0007),2026-10-02,,9636.08,14,,,0.00%,,,14,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-04,,0.00,0,,,-100.00%,,,41,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-07,,4570.00,33,,,0.00%,,,33,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-08,,5655.00,44,,,0.00%,,,44,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-09,,5109.98,42,,,-4.55%,,,44,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-10,,4349.99,34,,,-19.05%,,,42,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-11,,3294.98,15,,,-55.88%,,,34,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-14,,5354.98,41,,,100.00%,,,0,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-15,,4539.97,42,,,0.00%,,,42,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-16,,5119.98,39,,,,,,,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-17,,5314.99,41,,,0.00%,,,41,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-18,,5050.00,36,,,0.00%,,,36,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-21,,4444.95,36,,,0.00%,,,36,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-22,,6029.98,47,,,0.00%,,,47,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-23,,3700.01,29,,,0.00%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-24,,4869.98,44,,,51.72%,,,29,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-25,,2495.01,17,,,-61.36%,,,44,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-26,,0.00,0,,,-100.00%,,,17,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-28,,4404.97,43,,,0.00%,,,43,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-29,,3275.00,27,,,-37.21%,,,43,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-09-30,,2840.00,26,,,-3.70%,,,27,,,,,historical-total-revenue,false,East
+Dosa Coffee - Food Truck - 1 (0008),2026-10-01,,2724.98,31,,,,,,,,,,,historical-total-revenue,false,East

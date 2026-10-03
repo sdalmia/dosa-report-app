@@ -102,6 +102,39 @@ def unique_store_label(file_label, posist_labels):
     return None
 
 
+def extra_store_labels(rows, posist_labels):
+    """Labels from other feeds that are not on the Posist deployment report.
+
+    A shorter label is dropped when it names a longer label already kept, so
+    "Events & Catering" stays on "Dosa Coffee - Events & Catering".
+    """
+    found = []
+    for row in rows:
+        label = (row.get("posist_store") or "").strip()
+        if label:
+            found.append(label)
+    outside = []
+    deployments = [str(label).strip() for label in posist_labels if str(label).strip()]
+    for label in found:
+        wanted = label_words(label)
+        if not wanted:
+            continue
+        # A name that lines up with one or more deployments is not a new store.
+        # Ambiguous names such as "Salt Lake" stay unmatched.
+        if any(
+            label_words(deployment) == wanted or _label_aligns(wanted, label_words(deployment))
+            for deployment in deployments
+        ):
+            continue
+        outside.append(label)
+    kept = []
+    for label in sorted(set(outside), key=lambda text: (-len(text), text.casefold())):
+        if unique_store_label(label, kept):
+            continue
+        kept.append(label)
+    return kept
+
+
 def assign_rows(rows, label_key, posist_labels):
     """Map Posist labels to the one file row that names them.
 
