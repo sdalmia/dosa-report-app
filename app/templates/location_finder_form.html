@@ -2,37 +2,35 @@
 
 {% extends 'base.html' %}
 
+{% block title %}Location Finder – Where should we open?{% endblock %}
+
 {% block content %}
+<div class="lf-page">
+    <h1 class="mb-3">Location Finder</h1>
+    <p class="mb-4">
+        Use this to decide where to open a restaurant. Score one site, or map a single brand
+        across a city or region. Scoring a site stays on this page either way.
+    </p>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Location Finder – Score a Spot</title>
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    >
-</head>
-<body class="bg-light">
-<div class="container py-5">
-    <h1 class="mb-4">Location Finder Tool</h1>
-    <div class="alert alert-secondary mb-3">
-      <h5 class="mb-2">What this tool does</h5>
-      <p class="mb-1">
-        This Location Intelligence tool analyses any Google Maps location and calculates its business
-        potential on a 0–10 scale. It looks at nearby eateries, total reviews (area energy), ratings,
-        cuisine diversity, anchor brands (like Starbucks, McDonald’s, etc.), and transport connectivity
-        (metro, bus, main roads) to give you a clear, data-backed view of how strong a site really is.
-      </p>
-    </div>
-    <div id="loader" style="display:none; text-align:center; margin-bottom:20px;">
-    <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-2">Checking the Energy near the location… Please wait</p>
-    </div>
-    <form method="POST" class="card p-4 shadow-sm bg-white mt-3">
-        <div class="mb-3">
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
 
-          <div class="mb-3">
-                <label for="autocomplete" class="form-label">Search Location</label>
+    <div id="loader" style="display:none;" class="text-center mb-3">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 mb-0" id="loader-text">Working…</p>
+    </div>
+
+    <div class="card p-4 shadow-sm bg-white mb-4">
+        <h2 class="h4">Score one site</h2>
+        <p class="text-secondary">
+            The score runs from 0 to 10. A high score means a strong site for a new restaurant.
+            It still uses review energy, ratings, anchor brands, cuisine diversity, and transport.
+            The map keeps the review heatmap. Known brands are marked with their logo.
+        </p>
+        <form method="POST" id="score-form">
+            <div class="mb-3">
+                <label for="autocomplete" class="form-label">Site to score</label>
                 <input
                     type="text"
                     class="form-control"
@@ -40,75 +38,124 @@
                     placeholder="Search for a place"
                     required
                 >
-                <small class="text-muted">Type a location or landmark</small>
+                <small class="text-muted">Pick a suggestion so the coordinates are set.</small>
             </div>
-
-            <!-- Hidden fields to send to Flask -->
             <input type="hidden" name="latitude" id="latitude">
             <input type="hidden" name="longitude" id="longitude">
             <input type="hidden" name="location_name" id="location_name">
             <input type="hidden" name="place_id" id="place_id">
 
-        </div>
+            <div class="mb-3">
+                <label for="radius" class="form-label">Search radius (meters)</label>
+                <input
+                    type="number"
+                    class="form-control"
+                    id="radius"
+                    name="radius"
+                    placeholder="500"
+                    value="500"
+                    min="50"
+                    max="5000"
+                    required
+                >
+                <div class="form-text text-muted">Default = 500 meters. This is the area the score and heatmap read.</div>
+            </div>
 
-        <div class="mb-3">
-            <label for="radius" class="form-label">Search Radius (meters)</label>
-            <input
-                type="number"
-                class="form-control"
-                id="radius"
-                name="radius"
-                placeholder="500"
-                value="500"
-                min="50"
-                max="5000"
-                required
-            >
-            <div class="form-text text-muted">Default = 500 meters</div>
-        </div>
+            <button type="submit" class="btn btn-primary">Score this site</button>
+        </form>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Get Score</button>
-    </form>
+    <div class="card p-4 shadow-sm bg-white">
+        <h2 class="h4">Map one brand across a city or region</h2>
+        <p class="text-secondary">
+            See where one brand already operates, for example Starbucks in Kolkata or KFC across Delhi NCR.
+            Each known brand is marked with its logo. This does not replace the site score.
+        </p>
+        <form method="POST" action="{{ url_for('location_finder.location_finder_brand') }}" id="brand-form">
+            <div class="mb-3">
+                <label for="brand" class="form-label">Brand</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="brand"
+                    name="brand"
+                    list="known-brands"
+                    placeholder="Starbucks"
+                    value="{{ brand }}"
+                    required
+                >
+                <datalist id="known-brands">
+                    {% for item in known_brands %}
+                    <option value="{{ item.name }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="mb-3">
+                <label for="region" class="form-label">City or region</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="region"
+                    name="region"
+                    placeholder="Kolkata or Delhi NCR"
+                    value="{{ region }}"
+                    required
+                >
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Map this brand</button>
+        </form>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.lf-page {
+    background: #f4f6f8;
+    color: #1c1f23;
+    border-radius: 16px;
+    padding: 28px 24px 32px;
+    margin-bottom: 24px;
+}
+.lf-page h1, .lf-page h2, .lf-page p, .lf-page label { color: #1c1f23; }
+</style>
 <script>
-    document.querySelector("form").addEventListener("submit", function() {
-        const loader = document.getElementById("loader");
-        loader.style.display = "block";
-    });
+document.getElementById("score-form").addEventListener("submit", function (event) {
+    if (!document.getElementById("latitude").value) {
+        event.preventDefault();
+        alert("Choose a location from the suggestions.");
+        return;
+    }
+    const loader = document.getElementById("loader");
+    document.getElementById("loader-text").textContent = "Scoring this site for a new restaurant…";
+    loader.style.display = "block";
+});
+document.getElementById("brand-form").addEventListener("submit", function () {
+    const loader = document.getElementById("loader");
+    document.getElementById("loader-text").textContent = "Mapping this brand…";
+    loader.style.display = "block";
+});
 </script>
-
 <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
-
 <script>
-let autocomplete;
-
 function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(
+    const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete"),
         { types: ["geocode", "establishment"] }
     );
 
     autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
-
         if (!place.geometry) {
-            alert("No details available for selected location.");
+            alert("No details available for the selected location.");
             return;
         }
-
         document.getElementById("latitude").value = place.geometry.location.lat();
         document.getElementById("longitude").value = place.geometry.location.lng();
         document.getElementById("location_name").value = place.formatted_address || place.name;
         document.getElementById("place_id").value = place.place_id;
     });
 }
-
 document.addEventListener("DOMContentLoaded", initAutocomplete);
 </script>
-
-
-
-</body>
-
 {% endblock %}
-
