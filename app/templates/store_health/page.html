@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+
+{% block title %}{% if store %}Store Health · {{ store.label }}{% else %}Store Health{% endif %} - Dosa Coffee{% endblock %}
+
+{% block content %}
+<style>
+  .store-health { color: #f8f9fa; }
+  .store-health a { color: #f8f9fa; }
+  .eyebrow {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #adb5bd;
+    margin-bottom: 0.25rem;
+  }
+  .store-health h1 { font-size: 1.8rem; font-weight: 650; }
+  .identity { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 0 0 0.75rem; list-style: none; }
+  .identity li {
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    padding: 0.15rem 0.65rem;
+    font-size: 0.8rem;
+    color: #dee2e6;
+  }
+  .match-hint, .public-name { color: #adb5bd; font-size: 0.85rem; }
+  .store-health .form-control,
+  .store-health .form-select {
+    background-color: #121212;
+    color: #f8f9fa;
+    border-color: #4b4b4b;
+  }
+  .store-health .form-control:focus,
+  .store-health .form-select:focus {
+    background-color: #121212;
+    color: #fff;
+    border-color: #8d8d8d;
+    box-shadow: none;
+  }
+  .health-stack { display: grid; gap: 1rem; }
+  @media (min-width: 992px) {
+    .health-stack { grid-template-columns: 1fr 1fr; }
+    .span-full { grid-column: 1 / -1; }
+  }
+  .health-box {
+    --accent: #f5c518;
+    background: #1b1b1b;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: 8px solid var(--accent);
+    border-radius: 0.85rem;
+    padding: 1.05rem 1.1rem 1.15rem;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+  }
+  .box-posist { --accent: #f5c518; }
+  .box-audit { --accent: #a78bfa; }
+  .box-staff { --accent: #fb923c; }
+  .box-fame { --accent: #fb7185; }
+  .box-reelo { --accent: #60a5fa; }
+  .box-insights { --accent: #4ade80; }
+  .box-calendar { --accent: #2dd4bf; }
+  .box-head { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.85rem; }
+  .box-index {
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: #1a1a1a;
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+  .health-box h2 { color: var(--accent); font-size: 1.15rem; margin: 0; }
+  .box-source { color: #adb5bd; font-size: 0.8rem; margin: 0.15rem 0 0; }
+  .empty-state {
+    color: #d5d5d5;
+    background: rgba(0,0,0,0.28);
+    border: 1px dashed rgba(255,255,255,0.22);
+    border-radius: 0.65rem;
+    padding: 0.7rem 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.7rem;
+  }
+  .metric {
+    background: rgba(0,0,0,0.28);
+    border-radius: 0.7rem;
+    padding: 0.75rem 0.8rem;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .metric h3 {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #adb5bd;
+    margin: 0 0 0.35rem;
+  }
+  .metric .value {
+    min-height: 1.8rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .sub { display: flex; justify-content: space-between; gap: 0.6rem; margin: 0.35rem 0 0; font-size: 0.82rem; }
+  .sub-label { color: #9aa0a6; }
+  .sub-value { min-width: 1.4rem; text-align: right; font-variant-numeric: tabular-nums; }
+  .badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+  .badge-soft {
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    background: rgba(255,255,255,0.08);
+    font-size: 0.78rem;
+  }
+  .map-slot, .insight-col {
+    border: 1px dashed rgba(255,255,255,0.28);
+    border-radius: 0.7rem;
+    min-height: 7rem;
+    padding: 0.8rem;
+    background: rgba(0,0,0,0.18);
+  }
+  .insight-col { border-style: solid; border-color: rgba(255,255,255,0.08); }
+  .insight-col h3, .map-slot h3 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+  .cal-scroll { overflow-x: auto; }
+  .dow-grid, .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.4rem;
+    min-width: 720px;
+  }
+  .dow { text-align: center; color: #adb5bd; font-size: 0.75rem; }
+  .cal-cell {
+    background: rgba(0,0,0,0.28);
+    border-radius: 0.55rem;
+    min-height: 6.4rem;
+    padding: 0.4rem 0.45rem;
+    font-size: 0.78rem;
+  }
+  .cal-cell.pad { background: transparent; }
+  .cal-cell.is-selected { outline: 1px solid var(--accent); }
+  .cal-cell.is-today .day-num { text-decoration: underline; }
+  .day-num { font-weight: 700; text-decoration: none; }
+  .cal-line { display: flex; justify-content: space-between; gap: 0.3rem; color: #ced4da; }
+  .cal-line b { font-weight: 600; color: #f8f9fa; }
+  .cal-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 980px; }
+  .cal-table th, .cal-table td {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0.45rem 0.4rem;
+    vertical-align: top;
+  }
+  .cal-table th { color: #adb5bd; font-weight: 600; white-space: nowrap; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .var-down { color: #fda4af; }
+  .var-up { color: #86efac; }
+  .range-note { color: #adb5bd; font-size: 0.85rem; }
+  .contract { color: #ced4da; }
+  .contract code { color: #f8f9fa; }
+</style>
+
+<div class="store-health py-4">
+  <p class="eyebrow mb-1"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none">Command Centre</a> / Store Health</p>
+  <h1 class="mb-2">{% if store %}{{ store.label }}{% else %}Choose a store{% endif %}</h1>
+  {% if store and store.public_name != store.label %}
+    <p class="public-name mb-2">{{ store.public_name }}</p>
+  {% endif %}
+  {% if store %}
+    <ul class="identity">
+      {% if store.deployment_code %}<li>Code {{ store.deployment_code }}</li>{% endif %}
+      {% if store.region %}<li>{{ store.region }}</li>{% endif %}
+      {% if store.format %}<li>{{ store.format }}</li>{% endif %}
+    </ul>
+    <p class="match-hint">Rows match this store when the store column is {% for key in match_keys %}{{ key }}{% if not loop.last %} or {% endif %}{% endfor %}.</p>
+  {% else %}
+    <p class="match-hint mb-3">No store is selected. Pick any outlet. Figures stay blank until a file has a row for that store.</p>
+  {% endif %}
+
+  {% if unknown_store %}
+    <p class="empty-state">No store matches “{{ unknown_token }}”. Choose one from the list.</p>
+  {% endif %}
+  {% if warnings %}
+    <div class="empty-state">
+      {% for warning in warnings %}<div>{{ warning }}</div>{% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-4">
+    <div class="col-lg-8">
+      <label for="store" class="form-label">Store</label>
+      <select id="store" name="store" class="form-select" onchange="this.form.submit()">
+        <option value="" {% if not store %}selected{% endif %}>Choose a store</option>
+        {% for group_name, group in groups %}
+          <optgroup label="{{ group_name }}">
+            {% for item in group %}
+              <option value="{{ item.id }}" {% if store and item.id == store.id %}selected{% endif %}>{{ item.label }}</option>
+            {% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+    </div>
+    <input type="hidden" name="start" value="{{ selection.start_input }}">
+    <input type="hidden" name="end" value="{{ selection.end_input }}">
+    <input type="hidden" name="day" value="{{ selection.day_input }}">
+    <div class="col-lg-4">
+      <button type="submit" class="btn btn-outline-light">Open store</button>
+    </div>
+  </form>
+
+  <div class="health-stack">
+    <section id="posist" class="health-box box-posist span-full" aria-labelledby="posist-title">
+      <div class="box-head">
+        <span class="box-index">1</span>
+        <div>
+          <h2 id="posist-title">Posist Insights</h2>
+          <p class="box-source">Daily sales row{% if day_label %} · {{ day_label }}{% endif %}</p>
+        </div>
+      </div>
+      <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
+        {% if store %}<input type="hidden" name="store" value="{{ store.id }}">{% endif %}
+        <input type="hidden" name="start" value="{{ selection.start_input }}">
+        <input type="hidden" name="end" value="{{ selection.end_input }}">
+        <div class="col-sm-6 col-md-4">
+          <label for="posist-day" class="form-label">Posist day</label>
+          <input id="posist-day" class="form-control" type="date" name="day" value="{{ selection.day_input }}">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-light btn-sm">Show this day</button>
+        </div>
+      </form>
+      {% if posist.fields.source_label or posist.fields.provisional_label %}
+        <div class="badges">
+          {% if posist.fields.source_label %}<span class="badge-soft" data-field="source">{{ posist.fields.source_label }}</span>{% endif %}
+          {% if posist.fields.provisional_label %}<span class="badge-soft" data-field="provisional">{{ posist.fields.provisional_label }}</span>{% endif %}
+        </div>
+      {% endif %}
+      {% if not store %}
+        <p class="empty-state">Choose a store to load its Posist row.</p>
+      {% elif not posist.has_row %}
+        <p class="empty-state">No daily Posist row for this store on this date.</p>
+      {% endif %}
+      <div class="metric-grid">
+        <article class="metric">
+          <h3>Net</h3>
+          <p class="value" data-field="net">{{ posist.fields.net }}</p>
+          <p class="sub"><span class="sub-label">Gross</span><span class="sub-value" data-field="gross">{{ posist.fields.gross }}</span></p>
+          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="net_last_same_weekday">{{ posist.fields.net_last_same_weekday }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Bills</h3>
+          <p class="value" data-field="bills">{{ posist.fields.bills }}</p>
+          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="bills_last_same_weekday">{{ posist.fields.bills_last_same_weekday }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>APB</h3>
+          <p class="value" data-field="apb">{{ posist.fields.apb }}</p>
+          <p class="sub"><span class="sub-label">Last same weekday</span><span class="sub-value" data-field="apb_last_same_weekday">{{ posist.fields.apb_last_same_weekday }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Week over week</h3>
+          <p class="sub"><span class="sub-label">Net</span><span class="sub-value" data-field="net_wow_pct">{{ posist.fields.net_wow_pct }}</span></p>
+          <p class="sub"><span class="sub-label">Bills</span><span class="sub-value" data-field="bills_wow_pct">{{ posist.fields.bills_wow_pct }}</span></p>
+          <p class="sub"><span class="sub-label">APB</span><span class="sub-value" data-field="apb_wow_pct">{{ posist.fields.apb_wow_pct }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Unsettled</h3>
+          <p class="sub"><span class="sub-label">Amount</span><span class="sub-value" data-field="unsettled_amount">{{ posist.fields.unsettled_amount }}</span></p>
+          <p class="sub"><span class="sub-label">Bills</span><span class="sub-value" data-field="unsettled_bills">{{ posist.fields.unsettled_bills }}</span></p>
+        </article>
+        <article class="metric">
+          <h3>Voids</h3>
+          <p class="value" data-field="void_bills">{{ posist.fields.void_bills }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="mystery-audit" class="health-box box-audit" aria-labelledby="audit-title">
+      <div class="box-head">
+        <span class="box-index">2</span>
+        <div>
+          <h2 id="audit-title">Mystery Audit</h2>
+          <p class="box-source">For this store</p>
+        </div>
+      </div>
+      <p class="empty-state mb-0">No mystery audit is on file for this store.</p>
+    </section>
+
+    <section id="staff" class="health-box box-staff" aria-labelledby="staff-title">
+      <div class="box-head">
+        <span class="box-index">3</span>
+        <div>
+          <h2 id="staff-title">Staff strength</h2>
+          <p class="box-source">Keka</p>
+        </div>
+      </div>
+      <p class="empty-state">Store manager and staff strength are not connected. They will come from Keka.</p>
+      <div class="metric-grid">
+        <article class="metric">
+          <h3>Store manager</h3>
+          <p class="value" data-field="store_manager"></p>
+        </article>
+        <article class="metric">
+          <h3>Staff strength</h3>
+          <p class="value" data-field="staff_strength"></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="famepilot" class="health-box box-fame" aria-labelledby="fame-title">
+      <div class="box-head">
+        <span class="box-index">4</span>
+        <div>
+          <h2 id="fame-title">Famepilot</h2>
+          <p class="box-source">Ratings, complaints, threats</p>
+        </div>
+      </div>
+      <p class="empty-state">No Famepilot rating, complaint, or threat is on file for this store.</p>
+      <div class="metric-grid">
+        <article class="metric">
+          <h3>Rating</h3>
+          <p class="value" data-field="rating"></p>
+        </article>
+        <article class="metric">
+          <h3>Complaints</h3>
+          <p class="value" data-field="complaints"></p>
+        </article>
+        <article class="metric">
+          <h3>Threats</h3>
+          <p class="value" data-field="threats"></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="reelo" class="health-box box-reelo" aria-labelledby="reelo-title">
+      <div class="box-head">
+        <span class="box-index">5</span>
+        <div>
+          <h2 id="reelo-title">Reelo</h2>
+          <p class="box-source">For this store</p>
+        </div>
+      </div>
+      <p class="empty-state mb-0">No Reelo data is on file for this store.</p>
+    </section>
+
+    <section id="insights" class="health-box box-insights span-full" aria-labelledby="insights-title">
+      <div class="box-head">
+        <span class="box-index">6</span>
+        <div>
+          <h2 id="insights-title">Actionable insights</h2>
+          <p class="box-source">Ops, CRM, and cost, with room for context</p>
+        </div>
+      </div>
+      <p class="empty-state">No ops, CRM, or cost insights are on file for this store.</p>
+      <div class="row g-3 mb-3">
+        <div class="col-md-4"><div class="insight-col" id="ops"><h3>Ops</h3></div></div>
+        <div class="col-md-4"><div class="insight-col" id="crm"><h3>CRM</h3></div></div>
+        <div class="col-md-4"><div class="insight-col" id="cost"><h3>Cost</h3></div></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4"><div class="map-slot" id="holiday-calendar"><h3>Holiday calendar</h3></div></div>
+        <div class="col-md-4"><div class="map-slot" id="local-current-affairs"><h3>Local current affairs</h3></div></div>
+        <div class="col-md-4"><div class="map-slot" id="weather"><h3>Weather</h3></div></div>
+      </div>
+    </section>
+
+    <section id="sales-calendar" class="health-box box-calendar span-full" aria-labelledby="calendar-title">
+      <div class="box-head">
+        <span class="box-index">7</span>
+        <div>
+          <h2 id="calendar-title">Sales calendar</h2>
+          <p class="box-source">Predicted versus actual Net</p>
+        </div>
+      </div>
+      <form method="get" action="{{ url_for('store_health.page') }}" class="row g-2 align-items-end mb-3">
+        {% if store %}<input type="hidden" name="store" value="{{ store.id }}">{% endif %}
+        <input type="hidden" name="day" value="{{ selection.day_input }}">
+        <div class="col-sm-6 col-md-3">
+          <label for="range-start" class="form-label">Start</label>
+          <input id="range-start" class="form-control" type="date" name="start" value="{{ selection.start_input }}" required>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <label for="range-end" class="form-label">End</label>
+          <input id="range-end" class="form-control" type="date" name="end" value="{{ selection.end_input }}" required>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-light btn-sm">Show range</button>
+        </div>
+      </form>
+      {% if selection.error %}
+        <p class="empty-state">{{ selection.error }}</p>
+      {% elif not store %}
+        <p class="empty-state">Choose a store to see predicted and actual Net.</p>
+      {% elif day_count and not filled_actual_days and not filled_prediction_days %}
+        <p class="empty-state">No predicted or actual Net in this range.</p>
+      {% elif day_count %}
+        <p class="range-note">Actual Net is filled on {{ filled_actual_days }} of {{ day_count }} days. A prediction is filled on {{ filled_prediction_days }} of {{ day_count }} days. A blank cell is not zero.</p>
+      {% endif %}
+
+      {% if weeks %}
+        <div class="cal-scroll mb-3">
+          <div class="dow-grid mb-1">
+            <div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div>
+          </div>
+          {% for week in weeks %}
+            <div class="cal-grid mb-1">
+              {% for cell in week %}
+                {% if cell %}
+                  {% if store %}
+                    {% set day_href = url_for('store_health.page', store=store.id, start=selection.start_input, end=selection.end_input, day=cell.iso) %}
+                  {% else %}
+                    {% set day_href = url_for('store_health.page', start=selection.start_input, end=selection.end_input, day=cell.iso) %}
+                  {% endif %}
+                  <div class="cal-cell {% if cell.iso == selection.day_input %}is-selected{% endif %} {% if cell.iso == today_iso %}is-today{% endif %}">
+                    <a class="day-num" href="{{ day_href }}">{{ cell.date.day }} {{ cell.chrome_weekday }}</a>
+                    {% if cell.fields.tier %}<div class="cal-line"><span>Tier</span><b>{{ cell.fields.tier }}</b></div>{% endif %}
+                    <div class="cal-line"><span>Mid</span><b>{{ cell.fields.pred_mid }}</b></div>
+                    <div class="cal-line"><span>Actual</span><b>{{ cell.fields.actual_net }}</b></div>
+                    {% if cell.fields.status %}<div class="cal-line"><span>Status</span><b>{{ cell.fields.status }}</b></div>{% endif %}
+                  </div>
+                {% else %}
+                  <div class="cal-cell pad"></div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="cal-scroll">
+          <table class="cal-table" id="sales-calendar-table">
+            <caption class="text-start text-secondary pb-2">Every column from the store calendar. Blank means the file has no figure.</caption>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Weekday</th>
+                <th>Tier</th>
+                <th class="num">Pred low</th>
+                <th class="num">Pred high</th>
+                <th class="num">Pred mid</th>
+                <th class="num">Actual Net</th>
+                <th class="num">Variance vs mid</th>
+                <th class="num">Variance %</th>
+                <th>Status</th>
+                <th>Drivers</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for day in days %}
+                <tr>
+                  <th scope="row">{{ day.label }}</th>
+                  <td data-field="weekday" data-date="{{ day.iso }}">{{ day.fields.weekday }}</td>
+                  <td data-field="tier" data-date="{{ day.iso }}">{{ day.fields.tier }}</td>
+                  <td class="num" data-field="pred_low" data-date="{{ day.iso }}">{{ day.fields.pred_low }}</td>
+                  <td class="num" data-field="pred_high" data-date="{{ day.iso }}">{{ day.fields.pred_high }}</td>
+                  <td class="num" data-field="pred_mid" data-date="{{ day.iso }}">{{ day.fields.pred_mid }}</td>
+                  <td class="num" data-field="actual_net" data-date="{{ day.iso }}">{{ day.fields.actual_net }}</td>
+                  <td class="num {% if day.variance_negative %}var-down{% elif day.variance_positive %}var-up{% endif %}" data-field="variance_vs_mid" data-date="{{ day.iso }}">{{ day.fields.variance_vs_mid }}</td>
+                  <td class="num" data-field="variance_pct" data-date="{{ day.iso }}">{{ day.fields.variance_pct }}</td>
+                  <td data-field="status" data-date="{{ day.iso }}">{{ day.fields.status }}</td>
+                  <td data-field="drivers" data-date="{{ day.iso }}">{{ day.fields.drivers }}</td>
+                  <td data-field="notes" data-date="{{ day.iso }}">{{ day.fields.notes }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </section>
+  </div>
+
+  <details class="mt-4 contract">
+    <summary>Where these figures come from</summary>
+    <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. Money is rupees, not lakhs, unless a column name ends in <code>_L</code>.</p>
+    <p><code>{{ posist_columns|join(", ") }}</code></p>
+    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code>. A network file uses the same columns without store. A store calendar adds store. Status is pending, actual, or actual_provisional_eod. Variance is shown only when the file has it.</p>
+    <p class="mb-0"><code>{{ calendar_columns|join(", ") }}</code></p>
+  </details>
+</div>
+{% endblock %}
