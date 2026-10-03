@@ -173,6 +173,7 @@ class StoreHealthTests(unittest.TestCase):
         html = self.get("/store-health")
         order = [
             'id="posist"',
+            'id="menu-mix"',
             'id="mystery-audit"',
             'id="staff"',
             'id="famepilot"',
@@ -622,7 +623,11 @@ class StoreHealthTests(unittest.TestCase):
             "Dosa Coffee - Salt Lake (002)",
             "Dosa Coffee - Salt Lake Sec-1 (0009)",
         ]))
-        self.assertIn("does not match one Posist store", salt_page)
+        feeds = load_feeds(self.data.name)
+        self.assertTrue(any("does not match one Posist store" in warning for warning in feeds["warnings"]))
+        self.assertNotIn("does not match one Posist store", salt_page)
+        self.assertNotIn("does not match one Posist store", sec1_page)
+        self.assertNotIn("does not match one Posist store", sec10_page)
 
     def test_keka_and_mystery_audit_drop(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
@@ -1089,6 +1094,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("₹62,912.34", text)
         self.assertIn("₹70,000", text)
         self.assertIn("2 Oct 2026", text)
+        self.assertIn("Menu mix", text)
+        self.assertIn("Menu mix is not on file.", text)
         self.assertNotIn("Date range:", text)
         self.assertNotIn("Selected day", text)
         self.assertNotIn("2026-10-01", text)
@@ -1097,6 +1104,129 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("pred_low", text)
         self.assertNotIn("actual_net", text)
         self.assertNotIn("7,087", text)
+        self.assertNotIn("File warnings", text)
+
+    def test_posist_actual_fills_open_calendar_days_without_inventing_predictions(self):
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER
+            + "\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-01,,2500,10,,,,,,,,,,,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-02,1000,2500,10,,,,,,,,,,,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-03,0,2500,10,,,,,,,,,,,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-04,,,,,,,,,,,,,,,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-05,400,900,8,,,,,,,,,,,,,,,\n",
+        )
+        self.write(
+            "sales_pred_vs_actual.csv",
+            CALENDAR_HEADER
+            + "\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-01,Thu,,,,,,,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-02,Fri,A,,,70000,62912.34,,,,,\n"
+            + "Gurgaon Sec-15 (02/0010),2026-10-05,Wed,B,10,90,80,,,,,,,\n",
+        )
+        html = self.get(
+            f"/store-health/{GURGAON_SLUG}?start=2026-10-01&end=2026-10-05&day=2026-10-01"
+        )
+        self.assertEqual(cell(html, "actual_net", "2026-10-01"), "₹2,500")
+        self.assertEqual(cell(html, "pred_low", "2026-10-01"), "")
+        self.assertEqual(cell(html, "pred_high", "2026-10-01"), "")
+        self.assertEqual(cell(html, "pred_mid", "2026-10-01"), "")
+        self.assertEqual(cell(html, "variance_vs_mid", "2026-10-01"), "")
+        self.assertEqual(cell(html, "actual_net", "2026-10-02"), "₹62,912.34")
+        self.assertEqual(cell(html, "pred_mid", "2026-10-02"), "₹70,000")
+        self.assertEqual(cell(html, "variance_vs_mid", "2026-10-02"), "")
+        self.assertEqual(cell(html, "actual_net", "2026-10-03"), "₹0")
+        self.assertEqual(cell(html, "pred_mid", "2026-10-03"), "")
+        self.assertEqual(cell(html, "actual_net", "2026-10-04"), "")
+        self.assertEqual(cell(html, "pred_low", "2026-10-04"), "")
+        self.assertEqual(cell(html, "actual_net", "2026-10-05"), "₹400")
+        self.assertEqual(cell(html, "pred_low", "2026-10-05"), "₹10")
+        self.assertEqual(cell(html, "pred_high", "2026-10-05"), "₹90")
+        self.assertEqual(cell(html, "pred_mid", "2026-10-05"), "₹80")
+        self.assertEqual(cell(html, "variance_vs_mid", "2026-10-05"), "")
+        self.assertNotIn("7,087", html)
+        self.assertNotIn("-₹320", html)
+        self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
+        self.assertNotIn('data-field="menu_item"', html)
+
+    def test_shipped_calendar_keeps_band_cells_and_hides_file_warnings(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        index = self.get("/store-health")
+        self.assertIn("Menu mix is not on file.", index)
+        self.assertNotIn("historical-total-revenue", index)
+        self.assertNotIn("Further file warnings", index)
+        slug = self._option_slug(index, "Connaught place (02/0012)")
+        page = self.get(f"/store-health/{slug}")
+        self.assertEqual(cell(page, "pred_low", "2026-10-03"), "₹85,287.71")
+        self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "₹96,917.86")
+        self.assertEqual(cell(page, "pred_high", "2026-10-03"), "₹1,08,548")
+        self.assertEqual(cell(page, "actual_net", "2026-10-03"), "")
+        self.assertEqual(cell(page, "variance_vs_mid", "2026-10-03"), "")
+        self.assertNotIn('data-date="2026-10-02"', page)
+        self.assertNotIn("historical-total-revenue", page)
+        self.assertEqual(cell(page, "menu_mix"), "Menu mix is not on file.")
+
+    def test_calendar_file_actual_is_kept_ahead_of_posist_gross(self):
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER
+            + "\nConnaught place (02/0012),2026-10-02,,166950.16,223,,,,,,,,,,,,,,,\n"
+            + "Connaught place (02/0012),2026-10-01,,113726.94,176,,,,,,,,,,,,,,,\n",
+        )
+        self.write(
+            "sales_pred_vs_actual.csv",
+            CALENDAR_HEADER
+            + "\n"
+            + 'Connaught place (02/0012),2026-10-02,Friday,,,,,"152,678.98",,,actual_provisional_eod,Gandhi Jayanti,\n'
+            + "Connaught place (02/0012),2026-10-01,Thursday,,,,,,,,,,,,\n",
+        )
+        index = self.get("/store-health")
+        slug = self._option_slug(index, "Connaught place (02/0012)")
+        page = self.get(f"/store-health/{slug}")
+        self.assertEqual(cell(page, "actual_net", "2026-10-02"), "₹1,52,678.98")
+        self.assertEqual(cell(page, "pred_low", "2026-10-02"), "")
+        self.assertEqual(cell(page, "pred_high", "2026-10-02"), "")
+        self.assertEqual(cell(page, "pred_mid", "2026-10-02"), "")
+        self.assertEqual(cell(page, "variance_vs_mid", "2026-10-02"), "")
+        self.assertEqual(cell(page, "status", "2026-10-02"), "Actual, provisional end of day")
+        self.assertEqual(cell(page, "drivers", "2026-10-02"), "Gandhi Jayanti")
+        self.assertEqual(cell(page, "actual_net", "2026-10-01"), "₹1,13,726.94")
+        self.assertEqual(cell(page, "pred_mid", "2026-10-01"), "")
+        self.assertNotIn("₹1,66,950.16", page)
+
+    def test_csv_load_warnings_stay_off_the_page_and_the_pdf(self):
+        self.write(
+            "posist_daily.csv",
+            POSIST_HEADER
+            + "\nKalikapur,2026-10-02,10,20,1,2,3,4,5,6,7,8,9,10,1,live,true\n"
+            + "Kalikapur,2026-10-02,abc,20,1,2,3,4,5,6,7,8,9,10,1,historical-total-revenue,true\n",
+        )
+        self.write(
+            "sales_pred_vs_actual.csv",
+            CALENDAR_HEADER + "\nKalikapur,2026-10-02,,,,,,,,,,,,\n",
+        )
+        _rows, warnings = load_posist(self.data.name)
+        self.assertTrue(any("not a number" in warning for warning in warnings))
+        self.assertTrue(any("historical-total-revenue" in warning for warning in warnings))
+        html = self.get("/store-health/kalikapur?start=2026-10-02&end=2026-10-02&day=2026-10-02")
+        self.assertNotIn("not a number", html)
+        self.assertNotIn("historical-total-revenue", html)
+        self.assertNotIn("Further file warnings", html)
+        self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
+        self.assertEqual(cell(html, "actual_net", "2026-10-02"), "₹20")
+        self.assertEqual(cell(html, "pred_mid", "2026-10-02"), "")
+        response = self.client.get("/store-health/kalikapur/print?start=2026-10-02&end=2026-10-02&day=2026-10-02")
+        self.assertEqual(response.status_code, 200)
+        reader = PdfReader(io.BytesIO(response.data))
+        text = "\n".join(page.extract_text() or "" for page in reader.pages)
+        self.assertIn("Menu mix", text)
+        self.assertIn("Menu mix is not on file.", text)
+        self.assertIn("₹20", text)
+        self.assertNotIn("not a number", text)
+        self.assertNotIn("historical-total-revenue", text)
+        self.assertNotIn("File warnings", text)
 
     def test_print_pdf_hands_over_one_store_with_calendar_cells(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"

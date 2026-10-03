@@ -1,7 +1,8 @@
 """A4 handout for one store. Figures come from the same view as the page.
 
-The sheet is light, so it prints. Calendar days are cells with a tier-coloured
-border and a small colour mark. The on-screen page stays dark.
+Section cards use the same accents as the screen: Posist gold, audit purple,
+staff orange, Famepilot pink, Reelo blue, and calendar teal. Day cells keep a
+tier-coloured border. File warnings are not printed.
 """
 
 import logging
@@ -28,6 +29,18 @@ TIER_PRINT_COLOUR = {
     "Working weekday": (139, 148, 158),
 }
 _NEUTRAL_BORDER = (150, 150, 150)
+
+PAGE_BG = (18, 18, 18)
+CARD = (27, 27, 27)
+TEXT = (248, 249, 250)
+MUTED = (173, 181, 189)
+SOFT = (206, 212, 218)
+GOLD = (245, 197, 24)
+PURPLE = (167, 139, 250)
+ORANGE = (251, 146, 60)
+PINK = (251, 113, 133)
+BLUE = (96, 165, 250)
+TEAL = (45, 212, 191)
 
 _LABELS = {
     "net": "Net",
@@ -105,21 +118,27 @@ class _StorePdf(FPDF):
         self.set_auto_page_break(auto=True, margin=16)
         self.set_margins(14, 16, 14)
         self.c_margin = 0
+        self.page_background = PAGE_BG
 
     def header(self):
         if self.page_no() == 1:
             return
-        self.set_text_color(70, 70, 70)
+        self.set_text_color(*MUTED)
         self.set_font("DejaVu", "", 8)
-        self.cell(0, 5, f"Store Health  ·  {self.store_label}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-        self.set_text_color(0, 0, 0)
+        self.cell(self.epw - 28, 5, self.store_label)
+        self.set_font("DejaVu", "B", 8)
+        self.set_text_color(*GOLD)
+        self.cell(28, 5, "Store Health", align="R", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        self.set_draw_color(*GOLD)
+        self.set_line_width(0.4)
+        self.line(self.l_margin, self.get_y() + 0.4, self.w - self.r_margin, self.get_y() + 0.4)
         self.ln(2)
 
     def footer(self):
         self.set_y(-12)
-        self.set_text_color(80, 80, 80)
+        self.set_text_color(*MUTED)
         self.set_font("DejaVu", "", 8)
-        self.cell(0, 8, f"Page {self.page_no()}", align="C")
+        self.cell(0, 8, f"{self.store_label}  ·  {self.page_no()}", align="C")
 
 
 def render_store_pdf(store, selection, view, insights, context_slots, warnings=None):
@@ -127,25 +146,25 @@ def render_store_pdf(store, selection, view, insights, context_slots, warnings=N
     del selection, insights, context_slots, warnings
     pdf = _StorePdf(store.label)
     pdf.add_page()
-    pdf.set_text_color(0, 0, 0)
-    _paragraph(pdf, "Store Health", 20, bold=True)
-    _paragraph(pdf, store.label, 14, bold=True)
+    _paragraph(pdf, "Store Health", 20, bold=True, colour=GOLD)
+    _paragraph(pdf, store.label, 14, bold=True, colour=TEXT)
     if store.region:
-        _paragraph(pdf, store.region, 11)
+        _paragraph(pdf, store.region, 11, colour=SOFT)
     _paragraph(
         pdf,
         f"Prepared {format_ist(datetime.now(IST))}. A blank is not zero.",
         9,
-        colour=(70, 70, 70),
+        colour=MUTED,
     )
     pdf.ln(1)
 
-    _section_box(pdf, "Posist window", _posist_lines(view))
+    _section_box(pdf, "Posist window", _posist_lines(view), GOLD)
+    _section_box(pdf, "Menu mix", ["Menu mix is not on file."], GOLD)
     _calendar_section(pdf, view)
-    _section_box(pdf, "Mystery audit", _audit_lines(view))
-    _section_box(pdf, "Keka", _keka_lines(view))
-    _section_box(pdf, "Famepilot", _fame_lines(view))
-    _section_box(pdf, "Reelo", _reelo_lines(view))
+    _section_box(pdf, "Mystery audit", _audit_lines(view), PURPLE)
+    _section_box(pdf, "Keka", _keka_lines(view), ORANGE)
+    _section_box(pdf, "Famepilot", _fame_lines(view), PINK)
+    _section_box(pdf, "Reelo", _reelo_lines(view), BLUE)
 
     return bytes(pdf.output())
 
@@ -171,7 +190,7 @@ def _line_h(size):
     return max(3.6, size * 0.48)
 
 
-def _paragraph(pdf, text, size, bold=False, colour=(20, 20, 20)):
+def _paragraph(pdf, text, size, bold=False, colour=TEXT):
     if not str(text).strip():
         return
     pdf.set_x(pdf.l_margin)
@@ -189,7 +208,7 @@ def _paragraph(pdf, text, size, bold=False, colour=(20, 20, 20)):
     pdf.ln(0.7)
 
 
-def _section_box(pdf, title, lines):
+def _section_box(pdf, title, lines, accent):
     lines = [line for line in lines if str(line).strip()]
     if not lines:
         lines = ["Nothing is on file for this store."]
@@ -198,35 +217,37 @@ def _section_box(pdf, title, lines):
     body = 0
     for line in lines:
         body += _text_height(pdf, line, inner, 10) + 1.1
-    block_h = 4 + 6.2 + body + 2
+    block_h = 2.4 + 4 + 6.2 + body + 2
     page_room = pdf.h - pdf.t_margin - pdf.b_margin
     if block_h <= page_room and pdf.get_y() + block_h > pdf.h - pdf.b_margin:
         pdf.add_page()
     if block_h > page_room:
-        _paragraph(pdf, title, 13, bold=True)
+        _paragraph(pdf, title, 13, bold=True, colour=accent)
         for line in lines:
-            _paragraph(pdf, line, 10)
+            _paragraph(pdf, line, 10, colour=SOFT)
         pdf.ln(2)
         return
     x = pdf.l_margin
     y = pdf.get_y()
-    pdf.set_fill_color(248, 248, 248)
-    pdf.set_draw_color(186, 186, 186)
-    pdf.set_line_width(0.25)
+    pdf.set_fill_color(*CARD)
+    pdf.set_draw_color(*accent)
+    pdf.set_line_width(0.4)
     pdf.rect(x, y, width, block_h, style="FD")
+    pdf.set_fill_color(*accent)
+    pdf.rect(x, y, width, 2.2, style="F")
     pdf.set_auto_page_break(auto=False)
-    pdf.set_xy(x + 3, y + 2.2)
+    pdf.set_xy(x + 3, y + 4.2)
     pdf.set_font("DejaVu", "B", 12)
-    pdf.set_text_color(20, 20, 20)
+    pdf.set_text_color(*accent)
     pdf.multi_cell(inner, 6, title, align="L", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-    rule = y + 8.4
-    pdf.set_draw_color(210, 210, 210)
+    rule = y + 10.6
+    pdf.set_draw_color(*accent)
     pdf.line(x + 3, rule, x + width - 3, rule)
     cursor = rule + 1.6
     for line in lines:
         pdf.set_xy(x + 3, cursor)
         pdf.set_font("DejaVu", "", 10)
-        pdf.set_text_color(25, 25, 25)
+        pdf.set_text_color(*SOFT)
         pdf.multi_cell(
             inner,
             _line_h(10),
@@ -242,17 +263,24 @@ def _section_box(pdf, title, lines):
 
 
 def _calendar_section(pdf, view):
-    _paragraph(pdf, "Sales calendar", 13, bold=True)
+    lines = []
     if view.get("calendar_share_label"):
-        _paragraph(pdf, view["calendar_share_label"], 9)
+        lines.append(view["calendar_share_label"])
     if view.get("calendar_absent_note"):
-        _paragraph(pdf, view["calendar_absent_note"], 9)
-    _paragraph(pdf, "Predicted versus actual Net. A blank is not zero.", 9, colour=(70, 70, 70))
+        lines.append(view["calendar_absent_note"])
+    lines.append("Predicted versus actual Net. A blank is not zero.")
+    if view.get("posist_actual_days"):
+        lines.append(
+            "Days without a calendar actual use that day's Posist net. "
+            "When Posist net is blank, the day's gross is shown. "
+            "Predictions stay blank unless the calendar file has them."
+        )
     days = view.get("days") or []
     if not days:
-        _paragraph(pdf, "No predicted or actual Net for this store.", 10)
-        return
-    _draw_day_cards(pdf, days)
+        lines.append("No predicted or actual Net for this store.")
+    _section_box(pdf, "Sales calendar", lines, TEAL)
+    if days:
+        _draw_day_cards(pdf, days)
 
 
 def _card_lines(day):

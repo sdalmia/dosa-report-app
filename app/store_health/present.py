@@ -320,6 +320,22 @@ def _calendar_field(row, field):
     return str(value)
 
 
+def _posist_daily_actual(row):
+    """Figure to show as Actual Net when the calendar file has none.
+
+    Use Posist net when that cell has a number, including a real zero.
+    The shipped drop leaves net blank and keeps the day's revenue in gross,
+    so gross is the on-file figure only in that case. Never invent a prediction.
+    """
+    if row is None:
+        return None, ""
+    if row.get("net") is not None:
+        return row.get("net"), "posist_net"
+    if row.get("gross") is not None:
+        return row.get("gross"), "posist_gross"
+    return None, ""
+
+
 def calendar_days(feeds, store, start, end):
     if start is None or end is None:
         return []
@@ -328,6 +344,15 @@ def calendar_days(feeds, store, start, end):
     while cursor <= end:
         row = _row_for_store(feeds["calendar"], store, cursor) if store else None
         fields = {field: _calendar_field(row, field) for field in CALENDAR_VALUE_COLUMNS if field != "date"}
+        if row is not None and row.get("actual_net") is not None:
+            actual_source = "calendar"
+        else:
+            posist_row = _row_for_store(feeds["posist"], store, cursor) if store else None
+            amount, actual_source = _posist_daily_actual(posist_row)
+            if actual_source:
+                fields["actual_net"] = format_money(amount, "actual_net")
+            else:
+                actual_source = ""
         figure_fields = ("pred_low", "pred_high", "pred_mid", "actual_net")
         has_figure = any(fields[name] for name in figure_fields)
         tier = row.get("tier") if row else ""
@@ -340,6 +365,7 @@ def calendar_days(feeds, store, start, end):
                 "tier_class": TIER_BORDER_CLASS.get(tier or "", ""),
                 "fields": fields,
                 "has_figure": has_figure,
+                "actual_source": actual_source,
                 "variance_negative": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] < 0),
                 "variance_positive": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] > 0),
             }
@@ -689,6 +715,7 @@ def build_view(feeds, store, selection, today):
         "filled_prediction_days": predicted,
         "calendar_share_label": story["share_label"],
         "calendar_absent_note": story["absent_note"],
+        "posist_actual_days": sum(1 for day in days if str(day.get("actual_source", "")).startswith("posist")),
         "day_count": len(days),
         "today_iso": today.isoformat() if today else "",
         "posist_columns": POSIST_COLUMNS,
