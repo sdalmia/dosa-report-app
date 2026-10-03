@@ -182,8 +182,9 @@
 <div class="ingredient-buttons">
   {% for ingredient in top_ingredients %}
     <button
+      type="button"
       class="btn-default ingredient-btn"
-      onclick="showIngredientChart('{{ ingredient }}')"
+      data-ingredient="{{ ingredient }}"
     >
       {{ ingredient }}
     </button>
@@ -217,7 +218,32 @@
 
   $('#ingredient-search').bind('typeahead:select', function(ev, ingredient) {
     renderChart(ingredient);
+    setActiveIngredient(ingredient);
   });
+
+  // One point per day, oldest first, so a new upload extends the line
+  // instead of redrawing history backwards over duplicate rows.
+  function pointsForChart(records) {
+    const byDate = new Map();
+    records.forEach(record => {
+      if (!record.date || !(record.unit_price > 0)) return;
+      if (!byDate.has(record.date)) byDate.set(record.date, []);
+      const prices = byDate.get(record.date);
+      if (!prices.includes(record.unit_price)) prices.push(record.unit_price);
+    });
+    return Array.from(byDate.entries())
+      .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+      .map(([date, prices]) => ({
+        date,
+        unit_price: Math.round((prices.reduce((sum, price) => sum + price, 0) / prices.length) * 100) / 100
+      }));
+  }
+
+  function setActiveIngredient(ingredientName) {
+    document.querySelectorAll('.ingredient-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.ingredient === ingredientName);
+    });
+  }
 
   function renderChart(ingredient) {
     const records = ingredientData[ingredient];
@@ -225,25 +251,27 @@
     chartContainer.innerHTML = '';
 
     if (records && records.length > 0) {
-      const dates = records.map(p => p.date);
-      const prices = records.map(p => p.unit_price);
+      const points = pointsForChart(records);
+      const dates = points.map(p => p.date);
+      const prices = points.map(p => p.unit_price);
 
-      const chartDivId = `chart-${ingredient.replace(/\s+/g, '-')}`;
       const chartDiv = document.createElement('div');
-      chartDiv.id = chartDivId;
+      chartDiv.id = 'ingredient-price-chart';
       chartDiv.classList.add('mb-4');
       chartContainer.appendChild(chartDiv);
 
-      Plotly.newPlot(chartDivId, [{
+      Plotly.newPlot(chartDiv, [{
         x: dates,
         y: prices,
         type: 'scatter',
         mode: 'lines+markers',
-        name: ingredient
+        name: ingredient,
+        line: { simplify: false },
+        marker: { size: 8 }
       }], {
         title: `${ingredient} Price Trend`,
-        xaxis: { title: 'Date' },
-        yaxis: { title: 'Unit Price (₹)' }
+        xaxis: { title: 'Date', type: 'date', autorange: true },
+        yaxis: { title: 'Unit Price (₹)', autorange: true }
       });
 
       if (stats) {
@@ -290,32 +318,24 @@
 </script>
 
 <script>
+  const topIngredients = {{ top_ingredients | tojson }};
+
   function showIngredientChart(ingredientName) {
     renderChart(ingredientName);
+    setActiveIngredient(ingredientName);
   }
-</script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    if (topIngredients.length > 0) {
-      renderChart(topIngredients[0]);
-
-      document.querySelectorAll('.ingredient-buttons button').forEach(btn => {
-        btn.classList.remove('bg-green-500');
-        btn.classList.add('bg-[#202525]');
-      });
-
-      const clickedBtn = Array.from(document.querySelectorAll('.ingredient-buttons button'))
-        .find(btn => btn.textContent.trim() === ingredientName);
-
-      if (clickedBtn) {
-        clickedBtn.classList.remove('bg-[#202525]');
-        clickedBtn.classList.add('bg-green-500', 'text-black');
-      }
-    }
+  document.querySelectorAll('.ingredient-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      showIngredientChart(btn.dataset.ingredient);
+    });
   });
 
-  const topIngredients = {{ top_ingredients | tojson }};
+  document.addEventListener("DOMContentLoaded", function () {
+    if (topIngredients.length > 0) {
+      showIngredientChart(topIngredients[0]);
+    }
+  });
 </script>
 
 <script>
