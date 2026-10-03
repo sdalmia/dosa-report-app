@@ -30,6 +30,7 @@ IST = ZoneInfo("Asia/Kolkata")
 POSIST_FILE = "posist_daily.csv"
 CALENDAR_FILE = "sales_pred_vs_actual.csv"
 KEKA_FILE = "keka.csv"
+KEKA_ACTIVE_FILE = "keka_active.csv"
 AUDIT_FILE = "mystery_audit.csv"
 REELO_FILE = "reelo.csv"
 FAMEPILOT_FILE = "famepilot.csv"
@@ -80,6 +81,13 @@ KEKA_COLUMNS = (
     "other_leads",
     "match_status",
     "note",
+)
+KEKA_ACTIVE_COLUMNS = (
+    "posist_store",
+    "active_employees",
+    "keka_location",
+    "match_status",
+    "definition",
 )
 
 AUDIT_COLUMNS = (
@@ -381,8 +389,14 @@ def _text_cell(value):
     return str(value).strip()
 
 
+def load_keka_active(directory=None):
+    """Active employee counts. A blank stays blank. It is not zero."""
+    directory = Path(directory) if directory else data_directory()
+    return _load_store_rows(directory, KEKA_ACTIVE_FILE, KEKA_ACTIVE_COLUMNS, "posist_store")
+
+
 def load_keka(directory=None):
-    """Rows from keka.csv. Cells stay text, including headcount written as words."""
+    """Rows from keka.csv. The headcount column is not the staff number on the page."""
     directory = Path(directory) if directory else data_directory()
     warnings = []
     path = directory / KEKA_FILE
@@ -471,14 +485,17 @@ def load_feeds(directory=None):
     posist, posist_warnings = load_posist(directory)
     calendar, calendar_warnings = load_calendar(directory)
     keka, keka_warnings = load_keka(directory)
+    keka_active, keka_active_warnings = load_keka_active(directory)
     audit, audit_warnings = load_audit(directory)
     reelo, reelo_warnings = load_reelo(directory)
     famepilot, famepilot_warnings = load_famepilot(directory)
     labels = sorted({store for store, _day in posist})
     # Stores that never appear on the deployment report still have Keka, Reelo,
     # and Famepilot rows. Join those to the same labels the picker shows.
-    join_labels = list(labels) + extra_store_labels(keka + reelo + famepilot, labels)
+    outside = keka + keka_active + reelo + famepilot
+    join_labels = list(labels) + extra_store_labels(outside, labels)
     keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", join_labels)
+    keka_active_by_store, keka_active_unmatched = assign_rows(keka_active, "posist_store", join_labels)
     audit_stores = [row for row in audit if not is_brand_audit(row)]
     brand_rows = [row for row in audit if is_brand_audit(row)]
     audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
@@ -489,6 +506,11 @@ def load_feeds(directory=None):
             _warn(
                 keka_warnings,
                 f"{KEKA_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
+            )
+        for row in keka_active_unmatched:
+            _warn(
+                keka_active_warnings,
+                f"{KEKA_ACTIVE_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
             )
         for row in audit_unmatched:
             _warn(
@@ -510,6 +532,8 @@ def load_feeds(directory=None):
         "calendar": calendar,
         "keka": keka,
         "keka_by_store": keka_by_store,
+        "keka_active": keka_active,
+        "keka_active_by_store": keka_active_by_store,
         "audit": audit,
         "audit_by_store": audit_by_store,
         "audit_brand": brand_rows[-1] if brand_rows else None,
@@ -517,7 +541,7 @@ def load_feeds(directory=None):
         "reelo_by_store": reelo_by_store,
         "famepilot": famepilot,
         "famepilot_by_store": famepilot_by_store,
-        "warnings": posist_warnings + calendar_warnings + keka_warnings + audit_warnings + reelo_warnings + famepilot_warnings,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings,
         "directory": directory,
     }
 
