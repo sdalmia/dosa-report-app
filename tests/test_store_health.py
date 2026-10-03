@@ -15,8 +15,10 @@ from app import create_app
 from app.store_health.contract import (
     AUDIT_COLUMNS,
     CALENDAR_COLUMNS,
+    FAMEPILOT_COLUMNS,
     KEKA_COLUMNS,
     POSIST_COLUMNS,
+    REELO_COLUMNS,
     load_calendar,
     load_posist,
     parse_number,
@@ -144,15 +146,16 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "primary_lead"), "")
         self.assertEqual(cell(html, "headcount"), "")
         self.assertEqual(cell(html, "rating"), "")
-        self.assertEqual(cell(html, "complaints"), "")
-        self.assertEqual(cell(html, "threats"), "")
+        self.assertEqual(cell(html, "review_count"), "")
+        self.assertEqual(cell(html, "main_threat"), "")
         self.assertNotIn("62912", html)
         self.assertIn("Choose a store to see its mystery audit.", html)
         self.assertIn("mystery_audit.csv is missing.", html)
         self.assertIn("keka.csv is missing.", html)
         self.assertIn("Headcount is registered employees, not people on shift.", html)
         self.assertIn("not a confirmed single store manager.", html)
-        self.assertIn("No Reelo data is on file for this store.", html)
+        self.assertIn("reelo.csv is missing.", html)
+        self.assertIn("famepilot.csv is missing.", html)
         self.assertIn("Holiday calendar", html)
         self.assertIn("Local current affairs", html)
         self.assertIn("Weather", html)
@@ -218,8 +221,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "primary_lead"), "")
         self.assertEqual(cell(html, "headcount"), "")
         self.assertEqual(cell(html, "rating"), "")
-        self.assertEqual(cell(html, "threats"), "")
-        self.assertIn("No Reelo data is on file for this store.", html)
+        self.assertEqual(cell(html, "main_threat"), "")
+        self.assertIn("reelo.csv is missing.", html)
+        self.assertIn("famepilot.csv is missing.", html)
         self.assertIn("No ops, CRM, or cost insights are on file for this store.", html)
 
     def test_other_store_does_not_inherit_the_sample(self):
@@ -463,8 +467,16 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(index, "brand_status"), "brand aggregate")
         self.assertEqual(cell(index, "audit_avg"), "")
         self.assertEqual(cell(index, "primary_lead"), "")
-        self.assertIn("No Famepilot rating, complaint, or threat is on file for this store.", index)
-        self.assertIn("No Reelo data is on file for this store.", index)
+        self.assertEqual(cell(index, "rating"), "")
+        self.assertIn("Choose a store to see its Famepilot row.", index)
+        self.assertIn("Choose a store to see its Reelo row.", index)
+        self.assertIn("Past 30 days preset", index)
+        self.assertIn("not a verified 30-day range", index)
+        self.assertIn("Last 30 Days, 03 Sep 2026 to 03 Oct 2026.", index)
+        self.assertRegex(cell(index, "reelo_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
+        self.assertRegex(cell(index, "famepilot_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
+        self.assertNotIn('data-field="reelo_newest_date"', index)
+        self.assertNotIn('data-field="famepilot_newest_date"', index)
         self.assertEqual(cell(index, "posist_newest_date"), "2 Oct 2026")
         self.assertEqual(cell(index, "calendar_newest_date"), "2 Oct 2026")
 
@@ -537,8 +549,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(connaught, "audit_weekend"), "74.4% (4-10)")
         self.assertEqual(cell(connaught, "audit_period"), "August 2026")
         self.assertEqual(cell(connaught, "brand_avg"), "88.3%")
-        self.assertEqual(cell(connaught, "rating"), "")
-        self.assertIn("No Reelo data is on file for this store.", connaught)
+        self.assertEqual(cell(connaught, "rating"), "4.82")
+        self.assertEqual(cell(connaught, "review_count"), "349")
+        self.assertEqual(cell(connaught, "redemption_rate"), "12.33%")
+        self.assertEqual(cell(connaught, "reelo_match_status"), "matched")
 
         kalkaji = open_store("Kalkaji (02/0004)")
         self.assertEqual(cell(kalkaji, "audit_avg"), "")
@@ -565,6 +579,129 @@ class StoreHealthTests(unittest.TestCase):
             self.assertNotIn("Dipankar Saha", page)
 
         self.assertNotIn("does not match one Posist store", index)
+
+    def test_reelo_and_famepilot_drop(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        with (root / "reelo.csv").open(encoding="utf-8-sig", newline="") as handle:
+            reelo_rows = list(csv.DictReader(handle))
+        with (root / "famepilot.csv").open(encoding="utf-8-sig", newline="") as handle:
+            fame_rows = list(csv.DictReader(handle))
+        self.assertEqual(len(reelo_rows), 33)
+        self.assertEqual(tuple(reelo_rows[0].keys()), REELO_COLUMNS)
+        self.assertEqual(len(fame_rows), 33)
+        self.assertEqual(tuple(fame_rows[0].keys()), FAMEPILOT_COLUMNS)
+        self.assertEqual(sum(1 for row in reelo_rows if row["match_status"] == "not in Reelo"), 8)
+        self.assertEqual(sum(1 for row in reelo_rows if row["match_status"] == "inferred"), 1)
+        self.assertEqual(sum(1 for row in reelo_rows if row["redemption_rate"] != "not in Reelo"), 25)
+        self.assertEqual(sum(1 for row in fame_rows if not (row["famepilot_location"] or "").strip()), 8)
+
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        index = self.get("/store-health")
+
+        def open_store(label):
+            slug = self._option_slug(index, label)
+            return self.get(f"/store-health/{slug}?day=2026-10-02")
+
+        ideal = open_store("Dosa Coffee - Ideal Plaza (01/0001)")
+        self.assertEqual(cell(ideal, "rating"), "4.80")
+        self.assertEqual(cell(ideal, "review_count"), "35")
+        self.assertEqual(cell(ideal, "main_threat"), "")
+        self.assertEqual(cell(ideal, "private_rating"), "3.58")
+        self.assertEqual(cell(ideal, "private_review_count"), "132")
+        self.assertEqual(cell(ideal, "overall_reviews"), "167")
+        self.assertEqual(cell(ideal, "reelo_store"), "Dosa Coffee Ideal Plaza")
+        self.assertEqual(cell(ideal, "reelo_match_status"), "matched")
+        self.assertEqual(cell(ideal, "times_redeemed"), "558")
+        self.assertEqual(cell(ideal, "redemption_rate"), "45.28%")
+        self.assertEqual(cell(ideal, "redemption_revenue"), "₹3,75,778")
+        self.assertEqual(cell(ideal, "phone_capture"), "95.38%")
+        self.assertEqual(cell(ideal, "visits"), "7808")
+        self.assertEqual(cell(ideal, "active_customers"), "4288")
+        self.assertIn("Phone capture is valid visits / (valid + blocked) x 100.", ideal)
+        self.assertIn("Last 30 Days, 03 Sep 2026 to 03 Oct 2026.", ideal)
+
+        salt = open_store("Dosa Coffee - Salt Lake (002)")
+        self.assertEqual(cell(salt, "reelo_match_status"), "inferred")
+        self.assertEqual(cell(salt, "reelo_store"), "Dosa Coffee Saltlake JC21")
+        self.assertIn("Salt Lake Sec 3", cell(salt, "reelo_note"))
+        self.assertIn("Not a confirmed address match.", cell(salt, "reelo_note"))
+        self.assertEqual(cell(salt, "keka_location"), "Salt Lake Sec 3")
+        self.assertEqual(cell(salt, "famepilot_location"), "01/0002 / Dosa Coffee- Saltlake Sec 3")
+        self.assertIn("by code 0002", cell(salt, "famepilot_note"))
+        self.assertEqual(cell(salt, "rating"), "4.51")
+        self.assertEqual(cell(salt, "review_count"), "37")
+        self.assertEqual(cell(salt, "main_threat"), "Missing Item")
+
+        new_town = open_store("Dosa Coffee - New Town - Cloud Kitchen (01/0013)")
+        self.assertIn("not in Reelo", new_town)
+        self.assertEqual(cell(new_town, "reelo_match_status"), "not in Reelo")
+        self.assertEqual(cell(new_town, "redemption_rate"), "")
+        self.assertEqual(cell(new_town, "redemption_revenue"), "")
+        self.assertEqual(cell(new_town, "times_redeemed"), "")
+        self.assertEqual(cell(new_town, "phone_capture"), "")
+        self.assertEqual(cell(new_town, "visits"), "")
+        self.assertEqual(cell(new_town, "active_customers"), "")
+        self.assertEqual(cell(new_town, "rating"), "")
+        self.assertEqual(cell(new_town, "review_count"), "0")
+        self.assertEqual(cell(new_town, "private_rating"), "3.80")
+        self.assertEqual(cell(new_town, "private_review_count"), "59")
+        self.assertEqual(cell(new_town, "overall_reviews"), "59")
+        self.assertEqual(cell(new_town, "main_threat"), "Missing Item")
+        self.assertNotIn("no reviews in window", new_town.lower())
+
+        rohini = open_store("Rohini Sec-7 (02/0008)")
+        self.assertEqual(cell(rohini, "main_threat"), "tie: Missing Item, Quality Issue")
+        paschim = open_store("Paschim Vihar (02/0003)")
+        self.assertEqual(cell(paschim, "main_threat"), "tie: Missing Item, Wrong Item")
+
+        forum = open_store("Dosa Coffee - Forum (0003)")
+        self.assertEqual(cell(forum, "reelo_match_status"), "not in Reelo")
+        self.assertEqual(cell(forum, "rating"), "5.00")
+        self.assertEqual(cell(forum, "review_count"), "2")
+        self.assertEqual(cell(forum, "main_threat"), "not shown")
+        self.assertEqual(cell(forum, "private_rating"), "")
+        self.assertEqual(cell(forum, "private_review_count"), "0")
+        self.assertEqual(cell(forum, "overall_reviews"), "2")
+
+        for label in (
+            "Dosa Coffee - Manisquare (0004)",
+            "Dosa Coffee - Forum (0003)",
+            "Dosa Coffee - New Town - Cloud Kitchen (01/0013)",
+            "Dosa Coffee - Calcutta Swiming Club (0007)",
+            "Dosa Coffee - Food Truck - 1 (0008)",
+            "Dosa Coffee - Events & Catering",
+            "GK1 Cloud Kitchen (02/0002)",
+            "Chattarpur (02/0005)",
+        ):
+            page = open_store(label)
+            self.assertEqual(cell(page, "reelo_match_status"), "not in Reelo", label)
+            self.assertIn(">not in Reelo</p>", page.replace("\n", ""), label)
+            self.assertEqual(cell(page, "redemption_revenue"), "", label)
+            self.assertNotIn("₹0", cell(page, "redemption_revenue") or "x")
+
+        for label in (
+            "Shalimar Bagh (02/0015)",
+            "Sec 31 - Gurgaon (02/0016)",
+            "GK1 Cloud Kitchen (02/0002)",
+            "Chattarpur (02/0005)",
+            "Dosa Coffee - Quest Mall (01/0016)",
+            "Dosa Coffee - Calcutta Swiming Club (0007)",
+            "Dosa Coffee - Food Truck - 1 (0008)",
+            "Dosa Coffee - Events & Catering",
+        ):
+            page = open_store(label)
+            self.assertEqual(cell(page, "rating"), "", label)
+            self.assertEqual(cell(page, "review_count"), "", label)
+            self.assertEqual(cell(page, "famepilot_location"), "", label)
+            self.assertIn("No Famepilot location.", page)
+
+        quest = open_store("Dosa Coffee - Quest Mall (01/0016)")
+        self.assertEqual(cell(quest, "rating"), "")
+        self.assertEqual(cell(quest, "reelo_match_status"), "matched")
+        self.assertEqual(cell(quest, "redemption_rate"), "10.38%")
+        self.assertEqual(cell(quest, "times_redeemed"), "86")
+        self.assertIn("26 Sep 26 - 02 Oct 26 (7 days)", quest)
+        self.assertIn("not a verified 30-day range", quest)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"

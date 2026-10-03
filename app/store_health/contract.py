@@ -31,6 +31,8 @@ POSIST_FILE = "posist_daily.csv"
 CALENDAR_FILE = "sales_pred_vs_actual.csv"
 KEKA_FILE = "keka.csv"
 AUDIT_FILE = "mystery_audit.csv"
+REELO_FILE = "reelo.csv"
+FAMEPILOT_FILE = "famepilot.csv"
 
 POSIST_COLUMNS = (
     "store",
@@ -88,6 +90,38 @@ AUDIT_COLUMNS = (
     "weekend_score",
     "note",
     "status",
+)
+
+REELO_COLUMNS = (
+    "posist_store",
+    "reelo_store",
+    "date_range",
+    "match_status",
+    "times_rewards_redeemed",
+    "redemption_rate",
+    "redemption_revenue_inr",
+    "avg_revenue_per_redemption_inr",
+    "points_issued",
+    "sales_total_inr_last30d",
+    "visits_last30d",
+    "phones_valid_visits",
+    "phones_blocked_visits",
+    "phone_capture_pct",
+    "customers_with_purchase",
+    "active_customers",
+    "inactive_customers",
+    "note",
+)
+
+FAMEPILOT_COLUMNS = (
+    "posist_store",
+    "famepilot_location",
+    "rating",
+    "review_count",
+    "main_threat",
+    "private_rating",
+    "private_review_count",
+    "overall_reviews",
 )
 
 POSIST_MONEY = {
@@ -388,6 +422,37 @@ def load_audit(directory=None):
     return rows, warnings
 
 
+def _load_store_rows(directory, filename, columns, label_key):
+    warnings = []
+    path = Path(directory) / filename
+    table = _read_dicts(path, warnings)
+    rows = []
+    if not table:
+        return rows, warnings
+    if label_key not in table[0]:
+        _warn(warnings, f"{filename} is missing {label_key}.")
+        return [], warnings
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get(label_key))
+        if not store:
+            _warn(warnings, f"{filename} row {index} has no {label_key}, so it was skipped.")
+            continue
+        parsed = {field: _text_cell(raw.get(field)) for field in columns}
+        parsed[label_key] = store
+        rows.append(parsed)
+    return rows, warnings
+
+
+def load_reelo(directory=None):
+    directory = Path(directory) if directory else data_directory()
+    return _load_store_rows(directory, REELO_FILE, REELO_COLUMNS, "posist_store")
+
+
+def load_famepilot(directory=None):
+    directory = Path(directory) if directory else data_directory()
+    return _load_store_rows(directory, FAMEPILOT_FILE, FAMEPILOT_COLUMNS, "posist_store")
+
+
 def load_feeds(directory=None):
     from app.store_health.stores import assign_rows
 
@@ -396,11 +461,15 @@ def load_feeds(directory=None):
     calendar, calendar_warnings = load_calendar(directory)
     keka, keka_warnings = load_keka(directory)
     audit, audit_warnings = load_audit(directory)
+    reelo, reelo_warnings = load_reelo(directory)
+    famepilot, famepilot_warnings = load_famepilot(directory)
     labels = sorted({store for store, _day in posist})
     keka_by_store, keka_unmatched = assign_rows(keka, "posist_store", labels)
     audit_stores = [row for row in audit if not is_brand_audit(row)]
     brand_rows = [row for row in audit if is_brand_audit(row)]
     audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
+    reelo_by_store, reelo_unmatched = assign_rows(reelo, "posist_store", labels)
+    famepilot_by_store, famepilot_unmatched = assign_rows(famepilot, "posist_store", labels)
     if labels:
         for row in keka_unmatched:
             _warn(
@@ -412,6 +481,16 @@ def load_feeds(directory=None):
                 audit_warnings,
                 f"{AUDIT_FILE} row {row.get('store')!r} does not match one Posist store, so it was not applied.",
             )
+        for row in reelo_unmatched:
+            _warn(
+                reelo_warnings,
+                f"{REELO_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
+            )
+        for row in famepilot_unmatched:
+            _warn(
+                famepilot_warnings,
+                f"{FAMEPILOT_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
+            )
     return {
         "posist": posist,
         "calendar": calendar,
@@ -420,7 +499,11 @@ def load_feeds(directory=None):
         "audit": audit,
         "audit_by_store": audit_by_store,
         "audit_brand": brand_rows[-1] if brand_rows else None,
-        "warnings": posist_warnings + calendar_warnings + keka_warnings + audit_warnings,
+        "reelo": reelo,
+        "reelo_by_store": reelo_by_store,
+        "famepilot": famepilot,
+        "famepilot_by_store": famepilot_by_store,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + audit_warnings + reelo_warnings + famepilot_warnings,
         "directory": directory,
     }
 
@@ -458,11 +541,35 @@ def describe_feed_file(path):
     return {"state": "ready", "detail": "", "saved_at": saved_at, "newest_date": max(dates)}
 
 
+def describe_saved_file(path):
+    """File save time when the feed has rows but no date column.
+
+    Do not invent a newest date. A missing or empty file still has no timestamp.
+    """
+    path = Path(path)
+    name = path.name
+    if not path.exists():
+        return {"state": "missing", "detail": f"{name} is missing.", "saved_at": None, "newest_date": None}
+    try:
+        saved_at = datetime.fromtimestamp(path.stat().st_mtime, IST)
+    except OSError:
+        return {"state": "unreadable", "detail": f"{name} could not be read.", "saved_at": None, "newest_date": None}
+    warnings = []
+    table = _read_dicts(path, warnings)
+    if any("not UTF-8" in warning or "could not be read" in warning or "not valid CSV" in warning or "no header" in warning for warning in warnings):
+        return {"state": "unreadable", "detail": warnings[0], "saved_at": None, "newest_date": None}
+    if not table:
+        return {"state": "empty", "detail": f"{name} is empty.", "saved_at": None, "newest_date": None}
+    return {"state": "saved", "detail": "", "saved_at": saved_at, "newest_date": None}
+
+
 def describe_feeds(directory=None):
     directory = Path(directory) if directory else data_directory()
     return {
         "posist": describe_feed_file(directory / POSIST_FILE),
         "calendar": describe_feed_file(directory / CALENDAR_FILE),
+        "reelo": describe_saved_file(directory / REELO_FILE),
+        "famepilot": describe_saved_file(directory / FAMEPILOT_FILE),
     }
 
 
