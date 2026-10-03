@@ -1,4 +1,8 @@
-"""A4 store-health PDF. Figures come from the same view as the page."""
+"""A4 handout for one store. Figures come from the same view as the page.
+
+The sheet is light, so it prints. Calendar days are cells with a tier-coloured
+border and a small colour mark. The on-screen page stays dark.
+"""
 
 import logging
 from datetime import datetime
@@ -8,12 +12,23 @@ logging.getLogger("fontTools").setLevel(logging.ERROR)
 logging.getLogger("fpdf").setLevel(logging.ERROR)
 
 from fpdf import FPDF
-from fpdf.enums import XPos, YPos
+from fpdf.enums import MethodReturnValue, WrapMode, XPos, YPos
 
 from app.store_health.present import IST, format_ist
 
 
 _FONT_DIR = Path(__file__).resolve().parent / "fonts"
+
+# Dark enough to read on white paper. Working weekday stays grey.
+TIER_PRINT_COLOUR = {
+    "Weather caution": (176, 122, 8),
+    "Puja / festive": (176, 48, 104),
+    "Holiday": (88, 72, 184),
+    "Weekend": (12, 112, 156),
+    "Working weekday": (139, 148, 158),
+}
+_NEUTRAL_BORDER = (150, 150, 150)
+
 _LABELS = {
     "net": "Net",
     "gross": "Gross",
@@ -68,21 +83,17 @@ _LABELS = {
     "customers_with_purchase": "Customers with a purchase",
     "inactive_customers": "Inactive customers",
     "reelo_store": "Reelo store",
-    "reelo_date_range": "Date range in the file",
+    "reelo_date_range": "Dates in the Reelo file",
     "reelo_match_status": "Match status",
     "reelo_note": "Note",
-    "weekday": "Weekday",
-    "tier": "Tier",
-    "pred_low": "Pred low",
-    "pred_high": "Pred high",
-    "pred_mid": "Pred mid",
-    "actual_net": "Actual Net",
-    "variance_vs_mid": "Variance vs mid",
-    "variance_pct": "Variance %",
-    "status": "Status",
-    "drivers": "Drivers",
-    "notes": "Notes",
 }
+
+_CALENDAR_FIGURES = (
+    ("Low", "pred_low"),
+    ("Mid", "pred_mid"),
+    ("High", "pred_high"),
+    ("Actual", "actual_net"),
+)
 
 
 class _StorePdf(FPDF):
@@ -92,109 +103,227 @@ class _StorePdf(FPDF):
         self.add_font("DejaVu", "", str(_FONT_DIR / "DejaVuSans.ttf"))
         self.add_font("DejaVu", "B", str(_FONT_DIR / "DejaVuSans-Bold.ttf"))
         self.set_auto_page_break(auto=True, margin=16)
-        self.set_margins(14, 14, 14)
+        self.set_margins(14, 16, 14)
+        self.c_margin = 0
 
     def header(self):
         if self.page_no() == 1:
             return
-        self.set_text_color(60, 60, 60)
+        self.set_text_color(70, 70, 70)
         self.set_font("DejaVu", "", 8)
-        self.cell(0, 6, self.store_label, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        self.cell(0, 5, f"Store Health  ·  {self.store_label}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.set_text_color(0, 0, 0)
-        self.ln(1)
+        self.ln(2)
 
     def footer(self):
         self.set_y(-12)
-        self.set_text_color(60, 60, 60)
+        self.set_text_color(80, 80, 80)
         self.set_font("DejaVu", "", 8)
         self.cell(0, 8, f"Page {self.page_no()}", align="C")
 
 
 def render_store_pdf(store, selection, view, insights, context_slots, warnings=None):
+    """One store on paper. Insights, city slots, and file warnings stay on the screen page."""
+    del selection, insights, context_slots, warnings
     pdf = _StorePdf(store.label)
     pdf.add_page()
     pdf.set_text_color(0, 0, 0)
-    _text(pdf, "Store Health", 18, bold=True)
-    _text(pdf, store.label, 14, bold=True)
+    _paragraph(pdf, "Store Health", 20, bold=True)
+    _paragraph(pdf, store.label, 14, bold=True)
     if store.region:
-        _text(pdf, f"Region: {store.region}", 11)
-    start = selection.get("start_input") or ""
-    end = selection.get("end_input") or ""
-    day = selection.get("day_input") or ""
-    _text(pdf, f"Date range: {start} to {end}. Selected day: {day}.", 11)
-    _text(pdf, f"Prepared {format_ist(datetime.now(IST))}. Blank cells are not zero.", 9)
+        _paragraph(pdf, store.region, 11)
+    _paragraph(
+        pdf,
+        f"Prepared {format_ist(datetime.now(IST))}. A blank is not zero.",
+        9,
+        colour=(70, 70, 70),
+    )
     pdf.ln(1)
 
-    _section(pdf, "Last updated")
-    for line in _freshness_lines(view):
-        _text(pdf, line, 10)
+    _section_box(pdf, "Posist window", _posist_lines(view))
+    _calendar_section(pdf, view)
+    _section_box(pdf, "Mystery audit", _audit_lines(view))
+    _section_box(pdf, "Keka", _keka_lines(view))
+    _section_box(pdf, "Famepilot", _fame_lines(view))
+    _section_box(pdf, "Reelo", _reelo_lines(view))
 
-    _section(pdf, "1. Posist Insights")
-    for line in _posist_lines(view):
-        _text(pdf, line, 10)
-
-    _section(pdf, "2. Mystery Audit")
-    for line in _audit_lines(view):
-        _text(pdf, line, 10)
-
-    _section(pdf, "3. Staff strength")
-    for line in _keka_lines(view):
-        _text(pdf, line, 10)
-
-    _section(pdf, "4. Famepilot")
-    for line in _fame_lines(view):
-        _text(pdf, line, 10)
-
-    _section(pdf, "5. Reelo")
-    for line in _reelo_lines(view):
-        _text(pdf, line, 10)
-
-    _section(pdf, "6. Actionable insights")
-    if insights.get("has_insight"):
-        for title, key in (("Ops", "ops"), ("CRM", "crm"), ("Cost", "cost")):
-            _text(pdf, title, 12, bold=True)
-            for line in insights.get(key) or []:
-                _text(pdf, line, 10)
-    else:
-        _text(pdf, "No ops, CRM, or cost insights are on file for this store.", 10)
-    for title, key in (
-        ("Holiday calendar", "holiday"),
-        ("Local current affairs", "news"),
-        ("Weather", "weather"),
-    ):
-        _text(pdf, title, 12, bold=True)
-        for line in _context_lines(context_slots.get(key) or {}):
-            _text(pdf, line, 10)
-
-    _section(pdf, "7. Sales calendar")
-    for line in _calendar_lines(selection, view):
-        _text(pdf, line, 10)
-
-    if warnings:
-        _section(pdf, "File warnings")
-        for warning in warnings:
-            _text(pdf, warning, 9)
-
-    output = pdf.output()
-    return bytes(output)
+    return bytes(pdf.output())
 
 
-def _section(pdf, title):
-    pdf.ln(2)
-    _text(pdf, title, 13, bold=True)
-    y = pdf.get_y()
-    pdf.set_draw_color(180, 180, 180)
-    pdf.line(pdf.l_margin, y, pdf.w - pdf.r_margin, y)
-    pdf.ln(2)
+def _usable_width(pdf):
+    return pdf.w - pdf.l_margin - pdf.r_margin
 
 
-def _text(pdf, text, size, bold=False):
-    if not text:
-        return
+def _text_height(pdf, text, width, size, bold=False):
     pdf.set_font("DejaVu", "B" if bold else "", size)
-    pdf.set_text_color(0, 0, 0)
-    pdf.multi_cell(0, max(5, size * 0.5), text or "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-    pdf.ln(0.6)
+    return pdf.multi_cell(
+        width,
+        _line_h(size),
+        text,
+        dry_run=True,
+        output=MethodReturnValue.HEIGHT,
+        align="L",
+        wrapmode=WrapMode.WORD,
+    )
+
+
+def _line_h(size):
+    return max(3.6, size * 0.48)
+
+
+def _paragraph(pdf, text, size, bold=False, colour=(20, 20, 20)):
+    if not str(text).strip():
+        return
+    pdf.set_x(pdf.l_margin)
+    pdf.set_font("DejaVu", "B" if bold else "", size)
+    pdf.set_text_color(*colour)
+    pdf.multi_cell(
+        0,
+        _line_h(size),
+        text,
+        align="L",
+        new_x=XPos.LMARGIN,
+        new_y=YPos.NEXT,
+        wrapmode=WrapMode.WORD,
+    )
+    pdf.ln(0.7)
+
+
+def _section_box(pdf, title, lines):
+    lines = [line for line in lines if str(line).strip()]
+    if not lines:
+        lines = ["Nothing is on file for this store."]
+    width = _usable_width(pdf)
+    inner = width - 6
+    body = 0
+    for line in lines:
+        body += _text_height(pdf, line, inner, 10) + 1.1
+    block_h = 4 + 6.2 + body + 2
+    page_room = pdf.h - pdf.t_margin - pdf.b_margin
+    if block_h <= page_room and pdf.get_y() + block_h > pdf.h - pdf.b_margin:
+        pdf.add_page()
+    if block_h > page_room:
+        _paragraph(pdf, title, 13, bold=True)
+        for line in lines:
+            _paragraph(pdf, line, 10)
+        pdf.ln(2)
+        return
+    x = pdf.l_margin
+    y = pdf.get_y()
+    pdf.set_fill_color(248, 248, 248)
+    pdf.set_draw_color(186, 186, 186)
+    pdf.set_line_width(0.25)
+    pdf.rect(x, y, width, block_h, style="FD")
+    pdf.set_auto_page_break(auto=False)
+    pdf.set_xy(x + 3, y + 2.2)
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.set_text_color(20, 20, 20)
+    pdf.multi_cell(inner, 6, title, align="L", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+    rule = y + 8.4
+    pdf.set_draw_color(210, 210, 210)
+    pdf.line(x + 3, rule, x + width - 3, rule)
+    cursor = rule + 1.6
+    for line in lines:
+        pdf.set_xy(x + 3, cursor)
+        pdf.set_font("DejaVu", "", 10)
+        pdf.set_text_color(25, 25, 25)
+        pdf.multi_cell(
+            inner,
+            _line_h(10),
+            line,
+            align="L",
+            new_x=XPos.LMARGIN,
+            new_y=YPos.NEXT,
+            wrapmode=WrapMode.WORD,
+        )
+        cursor = pdf.get_y() + 1.1
+    pdf.set_auto_page_break(auto=True, margin=16)
+    pdf.set_y(y + block_h + 3.2)
+
+
+def _calendar_section(pdf, view):
+    _paragraph(pdf, "Sales calendar", 13, bold=True)
+    if view.get("calendar_share_label"):
+        _paragraph(pdf, view["calendar_share_label"], 9)
+    if view.get("calendar_absent_note"):
+        _paragraph(pdf, view["calendar_absent_note"], 9)
+    _paragraph(pdf, "Predicted versus actual Net. A blank is not zero.", 9, colour=(70, 70, 70))
+    days = view.get("days") or []
+    if not days:
+        _paragraph(pdf, "No predicted or actual Net for this store.", 10)
+        return
+    _draw_day_cards(pdf, days)
+
+
+def _card_lines(day):
+    fields = day.get("fields") or {}
+    lines = [(f"{day.get('label') or ''}  {day.get('chrome_weekday') or ''}".strip(), 9, True)]
+    tier = fields.get("tier") or ""
+    if tier:
+        lines.append((tier, 8, True))
+    for label, key in _CALENDAR_FIGURES:
+        value = fields.get(key) or ""
+        lines.append((f"{label}   {value}".rstrip(), 8, False))
+    driver = fields.get("drivers") or ""
+    if driver:
+        lines.append((f"Driver   {driver}", 8, False))
+    return lines
+
+
+def _card_height(pdf, day, width):
+    inner = width - 7.6
+    height = 3.2
+    for text, size, bold in _card_lines(day):
+        height += _text_height(pdf, text, inner, size, bold=bold) + 0.45
+    return height + 1.6
+
+
+def _draw_day_cards(pdf, days):
+    usable = _usable_width(pdf)
+    gap = 3.2
+    col_w = (usable - gap) / 2
+    index = 0
+    while index < len(days):
+        pair = days[index : index + 2]
+        row_h = max(_card_height(pdf, day, col_w) for day in pair)
+        if pdf.get_y() + row_h > pdf.h - pdf.b_margin:
+            pdf.add_page()
+        y = pdf.get_y()
+        for column, day in enumerate(pair):
+            x = pdf.l_margin + column * (col_w + gap)
+            _draw_day_card(pdf, x, y, col_w, row_h, day)
+        pdf.set_y(y + row_h + 2.4)
+        index += 2
+
+
+def _draw_day_card(pdf, x, y, width, height, day):
+    tier = (day.get("fields") or {}).get("tier") or ""
+    colour = TIER_PRINT_COLOUR.get(tier, _NEUTRAL_BORDER)
+    pdf.set_auto_page_break(auto=False)
+    pdf.set_fill_color(255, 255, 255)
+    pdf.set_draw_color(*colour)
+    pdf.set_line_width(0.75)
+    pdf.rect(x, y, width, height, style="FD")
+    pdf.set_fill_color(*colour)
+    pdf.rect(x + 1.6, y + 1.8, 3.2, 3.2, style="F")
+    cursor = y + 1.5
+    inner_x = x + 6.2
+    inner_w = width - 7.6
+    for text, size, bold in _card_lines(day):
+        pdf.set_xy(inner_x, cursor)
+        pdf.set_font("DejaVu", "B" if bold else "", size)
+        pdf.set_text_color(20, 20, 20)
+        pdf.multi_cell(
+            inner_w,
+            _line_h(size),
+            text,
+            align="L",
+            new_x=XPos.LMARGIN,
+            new_y=YPos.NEXT,
+            wrapmode=WrapMode.WORD,
+        )
+        cursor = pdf.get_y() + 0.45
+    pdf.set_auto_page_break(auto=True, margin=16)
 
 
 def _pair(fields, key):
@@ -213,34 +342,6 @@ def _pairs(fields, keys):
     return lines
 
 
-def _freshness_lines(view):
-    freshness = view.get("freshness") or {}
-    lines = []
-    for key, title in (
-        ("posist", "Posist daily"),
-        ("calendar", "Predicted vs actual"),
-        ("reelo", "Reelo"),
-        ("famepilot", "Famepilot"),
-    ):
-        slot = freshness.get(key) or {}
-        if slot.get("state") in {"ready", "saved"}:
-            saved = slot.get("saved_at") or ""
-            newest = slot.get("newest_date") or ""
-            line = f"{title}: file last saved {saved}."
-            if newest:
-                line += f" Newest date in the file {newest}."
-            lines.append(line)
-        else:
-            lines.append(f"{title}: {slot.get('detail') or 'Empty.'}")
-    reelo = view.get("reelo") or {}
-    fame = view.get("fame") or {}
-    if reelo.get("window"):
-        lines.append(f"Reelo window: {reelo['window']}")
-    if fame.get("window") and (view.get("freshness") or {}).get("famepilot", {}).get("state") == "saved":
-        lines.append(f"Famepilot window: {fame['window']}")
-    return lines
-
-
 def _posist_lines(view):
     posist = view.get("posist") or {}
     freshness = (view.get("freshness") or {}).get("posist") or {}
@@ -251,7 +352,7 @@ def _posist_lines(view):
         lines.append("Not on the Posist deployment report.")
         return lines
     if posist.get("window_label"):
-        lines.append(f"Last window: {posist['window_label']}.")
+        lines.append(f"Window: {posist['window_label']}.")
     if posist.get("days_summed"):
         lines.append(f"Days summed: {posist['days_summed']}.")
     if posist.get("missing_label"):
@@ -299,7 +400,7 @@ def _audit_lines(view):
             )
         )
     if audit.get("has_brand"):
-        lines.append("Brand aggregate (not this store's score).")
+        lines.append("Brand aggregate, not this store's score.")
         lines.extend(
             _pairs(
                 audit.get("fields") or {},
@@ -413,76 +514,4 @@ def _reelo_lines(view):
                 ],
             )
         )
-    return lines
-
-
-def _context_lines(slot):
-    if not slot or not slot.get("connected"):
-        return [slot.get("message") or ""]
-    lines = []
-    if slot.get("place"):
-        lines.append(f"Place: {slot['place']}.")
-    if slot.get("source"):
-        source = f"Source: {slot['source']}"
-        if slot.get("fetched_at"):
-            source += f" Fetched {slot['fetched_at']}."
-        lines.append(source)
-    if slot.get("summary"):
-        lines.append(slot["summary"])
-    for item in slot.get("entries") or []:
-        if item.get("line"):
-            lines.append(item["line"])
-        elif item.get("date") and item.get("name"):
-            lines.append(f"{item['date']}: {item['name']}")
-    for day in slot.get("days") or []:
-        if day.get("line"):
-            lines.append(day["line"])
-    if slot.get("message"):
-        lines.append(slot["message"])
-    return lines or [""]
-
-
-def _calendar_lines(selection, view):
-    if selection.get("error"):
-        return [selection["error"]]
-    days = view.get("days") or []
-    if not days:
-        return ["Choose a store to see predicted and actual Net."]
-    lines = [
-        (
-            f"Actual Net is filled on {view.get('filled_actual_days')} of {view.get('day_count')} days. "
-            f"A prediction is filled on {view.get('filled_prediction_days')} of {view.get('day_count')} days. "
-            "A blank cell is not zero."
-        )
-    ]
-    filled = []
-    for day in days:
-        fields = day.get("fields") or {}
-        if not any(str(value).strip() for value in fields.values()):
-            continue
-        bits = [day.get("label") or day.get("iso") or ""]
-        for key in (
-            "weekday",
-            "tier",
-            "pred_low",
-            "pred_high",
-            "pred_mid",
-            "actual_net",
-            "variance_vs_mid",
-            "variance_pct",
-            "status",
-            "drivers",
-            "notes",
-        ):
-            value = fields.get(key) or ""
-            if str(value).strip():
-                bits.append(f"{_LABELS[key]}: {value}")
-        filled.append(" | ".join(bits))
-    if not filled:
-        lines.append("No predicted or actual Net in this range.")
-    else:
-        lines.extend(filled)
-        blank = (view.get("day_count") or 0) - len(filled)
-        if blank:
-            lines.append(f"{blank} days in this range have no calendar figures. Those cells are blank, not zero.")
     return lines

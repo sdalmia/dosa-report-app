@@ -573,6 +573,13 @@ class StoreHealthTests(unittest.TestCase):
             self.assertNotIn(">East</li>", absent)
             self.assertNotIn(">North</li>", absent)
 
+    def _pdf_text(self, path):
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200, response.data[:300])
+        self.assertEqual(response.mimetype, "application/pdf")
+        reader = PdfReader(io.BytesIO(response.data))
+        return "\n".join(page.extract_text() or "" for page in reader.pages)
+
     def _option_slug(self, html, label):
         match = re.search(
             rf'<option value="([^"]+)"[^>]*>{re.escape(html_lib.escape(label))}</option>',
@@ -1075,19 +1082,68 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("store-health-", response.headers["Content-Disposition"])
         reader = PdfReader(io.BytesIO(response.data))
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
+        headings = ("Posist window", "Sales calendar", "Mystery audit", "Keka", "Famepilot", "Reelo")
+        self.assertIn("Store Health", text)
         self.assertIn("Gurgaon Sec-15 (02/0010)", text)
-        self.assertIn("2026-10-01", text)
-        self.assertIn("2026-10-03", text)
-        self.assertIn("Ops", text)
-        self.assertIn("CRM", text)
-        self.assertIn("Cost", text)
-        self.assertIn("Holiday calendar", text)
-        self.assertIn("Local current affairs", text)
-        self.assertIn("Weather", text)
+        self.assertEqual([text.index(name) for name in headings], sorted(text.index(name) for name in headings))
         self.assertIn("₹62,912.34", text)
-        self.assertIn(HOLIDAY_DISCONNECTED, text)
-        self.assertIn(NEWS_DISCONNECTED, text)
+        self.assertIn("₹70,000", text)
+        self.assertIn("2 Oct 2026", text)
+        self.assertNotIn("Date range:", text)
+        self.assertNotIn("Selected day", text)
+        self.assertNotIn("2026-10-01", text)
+        self.assertNotIn("2026-10-03", text)
+        self.assertNotIn("in this range", text)
+        self.assertNotIn("pred_low", text)
+        self.assertNotIn("actual_net", text)
         self.assertNotIn("7,087", text)
+
+    def test_print_pdf_hands_over_one_store_with_calendar_cells(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "store_health"
+        os.environ["STORE_HEALTH_DATA_DIR"] = str(root)
+        index = self.get("/store-health")
+        ideal_id = self._option_slug(index, "Dosa Coffee - Ideal Plaza (01/0001)")
+        ideal = self._pdf_text(f"/store-health/{ideal_id}/print?start=2026-09-01&end=2026-09-14")
+        headings = ("Posist window", "Sales calendar", "Mystery audit", "Keka", "Famepilot", "Reelo")
+        self.assertEqual([ideal.index(name) for name in headings], sorted(ideal.index(name) for name in headings))
+        self.assertIn("Dosa Coffee - Ideal Plaza (01/0001)", ideal)
+        self.assertIn("₹77,206.26", ideal)
+        self.assertIn("₹87,734.39", ideal)
+        self.assertIn("₹98,262.51", ideal)
+        self.assertIn("Weather caution", ideal)
+        self.assertIn("Puja / festive", ideal)
+        self.assertIn("Holiday", ideal)
+        self.assertIn("Weekend", ideal)
+        self.assertIn("Working weekday", ideal)
+        self.assertIn("Normal weekend tier, with first-week Kolkata rain risk", " ".join(ideal.split()))
+        self.assertIn("3 Oct 2026", ideal)
+        self.assertNotIn("Date range:", ideal)
+        self.assertNotIn("3 Oct 2026 through 1 Nov 2026", ideal)
+        self.assertNotIn("in this range", ideal)
+        self.assertNotIn("pred_mid", ideal)
+        self.assertNotIn("₹0", ideal)
+        from app.store_health.pdf_report import TIER_PRINT_COLOUR
+        for tier, colour in (
+            ("Weather caution", (176, 122, 8)),
+            ("Puja / festive", (176, 48, 104)),
+            ("Holiday", (88, 72, 184)),
+            ("Weekend", (12, 112, 156)),
+            ("Working weekday", (139, 148, 158)),
+        ):
+            self.assertEqual(TIER_PRINT_COLOUR[tier], colour)
+        self.assertNotEqual(TIER_PRINT_COLOUR["Working weekday"], TIER_PRINT_COLOUR["Weekend"])
+
+        for label in (
+            "GK1 Cloud Kitchen (02/0002)",
+            "Chattarpur (02/0005)",
+            "Dosa Coffee - Events & Catering",
+        ):
+            page = self._pdf_text(f"/store-health/{self._option_slug(index, label)}/print")
+            self.assertIn("Not on the Posist deployment report.", page, label)
+            self.assertIn("Not on the Posist historical deployment report", page, label)
+            self.assertIn("Blank is not zero.", page, label)
+            self.assertNotIn("₹0", page, label)
+            self.assertIn("Weather caution", page, label)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
