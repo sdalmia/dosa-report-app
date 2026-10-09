@@ -42,22 +42,18 @@ def build_food_cost(bundle):
     cities = _cities(bundle, week_start, week_end, span_start, span_end)
     week_label = format_period(week_start, week_end)
     span_label = format_period(span_start, span_end)
-    return {
+    view = {
         "period_label": _page_period(week_label, span_label),
         "week_label": week_label,
         "span_label": span_label,
         "period_start": week_start.isoformat() if week_start else "",
         "period_end": week_end.isoformat() if week_end else "",
         "september_note": _coverage_note(week_start, week_end, span_start, span_end),
-        "sales_note": (
-            "Sales are Posist gross from posist_daily.csv. "
-            "Net is blank in that file, so net is not used."
-        ),
-        "raw_note": "Raw is Food + Beverage. Semi-process is excluded.",
+        "sales_note": "Sales are Posist gross. Net is blank, so net is not used.",
+        "raw_note": "Raw means food and beverage. Semi-processed items are left out.",
         "variance_note": (
             "Warehouse and central-kitchen variance is not shown. "
-            "Their physical stock is ₹0 in the source, so the variance is not meaningful. "
-            "store_consumption_wastage.csv also leaves physical_amt blank on those rows."
+            "Their counted stock is ₹0, so a variance would not mean anything."
         ),
         "store_purchase_note": _store_purchase_note(bundle),
         "cities": cities,
@@ -68,18 +64,14 @@ def build_food_cost(bundle):
         "recipe": recipe_section(bundle),
         "unassigned": _unassigned(bundle),
         "warnings": list(bundle["warnings"]),
-        "missing_grn": _missing(bundle, "grn_lines", "grn_lines_warehouses.csv"),
-        "missing_consumption": _missing(bundle, "consumption", "store_consumption_wastage.csv"),
+        "missing_grn": _missing(bundle, "grn_lines", "Goods received are not on file."),
+        "missing_consumption": _missing(bundle, "consumption", "Store consumption is not on file."),
         "missing_posist": _missing_posist(bundle),
-        "sources": {
-            "grn": source_name(bundle, "grn_lines") or "grn_lines_warehouses.csv",
-            "charges": source_name(bundle, "grn_charges") or "grn_charges_warehouses.csv",
-            "consumption": source_name(bundle, "consumption") or "store_consumption_wastage.csv",
-            "wastage": source_name(bundle, "wastage") or "store_item_wastage_top.csv",
-            "workbook": source_name(bundle, "workbook") or "consumption_vs_purchase workbook",
-            "posist": bundle["posist_path"].name,
-        },
     }
+    view["page_help"] = " ".join(
+        part for part in (view["september_note"], view["sales_note"], view["raw_note"]) if part
+    )
+    return view
 
 
 def _consumption_bounds(bundle):
@@ -112,26 +104,26 @@ def _coverage_note(week_start, week_end, span_start, span_end):
     span = format_period(span_start, span_end)
     if week and span and (week_start != span_start or week_end != span_end):
         return (
-            f"GRN lines cover {span}. "
+            f"Purchases cover {span}. "
             f"Store consumption and wastage cover {week} only. "
-            "There is no September consumption file, so a food-cost % that uses consumption "
+            "September consumption is not on file, so a food-cost percent that uses consumption "
             f"is for {week}, not the full purchase window."
         )
     if span:
-        return f"GRN lines cover {span}."
+        return f"Purchases cover {span}."
     return ""
 
 
-def _missing(bundle, key, expected):
+def _missing(bundle, key, message):
     if bundle["files"].get(key):
         return ""
-    return f"Missing source: {expected}"
+    return message
 
 
 def _missing_posist(bundle):
     if bundle["posist"]:
         return ""
-    return f"Missing source: {bundle['posist_path'].name} (Posist gross)."
+    return "Posist gross is not on file."
 
 
 def _store_purchase_note(bundle):
@@ -144,8 +136,8 @@ def _store_purchase_note(bundle):
     if any(value != 0 for value in purchases):
         return ""
     return (
-        "Outlet raw purchases are ₹0 on every outlet row in store_consumption_wastage.csv. "
-        "That zero is recorded. City purchases below are warehouse GRN."
+        "Store purchases of raw food are recorded as ₹0 at every outlet. "
+        "City purchases below are warehouse receipts."
     )
 
 
@@ -251,8 +243,7 @@ def _purchase_window(bundle, city, region, start, end, week_start, week_end):
         "freight": money_pair(freight),
         "consumption_missing": (
             f"Raw consumption is not shown for {format_period(start, end)}. "
-            f"store_consumption_wastage.csv covers {week} only. "
-            "There is no September consumption file."
+            f"Consumption is on file for {week} only."
         ),
     }
 
@@ -400,7 +391,7 @@ def _alerts(bundle, start, end):
     if not workbook:
         return {
             "available": False,
-            "missing": "Missing source: consumption_vs_purchase workbook (item sheets and flags).",
+            "missing": "Days of cover are not on file.",
             "cover": [],
             "beyond_10": [],
             "stock": [],
@@ -416,7 +407,7 @@ def _alerts(bundle, start, end):
         key = (item.get("city"), item.get("Item"))
         seen.add(key)
         if days is not None and days > COVER_OVER_DAYS:
-            cover.append(_cover_row(item, days, "WH closing days of cover"))
+            cover.append(_cover_row(item, days, "Warehouse closing cover"))
         if days is not None and days > EXCESS_COVER_DAYS:
             beyond.append(_beyond_row(item, days, period_days, workbook["source"]))
     for flag in workbook["flags"]:
@@ -432,7 +423,7 @@ def _alerts(bundle, start, end):
                     "days_text": format_qty(days),
                     "days_attr": f"{days:.4f}".rstrip("0").rstrip("."),
                     "closing_qty_text": "",
-                    "basis": "flags sheet",
+                    "basis": "Stock note",
                     "detail": flag.get("detail") or "",
                 }
             )
@@ -627,16 +618,13 @@ def _hershey(bundle):
     if not lines and not flag:
         return {
             "available": False,
-            "missing": (
-                "Missing source: indent stock-out CSV (consumption_stockInStockOut_Indent) "
-                "and the Hershey's flag in the consumption workbook."
-            ),
+            "missing": "The Hershey's warehouse dispatch is not on file.",
             "lines": [],
             "flag": None,
         }
     return {
         "available": True,
-        "missing": "" if lines else "The IN-1854 line is not in the indent CSV.",
+        "missing": "" if lines else "The IN-1854 line is not on the warehouse dispatch.",
         "lines": lines,
         "flag": flag,
         "sources": indent_names,
@@ -645,7 +633,7 @@ def _hershey(bundle):
 
 def _wastage(bundle):
     if not bundle["files"].get("wastage"):
-        return {"available": False, "missing": "Missing source: store_item_wastage_top.csv", "rows": []}
+        return {"available": False, "missing": "Item wastage is not on file.", "rows": []}
     rows = []
     for row in bundle["wastage"]:
         amount = row.get("total_wastage_amt")

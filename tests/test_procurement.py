@@ -82,7 +82,7 @@ class ProcurementTests(unittest.TestCase):
 
     def test_city_food_cost_uses_real_windows(self):
         html = self.get("/food-cost")
-        self.assertIn("There is no September consumption file", html)
+        self.assertIn("September consumption is not on file", html)
         self.assertNotIn("September purchases are not in these files", html)
         self.assertIn("Net is blank", html)
         self.assertIn("Posist gross", html)
@@ -103,7 +103,12 @@ class ProcurementTests(unittest.TestCase):
         self.assertIn("16.5%", _field(html, "consumption-pct", window="week", city="kolkata")[0])
         self.assertNotIn('data-window="span" data-city="kolkata" data-value=""></em>\n', html)
         self.assertIn(week_grn, html)
-        self.assertIn("store_consumption_wastage.csv covers", html)
+        self.assertIn("Consumption is on file for", html)
+        self.assertNotIn(".csv", html)
+        self.assertNotIn(".xlsx", html)
+        self.assertNotIn("recipe-cost.json", html)
+        self.assertIn("theme-toggle", html)
+        self.assertNotIn("prefers-color-scheme", html)
         self.assertNotIn("data-field=\"grn-raw\" data-window=\"span\"", html)
 
     def test_store_match_and_blank_gross(self):
@@ -155,6 +160,56 @@ class ProcurementTests(unittest.TestCase):
         self.assertTrue(ideal["lines"])
         self.assertTrue(all("Ideal Plaza" in line["deployment"] for line in ideal["lines"]))
 
+    def test_menu_item_cost_is_preferred_when_present(self):
+        with tempfile.TemporaryDirectory() as folder:
+            folder_path = Path(folder)
+            (folder_path / "recipe_cost_by_item.csv").write_text(
+                "deployment,city,menu_item,is_menu_item,recipe_unit,"
+                "cost_per_unit_avg_price,cost_per_unit_last_price\n"
+                "Ideal Plaza,Kolkata,Masala Dosa,True,No.,1.00,1.00\n",
+                encoding="utf-8",
+            )
+            (folder_path / "menu_item_cost_summary.csv").write_text(
+                "item_name,unit,is_menu_item,outlets_with_recipe,min_cost_avg,"
+                "median_cost_avg,max_cost_avg,outlet_min,outlet_max,spread_pct\n"
+                "Masala Dosa,No.,True,2,23.82,26.91,30.00,Ideal Plaza,Connaught Place,26.0\n",
+                encoding="utf-8",
+            )
+            (folder_path / "menu_item_cost.csv").write_text(
+                "outlet,city,item_name,is_menu_item,recipe_tab,unit,"
+                "cost_per_portion_avg,cost_per_portion_last,has_unpriced_ingredient,"
+                "unpriced_ingredient_count\n"
+                "Ideal Plaza,Kolkata,Masala Dosa,True,base,No.,23.82,24.10,False,0\n"
+                "Connaught Place,Delhi,Masala Dosa,True,base,No.,30.00,31.00,True,1\n"
+                "Ideal Plaza,Kolkata,Masala Dosa,True,takeout,No.,40.00,41.00,False,0\n"
+                "GK1 Cloud Kitchen,Delhi,Filter Coffee,True,base,No.,,,True,2\n",
+                encoding="utf-8",
+            )
+            payload = recipe_costs(directory=folder, outlet="Ideal Plaza", menu_item="Masala Dosa")
+            self.assertEqual(payload["source_kind"], "menu_item_cost")
+            self.assertEqual(payload["label"], "recipe cost excl. packaging")
+            tabs = {row["recipe_tab"]: row for row in payload["items"]}
+            self.assertEqual(set(tabs), {"base", "takeout"})
+            self.assertEqual(tabs["base"]["cost_per_unit_avg_price"], 23.82)
+            self.assertEqual(tabs["base"]["cost_per_portion_avg"], 23.82)
+            self.assertFalse(tabs["base"]["partial"])
+            self.assertIsNone(tabs["base"]["margin"])
+            takeout = recipe_costs(
+                directory=folder,
+                outlet="Ideal Plaza",
+                menu_item="Masala Dosa",
+                recipe_tab="takeout",
+            )
+            self.assertEqual(len(takeout["items"]), 1)
+            self.assertEqual(takeout["items"][0]["cost_per_portion_avg"], 40.0)
+            blank_cost = recipe_costs(directory=folder, outlet="GK1 Cloud Kitchen", menu_item="Filter Coffee")
+            self.assertIsNone(blank_cost["items"][0]["cost_per_portion_avg"])
+            self.assertTrue(blank_cost["items"][0]["partial"])
+            (folder_path / "menu_item_cost.csv").unlink()
+            fallback = recipe_costs(directory=folder, menu_item="Masala Dosa")
+            self.assertEqual(fallback["source_kind"], "recipe_cost_by_item")
+            self.assertEqual(fallback["items"][0]["cost_per_unit_avg_price"], 1.0)
+
     def test_recipe_endpoint(self):
         response = self.client.get("/food-cost/recipe-cost.json?outlet=Ideal%20Plaza&item=Masala%20Dosa")
         self.assertEqual(response.status_code, 200)
@@ -182,6 +237,8 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(gap, "360.3")
         self.assertIn("9 Sep–8 Oct 2026", html)
         self.assertNotIn("September purchases are not in these files", html)
+        self.assertNotIn(".csv", html)
+        self.assertNotIn(".xlsx", html)
         moves = _all_attrs(html, "rate-move", "data-item")
         self.assertTrue(moves)
 

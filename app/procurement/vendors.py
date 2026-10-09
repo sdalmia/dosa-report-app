@@ -15,8 +15,8 @@ from app.procurement.numbers import (
 )
 
 SHORT_DELIVERY_MESSAGE = (
-    "Short deliveries cannot be computed: "
-    "PO Qty is blank on every Restroworks receipt (see po_coverage.csv)."
+    "Short deliveries cannot be computed. "
+    "The ordered quantity is blank on every Restroworks receipt."
 )
 
 MOVE_THRESHOLD = 10.0
@@ -43,21 +43,10 @@ def build_vendors(bundle, selected_item=None):
         "short_delivery": _short_delivery(),
         "po_coverage": _po_coverage(bundle),
         "reconciliation": _reconciliation(bundle),
-        "missing_grn": "" if bundle["files"].get("grn_lines") else "Missing source: grn_lines_warehouses.csv",
-        "missing_rates": ""
-        if bundle["files"].get("supplier_rates")
-        else "Missing source: supplier_item_rates.csv",
-        "missing_summary": ""
-        if bundle["files"].get("supplier_summary")
-        else "Missing source: supplier_summary.csv",
-        "sources": {
-            "grn": source_name(bundle, "grn_lines") or "grn_lines_warehouses.csv",
-            "rates": source_name(bundle, "supplier_rates") or "supplier_item_rates.csv",
-            "summary": source_name(bundle, "supplier_summary") or "supplier_summary.csv",
-            "po_coverage": source_name(bundle, "po_coverage") or "po_coverage.csv",
-            "po_summary": source_name(bundle, "po_summary") or "po_vs_grn_reconciliation_summary.csv",
-            "po_by_se": source_name(bundle, "po_by_se") or "po_vs_grn_reconciliation_by_se.csv",
-        },
+        "missing_grn": "" if bundle["files"].get("grn_lines") else "Goods received are not on file.",
+        "missing_rates": "" if bundle["files"].get("supplier_rates") else "Supplier rates are not on file.",
+        "missing_summary": "" if bundle["files"].get("supplier_summary") else "Supplier spend is not on file.",
+        "page_help": _period_note(start, end),
     }
 
 
@@ -71,11 +60,10 @@ def _grn_bounds(bundle):
 def _period_note(start, end):
     label = format_period(start, end)
     if not label:
-        return "Supplier rates follow the dates on the GRN lines."
+        return "Supplier rates follow the dates on the goods received."
     return (
         f"Rates and supplier spend cover {label}. "
-        "That is the GRN window on file, not a 90-day average. "
-        "A single odd line can make a gap look large."
+        "A single unusual receipt can make a gap look large."
     )
 
 
@@ -208,7 +196,7 @@ def _po_coverage(bundle):
     if not rows:
         return {
             "available": False,
-            "missing": "Missing source: po_coverage.csv",
+            "missing": "Purchase orders are not on file, so short delivery cannot be checked.",
         }
     received = sum_present(row.get("received_value") for row in rows)
     return {
@@ -217,9 +205,8 @@ def _po_coverage(bundle):
         "suppliers": len(rows),
         "received": money_pair(received if rows else None),
         "note": (
-            "po_coverage.csv records lines_with_po_qty and lines_with_po_number as 0 for every supplier. "
-            "Those zeros are derived because PO Qty and PO Number are blank on the Purchase Detail export, "
-            "not a Restroworks count of zero. They are not a short-delivery rate."
+            "The ordered quantity and the order number are blank on every receipt. "
+            "That is not a short-delivery rate."
         ),
         "source": source_name(bundle, "po_coverage"),
         "period": rows[0].get("period") or "",
@@ -232,7 +219,7 @@ def _reconciliation(bundle):
     if not summary and not bills:
         return {
             "available": False,
-            "missing": "Missing source: po_vs_grn_reconciliation_summary.csv",
+            "missing": "Bill reconciliation is not on file.",
             "matched": None,
             "bills": None,
             "cities": [],

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_info.html" import info %}
 {% block title %}Vendors - Dosa Coffee{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('procurement.static', filename='procurement.css') }}">
@@ -20,8 +21,12 @@
 
   <section id="suppliers">
     <article class="tile">
-      <h2>Suppliers by spend</h2>
-      <p class="tile-meta">{{ period_label }} · {{ sources.summary }} · line totals, freight excluded</p>
+      <div class="heading-row">
+        <h2>Suppliers by spend</h2>
+        {% call info() %}
+        <p>{{ period_label }}. Line totals. Freight is not included.</p>
+        {% endcall %}
+      </div>
       <div class="scroll stack">
         {% for row in suppliers %}
         <div class="row-card">
@@ -30,7 +35,7 @@
           <p data-field="supplier-spend" data-city="{{ row.city }}" data-supplier="{{ row.supplier }}" data-value="{{ row.total.attr }}">{{ row.total.text }}{% if row.share.text %} · {{ row.share.text }} of city{% endif %}</p>
         </div>
         {% else %}
-        <p class="empty">No rows in {{ sources.summary }}.</p>
+        <p class="empty">No supplier spend is on file.</p>
         {% endfor %}
       </div>
     </article>
@@ -38,8 +43,12 @@
 
   <section id="prices">
     <article class="tile">
-      <h2>Price per unit over time</h2>
-      <p class="tile-meta">{{ period_label }} · {{ sources.grn }} · one row per stock-entry line</p>
+      <div class="heading-row">
+        <h2>Price per unit over time</h2>
+        {% call info() %}
+        <p>{{ period_label }}. Each row is one receipt line for the item you pick.</p>
+        {% endcall %}
+      </div>
       <form class="pc-form" method="get" action="{{ url_for('procurement.vendors') }}">
         <label for="item">Item</label>
         <select id="item" name="item">
@@ -50,7 +59,7 @@
         <button type="submit">Show rates</button>
       </form>
       {% if selected_item and not price_rows %}
-      <p class="empty">No GRN line for {{ selected_item }} in {{ sources.grn }}.</p>
+      <p class="empty">No receipt for {{ selected_item }}.</p>
       {% endif %}
       <div class="stack">
         {% for row in price_rows %}
@@ -62,13 +71,12 @@
         {% endfor %}
       </div>
       {% if rate_rows %}
-      <h3>Weighted average on the rate file</h3>
-      <p class="tile-meta">{{ sources.rates }}</p>
+      <h3>Weighted average</h3>
       {% for row in rate_rows %}
       <div class="row-card">
         <b>{{ row.supplier }}</b>
-        <p class="muted">{{ row.city }} · {{ row.unit }} · {{ row.lines }} lines · last {{ row.last_date }}</p>
-        <p>Wavg {{ row.wavg.text }} · min {{ row.min_rate.text }} · max {{ row.max_rate.text }} · last {{ row.last_rate.text }}</p>
+        <p class="muted">{{ row.city }} · {{ row.unit }} · {{ row.lines }} receipts · last {{ row.last_date }}</p>
+        <p>Weighted average {{ row.wavg.text }} · lowest {{ row.min_rate.text }} · highest {{ row.max_rate.text }} · last {{ row.last_rate.text }}</p>
       </div>
       {% endfor %}
       {% endif %}
@@ -77,9 +85,12 @@
 
   <section id="moves">
     <article class="tile">
-      <h2>Unit price moved more than 10%</h2>
-      <p class="tile-meta">{{ period_label }} · {{ sources.rates }} · (max rate − min rate) / min rate, same supplier, item, unit and city, at least two lines</p>
-      <p class="pc-note">{{ period_note }}</p>
+      <div class="heading-row">
+        <h2>Unit price moved more than 10%</h2>
+        {% call info() %}
+        <p>Highest rate minus lowest rate, divided by the lowest, for the same supplier, item, unit and city, with at least two receipts.</p>
+        {% endcall %}
+      </div>
       {% if time_moves %}
       <div class="scroll stack">
         {% for row in time_moves %}
@@ -91,17 +102,21 @@
         {% endfor %}
       </div>
       {% else %}
-      <p class="empty">No supplier-item row in {{ sources.rates }} has a min-to-max move above 10%.</p>
+      <p class="empty">No item from the same supplier moved more than 10% between its lowest and highest rate.</p>
       {% endif %}
     </article>
   </section>
 
   <section id="above">
     <article class="tile">
-      <h2>Paying above the cheapest supplier</h2>
-      <p class="tile-meta">{{ period_label }} · {{ sources.rates }} · pct_vs_cheapest_supplier over 10. Same item and unit. Not a change over time.</p>
+      <div class="heading-row">
+        <h2>Paying above the cheapest supplier</h2>
+        {% call info() %}
+        <p>Same item and unit, compared with the cheapest supplier. This is not a change over time. Shown when the gap is over 10%.</p>
+        {% endcall %}
+      </div>
       {% if largest_gap %}
-      <p class="pc-note">Largest gap on file: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier (weighted average {{ largest_gap.wavg.text }}).</p>
+      <p class="muted">Largest gap: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier (weighted average {{ largest_gap.wavg.text }}).</p>
       {% endif %}
       {% if above_cheapest %}
       <div class="scroll stack">
@@ -114,20 +129,21 @@
         {% endfor %}
       </div>
       {% else %}
-      <p class="empty">No row in {{ sources.rates }} is more than 10% above the cheapest supplier.</p>
+      <p class="empty">No supplier is more than 10% above the cheapest supplier for the same item.</p>
       {% endif %}
     </article>
   </section>
 
   <section id="short">
     <article class="tile">
-      <h2>Short delivery</h2>
-      <p class="tile-meta">{{ sources.po_coverage }}</p>
+      <div class="heading-row">
+        <h2>Short delivery</h2>
+        {% if po_coverage.available and po_coverage.note %}
+        {% call info() %}<p>{{ po_coverage.note }}</p>{% endcall %}
+        {% endif %}
+      </div>
       <p class="empty" data-field="short-delivery">{{ short_delivery.missing }}</p>
-      {% if po_coverage.available %}
-      <p class="pc-note">{{ po_coverage.period }} · {{ po_coverage.source }}. Received value on the coverage file {{ po_coverage.received.text }} across {{ po_coverage.suppliers }} supplier rows.</p>
-      <p class="muted">{{ po_coverage.note }}</p>
-      {% elif po_coverage.missing %}
+      {% if not po_coverage.available and po_coverage.missing %}
       <p class="empty">{{ po_coverage.missing }}</p>
       {% endif %}
     </article>
@@ -135,8 +151,12 @@
 
   <section id="bills">
     <article class="tile">
-      <h2>Bill reconciliation</h2>
-      <p class="tile-meta">{{ period_label }} · {{ sources.po_summary }} · {{ sources.po_by_se }}</p>
+      <div class="heading-row">
+        <h2>Bill reconciliation</h2>
+        {% call info() %}
+        <p>{{ period_label }}. Compares the bill amount with the goods received for the same receipt.</p>
+        {% endcall %}
+      </div>
       {% if not reconciliation.available %}
       <p class="empty">{{ reconciliation.missing }}</p>
       {% else %}
@@ -145,8 +165,8 @@
         {% for city in reconciliation.cities %}
         <div class="row-card">
           <b>{{ city.city }}</b>
-          <p class="muted">Purchase Detail {{ city.pd_lines }} lines · GRN {{ city.grn_lines }} lines{% if city.discount.text %} · discount {{ city.discount.text }}{% endif %}</p>
-          <p>Purchase Detail {{ city.pd_total.text }} · GRN {{ city.grn_total.text }} · gap {{ city.diff.text }}</p>
+          <p class="muted">Bill {{ city.pd_lines }} lines · goods received {{ city.grn_lines }} lines{% if city.discount.text %} · discount {{ city.discount.text }}{% endif %}</p>
+          <p>Bill {{ city.pd_total.text }} · goods received {{ city.grn_total.text }} · gap {{ city.diff.text }}</p>
         </div>
         {% endfor %}
       </div>
@@ -155,8 +175,8 @@
       {% for row in reconciliation.mismatches %}
       <div class="alert" data-field="bill-mismatch" data-se="{{ row.se_number }}">
         <b>{{ row.se_number }} · {{ row.city }}</b>
-        <p class="muted">{{ row.date }} · {{ row.supplier }} · {{ row.status }}</p>
-        <p>Purchase Detail {{ row.pd_total.text }} · Entry Report {{ row.grn_total.text }} · gap {{ row.diff.text }}</p>
+        <p class="muted">{{ row.date }} · {{ row.supplier }}</p>
+        <p>Bill {{ row.pd_total.text }} · goods received {{ row.grn_total.text }} · gap {{ row.diff.text }}</p>
       </div>
       {% endfor %}
       {% endif %}

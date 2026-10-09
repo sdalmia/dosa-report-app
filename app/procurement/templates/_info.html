@@ -1,0 +1,6 @@
+{% macro info() -%}
+<details class="info">
+  <summary aria-label="Explanation"><span aria-hidden="true">ⓘ</span></summary>
+  <div class="info-body">{{ caller() }}</div>
+</details>
+{%- endmacro %}

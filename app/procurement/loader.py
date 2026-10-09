@@ -139,6 +139,28 @@ def posist_daily_path():
     return Path(__file__).resolve().parents[2] / "data" / "store_health" / "posist_daily.csv"
 
 
+def _skip_menu_cost_side_file(path):
+    """Summary and channel files are not the per-outlet item cost."""
+    name = path.name.casefold()
+    return "summary" in name or "channel" in name
+
+
+def menu_item_cost_path(directory):
+    return newest_file(directory, "menu_item_cost*.csv", exclude=_skip_menu_cost_side_file)
+
+
+def recipe_cost_by_item_path(directory):
+    return newest_file(directory, "recipe_cost_by_item*.csv")
+
+
+def preferred_recipe_item_path(directory):
+    """Menu item cost supersedes recipe_cost_by_item when both are present."""
+    menu = menu_item_cost_path(directory)
+    if menu is not None:
+        return menu
+    return recipe_cost_by_item_path(directory)
+
+
 def newest_file(directory, pattern, exclude=None):
     """Pick the newest match. Date in the filename wins over mtime."""
     directory = Path(directory)
@@ -352,7 +374,9 @@ def load_procurement(directory=None):
         "supplier_summary": newest_file(directory, "supplier_summary*.csv"),
         "consumption": newest_file(directory, "store_consumption_wastage*.csv"),
         "wastage": newest_file(directory, "store_item_wastage_top*.csv"),
-        "recipe_items": newest_file(directory, "recipe_cost_by_item*.csv"),
+        "recipe_items": preferred_recipe_item_path(directory),
+        "menu_item_summary": newest_file(directory, "menu_item_cost*summary*.csv"),
+        "menu_item_channels": newest_file(directory, "menu_item_cost*channel*.csv"),
         "recipe_lines": newest_file(directory, "recipe_cost_lines*.csv"),
         "recipe_consumption": newest_file(
             directory,

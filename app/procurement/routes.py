@@ -25,11 +25,13 @@ def food_cost():
 @login_required
 def recipe_cost_json():
     """Recipe cost for the menu-engineering page. Margin is null until a selling price exists."""
+    tab = (request.args.get("tab") or "").strip()
     payload = recipe_costs(
         outlet=request.args.get("outlet") or None,
         menu_item=request.args.get("item") or None,
         include_lines=request.args.get("lines") == "1",
         include_non_menu=request.args.get("all") == "1",
+        recipe_tab=None if tab in {"", "all"} else tab,
     )
     return jsonify(payload)
 
