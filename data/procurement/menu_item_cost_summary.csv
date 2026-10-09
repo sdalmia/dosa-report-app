@@ -1,0 +1,293 @@
+item_name,unit,is_menu_item,outlets_with_recipe,outlets_east,outlets_north,outlets_compared,outlets_excluded,outlets_fully_priced,all_outlets_min_cost,all_outlets_max_cost,min_cost_avg,median_cost_avg,max_cost_avg,outlet_min,outlet_max,median_cost_east,median_cost_north,outlet_min_east,outlet_max_east,outlet_min_north,outlet_max_north,common_unpriced_ingredients,spread_east_pct,spread_north_pct,spread_pct
+Benne Dosa Batter Kit (1 kg),No.,True,17,0,17,4,13,0,145.87,254.41,217.16,238.31,244.66,Gurgaon Sec-15,Sec 18 Noida,,238.31,,,Gurgaon Sec-15,Sec 18 Noida,coconut chutney sticker (diy); dosa batter sticker (diy) cap cover; malkapodi powder sticker (diy); potato masala sticker (diy); round bucket dosa batter front sticker (diy); sambar sticker (diy) cap cover,,12.7,12.7
+Dosa Batter Kit (1 Kg),No.,True,34,17,17,14,20,14,97.1,212.0,125.54,128.51,212.0,Events & Catering,Kalkaji,126.55,211.25,Events & Catering,Ideal Plaza,Model Town,Kalkaji,,6.9,0.7,68.9
+Benne Dosa Batter Kit (1 Kg),No.,True,17,17,0,9,8,9,93.7,134.28,126.26,127.0,134.28,Lake Road,Ideal Plaza,127.0,,Lake Road,Ideal Plaza,,,,6.4,,6.4
+Rava Dosa Batter Kit (1 Kg),No.,True,34,17,17,11,23,1,44.1,141.94,121.37,121.85,139.56,New Town - Cloud Kitchen,Kalkaji,121.79,138.96,New Town - Cloud Kitchen,Kalikapur,Connaught Place,Kalkaji,coconut powder; whole black pepper,3.4,0.5,15.0
+Maharaja Delight,No.,True,34,17,17,5,29,0,73.0,123.61,110.55,113.18,113.86,Sec 143 Noida,"Pacific Mall, Jasola",,113.18,,,Sec 143 Noida,"Pacific Mall, Jasola",dahi bucket; paper food container - 100ml (1pkt = 50pc); paper tray mat (1pkt = 500pc); potato masala bucket; spicy coconut chutney bucket,,3.0,3.0
+Kitty Party Meal @ 349,No.,True,17,0,17,4,13,0,71.92,109.99,97.86,100.8,101.16,Sec 143 Noida,"Pacific Mall, Jasola",,100.8,,,Sec 143 Noida,"Pacific Mall, Jasola",buttermilk sticker (1sheet = 28pc); cold cup with lid - 300ml (1pkt = 50pc); potato masala bucket; spicy coconut chutney bucket,,3.4,3.4
+Dosa Coffee Thindi Podi Mix (500grm),No.,True,17,0,17,14,3,14,99.16,100.16,99.16,99.98,100.16,Sec 31 - Gurgaon,Model Town,,99.98,,,Sec 31 - Gurgaon,Model Town,,,1.0,1.0
+Dosa Coffee Rava Powder Mix (1Kg),No.,True,17,0,17,14,3,14,91.42,94.19,91.42,93.58,94.19,Shalimar Bagh,Paschim Vihar,,93.58,,,Shalimar Bagh,Paschim Vihar,,,3.0,3.0
+Malkapodi powder 500gm,Kg,True,17,17,0,16,1,16,7.33,94.64,91.08,91.94,94.64,James Long Sarani,Events & Catering,91.94,,James Long Sarani,Events & Catering,,,,3.9,,3.9
+Uttapam Combo,No.,True,34,17,17,7,27,0,51.12,90.57,85.21,87.78,87.92,Ideal Plaza,Rangoli Mall,87.78,,Ideal Plaza,Rangoli Mall,,,hot coffee cup with lid - 200ml (1pkt = 25pc); paper food container - 100ml (1pkt = 50pc); paper tray mat (1pkt = 500pc),3.2,,3.2
+Dosa Coffee Malkapodi Mix (500grm),No.,True,17,0,17,15,2,15,84.76,98.63,84.76,85.72,98.63,Shalimar Bagh,Chattarpur,,85.72,,,Shalimar Bagh,Chattarpur,,,16.4,16.4
+Filter Coffee Flask (500ml),No.,True,17,0,17,5,12,0,9.69,102.08,83.42,85.18,85.25,Kalkaji,Sec 15 Faridabad,,85.18,,,Kalkaji,Sec 15 Faridabad,cable tie (1pkt = 100pc); coffee/tea flask 500ml (1pkt = 25pc),,2.2,2.2
+Paneer Dosa,No.,True,17,0,17,12,5,12,57.29,82.81,81.27,82.45,82.81,Sec 143 Noida,Rohini Sec-7,,82.45,,,Sec 143 Noida,Rohini Sec-7,,,1.9,1.9
+Dosa Coffee Appam Tiffin,No.,True,17,0,17,8,9,0,52.97,86.47,81.03,82.42,83.51,Sec 143 Noida,Sec 31 - Gurgaon,,82.42,,,Sec 143 Noida,Sec 31 - Gurgaon,appam batter; cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); paper sleeve (1pkt = 50pc),,3.1,3.1
+Dosa Coffee Malabar Tiffin,No.,True,17,0,17,8,9,0,31.6,76.12,72.69,73.16,73.94,Gurgaon Sec-15,Gurgaon Sec 10,,73.16,,,Gurgaon Sec-15,Gurgaon Sec 10,cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); dahi bucket; paper sleeve (1pkt = 50pc),,1.7,1.7
+Spicy Banana Chips,No.,True,17,17,0,13,4,13,71.99,72.45,71.99,72.45,72.45,Salt Lake Sec-1,Forum,72.45,,Salt Lake Sec-1,Forum,,,,0.6,,0.6
+Tomato Banana Chips,No.,True,17,17,0,13,4,13,72.45,72.45,72.45,72.45,72.45,Forum,Forum,72.45,,Forum,Forum,,,,0.0,,0.0
+Malabar Paratha with Paneer Korma,No.,True,34,17,17,29,5,29,3.71,81.13,67.13,70.93,81.13,Events & Catering,Sec 31 - Gurgaon,68.86,79.05,Events & Catering,Manisquare,Gurgaon Sec-15,Sec 31 - Gurgaon,,5.7,2.9,20.9
+Cheese Paniyaram (10 Pcs),No.,True,34,17,17,22,12,22,28.37,98.37,67.64,70.05,98.37,Ideal Plaza,"Pacific Mall, Jasola",69.97,98.04,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,3.7,3.2,45.4
+Salt & Pepper Banana Chips,No.,True,17,17,0,13,4,13,49.97,68.09,49.97,68.09,68.09,Salt Lake Sec-1,Forum,68.09,,Salt Lake Sec-1,Forum,,,,36.3,,36.3
+Dosa Coffee Tiffin,No.,True,34,17,17,15,19,15,30.91,66.41,44.02,66.2,66.41,Gurgaon Sec-15,New Town - Cloud Kitchen,66.24,44.02,Ideal Plaza,New Town - Cloud Kitchen,Gurgaon Sec-15,Connaught Place,,3.7,0.3,50.9
+Regular White Chutney Bucket Outlet,Kg,False,34,17,17,30,4,30,0.81,80.83,52.32,64.95,80.83,Ideal Plaza,Sec 31 - Gurgaon,64.88,79.53,Ideal Plaza,Rangoli Mall,Chattarpur,Sec 31 - Gurgaon,,24.2,25.5,54.5
+Dosa Batter 1Kg,Kg,True,17,17,0,6,11,6,39.82,66.1,63.49,64.78,66.1,Rangoli Mall,Kalikapur,64.78,,Rangoli Mall,Kalikapur,,,,4.1,,4.1
+Paper Dosa Combo,No.,True,34,17,17,6,28,0,20.79,64.67,61.86,61.96,62.05,Santoshpur,Rangoli Mall,61.96,,Santoshpur,Rangoli Mall,,,paper food container - 100ml (1pkt = 50pc); paper tray mat (1pkt = 500pc); potato masala bucket,0.3,,0.3
+DC Tiffin @ 150,No.,True,17,0,17,6,11,0,44.42,61.28,60.88,61.05,61.28,Sec 15 Faridabad,Gurgaon DLF,,61.05,,,Sec 15 Faridabad,Gurgaon DLF,buttermilk bucket; white paper glass - 100ml,,0.7,0.7
+Cold Coffee-Crunchy Oreo,No.,True,34,17,17,14,20,14,0.72,62.51,60.23,60.39,61.14,Model Town,Sec 31 - Gurgaon,,60.39,,,Model Town,Sec 31 - Gurgaon,,,1.5,1.5
+Malabar Paratha Combo,No.,True,17,0,17,14,3,0,9.56,59.05,57.71,57.96,59.05,"Pacific Mall, Jasola",Sec 31 - Gurgaon,,57.96,,,"Pacific Mall, Jasola",Sec 31 - Gurgaon,cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); coke pet - 250ml,,2.3,2.3
+Malkapodi Masala Dosa,No.,True,17,0,17,7,10,7,50.23,57.46,55.85,57.23,57.46,Sec 143 Noida,"Pacific Mall, Jasola",,57.23,,,Sec 143 Noida,"Pacific Mall, Jasola",,,2.9,2.9
+Dosa Coffee Benne Tiffin,No.,True,34,17,17,21,13,21,12.01,57.22,50.24,57.06,57.22,Gurgaon Sec-15,Quest Mall,57.12,50.28,Ideal Plaza,Quest Mall,Gurgaon Sec-15,"Pacific Mall, Jasola",,4.6,0.4,13.9
+Dosa Coffee Bhaat Tiffin,No.,True,17,0,17,4,13,0,36.91,62.3,54.99,55.11,55.46,Model Town,"Pacific Mall, Jasola",,55.11,,,Model Town,"Pacific Mall, Jasola",cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); paper sleeve (1pkt = 50pc); raw curd bucket; raw imli,,0.9,0.9
+Guntur Karampodi Dosa,No.,True,34,17,17,14,20,14,26.28,64.32,51.05,54.17,54.19,Ideal Plaza,Kalikapur,54.17,,Ideal Plaza,Kalikapur,,,,6.2,,6.2
+Cold Coffee-Nuttela,No.,True,34,17,17,14,20,14,0.72,56.34,53.83,54.04,54.57,Sec 143 Noida,Sec 31 - Gurgaon,,54.04,,,Sec 143 Noida,Sec 31 - Gurgaon,,,1.4,1.4
+Thindi Ghee Podi Masala Dosa,No.,True,17,0,17,7,10,7,45.72,53.61,52.01,53.37,53.61,Sec 143 Noida,"Pacific Mall, Jasola",,53.37,,,Sec 143 Noida,"Pacific Mall, Jasola",,,3.1,3.1
+Garlic Ghee Roast Dosa,No.,True,34,17,17,22,12,22,22.81,65.01,50.36,52.6,65.01,Ideal Plaza,"Pacific Mall, Jasola",52.55,64.71,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,4.6,2.6,29.1
+Breakfast Combo,No.,True,34,17,17,8,26,0,27.8,56.06,50.43,52.46,53.55,Ideal Plaza,Model Town,52.44,53.55,Ideal Plaza,Kalikapur,Model Town,Model Town,hot coffee cup with lid - 200ml (1pkt = 25pc); paper tray mat (1pkt = 500pc),4.2,,6.2
+Paniyaram Batter Kit (1Ltr),No.,True,17,0,17,7,10,5,35.65,53.44,51.32,51.35,53.44,Gurgaon DLF,Chattarpur,,51.35,,,Gurgaon DLF,Chattarpur,special white coconut chutney bucket,,4.1,4.1
+Mysore Masala Dosa,No.,True,17,0,17,7,10,7,44.24,51.4,49.88,51.27,51.4,Sec 143 Noida,"Pacific Mall, Jasola",,51.27,,,Sec 143 Noida,"Pacific Mall, Jasola",,,3.0,3.0
+Garlic Benne Dosa,No.,True,34,17,17,29,5,29,5.45,64.95,48.27,50.78,64.95,Ideal Plaza,Model Town,50.65,64.9,Ideal Plaza,Quest Mall,Shalimar Bagh,Model Town,,5.2,0.5,34.6
+ABC Juice,No.,True,34,17,17,20,14,20,0.78,54.67,46.58,50.71,54.67,Kalkaji,Rosedale Plaza,54.66,46.63,Ideal Plaza,Rosedale Plaza,Kalkaji,Gurgaon DLF,,0.1,0.4,17.4
+Upma,No.,True,34,17,17,22,12,22,23.37,65.03,48.31,50.57,65.03,Ideal Plaza,"Pacific Mall, Jasola",50.48,64.63,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,4.9,2.7,34.6
+Dosa Coffee Tiffin @ 199,No.,True,17,0,17,6,11,5,40.33,50.59,50.25,50.43,50.59,Sec 15 Faridabad,"Pacific Mall, Jasola",,50.43,,,Sec 15 Faridabad,"Pacific Mall, Jasola",camphor,,0.7,0.7
+Thindi Podi Ghee Masala Dosa,No.,True,17,17,0,12,5,12,17.14,50.47,48.97,50.36,50.47,Ideal Plaza,James Long Sarani,50.36,,Ideal Plaza,James Long Sarani,,,,3.1,,3.1
+DC Benne Tiffin,No.,True,17,17,0,11,6,3,14.76,50.95,47.65,49.81,49.85,Ideal Plaza,Rangoli Mall,49.81,,Ideal Plaza,Rangoli Mall,,,paper tray mat (1pkt = 500pc),4.6,,4.6
+Dhaniya Masala Dosa,No.,True,17,0,17,7,10,7,35.08,49.49,48.01,49.41,49.49,Sec 143 Noida,"Pacific Mall, Jasola",,49.41,,,Sec 143 Noida,"Pacific Mall, Jasola",,,3.1,3.1
+Mysore Ghee Roast Dosa,No.,True,34,17,17,22,12,22,31.79,61.48,45.34,47.59,61.48,Ideal Plaza,"Pacific Mall, Jasola",47.52,61.1,Ideal Plaza,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,5.1,2.8,35.6
+Idli Fries & Filter Coffee @ 199,No.,True,17,0,17,14,3,14,21.58,47.29,46.42,46.52,47.29,Model Town,Sec 31 - Gurgaon,,46.52,,,Model Town,Sec 31 - Gurgaon,,,1.9,1.9
+Raw Mango Ghee Roast Dosa,No.,True,34,17,17,21,13,21,22.54,68.13,42.68,45.88,68.13,Ideal Plaza,"Pacific Mall, Jasola",45.82,67.76,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,7.7,2.5,59.6
+Mysore Benne Dosa,No.,True,34,17,17,29,5,29,14.43,60.84,43.25,45.76,60.84,Ideal Plaza,Sec 31 - Gurgaon,45.64,60.58,Ideal Plaza,Forum,Gurgaon Sec-15,Sec 31 - Gurgaon,,5.8,0.6,40.7
+Raw Mango Benne Dosa,No.,True,34,17,17,26,8,26,14.87,63.33,42.86,45.44,63.33,Ideal Plaza,Kalkaji,45.17,63.28,Ideal Plaza,Quest Mall,Gurgaon Sec 10,Kalkaji,,6.5,0.2,47.8
+Ghee Roast Masala Dosa.,No.,True,34,17,17,21,13,21,22.81,58.87,40.88,45.38,58.87,Events & Catering,"Pacific Mall, Jasola",45.36,58.53,Events & Catering,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,11.3,2.9,44.0
+Paper Masala Dosa,No.,True,17,0,17,7,10,7,38.32,45.44,43.95,45.35,45.44,Sec 143 Noida,"Pacific Mall, Jasola",,45.35,,,Sec 143 Noida,"Pacific Mall, Jasola",,,3.4,3.4
+Spicy Tomato Onion Ghee Roast Dosa,No.,True,34,17,17,21,13,21,26.56,75.09,42.94,45.2,75.09,Ideal Plaza,"Pacific Mall, Jasola",45.14,74.76,Ideal Plaza,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,5.4,9.7,74.9
+Spicy Banana Masala Chips,No.,True,17,17,0,13,4,13,3.85,43.84,43.59,43.83,43.84,Salt Lake Sec-1,Rosedale Plaza,43.83,,Salt Lake Sec-1,Rosedale Plaza,,,,0.6,,0.6
+Tomato Banana Masala Chips,No.,True,17,17,0,13,4,13,3.85,43.84,43.81,43.83,43.84,Lake Town,Rosedale Plaza,43.83,,Lake Town,Rosedale Plaza,,,,0.1,,0.1
+Tender Coconut Shake,No.,True,34,17,17,24,10,24,0.72,44.24,43.68,43.73,44.24,Quest Mall,"Pacific Mall, Jasola",43.7,44.22,Quest Mall,Manisquare,Model Town,"Pacific Mall, Jasola",,0.1,0.1,1.3
+Ghee Roast Masala Dosa,No.,True,34,17,17,22,12,22,22.81,58.87,39.21,43.7,58.87,Events & Catering,"Pacific Mall, Jasola",43.65,58.53,Events & Catering,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,11.7,2.9,50.1
+Cold Coffee Combo,No.,True,34,17,17,11,23,0,6.83,85.52,43.22,43.38,44.32,Sec 143 Noida,Sec 31 - Gurgaon,,43.38,,,Sec 143 Noida,Sec 31 - Gurgaon,cold coffee sticker (1sheet = 28pc); cold cup with lid - 300ml (1pkt = 50pc); dahi bucket; milk powder; paper tray mat (1pkt = 500pc); sugar syrup bucket,,2.5,2.5
+Rava Masala Dosa,No.,True,17,0,17,5,12,1,36.37,43.57,41.72,43.14,43.22,Sec 143 Noida,"Pacific Mall, Jasola",,43.14,,,Sec 143 Noida,"Pacific Mall, Jasola",coconut powder; whole black pepper,,3.6,3.6
+Potato Masala Bucket Outlet,Kg,False,34,17,17,30,4,30,15.2,44.11,42.1,43.14,44.11,Chattarpur,Sec 31 - Gurgaon,42.98,43.92,Lake Town,Calcutta Swimming Club,Chattarpur,Sec 31 - Gurgaon,,2.1,4.8,4.8
+Open Butter Masala Dosa,No.,True,34,17,17,22,12,22,5.77,95.11,39.88,42.71,95.11,Events & Catering,"Pacific Mall, Jasola",42.69,95.07,Events & Catering,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,7.1,3.2,138.5
+Malkapodi Dosa Combo,No.,True,17,0,17,11,6,0,36.43,42.5,42.28,42.4,42.5,Paschim Vihar,Gurgaon DLF,,42.4,,,Paschim Vihar,Gurgaon DLF,cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); coke pet - 250ml; regular white chutney bucket,,0.5,0.5
+Benne Masala Dosa.,No.,True,34,17,17,22,12,22,5.46,61.66,38.39,41.95,61.66,Events & Catering,"Pacific Mall, Jasola",41.84,61.59,Events & Catering,Quest Mall,Sec 143 Noida,"Pacific Mall, Jasola",,9.6,5.0,60.6
+Benne Masala Dosa,No.,True,34,17,17,22,12,22,5.46,61.66,38.39,41.95,61.66,Events & Catering,"Pacific Mall, Jasola",41.84,61.59,Events & Catering,Quest Mall,Sec 143 Noida,"Pacific Mall, Jasola",,9.6,5.0,60.6
+Dhaniya Ghee Roast Dosa,No.,True,34,17,17,17,17,17,26.57,57.49,39.54,41.84,57.49,Ideal Plaza,"Pacific Mall, Jasola",41.79,57.15,Ideal Plaza,Salt Lake Sec-1,Sec 143 Noida,"Pacific Mall, Jasola",,6.0,3.0,45.4
+Benne Masala Dosa @ 0,No.,True,17,0,17,8,9,4,17.38,45.09,40.41,41.6,42.18,Sec 31 - Gurgaon,Sec 18 Noida,,41.6,,,Sec 31 - Gurgaon,Sec 18 Noida,spicy coconut chutney bucket,,4.4,4.4
+Thatte Idli @ 79,No.,True,34,17,17,19,15,19,16.41,45.74,39.74,41.53,45.74,Ideal Plaza,"Pacific Mall, Jasola",41.48,45.24,Ideal Plaza,Forum,Gurgaon Sec-15,"Pacific Mall, Jasola",,4.7,1.4,15.1
+Garlic Masala Dosa,No.,True,17,0,17,8,9,2,38.62,55.88,38.62,41.32,41.54,Chattarpur,Sec 31 - Gurgaon,,41.32,,,Chattarpur,Sec 31 - Gurgaon,spicy coconut chutney mix 1pkt (16gm); tomato banana chips (1 pkt = 1kg),,7.6,7.6
+Thatte Idli Plate,No.,True,34,17,17,19,15,19,16.18,45.4,39.51,41.3,45.4,Ideal Plaza,"Pacific Mall, Jasola",41.24,44.88,Ideal Plaza,Forum,Gurgaon Sec-15,"Pacific Mall, Jasola",,4.8,1.5,14.9
+Idli Vada Combo,No.,True,17,0,17,4,13,0,16.2,40.11,39.79,39.99,40.11,Connaught Place,Sec 15 Faridabad,,39.99,,,Connaught Place,Sec 15 Faridabad,paper tray mat (1pkt = 500pc); regular white chutney bucket,,0.8,0.8
+Steam Dosa With Paneer Korma,No.,True,17,0,17,14,3,14,6.89,39.67,39.34,39.36,39.67,Gurgaon Sec-15,Sec 31 - Gurgaon,,39.36,,,Gurgaon Sec-15,Sec 31 - Gurgaon,,,0.8,0.8
+Gulab Jamun (2 Pc),No.,True,17,0,17,10,7,10,0.25,39.06,38.98,39.04,39.06,Gurgaon DLF,Kalkaji,,39.04,,,Gurgaon DLF,Kalkaji,,,0.2,0.2
+Dosa Coffee Kesari Halwa Mix (550grm),No.,True,17,0,17,15,2,15,32.05,41.25,32.05,39.04,41.25,Chattarpur,Sec 31 - Gurgaon,,39.04,,,Chattarpur,Sec 31 - Gurgaon,,,28.7,28.7
+Dosa Coffee Tiffin @ 249,No.,True,34,17,17,27,7,27,14.02,39.3,33.49,38.91,39.3,Ideal Plaza,Sec 31 - Gurgaon,35.62,38.98,Ideal Plaza,Salt Lake Sec-1,Gurgaon Sec-15,Sec 31 - Gurgaon,,6.8,1.0,17.3
+Garlic Dosa,No.,True,34,17,17,22,12,22,7.4,48.5,36.35,38.74,48.5,Ideal Plaza,Rohini Sec-7,38.73,48.41,Ideal Plaza,Manisquare,Sec 143 Noida,Rohini Sec-7,,6.7,3.2,33.4
+Garlic Benne Masala Dosa - Forum,No.,True,17,17,0,11,6,2,7.12,45.29,37.29,38.17,38.25,Ideal Plaza,Rangoli Mall,38.17,,Ideal Plaza,Rangoli Mall,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",2.6,,2.6
+Cold Coffee-Classic,No.,True,34,17,17,28,6,28,0.72,38.32,36.74,37.92,38.32,Model Town,Forum,38.3,36.92,Quest Mall,Forum,Model Town,Sec 31 - Gurgaon,,0.8,2.9,4.3
+Spicy Coconut Ghee Roast Dosa,No.,True,34,17,17,15,19,15,23.01,62.11,35.65,37.91,61.47,Ideal Plaza,Connaught Place,37.87,61.26,Ideal Plaza,James Long Sarani,Sec 15 Faridabad,Connaught Place,,6.6,1.5,72.4
+Fresh Orange Juice,No.,True,34,17,17,23,11,23,0.39,42.82,36.82,37.66,42.82,Gurgaon Sec-15,Rosedale Plaza,42.73,37.38,Rangoli Mall,Rosedale Plaza,Gurgaon Sec-15,Sec 143 Noida,,0.3,2.3,16.3
+Garlic Ghee Roast Masala Dosa - Forum,No.,True,17,17,0,11,6,2,16.47,44.08,36.26,37.15,37.22,Ideal Plaza,James Long Sarani,37.15,,Ideal Plaza,James Long Sarani,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",2.6,,2.6
+Plain Ghee Roast Dosa,No.,True,34,17,17,22,12,22,22.54,52.28,34.9,37.14,52.28,Ideal Plaza,"Pacific Mall, Jasola",37.08,51.95,Ideal Plaza,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,6.6,3.3,49.8
+Paniyaram (10 Pcs),No.,True,34,17,17,22,12,22,21.91,79.96,34.39,36.61,79.96,Ideal Plaza,"Pacific Mall, Jasola",36.59,79.63,Ideal Plaza,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,6.6,4.1,132.5
+Crunchy Oreo Cold Coffee,No.,True,17,0,17,13,4,1,0.72,57.49,36.39,36.52,36.76,Sec 143 Noida,Sec 31 - Gurgaon,,36.52,,,Sec 143 Noida,Sec 31 - Gurgaon,milk powder,,1.0,1.0
+Malkapodi Dosa,No.,True,34,17,17,22,12,22,16.98,50.76,33.98,36.4,50.76,Ideal Plaza,"Pacific Mall, Jasola",36.37,50.55,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,7.2,3.2,49.4
+Raw Mango Benne Masala Dosa - Forum,No.,True,17,17,0,11,6,2,11.04,43.15,35.04,35.88,36.01,Ideal Plaza,New Town - Cloud Kitchen,35.88,,Ideal Plaza,New Town - Cloud Kitchen,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",2.8,,2.8
+Dosa Coffee Meal,No.,True,17,17,0,8,9,0,17.81,39.17,35.34,35.53,35.6,James Long Sarani,Kalikapur,35.53,,James Long Sarani,Kalikapur,,,potato masala bucket; regular white chutney bucket,0.7,,0.7
+Filter Coffee Flask (250ml),No.,True,17,0,17,14,3,14,0.56,36.35,35.34,35.5,36.35,Sec 143 Noida,Sec 31 - Gurgaon,,35.5,,,Sec 143 Noida,Sec 31 - Gurgaon,,,2.9,2.9
+Thindi Podi Powder,Pkt,True,17,17,0,12,5,12,7.3,36.89,29.94,35.34,36.89,James Long Sarani,Events & Catering,35.34,,James Long Sarani,Events & Catering,,,,23.2,,23.2
+Ghee Podi Thatte Idli - Forum,No.,True,17,17,0,11,6,2,19.06,39.92,34.54,35.34,35.42,Ideal Plaza,James Long Sarani,35.34,,Ideal Plaza,James Long Sarani,,,"areca 7"" plate; paper tray mat (1pkt = 500pc)",2.5,,2.5
+Benne Dosa,No.,True,34,17,17,22,12,22,5.11,55.07,32.72,35.15,55.07,Ideal Plaza,Rohini Sec-7,35.12,55.0,Ideal Plaza,Quest Mall,Sec 143 Noida,Rohini Sec-7,,7.8,5.6,68.3
+Filter Coffee Flask,No.,True,17,17,0,15,2,15,34.15,35.07,34.15,34.98,35.07,Events & Catering,Salt Lake Sec-1,34.98,,Events & Catering,Salt Lake Sec-1,,,,2.7,,2.7
+Masala Vada Plate (2 pc),No.,True,17,0,17,7,10,7,19.52,34.96,33.51,34.93,34.96,Sec 143 Noida,"Pacific Mall, Jasola",,34.93,,,Sec 143 Noida,"Pacific Mall, Jasola",,,4.3,4.3
+Raw Mango Ghee Roast Masala Dosa - Forum,No.,True,17,17,0,11,6,2,20.39,41.94,34.01,34.85,35.03,Ideal Plaza,New Town - Cloud Kitchen,34.85,,Ideal Plaza,New Town - Cloud Kitchen,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",3.0,,3.0
+Gunturkaram Podi Powder,Pkt,True,17,17,0,10,7,10,7.3,35.99,29.08,34.78,35.99,James Long Sarani,Rosedale Plaza,34.78,,James Long Sarani,Rosedale Plaza,,,,23.8,,23.8
+Tomato Rice,No.,True,34,17,17,22,12,22,8.73,35.57,31.86,34.68,35.57,Quest Mall,Sec 31 - Gurgaon,32.44,34.8,Quest Mall,New Town - Cloud Kitchen,Rohini Sec-7,Sec 31 - Gurgaon,,2.1,2.7,11.6
+Thindi Ghee Masala Dosa,No.,True,17,0,17,9,8,5,28.98,44.29,28.98,34.39,35.48,Chattarpur,Sec 31 - Gurgaon,,34.39,,,Chattarpur,Sec 31 - Gurgaon,potato masala bucket; spicy coconut chutney bucket,,22.4,22.4
+Mango Shake,No.,True,34,17,17,28,6,28,0.72,36.0,32.78,34.32,36.0,Model Town,James Long Sarani,35.99,32.79,Forum,James Long Sarani,Model Town,Sec 31 - Gurgaon,,0.7,0.3,9.8
+Bisbelle Bhaat,No.,True,34,17,17,19,15,4,8.05,34.74,32.62,34.01,34.41,Kalikapur,Gurgaon Sec 10,33.66,34.09,Kalikapur,James Long Sarani,Rohini Sec-7,Gurgaon Sec 10,raw imli,3.5,1.4,5.5
+Spicy Onion Ghee Roast Dosa,No.,True,34,17,17,15,19,10,28.36,45.47,28.36,33.64,34.86,Chattarpur,Sec 31 - Gurgaon,,33.64,,,Chattarpur,Sec 31 - Gurgaon,onion chutney bucket; regular white chutney bucket,,22.9,22.9
+Paniyaram Batter Kit (500ml),No.,True,17,0,17,7,10,5,18.15,55.72,33.6,33.62,34.92,Gurgaon DLF,Chattarpur,,33.62,,,Gurgaon DLF,Chattarpur,special white coconut chutney bucket,,3.9,3.9
+Banana Masala Chips,No.,True,17,0,17,10,7,10,6.48,33.49,32.94,33.47,33.49,Gurgaon DLF,Gurgaon Sec-15,,33.47,,,Gurgaon DLF,Gurgaon Sec-15,,,1.7,1.7
+Malkapodi Powder,Pkt,True,17,17,0,10,7,10,7.3,34.58,28.47,33.44,34.58,James Long Sarani,Salt Lake,33.44,,James Long Sarani,Salt Lake,,,,21.5,,21.5
+Rava Batter 1Kg,Kg,True,17,17,0,5,12,2,7.75,58.77,33.2,33.33,35.73,Quest Mall,Events & Catering,33.33,,Quest Mall,Events & Catering,,,1000ml round bucket (diy); rava batter sticker (diy) cap cover; round bucket back sticker (diy); round bucket rava batter front sticker (diy),7.6,,7.6
+Mysore Dosa,No.,True,34,17,17,22,12,22,19.37,45.81,30.93,33.33,45.81,Ideal Plaza,"Pacific Mall, Jasola",33.31,45.67,Ideal Plaza,Lake Road,Sec 143 Noida,"Pacific Mall, Jasola",,7.8,3.5,48.1
+Salt & Pepper Banana Masala Chips,No.,True,17,17,0,13,4,13,3.85,33.25,31.47,33.24,33.25,Events & Catering,Kalikapur,33.24,,Events & Catering,Kalikapur,,,,5.7,,5.7
+Service of Schweppes Ginger Ale,No.,True,17,0,17,2,15,2,33.19,33.19,33.19,33.19,33.19,Gurgaon Sec-15,Gurgaon Sec-15,,33.19,,,Gurgaon Sec-15,Gurgaon Sec-15,,,0.0,0.0
+Dahi Vada Plate (2 pc),No.,True,34,17,17,26,8,26,16.51,33.48,26.04,33.11,33.48,Gurgaon Sec 10,New Town - Cloud Kitchen,33.33,26.1,Salt Lake,New Town - Cloud Kitchen,Gurgaon Sec 10,Model Town,,1.1,1.2,28.6
+Beetroot Ghee Roast Dosa,No.,True,34,17,17,15,19,11,27.74,41.22,27.74,33.04,34.26,Chattarpur,Sec 31 - Gurgaon,,33.04,,,Chattarpur,Sec 31 - Gurgaon,beetroot chutney bucket; regular white chutney bucket,,23.5,23.5
+Fresh Sweet Lime Juice,No.,True,34,17,17,22,12,22,0.39,45.62,32.71,32.84,45.62,Connaught Place,Quest Mall,44.86,32.78,Ideal Plaza,Quest Mall,Connaught Place,Sec 18 Noida,,2.2,0.5,39.5
+Benne Masala Dosa - Forum,No.,True,17,17,0,11,6,2,7.0,39.6,31.62,32.5,32.56,Ideal Plaza,James Long Sarani,32.5,,Ideal Plaza,James Long Sarani,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",3.0,,3.0
+Srivillli Kheer,No.,True,17,0,17,14,3,14,0.28,32.63,32.01,32.16,32.63,Sec 15 Faridabad,Sec 31 - Gurgaon,,32.16,,,Sec 15 Faridabad,Sec 31 - Gurgaon,,,1.9,1.9
+Masala Dosa Combo,No.,True,34,17,17,4,30,0,12.58,45.2,31.87,31.92,32.19,Lake Road,Lake Town,31.92,,Lake Road,Lake Town,,,paper tray mat (1pkt = 500pc); potato masala bucket,1.0,,1.0
+Dahi Vada - Forum,No.,True,17,17,0,9,8,2,23.65,36.39,31.82,31.85,31.88,Lake Road,Rosedale Plaza,31.85,,Lake Road,Rosedale Plaza,,,"areca 7"" plate; paper tray mat (1pkt = 500pc)",0.2,,0.2
+Coconut Rice,No.,True,34,17,17,22,12,22,6.43,36.37,30.76,31.35,36.37,Model Town,Rangoli Mall,36.32,31.05,Ideal Plaza,Rangoli Mall,Model Town,Sec 31 - Gurgaon,,12.7,5.5,18.2
+Dosa Batter Kit (500ml),No.,True,17,0,17,7,10,5,15.64,53.14,31.03,31.03,31.97,Gurgaon DLF,Chattarpur,,31.03,,,Gurgaon DLF,Chattarpur,special white coconut chutney bucket,,3.0,3.0
+Ghee Roast Masala Dosa - Forum,No.,True,17,17,0,11,6,2,16.47,37.75,29.93,30.82,30.89,Ideal Plaza,James Long Sarani,30.82,,Ideal Plaza,James Long Sarani,,,"areca 10"" plate; paper tray mat (1pkt = 500pc)",3.2,,3.2
+Nutella Cold Coffee,No.,True,17,0,17,13,4,1,0.72,51.26,30.27,30.48,30.73,Sec 143 Noida,Gurgaon Sec 10,,30.48,,,Sec 143 Noida,Gurgaon Sec 10,milk powder,,1.5,1.5
+Pav Bhaji Combo,No.,True,17,0,17,13,4,0,26.75,31.65,30.28,30.37,30.56,Gurgaon Sec 10,Sec 31 - Gurgaon,,30.37,,,Gurgaon Sec 10,Sec 31 - Gurgaon,dahi bucket; paper tray mat (1pkt = 500pc); pav bhaji masala 1kg; pav bread (300 gm),,0.9,0.9
+Schweppes Bottled water (500ml),No.,True,34,17,17,16,18,16,26.15,32.16,26.15,30.26,32.16,Food Truck - 1,Events & Catering,30.26,,Food Truck - 1,Events & Catering,,,,23.0,,23.0
+Strawberry Shake,No.,True,34,17,17,28,6,28,0.72,30.15,29.23,29.8,30.15,Model Town,Forum,30.11,29.3,Quest Mall,Forum,Model Town,Sec 31 - Gurgaon,,0.5,1.2,3.1
+Thindi Podi Idli (2 pc) @ 79,No.,True,17,17,0,12,5,12,11.99,29.77,26.96,29.72,29.77,Ideal Plaza,James Long Sarani,29.72,,Ideal Plaza,James Long Sarani,,,,10.4,,10.4
+Thindi Podi Idli,No.,True,34,17,17,12,22,12,11.99,33.19,26.96,29.72,29.77,Ideal Plaza,James Long Sarani,29.72,,Ideal Plaza,James Long Sarani,,,,10.4,,10.4
+Rava Dosa Batter Kit (500ml),No.,True,17,0,17,4,13,1,13.73,52.46,29.23,29.28,29.34,Rohini Sec-7,Paschim Vihar,,29.28,,,Rohini Sec-7,Paschim Vihar,coconut powder; special white coconut chutney bucket; whole black pepper,,0.4,0.4
+Rasam Vada Plate (2 Pc),No.,True,34,17,17,17,17,17,10.8,44.18,26.78,29.13,44.18,Ideal Plaza,"Pacific Mall, Jasola",28.92,43.97,Ideal Plaza,Rosedale Plaza,Sec 143 Noida,"Pacific Mall, Jasola",,9.4,4.1,65.0
+All Time Favourite,No.,True,34,17,17,17,17,8,3.97,29.07,24.27,29.02,29.07,Rohini Sec-7,Forum,29.02,24.28,Events & Catering,Forum,Rohini Sec-7,Paschim Vihar,hot coffee cup with lid - 200ml (1pkt = 25pc),3.4,0.0,19.8
+Curd Rice,No.,True,34,17,17,23,11,23,9.66,30.06,23.6,28.99,30.06,Kalikapur,Sec 31 - Gurgaon,24.55,29.11,Kalikapur,Salt Lake Sec-1,Model Town,Sec 31 - Gurgaon,,4.3,4.2,27.4
+Vegan Iced Cold Coffee,No.,True,34,17,17,21,13,21,1.0,36.41,28.51,28.83,36.41,Manisquare,Sec 143 Noida,29.24,28.74,Manisquare,Salt Lake Sec-1,Gurgaon Sec-15,Sec 143 Noida,,2.8,27.4,27.7
+Masala Dosa - EV,No.,True,17,17,0,11,6,0,9.36,36.66,28.26,28.27,28.3,Forum,Rangoli Mall,28.27,,Forum,Rangoli Mall,,,biodegrable plate-3cp (1pkt=25pc); potato masala bucket; regular white chutney bucket,0.1,,0.1
+Idli Batter (1Ltr),No.,True,34,17,17,15,19,15,25.74,30.16,25.74,28.03,30.16,Paschim Vihar,Rangoli Mall,29.91,27.95,Events & Catering,Rangoli Mall,Paschim Vihar,Sec 143 Noida,,16.2,9.9,17.2
+Srivilli Kheer (Complimentary),No.,True,34,17,17,29,5,29,0.28,34.1,27.51,28.0,34.1,Events & Catering,Sec 31 - Gurgaon,27.85,33.74,Events & Catering,Quest Mall,Gurgaon DLF,Sec 31 - Gurgaon,,1.8,1.5,24.0
+Fresh Watermelon Juice,No.,True,34,17,17,25,9,25,0.39,32.13,26.97,27.87,32.13,Kalkaji,Quest Mall,32.1,27.54,Ideal Plaza,Quest Mall,Kalkaji,Gurgaon Sec-15,,0.1,3.4,19.1
+Filter Coffee Ice-Cream,No.,True,17,17,0,14,3,14,0.23,29.24,25.93,27.86,29.24,Events & Catering,Lake Town,27.86,,Events & Catering,Lake Town,,,,12.8,,12.8
+Srivilli Kheer,No.,True,17,17,0,15,2,15,1.48,28.0,27.51,27.85,28.0,Events & Catering,Quest Mall,27.85,,Events & Catering,Quest Mall,,,,1.8,,1.8
+Sprite Can (330 ml),No.,True,17,0,17,4,13,4,27.71,27.79,27.71,27.74,27.79,Connaught Place,Paschim Vihar,,27.74,,,Connaught Place,Paschim Vihar,,,0.3,0.3
+Coke Zero Can (330 ml),No.,True,17,0,17,8,9,8,27.53,27.54,27.53,27.54,27.54,Connaught Place,Gurgaon DLF,,27.54,,,Connaught Place,Gurgaon DLF,,,0.0,0.0
+Coca Cola Can (330 ml),No.,True,17,0,17,9,8,9,27.53,27.55,27.53,27.54,27.55,Gurgaon DLF,"Pacific Mall, Jasola",,27.54,,,Gurgaon DLF,"Pacific Mall, Jasola",,,0.1,0.1
+Thums Up Can (330 ml),No.,True,17,0,17,8,9,8,27.53,27.53,27.53,27.53,27.53,Connaught Place,Connaught Place,,27.53,,,Connaught Place,Connaught Place,,,0.0,0.0
+Fanta Can (330 ml),No.,True,17,0,17,8,9,8,27.53,27.53,27.53,27.53,27.53,Connaught Place,Connaught Place,,27.53,,,Connaught Place,Connaught Place,,,0.0,0.0
+Extra Paneer Korma,No.,True,34,17,17,29,5,29,0.1,28.5,15.52,27.38,28.5,Gurgaon Sec 10,James Long Sarani,28.5,15.55,Events & Catering,James Long Sarani,Gurgaon Sec 10,Sec 31 - Gurgaon,,4.1,0.8,83.6
+Dosa Batter (1Ltr),No.,True,17,0,17,15,2,15,26.96,28.01,26.96,27.28,28.01,Sec 31 - Gurgaon,Chattarpur,,27.28,,,Sec 31 - Gurgaon,Chattarpur,,,3.9,3.9
+Dahi Vada pc,No.,True,34,17,17,26,8,26,7.69,27.14,12.48,26.96,27.14,Gurgaon Sec 10,New Town - Cloud Kitchen,27.07,12.52,Salt Lake,New Town - Cloud Kitchen,Gurgaon Sec 10,Model Town,,0.7,1.4,117.5
+Plain Idli- EV,No.,True,17,17,0,13,4,0,7.93,31.85,26.81,26.83,26.86,New Town - Cloud Kitchen,Rangoli Mall,26.83,,New Town - Cloud Kitchen,Rangoli Mall,,,biodegrable plate-3cp (1pkt=25pc); regular white chutney bucket,0.2,,0.2
+Masala Dosa.,No.,True,17,17,0,15,2,15,7.5,26.3,22.29,26.26,26.3,Events & Catering,James Long Sarani,26.26,,Events & Catering,James Long Sarani,,,,18.0,,18.0
+Masala Dosa,No.,True,34,17,17,22,12,22,7.49,41.42,22.25,26.25,41.42,Events & Catering,"Pacific Mall, Jasola",26.22,41.34,Events & Catering,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,18.0,3.7,86.2
+Dhaniya Dosa,No.,True,34,17,17,17,17,17,12.67,40.72,23.42,25.91,40.72,Ideal Plaza,Rohini Sec-7,25.84,40.66,Ideal Plaza,Salt Lake Sec-1,Sec 143 Noida,Rohini Sec-7,,10.7,3.8,73.9
+Raw Mango Dosa,No.,True,17,17,0,15,2,15,19.13,26.31,24.72,25.87,26.31,Ideal Plaza,Quest Mall,25.87,,Ideal Plaza,Quest Mall,,,,6.4,,6.4
+Mixed Uttapam,No.,True,34,17,17,22,12,22,10.06,42.73,23.03,25.77,42.73,Ideal Plaza,Rohini Sec-7,25.76,42.64,Ideal Plaza,Rangoli Mall,Sec 143 Noida,Rohini Sec-7,,12.0,3.6,85.5
+Garlic Chutney,No.,True,17,17,0,16,1,16,0.31,25.67,25.58,25.64,25.67,Events & Catering,Calcutta Swimming Club,25.64,,Events & Catering,Calcutta Swimming Club,,,,0.4,,0.4
+Masala Uttapam,No.,True,34,17,17,15,19,15,9.72,25.6,22.7,25.54,25.6,Events & Catering,Rangoli Mall,25.54,,Events & Catering,Rangoli Mall,,,,12.8,,12.8
+Kesari Halwa (Complimentary),No.,True,34,17,17,29,5,29,16.5,27.41,24.02,25.27,27.41,Events & Catering,Sec 31 - Gurgaon,25.14,26.29,Events & Catering,James Long Sarani,Gurgaon Sec-15,Sec 31 - Gurgaon,,5.2,5.1,14.1
+Paper Plain Dosa,No.,True,34,17,17,22,12,22,13.57,39.95,23.01,25.22,39.95,Ideal Plaza,Rohini Sec-7,25.21,39.85,Ideal Plaza,James Long Sarani,Sec 143 Noida,Rohini Sec-7,,9.6,3.9,73.6
+Dosa Coffee Upma Mix (300grm),No.,True,17,0,17,15,2,15,23.82,25.28,23.82,25.11,25.28,Chattarpur,Sec 31 - Gurgaon,,25.11,,,Chattarpur,Sec 31 - Gurgaon,,,6.1,6.1
+Malkapodi Idli Plate (2pc),No.,True,34,17,17,22,12,22,10.89,39.77,22.86,25.06,39.77,Ideal Plaza,"Pacific Mall, Jasola",25.04,39.57,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,9.7,4.2,74.0
+Malkapodi Idli Plate (2 pc) @ 79,No.,True,17,17,0,15,2,15,10.89,25.08,22.86,25.04,25.08,Ideal Plaza,Manisquare,25.04,,Ideal Plaza,Manisquare,,,,9.7,,9.7
+Medu Vada Plate (2 pc),No.,True,34,17,17,21,13,21,13.5,38.29,22.5,24.71,38.29,Ideal Plaza,"Pacific Mall, Jasola",24.7,38.05,Ideal Plaza,New Town - Cloud Kitchen,Sec 143 Noida,"Pacific Mall, Jasola",,10.5,4.6,70.2
+Dahi Idli (2 pc) @ 79,No.,True,17,17,0,14,3,14,24.06,24.65,24.62,24.63,24.65,Forum,Quest Mall,24.63,,Forum,Quest Mall,,,,0.1,,0.1
+Tomato Onion Uttapam,No.,True,34,17,17,22,12,22,11.46,40.74,22.35,24.56,40.74,Ideal Plaza,"Pacific Mall, Jasola",24.55,40.66,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,10.0,3.8,82.3
+Lemon Rice,No.,True,34,17,17,23,11,23,0.98,30.25,24.2,24.52,30.25,Gurgaon Sec-15,Events & Catering,29.94,24.44,Rangoli Mall,Events & Catering,Gurgaon Sec-15,Sec 31 - Gurgaon,,5.4,4.7,25.0
+Onion Uttapam,No.,True,34,17,17,22,12,22,12.76,53.37,22.02,24.23,53.37,Ideal Plaza,"Pacific Mall, Jasola",24.22,53.11,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,10.2,3.1,142.4
+Irish Filter Coffee,No.,True,34,17,17,18,16,18,0.56,45.74,23.66,24.12,45.74,Quest Mall,Sec 15 Faridabad,23.88,45.68,Quest Mall,James Long Sarani,Connaught Place,Sec 15 Faridabad,,2.2,0.5,93.3
+Kesari Halwa,No.,True,34,17,17,29,5,29,15.25,25.94,22.77,24.02,25.94,Events & Catering,Sec 31 - Gurgaon,23.89,24.69,Events & Catering,James Long Sarani,Gurgaon Sec-15,Sec 31 - Gurgaon,,5.5,6.0,13.9
+Rasam Idli Plate (2pc),No.,True,34,17,17,18,16,18,5.18,38.19,21.4,23.69,38.19,Ideal Plaza,"Pacific Mall, Jasola",23.58,38.09,Ideal Plaza,Rosedale Plaza,Sec 143 Noida,"Pacific Mall, Jasola",,11.1,4.3,78.5
+Vegetable Uttapam,No.,True,34,17,17,22,12,22,9.72,39.89,21.49,23.68,39.89,Ideal Plaza,"Pacific Mall, Jasola",23.67,39.82,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,10.3,3.9,85.6
+Rasam Idli Plate (2 pc) @ 79,No.,True,17,17,0,11,6,11,5.18,23.77,21.4,23.58,23.77,Ideal Plaza,Rosedale Plaza,23.58,,Ideal Plaza,Rosedale Plaza,,,,11.1,,11.1
+Dosa Coffee Combo,No.,True,34,17,17,8,26,0,9.82,27.2,23.39,23.55,23.63,James Long Sarani,Kalikapur,23.55,,James Long Sarani,Kalikapur,,,potato masala bucket; regular white chutney bucket,1.0,,1.0
+Ghee Idli Plate (2pc),No.,True,34,17,17,22,12,22,10.89,37.79,21.16,23.36,37.79,Ideal Plaza,"Pacific Mall, Jasola",23.35,37.58,Ideal Plaza,James Long Sarani,Sec 143 Noida,"Pacific Mall, Jasola",,10.5,4.4,78.6
+Ghee Idli Plate (2 pc) @ 79,No.,True,17,17,0,15,2,15,10.89,23.39,21.16,23.35,23.39,Ideal Plaza,James Long Sarani,23.35,,Ideal Plaza,James Long Sarani,,,,10.5,,10.5
+Pav Bhaji,No.,True,17,0,17,15,2,0,20.76,23.27,20.76,22.94,23.27,Chattarpur,Sec 31 - Gurgaon,,22.94,,,Chattarpur,Sec 31 - Gurgaon,pav bhaji masala 1kg; pav bread (300 gm),,12.1,12.1
+Tomato Uttapam,No.,True,34,17,17,22,12,22,9.36,39.4,20.7,22.89,39.4,Ideal Plaza,"Pacific Mall, Jasola",22.88,39.32,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,10.6,3.9,90.3
+Chocolate Filter Coffee,No.,True,34,17,17,20,14,20,0.28,43.66,22.47,22.87,43.66,Events & Catering,Gurgaon DLF,22.78,43.54,Events & Catering,Manisquare,Sec 143 Noida,Gurgaon DLF,,2.1,0.8,94.3
+Appam Batter Kit (1Ltr),No.,True,17,0,17,1,16,0,22.01,22.01,22.01,22.01,22.01,Connaught Place,Connaught Place,,22.01,,,Connaught Place,Connaught Place,potato stew bucket,,,0.0
+Coconut Sevai,No.,True,34,17,17,21,13,2,6.32,40.55,21.89,21.99,28.49,Gurgaon Sec-15,Quest Mall,28.24,21.94,Rangoli Mall,Quest Mall,Gurgaon Sec-15,Sec 31 - Gurgaon,sevai bucket,1.2,2.1,30.2
+Plain Uttapam,No.,True,34,17,17,21,13,21,10.43,38.18,19.62,21.85,38.18,Ideal Plaza,Rohini Sec-7,21.82,38.11,Ideal Plaza,Quest Mall,Sec 143 Noida,Rohini Sec-7,,11.5,4.0,94.6
+Butter Idli Plate (2pc),No.,True,34,17,17,22,12,22,9.59,35.98,19.57,21.76,35.98,Ideal Plaza,"Pacific Mall, Jasola",21.75,35.86,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,11.2,4.5,83.9
+Buter Idli Plate (2 pc) @ 79,No.,True,17,17,0,15,2,15,9.59,21.77,19.57,21.75,21.77,Ideal Plaza,Manisquare,21.75,,Ideal Plaza,Manisquare,,,,11.2,,11.2
+Sambar Vada Plate (2pc),No.,True,34,17,17,21,13,21,10.5,36.53,19.49,21.69,36.53,Ideal Plaza,"Pacific Mall, Jasola",21.66,36.31,Ideal Plaza,New Town - Cloud Kitchen,Sec 143 Noida,"Pacific Mall, Jasola",,12.0,4.9,87.4
+Filter Coffee (For Combo),No.,True,34,17,17,28,6,1,0.28,22.58,20.7,21.6,22.58,Events & Catering,Sec 31 - Gurgaon,21.17,22.04,Events & Catering,Salt Lake Sec-1,Model Town,Sec 31 - Gurgaon,sticker- hot coffee cup (1sheet=30pc),2.5,2.8,9.1
+Medu Vada Pc,No.,True,17,17,0,14,3,14,6.84,21.66,18.44,21.58,21.66,Ideal Plaza,New Town - Cloud Kitchen,21.58,,Ideal Plaza,New Town - Cloud Kitchen,,,,17.5,,17.5
+Medu Vada - Forum,No.,True,17,17,0,9,8,2,7.04,25.58,21.05,21.1,21.11,Lake Road,Kalikapur,21.1,,Lake Road,Kalikapur,,,"areca 7"" plate; paper tray mat (1pkt = 500pc)",0.3,,0.3
+Filter Coffee - EV,No.,True,17,17,0,15,2,15,20.26,20.79,20.26,20.74,20.79,Events & Catering,Salt Lake Sec-1,20.74,,Events & Catering,Salt Lake Sec-1,,,,2.6,,2.6
+Aam Panna,No.,True,34,17,17,23,11,23,0.39,22.72,20.19,20.22,22.72,Kalikapur,Connaught Place,20.2,22.44,Kalikapur,Ideal Plaza,Sec 15 Faridabad,Connaught Place,,0.1,1.5,12.5
+Cheese,No.,True,34,17,17,31,3,31,14.22,20.21,14.22,20.03,20.21,Chattarpur,Quest Mall,20.17,15.66,Events & Catering,Quest Mall,Chattarpur,Sec 31 - Gurgaon,,0.9,11.1,42.1
+Rava Plain Dosa,No.,True,34,17,17,13,21,3,2.93,37.44,19.19,19.74,19.77,Events & Catering,Manisquare,19.74,,Events & Catering,Manisquare,,,whole black pepper,3.0,,3.0
+Special White Coconut Chutney,No.,True,34,17,17,25,9,25,0.46,19.8,8.93,19.52,19.8,New Town - Cloud Kitchen,Sec 31 - Gurgaon,9.11,19.56,New Town - Cloud Kitchen,Ideal Plaza,Chattarpur,Sec 31 - Gurgaon,,26.7,17.6,121.7
+Thatte Idli - Forum,No.,True,17,17,0,11,6,2,7.04,23.87,18.5,19.28,19.33,Ideal Plaza,Lake Road,19.28,,Ideal Plaza,Lake Road,,,"areca 7"" plate; paper tray mat (1pkt = 500pc)",4.5,,4.5
+Jaggery Cinnamon Filter Coffee,No.,True,34,17,17,16,18,16,0.28,39.84,18.82,18.96,39.77,Quest Mall,"Pacific Mall, Jasola",18.9,39.66,Quest Mall,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,0.8,0.6,111.3
+Plain Dosa,No.,True,34,17,17,22,12,22,7.39,33.42,16.72,18.92,33.42,Ideal Plaza,"Pacific Mall, Jasola",18.91,33.36,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,13.2,4.6,99.9
+Service of Maaza,No.,True,17,0,17,6,11,6,18.72,19.54,18.72,18.72,19.54,Connaught Place,Rohini Sec-7,,18.72,,,Connaught Place,Rohini Sec-7,,,4.4,4.4
+Malkapodi Idli pc,No.,True,34,17,17,15,19,15,5.86,18.67,16.47,18.65,18.67,Ideal Plaza,Manisquare,18.65,,Ideal Plaza,Manisquare,,,,13.4,,13.4
+Tomato Sevai,No.,True,34,17,17,20,14,3,5.53,38.23,18.38,18.48,25.21,Shalimar Bagh,Quest Mall,25.02,18.46,Rangoli Mall,Quest Mall,Shalimar Bagh,Sec 18 Noida,sevai bucket,1.2,0.7,37.2
+Cold Coffee,No.,True,17,0,17,13,4,0,0.72,39.38,18.21,18.29,18.79,Sec 143 Noida,Sec 31 - Gurgaon,,18.29,,,Sec 143 Noida,Sec 31 - Gurgaon,milk powder; sugar syrup bucket,,3.2,3.2
+Masala Vada Combo,No.,True,17,0,17,10,7,0,9.8,18.29,18.22,18.24,18.29,Gurgaon DLF,Sec 143 Noida,,18.24,,,Gurgaon DLF,Sec 143 Noida,cable tie (1pkt = 100pc); carry bag - medium (1pkt = 100pc); coke pet - 250ml; regular white chutney bucket,,0.4,0.4
+Service of ice cream soda,Pc,True,17,17,0,10,7,10,0.39,18.12,18.12,18.12,18.12,Ideal Plaza,Ideal Plaza,18.12,,Ideal Plaza,Ideal Plaza,,,,0.0,,0.0
+Service of Lemonade,No.,True,34,17,17,15,19,15,0.39,18.12,18.11,18.11,18.12,Ideal Plaza,Events & Catering,18.11,,Ideal Plaza,Events & Catering,,,,0.1,,0.1
+Filter Coffee,No.,True,34,17,17,30,4,30,0.28,20.69,17.54,17.94,20.69,Events & Catering,Sec 31 - Gurgaon,17.9,20.21,Events & Catering,Salt Lake Sec-1,Sec 143 Noida,Sec 31 - Gurgaon,,2.3,2.8,18.0
+Filter Coffee @ 80,No.,True,34,17,17,30,4,30,0.28,18.93,17.54,17.94,18.93,Events & Catering,Sec 31 - Gurgaon,17.9,18.52,Events & Catering,Salt Lake Sec-1,Model Town,Sec 31 - Gurgaon,,2.3,2.5,7.9
+Filter Coffee Cappuccino,No.,True,34,17,17,24,10,24,0.56,38.39,17.42,17.76,38.39,Events & Catering,Gurgaon DLF,17.73,38.11,Events & Catering,Manisquare,Sec 143 Noida,Gurgaon DLF,,2.0,1.0,120.4
+Cotton's Lemonade (For Combo),No.,True,34,17,17,15,19,15,17.49,17.5,17.49,17.5,17.5,Rosedale Plaza,Events & Catering,17.5,,Rosedale Plaza,Events & Catering,,,,0.1,,0.1
+Idli Vada Plate,No.,True,34,17,17,21,13,21,6.15,36.64,15.27,17.46,36.64,Ideal Plaza,"Pacific Mall, Jasola",17.44,36.43,Ideal Plaza,New Town - Cloud Kitchen,Sec 143 Noida,"Pacific Mall, Jasola",,14.8,4.7,139.9
+Mysore Chutney,No.,True,17,17,0,17,0,17,15.42,17.47,15.42,17.43,17.47,Food Truck - 1,Lake Road,17.43,,Food Truck - 1,Lake Road,,,,13.3,,13.3
+Rasam Vada pc,No.,True,34,17,17,12,22,10,5.69,20.66,15.43,16.72,16.83,Chattarpur,Model Town,,16.72,,,Chattarpur,Model Town,regular white chutney bucket,,9.1,9.1
+Malkapodi & Ghee,No.,True,34,17,17,31,3,31,12.02,17.73,14.8,16.7,17.73,Chattarpur,Sec 31 - Gurgaon,16.63,17.01,Events & Catering,Manisquare,Chattarpur,Sec 31 - Gurgaon,,2.6,19.8,19.8
+Sambar Vada Pc,No.,True,34,17,17,14,20,14,5.4,16.77,14.51,16.69,16.77,Ideal Plaza,New Town - Cloud Kitchen,16.69,,Ideal Plaza,New Town - Cloud Kitchen,,,,15.6,,15.6
+Medu Vada for Combo,No.,True,17,17,0,14,3,14,5.4,16.77,14.51,16.69,16.77,Ideal Plaza,New Town - Cloud Kitchen,16.69,,Ideal Plaza,New Town - Cloud Kitchen,,,,15.6,,15.6
+Homemade Sparkling Lemonade,No.,True,34,17,17,15,19,15,0.78,16.48,16.35,16.46,16.48,Lake Town,Forum,16.46,,Lake Town,Forum,,,,0.8,,0.8
+Homemade Sparkling Lemonade.,No.,True,34,17,17,29,5,29,0.78,16.48,14.36,16.35,16.48,Sec 31 - Gurgaon,Forum,16.46,14.59,Lake Town,Forum,Sec 31 - Gurgaon,Paschim Vihar,,0.8,2.0,14.8
+Idli Plate (2 pc),No.,True,34,17,17,22,12,22,4.88,31.09,14.11,16.3,31.09,Ideal Plaza,"Pacific Mall, Jasola",16.29,30.98,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,15.6,5.2,120.3
+Sambar Idli Plate (2pc),No.,True,34,17,17,22,12,22,4.88,30.8,14.11,16.3,30.8,Ideal Plaza,"Pacific Mall, Jasola",16.29,30.69,Ideal Plaza,Rangoli Mall,Sec 143 Noida,"Pacific Mall, Jasola",,15.6,5.3,118.3
+Idli Plate (2 pc) @ 79,No.,True,17,17,0,15,2,15,4.88,16.31,14.11,16.29,16.31,Ideal Plaza,Rangoli Mall,16.29,,Ideal Plaza,Rangoli Mall,,,,15.6,,15.6
+Sambar Idli Plate (2 pc) @ 79,No.,True,17,17,0,15,2,15,4.88,16.31,14.11,16.29,16.31,Ideal Plaza,Rangoli Mall,16.29,,Ideal Plaza,Rangoli Mall,,,,15.6,,15.6
+Idli Fries,No.,True,34,17,17,28,6,28,14.44,16.37,15.38,15.83,16.37,Santoshpur,Sec 31 - Gurgaon,15.42,16.16,Santoshpur,Quest Mall,Paschim Vihar,Sec 31 - Gurgaon,,1.0,1.6,6.4
+Idli for Combo,No.,True,17,17,0,15,2,15,4.11,15.54,13.34,15.52,15.54,Ideal Plaza,Rangoli Mall,15.52,,Ideal Plaza,Rangoli Mall,,,,16.5,,16.5
+Idli Fries @ 79,No.,True,17,17,0,14,3,14,14.6,15.54,15.38,15.42,15.54,Santoshpur,Quest Mall,15.42,,Santoshpur,Quest Mall,,,,1.0,,1.0
+Thindi Raw Mango Ghee Dosa,No.,True,17,0,17,8,9,0,4.0,21.2,14.0,15.35,15.38,Chattarpur,Sec 143 Noida,,15.35,,,Chattarpur,Sec 143 Noida,spicy coconut chutney bucket; udhaya krishna ghee,,9.9,9.9
+Medu Vada - EV,No.,True,17,17,0,12,5,1,5.31,26.55,14.81,15.18,15.35,James Long Sarani,Kalikapur,15.18,,James Long Sarani,Kalikapur,,,biodegrable plate-3cp (1pkt=25pc); regular white chutney bucket,3.6,,3.6
+Butter,No.,True,34,17,17,32,2,32,4.84,16.44,4.84,15.07,16.44,Chattarpur,Quest Mall,16.36,5.44,Food Truck - 1,Quest Mall,Chattarpur,Sec 31 - Gurgaon,,16.4,14.0,239.7
+Sambar Idli Pc,No.,True,17,17,0,15,2,15,2.86,14.29,12.09,14.27,14.29,Ideal Plaza,Rangoli Mall,14.27,,Ideal Plaza,Rangoli Mall,,,,18.2,,18.2
+Butter Idli pc,No.,True,34,17,17,22,12,22,5.21,31.55,12.03,14.2,31.55,Ideal Plaza,"Pacific Mall, Jasola",14.2,31.48,Ideal Plaza,Manisquare,Sec 143 Noida,"Pacific Mall, Jasola",,18.2,5.0,162.3
+Plain Idli Pc,No.,True,17,17,0,15,2,15,2.63,14.06,11.86,14.04,14.06,Ideal Plaza,Rangoli Mall,14.04,,Ideal Plaza,Rangoli Mall,,,,18.5,,18.5
+Appam with Stew,No.,True,34,17,17,22,12,5,8.43,38.22,11.24,13.93,14.21,Santoshpur,Sec 31 - Gurgaon,11.3,13.99,Santoshpur,Manisquare,Gurgaon Sec-15,Sec 31 - Gurgaon,appam batter; coconut milk pkt 200ml,0.9,2.0,26.4
+Rasam Idli Pc,No.,True,34,17,17,12,22,11,3.15,18.16,12.48,13.92,13.98,Chattarpur,Connaught Place,,13.92,,,Chattarpur,Connaught Place,regular white chutney bucket,,12.0,12.0
+Thindi Podi Dosa,No.,True,17,0,17,6,11,0,6.98,24.8,13.14,13.14,13.15,Gurgaon DLF,Paschim Vihar,,13.14,,,Gurgaon DLF,Paschim Vihar,spicy coconut chutney bucket; udhaya krishna ghee,,0.1,0.1
+Medu Vada pc,No.,True,17,0,17,13,4,0,8.2,13.09,11.5,12.97,13.09,Chattarpur,Model Town,,12.97,,,Chattarpur,Model Town,regular white chutney bucket,,13.8,13.8
+Raw Mango Chutney,No.,True,34,17,17,26,8,26,0.15,22.81,11.58,12.96,22.81,Ideal Plaza,Sec 143 Noida,12.93,22.75,Ideal Plaza,Quest Mall,Chattarpur,Sec 143 Noida,,11.9,15.1,97.0
+Iced Filter Coffee,No.,True,34,17,17,30,4,30,0.28,13.54,12.71,12.94,13.54,Events & Catering,Sec 31 - Gurgaon,12.92,13.3,Events & Catering,Salt Lake Sec-1,Model Town,Sec 31 - Gurgaon,,1.9,2.0,6.5
+Black Coffee,No.,True,34,17,17,30,4,30,0.28,13.08,12.51,12.9,13.08,Events & Catering,Sec 31 - Gurgaon,12.92,12.68,Events & Catering,Forum,Sec 143 Noida,Sec 31 - Gurgaon,,3.7,3.8,4.6
+Ghee,No.,True,34,17,17,32,2,32,5.92,14.19,5.92,12.85,14.19,Chattarpur,James Long Sarani,14.1,7.22,Food Truck - 1,James Long Sarani,Chattarpur,Sec 31 - Gurgaon,,18.1,28.2,139.7
+Packaged Drinking Water-500 ml,No.,True,17,0,17,14,3,14,12.74,13.29,12.74,12.82,13.29,Gurgaon Sec 10,Sec 31 - Gurgaon,,12.82,,,Gurgaon Sec 10,Sec 31 - Gurgaon,,,4.3,4.3
+Masala Vada pc,No.,True,17,0,17,11,6,0,8.09,12.29,10.56,12.28,12.29,Chattarpur,Gurgaon DLF,,12.28,,,Chattarpur,Gurgaon DLF,regular white chutney bucket,,16.4,16.4
+Idli Vada - EV,No.,True,17,17,0,12,5,1,7.32,23.6,12.07,12.26,12.35,James Long Sarani,Kalikapur,12.26,,James Long Sarani,Kalikapur,,,biodegrable plate-3cp (1pkt=25pc); regular white chutney bucket,2.3,,2.3
+Homemade Lemonade.,No.,True,34,17,17,16,18,16,0.78,12.11,11.32,12.1,12.11,Connaught Place,Forum,12.1,11.32,Events & Catering,Forum,Connaught Place,Connaught Place,,0.2,,7.0
+Homemade Lemonade,No.,True,34,17,17,15,19,15,0.78,12.11,12.09,12.1,12.11,Events & Catering,Forum,12.1,,Events & Catering,Forum,,,,0.2,,0.2
+Dosa Coffee Glass Bottle,No.,True,17,17,0,15,2,15,11.8,12.38,11.8,11.84,12.38,Manisquare,Events & Catering,11.84,,Manisquare,Events & Catering,,,,4.9,,4.9
+Spicy Tomato Onion Chutney,No.,True,34,17,17,27,7,27,0.15,13.61,10.57,11.83,13.61,Sec 31 - Gurgaon,Chattarpur,11.82,13.57,Forum,Salt Lake,Sec 31 - Gurgaon,Chattarpur,,0.5,28.8,28.8
+Dadu`s Special Spicy Chutney,No.,True,17,17,0,16,1,16,2.14,11.53,10.61,11.5,11.53,Ideal Plaza,Salt Lake Sec-1,11.5,,Ideal Plaza,Salt Lake Sec-1,,,,8.7,,8.7
+Appam Batter Kit (500ml),No.,True,17,0,17,1,16,0,11.01,11.01,11.01,11.01,11.01,Connaught Place,Connaught Place,,11.01,,,Connaught Place,Connaught Place,potato stew bucket,,,0.0
+Milk Tea,No.,True,17,0,17,14,3,0,1.06,10.95,10.88,10.89,10.95,Model Town,Sec 31 - Gurgaon,,10.89,,,Model Town,Sec 31 - Gurgaon,mitti kulhad,,0.6,0.6
+Thindi Dosa,No.,True,17,0,17,7,10,0,4.6,22.38,10.72,10.72,11.06,Gurgaon DLF,Chattarpur,,10.72,,,Gurgaon DLF,Chattarpur,spicy coconut chutney bucket; udhaya krishna ghee,,3.2,3.2
+Lemon Iced Tea.,No.,True,17,17,0,13,4,13,0.78,10.69,10.64,10.66,10.69,Lake Town,Forum,10.66,,Lake Town,Forum,,,,0.5,,0.5
+Lemon Iced Tea,No.,True,34,17,17,21,13,21,0.78,10.69,9.2,10.65,10.69,Shalimar Bagh,Forum,10.66,9.36,Lake Town,Forum,Shalimar Bagh,Gurgaon Sec 10,,0.5,2.0,16.2
+Rasam & Papad,No.,True,34,17,17,22,12,22,1.35,10.83,10.18,10.42,10.83,Kalkaji,Events & Catering,10.65,10.2,James Long Sarani,Events & Catering,Kalkaji,Connaught Place,,2.1,0.6,6.4
+Thindi Garlic Ghee Dosa,No.,True,17,0,17,10,7,0,10.26,16.25,10.26,10.42,11.25,Sec 31 - Gurgaon,Chattarpur,,10.42,,,Sec 31 - Gurgaon,Chattarpur,spicy coconut chutney bucket; udhaya krishna ghee,,9.6,9.6
+Extra Paratha(1 Pc),No.,True,34,17,17,29,5,29,1.62,11.16,9.86,10.17,11.16,James Long Sarani,Manisquare,10.17,10.18,James Long Sarani,Manisquare,"Pacific Mall, Jasola",Sec 31 - Gurgaon,,13.2,7.5,13.2
+Lemon Sevai,No.,True,34,17,17,21,13,3,2.04,41.59,9.9,10.01,11.71,Gurgaon Sec-15,Quest Mall,11.64,9.99,James Long Sarani,Quest Mall,Gurgaon Sec-15,Sec 31 - Gurgaon,lemon sevai bucket,0.9,4.1,18.3
+Thindi Mysore Ghee Dosa,No.,True,17,0,17,10,7,0,8.95,15.38,8.95,9.55,9.6,Chattarpur,Shalimar Bagh,,9.55,,,Chattarpur,Shalimar Bagh,spicy coconut chutney bucket; udhaya krishna ghee,,7.3,7.3
+Dhaniya Chutney,No.,True,17,17,0,12,5,12,0.31,9.86,7.83,9.21,9.86,Food Truck - 1,Calcutta Swimming Club,9.21,,Food Truck - 1,Calcutta Swimming Club,,,,25.9,,25.9
+Comp - Rasam & Papad,No.,True,17,17,0,11,6,11,0.1,9.35,9.13,9.17,9.35,James Long Sarani,Events & Catering,9.17,,James Long Sarani,Events & Catering,,,,2.4,,2.4
+Chola Bhatura Combo,No.,True,17,0,17,13,4,0,7.69,10.39,8.78,8.92,8.98,Sec 31 - Gurgaon,"Pacific Mall, Jasola",,8.92,,,Sec 31 - Gurgaon,"Pacific Mall, Jasola",amritsari chhole 1kg; bhatura dough raw; dahi bucket; paper food container - 100ml (1pkt = 50pc); paper tray mat (1pkt = 500pc),,2.3,2.3
+Special Spicy Coconut Chutney,No.,True,17,17,0,12,5,12,0.78,8.17,6.79,8.16,8.17,Ideal Plaza,James Long Sarani,8.16,,Ideal Plaza,James Long Sarani,,,,20.3,,20.3
+Ghee Idli pc,No.,True,17,17,0,15,2,15,5.86,7.97,7.73,7.95,7.97,Events & Catering,James Long Sarani,7.95,,Events & Catering,James Long Sarani,,,,3.1,,3.1
+Potato Masala,No.,True,34,17,17,31,3,31,0.1,8.73,4.72,7.88,8.73,Events & Catering,Calcutta Swimming Club,8.7,7.86,Events & Catering,Calcutta Swimming Club,Chattarpur,Sec 31 - Gurgaon,,85.0,1.2,85.0
+Idli Vada & Chutney,No.,True,17,0,17,8,9,5,2.65,19.15,7.44,7.49,7.63,Chattarpur,"Pacific Mall, Jasola",,7.49,,,Chattarpur,"Pacific Mall, Jasola",spicy coconut chutney bucket,,2.6,2.6
+Idli Fries- EV,No.,True,17,17,0,13,4,1,5.65,18.55,7.05,7.06,7.07,Forum,Kalikapur,7.06,,Forum,Kalikapur,,,biodegrable plate-3cp (1pkt=25pc); dahi bucket,0.3,,0.3
+Service of Kinley Bottled Water (500ml),No.,True,34,17,17,8,26,8,6.92,7.82,6.92,7.06,7.82,Kalikapur,Kalkaji,7.01,7.82,Kalikapur,Ideal Plaza,Kalkaji,Kalkaji,,2.7,,13.0
+Masala Dosa & Chutney,No.,True,17,0,17,9,8,5,5.62,20.82,5.62,6.1,6.17,Chattarpur,Shalimar Bagh,,6.1,,,Chattarpur,Shalimar Bagh,potato masala bucket; spicy coconut chutney bucket,,9.8,9.8
+Rasam,No.,True,17,0,17,12,5,12,0.35,6.12,5.8,5.84,6.12,Sec 143 Noida,Chattarpur,,5.84,,,Sec 143 Noida,Chattarpur,,,5.5,5.5
+Homemade Ginger Ale,No.,True,17,0,17,14,3,0,0.72,5.78,5.72,5.73,5.78,Paschim Vihar,Sec 31 - Gurgaon,,5.73,,,Paschim Vihar,Sec 31 - Gurgaon,ginger ale syrup - sheetal (1bottle=750ml),,1.0,1.0
+Fresh Buttermilk,No.,True,34,17,17,30,4,30,5.09,6.03,5.44,5.67,6.03,Events & Catering,Sec 31 - Gurgaon,5.51,6.0,Events & Catering,Forum,Chattarpur,Sec 31 - Gurgaon,,1.3,3.4,10.8
+Fresh Buttermilk.,No.,True,34,17,17,30,4,30,5.09,6.03,5.44,5.67,6.03,Events & Catering,Sec 31 - Gurgaon,5.51,6.0,Events & Catering,Forum,Chattarpur,Sec 31 - Gurgaon,,1.3,3.4,10.8
+Regular Sambar,No.,True,34,17,17,31,3,31,0.13,6.84,5.45,5.6,6.84,New Town - Cloud Kitchen,Connaught Place,5.48,6.82,New Town - Cloud Kitchen,Food Truck - 1,Sec 31 - Gurgaon,Connaught Place,,12.7,3.5,25.5
+Buttermilk (For Combo),No.,True,34,17,17,14,20,0,0.69,8.44,5.51,5.51,5.51,Forum,Forum,5.51,,Forum,Forum,,,buttermilk sticker (1sheet = 28pc); cold cup with lid - 300ml (1pkt = 50pc),0.0,,0.0
+Fresh Buttermilk - Complimentary,No.,True,34,17,17,30,4,30,2.42,5.67,4.85,5.21,5.67,Events & Catering,Chattarpur,4.9,5.62,Events & Catering,Forum,Sec 31 - Gurgaon,Chattarpur,,1.2,2.9,16.9
+Jain Sambar,No.,True,34,17,17,31,3,31,0.13,6.6,4.94,5.07,6.6,Kalikapur,Model Town,5.04,6.55,Kalikapur,Events & Catering,Sec 31 - Gurgaon,Model Town,,4.9,3.6,33.6
+Chola Bhatura,No.,True,17,0,17,13,4,0,3.8,6.22,4.59,4.75,4.76,Sec 31 - Gurgaon,Gurgaon Sec-15,,4.75,,,Sec 31 - Gurgaon,Gurgaon Sec-15,amritsari chhole 1kg; bhatura dough raw; paper tray mat (1pkt = 500pc),,3.7,3.7
+Idli & Chutney,No.,True,17,0,17,10,7,5,4.33,16.23,4.33,4.56,4.64,Chattarpur,"Pacific Mall, Jasola",,4.56,,,Chattarpur,"Pacific Mall, Jasola",spicy coconut chutney bucket,,7.2,7.2
+Dahi Idli,No.,True,34,17,17,15,19,14,4.2,24.94,4.2,4.48,4.55,Chattarpur,"Pacific Mall, Jasola",,4.48,,,Chattarpur,"Pacific Mall, Jasola",dahi bucket,,8.3,8.3
+Appalam Papad (1pc),No.,True,34,17,17,27,7,27,3.71,3.83,3.71,3.74,3.83,Connaught Place,Events & Catering,3.82,3.71,Ideal Plaza,Events & Catering,Connaught Place,Sec 31 - Gurgaon,,0.3,0.8,3.2
+Dum Tomato Rice,No.,True,34,17,17,23,11,4,3.71,16.6,3.71,3.74,3.83,Connaught Place,Lake Town,3.82,3.71,Ideal Plaza,Lake Town,Connaught Place,Sec 31 - Gurgaon,dum tomato rice bucket,0.3,0.8,3.2
+Extra Sambar - 250ml,No.,True,34,17,17,32,2,32,3.54,4.02,3.54,3.62,4.02,Chattarpur,Sec 31 - Gurgaon,3.6,3.77,Events & Catering,Santoshpur,Chattarpur,Sec 31 - Gurgaon,,3.1,13.6,13.6
+Malkapodi,No.,True,34,17,17,31,3,31,3.35,3.95,3.35,3.4,3.95,James Long Sarani,Chattarpur,3.38,3.43,James Long Sarani,Events & Catering,Sec 31 - Gurgaon,Chattarpur,,3.9,16.5,17.9
+Coconut Cookies,No.,True,17,0,17,14,3,0,0.28,1.88,1.73,1.86,1.88,Sec 31 - Gurgaon,Sec 143 Noida,,1.86,,,Sec 31 - Gurgaon,Sec 143 Noida,coconut cookies (1 pkt =10pics ),,8.7,8.7
+Filter Coffee Tiramisu,No.,True,17,0,17,14,3,0,0.28,1.88,1.73,1.86,1.88,Sec 31 - Gurgaon,Sec 143 Noida,,1.86,,,Sec 31 - Gurgaon,Sec 143 Noida,filter coffee tiramisu,,8.7,8.7
+Onion,No.,True,34,17,17,32,2,32,0.69,1.79,0.69,1.69,1.79,Gurgaon Sec 10,Events & Catering,1.71,0.7,Quest Mall,Events & Catering,Gurgaon Sec 10,Chattarpur,,5.9,17.4,159.4
+Coke (Small),No.,True,17,0,17,15,2,0,0.42,0.45,0.42,0.43,0.45,Model Town,Sec 31 - Gurgaon,,0.43,,,Model Town,Sec 31 - Gurgaon,bib - coke 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),,7.1,7.1
+Coka Cola (Regular),No.,True,17,0,17,15,2,0,0.42,0.45,0.42,0.43,0.45,Model Town,Sec 31 - Gurgaon,,0.43,,,Model Town,Sec 31 - Gurgaon,bib - coke 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),,7.1,7.1
+Thumsup (Regular),No.,True,34,17,17,31,3,1,0.38,18.86,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - thumsup 20ltr; co2 cylinder - 9kg; fountain glass with lid - 450ml (1pkt = 50pc),44.7,7.1,44.7
+Sprite (Regular),No.,True,34,17,17,31,3,1,0.38,17.08,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - sprite 10ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,7.1,44.7
+Sprite (Small),No.,True,34,17,17,31,3,1,0.38,12.55,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - sprite 10ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,7.1,44.7
+Thumsup (Small),No.,True,34,17,17,31,3,1,0.38,13.18,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - thumsup 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,7.1,44.7
+Fanta (Small),No.,True,34,17,17,31,3,1,0.38,13.91,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - fanta 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,7.1,44.7
+Fanta (Regular),No.,True,34,17,17,31,3,1,0.38,19.04,0.38,0.42,0.55,Events & Catering,Food Truck - 1,0.39,0.43,Events & Catering,Food Truck - 1,Model Town,Sec 31 - Gurgaon,bib - fanta 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,7.1,44.7
+Fountain Combo - Thumsup (Small),No.,True,17,17,0,16,1,1,0.38,13.18,0.38,0.39,0.55,Events & Catering,Food Truck - 1,0.39,,Events & Catering,Food Truck - 1,,,bib - thumsup 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,,44.7
+Fountain Combo - Fanta (Small),No.,True,17,17,0,16,1,1,0.38,13.91,0.38,0.39,0.55,Events & Catering,Food Truck - 1,0.39,,Events & Catering,Food Truck - 1,,,bib - fanta 20ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,,44.7
+Fountain Combo - Sprite (Small),No.,True,17,17,0,16,1,1,0.38,12.55,0.38,0.39,0.55,Events & Catering,Food Truck - 1,0.39,,Events & Catering,Food Truck - 1,,,bib - sprite 10ltr; co2 cylinder - 9kg; fountain glass with lid - 300ml (1pkt = 50pc),44.7,,44.7
+Punjabi Samosa,No.,True,17,0,17,15,2,0,0.25,0.28,0.25,0.26,0.28,Sec 31 - Gurgaon,Chattarpur,,0.26,,,Sec 31 - Gurgaon,Chattarpur,imli chutney 1kg; punjabi samosa half fry (80gm) 13pc tray,,12.0,12.0
+Tutty Fruity Ice Cream,No.,True,17,0,17,15,2,0,0.25,0.28,0.25,0.26,0.28,Sec 31 - Gurgaon,Chattarpur,,0.26,,,Sec 31 - Gurgaon,Chattarpur,fruit overload - 2.1 kg block,,12.0,12.0
+Chocolate Ice Cream,No.,True,17,0,17,15,2,0,0.25,0.28,0.25,0.26,0.28,Sec 31 - Gurgaon,Chattarpur,,0.26,,,Sec 31 - Gurgaon,Chattarpur,dutch chocolate - 2.1 kg block,,12.0,12.0
+Mint Choco Chips Ice Cream,No.,True,17,0,17,15,2,0,0.25,0.28,0.25,0.26,0.28,Sec 31 - Gurgaon,Chattarpur,,0.26,,,Sec 31 - Gurgaon,Chattarpur,mint milk chocolate chips - 2.1 kg block,,12.0,12.0
+Vanilla Ice Cream,No.,True,17,0,17,15,2,0,0.25,0.28,0.25,0.26,0.28,Sec 31 - Gurgaon,Chattarpur,,0.26,,,Sec 31 - Gurgaon,Chattarpur,vanilla ice cream - 2.1 kg block,,12.0,12.0
+Beetroot Chutney,No.,True,34,17,17,20,14,12,0.15,13.24,0.15,0.15,0.15,Chattarpur,Chattarpur,0.15,0.15,Calcutta Swimming Club,Calcutta Swimming Club,Chattarpur,Chattarpur,beetroot chutney bucket,0.0,0.0,0.0
+Spicy Onion Chutney,No.,True,34,17,17,21,13,11,0.15,12.27,0.15,0.15,0.46,Chattarpur,Calcutta Swimming Club,0.46,0.15,Calcutta Swimming Club,Calcutta Swimming Club,Chattarpur,Chattarpur,onion chutney bucket,0.0,0.0,206.7
+Regular Masala Dosa,No.,True,34,17,17,24,10,24,0.1,41.42,0.1,0.1,41.42,Calcutta Swimming Club,"Pacific Mall, Jasola",0.1,41.34,Calcutta Swimming Club,Calcutta Swimming Club,Sec 143 Noida,"Pacific Mall, Jasola",,0.0,3.7,41320.0
+Service of Ice-Cream Soda,No.,True,17,0,17,0,17,0,,,,,,,,,,,,,,,,,

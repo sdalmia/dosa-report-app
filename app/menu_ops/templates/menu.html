@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block title %}Menu engineering{% endblock %}
+
+{% block ops %}
+<header class="ops-head">
+  <p class="eyebrow">Command Centre</p>
+  <h1>Menu engineering</h1>
+  <p class="lede">Popularity is share of orders. Contribution is {% if view.margin_mode %}margin per order{% else %}share of Gross{% endif %}.</p>
+</header>
+
+{% if view.empty_sales %}
+  <section class="empty" data-empty="sales">
+    <h2>Menu sales are not in yet</h2>
+    <p>Stars, plowhorses, puzzles and dogs need item Gross and orders for each store.</p>
+  </section>
+{% else %}
+  <p class="meta"><strong>Gross</strong>{% if view.period_label %}, {{ view.period_label }}{% endif %}{% if view.coverage_label %}. {{ view.coverage_label }}{% endif %}.</p>
+  {% if view.margin_mode %}
+    <p class="meta" data-note="margin">{{ view.margin_note }}</p>
+    {% if view.unmatched_items %}
+      <p class="meta" data-unmatched-items="{{ view.unmatched_items }}">{{ view.unmatched_items }} item{{ 's' if view.unmatched_items != 1 else '' }} ha{{ 've' if view.unmatched_items != 1 else 's' }} no recipe with the same name.</p>
+    {% else %}
+      <p class="meta" data-unmatched-items="0">Every item name matches a recipe.</p>
+    {% endif %}
+    {% if view.unmatched_outlets %}
+      <p class="meta" data-unmatched-outlets="{{ view.unmatched_outlets|length }}">{{ view.unmatched_outlets|length }} outlet{{ 's' if view.unmatched_outlets|length != 1 else '' }} {{ 'are' if view.unmatched_outlets|length != 1 else 'is' }} not on the recipe list.</p>
+    {% endif %}
+    <details class="info">
+      <summary>How margin is calculated</summary>
+      <p>{{ view.margin_info }}</p>
+      {% if view.unmatched_names %}
+        <p>No exact recipe name: {{ view.unmatched_names|join(', ') }}.</p>
+      {% endif %}
+      {% if view.unmatched_outlets %}
+        <p>Not on the recipe list: {{ view.unmatched_outlets|join(', ') }}.</p>
+      {% endif %}
+    </details>
+  {% else %}
+    <p class="empty" data-empty="margin">{{ view.margin_note }}</p>
+  {% endif %}
+
+  <section class="quads" aria-label="Quadrant counts">
+    {% for key, label in quadrants.items() %}
+      <a class="quad {{ key }}" href="{{ url_for('menu_ops.menu', category=view.category, region=view.region, store=view.store, quadrant=key) }}" data-quadrant="{{ key }}" data-count="{{ view.counts[key] }}">
+        <span class="quad-count">{{ view.counts[key] }}</span>
+        <span>{{ label }}</span>
+      </a>
+    {% endfor %}
+    <a class="quad unclassified" href="{{ url_for('menu_ops.menu', category=view.category, region=view.region, store=view.store, quadrant='unclassified') }}" data-quadrant="unclassified" data-count="{{ view.counts.unclassified }}">
+      <span class="quad-count">{{ view.counts.unclassified }}</span>
+      <span>Not classified</span>
+    </a>
+  </section>
+
+  {% if view.svg %}
+    <section class="plot-card">
+      <h2>Popularity vs contribution</h2>
+      {{ view.svg|safe }}
+      <p class="meta">Each dot is an item in this filter. The lines are the cutoffs.</p>
+    </section>
+  {% endif %}
+
+  <form class="filters" method="get" action="{{ url_for('menu_ops.menu') }}">
+    {% if view.show_category %}
+    <label>Category
+      <select name="category">
+        <option value="">All categories</option>
+        {% for name in view.category_names %}
+          <option value="{{ name }}" {% if view.category == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+        {% if view.has_unknown_category %}
+          <option value="{{ no_category }}" {% if view.category == no_category %}selected{% endif %}>No category</option>
+        {% endif %}
+      </select>
+    </label>
+    {% endif %}
+    <label>Region
+      <select name="region">
+        <option value="">All regions</option>
+        {% for name in view.region_names %}
+          <option value="{{ name }}" {% if view.region == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+        {% if view.has_unknown_region %}
+          <option value="{{ no_region }}" {% if view.region == no_region %}selected{% endif %}>Region not on file</option>
+        {% endif %}
+      </select>
+    </label>
+    <label>Store
+      <select name="store">
+        <option value="">All stores</option>
+        {% for name in view.store_names %}
+          <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Quadrant
+      <select name="quadrant">
+        <option value="">All quadrants</option>
+        {% for key, label in quadrants.items() %}
+          <option value="{{ key }}" {% if view.quadrant == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+        <option value="unclassified" {% if view.quadrant == 'unclassified' %}selected{% endif %}>Not classified</option>
+      </select>
+    </label>
+    <button type="submit">Apply</button>
+  </form>
+
+  <p class="meta">Classified items {{ view.classified }}. Gross of those items {{ view.gross_total or 'Not on the report' }}. Orders {{ view.orders_total or 'Not on the report' }}.
+    {% if view.cutoff.popularity is not none %}Popularity line {{ view.cutoff_popularity }} of orders (70% of an equal share).{% endif %}
+    {% if view.cutoff.contribution is not none %}
+      {% if view.margin_mode %}Margin line {{ view.cutoff_contribution }} per order (average of classified items).
+      {% else %}Revenue line {{ view.cutoff_contribution }} of Gross (an equal share).{% endif %}
+    {% endif %}
+  </p>
+
+  <section class="item-list">
+    {% for item in view['items'] %}
+      <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}">
+        <header>
+          <h2>{{ item.item }}</h2>
+          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
+          {% if item.partial %}<span class="pill partial">Partial</span>{% endif %}
+        </header>
+        <dl>
+          <div><dt>Gross</dt><dd data-field="gross">{{ item.gross or 'Not on the report' }}</dd></div>
+          <div><dt>Orders</dt><dd data-field="orders">{{ item.orders or 'Not on the report' }}</dd></div>
+          <div><dt>Popularity</dt><dd data-field="popularity">{{ item.popularity or 'Not on the report' }}</dd></div>
+          <div><dt>{% if view.margin_mode %}Margin per order{% else %}Revenue contribution{% endif %}</dt><dd data-field="contribution">{{ item.contribution or 'Not on the report' }}</dd></div>
+          {% if view.margin_mode %}
+            <div><dt>Cost, excl. packaging</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
+            <div><dt>Margin</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
+            {% if item.cost_coverage %}<div><dt>Recipe coverage</dt><dd data-field="coverage">{{ item.cost_coverage }}</dd></div>{% endif %}
+            {% if item.cost_min or item.cost_median or item.cost_max %}
+              <div><dt>Across outlets</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>
+            {% endif %}
+            {% if item.channel_costs %}
+              {% if item.channel_costs.same %}
+                <div><dt>Takeout and delivery</dt><dd data-field="packaging">{{ item.channel_costs.packaging }}</dd></div>
+              {% else %}
+                {% if item.channel_costs.takeout %}<div><dt>Takeout</dt><dd data-field="takeout">{{ item.channel_costs.takeout }}</dd></div>{% endif %}
+                {% if item.channel_costs.delivery %}<div><dt>Delivery</dt><dd data-field="delivery">{{ item.channel_costs.delivery }}</dd></div>{% endif %}
+              {% endif %}
+            {% endif %}
+          {% else %}
+            <div><dt>True margin</dt><dd data-field="margin">Not on the report</dd></div>
+          {% endif %}
+          {% if view.show_category %}<div><dt>Category</dt><dd>{{ item.category or 'Not listed' }}</dd></div>{% endif %}
+          <div><dt>Region</dt><dd>{{ item.regions or 'Not listed' }}</dd></div>
+          <div><dt>Stores</dt><dd>{{ item.store_count }}</dd></div>
+        </dl>
+        {% if item.coverage_note %}<p class="reason">{{ item.coverage_note }}</p>{% endif %}
+        {% if item.reason %}<p class="reason">{{ item.reason }}</p>{% endif %}
+      </article>
+    {% else %}
+      <p class="empty">No items in this filter.</p>
+    {% endfor %}
+  </section>
+{% endif %}
+{% endblock %}

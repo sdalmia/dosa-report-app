@@ -10,6 +10,7 @@ from auth import auth_bp, google_bp
 
 
 def register_routes(app):
+    from app.menu_ops.routes import menu_ops_bp
     app.register_blueprint(google_bp, url_prefix="/login")  # ✅ Register this first
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
@@ -19,3 +20,4 @@ def register_routes(app):
     app.register_blueprint(store_health_bp)
     app.register_blueprint(owner_bp)
     app.register_blueprint(procurement_bp)
+    app.register_blueprint(menu_ops_bp)

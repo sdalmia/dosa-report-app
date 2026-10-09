@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block title %}Channels{% endblock %}
+
+{% block ops %}
+<header class="ops-head">
+  <p class="eyebrow">Command Centre</p>
+  <h1>Channels</h1>
+  <p class="lede">Public ratings by channel, then Gross and orders for POS, Swiggy and Zomato.</p>
+</header>
+
+<section data-empty="channel-ratings">
+  <h2>Channel ratings</h2>
+  {% if view.ratings_present %}
+    <p>Current public ratings{% if view.as_of %} as of {{ view.as_of|join(', ') }}{% endif %}.</p>
+    <details class="info">
+      <summary>How to read a missing rating</summary>
+      <p>Not a 30-day average. A channel that is not listed stays empty. An empty cell is not a zero. Stores are sorted by Zomato Delivery, lowest first. Stores with no Zomato Delivery rating follow.</p>
+    </details>
+    <div class="heat-wrap">
+      <table class="heat">
+        <caption>Stores sorted by Zomato Delivery, lowest first.</caption>
+        <thead>
+          <tr>
+            <th>Store</th>
+            {% for key, label in view.rating_fields %}
+              <th>{{ label }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in view.ratings %}
+            <tr data-store="{{ row.store }}">
+              <th scope="row">{{ row.store }}</th>
+              {% for key, label in view.rating_fields %}
+                {% if row[key] %}
+                  <td data-channel="{{ key }}" data-rating="{{ row[key] }}" class="{{ row[key ~ '_class'] }}">{{ row[key] }}</td>
+                {% else %}
+                  <td class="is-empty" data-channel="{{ key }}" data-rating=""><span class="sr-only">Not listed</span></td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty">
+      <p>Channel ratings are not in yet.</p>
+    </div>
+  {% endif %}
+</section>
+
+<section data-empty="channel-sales">
+  <h2>Sales mix</h2>
+  <p>{{ view.pos_note }}</p>
+  {% if view.sales_present %}
+    {% if view.coverage_label %}<p class="meta">{{ view.coverage_label }}{% if view.period_label %}, {{ view.period_label }}{% endif %}.</p>{% elif view.period_label %}<p class="meta">{{ view.period_label }}.</p>{% endif %}
+    {% if view.stores %}
+      <form class="filters" method="get" action="{{ url_for('menu_ops.channels') }}">
+        <label>Store
+          <select name="store">
+            <option value="">All stores</option>
+            {% for name in view.stores %}
+              <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit">Apply</button>
+      </form>
+    {% endif %}
+    {% if view.totals_present and view.mix.channels %}
+      <div class="mix">
+        {% for row in view.mix.channels %}
+          <article class="mix-row" data-channel-name="{{ row.channel }}" data-gross="{{ row.gross }}" data-orders="{{ row.orders }}">
+            <h3>{{ row.channel }}</h3>
+            <p>Gross <strong data-field="gross">{{ row.gross or 'Not on the report' }}</strong> {% if row.gross_share %}· {{ row.gross_share }} of Gross{% endif %}</p>
+            <p>Orders <strong data-field="orders">{{ row.orders or 'Not on the report' }}</strong> {% if row.orders_share %}· {{ row.orders_share }} of orders{% endif %}</p>
+            <p>APB, calculated <strong data-field="apb">{{ row.apb or 'Not on the report' }}</strong></p>
+            {% if row.gross_share_value is not none %}
+              <div class="bar" style="width: {{ row.gross_share_value }}%"></div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+      <p class="meta">Gross total {{ view.mix.gross_total or 'Not on the report' }}. Orders total {{ view.mix.orders_total or 'Not on the report' }}.</p>
+    {% else %}
+      <p class="empty">The period totals are not in yet.</p>
+    {% endif %}
+    {% if view.daily_present %}
+      <h3>Daily trend</h3>
+      {% for day in view.trend %}
+        <article class="mix-row" data-day="{{ day.when }}">
+          <h3>{{ day.when }}</h3>
+          {% for row in day.channels %}
+            <p>{{ row.channel }}: Gross {{ row.gross or 'Not on the report' }}, orders {{ row.orders or 'Not on the report' }}{% if row.apb %}, APB {{ row.apb }}{% endif %}</p>
+          {% endfor %}
+        </article>
+      {% endfor %}
+    {% else %}
+      <p class="meta">The daily trend is not in yet.</p>
+    {% endif %}
+    <details class="info">
+      <summary>How the sales split is counted</summary>
+      <p>POS includes dine-in and takeaway together. Period totals are the rows with no date. Daily rows are the trend and are not added into the period totals. APB is Gross divided by orders.</p>
+    </details>
+  {% else %}
+    <div class="empty">
+      <p>The sales split across POS, Swiggy and Zomato is not in yet.</p>
+    </div>
+  {% endif %}
+</section>
+
+<section class="empty" data-empty="payouts">
+  <h2>Payouts after commission</h2>
+  <p>{{ view.payout_note }}</p>
+</section>
+{% endblock %}
