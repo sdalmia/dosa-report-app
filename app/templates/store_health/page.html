@@ -689,7 +689,7 @@
         <span class="box-index">7</span>
         <div>
           <h2 id="calendar-title">Sales calendar</h2>
-          <p class="box-source">Predicted versus actual Net</p>
+          <p class="box-source">Predicted band versus Actual Gross</p>
           {% if calendar_share_label %}
             <p class="box-source" data-field="calendar_share_label">{{ calendar_share_label }}</p>
           {% endif %}
@@ -701,13 +701,13 @@
         </div>
       </div>
       {% if not store %}
-        <p class="empty-state">Choose a store to see predicted and actual Net.</p>
+        <p class="empty-state">Choose a store to see the predicted band and Actual Gross.</p>
       {% elif calendar_absent_note %}
         <p class="empty-state" data-field="calendar_absent_note">{{ calendar_absent_note }}</p>
       {% elif day_count and not filled_actual_days and not filled_prediction_days %}
-        <p class="empty-state">No predicted or actual Net for this store.</p>
+        <p class="empty-state">No predicted band or Actual Gross for this store.</p>
       {% elif posist_actual_days %}
-        <p class="range-note">Days without a calendar actual use that day's Posist net. When Posist net is blank, the day's gross is shown. Pred low, pred high, and pred mid stay blank unless the calendar file has them.</p>
+        <p class="range-note">Actual Gross is that day's Posist gross. Low, mid, and high come from the network band, which is a net figure, so Actual Gross is not like-for-like with them. Pred low, pred high, and pred mid stay blank unless the calendar file has them.</p>
       {% endif %}
 
       {% if weeks %}
@@ -730,7 +730,8 @@
                     <div class="cal-line"><span>Low</span><b data-field="pred_low" data-date="{{ cell.iso }}">{{ cell.fields.pred_low }}</b></div>
                     <div class="cal-line"><span>Mid</span><b data-field="pred_mid" data-date="{{ cell.iso }}">{{ cell.fields.pred_mid }}</b></div>
                     <div class="cal-line"><span>High</span><b data-field="pred_high" data-date="{{ cell.iso }}">{{ cell.fields.pred_high }}</b></div>
-                    <div class="cal-line"><span>Actual</span><b data-field="actual_net" data-date="{{ cell.iso }}">{{ cell.fields.actual_net }}</b></div>
+                    <div class="cal-line"><span>Actual Gross</span><b data-field="actual_gross" data-date="{{ cell.iso }}">{{ cell.fields.actual_gross }}</b></div>
+                    {% if cell.fields.actual_net %}<div class="cal-line"><span>Actual Net</span><b data-field="actual_net" data-date="{{ cell.iso }}">{{ cell.fields.actual_net }}</b></div>{% endif %}
                     <div class="cal-line"><span>Driver</span><b data-field="drivers" data-date="{{ cell.iso }}">{{ cell.fields.drivers }}</b></div>
                     <span hidden data-field="weekday" data-date="{{ cell.iso }}">{{ cell.fields.weekday }}</span>
                     <span hidden data-field="variance_vs_mid" data-date="{{ cell.iso }}">{{ cell.fields.variance_vs_mid }}</span>
@@ -754,7 +755,7 @@
     <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
     <p><code>{{ posist_columns|join(", ") }}</code></p>
     <p class="mb-2">Menu mix reads <code>data/store_health/menu_mix.csv</code> from Posist Insights Menu Analysis. Columns are store, item, total sales, total orders, contribution percent, period start, and period end. The box lists the top items for the dates present in that file. When the file covers more than 30 days, only the latest 30 days present are listed. A store with no matching rows says menu mix is not on file for this store.</p>
-    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code> and shows the next 30 days from today in Asia/Kolkata. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. A day keeps the calendar file's actual when that cell has a figure, including zero. Otherwise it uses that same day's Posist net, or that same day's gross when net is blank. A day with no row stays blank. A later day does not reuse an earlier day's gross. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
+    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code> and shows the next 30 days from today in Asia/Kolkata. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. Actual Gross is that same day's Posist gross, including a real zero. It is never replaced by net. If the calendar file has a real Actual Net for a day, it is shown on its own line labelled Actual Net. Low, mid, and high come from the network band, which is a net figure, so Actual Gross is not like-for-like with them. A day with no Posist row stays blank. A later day does not reuse an earlier day's gross. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band or not_on_deployment_report, as well as pending, actual, or actual_provisional_eod.</p>
     <p><code>{{ calendar_columns|join(", ") }}</code></p>
     <p class="mb-2">Active employees read <code>data/store_health/keka_active.csv</code>. Keka has no Active flag. The count is the Org Locations employee count minus people on the Relieved Employees report, as of 3 Oct 2026. People still in notice stay in the count. A blank is unmatched, not zero. The old <code>keka.csv</code> headcount is not used. Primary lead still comes from <code>keka.csv</code> and is the largest reporting line, not a confirmed single store manager. <code>posist_store</code> joins a Posist label only when it matches one store.</p>
     <p><code>{{ keka_active_columns|join(", ") }}</code></p>

@@ -72,6 +72,10 @@ def cell(html, field, day=None):
     return match.group(1).strip()
 
 
+def has_field(html, field, day):
+    return f'data-field="{field}" data-date="{day}"' in html
+
+
 def calendar_cell_class(html, day):
     marker = f'data-field="tier" data-date="{day}"'
     index = html.index(marker)
@@ -97,8 +101,13 @@ class StoreHealthTests(unittest.TestCase):
             return_value=None,
         )
         self.context.start()
+        # The calendar is the next 30 days from today. Pin today so these checks
+        # do not drift as the real date moves past the fixtures.
+        self.today = patch("app.routes.store_health.business_today", return_value=date(2026, 10, 3))
+        self.today.start()
 
     def tearDown(self):
+        self.today.stop()
         self.context.stop()
         os.environ.pop("STORE_HEALTH_DATA_DIR", None)
         self.data.cleanup()
@@ -226,8 +235,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn('id="range-start"', html)
         self.assertNotIn('id="range-end"', html)
         self.assertNotIn("Show range", html)
-        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', html)), 0)
-        self.assertIn("Choose a store to see predicted and actual Net.", html)
+        self.assertEqual(len(re.findall(r'data-field="actual_gross" data-date="', html)), 0)
+        self.assertIn("Choose a store to see the predicted band and Actual Gross.", html)
 
     def test_sample_row_renders_and_missing_calendar_cells_stay_blank(self):
         self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
@@ -269,10 +278,14 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("7,087", html)
         self.assertNotIn('data-date="2026-10-01"', html)
         self.assertNotIn('data-date="2026-10-02"', html)
-        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', html)), 30)
-        self.assertEqual(cell(html, "actual_net", "2026-10-04"), "")
+        self.assertEqual(len(re.findall(r'data-field="actual_gross" data-date="', html)), 30)
+        self.assertIn("<span>Actual Gross</span>", html)
+        self.assertNotIn("<span>Actual</span>", html)
+        self.assertEqual(cell(html, "actual_gross", "2026-10-04"), "")
+        self.assertFalse(has_field(html, "actual_net", "2026-10-04"))
         self.assertEqual(cell(html, "pred_mid", "2026-10-04"), "")
         self.assertNotIn("₹67,393.99", html[html.index('id="sales-calendar"'):])
+        self.assertEqual(cell(html, "actual_gross", "2026-10-03"), "")
         self.assertEqual(cell(html, "actual_net", "2026-10-03"), "₹0")
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-03"), "-₹150")
         self.assertEqual(cell(html, "variance_pct", "2026-10-03"), "-100%")
@@ -460,11 +473,12 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("Actual Net is filled on", ideal)
         self.assertIn("2026-10-03", ideal)
         self.assertIn("2026-11-01", ideal)
-        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', ideal)), 30)
+        self.assertEqual(len(re.findall(r'data-field="actual_gross" data-date="', ideal)), 30)
+        self.assertEqual(len(re.findall(r'data-field="actual_net" data-date="', ideal)), 0)
         self.assertEqual(cell(ideal, "pred_low", "2026-10-03"), "₹77,206.26")
         self.assertEqual(cell(ideal, "pred_mid", "2026-10-03"), "₹87,734.39")
         self.assertEqual(cell(ideal, "pred_high", "2026-10-03"), "₹98,262.51")
-        self.assertEqual(cell(ideal, "actual_net", "2026-10-03"), "")
+        self.assertEqual(cell(ideal, "actual_gross", "2026-10-03"), "₹1,28,173.40")
         self.assertEqual(cell(ideal, "variance_vs_mid", "2026-10-03"), "")
         self.assertEqual(cell(ideal, "variance_pct", "2026-10-03"), "")
         self.assertEqual(cell(ideal, "tier", "2026-10-03"), "Weather caution")
@@ -472,9 +486,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(ideal, "status", "2026-10-03"), "Share of the network band")
         self.assertEqual(cell(ideal, "weekday", "2026-10-03"), "Saturday")
         self.assertIn("not a separate store model", cell(ideal, "notes", "2026-10-03"))
-        self.assertNotIn("₹0", cell(ideal, "actual_net", "2026-10-03") or "x")
         self.assertNotEqual(cell(ideal, "pred_mid", "2026-11-01"), "")
-        self.assertEqual(cell(ideal, "actual_net", "2026-11-01"), "")
+        self.assertEqual(cell(ideal, "actual_gross", "2026-11-01"), "")
 
         tier_borders = {
             "2026-10-03": ("Weather caution", "tier-weather-caution", "#e8b931"),
@@ -487,7 +500,7 @@ class StoreHealthTests(unittest.TestCase):
             self.assertEqual(cell(ideal, "tier", day), name)
             self.assertIn(css_class, calendar_cell_class(ideal, day))
             self.assertIn(f".cal-cell.{css_class} {{ border: 3px solid {colour}; }}", ideal)
-            self.assertEqual(cell(ideal, "actual_net", day), "")
+            self.assertFalse(has_field(ideal, "actual_net", day))
         self.assertEqual(len({item[1] for item in tier_borders.values()}), 5)
         for _name, css_class, _colour in tier_borders.values():
             rule = re.search(rf"\.cal-cell\.{css_class}\s*\{{([^}}]*)\}}", ideal)
@@ -508,11 +521,11 @@ class StoreHealthTests(unittest.TestCase):
             for day, (_name, css_class, _colour) in tier_borders.items():
                 self.assertIn(css_class, calendar_cell_class(page, day), label)
                 self.assertEqual(cell(page, "pred_mid", day), "", label)
-                self.assertEqual(cell(page, "actual_net", day), "", label)
+                self.assertEqual(cell(page, "actual_gross", day), "", label)
             self.assertEqual(cell(page, "pred_low", "2026-10-03"), "", label)
             self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "", label)
             self.assertEqual(cell(page, "pred_high", "2026-10-03"), "", label)
-            self.assertEqual(cell(page, "actual_net", "2026-10-03"), "", label)
+            self.assertEqual(cell(page, "actual_gross", "2026-10-03"), "", label)
             self.assertEqual(cell(page, "status", "2026-10-03"), "Not on the deployment report", label)
             self.assertIn("Blank is not zero.", cell(page, "notes", "2026-10-03"))
             self.assertIn("Not on the Posist historical deployment report", cell(page, "calendar_absent_note"))
@@ -1227,7 +1240,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("7,087", text)
         self.assertNotIn("File warnings", text)
 
-    def test_posist_actual_fills_open_calendar_days_without_inventing_predictions(self):
+    def test_actual_gross_is_posist_gross_and_never_net(self):
         self.write(
             "posist_daily.csv",
             POSIST_HEADER
@@ -1249,24 +1262,32 @@ class StoreHealthTests(unittest.TestCase):
         html = self.get(
             f"/store-health/{GURGAON_SLUG}?start=2026-10-01&end=2026-10-05&day=2026-10-01"
         )
-        self.assertEqual(cell(html, "actual_net", "2026-10-03"), "₹2,500")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-03"), "₹2,500")
+        self.assertFalse(has_field(html, "actual_net", "2026-10-03"))
         self.assertEqual(cell(html, "pred_low", "2026-10-03"), "")
         self.assertEqual(cell(html, "pred_high", "2026-10-03"), "")
         self.assertEqual(cell(html, "pred_mid", "2026-10-03"), "")
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-03"), "")
+        # Posist net is 1,000 that day. Actual Gross stays gross, and only the
+        # calendar file's real net shows, under its own Actual Net label.
+        self.assertEqual(cell(html, "actual_gross", "2026-10-04"), "₹2,500")
         self.assertEqual(cell(html, "actual_net", "2026-10-04"), "₹62,912.34")
+        self.assertNotIn("₹1,000", html[html.index('id="sales-calendar"'):])
         self.assertEqual(cell(html, "pred_mid", "2026-10-04"), "₹70,000")
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-04"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-05"), "₹0")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-05"), "₹2,500")
+        self.assertFalse(has_field(html, "actual_net", "2026-10-05"))
         self.assertEqual(cell(html, "pred_mid", "2026-10-05"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-06"), "")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-06"), "")
         self.assertEqual(cell(html, "pred_low", "2026-10-06"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-07"), "₹400")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-07"), "₹900")
+        self.assertFalse(has_field(html, "actual_net", "2026-10-07"))
+        self.assertNotIn("₹400", html[html.index('id="sales-calendar"'):])
         self.assertEqual(cell(html, "pred_low", "2026-10-07"), "₹10")
         self.assertEqual(cell(html, "pred_high", "2026-10-07"), "₹90")
         self.assertEqual(cell(html, "pred_mid", "2026-10-07"), "₹80")
         self.assertEqual(cell(html, "variance_vs_mid", "2026-10-07"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-08"), "")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-08"), "")
         self.assertNotIn("7,087", html)
         self.assertNotIn("-₹320", html)
         self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
@@ -1284,7 +1305,8 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(page, "pred_low", "2026-10-03"), "₹85,287.71")
         self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "₹96,917.86")
         self.assertEqual(cell(page, "pred_high", "2026-10-03"), "₹1,08,548")
-        self.assertEqual(cell(page, "actual_net", "2026-10-03"), "")
+        self.assertEqual(cell(page, "actual_gross", "2026-10-03"), "₹1,69,696.45")
+        self.assertFalse(has_field(page, "actual_net", "2026-10-03"))
         self.assertEqual(cell(page, "variance_vs_mid", "2026-10-03"), "")
         self.assertNotIn('data-date="2026-10-02"', page)
         self.assertNotIn("historical-total-revenue", page)
@@ -1293,7 +1315,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("₹5,59,226.59", page)
         self.assertNotIn("last 30 days", page[page.index('id="menu-mix"'):page.index('id="mystery-audit"')])
 
-    def test_calendar_file_actual_is_kept_ahead_of_posist_gross(self):
+    def test_calendar_file_net_keeps_its_own_label_beside_actual_gross(self):
         self.write(
             "posist_daily.csv",
             POSIST_HEADER
@@ -1311,17 +1333,20 @@ class StoreHealthTests(unittest.TestCase):
         slug = self._option_slug(index, "Connaught place (02/0012)")
         page = self.get(f"/store-health/{slug}")
         self.assertEqual(cell(page, "actual_net", "2026-10-03"), "₹1,52,678.98")
+        self.assertEqual(cell(page, "actual_gross", "2026-10-03"), "₹1,66,950.16")
         self.assertEqual(cell(page, "pred_low", "2026-10-03"), "")
         self.assertEqual(cell(page, "pred_high", "2026-10-03"), "")
         self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "")
         self.assertEqual(cell(page, "variance_vs_mid", "2026-10-03"), "")
         self.assertEqual(cell(page, "status", "2026-10-03"), "Actual, provisional end of day")
         self.assertEqual(cell(page, "drivers", "2026-10-03"), "Gandhi Jayanti")
-        self.assertEqual(cell(page, "actual_net", "2026-10-04"), "")
+        self.assertEqual(cell(page, "actual_gross", "2026-10-04"), "")
+        self.assertFalse(has_field(page, "actual_net", "2026-10-04"))
         self.assertEqual(cell(page, "pred_mid", "2026-10-04"), "")
         self.assertNotIn('data-date="2026-10-02"', page)
         calendar = page.split('id="sales-calendar"', 1)[1].split("<details", 1)[0]
-        self.assertNotIn("₹1,66,950.16", calendar)
+        self.assertIn("<span>Actual Net</span>", calendar)
+        self.assertIn("<span>Actual Gross</span>", calendar)
         self.assertIn("gross was ₹1,66,950.16", page.split('id="cost"', 1)[1].split('id="holiday-calendar"', 1)[0])
 
     def test_csv_load_warnings_stay_off_the_page_and_the_pdf(self):
@@ -1345,9 +1370,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("historical-total-revenue", html)
         self.assertNotIn("Further file warnings", html)
         self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
-        self.assertEqual(cell(html, "actual_net", "2026-10-03"), "₹20")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-03"), "₹20")
         self.assertEqual(cell(html, "pred_mid", "2026-10-03"), "")
-        self.assertEqual(cell(html, "actual_net", "2026-10-04"), "")
+        self.assertEqual(cell(html, "actual_gross", "2026-10-04"), "")
         response = self.client.get("/store-health/kalikapur/print?start=2026-10-02&end=2026-10-02&day=2026-10-02")
         self.assertEqual(response.status_code, 200)
         reader = PdfReader(io.BytesIO(response.data))
@@ -1381,6 +1406,11 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("Expected live", ideal)
         self.assertIn("₹77,206.26", ideal)
         self.assertIn("₹87,734.39", ideal)
+        flat = " ".join(ideal.split())
+        self.assertIn("Predicted band versus Actual Gross.", flat)
+        self.assertIn("Actual Gross ₹1,28,173.40", flat)
+        self.assertNotIn("Actual Net", flat)
+        self.assertNotIn("Posist net", flat)
         self.assertIn("₹98,262.51", ideal)
         self.assertIn("Weather caution", ideal)
         self.assertIn("Puja / festive", ideal)

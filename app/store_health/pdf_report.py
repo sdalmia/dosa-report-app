@@ -105,7 +105,7 @@ _CALENDAR_FIGURES = (
     ("Low", "pred_low"),
     ("Mid", "pred_mid"),
     ("High", "pred_high"),
-    ("Actual", "actual_net"),
+    ("Actual Gross", "actual_gross"),
 )
 
 
@@ -268,16 +268,16 @@ def _calendar_section(pdf, view):
         lines.append(view["calendar_share_label"])
     if view.get("calendar_absent_note"):
         lines.append(view["calendar_absent_note"])
-    lines.append("Predicted versus actual Net. A blank is not zero.")
+    lines.append("Predicted band versus Actual Gross. A blank is not zero.")
     if view.get("posist_actual_days"):
         lines.append(
-            "Days without a calendar actual use that day's Posist net. "
-            "When Posist net is blank, the day's gross is shown. "
+            "Actual Gross is that day's Posist gross. Low, mid, and high come from the "
+            "network band, which is a net figure, so Actual Gross is not like-for-like with them. "
             "Predictions stay blank unless the calendar file has them."
         )
     days = view.get("days") or []
     if not days:
-        lines.append("No predicted or actual Net for this store.")
+        lines.append("No predicted band or Actual Gross for this store.")
     _section_box(pdf, "Sales calendar", lines, TEAL)
     if days:
         _draw_day_cards(pdf, days)
@@ -292,6 +292,10 @@ def _card_lines(day):
     for label, key in _CALENDAR_FIGURES:
         value = fields.get(key) or ""
         lines.append((f"{label}   {value}".rstrip(), 8, False))
+    actual_net = fields.get("actual_net") or ""
+    if actual_net:
+        # Real net from the calendar file keeps its own Net label.
+        lines.append((f"Actual Net   {actual_net}", 8, False))
     driver = fields.get("drivers") or ""
     if driver:
         lines.append((f"Driver   {driver}", 8, False))
