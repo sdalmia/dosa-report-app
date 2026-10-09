@@ -10,6 +10,7 @@ from datetime import timedelta
 from app.store_health.contract import parse_number
 from app.store_health.present import list_stores
 from app.store_health.stores import assign_rows
+from app.store_master import is_trading
 
 from .figures import count_fig, date_label, fig, money_fig, month_label, pct_fig, plain_pct_fig, ratio_fig, score_fig
 
@@ -315,6 +316,8 @@ def build_brief(feeds, attention, procurement):
         variance = None
         if gross is not None and mid is not None and mid != 0:
             variance = (float(gross) - float(mid)) / float(mid) * 100.0
+        if not is_trading(row["label"]):
+            continue
         if variance is not None:
             worst_mid.append(
                 {
@@ -519,7 +522,7 @@ def _assign_ranks(stores):
 
 def build_scorecard(feeds, wastage, month):
     selected, available = resolve_month(feeds, month)
-    stores = _stores(feeds)
+    stores = [store for store in _stores(feeds) if is_trading(store.label)]
     labels = [store.label for store in stores]
     wastage_rows = _wastage_for_month(wastage.get("rows") or [], labels, selected) if selected else {}
     per_person = {}

@@ -1,0 +1,20 @@
+{% extends "owner/layout.html" %}
+
+{% block title %}Store Master - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Store Master</h1>
+<p class="subtitle">One list of outlets. Other pages match a name to this list.</p>
+{% include "_filters.html" %}
+
+{% if not stores %}
+<div class="empty"><p>No outlets for this store or city.</p></div>
+{% endif %}
+
+{% for store in stores %}
+<article class="store" data-store="{{ store.store_id }}">
+  <h2>{{ store.name }}</h2>
+  {% if store.line %}<p class="meta">{{ store.line }}</p>{% endif %}
+</article>
+{% endfor %}
+{% endblock %}

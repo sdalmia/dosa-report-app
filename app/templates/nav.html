@@ -28,7 +28,11 @@
   <a href="{{ url_for('owner.labour') }}" {% if request.endpoint == 'owner.labour' %}class="is-current"{% endif %}>Labour</a>
   <a href="{{ url_for('owner.goals') }}" {% if request.endpoint == 'owner.goals' %}class="is-current"{% endif %}>Goals</a>
   <h2>Stores</h2>
-  <a href="{{ url_for('store_health.page') }}">Store Health</a>
+  <a href="{{ url_for('store_health.page') }}" {% if request.endpoint == 'store_health.page' %}class="is-current"{% endif %}>Store Health</a>
+  {% if is_owner() %}
+  <a href="{{ url_for('owner.store_master') }}" {% if request.endpoint == 'owner.store_master' %}class="is-current"{% endif %}>Store Master</a>
+  <a href="{{ url_for('owner.data_gaps') }}" {% if request.endpoint == 'owner.data_gaps' %}class="is-current"{% endif %}>Data gaps</a>
+  {% endif %}
   <a href="{{ url_for('main.flags_page') }}">Red flags</a>
   <h2>Buying</h2>
   <a href="{{ url_for('main.procurement_page') }}">Procurement</a>

@@ -582,6 +582,7 @@ def load_item_sales(directory=None):
 
 def load_feeds(directory=None):
     from app.store_health.stores import assign_rows, extra_store_labels, match_menu_store
+    from app.store_master import resolve_store_label
 
     directory = Path(directory) if directory else data_directory()
     posist, posist_warnings = load_posist(directory)
@@ -611,7 +612,9 @@ def load_feeds(directory=None):
         seen_menu = set()
         targets = join_labels or labels
         for row in menu_mix:
-            label = match_menu_store(row.get("store"), targets)
+            label = resolve_store_label(row.get("store"), targets)
+            if label is None:
+                label = match_menu_store(row.get("store"), targets)
             if label is None:
                 if row.get("store") not in seen_menu:
                     seen_menu.add(row.get("store"))
@@ -623,7 +626,9 @@ def load_feeds(directory=None):
         seen_items = set()
         targets = join_labels or labels
         for row in item_sales:
-            label = match_menu_store(row.get("store"), targets)
+            label = resolve_store_label(row.get("store"), targets)
+            if label is None:
+                label = match_menu_store(row.get("store"), targets)
             if label is None:
                 if row.get("store") not in seen_items:
                     seen_items.add(row.get("store"))

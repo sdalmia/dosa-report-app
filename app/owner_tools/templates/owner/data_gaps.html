@@ -1,0 +1,43 @@
+{% extends "owner/layout.html" %}
+
+{% block title %}Data gaps - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Data gaps</h1>
+<p class="subtitle">Open work, grouped by who owns it. Threats are listed first.</p>
+{% include "_filters.html" %}
+
+<div class="gap-counts">
+  <div class="ot-stat">
+    <p class="kicker">Open</p>
+    <p class="figure-sm" data-field="open">{{ counts.open }}</p>
+  </div>
+  <div class="ot-stat">
+    <p class="kicker">Waiting</p>
+    <p class="figure-sm" data-field="waiting">{{ counts.waiting }}</p>
+  </div>
+  <div class="ot-stat">
+    <p class="kicker">Fixed</p>
+    <p class="figure-sm" data-field="fixed">{{ counts.fixed }}</p>
+  </div>
+</div>
+
+{% if not groups %}
+<div class="empty"><p>{% if filters.cc_store or filters.cc_city %}No gaps for this store or city.{% else %}No open gaps.{% endif %}</p></div>
+{% endif %}
+
+{% for group in groups %}
+<section class="owner-group" data-owner="{{ group.owner }}">
+  <h2>{{ group.owner }}</h2>
+  {% for gap in group.gaps %}
+  <article class="store" data-gap="{{ gap.gap_id }}" {% if gap.threat %}data-threat="1"{% endif %}>
+    {% if gap.threat %}<p class="kicker threat">Threat</p>{% endif %}
+    <h3>{{ gap.title }}</h3>
+    {% if gap.store %}<p class="note">{{ gap.store }}</p>{% endif %}
+    {% if gap.why_it_matters %}<p>{{ gap.why_it_matters }}</p>{% endif %}
+    <p class="meta">{{ gap.status_label }}{% if gap.fix %} · {{ gap.fix }}{% endif %}{% if gap.due_label %} · Due {{ gap.due_label }}{% endif %}</p>
+  </article>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endblock %}
