@@ -346,28 +346,23 @@ def _calendar_field(row, field):
     return str(value)
 
 
-def _posist_daily_actual(row):
-    """Figure to show as Actual Net when the calendar file has none.
+def _posist_daily_gross(row):
+    """Figure to show as Actual Gross: that day's Posist gross, including a real zero.
 
-    Use Posist net when that cell has a number, including a real zero.
-    The shipped drop leaves net blank and keeps the day's revenue in gross,
-    so gross is the on-file figure only in that case. Never invent a prediction.
+    This is always gross. Posist net is never swapped in, even when a day has it,
+    and gross is never written into a net field.
     """
-    if row is None:
+    if row is None or row.get("gross") is None:
         return None, ""
-    if row.get("net") is not None:
-        return row.get("net"), "posist_net"
-    if row.get("gross") is not None:
-        return row.get("gross"), "posist_gross"
-    return None, ""
+    return row.get("gross"), "posist_gross"
 
 
 def calendar_days(feeds, store, start, end):
     """One cell per day in the window.
 
-    A calendar row is shown as written, including a real zero. When that row
-    has no actual, the same day's Posist net is used, or that day's gross when
-    net is blank. A later day never reuses an earlier day's gross.
+    A calendar row is shown as written, including a real zero. Actual Gross is
+    that same day's Posist gross. A real Actual Net from the calendar file is kept
+    under its own Net label. A later day never reuses an earlier day's gross.
     """
     if start is None or end is None:
         return []
@@ -376,16 +371,10 @@ def calendar_days(feeds, store, start, end):
     while cursor <= end:
         row = _row_for_store(feeds["calendar"], store, cursor) if store else None
         fields = {field: _calendar_field(row, field) for field in CALENDAR_VALUE_COLUMNS if field != "date"}
-        if row is not None and row.get("actual_net") is not None:
-            actual_source = "calendar"
-        else:
-            posist_row = _row_for_store(feeds["posist"], store, cursor) if store else None
-            amount, actual_source = _posist_daily_actual(posist_row)
-            if actual_source:
-                fields["actual_net"] = format_money(amount, "actual_net")
-            else:
-                actual_source = ""
-        figure_fields = ("pred_low", "pred_high", "pred_mid", "actual_net")
+        posist_row = _row_for_store(feeds["posist"], store, cursor) if store else None
+        amount, actual_source = _posist_daily_gross(posist_row)
+        fields["actual_gross"] = format_money(amount, "gross") if actual_source else ""
+        figure_fields = ("pred_low", "pred_high", "pred_mid", "actual_gross", "actual_net")
         has_figure = any(fields[name] for name in figure_fields)
         tier = row.get("tier") if row else ""
         days.append(
@@ -858,7 +847,7 @@ def build_view(feeds, store, selection, today):
         days = calendar_days(feeds, store, span[0], span[1])
     else:
         days = []
-    filled = sum(1 for day in days if day["fields"]["actual_net"])
+    filled = sum(1 for day in days if day["fields"]["actual_gross"] or day["fields"]["actual_net"])
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
     story = calendar_story(feeds, store)
     described = describe_feeds(feeds["directory"])
