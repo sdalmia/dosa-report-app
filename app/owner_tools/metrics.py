@@ -22,8 +22,8 @@ WEIGHTS = (
         "label": "Sales vs forecast mid",
         "weight": 25,
         "formula": (
-            "100 × summed gross ÷ summed forecast mid, on days in the month that have both. "
-            "100 means gross matched mid. A day missing either figure is left out, not counted as zero."
+            "100 times summed gross divided by summed forecast mid, on days in the month that have both. "
+            "100 means gross matched the forecast. A day missing either figure is left out, not counted as zero."
         ),
     },
     {
@@ -40,7 +40,7 @@ WEIGHTS = (
         "label": "Famepilot public rating",
         "weight": 20,
         "formula": (
-            "100 × public rating ÷ 5, from the rating column in famepilot.csv. "
+            "100 times the public rating divided by 5. "
             "5.0 is 100. A blank rating is left out. The private rating is not used."
         ),
     },
@@ -49,8 +49,8 @@ WEIGHTS = (
         "label": "Mystery audit",
         "weight": 15,
         "formula": (
-            "The avg_score percent in mystery_audit.csv, when it is a number. "
-            "“Not in cycle” and other non-numbers are left out."
+            "The mystery-audit score, when it is a number. "
+            "A visit that is not in cycle is left out."
         ),
     },
     {
@@ -58,9 +58,9 @@ WEIGHTS = (
         "label": "Gross per active employee",
         "weight": 15,
         "formula": (
-            "Month-to-date gross ÷ active_employees from keka_active.csv. "
-            "The score indexes that figure to the median of stores with a count (the median scores 100). "
-            "A blank or unmatched count is left out, not scored as zero."
+            "Month-to-date gross divided by active staff. "
+            "The score compares that figure with the middle store (the middle store scores 100). "
+            "A blank staff count is left out, not scored as zero."
         ),
     },
     {
@@ -68,8 +68,8 @@ WEIGHTS = (
         "label": "Wastage",
         "weight": 10,
         "formula": (
-            "100 minus wastage_pct from data/store_health/wastage.csv, when that percent is present. "
-            "An amount with no percent is shown and not scored. A missing file leaves the component blank."
+            "100 minus the wastage percent, when that percent is present. "
+            "An amount with no percent is shown and not scored. If there is no wastage figure, this part is left out."
         ),
     },
 )
@@ -292,7 +292,7 @@ def build_brief(feeds, attention, procurement):
         "gross": money_fig(_sum_present(gross_values)),
         "bills": count_fig(_sum_present(bill_values)),
         "apb": money_fig(_apb(paired_gross_sum, paired_bills_sum)),
-        "apb_label": "APB, calculated as summed gross / summed bills",
+        "apb_label": "APB",
         "stores_in_apb": len(paired_gross),
         "stores_on_day": len(rows),
         "gross_change_pct": pct_fig(gross_change),
@@ -333,21 +333,15 @@ def build_brief(feeds, attention, procurement):
     worst_mid.sort(key=lambda item: (item["variance_pct"]["value"], item["label"].casefold()))
     worst_week.sort(key=lambda item: (item["variance_pct"]["value"], item["label"].casefold()))
     if day is None:
-        empty = "posist_daily.csv has no dated rows, so there is no morning brief yet."
+        empty = "No sales day to show yet."
     else:
         empty = ""
     if not worst_mid:
-        mid_empty = (
-            "No store has both Posist gross and a forecast mid (pred_mid in sales_pred_vs_actual.csv) "
-            "on this date, so there is no ranking versus forecast."
-        )
+        mid_empty = "No store has both sales and a forecast for this day."
     else:
         mid_empty = ""
     if not worst_week:
-        week_empty = (
-            "No store has gross on this date and on the same weekday one week earlier, "
-            "so there is no ranking versus last week."
-        )
+        week_empty = "No store has sales on this day and the same weekday last week."
     else:
         week_empty = ""
     return {
@@ -357,7 +351,7 @@ def build_brief(feeds, attention, procurement):
         "prior_label": date_label(prior_day),
         "sales_basis": "gross",
         "net": None,
-        "net_note": "posist_daily.csv net is blank. Sales on this page are gross.",
+        "net_note": "Sales are gross.",
         "empty": empty,
         "network": network,
         "regions": _group_rows(rows),
@@ -477,7 +471,7 @@ def _wastage_for_month(wastage_rows, labels, month):
 
 def _wastage_component(row, file_present):
     if not file_present:
-        return None, "No wastage file."
+        return None, "No wastage figure yet, so this part is left out."
     if row is None:
         return None, "No wastage row for this store."
     pct = row.get("wastage_pct")
@@ -486,16 +480,16 @@ def _wastage_component(row, file_present):
     if pct is None and amount is None:
         return None, "Wastage cells are blank."
     if score is None:
-        return None, f"Wastage amount {money_fig(amount)['text']} has no wastage_pct, so it is not scored."
+        return None, f"Wastage amount {money_fig(amount)['text']} has no percent, so it is not scored."
     amount_bit = f", amount {money_fig(amount)['text']}" if amount is not None else ""
     return score, f"Wastage {pct:g}%{amount_bit}."
 
 
 def _productivity_raw(gross, employees, matched_note):
     if employees is None:
-        return None, matched_note or "active_employees is blank, so gross per person is not calculated."
+        return None, matched_note or "Staff count is blank, so gross per person is not calculated."
     if employees == 0:
-        return None, "active_employees is 0, so gross per person is not calculated."
+        return None, "Staff count is zero, so gross per person is not calculated."
     if gross is None:
         return None, "Month-to-date gross is blank, so gross per person is not calculated."
     per = float(gross) / float(employees)
@@ -530,10 +524,10 @@ def build_scorecard(feeds, wastage, month):
         keka = (feeds.get("keka_active_by_store") or {}).get(store.label)
         employees = parse_number(keka.get("active_employees")) if keka else None
         if keka is None:
-            note = "No row in keka_active.csv matches this store."
+            note = "Staff count is blank."
         else:
             status = (keka.get("match_status") or "").strip()
-            note = status or "active_employees is blank."
+            note = status if employees is not None else "Staff count is blank."
         per, per_raw = _productivity_raw(gross, employees, note)
         per_person[store.label] = per
         prepared.append(
@@ -624,7 +618,7 @@ def build_scorecard(feeds, wastage, month):
         "stores": ordered,
         "ranked_count": sum(1 for store in ordered if store["rank"] is not None),
         "unranked_count": sum(1 for store in ordered if store["rank"] is None),
-        "empty": "" if selected else "posist_daily.csv has no dated rows, so there is no month to score.",
+        "empty": "" if selected else "No sales month to score yet.",
     }
 
 
@@ -654,9 +648,9 @@ def build_labour(feeds):
         employees = parse_number(keka.get("active_employees")) if keka else None
         status = (keka.get("match_status") or "").strip() if keka else ""
         if keka is None:
-            status = "No row in keka_active.csv matches this store."
+            status = "Staff count is blank."
         elif employees is None and not status:
-            status = "active_employees is blank."
+            status = "Staff count is blank."
         if employees is not None and employees != 0 and gross is not None:
             matched_gross.append(gross)
             matched_gross_employees.append(employees)
@@ -692,8 +686,8 @@ def build_labour(feeds):
         "as_of_label": date_label(day),
         "month": month,
         "month_label": month_label(month) if month else "",
-        "note": "active_employees comes from keka_active.csv. A blank count is unmatched, not zero. Per-person figures stay blank when the count is blank.",
-        "empty": "" if day else "posist_daily.csv has no dated rows, so labour productivity has no sales to divide.",
+        "note": "A missing staff count stays blank, not zero. Per-person figures stay blank when the count is blank.",
+        "empty": "" if day else "No sales day to show yet.",
         "network": {
             "gross_per": money_fig(_per(_sum_present(matched_gross), _sum_present(matched_gross_employees))),
             "bills_per": ratio_fig(_per(_sum_present(matched_bills), _sum_present(matched_bill_employees))),
@@ -744,15 +738,15 @@ def build_goals(feeds, goals, month, festive_on):
         bar = None
         empty = ""
         if goal is None:
-            empty = "No target in data/goals.csv for this store and month."
+            empty = "No target for this month."
         elif not written:
-            empty = "target_gross is blank in data/goals.csv."
+            empty = "The target for this month is blank."
         elif target is None:
-            empty = f"target_gross {written} is not a number, so the bar is not drawn."
+            empty = "The target is not a number, so the bar is not drawn."
         elif target == 0:
-            note = "target_gross is 0, so the bar is not drawn."
+            note = "The target is zero, so the bar is not drawn."
         elif gross is None:
-            empty = "No month-to-date gross in posist_daily.csv, so the bar is not drawn."
+            empty = "No month-to-date sales, so the bar is not drawn."
         else:
             progress = float(gross) / float(target) * 100.0
             bar = min(progress, 100.0)
@@ -774,7 +768,7 @@ def build_goals(feeds, goals, month, festive_on):
     if festive:
         festive_empty = ""
     else:
-        festive_empty = "No Puja or Diwali wording in the drivers column of sales_pred_vs_actual.csv."
+        festive_empty = "No Puja or Diwali dates in the sales forecast."
     return {
         "month": selected,
         "month_label": month_label(selected) if selected else "",
@@ -787,7 +781,7 @@ def build_goals(feeds, goals, month, festive_on):
         "festive_dates": festive,
         "festive_empty": festive_empty,
         "stores": built,
-        "empty": "" if selected else "posist_daily.csv has no dated rows, so there is no month-to-date gross.",
+        "empty": "" if selected else "No sales month to show yet.",
     }
 
 

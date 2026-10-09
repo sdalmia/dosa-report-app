@@ -4,12 +4,15 @@
 {% block title %}Goals - Dosa Coffee{% endblock %}
 
 {% block owner_body %}
-<p class="kicker">Owner</p>
 <h1>Goals</h1>
-<p class="lede">Month-to-date gross against target_gross in data/goals.csv. A missing target does not become zero.</p>
+<p class="subtitle">{% if goals.month_label %}{{ goals.month_label }} · {% endif %}Month-to-date gross</p>
+<details class="ot-info">
+  <summary>About these numbers</summary>
+  <p>The bar is this month’s gross versus the target. A missing target stays blank, not zero. Festive dates are Puja and Diwali days named in the sales forecast.</p>
+</details>
 
 {% if goals.months %}
-<nav class="month-row" aria-label="Month">
+<nav class="filters" aria-label="Month">
   {% for month in goals.months %}
   <a href="{{ url_for('owner.goals', month=month.key, festive=1 if goals.festive_on else 0) }}" class="{% if month.key == goals.month %}is-on{% endif %}">{{ month.label }}</a>
   {% endfor %}
@@ -20,11 +23,10 @@
 <div class="empty" data-empty="goals-file"><p>{{ goals.file_message }}</p></div>
 {% endif %}
 
-<section class="{% if goals.festive_on %}card{% endif %}" data-section="festive">
-  <h2>Festive mode</h2>
-  <p class="note">Puja and Diwali dates come from the drivers text in sales_pred_vs_actual.csv. They are not typed in by hand.</p>
+<section class="ot-box" data-section="festive">
+  <h2>Festive days</h2>
   {% if goals.festive_on %}
-  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=0) }}">Turn festive mode off</a></p>
+  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=0) }}">Hide festive days</a></p>
   <div class="chip-row">
     {% for day in goals.festive_dates %}
     <article class="chip {{ day.kinds|join(' ')|lower }}" data-festive="{{ day.iso }}">
@@ -35,8 +37,8 @@
     {% endfor %}
   </div>
   {% elif goals.festive_dates %}
-  <p>Festive mode is off.</p>
-  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=1) }}">Show Puja and Diwali dates</a></p>
+  <p>Festive days are hidden.</p>
+  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=1) }}">Show Puja and Diwali</a></p>
   {% else %}
   <div class="empty" data-empty="festive"><p>{{ goals.festive_empty }}</p></div>
   {% endif %}
@@ -52,8 +54,8 @@
 {% for store in goals.stores %}
 <article class="store" data-store="{{ store.label }}">
   <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
-  <div class="pair"><span>{{ goals.month_label }} gross</span><span data-field="mtd-gross">{{ show(store.mtd_gross) }}</span></div>
-  <p class="note">{{ store.days }} days with gross. Missing days are not counted as zero.</p>
+  <p class="kicker">{{ goals.month_label }} gross</p>
+  <p class="figure-sm" data-field="mtd-gross">{{ show(store.mtd_gross) }}</p>
   {% if store.bar_pct is not none %}
   <div class="pair"><span>Target</span><span data-field="target">{{ show(store.target) }}</span></div>
   <div class="bar" role="progressbar" aria-valuenow="{{ store.bar_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Month-to-date gross versus target">

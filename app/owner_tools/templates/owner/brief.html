@@ -4,35 +4,37 @@
 {% block title %}Morning brief - Dosa Coffee{% endblock %}
 
 {% block owner_body %}
-<p class="kicker">Owner</p>
 <h1>Morning brief</h1>
-{% if brief.as_of_label %}
-<p class="lede">{{ brief.as_of_label }}, the latest date in posist_daily.csv. Sales are gross. {{ brief.net_note }}</p>
-{% endif %}
-
-<div class="renders">
-  <a href="{{ url_for('owner.brief_json') }}">JSON</a>
-  <a href="{{ url_for('owner.brief_text') }}">Plain text</a>
-  <a href="{{ url_for('owner.brief_email') }}">Email HTML</a>
-</div>
-<p class="note">The text and HTML renders are for an external emailer. Nothing is sent from here.</p>
+<p class="subtitle">{% if brief.as_of_label %}{{ brief.as_of_label.rsplit(' ', 1)[0] }} · {% endif %}Gross sales</p>
+<details class="ot-info">
+  <summary>About these numbers</summary>
+  <p>APB is total gross divided by total bills. A missing day is left out, not counted as zero. Week on week compares this day with the same weekday last week.</p>
+</details>
 
 {% if brief.empty %}
-<div class="empty" data-empty="brief"><strong>No brief yet</strong><p>{{ brief.empty }}</p></div>
+<div class="empty" data-empty="brief"><p>{{ brief.empty }}</p></div>
 {% else %}
-<section class="card" data-section="network">
-  <p class="kicker">Network gross</p>
+<section class="ot-box" data-section="network">
+  <p class="kicker">Gross</p>
   <p class="figure" data-field="network-gross">{{ show(brief.network.gross) }}</p>
-  <div class="pair"><span>Bills</span><span data-field="network-bills">{{ show(brief.network.bills) }}</span></div>
-  <div class="pair"><span>APB, calculated</span><span data-field="network-apb">{{ show(brief.network.apb) }}</span></div>
-  <div class="pair"><span>Gross vs {{ brief.prior_label }}</span><span data-field="network-gross-change">{{ change(brief.network.gross_change_pct) }}</span></div>
-  <div class="pair"><span>Bills vs {{ brief.prior_label }}</span><span data-field="network-bills-change">{{ change(brief.network.bills_change_pct) }}</span></div>
-  <p class="note">{{ brief.network.apb_label }}. Week change uses stores that have both days ({{ brief.network.gross_compared }} for gross). A missing day is left out, not treated as zero.</p>
+  <div class="hero-split">
+    <div class="ot-stat">
+      <p class="kicker">Bills</p>
+      <p class="figure-sm" data-field="network-bills">{{ show(brief.network.bills) }}</p>
+    </div>
+    <div class="ot-stat">
+      <p class="kicker">APB</p>
+      <p class="figure-sm" data-field="network-apb">{{ show(brief.network.apb) }}</p>
+    </div>
+  </div>
+  <div class="wow">
+    <span class="wow-chip">Gross {{ change(brief.network.gross_change_pct) }}</span>
+    <span class="wow-chip">Bills {{ change(brief.network.bills_change_pct) }}</span>
+  </div>
 </section>
 
 <section>
-  <h2>Lowest 5 versus forecast mid</h2>
-  <p class="note">Forecast mid is pred_mid in sales_pred_vs_actual.csv. Actual is that day's Posist gross. The file's actual_net and variance columns are blank, so this gap is calculated.</p>
+  <h2>Lowest versus forecast</h2>
   {% if brief.worst_vs_mid_empty %}
   <div class="empty" data-empty="forecast"><p>{{ brief.worst_vs_mid_empty }}</p></div>
   {% else %}
@@ -51,8 +53,7 @@
 </section>
 
 <section>
-  <h2>Lowest 5 versus last week</h2>
-  <p class="note">Gross versus {{ brief.prior_label }}, the same weekday one week earlier in posist_daily.csv.</p>
+  <h2>Lowest versus last week</h2>
   {% if brief.worst_vs_last_week_empty %}
   <div class="empty" data-empty="last-week"><p>{{ brief.worst_vs_last_week_empty }}</p></div>
   {% else %}
@@ -99,7 +100,7 @@
   <div class="empty" data-empty="procurement"><p>{{ brief.procurement_empty }}</p></div>
   {% else %}
   {% for item in brief.procurement %}
-  <article class="store" data-field="procurement"><h3>{{ item.store or item.file }}</h3><p>{{ item.text }}</p></article>
+  <article class="store" data-field="procurement"><h3>{{ item.store or "Procurement" }}</h3><p>{{ item.text }}</p></article>
   {% endfor %}
   {% endif %}
 </section>
@@ -111,11 +112,22 @@
   {% for store in region.stores %}
   <article class="store" data-store="{{ store.label }}">
     <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
-    <div class="pair"><span>Gross</span><span data-field="gross">{{ show(store.gross) }}</span></div>
-    <div class="pair"><span>Vs {{ brief.prior_label }}</span><span data-field="gross-change">{{ change(store.gross_change_pct) }}</span></div>
-    <div class="pair"><span>Bills</span><span data-field="bills">{{ show(store.bills) }}</span></div>
-    <div class="pair"><span>Bills vs last week</span><span data-field="bills-change">{{ change(store.bills_change_pct) }}</span></div>
-    <div class="pair"><span>APB, calculated</span><span data-field="apb">{{ show(store.apb) }}</span></div>
+    <p class="kicker">Gross</p>
+    <p class="figure-sm" data-field="gross">{{ show(store.gross) }}</p>
+    <div class="hero-split">
+      <div class="ot-stat">
+        <p class="kicker">Bills</p>
+        <p class="figure-sm" data-field="bills">{{ show(store.bills) }}</p>
+      </div>
+      <div class="ot-stat">
+        <p class="kicker">APB</p>
+        <p class="figure-sm" data-field="apb">{{ show(store.apb) }}</p>
+      </div>
+    </div>
+    <div class="wow">
+      <span class="wow-chip">Gross {{ change(store.gross_change_pct) }}</span>
+      <span class="wow-chip">Bills {{ change(store.bills_change_pct) }}</span>
+    </div>
   </article>
   {% endfor %}
 </section>

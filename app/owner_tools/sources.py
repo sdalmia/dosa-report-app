@@ -89,19 +89,19 @@ def load_goals():
         return {
             "state": "missing",
             "rows": [],
-            "message": "Targets need data/goals.csv with columns store, month, target_gross. That file is missing.",
+            "message": "No targets yet. Add a monthly gross target to see progress.",
         }
     if header[:3] != ["store", "month", "target_gross"]:
         return {
             "state": "unreadable",
             "rows": [],
-            "message": "data/goals.csv must start with the columns store, month, target_gross.",
+            "message": "Targets could not be read. They need a store, a month, and a gross target.",
         }
     if not rows:
         return {
             "state": "empty",
             "rows": [],
-            "message": "data/goals.csv has the headers store, month, target_gross and no targets yet. Add a target_gross for a store and month (YYYY-MM) to draw a progress bar.",
+            "message": "No targets yet. Add a monthly gross target to see progress.",
         }
     return {"state": "ready", "rows": rows, "message": ""}
 
@@ -134,18 +134,11 @@ def scan_famepilot(directory):
     result = {
         "food_safety": [],
         "emergency": [],
-        "food_safety_empty": (
-            "No food-safety item is named in data/store_health/famepilot.csv. "
-            "main_threat is an operational theme (such as Missing Item or Quality Issue) and does not say food safety. "
-            "Add that wording, or a food_safety column, to show items here."
-        ),
-        "emergency_empty": (
-            "No emergency item is named in data/store_health/famepilot.csv. "
-            "None of the threat text says emergency. Add that wording, or an emergency column, to show items here."
-        ),
+        "food_safety_empty": "No food-safety notes from Famepilot.",
+        "emergency_empty": "No emergency notes from Famepilot.",
     }
     if rows is None:
-        missing = "data/store_health/famepilot.csv is missing, so there are no food-safety or emergency items to show."
+        missing = "No notes from Famepilot."
         result["food_safety_empty"] = missing
         result["emergency_empty"] = missing
         return result
@@ -179,13 +172,13 @@ def scan_procurement():
     if not directory.exists():
         return {
             "items": [],
-            "empty": "Procurement flags need a folder at data/procurement. It is not in the repo.",
+            "empty": "No procurement flags yet.",
         }
     files = sorted(path for path in directory.glob("*.csv") if path.is_file())
     if not files:
         return {
             "items": [],
-            "empty": "data/procurement has no CSV. Add a CSV with a flag, alert, or status column.",
+            "empty": "No procurement flags yet.",
         }
     items = []
     saw_column = False
@@ -206,9 +199,9 @@ def scan_procurement():
             store = (row.get("store") or row.get("posist_store") or "").strip()
             items.append({"file": path.name, "store": store, "text": "; ".join(parts)})
     if not saw_column:
-        empty = "data/procurement has CSV files, but none has a flag, alert, or status column."
+        empty = "No procurement flags yet."
     elif not items:
-        empty = "data/procurement has a flag column, and every flag cell is blank."
+        empty = "No procurement flags yet."
     else:
         empty = ""
     return {"items": items, "empty": empty}
@@ -218,10 +211,7 @@ def load_wastage(directory):
     """Raw wastage rows. Matching to a Posist store happens per month."""
     path = wastage_path(directory)
     rows, fieldnames = read_csv(path)
-    empty = (
-        "Wastage needs data/store_health/wastage.csv with columns store and wastage_pct "
-        "(or wastage_amount). That file is not in the repo, so this part of the score is left blank."
-    )
+    empty = "No wastage figure yet, so that part of the score is left out."
     if rows is None:
         return {"present": False, "rows": [], "empty": empty}
     header = {name.strip().casefold() for name in fieldnames}
@@ -229,7 +219,7 @@ def load_wastage(directory):
         return {
             "present": True,
             "rows": [],
-            "empty": "data/store_health/wastage.csv has no store column, so wastage was not applied.",
+            "empty": "Wastage could not be matched to a store, so that part of the score is left out.",
         }
     normalised = []
     for row in rows:
@@ -249,6 +239,6 @@ def load_wastage(directory):
         return {
             "present": True,
             "rows": [],
-            "empty": "data/store_health/wastage.csv has headers only, so wastage is blank.",
+            "empty": "No wastage figure yet, so that part of the score is left out.",
         }
     return {"present": True, "rows": normalised, "empty": ""}

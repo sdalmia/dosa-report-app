@@ -1,4 +1,4 @@
-"""Plain-text morning brief for an external emailer. Nothing is sent."""
+"""Plain-text morning brief. Nothing is sent from this render."""
 
 
 def _show(figure):
@@ -15,8 +15,7 @@ def render_brief_text(brief):
     lines = [
         "Dosa Coffee morning brief",
         brief.get("as_of_label") or "No date",
-        "Sales are Gross. Posist net is blank.",
-        "Nothing is sent from this render.",
+        "Sales are gross.",
         "",
     ]
     if brief.get("empty"):
@@ -28,9 +27,9 @@ def render_brief_text(brief):
             "Network",
             _line("Gross", network["gross"]),
             _line("Bills", network["bills"]),
-            f"{network['apb_label']}: {_show(network['apb'])}",
-            f"Gross vs {brief.get('prior_label') or 'last week'}: {_show(network['gross_change_pct'])} ({network['gross_compared']} stores with both days)",
-            f"Bills vs {brief.get('prior_label') or 'last week'}: {_show(network['bills_change_pct'])} ({network['bills_compared']} stores with both days)",
+            f"APB: {_show(network['apb'])}",
+            f"Gross vs last week: {_show(network['gross_change_pct'])}",
+            f"Bills vs last week: {_show(network['bills_change_pct'])}",
             "",
             "By store",
         ]
@@ -39,12 +38,11 @@ def render_brief_text(brief):
         lines.append(region["name"])
         for store in region["stores"]:
             lines.append(f"- {store['label']}")
-            lines.append(f"  Gross {_show(store['gross'])} ({_show(store['gross_change_pct'])} vs {brief.get('prior_label') or 'last week'})")
-            lines.append(f"  Bills {_show(store['bills'])} ({_show(store['bills_change_pct'])} vs {brief.get('prior_label') or 'last week'})")
-            lines.append(f"  APB, calculated: {_show(store['apb'])}")
+            lines.append(f"  Gross {_show(store['gross'])} ({_show(store['gross_change_pct'])} vs last week)")
+            lines.append(f"  Bills {_show(store['bills'])} ({_show(store['bills_change_pct'])} vs last week)")
+            lines.append(f"  APB: {_show(store['apb'])}")
         lines.append("")
-    lines.append("Lowest 5 versus forecast mid")
-    lines.append("Forecast mid is pred_mid in sales_pred_vs_actual.csv. Actual is that day's Posist gross.")
+    lines.append("Lowest versus forecast")
     if brief.get("worst_vs_mid_empty"):
         lines.append(brief["worst_vs_mid_empty"])
     for index, item in enumerate(brief["worst_vs_mid"], start=1):
@@ -52,7 +50,7 @@ def render_brief_text(brief):
             f"{index}. {item['label']} — gross {_show(item['gross'])} vs mid {_show(item['mid'])} ({_show(item['variance_pct'])})"
         )
     lines.append("")
-    lines.append("Lowest 5 versus last week")
+    lines.append("Lowest versus last week")
     if brief.get("worst_vs_last_week_empty"):
         lines.append(brief["worst_vs_last_week_empty"])
     for index, item in enumerate(brief["worst_vs_last_week"], start=1):
@@ -79,6 +77,6 @@ def render_brief_text(brief):
         lines.append(brief["procurement_empty"])
     for item in brief["procurement"]:
         who = f"{item['store']}: " if item.get("store") else ""
-        lines.append(f"- {item['file']} {who}{item['text']}".strip())
+        lines.append(f"- {who}{item['text']}".strip())
     lines.append("")
     return "\n".join(lines).rstrip() + "\n"

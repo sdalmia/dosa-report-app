@@ -1,18 +1,8 @@
-/* Owner tools. Phone widths 360–414px are the layout this file is written for.
-   Colours come from variables so a shared theme can override them. */
+/* Owner tools. Colour comes only from theme.css variables.
+   Every box sets its own text and surface so a dark label cannot sit on a dark fill. */
 
 .owner-tools {
-  --ot-bg: var(--page-bg, #141414);
-  --ot-surface: var(--card-bg, #1c1c1c);
-  --ot-text: var(--text, #f6f3ee);
-  --ot-muted: var(--muted, #b7b1a8);
-  --ot-line: var(--line, rgba(255, 255, 255, 0.14));
-  --ot-accent: var(--accent, #f0c14b);
-  --ot-good: var(--good, #7dcea0);
-  --ot-bad: var(--bad, #e07a7a);
-  --ot-chip: var(--chip, #2a2a2a);
-  --ot-tap: 44px;
-  color: var(--ot-text);
+  color: var(--text);
   font-size: 1rem;
   line-height: 1.45;
   max-width: 26rem;
@@ -20,223 +10,230 @@
   overflow-wrap: break-word;
 }
 
-.owner-tools summary {
-  min-height: var(--ot-tap);
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+.owner-tools h1 {
+  color: var(--text);
+  font-size: 1.55rem;
+  line-height: 1.2;
+  margin: 0 0 0.2rem;
 }
 
-.owner-tools h1 {
-  font-size: 1.5rem;
-  line-height: 1.2;
-  margin: 0 0 0.35rem;
+.owner-tools h2,
+.owner-tools h3,
+.owner-tools p,
+.owner-tools li,
+.owner-tools strong {
+  color: var(--text);
 }
 
 .owner-tools h2 {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   margin: 0 0 0.5rem;
 }
 
-.owner-tools p {
-  margin: 0 0 0.75rem;
+.owner-tools p { margin: 0 0 0.7rem; }
+
+.owner-tools .subtitle,
+.owner-tools .kicker,
+.owner-tools .note,
+.owner-tools .blank {
+  color: var(--muted);
 }
 
-.lede,
-.note,
-.ot-nav a,
-.month-row a,
-.section-head p {
-  color: var(--ot-muted);
+.owner-tools .kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 0.15rem;
 }
 
-.ot-nav {
+.owner-tools .subtitle { margin: 0 0 0.7rem; }
+
+.owner-tools .filters { margin: 0 0 0.9rem; }
+
+.owner-tools summary {
+  min-height: 44px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.ot-nav a,
-.month-row a,
-.tap,
-.renders a {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-height: var(--ot-tap);
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--ot-line);
-  border-radius: 999px;
-  color: var(--ot-text);
-  text-decoration: none;
-  background: var(--ot-chip);
+  cursor: pointer;
+  color: var(--text);
 }
 
-.ot-nav a.is-on,
-.month-row a.is-on {
-  background: var(--ot-accent);
-  color: #1a1a1a;
-  border-color: var(--ot-accent);
+.owner-tools .ot-info {
+  margin: 0 0 0.9rem;
+  color: var(--text);
 }
 
-.month-row,
-.renders {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0 0 1rem;
-}
+.owner-tools .ot-info p { color: var(--muted); margin: 0.2rem 0 0.6rem; }
 
-.card,
-.weight,
-.store,
-.empty,
-.rank a {
-  background: var(--ot-surface);
-  border: 1px solid var(--ot-line);
+.owner-tools .ot-box,
+.owner-tools .store,
+.owner-tools .empty,
+.owner-tools .rank a,
+.owner-tools .chip,
+.owner-tools .weight {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
   border-radius: 0.9rem;
 }
 
-.card,
-.store,
-.empty,
-.weight {
+.owner-tools .ot-box,
+.owner-tools .store,
+.owner-tools .empty,
+.owner-tools .weight {
   padding: 0.9rem 0.95rem;
   margin-bottom: 0.75rem;
 }
 
-.empty {
-  border-style: dashed;
+.owner-tools .empty { border-style: dashed; }
+
+.owner-tools .figure {
+  color: var(--text);
+  font-size: 2.15rem;
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin: 0.1rem 0 0.7rem;
 }
 
-.empty strong,
-.store h3,
-.card h2 {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.kicker {
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ot-muted);
-  margin-bottom: 0.2rem;
-}
-
-.figure {
+.owner-tools .figure-sm {
+  color: var(--text);
   font-size: 1.35rem;
-  font-weight: 650;
-  margin: 0.15rem 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin: 0.1rem 0 0;
 }
 
-.pair {
+.owner-tools .hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin-bottom: 0.7rem;
+}
+
+.owner-tools .hero-split .ot-stat {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.7rem;
+}
+
+.owner-tools .wow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.owner-tools .wow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.owner-tools .up { color: var(--up); }
+.owner-tools .down { color: var(--down); }
+
+.owner-tools .pair {
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.45rem 0;
-  border-top: 1px solid var(--ot-line);
+  border-top: 1px solid var(--line);
+  color: var(--text);
 }
 
-.pair span:last-child {
-  text-align: right;
-}
+.owner-tools .pair span:last-child { text-align: right; }
 
-.up { color: var(--ot-good); }
-.down { color: var(--ot-bad); }
-.blank { color: var(--ot-muted); }
-
-.rank {
+.owner-tools .rank {
   list-style: none;
   padding: 0;
   margin: 0 0 1rem;
 }
 
-.rank a {
+.owner-tools .rank a {
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr) auto;
   gap: 0.6rem;
   align-items: center;
-  min-height: var(--ot-tap);
+  min-height: 44px;
   padding: 0.55rem 0.75rem;
   margin-bottom: 0.45rem;
-  color: var(--ot-text);
+  color: var(--text);
   text-decoration: none;
 }
 
-.rank-n {
+.owner-tools .rank-n {
   font-weight: 700;
-  color: var(--ot-accent);
+  color: var(--accent);
 }
 
-.store h3 {
+.owner-tools .store h3 {
   font-size: 1.05rem;
   margin: 0 0 0.35rem;
 }
 
-.store details {
-  margin-top: 0.35rem;
+.owner-tools .store h3 a,
+.owner-tools .tap {
+  color: var(--accent);
 }
 
-.store summary {
-  min-height: var(--ot-tap);
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.component {
+.owner-tools .component {
   padding: 0.55rem 0;
-  border-top: 1px solid var(--ot-line);
+  border-top: 1px solid var(--line);
+  color: var(--text);
 }
 
-.component .meta {
-  color: var(--ot-muted);
+.owner-tools .component .meta {
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
-.bar {
+.owner-tools .bar {
   height: 0.7rem;
-  background: var(--ot-chip);
+  background: var(--surface-2);
   border-radius: 999px;
   overflow: hidden;
   margin: 0.45rem 0;
 }
 
-.bar > span {
+.owner-tools .bar > span {
   display: block;
   height: 100%;
-  background: var(--ot-accent);
+  background: var(--accent);
 }
 
-.chip-row {
+.owner-tools .chip-row {
   display: flex;
   gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.35rem;
-  margin: 0 0 1rem;
+  margin: 0 0 0.4rem;
 }
 
-.chip {
+.owner-tools .chip {
   flex: 0 0 auto;
   max-width: 16rem;
-  border: 1px solid var(--ot-line);
-  border-radius: 0.9rem;
   padding: 0.55rem 0.7rem;
-  background: var(--ot-chip);
 }
 
-.chip.puja { border-color: var(--ot-accent); }
-.chip.diwali { border-color: var(--ot-bad); }
-.chip strong { display: block; }
-.chip span { color: var(--ot-muted); font-size: 0.9rem; }
+.owner-tools .chip strong,
+.owner-tools .chip span { display: block; }
+.owner-tools .chip span { color: var(--muted); font-size: 0.9rem; }
+.owner-tools .chip.puja { border-color: var(--accent); }
+.owner-tools .chip.diwali { border-color: var(--down); }
 
-.weight { margin-bottom: 0.55rem; }
-.weight b { float: right; color: var(--ot-accent); }
+.owner-tools .weight { margin-bottom: 0.55rem; }
+.owner-tools .weight b { float: right; color: var(--accent); }
 
 @media (min-width: 768px) {
   .owner-tools { max-width: 42rem; }
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .split .card { margin-bottom: 0; }
 }
