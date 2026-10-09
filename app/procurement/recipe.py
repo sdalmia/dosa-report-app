@@ -227,6 +227,8 @@ def _item_record(
     has_unpriced=None,
     cost_status="",
     comparable=None,
+    region="",
+    as_of="",
 ):
     gap = None
     if avg is not None and last is not None:
@@ -255,6 +257,8 @@ def _item_record(
         "selling_price": None,
         "margin": None,
         "label": RECIPE_LABEL,
+        "region": region,
+        "as_of": as_of,
     }
 
 
@@ -290,6 +294,8 @@ def _read_menu_items(path):
                     comparable=_truthy(raw.get("comparable_for_cross_outlet"))
                     if (raw.get("comparable_for_cross_outlet") or "").strip()
                     else None,
+                    region=(raw.get("region") or "").strip(),
+                    as_of=(raw.get("as_of") or "").strip(),
                 )
             )
     return rows
@@ -317,6 +323,8 @@ def _read_summary(path):
                     "outlet_min": (raw.get("outlet_min") or "").strip(),
                     "outlet_max": (raw.get("outlet_max") or "").strip(),
                     "spread_pct": parse_number(raw.get("spread_pct")),
+                    "median_east": parse_number(raw.get("median_cost_east")),
+                    "median_north": parse_number(raw.get("median_cost_north")),
                 }
             )
     return rows

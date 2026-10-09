@@ -173,13 +173,8 @@ class MatrixTests(unittest.TestCase):
                 "Ideal Plaza,No Cost,base,,False,no_priced_ingredients,2026-10-09\n"
                 "GK1 Cloud Kitchen,Star Dosa,base,,True,no_priced_ingredients,2026-10-09\n"
                 "Ideal Plaza,Plain Dosa,base,3,False,fully_priced,2026-10-09\n"
-                "Ideal Plaza,Star Dosa,takeout,23,True,partial_unpriced_ingredients,2026-10-09\n",
-            )
-            _write(
-                cost_dir,
-                "menu_item_cost_channels_ideal_plaza.csv",
-                "item_name,cost_base,cost_takeout,cost_delivery,cost_status\n"
-                "Star Dosa,4,23,25,partial_unpriced_ingredients\n",
+                "Ideal Plaza,Star Dosa,takeout,23,True,partial_unpriced_ingredients,2026-10-09\n"
+                "Ideal Plaza,Star Dosa,delivery,25,True,partial_unpriced_ingredients,2026-10-09\n",
             )
             _write(
                 cost_dir,
