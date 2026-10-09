@@ -12,8 +12,10 @@
 </header>
 <nav class="cc-drawer" id="nav-drawer" aria-label="More">
   <a href="{{ url_for('main.dashboard') }}">Home</a>
-  <a href="/brief">Brief</a>
-  <a href="/scorecard">Scorecard</a>
+  <a href="/brief" {% if request.endpoint == 'owner.brief' %}class="is-current"{% endif %}>Brief</a>
+  <a href="/scorecard" {% if request.endpoint == 'owner.scorecard' %}class="is-current"{% endif %}>Scorecard</a>
+  <a href="{{ url_for('owner.labour') }}" {% if request.endpoint == 'owner.labour' %}class="is-current"{% endif %}>Labour</a>
+  <a href="{{ url_for('owner.goals') }}" {% if request.endpoint == 'owner.goals' %}class="is-current"{% endif %}>Goals</a>
   <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
   <a href="{{ url_for('store_health.page') }}">Store Health</a>
   <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
@@ -37,10 +39,10 @@
   <a href="{{ url_for('main.dashboard') }}" {% if request.endpoint == 'main.dashboard' %}class="is-current"{% endif %}>
     <i class="bi bi-house"></i><span>Home</span>
   </a>
-  <a href="/brief">
+  <a href="/brief" {% if request.endpoint == 'owner.brief' %}class="is-current"{% endif %}>
     <i class="bi bi-sunrise"></i><span>Brief</span>
   </a>
-  <a href="/scorecard">
+  <a href="/scorecard" {% if request.endpoint == 'owner.scorecard' %}class="is-current"{% endif %}>
     <i class="bi bi-clipboard-data"></i><span>Scorecard</span>
   </a>
   <a href="{{ url_for('main.procurement_page') }}" {% if request.endpoint == 'main.procurement_page' %}class="is-current"{% endif %}>

@@ -1,0 +1,69 @@
+{% extends "owner/layout.html" %}
+{% from "owner/_macros.html" import show %}
+
+{% block title %}Store scorecard - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Store scorecard</h1>
+<p class="subtitle">{{ scorecard.month_label or "Latest month" }}</p>
+<details class="ot-info">
+  <summary>About the score</summary>
+  <p>A missing part is left out and its weight is shared. It is not scored as zero.</p>
+  <p>Sales vs forecast mid 25 · Bills week on week 15 · Famepilot public rating 20 · Mystery audit 15 · Gross per active employee 15 · Wastage 10.</p>
+</details>
+
+{% if scorecard.months %}
+<nav class="filters" aria-label="Month">
+  {% for month in scorecard.months %}
+  <a href="{{ url_for('owner.scorecard', month=month.key) }}" class="{% if month.key == scorecard.month %}is-on{% endif %}">{{ month.label }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+{% if scorecard.wastage_empty %}
+<div class="empty" data-empty="wastage"><p>{{ scorecard.wastage_empty }}</p></div>
+{% endif %}
+
+{% if scorecard.empty %}
+<div class="empty" data-empty="scorecard"><p>{{ scorecard.empty }}</p></div>
+{% else %}
+<h2>Monthly ranking</h2>
+<ol class="rank">
+  {% for store in scorecard.stores if store.rank %}
+  <li>
+    <a href="#store-{{ store.id }}">
+      <span class="rank-n">{{ store.rank }}</span>
+      <span>{{ store.label }}</span>
+      <span data-field="rank-score">{{ store.score.text }}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ol>
+
+{% for store in scorecard.stores %}
+<article class="store" id="store-{{ store.id }}" data-store="{{ store.label }}">
+  <p class="kicker">{% if store.rank %}Rank {{ store.rank }}{% else %}Not ranked{% endif %}{% if store.region %} · {{ store.region }}{% endif %}</p>
+  <h3>{{ store.label }}</h3>
+  <p class="figure" data-field="score">{{ show(store.score) }}</p>
+  <details>
+    <summary>What went into the score</summary>
+    {% for component in store.components %}
+    <div class="component" data-component="{{ component.key }}">
+      <strong>{{ component.label }}</strong>
+      <p class="meta">
+        Weight {{ component.weight }}.
+        {% if component.included %}
+        Score {{ component.score.text }}.
+        {% else %}
+        Left out. Not scored as zero.
+        {% endif %}
+      </p>
+      <p>{{ component.raw }}</p>
+    </div>
+    {% endfor %}
+  </details>
+  <p><a class="tap" href="{{ url_for('store_health.page', store_id=store.id) }}">Store Health</a></p>
+</article>
+{% endfor %}
+{% endif %}
+{% endblock %}

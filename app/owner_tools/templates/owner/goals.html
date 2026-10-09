@@ -1,0 +1,71 @@
+{% extends "owner/layout.html" %}
+{% from "owner/_macros.html" import show %}
+
+{% block title %}Goals - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Goals</h1>
+<p class="subtitle">{% if goals.month_label %}{{ goals.month_label }} · {% endif %}Month-to-date gross</p>
+<details class="ot-info">
+  <summary>About these numbers</summary>
+  <p>The bar is this month’s gross versus the target. A missing target stays blank, not zero. Festive dates are Puja and Diwali days named in the sales forecast.</p>
+</details>
+
+{% if goals.months %}
+<nav class="filters" aria-label="Month">
+  {% for month in goals.months %}
+  <a href="{{ url_for('owner.goals', month=month.key, festive=1 if goals.festive_on else 0) }}" class="{% if month.key == goals.month %}is-on{% endif %}">{{ month.label }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+{% if goals.file_message %}
+<div class="empty" data-empty="goals-file"><p>{{ goals.file_message }}</p></div>
+{% endif %}
+
+<section class="ot-box" data-section="festive">
+  <h2>Festive days</h2>
+  {% if goals.festive_on %}
+  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=0) }}">Hide festive days</a></p>
+  <div class="chip-row">
+    {% for day in goals.festive_dates %}
+    <article class="chip {{ day.kinds|join(' ')|lower }}" data-festive="{{ day.iso }}">
+      <strong>{{ day.label }}</strong>
+      <span>{{ day.kinds|join(' · ') }}</span>
+      <span>{{ day.driver }}</span>
+    </article>
+    {% endfor %}
+  </div>
+  {% elif goals.festive_dates %}
+  <p>Festive days are hidden.</p>
+  <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=1) }}">Show Puja and Diwali</a></p>
+  {% else %}
+  <div class="empty" data-empty="festive"><p>{{ goals.festive_empty }}</p></div>
+  {% endif %}
+</section>
+
+{% for warning in goals.warnings %}
+<p class="note">{{ warning }}</p>
+{% endfor %}
+
+{% if goals.empty %}
+<div class="empty"><p>{{ goals.empty }}</p></div>
+{% else %}
+{% for store in goals.stores %}
+<article class="store" data-store="{{ store.label }}">
+  <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+  <p class="kicker">{{ goals.month_label }} gross</p>
+  <p class="figure-sm" data-field="mtd-gross">{{ show(store.mtd_gross) }}</p>
+  {% if store.bar_pct is not none %}
+  <div class="pair"><span>Target</span><span data-field="target">{{ show(store.target) }}</span></div>
+  <div class="bar" role="progressbar" aria-valuenow="{{ store.bar_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Month-to-date gross versus target">
+    <span style="width: {{ store.bar_pct }}%;"></span>
+  </div>
+  <p data-field="progress">{{ store.progress_pct.text }} of target</p>
+  {% else %}
+  <div class="empty" data-empty="target"><p>{{ store.empty or store.note }}</p></div>
+  {% endif %}
+</article>
+{% endfor %}
+{% endif %}
+{% endblock %}

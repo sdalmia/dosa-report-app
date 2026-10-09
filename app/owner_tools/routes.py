@@ -1,0 +1,82 @@
+"""Owner pages. These routes never send mail."""
+
+from flask import jsonify, render_template, request, Response
+
+from app.routes.main import login_required
+from app.store_health.contract import load_feeds
+
+from . import owner_bp
+from .metrics import build_brief, build_goals, build_labour, build_scorecard, festive_available, resolve_month
+from .sources import load_goals, load_wastage, scan_famepilot, scan_procurement
+from .text import render_brief_text
+
+
+def _feeds():
+    return load_feeds()
+
+
+def _brief_payload():
+    feeds = _feeds()
+    attention = scan_famepilot(feeds.get("directory"))
+    return build_brief(feeds, attention, scan_procurement())
+
+
+def _festive_choice(raw, available):
+    text = (raw or "").strip().lower()
+    if text in {"0", "off", "false", "no"}:
+        return False
+    if text in {"1", "on", "true", "yes"}:
+        return True
+    return available
+
+
+@owner_bp.route("/brief")
+@login_required
+def brief():
+    return render_template("owner/brief.html", brief=_brief_payload(), active="brief")
+
+
+@owner_bp.route("/brief.json")
+@login_required
+def brief_json():
+    return jsonify(_brief_payload())
+
+
+@owner_bp.route("/brief.txt")
+@login_required
+def brief_text():
+    body = render_brief_text(_brief_payload())
+    return Response(body, mimetype="text/plain; charset=utf-8")
+
+
+@owner_bp.route("/brief/email")
+@login_required
+def brief_email():
+    """HTML the external emailer can copy. This view does not send it."""
+    return render_template("owner/email.html", brief=_brief_payload())
+
+
+@owner_bp.route("/scorecard")
+@login_required
+def scorecard():
+    feeds = _feeds()
+    wastage = load_wastage(feeds.get("directory"))
+    payload = build_scorecard(feeds, wastage, (request.args.get("month") or "").strip())
+    return render_template("owner/scorecard.html", scorecard=payload, active="scorecard")
+
+
+@owner_bp.route("/labour")
+@login_required
+def labour():
+    return render_template("owner/labour.html", labour=build_labour(_feeds()), active="labour")
+
+
+@owner_bp.route("/goals")
+@login_required
+def goals():
+    feeds = _feeds()
+    requested = (request.args.get("month") or "").strip()
+    selected, _available = resolve_month(feeds, requested)
+    festive = _festive_choice(request.args.get("festive"), festive_available(feeds, selected))
+    payload = build_goals(feeds, load_goals(), selected, festive)
+    return render_template("owner/goals.html", goals=payload, active="goals")

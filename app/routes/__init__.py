@@ -3,6 +3,7 @@ from .uploader import uploader_bp
 from .ingredient_tracker import ingredient_bp
 from .location_finder import location_finder_bp
 from .store_health import store_health_bp
+from app.owner_tools import owner_bp
 from auth import auth_bp, google_bp
 
 
@@ -15,3 +16,4 @@ def register_routes(app):
     app.register_blueprint(ingredient_bp)
     app.register_blueprint(location_finder_bp)
     app.register_blueprint(store_health_bp)
+    app.register_blueprint(owner_bp)
