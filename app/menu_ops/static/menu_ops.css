@@ -170,6 +170,11 @@
 .pill.over { background: var(--mo-danger-bg); color: var(--mo-danger); }
 .pill.keyword { background: var(--mo-accent-ink); color: var(--mo-accent); }
 .pill.partial { background: var(--mo-danger-bg); color: var(--mo-danger); }
+.pill.review {
+  background: color-mix(in srgb, var(--amber) 18%, var(--surface));
+  color: var(--text);
+  border: 1px solid var(--amber);
+}
 
 details.info { margin: 0.35rem 0 0.9rem; }
 details.info summary {

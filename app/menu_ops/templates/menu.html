@@ -26,6 +26,12 @@
     {% if view.unmatched_outlets %}
       <p class="meta" data-unmatched-outlets="{{ view.unmatched_outlets|length }}">{{ view.unmatched_outlets|length }} outlet{{ 's' if view.unmatched_outlets|length != 1 else '' }} {{ 'are' if view.unmatched_outlets|length != 1 else 'is' }} not on the recipe list.</p>
     {% endif %}
+    {% if view.north_review_note %}
+    <details class="info">
+      <summary>Why North recipes are under review</summary>
+      <p data-note="north-review">{{ view.north_review_note }}</p>
+    </details>
+    {% endif %}
     <details class="info">
       <summary>How margin is calculated</summary>
       <p>{{ view.margin_info }}</p>
@@ -38,6 +44,10 @@
     </details>
   {% else %}
     <p class="empty" data-empty="margin">{{ view.margin_note }}</p>
+  {% endif %}
+
+  {% if view.review_only %}
+    <p class="meta" data-note="review-only">These margins are shown. They are not ranked while the Delhi NCR recipes are under review.</p>
   {% endif %}
 
   <section class="quads" aria-label="Quadrant counts">
@@ -119,7 +129,7 @@
       <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}">
         <header>
           <h2>{{ item.item }}</h2>
-          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
+          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% elif item.under_review %}<span class="pill review">Recipe under review</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
           {% if item.partial %}<span class="pill partial">Partial</span>{% endif %}
         </header>
         <dl>
@@ -128,8 +138,12 @@
           <div><dt>Popularity</dt><dd data-field="popularity">{{ item.popularity or 'Not on the report' }}</dd></div>
           <div><dt>{% if view.margin_mode %}Margin per order{% else %}Revenue contribution{% endif %}</dt><dd data-field="contribution">{{ item.contribution or 'Not on the report' }}</dd></div>
           {% if view.margin_mode %}
-            <div><dt>Cost, excl. packaging</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
-            <div><dt>Margin</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
+            <div><dt>{% if item.north_cost %}Kolkata cost, excl. packaging{% else %}Cost, excl. packaging{% endif %}</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
+            <div><dt>{% if item.north_margin %}Kolkata margin{% else %}Margin{% endif %}</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
+            {% if item.north_cost %}
+              <div><dt>North cost, excl. packaging</dt><dd data-field="north-cost">{{ item.north_cost }} <span class="pill review">Recipe under review</span></dd></div>
+              <div><dt>North margin</dt><dd data-field="north-margin">{{ item.north_margin or 'Not on the report' }}</dd></div>
+            {% endif %}
             {% if item.cost_coverage %}<div><dt>Recipe coverage</dt><dd data-field="coverage">{{ item.cost_coverage }}</dd></div>{% endif %}
             {% if item.cost_min or item.cost_median or item.cost_max %}
               <div><dt>Across outlets</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>

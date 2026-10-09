@@ -29,6 +29,7 @@ def load_menu_costs(directory=None):
         "file": COST_FILE,
         "as_of": None,
         "outlets": [],
+        "outlet_region": {},
         "by_outlet": {},
         "item_names": set(),
         "summary": {},
@@ -39,8 +40,9 @@ def load_menu_costs(directory=None):
         result["warnings"].append(f"{COST_FILE} is not on file.")
         return result
     result["found"] = True
-    by_outlet, item_names, as_of, conflicts = _read_base_costs(path)
+    by_outlet, item_names, as_of, conflicts, outlet_region = _read_base_costs(path)
     result["by_outlet"] = by_outlet
+    result["outlet_region"] = outlet_region
     result["item_names"] = item_names
     result["outlets"] = sorted(by_outlet)
     result["as_of"] = as_of
@@ -74,6 +76,7 @@ def match_outlet(store, outlets):
 def _read_base_costs(path):
     by_outlet = {}
     item_names = set()
+    outlet_region = {}
     as_of = None
     conflicts = set()
     with path.open(newline="", encoding="utf-8-sig", errors="replace") as handle:
@@ -91,12 +94,16 @@ def _read_base_costs(path):
             status = str(raw.get("cost_status") or "").strip()
             cost = _portion_cost(raw.get("cost_per_portion_avg"), status)
             partial = _flag(raw.get("has_unpriced_ingredient")) and cost is not None
+            region = str(raw.get("region") or "").strip()
+            if region:
+                outlet_region.setdefault(outlet, region)
             record = {
                 "outlet": outlet,
                 "item": item,
                 "cost": cost,
                 "partial": partial,
                 "status": status,
+                "region": region,
             }
             slot = by_outlet.setdefault(outlet, {})
             previous = slot.get(key)
@@ -114,7 +121,7 @@ def _read_base_costs(path):
             stamped = parse_date(raw.get("as_of"))
             if stamped is not None:
                 as_of = stamped if as_of is None else max(as_of, stamped)
-    return by_outlet, item_names, as_of, conflicts
+    return by_outlet, item_names, as_of, conflicts, outlet_region
 
 
 def _portion_cost(value, status):
@@ -144,6 +151,8 @@ def _read_summary(path):
                 "min": parse_number(raw.get("min_cost_avg")),
                 "median": parse_number(raw.get("median_cost_avg")),
                 "max": parse_number(raw.get("max_cost_avg")),
+                "median_east": parse_number(raw.get("median_cost_east")),
+                "median_north": parse_number(raw.get("median_cost_north")),
             }
     return summary
 

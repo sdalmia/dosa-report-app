@@ -244,6 +244,61 @@ class MatrixTests(unittest.TestCase):
             self.assertEqual(item["recipe_cost"], "₹0")
             self.assertEqual(item["margin"], "₹10")
 
+    def test_north_margins_are_shown_and_not_ranked_as_losing_money(self):
+        with tempfile.TemporaryDirectory() as menu_dir, tempfile.TemporaryDirectory() as cost_dir:
+            _write(
+                menu_dir,
+                "menu_mix_2026-09.csv",
+                MENU_HEADER
+                + "Ideal Plaza,Onion Uttapam,400,10,50,2026-09-01,2026-09-30\n"
+                + "Ideal Plaza,Plain Dosa,400,10,50,2026-09-01,2026-09-30\n"
+                + "Connaught Place,Onion Uttapam,400,10,50,2026-09-01,2026-09-30\n"
+                + "Connaught Place,Plain Dosa,400,10,50,2026-09-01,2026-09-30\n",
+            )
+            _write(
+                cost_dir,
+                "menu_item_cost.csv",
+                "outlet,item_name,recipe_tab,region,cost_per_portion_avg,has_unpriced_ingredient,cost_status\n"
+                "Ideal Plaza,Onion Uttapam,base,East,10,False,fully_priced\n"
+                "Ideal Plaza,Plain Dosa,base,East,10,False,fully_priced\n"
+                "Connaught Place,Onion Uttapam,base,North,80,False,fully_priced\n"
+                "Connaught Place,Plain Dosa,base,North,10,False,fully_priced\n",
+            )
+            _write(
+                cost_dir,
+                "menu_item_cost_summary.csv",
+                "item_name,min_cost_avg,median_cost_avg,max_cost_avg,median_cost_east,median_cost_north\n"
+                "Onion Uttapam,10,24,80,24,53\n",
+            )
+            east = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir, store="Ideal Plaza")
+            east_by = {item["item"]: item for item in east["items"]}
+            self.assertEqual(east_by["Onion Uttapam"]["margin"], "₹30")
+            self.assertFalse(east_by["Onion Uttapam"]["under_review"])
+            self.assertEqual(east_by["Onion Uttapam"]["quadrant"], "star")
+            self.assertIn("coconut and chutney", east["north_review_note"])
+            self.assertIn("₹53", east["north_review_note"])
+            self.assertIn("₹24", east["north_review_note"])
+
+            north = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir, store="Connaught Place")
+            north_by = {item["item"]: item for item in north["items"]}
+            self.assertEqual(north_by["Onion Uttapam"]["margin"], "-₹40")
+            self.assertTrue(north_by["Onion Uttapam"]["under_review"])
+            self.assertEqual(north_by["Onion Uttapam"]["quadrant"], "")
+            self.assertTrue(north["review_only"])
+            self.assertEqual(north["counts"]["dog"], 0)
+            self.assertEqual(north["counts"]["plowhorse"], 0)
+
+            both = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir)
+            both_by = {item["item"]: item for item in both["items"]}
+            # Blending the Delhi cost would drop Onion Uttapam to -₹5 and a plowhorse.
+            # The rank stays on the Kolkata margin of ₹30, so it remains a star.
+            self.assertEqual(both_by["Onion Uttapam"]["margin"], "₹30")
+            self.assertEqual(both_by["Onion Uttapam"]["north_cost"], "₹80")
+            self.assertEqual(both_by["Onion Uttapam"]["north_margin"], "-₹40")
+            self.assertTrue(both_by["Onion Uttapam"]["under_review"])
+            self.assertEqual(both_by["Onion Uttapam"]["quadrant"], "star")
+            self.assertEqual(both_by["Plain Dosa"]["quadrant"], "star")
+
     def test_example_channel_numbers_are_not_in_the_source(self):
         text = "\n".join(
             path.read_text(errors="replace")
@@ -404,6 +459,8 @@ class PageTests(unittest.TestCase):
         self.assertIn("Gross", html)
         self.assertIn("Star", html)
         self.assertIn("excl. packaging", html)
+        self.assertIn("Recipe under review", html)
+        self.assertIn("coconut and chutney", html)
         self.assertIn("Masala Dosa", html)
         self.assertNotIn("60619", html)
         self.assertNotIn("Buttermilk - 200ml", html)
@@ -434,13 +491,23 @@ class PageTests(unittest.TestCase):
         self.assertNotRegex(board, r"\bblank\b")
 
         dashboard = self.client.get("/dashboard")
-        self.assertIn("/menu", dashboard.get_data(as_text=True))
-        self.assertIn("/channels", dashboard.get_data(as_text=True))
-        self.assertIn("/tickets", dashboard.get_data(as_text=True))
+        home = dashboard.get_data(as_text=True)
+        drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
+        bottom = home.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
+        self.assertIn("/menu", drawer)
+        self.assertIn("/channels", drawer)
+        self.assertIn("/tickets", drawer)
+        self.assertIn("Menu engineering", drawer)
+        self.assertNotIn("/menu", bottom)
+        self.assertNotIn("/channels", bottom)
+        self.assertNotIn("/tickets", bottom)
 
     def test_theme_does_not_follow_the_operating_system(self):
         css = (ROOT / "app" / "menu_ops" / "static" / "menu_ops.css").read_text()
+        theme = (ROOT / "static" / "css" / "theme.css").read_text()
         self.assertNotIn("prefers-color-scheme", css)
+        self.assertNotIn("prefers-color-scheme", theme)
+        self.assertIn("Light is the default", theme)
 
     def test_real_recipe_costs_match_names_exactly(self):
         view = build_menu()
