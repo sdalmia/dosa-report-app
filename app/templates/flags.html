@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Red flags - Dosa Coffee{% endblock %}
+{% block content %}
+<section class="cc-section">
+  <div class="section-head">
+    <h2>Red flags</h2>
+    <a href="{{ url_for('main.dashboard') }}">Home</a>
+  </div>
+  <p class="source-line">From data/flags. Red first, then the newest as_of. Hidden after 7 days. Accounts and people stay with the owners.</p>
+  {% if flag_state == "missing" %}
+    <p class="empty">No flags loaded</p>
+  {% elif not groups %}
+    <p class="empty">No flags to show</p>
+  {% else %}
+    {% for area, rows in groups %}
+      <div class="flag-group" id="area-{{ area }}">
+        <h3 class="cc-kicker"><i class="bi {{ rows[0].icon }}" aria-hidden="true"></i> {{ rows[0].label }}</h3>
+        {% for flag in rows %}
+          <article class="flag-full sev-{{ flag.severity }}">
+            <strong>{{ flag.title }}</strong>
+            {% if flag.detail %}<p>{{ flag.detail }}</p>{% endif %}
+            <p class="source-line">{{ flag.as_of_label }}{% if flag.owner %} · {{ flag.owner }}{% endif %}{% if flag.source %} · {{ flag.source }}{% endif %}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% endif %}
+</section>
+{% endblock %}

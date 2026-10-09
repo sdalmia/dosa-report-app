@@ -1,0 +1,5 @@
+area,severity,title,detail,owner,as_of,source
+people,red,Gurgaon Sec 10 lost 4 staff in September,4 of 34 company-wide Sep exits; only ~7 active as of 3 Oct; it was the worst exit hotspot Jan-Sep too,Regional manager NCR,2026-10-09,"Keka Relieved Employees report (Exit Date), all 12 BUs"
+people,amber,"34 people left in September, 22 absconded","25 company action, 9 resignations; Oct 1-9 so far 6 exits, 4 absconding (CK Kolkata 2, James Long Sarani, Forum)",Ops head + HR,2026-10-09,"Keka Relieved Employees report (Exit Date), all 12 BUs"
+people,amber,25 probations overdue for confirmation,"Oldest: Ruby (Gurgaon Sec 10, ended 9 May); most at Gurgaon Sec 31 (5), Lake Road (4), Shalimar Bagh (3)",HR + store managers,2026-10-09,Keka Employees in probation report / Org dashboard pending actions
+people,amber,Gurgaon DLF has 3 staff serving notice,Leaving between 16 Oct and 7 Nov; 9 in notice company-wide,Regional manager NCR,2026-10-09,Keka Employees in notice period quick report

@@ -94,13 +94,13 @@
 {% block scripts %}
 <style>
 .lf-page {
-    background: #f4f6f8;
-    color: #1c1f23;
+    background: var(--surface);
+    color: var(--text);
     border-radius: 16px;
-    padding: 28px 24px 32px;
+    padding: 28px 16px 32px;
     margin-bottom: 24px;
 }
-.lf-page h1, .lf-page h2, .lf-page p, .lf-page label, .lf-page td, .lf-page th { color: #1c1f23; }
+.lf-page h1, .lf-page h2, .lf-page p, .lf-page label, .lf-page td, .lf-page th { color: var(--text); }
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
 <script>
