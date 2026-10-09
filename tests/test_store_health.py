@@ -96,6 +96,8 @@ class StoreHealthTests(unittest.TestCase):
         os.environ["STORE_HEALTH_DATA_DIR"] = self.data.name
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
+            for key in ("cc_store", "cc_city", "cc_range", "cc_start", "cc_end"):
+                sess.pop(key, None)
         self.context = patch(
             "app.store_health.context_slots.fetch_city_context",
             return_value=None,
@@ -1229,7 +1231,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("2 Oct 2026", text)
         self.assertIn("3 Oct 2026", text)
         self.assertIn("Menu mix", text)
-        self.assertIn("Menu mix is not on file.", text)
+        self.assertIn("Data coming", text)
         self.assertNotIn("Date range:", text)
         self.assertNotIn("Selected day", text)
         self.assertNotIn("2026-10-01", text)
@@ -1290,7 +1292,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(html, "actual_gross", "2026-10-08"), "")
         self.assertNotIn("7,087", html)
         self.assertNotIn("-₹320", html)
-        self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
+        self.assertEqual(cell(html, "menu_mix"), "Data coming")
         self.assertNotIn('data-field="menu_item"', html)
 
     def test_shipped_calendar_keeps_band_cells_and_hides_file_warnings(self):
@@ -1311,9 +1313,12 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn('data-date="2026-10-02"', page)
         self.assertNotIn("historical-total-revenue", page)
         self.assertEqual(cell(page, "menu_mix_period"), "9 Sep–8 Oct 2026")
-        self.assertEqual(cell(page, "menu_mix"), "Per-store item sales for this window are not on file yet.")
-        self.assertNotIn("Benne Masala Dosa", page[page.index('id="menu-mix"'):page.index('id="mystery-audit"')])
-        self.assertNotIn("last 30 days", page[page.index('id="menu-mix"'):page.index('id="mystery-audit"')])
+        mix = page[page.index('id="menu-mix"'):page.index('id="delivery-mix"')]
+        self.assertIn("Benne Masala Dosa", mix)
+        self.assertIn("Unallocated charges", mix)
+        self.assertNotIn("Per-store item sales for this window are not on file yet.", mix)
+        self.assertNotIn("last 30 days", mix)
+        self.assertNotRegex(mix, r"₹[\d,]+\.\d{2}")
 
     def test_calendar_file_net_keeps_its_own_label_beside_actual_gross(self):
         self.write(
@@ -1369,7 +1374,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn("not a number", html)
         self.assertNotIn("historical-total-revenue", html)
         self.assertNotIn("Further file warnings", html)
-        self.assertEqual(cell(html, "menu_mix"), "Menu mix is not on file.")
+        self.assertEqual(cell(html, "menu_mix"), "Data coming")
         self.assertEqual(cell(html, "actual_gross", "2026-10-03"), "₹20")
         self.assertEqual(cell(html, "pred_mid", "2026-10-03"), "")
         self.assertEqual(cell(html, "actual_gross", "2026-10-04"), "")
@@ -1378,7 +1383,7 @@ class StoreHealthTests(unittest.TestCase):
         reader = PdfReader(io.BytesIO(response.data))
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
         self.assertIn("Menu mix", text)
-        self.assertIn("Menu mix is not on file.", text)
+        self.assertIn("Data coming", text)
         self.assertIn("₹20", text)
         self.assertNotIn("not a number", text)
         self.assertNotIn("historical-total-revenue", text)
@@ -1468,16 +1473,23 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn("Menu mix is not on file.", index)
         ideal = self.get(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Ideal Plaza (01/0001)')}")
         self.assertEqual(cell(ideal, "menu_mix_period"), "9 Sep–8 Oct 2026")
-        self.assertEqual(cell(ideal, "menu_mix"), "Per-store item sales for this window are not on file yet.")
-        self.assertNotIn("Masala Dosa", ideal[ideal.index('id="menu-mix"'):ideal.index('id="mystery-audit"')])
-        self.assertNotIn("last 30 days", ideal[ideal.index('id="menu-mix"'):ideal.index('id="mystery-audit"')])
+        mix = ideal[ideal.index('id="menu-mix"'):ideal.index('id="delivery-mix"')]
+        self.assertIn("Masala Dosa", mix)
+        self.assertIn("Unallocated charges", mix)
+        self.assertIn("data gaps list", mix)
+        self.assertNotIn("Per-store item sales for this window are not on file yet.", mix)
+        self.assertNotIn("last 30 days", mix)
+        self.assertNotRegex(mix, r"₹[\d,]+\.\d{2}")
         for label in ("GK1 Cloud Kitchen (02/0002)", "Chattarpur (02/0005)"):
             page = self.get(f"/store-health/{self._option_slug(index, label)}")
-            self.assertEqual(cell(page, "menu_mix"), "Per-store item sales for this window are not on file yet.", label)
+            self.assertEqual(cell(page, "menu_mix"), "Data coming", label)
+            self.assertEqual(cell(page, "delivery_mix"), "Data coming", label)
             self.assertNotIn('data-field="menu_item"', page, label)
         pdf = self._pdf_text(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Ideal Plaza (01/0001)')}/print")
         self.assertIn("9 Sep–8 Oct 2026", pdf)
-        self.assertIn("Per-store item sales for this window are not on file yet.", pdf)
+        self.assertIn("Masala Dosa", pdf)
+        self.assertIn("Delivery vs dine-in", pdf)
+        self.assertNotIn("Per-store item sales for this window are not on file yet.", pdf)
         self.assertNotIn("Ghee Roast Masala Dosa", pdf)
         start, end = forward_calendar_bounds(date(2026, 10, 3))
         self.assertEqual((start, end), (date(2026, 10, 3), date(2026, 11, 1)))

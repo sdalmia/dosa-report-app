@@ -160,25 +160,30 @@ class ProcurementTests(unittest.TestCase):
     def test_recipe_cost_excludes_packaging_and_has_no_margin(self):
         html = self.get("/food-cost")
         self.assertIn("recipe cost excl. packaging", html.lower())
-        self.assertEqual(
-            _attr(html, "recipe-avg", outlet="Ideal Plaza", item="Masala Dosa"),
-            "23.82",
-        )
+        self.assertIn("Masala Dosa", html)
+        self.assertIn("Costs within each city", html)
+        self.assertIn("three chutneys", html)
         self.assertEqual(_attr(html, "consumed-cost", item="Masala Dosa"), "41.67")
         self.assertIn("Margin is blank", html)
         self.assertIn("Connaught Place", html)
         payload = recipe_costs(outlet="Ideal Plaza", menu_item="Masala Dosa")
         self.assertTrue(payload["available"])
+        self.assertEqual(payload["source_kind"], "menu_item_cost")
         self.assertEqual(payload["label"], "recipe cost excl. packaging")
         self.assertIsNone(payload["margin"])
-        self.assertEqual(len(payload["items"]), 1)
-        self.assertEqual(payload["items"][0]["cost_per_unit_avg_price"], 23.82)
-        self.assertIsNone(payload["items"][0]["selling_price"])
-        self.assertIsNone(payload["items"][0]["margin"])
+        base = next(row for row in payload["items"] if row["recipe_tab"] == "base")
+        self.assertEqual(base["cost_per_unit_avg_price"], 23.82)
+        self.assertEqual(base["region"], "East")
+        self.assertEqual(base["city"], "Kolkata")
+        self.assertEqual(base["city_baseline_median"], 26.22)
+        self.assertEqual(base["vs_city_baseline_pct"], -9.2)
+        self.assertIsNone(base["selling_price"])
+        self.assertIsNone(base["margin"])
+        self.assertIn("takeout", {row["recipe_tab"] for row in payload["items"]})
         self.assertAlmostEqual(payload["packaging_gap"]["share"], 24.9, delta=0.1)
         ideal = ideal_plaza_recipe_costs(menu_item="Masala Dosa", include_lines=True)
-        self.assertTrue(ideal["lines"])
-        self.assertTrue(all("Ideal Plaza" in line["deployment"] for line in ideal["lines"]))
+        self.assertEqual(ideal["lines"], [])
+        self.assertIn("Ingredient lines", ideal["lines_note"])
 
     def test_menu_item_cost_is_preferred_when_present(self):
         with tempfile.TemporaryDirectory() as folder:

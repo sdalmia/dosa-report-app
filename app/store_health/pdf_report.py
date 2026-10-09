@@ -161,6 +161,7 @@ def render_store_pdf(store, selection, view, insights, context_slots, warnings=N
 
     _section_box(pdf, "Posist window", _posist_lines(view), GOLD)
     _section_box(pdf, "Menu mix", _menu_lines(view), GOLD)
+    _section_box(pdf, "Delivery vs dine-in", _delivery_lines(view), GOLD)
     _calendar_section(pdf, view)
     _section_box(pdf, "Mystery audit", _audit_lines(view), PURPLE)
     _section_box(pdf, "Keka", _keka_lines(view), ORANGE)
@@ -395,6 +396,34 @@ def _menu_lines(view):
         if item.get("contribution"):
             bits.append(item["contribution"])
         lines.append(" · ".join(bit for bit in bits if bit))
+    return lines
+
+
+def _delivery_lines(view):
+    card = view.get("delivery") or {}
+    if not card.get("has_rows"):
+        lines = []
+        if card.get("period_label"):
+            lines.append(card["period_label"])
+        lines.append(card.get("empty") or "Data coming")
+        return lines
+    lines = []
+    if card.get("period_label"):
+        lines.append(card["period_label"])
+    lines.append(f"Dine-in gross: {card.get('dine_gross') or ''}")
+    if card.get("mall_bulk"):
+        lines.append(card.get("mall_note") or "In-store bills include bulk mall-system entries.")
+    else:
+        if card.get("dine_orders"):
+            lines.append(f"Dine-in bills: {card['dine_orders']}")
+        if card.get("dine_apb"):
+            lines.append(f"Dine-in APB: {card['dine_apb']}")
+    if card.get("delivery_gross"):
+        lines.append(f"Delivery gross: {card['delivery_gross']}")
+    if card.get("delivery_orders"):
+        lines.append(f"Delivery bills: {card['delivery_orders']}")
+    if card.get("delivery_apb"):
+        lines.append(f"Delivery APB: {card['delivery_apb']}")
     return lines
 
 

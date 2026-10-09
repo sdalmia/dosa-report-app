@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block title %}Tickets{% endblock %}
+
+{% block ops %}
+<header class="ops-head">
+  <p class="eyebrow">Command Centre</p>
+  <h1>Tickets</h1>
+  <p class="lede">Emergency-keyword alerts. Age is hours since the customer’s post when that time is known, otherwise hours since the alert.</p>
+</header>
+
+{% if not view.present %}
+  <section class="empty" data-empty="tickets">
+    <h2>Tickets are not in yet</h2>
+    <p>Emergency-keyword alerts are not in yet.</p>
+  </section>
+{% else %}
+  <section>
+    <p data-note="open">{{ view.open_note }}</p>
+    <p>{{ view.counts.cases }} cases across {{ view.counts.stores }} stores. Over 24 hours: {{ view.counts.over_24 }}. Within 24 hours: {{ view.counts.within_24 }}.</p>
+    {% if view.rating_note %}<p>{{ view.rating_note }}</p>{% endif %}
+    <details class="info">
+      <summary>How age is counted</summary>
+      <p>Age uses the customer’s post time when that time is known, and says since post. Otherwise it uses the alert time, and says since alert. Over 24 hours means the age is more than 24 hours. It is not a resolved status.</p>
+    </details>
+  </section>
+
+  <form class="filters" method="get" action="{{ url_for('menu_ops.tickets') }}">
+    <label>Store
+      <select name="store">
+        <option value="">All stores</option>
+        {% for name in view.store_names %}
+          <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Keyword
+      <select name="keyword">
+        <option value="">All keywords</option>
+        {% for name in view.keyword_names %}
+          <option value="{{ name }}" {% if view.keyword == name %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Apply</button>
+  </form>
+
+  <section>
+    <h2>Repeat stores</h2>
+    {% if view.hotspots %}
+      <ul class="hotspots">
+        {% for row in view.hotspots %}
+          <li data-hotspot="{{ row.store }}" data-count="{{ row.count }}">
+            <a href="{{ url_for('menu_ops.tickets', store=row.store, keyword=view.keyword) }}">{{ row.store }}</a>
+            <span>{{ row.count }} cases</span>
+            <span>{{ row.keywords|join(', ') }}</span>
+            <span>{{ row.over_24 }} over 24 hours</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty">No store has more than one case in this filter.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>By keyword</h2>
+    <ul class="keywords">
+      {% for row in view.keywords %}
+        <li data-keyword="{{ row.keyword }}" data-count="{{ row.count }}">
+          {% if row.keyword %}
+            <a href="{{ url_for('menu_ops.tickets', keyword=row.keyword, store=view.store) }}">{{ row.keyword }}</a>
+          {% else %}
+            <span>No keyword</span>
+          {% endif %}
+          <span>{{ row.count }} cases · {{ row.stores }} stores · {{ row.over_24 }} over 24 hours</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>By store</h2>
+    {% for group in view.stores %}
+      <article class="store-group" data-store="{{ group.store }}">
+        <h3>{{ group.store }} <span>{{ group.count }}</span></h3>
+        <p class="meta">{% for keyword in group.keywords %}{{ keyword.keyword or 'No keyword' }} {{ keyword.count }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+        {% for case in group.cases %}
+          <article class="case" data-over-24="{{ 'yes' if case.over_24 else ('no' if case.over_24 is not none else '') }}">
+            <header>
+              <span class="pill {{ 'over' if case.over_24 else 'open' }}">{{ case.tracker }}</span>
+              {% if case.keyword %}<span class="pill keyword">{{ case.keyword }}</span>{% endif %}
+              {% if case.type %}<span class="pill">{{ case.type }}</span>{% endif %}
+            </header>
+            <dl>
+              <div><dt>Age</dt><dd data-field="age">{% if case.age %}{{ case.age }} h {{ case.age_basis }}{% else %}Not on the report{% endif %}</dd></div>
+              <div><dt>Over 24 hours</dt><dd data-field="over-24">{{ case.over_24_label or 'Not on the report' }}</dd></div>
+              <div><dt>Alert</dt><dd>{{ case.alert or 'Not on the report' }}</dd></div>
+              <div><dt>Post</dt><dd>{{ case.post or 'Not on the report' }}</dd></div>
+              <div><dt>Platform</dt><dd>{{ case.platform or 'Not on the report' }}</dd></div>
+              <div><dt>Rating</dt><dd data-field="rating">{{ case.rating or 'Not on the report' }}</dd></div>
+              <div><dt>Customer</dt><dd>{{ case.customer or 'Not on the report' }}</dd></div>
+              <div><dt>Status</dt><dd data-field="status">{{ case.status }}</dd></div>
+              <div><dt>Owner</dt><dd data-field="owner">{{ case.owner }}</dd></div>
+              <div><dt>Resolved</dt><dd data-field="resolved-at">{{ case.resolved_at }}</dd></div>
+            </dl>
+          </article>
+        {% endfor %}
+      </article>
+    {% endfor %}
+  </section>
+{% endif %}
+{% endblock %}

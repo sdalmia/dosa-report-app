@@ -259,6 +259,7 @@
         <p>{{ recipe.basis }}</p>
         {% if recipe.other_outlets_missing %}<p>{{ recipe.other_outlets_missing }}</p>{% endif %}
         <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero.</p>
+        <p>Each cost is compared with its own city median. Delhi recipes use three chutneys per dish and Kolkata uses one, so Delhi costs more by design. The two cities are not ranked against each other.</p>
         {% endcall %}
       </div>
       {% if not recipe.available %}
@@ -271,14 +272,14 @@
       <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
       {% if recipe.list_kind == 'summary' %}
       <details>
-        <summary>Costs across outlets</summary>
+        <summary>Costs within each city</summary>
         <div class="scroll stack">
           {% for row in recipe.rows %}
           <div class="row-card">
             <b>{{ row.menu_item }}</b>
-            <p class="muted">{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
+            <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
             <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
-              · typical {{ row.typical.text }}
+              · city median {{ row.typical.text }}
               · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
               {% if row.spread.text %} · spread {{ row.spread.text }}{% endif %}</p>
           </div>

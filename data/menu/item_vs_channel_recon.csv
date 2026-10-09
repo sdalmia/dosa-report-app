@@ -1,0 +1,31 @@
+store,store_code,items_gross,channel_gross,gap,gap_pct,flag
+Dosa Coffee - Forum (0003),0003,804739.74,804740.0,-0.26,-0.0,False
+Dosa Coffee - Manisquare (0004),0004,1813614.99,1821784.0,-8169.01,-0.45,False
+Dosa Coffee - Lake Town (0005),0005,1469610.88,1507535.0,-37924.12,-2.52,True
+Dosa Coffee - Calcutta Swiming Club (0007),0007,134995.68,134996.0,-0.32,-0.0,False
+Dosa Coffee - Food Truck - 1 (0008),0008,92669.74,92670.0,-0.26,-0.0,False
+Dosa Coffee - Salt Lake Sec-1 (0009),0009,2700038.5,2735985.0,-35946.5,-1.31,False
+Dosa Coffee - Salt Lake (002),002,2795477.39,2821937.0,-26459.61,-0.94,False
+Dosa Coffee - Ideal Plaza (01/0001),01-0001,3574003.39,3671611.0,-97607.61,-2.66,True
+Dosa Coffee - Rosedale Plaza(0006),01-0006,2132942.75,2186219.0,-53276.25,-2.44,True
+Dosa Coffee - Rangoli Mall (01/0010),01-0010,1517316.02,1536745.0,-19428.98,-1.26,False
+Dosa Coffee - James long Sarani (01/0011),01-0011,1819963.48,1869703.0,-49739.52,-2.66,True
+Dosa Coffee - Santoshpur (01/0012),01-0012,1315881.39,1350413.0,-34531.61,-2.56,True
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),01-0013,774689.65,815592.0,-40902.35,-5.02,True
+Dosa Coffee - Kalikapur (01/0014),01-0014,1465752.08,1495357.0,-29604.92,-1.98,False
+Dosa Coffee - Lake road 01/0015,01-0015,2646455.41,2694700.0,-48244.59,-1.79,False
+Dosa Coffee - Quest Mall (01/0016),01-0016,1098563.28,1098563.0,0.28,0.0,False
+Dosa Coffee - Sec 18 Noida (02/0001),02-0001,1871148.54,1935770.0,-64621.46,-3.34,True
+Dosa Coffee - Paschim Vihar (02/0003),02-0003,1227555.93,1255772.0,-28216.07,-2.25,True
+Kalkaji (02/0004),02-0004,1750094.81,1815267.0,-65172.19,-3.59,True
+Dosa Coffee - Sec 143 Noida (02/0006),02-0006,1030355.28,1064392.0,-34036.72,-3.2,True
+Dosa Coffee - Sec 15 Faridabad (02/0007),02-0007,952681.56,990346.0,-37664.44,-3.8,True
+Dosa Coffee - Rohini Sec-7 (02/0008),02-0008,2337691.08,2392899.0,-55207.92,-2.31,True
+Gurgaon DLF (02/0009),02-0009,1897811.97,1967912.0,-70100.03,-3.56,True
+Gurgaon Sec-15 (02/0010),02-0010,1700840.41,1732131.0,-31290.59,-1.81,False
+"Dosa Coffee - Pacific mall, Jasola",02-0011,2515897.64,2530684.0,-14786.36,-0.58,False
+Connaught place (02/0012),02-0012,4015439.0,4026137.0,-10698.0,-0.27,False
+Dosa Coffee - Model Town (02/0013),02-0013,2033003.82,2074813.0,-41809.18,-2.02,True
+Gurgaon Sec 10 (02/0014),02-0014,616805.26,638520.0,-21714.74,-3.4,True
+Dosa Coffee - Shalimar Bagh (02/0015),02-0015,1456695.73,1477281.0,-20585.27,-1.39,False
+Sec 31 - Gurgaon (02/0016),02-0016,1025567.91,1056432.0,-30864.09,-2.92,True

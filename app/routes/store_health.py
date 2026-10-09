@@ -93,8 +93,9 @@ def page(store_id=None):
 @store_health_bp.route("/store-health/<store_id>/print")
 @login_required
 def print_pdf(store_id):
+    filters = remember_filters()
     token = (store_id or "").strip()
-    packed = _assemble(token, request.args)
+    packed = _assemble(token, request.args, filters)
     store = packed["store"]
     if store is None:
         return "No store matches that name.", 404
