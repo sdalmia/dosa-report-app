@@ -35,6 +35,7 @@ AUDIT_FILE = "mystery_audit.csv"
 REELO_FILE = "reelo.csv"
 FAMEPILOT_FILE = "famepilot.csv"
 MENU_MIX_FILE = "menu_mix.csv"
+ITEM_SALES_FILE = "item_sales.csv"
 
 POSIST_COLUMNS = (
     "store",
@@ -489,15 +490,16 @@ def load_famepilot(directory=None):
     return _load_store_rows(directory, FAMEPILOT_FILE, FAMEPILOT_COLUMNS, "posist_store")
 
 
-def load_menu_mix(directory=None):
+def load_menu_mix(directory=None, filename=None):
     """Item rows from Posist Insights Menu Analysis. Every row is kept.
 
     A blank sales, order, or contribution cell stays blank. This does not
     invent an item or turn a blank into zero.
     """
     directory = Path(directory) if directory else data_directory()
+    filename = filename or MENU_MIX_FILE
     warnings = []
-    path = directory / MENU_MIX_FILE
+    path = directory / filename
     table = _read_dicts(path, warnings)
     rows = []
     if not table:
@@ -505,7 +507,7 @@ def load_menu_mix(directory=None):
     required = ("store", "item", "period_start", "period_end")
     missing = [name for name in required if name not in table[0]]
     if missing:
-        _warn(warnings, f"{MENU_MIX_FILE} is missing {', '.join(missing)}.")
+        _warn(warnings, f"{filename} is missing {', '.join(missing)}.")
         return [], warnings
     for index, raw in enumerate(table, start=2):
         store = _text_cell(raw.get("store"))
@@ -513,7 +515,7 @@ def load_menu_mix(directory=None):
         start = parse_date(raw.get("period_start"))
         end = parse_date(raw.get("period_end"))
         if not store or not item or start is None or end is None or end < start:
-            _warn(warnings, f"{MENU_MIX_FILE} row {index} has no store, item, or period, so it was skipped.")
+            _warn(warnings, f"{filename} row {index} has no store, item, or period, so it was skipped.")
             continue
         parsed = {
             "store": store,
@@ -527,8 +529,54 @@ def load_menu_mix(directory=None):
         for field in ("total_sales", "total_orders", "contribution_pct"):
             cell = raw.get(field)
             if parsed[field] is None and not _blank(cell):
-                _warn(warnings, f"{MENU_MIX_FILE} row {index} {field} is not a number, so it was left blank.")
+                _warn(warnings, f"{filename} row {index} {field} is not a number, so it was left blank.")
         rows.append(parsed)
+    return rows, warnings
+
+
+def load_item_sales(directory=None):
+    """Per-store item sales. Absent until the file is dropped in.
+
+    A period file uses the menu-mix columns. A daily file uses
+    store, item, date, sales, orders. Blank cells stay blank.
+    """
+    directory = Path(directory) if directory else data_directory()
+    path = directory / ITEM_SALES_FILE
+    if not path.is_file():
+        return [], []
+    warnings = []
+    table = _read_dicts(path, warnings)
+    if not table:
+        return [], warnings
+    headers = set(table[0])
+    if "period_start" in headers and "period_end" in headers:
+        return load_menu_mix(directory, ITEM_SALES_FILE)
+    if "date" not in headers:
+        _warn(warnings, f"{ITEM_SALES_FILE} needs a date or a period, so it was left unused.")
+        return [], warnings
+    rows = []
+    for index, raw in enumerate(table, start=2):
+        store = _text_cell(raw.get("store"))
+        item = _text_cell(raw.get("item"))
+        day = parse_date(raw.get("date"))
+        if not store or not item or day is None:
+            _warn(warnings, f"{ITEM_SALES_FILE} row {index} has no store, item, or date, so it was skipped.")
+            continue
+        sales_cell = raw.get("total_sales")
+        if sales_cell is None or _blank(sales_cell):
+            sales_cell = raw.get("sales")
+        orders_cell = raw.get("total_orders")
+        if orders_cell is None or _blank(orders_cell):
+            orders_cell = raw.get("orders")
+        rows.append({
+            "store": store,
+            "item": item,
+            "total_sales": parse_number(sales_cell),
+            "total_orders": parse_number(orders_cell),
+            "contribution_pct": parse_number(raw.get("contribution_pct")),
+            "period_start": day,
+            "period_end": day,
+        })
     return rows, warnings
 
 
@@ -544,6 +592,7 @@ def load_feeds(directory=None):
     reelo, reelo_warnings = load_reelo(directory)
     famepilot, famepilot_warnings = load_famepilot(directory)
     menu_mix, menu_mix_warnings = load_menu_mix(directory)
+    item_sales, item_sales_warnings = load_item_sales(directory)
     labels = sorted({store for store, _day in posist})
     # Stores that never appear on the deployment report still have Keka, Reelo,
     # and Famepilot rows. Join those to the same labels the picker shows.
@@ -569,6 +618,21 @@ def load_feeds(directory=None):
                     unmatched_menu_stores.append(row)
                 continue
             menu_mix_by_store.setdefault(label, []).append(row)
+    item_sales_by_store = {}
+    if join_labels or labels:
+        seen_items = set()
+        targets = join_labels or labels
+        for row in item_sales:
+            label = match_menu_store(row.get("store"), targets)
+            if label is None:
+                if row.get("store") not in seen_items:
+                    seen_items.add(row.get("store"))
+                    _warn(
+                        item_sales_warnings,
+                        f"{ITEM_SALES_FILE} store {row.get('store')!r} does not match one store, so it was not applied.",
+                    )
+                continue
+            item_sales_by_store.setdefault(label, []).append(row)
     if labels or join_labels:
         for row in unmatched_menu_stores:
             _warn(
@@ -617,7 +681,9 @@ def load_feeds(directory=None):
         "famepilot_by_store": famepilot_by_store,
         "menu_mix": menu_mix,
         "menu_mix_by_store": menu_mix_by_store,
-        "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings + menu_mix_warnings,
+        "item_sales": item_sales,
+        "item_sales_by_store": item_sales_by_store,
+        "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings + menu_mix_warnings + item_sales_warnings,
         "directory": directory,
     }
 

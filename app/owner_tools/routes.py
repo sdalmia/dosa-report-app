@@ -4,6 +4,7 @@ from flask import jsonify, render_template, request, Response
 
 from app.routes.main import login_required
 from app.store_health.contract import load_feeds
+from app.view_filters import city_region, remember_filters, resolve_bounds, store_options, visible_stores
 
 from . import owner_bp
 from .metrics import build_brief, build_goals, build_labour, build_scorecard, festive_available, resolve_month
@@ -59,10 +60,33 @@ def brief_email():
 @owner_bp.route("/scorecard")
 @login_required
 def scorecard():
+    filters = remember_filters()
     feeds = _feeds()
     wastage = load_wastage(feeds.get("directory"))
-    payload = build_scorecard(feeds, wastage, (request.args.get("month") or "").strip())
-    return render_template("owner/scorecard.html", scorecard=payload, active="scorecard")
+    month = (request.args.get("month") or "").strip()
+    if not month and filters.get("cc_range"):
+        from app.store_health.present import _window_bounds
+
+        _start, end = resolve_bounds(filters, *_window_bounds(feeds))
+        if end is not None:
+            month = f"{end.year:04d}-{end.month:02d}"
+    payload = build_scorecard(feeds, wastage, month)
+    region = city_region(filters)
+    wanted = filters.get("cc_store") or ""
+    rows = payload.get("stores") or []
+    if region:
+        rows = [row for row in rows if row.get("region") == region]
+    if wanted:
+        rows = [row for row in rows if row.get("id") == wanted]
+    payload["stores"] = rows
+    options = visible_stores(store_options(), filters)
+    return render_template(
+        "owner/scorecard.html",
+        scorecard=payload,
+        active="scorecard",
+        filters=filters,
+        filter_stores=options,
+    )
 
 
 @owner_bp.route("/labour")

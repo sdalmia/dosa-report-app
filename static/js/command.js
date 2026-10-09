@@ -7,7 +7,14 @@
   function applyLabel() {
     if (!toggle) return;
     var dark = root.getAttribute("data-theme") === "dark";
-    toggle.textContent = dark ? "Light" : "Dark";
+    var compact = toggle.closest(".cc-header");
+    if (compact) {
+      toggle.innerHTML = dark
+        ? '<i class="bi bi-sun" aria-hidden="true"></i>'
+        : '<i class="bi bi-moon" aria-hidden="true"></i>';
+    } else {
+      toggle.textContent = dark ? "Light" : "Dark";
+    }
     toggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#12110e" : "#f7f6f3");
@@ -33,8 +40,73 @@
     menu.addEventListener("click", function () {
       var open = drawer.classList.toggle("is-open");
       menu.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.classList.toggle("nav-open", open);
+      if (open) {
+        var field = drawer.querySelector(".cc-search-input");
+        if (field) field.focus();
+      }
     });
   }
+
+  var searchRows = null;
+  function ensureSearch() {
+    if (searchRows) return Promise.resolve(searchRows);
+    return fetch("/search.json", { credentials: "same-origin" })
+      .then(function (response) { return response.ok ? response.json() : { results: [] }; })
+      .then(function (payload) {
+        searchRows = payload.results || [];
+        return searchRows;
+      })
+      .catch(function () { searchRows = []; return searchRows; });
+  }
+
+  function paintResults(box, rows) {
+    if (!box) return;
+    if (!rows.length) {
+      box.hidden = true;
+      box.innerHTML = "";
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML = rows.map(function (row) {
+      var kind = row.kind || "";
+      var label = row.label || "";
+      var store = row.store || "";
+      var extra = store && label.toLowerCase().indexOf(String(store).toLowerCase()) === -1 ? " · " + store : "";
+      return '<a href="' + String(row.href || "#").replace(/"/g, "") + '"><span class="kind">' + kind + '</span><span>' + (label + extra).replace(/[&<>]/g, function (ch) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch];
+      }) + "</span></a>";
+    }).join("");
+  }
+
+  document.querySelectorAll(".cc-search").forEach(function (form) {
+    var input = form.querySelector(".cc-search-input");
+    var box = form.querySelector(".cc-search-results");
+    if (!input || !box) return;
+    form.addEventListener("submit", function (event) { event.preventDefault(); });
+    input.addEventListener("input", function () {
+      var query = input.value.trim().toLowerCase();
+      if (query.length < 1) {
+        box.hidden = true;
+        box.innerHTML = "";
+        return;
+      }
+      ensureSearch().then(function (rows) {
+        var hits = rows.filter(function (row) {
+          return ((row.label || "") + " " + (row.store || "") + " " + (row.kind || "")).toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 12);
+        paintResults(box, hits);
+      });
+    });
+  });
+
+  document.querySelectorAll(".cc-filters").forEach(function (form) {
+    var range = form.querySelector('select[name="cc_range"]');
+    if (!range) return;
+    range.addEventListener("change", function () {
+      form.classList.toggle("is-custom", range.value === "custom");
+    });
+  });
 
   var sheet = document.getElementById("cal-sheet");
   if (sheet && window.matchMedia("(max-width: 767px)").matches) {

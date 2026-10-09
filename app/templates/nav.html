@@ -3,25 +3,41 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Dosa Coffee">
     <span>Command</span>
   </a>
+  <form class="cc-search cc-search-desktop" role="search">
+    <label class="visually-hidden" for="cc-search-header">Search</label>
+    <input id="cc-search-header" class="cc-search-input" type="search" placeholder="Search" autocomplete="off" enterkeyhint="search">
+    <div class="cc-search-results" hidden></div>
+  </form>
   <span class="cc-header-spacer"></span>
   {% if session.get('user') %}
     <span class="cc-hello">Hi, {{ session['user']['name'].split(' ')[0] }}</span>
   {% endif %}
-  <button type="button" class="cc-icon-btn" id="theme-toggle" aria-label="Switch theme">Theme</button>
-  <button type="button" class="cc-icon-btn" id="nav-menu" aria-expanded="false" aria-controls="nav-drawer">Menu</button>
+  <button type="button" class="cc-icon-btn" id="theme-toggle" aria-label="Switch theme"><i class="bi bi-moon" aria-hidden="true"></i></button>
+  <button type="button" class="cc-icon-btn" id="nav-menu" aria-expanded="false" aria-controls="nav-drawer" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 </header>
 <nav class="cc-drawer" id="nav-drawer" aria-label="More">
+  <form class="cc-search" role="search">
+    <label class="visually-hidden" for="cc-search-drawer">Search</label>
+    <input id="cc-search-drawer" class="cc-search-input" type="search" placeholder="Search pages, stores, menu" autocomplete="off" enterkeyhint="search">
+    <div class="cc-search-results" hidden></div>
+  </form>
+  <h2>Today</h2>
   <a href="{{ url_for('main.dashboard') }}">Home</a>
   <a href="/brief" {% if request.endpoint == 'owner.brief' %}class="is-current"{% endif %}>Brief</a>
   <a href="/scorecard" {% if request.endpoint == 'owner.scorecard' %}class="is-current"{% endif %}>Scorecard</a>
   <a href="{{ url_for('owner.labour') }}" {% if request.endpoint == 'owner.labour' %}class="is-current"{% endif %}>Labour</a>
   <a href="{{ url_for('owner.goals') }}" {% if request.endpoint == 'owner.goals' %}class="is-current"{% endif %}>Goals</a>
-  <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
+  <h2>Stores</h2>
   <a href="{{ url_for('store_health.page') }}">Store Health</a>
+  <a href="{{ url_for('main.flags_page') }}">Red flags</a>
+  <h2>Buying</h2>
+  <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
+  <a href="{{ url_for('procurement.food_cost') }}">Food cost</a>
   <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
+  <h2>Tools</h2>
   <a href="{{ url_for('uploader.upload_index') }}">Zomato Settlement Uploader</a>
   <a href="{{ url_for('location_finder.location_finder') }}">Location Finder</a>
-  <a href="{{ url_for('main.flags_page') }}">Red flags</a>
+  <h2>Outside</h2>
   <a href="https://trello.com/" target="_blank" rel="noopener">Trello</a>
   <a href="https://www.buzzready.app/" target="_blank" rel="noopener">Buzzready</a>
   <a href="https://www.keka.com/" target="_blank" rel="noopener">Keka</a>
@@ -29,6 +45,7 @@
   <a href="https://dosacoffee.posist.biz/login" target="_blank" rel="noopener">Posist</a>
   <a href="https://famepilot.com/" target="_blank" rel="noopener">Fame Pilot</a>
   <a href="https://app.reelo.io/" target="_blank" rel="noopener">Reelo</a>
+  <h2>Account</h2>
   {% if session.get('user') %}
     <a href="{{ url_for('auth.logout') }}">Logout</a>
   {% else %}

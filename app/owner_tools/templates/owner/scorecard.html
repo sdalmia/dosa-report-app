@@ -4,6 +4,7 @@
 {% block title %}Store scorecard - Dosa Coffee{% endblock %}
 
 {% block owner_body %}
+{% include "_filters.html" %}
 <h1>Store scorecard</h1>
 <p class="subtitle">{{ scorecard.month_label or "Latest month" }}</p>
 <details class="ot-info">

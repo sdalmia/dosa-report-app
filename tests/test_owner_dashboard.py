@@ -192,8 +192,12 @@ class OwnerDashboardTests(unittest.TestCase):
         )
         self.assertEqual(
             by_key["all"]["apb_value"],
-            by_key["all"]["gross_value"] / by_key["all"]["bills_value"],
+            by_key["all"]["comparable_gross"] / by_key["all"]["comparable_bills"],
         )
+        self.assertGreater(by_key["all"]["gross_value"], by_key["all"]["comparable_gross"])
+        bill_alerts = " ".join(alert["text"] for alert in view["alerts"] if alert["kind"] == "Bills")
+        self.assertNotIn("Manisquare", bill_alerts)
+        self.assertNotIn("Forum", bill_alerts)
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = self.client.get("/dashboard").get_data(as_text=True)

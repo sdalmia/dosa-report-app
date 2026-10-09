@@ -378,7 +378,11 @@ def _pairs(fields, keys):
 def _menu_lines(view):
     mix = view.get("menu_mix") or {}
     if not mix.get("has_items"):
-        return [mix.get("empty") or "Menu mix is not on file."]
+        lines = []
+        if mix.get("period_label"):
+            lines.append(mix["period_label"])
+        lines.append(mix.get("empty") or "Menu mix is not on file.")
+        return lines
     lines = []
     if mix.get("period_label"):
         lines.append(mix["period_label"])

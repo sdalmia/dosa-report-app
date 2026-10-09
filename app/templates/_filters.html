@@ -1,0 +1,34 @@
+<form class="cc-filters{% if filters.cc_range == 'custom' %} is-custom{% endif %}" method="get" action="{{ request.path }}">
+  <label>Store
+    <select name="cc_store">
+      <option value="">All stores</option>
+      {% for store in filter_stores %}
+        <option value="{{ store.id }}" {% if filters.cc_store == store.id %}selected{% endif %}>{{ store.label }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>City
+    <select name="cc_city">
+      <option value="" {% if not filters.cc_city %}selected{% endif %}>All</option>
+      <option value="Kolkata" {% if filters.cc_city == 'Kolkata' %}selected{% endif %}>Kolkata</option>
+      <option value="Delhi NCR" {% if filters.cc_city == 'Delhi NCR' %}selected{% endif %}>Delhi NCR</option>
+    </select>
+  </label>
+  <label>Dates
+    <select name="cc_range">
+      <option value="" {% if not filters.cc_range %}selected{% endif %}>This window</option>
+      <option value="7" {% if filters.cc_range == '7' %}selected{% endif %}>Last 7 days</option>
+      <option value="30" {% if filters.cc_range == '30' %}selected{% endif %}>Last 30 days</option>
+      <option value="custom" {% if filters.cc_range == 'custom' %}selected{% endif %}>Custom</option>
+    </select>
+  </label>
+  <div class="cc-range-custom">
+    <label>From
+      <input type="date" name="cc_start" value="{{ filters.cc_start }}">
+    </label>
+    <label>To
+      <input type="date" name="cc_end" value="{{ filters.cc_end }}">
+    </label>
+  </div>
+  <button type="submit" class="cc-icon-btn cc-apply">Apply</button>
+</form>

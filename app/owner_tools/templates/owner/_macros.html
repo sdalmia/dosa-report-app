@@ -2,7 +2,7 @@
 {%- if figure is none or figure.value is none -%}
 <span class="blank">Blank</span>
 {%- else -%}
-{{ figure.text }}
+<span{% if figure.exact %} title="{{ figure.exact }}"{% endif %}>{{ figure.text }}</span>
 {%- endif -%}
 {%- endmacro %}
 

@@ -2,6 +2,7 @@
 {% block title %}Procurement - Dosa Coffee{% endblock %}
 {% block content %}
 <section class="cc-section">
+  {% include "_filters.html" %}
   <div class="section-head">
     <h2>Procurement</h2>
     <a href="{{ url_for('main.dashboard') }}">Home</a>
@@ -23,7 +24,16 @@
         {% if tile.lines %}
           <ul>
             {% for line in tile.lines %}
-              <li><span>{{ line.label }}</span>{% if line.value %}<b>{{ line.value }}</b>{% endif %}</li>
+              <li class="stat-block">
+              <span class="stat-name">{{ line.label }}</span>
+              {% if line.stats %}
+                <ul class="stat-list">
+                  {% for stat in line.stats %}
+                    <li class="stat-row"><span>{{ stat.label }}</span><b title="{{ stat.exact }}">{{ stat.text }}</b></li>
+                  {% endfor %}
+                </ul>
+              {% elif line.value %}<b>{{ line.value }}</b>{% endif %}
+            </li>
             {% endfor %}
           </ul>
         {% endif %}

@@ -115,6 +115,24 @@ def group_indian(digits):
     return ",".join(reversed(parts)) + "," + tail
 
 
+def format_owner_rupee(value):
+    """Owner pages. No paise. Lakhs and crores when the amount is large."""
+    if value is None:
+        return ""
+    number = float(value)
+    if number == 0:
+        return "₹0"
+    sign = "-" if number < 0 else ""
+    amount = abs(number)
+    if amount >= 10_000_000:
+        body = f"{amount / 10_000_000:.1f}".rstrip("0").rstrip(".")
+        return f"{sign}₹{body}Cr"
+    if amount >= 100_000:
+        body = f"{amount / 100_000:.1f}".rstrip("0").rstrip(".")
+        return f"{sign}₹{body}L"
+    return f"{sign}₹{group_indian(str(int(round(amount))))}"
+
+
 def format_inr(value):
     negative = float(value) < 0
     cents = int(round(abs(float(value)) * 100))
@@ -245,12 +263,14 @@ def _window_apb(gross, bills):
     return float(gross) / float(bills)
 
 
-def posist_window(feeds, store):
+def posist_window(feeds, store, bounds=None):
     """One total per store across the dates that store actually has."""
+    from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
+
     display = {field: "" for field in POSIST_COLUMNS if field not in {"store", "date"}}
     display["source_label"] = ""
     display["provisional_label"] = ""
-    start, end = _window_bounds(feeds)
+    start, end = bounds if bounds else _window_bounds(feeds)
     window_label = ""
     if start is not None and end is not None:
         window_label = f"{format_date(start)} through {format_date(end)}"
@@ -261,7 +281,10 @@ def posist_window(feeds, store):
         "days_summed": "",
         "missing_label": "",
         "fields": display,
+        "bills_note": "",
     }
+    if store is not None and is_mall_food_court(store.label):
+        result["bills_note"] = MALL_BILL_NOTE
     if store is None:
         return result
     all_rows = []
@@ -799,8 +822,70 @@ def format_share(value):
     return f"{float(value):.2f}%"
 
 
-def present_menu_mix(feeds, store):
-    """Top items for one store from the dates present in menu_mix.csv."""
+def _inside_window(row, start, end):
+    row_start = row.get("period_start")
+    row_end = row.get("period_end")
+    if row_start is None or row_end is None or start is None or end is None:
+        return False
+    return row_start >= start and row_end <= end
+
+
+def _mix_entries(rows):
+    """Top items. One row keeps its contribution. Several days are summed."""
+    buckets = {}
+    order = []
+    for row in rows:
+        item = row.get("item") or ""
+        if item not in buckets:
+            buckets[item] = {
+                "item": item,
+                "sales": None,
+                "orders": None,
+                "contribution": None,
+                "rows": 0,
+            }
+            order.append(item)
+        bucket = buckets[item]
+        bucket["rows"] += 1
+        if row.get("total_sales") is not None:
+            bucket["sales"] = (bucket["sales"] or 0) + float(row["total_sales"])
+        if row.get("total_orders") is not None:
+            bucket["orders"] = (bucket["orders"] or 0) + float(row["total_orders"])
+        if bucket["rows"] == 1 and row.get("contribution_pct") is not None:
+            bucket["contribution"] = row.get("contribution_pct")
+        elif bucket["rows"] > 1:
+            bucket["contribution"] = None
+    total_sales = sum(bucket["sales"] for bucket in buckets.values() if bucket["sales"] is not None)
+    ranked = sorted(
+        (buckets[item] for item in order),
+        key=lambda bucket: (
+            -(bucket["sales"] if bucket["sales"] is not None else float("-inf")),
+            bucket["item"].casefold(),
+        ),
+    )
+    items = []
+    for bucket in ranked[:MENU_MIX_LIMIT]:
+        contribution = bucket["contribution"]
+        if contribution is None and bucket["sales"] is not None and total_sales:
+            contribution = bucket["sales"] / total_sales * 100.0
+        items.append(
+            {
+                "item": bucket["item"],
+                "sales": format_money(bucket["sales"], "total_sales"),
+                "orders": format_count(bucket["orders"]),
+                "contribution": format_share(contribution),
+            }
+        )
+    return items
+
+
+def present_menu_mix(feeds, store, window=None):
+    """Top items for one store.
+
+    With a window, only per-store item sales that sit inside that window are
+    shown. The September menu-mix file is not relabelled as a later window.
+    Without a window, the dates in menu_mix.csv are used as they stand.
+    """
     directory = feeds.get("directory")
     state = _file_state(directory, "menu_mix.csv", feeds.get("menu_mix") or []) if directory else "missing"
     result = {
@@ -810,7 +895,27 @@ def present_menu_mix(feeds, store):
         "empty": "Menu mix is not on file.",
         "entries": [],
     }
-    if store is None or state in {"missing", "empty"}:
+    if store is None:
+        return result
+    if window:
+        start, end = window
+        result["period_label"] = menu_period_label(start, end)
+        sales = (feeds.get("item_sales_by_store") or {}).get(store.label) or []
+        chosen = [row for row in sales if _inside_window(row, start, end)]
+        if chosen:
+            result["has_items"] = True
+            result["empty"] = ""
+            result["entries"] = _mix_entries(chosen)
+            return result
+        item_rows = feeds.get("item_sales") or []
+        mix_rows = feeds.get("menu_mix") or []
+        if not item_rows and not mix_rows:
+            result["period_label"] = ""
+            result["empty"] = "Menu mix is not on file."
+            return result
+        result["empty"] = "Per-store item sales for this window are not on file yet."
+        return result
+    if state in {"missing", "empty"}:
         return result
     rows = (feeds.get("menu_mix_by_store") or {}).get(store.label) or []
     start, end, kept = menu_mix_window(feeds.get("menu_mix") or [])
@@ -818,30 +923,14 @@ def present_menu_mix(feeds, store):
     if not chosen:
         result["empty"] = "Menu mix is not on file for this store."
         return result
-    chosen.sort(
-        key=lambda row: (
-            -(row["total_sales"] if row.get("total_sales") is not None else float("-inf")),
-            (row.get("item") or "").casefold(),
-        )
-    )
-    items = []
-    for row in chosen[:MENU_MIX_LIMIT]:
-        items.append(
-            {
-                "item": row.get("item") or "",
-                "sales": format_money(row.get("total_sales"), "total_sales"),
-                "orders": format_count(row.get("total_orders")),
-                "contribution": format_share(row.get("contribution_pct")),
-            }
-        )
     result["has_items"] = True
     result["period_label"] = menu_period_label(start, end)
     result["empty"] = ""
-    result["entries"] = items
+    result["entries"] = _mix_entries(chosen)
     return result
 
 
-def build_view(feeds, store, selection, today):
+def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=None):
     # The calendar is the next 30 days from today, not the dates in the file.
     span = forward_calendar_bounds(today) if store else None
     if span:
@@ -853,7 +942,7 @@ def build_view(feeds, store, selection, today):
     story = calendar_story(feeds, store)
     described = describe_feeds(feeds["directory"])
     return {
-        "posist": posist_window(feeds, store),
+        "posist": posist_window(feeds, store, posist_bounds),
         "days": days,
         "weeks": calendar_weeks(days),
         "filled_actual_days": filled,
@@ -871,7 +960,7 @@ def build_view(feeds, store, selection, today):
         "reelo_columns": REELO_COLUMNS,
         "famepilot_columns": FAMEPILOT_COLUMNS,
         "keka": present_keka(feeds, store),
-        "menu_mix": present_menu_mix(feeds, store),
+        "menu_mix": present_menu_mix(feeds, store, menu_window),
         "audit": present_audit(feeds, store),
         "reelo": present_reelo(feeds, store),
         "fame": present_famepilot(feeds, store),

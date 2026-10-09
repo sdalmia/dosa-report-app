@@ -227,7 +227,8 @@
   }
 </style>
 
-<div class="store-health py-4">
+<div class="store-health">
+  {% include "_filters.html" %}
   <p class="eyebrow mb-1"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none">Command Centre</a> / Store Health</p>
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
     <h1 class="mb-0">{% if store %}{{ store.label }}{% else %}Choose a store{% endif %}</h1>
@@ -344,6 +345,7 @@
         <article class="metric">
           <h3>Bills</h3>
           <p class="value" data-field="bills">{{ posist.fields.bills }}</p>
+          {% if posist.bills_note %}<p class="note" data-field="bills_note">{{ posist.bills_note }}</p>{% endif %}
         </article>
         <article class="metric">
           <h3>APB</h3>

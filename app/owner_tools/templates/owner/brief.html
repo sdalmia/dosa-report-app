@@ -118,6 +118,7 @@
       <div class="ot-stat">
         <p class="kicker">Bills</p>
         <p class="figure-sm" data-field="bills">{{ show(store.bills) }}</p>
+        {% if store.mall_bills %}<p class="note">Includes mall bulk entries</p>{% endif %}
       </div>
       <div class="ot-stat">
         <p class="kicker">APB</p>
