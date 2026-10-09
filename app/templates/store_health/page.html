@@ -332,8 +332,9 @@
       <p class="box-source" data-field="posist_missing">{{ posist.missing_label }}</p>
       <div class="metric-grid">
         <article class="metric">
-          <h3>Net</h3>
-          <p class="value" data-field="net">{% if posist.fields.net %}{{ posist.fields.net }}{% else %}{{ posist.fields.gross }}{% endif %}</p>
+          <h3>Gross</h3>
+          <p class="value" data-field="gross">{{ posist.fields.gross }}</p>
+          <p class="note" data-field="gross_basis">Summed gross for the window</p>
         </article>
         <article class="metric">
           <h3>Bills</h3>

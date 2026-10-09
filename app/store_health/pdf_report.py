@@ -405,11 +405,11 @@ def _posist_lines(view):
     if posist.get("missing_label"):
         lines.append(posist["missing_label"])
     fields = posist.get("fields") or {}
-    # Net on the sheet is the gross total when the net column is blank.
-    net = fields.get("net") or fields.get("gross") or ""
+    # The window figure is summed gross. Net is never filled from gross.
+    gross = fields.get("gross") or ""
     bills = fields.get("bills") or ""
     apb = fields.get("apb") or ""
-    lines.append(f"Net: {net}" if net else "Net:")
+    lines.append(f"Gross: {gross}" if gross else "Gross:")
     lines.append(f"Bills: {bills}" if bills else "Bills:")
     # The window figure is summed gross divided by summed bills, not a Posist print.
     lines.append(f"APB, calculated as gross divided by bills: {apb}" if apb else "APB, calculated as gross divided by bills:")
