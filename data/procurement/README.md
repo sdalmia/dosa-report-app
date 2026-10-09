@@ -160,7 +160,16 @@ This compares Stock Recipe cost with the Recipe Consumption cost for Ideal Plaza
 - The few residual gaps above 5% on shared ingredients are Ghee/Butter Idli pc, Iced Filter Coffee and some Uttapam/Rasam Vada lines, mostly banana leaf quantities.
 - **For food cost:** use Recipe Consumption for actual mix-weighted cost and Stock Recipe for menu-level base cost.
 
+### 5d. menu_item_cost.csv, menu_item_cost_summary.csv, menu_item_cost_channels_ideal_plaza.csv
+**menu_item_cost_summary.csv** is one row per item per city. `city_baseline_median_cost` is that city's own median. Outlets in `outlets_excluded` are already left out of it. `spread_within_city_pct` and `max_vs_city_baseline_pct` stay inside that city.
+
+**menu_item_cost.csv** is one row per outlet, recipe tab, and item. `vs_city_baseline_pct` is that outlet versus its own city's median. A blank cost is not zero.
+
+**menu_item_cost_channels_ideal_plaza.csv** is Ideal Plaza only (base, table, takeout, delivery). It is not the item file.
+
+Delhi NCR costs more than Kolkata because Delhi serves 3 chutneys with each dish and Kolkata serves 1. Compare each city with its own median. Do not label a Delhi or North margin as a recipe that needs checking.
+
 ## Missing / pending
 - **Short deliveries:** cannot be built, because PO quantities are blank in Restroworks.
-- **Recipe cost:** only Ideal Plaza and Connaught Place have Stock Recipe exports. The other outlets are not available.
+- **Older recipe export:** `recipe_cost_by_item.csv` covers Ideal Plaza and Connaught Place only. `menu_item_cost.csv` replaces it for the panel when both are on disk.
 - **Store consumption and wastage:** covers 1 to 8 Oct only. There is no September consumption file.

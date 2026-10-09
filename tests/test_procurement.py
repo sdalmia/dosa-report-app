@@ -11,6 +11,7 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.procurement.loader import load_procurement, newest_file
+from app.procurement.recipe import recipe_section
 from app.procurement.numbers import (
     dates_in_filename,
     format_compact_inr,
@@ -160,25 +161,47 @@ class ProcurementTests(unittest.TestCase):
     def test_recipe_cost_excludes_packaging_and_has_no_margin(self):
         html = self.get("/food-cost")
         self.assertIn("recipe cost excl. packaging", html.lower())
-        self.assertEqual(
-            _attr(html, "recipe-avg", outlet="Ideal Plaza", item="Masala Dosa"),
-            "23.82",
-        )
+        self.assertIn("Delhi serves 3 chutneys with each dish. Kolkata serves 1.", html)
+        self.assertNotIn("double the cost", html.lower())
+        self.assertNotIn("recipe needs checking", html.lower())
+        self.assertNotIn("Costs across outlets", html)
+        self.assertEqual(_attr(html, "city-median", city="Kolkata", item="Masala Dosa"), "26.22")
+        self.assertEqual(_attr(html, "city-median", city="Delhi NCR", item="Masala Dosa"), "41.34")
+        self.assertEqual(_attr(html, "city-spread", city="Kolkata", item="Masala Dosa"), "18")
+        self.assertEqual(_attr(html, "city-spread", city="Delhi NCR", item="Masala Dosa"), "3.7")
         self.assertEqual(_attr(html, "consumed-cost", item="Masala Dosa"), "41.67")
         self.assertIn("Margin is blank", html)
         self.assertIn("Connaught Place", html)
-        payload = recipe_costs(outlet="Ideal Plaza", menu_item="Masala Dosa")
+        payload = recipe_costs(outlet="Ideal Plaza", menu_item="Masala Dosa", recipe_tab="base")
         self.assertTrue(payload["available"])
+        self.assertEqual(payload["source_kind"], "menu_item_cost")
         self.assertEqual(payload["label"], "recipe cost excl. packaging")
         self.assertIsNone(payload["margin"])
         self.assertEqual(len(payload["items"]), 1)
-        self.assertEqual(payload["items"][0]["cost_per_unit_avg_price"], 23.82)
-        self.assertIsNone(payload["items"][0]["selling_price"])
-        self.assertIsNone(payload["items"][0]["margin"])
+        item = payload["items"][0]
+        self.assertEqual(item["cost_per_unit_avg_price"], 23.82)
+        self.assertEqual(item["city_baseline_median_cost"], 26.22)
+        self.assertEqual(item["vs_city_baseline_pct"], -9.2)
+        self.assertEqual(item["vs_own_city"], "9.2% below the Kolkata median")
+        self.assertNotIn("recipe needs checking", item["vs_own_city"].lower())
+        self.assertIsNone(item["selling_price"])
+        self.assertIsNone(item["margin"])
         self.assertAlmostEqual(payload["packaging_gap"]["share"], 24.9, delta=0.1)
+        delhi = recipe_costs(outlet="Gurgaon Sec-15", menu_item="Dum Tomato Rice", recipe_tab="base")
+        delhi_item = delhi["items"][0]
+        self.assertEqual(delhi_item["city"], "Delhi NCR")
+        self.assertEqual(delhi_item["vs_own_city"], "298.9% above the Delhi NCR median")
+        self.assertNotIn("recipe needs checking", delhi_item["vs_own_city"].lower())
+        self.assertIsNone(delhi_item["margin"])
         ideal = ideal_plaza_recipe_costs(menu_item="Masala Dosa", include_lines=True)
-        self.assertTrue(ideal["lines"])
-        self.assertTrue(all("Ideal Plaza" in line["deployment"] for line in ideal["lines"]))
+        self.assertEqual(ideal["lines"], [])
+        self.assertIn("not in this export", ideal["lines_note"])
+        section = recipe_section(load_procurement())
+        masala = next(row for row in section["rows"] if row["menu_item"] == "Masala Dosa")
+        by_city = {city["city"]: city for city in masala["cities"]}
+        self.assertEqual(by_city["Kolkata"]["typical"]["value"], 26.22)
+        self.assertEqual(by_city["Delhi NCR"]["typical"]["value"], 41.34)
+        self.assertNotEqual(by_city["Delhi NCR"]["spread"]["text"], "57.7%")
 
     def test_menu_item_cost_is_preferred_when_present(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -229,13 +252,65 @@ class ProcurementTests(unittest.TestCase):
             fallback = recipe_costs(directory=folder, menu_item="Masala Dosa")
             self.assertEqual(fallback["source_kind"], "recipe_cost_by_item")
             self.assertEqual(fallback["items"][0]["cost_per_unit_avg_price"], 1.0)
+            (folder_path / "menu_item_cost.csv").write_text(
+                "outlet,city,item_name,is_menu_item,recipe_tab,unit,cost_per_portion_avg\n"
+                "Ideal Plaza,Kolkata,Masala Dosa,True,base,No.,20.00\n"
+                "Salt Lake,Kolkata,Masala Dosa,True,base,No.,30.00\n"
+                "Connaught Place,Delhi,Masala Dosa,True,base,No.,40.00\n",
+                encoding="utf-8",
+            )
+            section = recipe_section(load_procurement(folder))
+            masala = next(row for row in section["rows"] if row["menu_item"] == "Masala Dosa")
+            by_city = {city["city"]: city for city in masala["cities"]}
+            self.assertEqual(set(by_city), {"Kolkata", "Delhi"})
+            self.assertEqual(by_city["Kolkata"]["spread"]["text"], "50.0%")
+            self.assertEqual(by_city["Delhi"]["spread"]["text"], "")
+            self.assertEqual(by_city["Delhi"]["typical"]["value"], 40.0)
+            self.assertNotIn("100", by_city["Delhi"]["spread"]["text"])
+            (folder_path / "menu_item_cost_summary.csv").write_text(
+                "city,region,item_name,unit,is_menu_item,outlets_with_recipe,outlets_compared,"
+                "city_baseline_median_cost,min_cost_avg,max_cost_avg,outlet_min,outlet_max,"
+                "max_vs_city_baseline_pct,spread_within_city_pct,spread_pct\n"
+                "Kolkata,East,Masala Dosa,No.,True,3,2,26.22,22.25,26.26,Events,Rangoli,0.2,18.0,57.7\n"
+                "Delhi NCR,North,Masala Dosa,No.,True,3,2,41.34,39.93,41.42,Sec 143,Pacific,0.2,3.7,57.7\n",
+                encoding="utf-8",
+            )
+            (folder_path / "menu_item_cost.csv").write_text(
+                "outlet,city,region,item_name,is_menu_item,recipe_tab,unit,cost_per_portion_avg,"
+                "city_baseline_median_cost,vs_city_baseline_pct,cost_status\n"
+                "Ideal Plaza,Kolkata,East,Masala Dosa,True,base,No.,10.00,26.22,-61.9,fully_priced\n"
+                "Salt Lake,Kolkata,East,Masala Dosa,True,base,No.,90.00,26.22,243.4,fully_priced\n"
+                "Connaught Place,Delhi NCR,North,Masala Dosa,True,base,No.,80.00,41.34,93.5,fully_priced\n",
+                encoding="utf-8",
+            )
+            official = recipe_section(load_procurement(folder))
+            official_masala = next(row for row in official["rows"] if row["menu_item"] == "Masala Dosa")
+            official_cities = {city["city"]: city for city in official_masala["cities"]}
+            self.assertEqual(official_cities["Kolkata"]["typical"]["value"], 26.22)
+            self.assertEqual(official_cities["Delhi NCR"]["typical"]["value"], 41.34)
+            self.assertEqual(official_cities["Kolkata"]["spread"]["text"], "18.0%")
+            self.assertEqual(official_cities["Delhi NCR"]["spread"]["text"], "3.7%")
+            north = recipe_costs(
+                directory=folder,
+                outlet="Connaught Place",
+                menu_item="Masala Dosa",
+                recipe_tab="base",
+            )
+            self.assertEqual(north["items"][0]["vs_own_city"], "93.5% above the Delhi NCR median")
+            self.assertNotIn("recipe needs checking", north["items"][0]["vs_own_city"].lower())
+            self.assertIsNone(north["items"][0]["margin"])
 
     def test_recipe_endpoint(self):
         response = self.client.get("/food-cost/recipe-cost.json?outlet=Ideal%20Plaza&item=Masala%20Dosa")
         self.assertEqual(response.status_code, 200)
         body = response.get_json()
-        self.assertEqual(body["items"][0]["cost_per_unit_avg_price"], 23.82)
+        base = next(row for row in body["items"] if row["recipe_tab"] == "base")
+        self.assertEqual(base["cost_per_unit_avg_price"], 23.82)
+        self.assertEqual(base["vs_city_baseline_pct"], -9.2)
+        self.assertEqual(base["city_baseline_median_cost"], 26.22)
+        self.assertNotIn("recipe needs checking", (base.get("vs_own_city") or "").lower())
         self.assertIsNone(body["margin"])
+        self.assertIsNone(base["margin"])
         self.assertIn("Ideal Plaza", body["consumption"]["outlet"])
         anon = self.app.test_client()
         self.assertEqual(anon.get("/food-cost/recipe-cost.json").status_code, 302)
@@ -254,7 +329,12 @@ class ProcurementTests(unittest.TestCase):
             supplier="Devine &amp; Conquer Store",
             city="Delhi",
         )
-        self.assertEqual(gap, "360.3")
+        self.assertAlmostEqual(float(gap), 360.3, delta=0.1)
+        self.assertNotIn(
+            'data-field="above-cheapest" data-item="Cling Wrap" data-supplier="M/S MAHAR" data-city="Kolkata"',
+            html,
+        )
+        self.assertIn("in that city", html)
         self.assertIn("9 Sep–8 Oct 2026", html)
         self.assertNotIn("September purchases are not in these files", html)
         self.assertNotIn(".csv", html)

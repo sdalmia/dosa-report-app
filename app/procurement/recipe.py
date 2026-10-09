@@ -7,6 +7,7 @@ Selling price is not in these files, so margin stays blank.
 
 import csv
 from pathlib import Path
+from statistics import median
 
 from app.procurement.loader import (
     newest_file,
@@ -27,6 +28,41 @@ from app.procurement.numbers import (
 )
 
 RECIPE_LABEL = "recipe cost excl. packaging"
+CITY_RECIPE_NOTE = (
+    "Delhi serves 3 chutneys with each dish. Kolkata serves 1. "
+    "Compare a store with its own city, not with the other city."
+)
+
+
+def _city_rank(city):
+    key = (city or "").casefold()
+    if "kolkata" in key:
+        return 0
+    if "delhi" in key:
+        return 1
+    return 9
+
+
+def _vs_own_city(pct, city):
+    """Outlet versus its own city median. A higher Delhi cost is not a recipe check."""
+    place = (city or "").strip()
+    if pct is None or not place:
+        return ""
+    if pct == 0:
+        return f"Same as the {place} median"
+    direction = "above" if pct > 0 else "below"
+    return f"{format_pct(abs(pct))} {direction} the {place} median"
+
+
+def _highest_vs_median(pct, city):
+    place = (city or "").strip()
+    if pct is None or not place:
+        return ""
+    if pct == 0:
+        return f"Highest matches the {place} median"
+    if pct > 0:
+        return f"Highest is {format_pct(pct)} above the {place} median"
+    return f"Highest is {format_pct(abs(pct))} below the {place} median"
 
 
 def recipe_costs(
@@ -97,6 +133,7 @@ def recipe_costs(
             "Base recipe at average price and last price. "
             "This is recipe cost excl. packaging: takeaway packaging and banana leaf are not in the base recipe."
         ),
+        "city_note": CITY_RECIPE_NOTE,
         "margin": None,
         "margin_unavailable": _margin_reason(),
         "item_count": len(items),
@@ -128,23 +165,12 @@ def recipe_section(bundle):
     payload = recipe_costs(bundle["directory"])
     summary = payload.get("summary") or []
     menu_summary = [row for row in summary if row.get("is_menu_item")]
-    if menu_summary:
+    if menu_summary and any((row.get("city") or "").strip() for row in menu_summary):
         payload["list_kind"] = "summary"
-        payload["rows"] = [
-            {
-                "menu_item": row["item_name"],
-                "unit": row["unit"],
-                "low": money_pair(row["min_cost"]),
-                "typical": money_pair(row["median_cost"]),
-                "high": money_pair(row["max_cost"]),
-                "outlet_min": row["outlet_min"],
-                "outlet_max": row["outlet_max"],
-                "spread": pct_pair(row["spread_pct"]),
-                "outlets": row["outlets_with_recipe"],
-            }
-            for row in menu_summary
-        ]
-        payload["rows"].sort(key=lambda row: row["menu_item"].casefold())
+        payload["rows"] = _rows_from_city_summary(menu_summary)
+    elif menu_summary:
+        payload["list_kind"] = "summary"
+        payload["rows"] = _within_city_recipe_rows(payload.get("items") or [])
     else:
         payload["list_kind"] = "items"
         rows = []
@@ -182,6 +208,119 @@ def recipe_section(bundle):
     cons_rows.sort(key=lambda row: -(row["total"]["value"] or 0))
     payload["consumption_rows"] = cons_rows
     return payload
+
+
+def _rows_from_city_summary(summary_rows):
+    """One line per item per city, from that file's own median.
+
+    The median already leaves out outlets the file excluded. Do not recompute it,
+    and do not rank Delhi NCR against Kolkata.
+    """
+    grouped = {}
+    for row in summary_rows:
+        name = (row.get("item_name") or "").strip()
+        city = (row.get("city") or "").strip()
+        if not name or not city:
+            continue
+        bucket = grouped.setdefault(name, {"unit": "", "cities": []})
+        if not bucket["unit"]:
+            bucket["unit"] = row.get("unit") or ""
+        bucket["cities"].append(_summary_city(row))
+    rows = []
+    for name in sorted(grouped, key=str.casefold):
+        cities = grouped[name]["cities"]
+        cities.sort(key=lambda city: (_city_rank(city["city"]), city["city"]))
+        rows.append({"menu_item": name, "unit": grouped[name]["unit"], "cities": cities})
+    return rows
+
+
+def _summary_city(row):
+    compared = row.get("outlets_compared")
+    with_recipe = row.get("outlets_with_recipe")
+    median_cost = row.get("city_baseline_median_cost")
+    if median_cost is None:
+        median_cost = row.get("median_cost")
+    shown = compared if compared is not None else with_recipe
+    return {
+        "city": row.get("city") or "",
+        "outlets": _whole(shown),
+        "outlets_text": _outlets_text(compared, with_recipe),
+        "typical": money_pair(median_cost),
+        "low": money_pair(row.get("min_cost")),
+        "high": money_pair(row.get("max_cost")),
+        "outlet_min": row.get("outlet_min") or "",
+        "outlet_max": row.get("outlet_max") or "",
+        "spread": pct_pair(row.get("spread_within_city_pct")),
+        "above_median_text": _highest_vs_median(row.get("max_vs_city_baseline_pct"), row.get("city") or ""),
+    }
+
+
+def _whole(value):
+    if value is None:
+        return None
+    number = float(value)
+    if number == int(number):
+        return int(number)
+    return number
+
+
+def _outlets_text(compared, with_recipe):
+    compared_n = _whole(compared)
+    with_n = _whole(with_recipe)
+    if compared_n is not None and with_n is not None and compared_n != with_n:
+        return f"{compared_n} of {with_n} outlets"
+    if compared_n is not None:
+        return f"{compared_n} outlets"
+    if with_n is not None:
+        return f"{with_n} outlets"
+    return ""
+
+
+def _within_city_recipe_rows(items):
+    """Lowest, typical, and highest stay inside one city.
+
+    Used when the summary has no city column. A network spread is not a flag.
+    Delhi is not ranked against Kolkata.
+    """
+    grouped = {}
+    units = {}
+    for item in items:
+        if not item.get("is_menu_item") or not _is_base_tab(item):
+            continue
+        cost = item.get("cost_per_unit_avg_price")
+        city = (item.get("city") or "").strip()
+        name = (item.get("menu_item") or "").strip()
+        if cost is None or not city or not name:
+            continue
+        units.setdefault(name, item.get("recipe_unit") or "")
+        grouped.setdefault(name, {}).setdefault(city, []).append(
+            {"outlet": item.get("outlet") or "", "cost": cost}
+        )
+    rows = []
+    for name in sorted(grouped, key=str.casefold):
+        cities = []
+        for city, outlets in grouped[name].items():
+            low_entry = min(outlets, key=lambda entry: (entry["cost"], entry["outlet"]))
+            high_entry = max(outlets, key=lambda entry: (entry["cost"], entry["outlet"]))
+            several = len(outlets) >= 2 and low_entry["cost"]
+            spread = percent(high_entry["cost"] - low_entry["cost"], low_entry["cost"]) if several else None
+            cities.append(
+                {
+                    "city": city,
+                    "outlets": len(outlets),
+                    "outlets_text": f"{len(outlets)} outlets" if outlets else "",
+                    "typical": money_pair(median(entry["cost"] for entry in outlets)),
+                    "low": money_pair(low_entry["cost"] if several else None),
+                    "high": money_pair(high_entry["cost"] if several else None),
+                    "outlet_min": low_entry["outlet"] if several else "",
+                    "outlet_max": high_entry["outlet"] if several else "",
+                    "spread": pct_pair(spread),
+                    "above_median_text": "",
+                }
+            )
+        cities.sort(key=lambda row: (_city_rank(row["city"]), row["city"]))
+        rows.append({"menu_item": name, "unit": units.get(name, ""), "cities": cities})
+    return rows
 
 
 def _source_kind(path):
@@ -227,6 +366,8 @@ def _item_record(
     has_unpriced=None,
     cost_status="",
     comparable=None,
+    city_baseline=None,
+    vs_city=None,
 ):
     gap = None
     if avg is not None and last is not None:
@@ -252,6 +393,9 @@ def _item_record(
         "partial": partial,
         "cost_status": cost_status,
         "comparable_for_cross_outlet": comparable,
+        "city_baseline_median_cost": city_baseline,
+        "vs_city_baseline_pct": vs_city,
+        "vs_own_city": _vs_own_city(vs_city, city),
         "selling_price": None,
         "margin": None,
         "label": RECIPE_LABEL,
@@ -290,6 +434,8 @@ def _read_menu_items(path):
                     comparable=_truthy(raw.get("comparable_for_cross_outlet"))
                     if (raw.get("comparable_for_cross_outlet") or "").strip()
                     else None,
+                    city_baseline=parse_number(raw.get("city_baseline_median_cost")),
+                    vs_city=parse_number(raw.get("vs_city_baseline_pct")),
                 )
             )
     return rows
@@ -305,17 +451,27 @@ def _read_summary(path):
             name = (raw.get("item_name") or "").strip()
             if not name:
                 continue
+            baseline = parse_number(raw.get("city_baseline_median_cost"))
+            older_median = parse_number(raw.get("median_cost_avg"))
             rows.append(
                 {
                     "item_name": name,
+                    "city": (raw.get("city") or "").strip(),
+                    "region": (raw.get("region") or "").strip(),
                     "unit": (raw.get("unit") or "").strip(),
                     "is_menu_item": _truthy(raw.get("is_menu_item")),
                     "outlets_with_recipe": parse_number(raw.get("outlets_with_recipe")),
+                    "outlets_compared": parse_number(raw.get("outlets_compared")),
+                    "outlets_excluded": parse_number(raw.get("outlets_excluded")),
+                    "outlets_fully_priced": parse_number(raw.get("outlets_fully_priced")),
+                    "city_baseline_median_cost": baseline,
                     "min_cost": parse_number(raw.get("min_cost_avg")),
-                    "median_cost": parse_number(raw.get("median_cost_avg")),
+                    "median_cost": baseline if baseline is not None else older_median,
                     "max_cost": parse_number(raw.get("max_cost_avg")),
                     "outlet_min": (raw.get("outlet_min") or "").strip(),
                     "outlet_max": (raw.get("outlet_max") or "").strip(),
+                    "spread_within_city_pct": parse_number(raw.get("spread_within_city_pct")),
+                    "max_vs_city_baseline_pct": parse_number(raw.get("max_vs_city_baseline_pct")),
                     "spread_pct": parse_number(raw.get("spread_pct")),
                 }
             )

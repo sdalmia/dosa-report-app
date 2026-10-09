@@ -22,7 +22,7 @@ from app.procurement.numbers import (
     percent,
     sum_present,
 )
-from app.procurement.recipe import recipe_section
+from app.procurement.recipe import CITY_RECIPE_NOTE, recipe_section
 
 COVER_OVER_DAYS = 15
 EXCESS_COVER_DAYS = 10
@@ -62,6 +62,7 @@ def build_food_cost(bundle):
         "hershey": _hershey(bundle),
         "wastage": _wastage(bundle),
         "recipe": recipe_section(bundle),
+        "city_recipe_note": CITY_RECIPE_NOTE,
         "unassigned": _unassigned(bundle),
         "warnings": list(bundle["warnings"]),
         "missing_grn": _missing(bundle, "grn_lines", "Goods received are not on file."),

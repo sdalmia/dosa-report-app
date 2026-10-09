@@ -26,6 +26,7 @@
   {% if missing_consumption %}<p class="empty">{{ missing_consumption }}</p>{% endif %}
   {% if missing_posist %}<p class="empty">{{ missing_posist }}</p>{% endif %}
 
+  <p class="muted">{{ city_recipe_note }}</p>
   <section id="cities" class="city-grid">
     {% for city in cities %}
     <article class="tile" id="city-{{ city.slug }}">
@@ -257,8 +258,9 @@
         <h2>Recipe cost excl. packaging</h2>
         {% call info() %}
         <p>{{ recipe.basis }}</p>
+        <p>{{ recipe.city_note }}</p>
         {% if recipe.other_outlets_missing %}<p>{{ recipe.other_outlets_missing }}</p>{% endif %}
-        <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero.</p>
+        <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero. A spread is within one city only.</p>
         {% endcall %}
       </div>
       {% if not recipe.available %}
@@ -268,24 +270,30 @@
       <p data-field="packaging-gap">{{ recipe.packaging_gap.note }}</p>
       {% endif %}
       <p class="empty" data-field="recipe-margin">{{ recipe.margin_unavailable }}</p>
-      <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
+      <p class="muted">{{ recipe.city_note }}</p>
       {% if recipe.list_kind == 'summary' %}
+      <p class="muted">{{ recipe.rows|length }} menu items. Each line is one city, measured against that city's own median.</p>
       <details>
-        <summary>Costs across outlets</summary>
+        <summary>Costs within each city</summary>
         <div class="scroll stack">
           {% for row in recipe.rows %}
           <div class="row-card">
             <b>{{ row.menu_item }}</b>
-            <p class="muted">{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
-            <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
-              · typical {{ row.typical.text }}
-              · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
-              {% if row.spread.text %} · spread {{ row.spread.text }}{% endif %}</p>
+            <p class="muted">{{ row.unit }}</p>
+            {% for city in row.cities %}
+            <p>{{ city.city }}{% if city.outlets_text %} · {{ city.outlets_text }}{% elif city.outlets %} · {{ city.outlets }} outlets{% endif %}
+              · city median <span data-field="city-median" data-city="{{ city.city }}" data-item="{{ row.menu_item }}" data-value="{{ city.typical.attr }}">{{ city.typical.text }}</span>
+              {% if city.spread.text %} · spread <span data-field="city-spread" data-city="{{ city.city }}" data-item="{{ row.menu_item }}" data-value="{{ city.spread.attr }}">{{ city.spread.text }}</span> within {{ city.city }}{% endif %}
+              {% if city.outlet_min %} · lowest {{ city.low.text }} at {{ city.outlet_min }}{% endif %}
+              {% if city.outlet_max and city.outlet_max != city.outlet_min %} · highest {{ city.high.text }} at {{ city.outlet_max }}{% endif %}
+              {% if city.above_median_text %} · {{ city.above_median_text }}{% endif %}</p>
+            {% endfor %}
           </div>
           {% endfor %}
         </div>
       </details>
       {% else %}
+      <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
       <details>
         <summary>All menu items</summary>
         <div class="scroll stack">
