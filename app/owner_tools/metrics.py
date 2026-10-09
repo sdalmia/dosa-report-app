@@ -730,7 +730,7 @@ def build_goals(feeds, goals, month, festive_on):
     stores = _stores(feeds)
     labels = [store.label for store in stores]
     assigned, warnings = _goals_for_month(goals.get("rows") or [], labels, selected) if selected else ({}, [])
-    festive = _festive_dates(feeds, selected)
+    festive = _festive_dates(feeds)
     built = []
     for store in stores:
         rows = _rows_in_month(feeds, store.label, selected) if selected else []
@@ -771,14 +771,10 @@ def build_goals(feeds, goals, month, festive_on):
                 "note": note,
             }
         )
-    if selected and festive:
+    if festive:
         festive_empty = ""
-    elif selected:
-        festive_empty = (
-            f"No Puja or Diwali wording in the drivers column of sales_pred_vs_actual.csv for {month_label(selected)}."
-        )
     else:
-        festive_empty = "sales_pred_vs_actual.csv has no driver text to highlight."
+        festive_empty = "No Puja or Diwali wording in the drivers column of sales_pred_vs_actual.csv."
     return {
         "month": selected,
         "month_label": month_label(selected) if selected else "",
@@ -795,11 +791,14 @@ def build_goals(feeds, goals, month, festive_on):
     }
 
 
-def _festive_dates(feeds, month):
+def _festive_dates(feeds):
+    """Every Puja or Diwali date named in the forecast drivers.
+
+    This is the whole file, not only the goals month, so 1 Nov stays visible
+    with the rest of the Diwali-prep run.
+    """
     found = {}
     for (_store, day), row in feeds.get("calendar", {}).items():
-        if month and month_key(day) != month:
-            continue
         driver = row.get("drivers") or ""
         low = driver.casefold()
         kinds = []
@@ -825,4 +824,6 @@ def _festive_dates(feeds, month):
 
 
 def festive_available(feeds, month):
-    return bool(_festive_dates(feeds, month))
+    if not month:
+        return bool(_festive_dates(feeds))
+    return any(day["iso"].startswith(month) for day in _festive_dates(feeds))

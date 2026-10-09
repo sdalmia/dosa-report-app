@@ -405,6 +405,7 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("no targets yet", goals)
         self.assertIn("Durga Puja peak band", goals)
         self.assertIn("Diwali-prep", goals)
+        self.assertIn("Sun 1 Nov 2026", goals)
         self.assertNotIn('role="progressbar"', goals)
         hidden = self.client.get("/goals?festive=0").get_data(as_text=True)
         self.assertNotIn("Durga Puja peak band", hidden)
