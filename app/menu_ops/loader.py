@@ -361,6 +361,7 @@ def load_sales(directory=None, posist_labels=None):
         )
         return [], warnings, []
 
+    files = _period_files(files)
     labels = list(posist_labels or [])
     names = sorted({row["store"] for entry in files for row in entry["rows"]})
     network_names = {row["store"] for entry in files if entry["kind"] == "network" for row in entry["rows"]}
@@ -382,6 +383,34 @@ def load_sales(directory=None, posist_labels=None):
             chosen.append(copied)
         used[entry["path"].name] = {"name": entry["path"].name, "columns": entry["columns"], "kind": entry["kind"]}
     return chosen, warnings, [used[name] for name in sorted(used)]
+
+
+def _period_files(files):
+    """The newest network file is the period. Older network files do not fill gaps."""
+    network = [entry for entry in files if entry["kind"] == "network"]
+    if not network:
+        return files
+    newest = max(entry["stamp"] for entry in network)
+    kept = []
+    for entry in files:
+        if entry["kind"] == "network" and entry["stamp"] != newest:
+            continue
+        if entry["kind"] == "analysis" and entry["stamp"] < newest:
+            continue
+        kept.append(entry)
+    return kept
+
+
+def coming_stores(sales_names, regions):
+    """Posist stores with no sales row. Missing is not zero."""
+    labels = list(regions or [])
+    if not labels or not sales_names:
+        return []
+    coming = []
+    for label in labels:
+        if not any(_same_store(label, name, labels) for name in sales_names):
+            coming.append(label)
+    return sorted(coming, key=str.casefold)
 
 
 def _store_clusters(names, labels):

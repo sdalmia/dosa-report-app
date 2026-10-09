@@ -13,7 +13,9 @@ os.environ["SECRET_KEY"] = "test-secret"
 from app import create_app
 from app.menu_ops.channels import build_channels, build_mix
 from app.menu_ops.engineering import build_menu
+from app.menu_ops.formatutil import format_sales
 from app.menu_ops.loader import file_stamp, load_channel_sales, load_sales
+from app.menu_ops.posist_raw import load_posist_raw
 from app.menu_ops.tickets import build_tickets
 
 IST = ZoneInfo("Asia/Kolkata")
@@ -113,6 +115,27 @@ class LoaderTests(unittest.TestCase):
             self.assertEqual(rows[0]["store"], "Ideal Plaza")
             self.assertEqual(rows[0]["period_start"].isoformat(), "2026-09-09")
             self.assertEqual(rows[0]["period_end"].isoformat(), "2026-10-08")
+
+    def test_an_older_network_file_does_not_fill_a_missing_store(self):
+        with tempfile.TemporaryDirectory() as directory:
+            _write(
+                directory,
+                "menu_mix_2026-09.csv",
+                MENU_HEADER + "Old Store,Dosa,10,1,100,2026-09-01,2026-09-30\n",
+            )
+            _write(
+                directory,
+                "menu_mix_2026-09-09_2026-10-08.csv",
+                MENU_HEADER + "New Store,Dosa,20,2,100,2026-09-09,2026-10-08\n",
+            )
+            rows, _warnings, sources = load_sales(directory)
+            self.assertEqual({row["store"] for row in rows}, {"New Store"})
+            self.assertEqual([source["name"] for source in sources], ["menu_mix_2026-09-09_2026-10-08.csv"])
+
+    def test_sales_display_has_no_paise(self):
+        self.assertEqual(format_sales(684.37), "₹684")
+        self.assertEqual(format_sales(250000), "₹2.50L")
+        self.assertNotIn(".", format_sales(684.37))
 
     def test_blank_category_column_hides_the_filter(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -239,7 +262,7 @@ class MatrixTests(unittest.TestCase):
             self.assertEqual(item["recipe_cost"], "₹0")
             self.assertEqual(item["margin"], "₹10")
 
-    def test_north_margins_are_shown_and_not_ranked_as_losing_money(self):
+    def test_cities_are_ranked_separately_and_delhi_is_not_a_recipe_problem(self):
         with tempfile.TemporaryDirectory() as menu_dir, tempfile.TemporaryDirectory() as cost_dir:
             _write(
                 menu_dir,
@@ -253,46 +276,51 @@ class MatrixTests(unittest.TestCase):
             _write(
                 cost_dir,
                 "menu_item_cost.csv",
-                "outlet,item_name,recipe_tab,region,cost_per_portion_avg,has_unpriced_ingredient,cost_status\n"
-                "Ideal Plaza,Onion Uttapam,base,East,10,False,fully_priced\n"
-                "Ideal Plaza,Plain Dosa,base,East,10,False,fully_priced\n"
-                "Connaught Place,Onion Uttapam,base,North,80,False,fully_priced\n"
-                "Connaught Place,Plain Dosa,base,North,10,False,fully_priced\n",
+                "outlet,city,item_name,recipe_tab,region,cost_per_portion_avg,city_baseline_median_cost,has_unpriced_ingredient,cost_status\n"
+                "Ideal Plaza,Kolkata,Onion Uttapam,base,East,10,24,False,fully_priced\n"
+                "Ideal Plaza,Kolkata,Plain Dosa,base,East,10,10,False,fully_priced\n"
+                "Connaught Place,Delhi NCR,Onion Uttapam,base,North,80,53,False,fully_priced\n"
+                "Connaught Place,Delhi NCR,Plain Dosa,base,North,10,10,False,fully_priced\n",
             )
             _write(
                 cost_dir,
                 "menu_item_cost_summary.csv",
-                "item_name,min_cost_avg,median_cost_avg,max_cost_avg,median_cost_east,median_cost_north\n"
-                "Onion Uttapam,10,24,80,24,53\n",
+                "city,item_name,min_cost_avg,city_baseline_median_cost,max_cost_avg\n"
+                "Kolkata,Onion Uttapam,10,24,24\n"
+                "Delhi NCR,Onion Uttapam,53,53,80\n",
             )
             east = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir, store="Ideal Plaza")
             east_by = {item["item"]: item for item in east["items"]}
             self.assertEqual(east_by["Onion Uttapam"]["margin"], "₹30")
-            self.assertFalse(east_by["Onion Uttapam"]["under_review"])
+            self.assertEqual(east_by["Onion Uttapam"]["city"], "Kolkata")
+            self.assertEqual(east_by["Onion Uttapam"]["city_median"], "₹24")
             self.assertEqual(east_by["Onion Uttapam"]["quadrant"], "star")
-            self.assertIn("coconut and chutney", east["north_review_note"])
-            self.assertIn("₹53", east["north_review_note"])
-            self.assertIn("₹24", east["north_review_note"])
+            self.assertIn("three chutneys", east["city_note"])
+            self.assertIn("₹53", east["city_note"])
+            self.assertIn("₹24", east["city_note"])
+            self.assertNotIn("under review", east["city_note"].lower())
+            self.assertNotIn("coconut", east["city_note"].lower())
 
             north = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir, store="Connaught Place")
             north_by = {item["item"]: item for item in north["items"]}
+            # Ranked against the other Delhi item, not left off the matrix.
             self.assertEqual(north_by["Onion Uttapam"]["margin"], "-₹40")
-            self.assertTrue(north_by["Onion Uttapam"]["under_review"])
-            self.assertEqual(north_by["Onion Uttapam"]["quadrant"], "")
-            self.assertTrue(north["review_only"])
+            self.assertEqual(north_by["Onion Uttapam"]["city"], "Delhi NCR")
+            self.assertEqual(north_by["Onion Uttapam"]["quadrant"], "plowhorse")
+            self.assertEqual(north_by["Plain Dosa"]["quadrant"], "star")
             self.assertEqual(north["counts"]["dog"], 0)
-            self.assertEqual(north["counts"]["plowhorse"], 0)
 
             both = build_menu(directory=menu_dir, posist=Path(menu_dir) / "missing.csv", procurement=cost_dir)
-            both_by = {item["item"]: item for item in both["items"]}
-            # Blending the Delhi cost would drop Onion Uttapam to -₹5 and a plowhorse.
-            # The rank stays on the Kolkata margin of ₹30, so it remains a star.
-            self.assertEqual(both_by["Onion Uttapam"]["margin"], "₹30")
-            self.assertEqual(both_by["Onion Uttapam"]["north_cost"], "₹80")
-            self.assertEqual(both_by["Onion Uttapam"]["north_margin"], "-₹40")
-            self.assertTrue(both_by["Onion Uttapam"]["under_review"])
-            self.assertEqual(both_by["Onion Uttapam"]["quadrant"], "star")
-            self.assertEqual(both_by["Plain Dosa"]["quadrant"], "star")
+            onions = [item for item in both["items"] if item["item"] == "Onion Uttapam"]
+            by_city = {item["city"]: item for item in onions}
+            # Blending the Delhi cost would make one Onion Uttapam margin of -₹5.
+            self.assertEqual(set(by_city), {"Kolkata", "Delhi NCR"})
+            self.assertEqual(by_city["Kolkata"]["margin"], "₹30")
+            self.assertEqual(by_city["Kolkata"]["quadrant"], "star")
+            self.assertEqual(by_city["Delhi NCR"]["margin"], "-₹40")
+            self.assertEqual(by_city["Delhi NCR"]["quadrant"], "plowhorse")
+            self.assertEqual(len(both["plots"]), 2)
+            self.assertNotIn("Recipe under review", " ".join(item["quadrant_label"] for item in both["items"]))
 
     def test_example_channel_numbers_are_not_in_the_source(self):
         text = "\n".join(
@@ -316,8 +344,10 @@ class ChannelTests(unittest.TestCase):
         faridabad = next(row for row in view["ratings"] if "Faridabad" in row["store"])
         self.assertEqual(faridabad["google"], "4")
         self.assertEqual(len(view["ratings"]), 25)
-        self.assertFalse(view["sales_present"])
-        self.assertTrue(any("Channel sales" in warning for warning in view["sales_warnings"]))
+        self.assertTrue(view["sales_present"])
+        self.assertTrue(any(card["coming"] for card in view["comparison"]))
+        self.assertTrue(any(card["mall_bulk"] for card in view["comparison"]))
+        self.assertIn("bulk mall-system", view["mall_note"])
         self.assertIn("commission", view["payout_note"].lower())
 
     def test_sales_mix_uses_gross_and_does_not_treat_a_blank_as_zero(self):
@@ -360,6 +390,81 @@ class ChannelTests(unittest.TestCase):
             daily_names = {row["channel"] for row in days["2026-10-08"]["channels"]}
             self.assertIn("Rapido", daily_names)
             self.assertIn("999", days["2026-10-08"]["channels"][0]["gross"] + days["2026-10-08"]["channels"][-1]["gross"])
+
+    def test_raw_folders_sum_menu_halves_and_keep_partial_channels_empty(self):
+        from openpyxl import Workbook
+
+        def book(path, rows):
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet.append(["Item Name", "Total Sales", "Total Orders", "% Contribution"])
+            for row in rows:
+                sheet.append(row)
+            workbook.save(path)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ideal = root / "01-0001"
+            ideal.mkdir()
+            (ideal / "store.txt").write_text("Dosa Coffee - Ideal Plaza (01/0001)\n")
+            book(ideal / "menu_items_2026-09-09_to_09-23.xlsx", [("Masala Dosa", 10, 2, 100), ("Plain Dosa", None, 1, None)])
+            book(ideal / "menu_items_2026-09-24_to_10-08.xlsx", [("Masala Dosa", 15.5, 3, 100)])
+            (ideal / "source_range_2026-09-09_to_10-08.tsv").write_text(
+                "source\tsales\torders\tapb\nPOS\t100\t10\t10\nSwiggy\t40\t5\t8\n"
+            )
+            (ideal / "source_daily_2026-10-02_to_10-08.tsv").write_text(
+                "date\tsource\tsales\torders\n2026-10-02\tPOS\t999\t1\n"
+            )
+            partial = root / "02-0013"
+            partial.mkdir()
+            book(partial / "menu_items_2026-09-09_to_09-23.xlsx", [("Idli", 5, 1, 100)])
+            labels = [
+                "Dosa Coffee - Ideal Plaza (01/0001)",
+                "Model Town (02/0013)",
+                "Pacific mall, Jasola (02/0011)",
+            ]
+            loaded = load_posist_raw(root, labels)
+            menu = {(row["store"], row["item"]): row for row in loaded["menu_rows"]}
+            masala = menu[("Dosa Coffee - Ideal Plaza (01/0001)", "Masala Dosa")]
+            self.assertEqual(masala["gross"], 25.5)
+            self.assertEqual(masala["orders"], 5)
+            self.assertEqual(masala["period_start"].isoformat(), "2026-09-09")
+            self.assertEqual(masala["period_end"].isoformat(), "2026-10-08")
+            plain = menu[("Dosa Coffee - Ideal Plaza (01/0001)", "Plain Dosa")]
+            self.assertIsNone(plain["gross"])
+            self.assertEqual(menu[("Model Town (02/0013)", "Idli")]["gross"], 5)
+            totals = [row for row in loaded["channel_rows"] if row["kind"] == "total"]
+            daily = [row for row in loaded["channel_rows"] if row["kind"] == "daily"]
+            self.assertEqual({row["store"] for row in totals}, {"Dosa Coffee - Ideal Plaza (01/0001)"})
+            self.assertEqual(daily[0]["gross"], 999)
+            self.assertNotIn("Pacific", {row["store"] for row in loaded["menu_rows"]})
+
+    def test_mall_in_store_bills_stay_out_of_the_comparison(self):
+        with tempfile.TemporaryDirectory() as directory:
+            _write(
+                directory,
+                "channel_sales_2026-09-09_2026-10-08.csv",
+                "date,period_from,period_to,store,channel,gross,orders\n"
+                ",2026-09-09,2026-10-08,Dosa Coffee - Forum (0003),POS,1000,2\n"
+                ",2026-09-09,2026-10-08,Dosa Coffee - Ideal Plaza (01/0001),POS,100,10\n"
+                ",2026-09-09,2026-10-08,Dosa Coffee - Manisquare (0004),POS,5000,4\n"
+                ",2026-09-09,2026-10-08,Dosa Coffee - Manisquare (0004),Zomato,40,5\n"
+                ",2026-09-09,2026-10-08,Kalkaji (02/0004),POS,80,8\n",
+            )
+            view = build_channels(famepilot=directory, channels=directory)
+            pos = next(row for row in view["mix"]["channels"] if row["channel"] == "POS")
+            # Gross keeps the mall stores. Bills and APB use Ideal Plaza and Kalkaji only: 180 / 18.
+            self.assertEqual(pos["gross"], "₹6,180")
+            self.assertEqual(pos["orders"], "18")
+            self.assertEqual(pos["apb"], "₹10")
+            forum = next(card for card in view["comparison"] if card["store"].endswith("(0003)"))
+            self.assertTrue(forum["mall_bulk"])
+            self.assertEqual(forum["dine_orders"], "")
+            self.assertEqual(forum["dine_apb"], "")
+            self.assertEqual(forum["dine_gross"], "₹1,000")
+            kalkaji = next(card for card in view["comparison"] if "Kalkaji" in card["store"])
+            self.assertFalse(kalkaji["mall_bulk"])
+            self.assertEqual(kalkaji["dine_orders"], "8")
 
     def test_missing_sales_file_names_the_schema(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -454,9 +559,13 @@ class PageTests(unittest.TestCase):
         self.assertIn("Gross", html)
         self.assertIn("Star", html)
         self.assertIn("excl. packaging", html)
-        self.assertIn("Recipe under review", html)
-        self.assertIn("coconut and chutney", html)
+        self.assertIn("Data coming", html)
+        self.assertIn("three chutneys", html)
+        self.assertIn("City median", html)
         self.assertIn("Masala Dosa", html)
+        self.assertNotIn("Recipe under review", html)
+        self.assertNotIn("under review", html.lower())
+        self.assertNotIn("coconut and chutney", html.lower())
         self.assertNotIn("60619", html)
         self.assertNotIn("Buttermilk - 200ml", html)
         self.assertNotIn(".csv", html)
@@ -466,6 +575,9 @@ class PageTests(unittest.TestCase):
         channels = self.client.get("/channels")
         self.assertEqual(channels.status_code, 200)
         page = channels.get_data(as_text=True)
+        self.assertIn("Delivery vs dine-in", page)
+        self.assertIn("Data coming", page)
+        self.assertIn("bulk mall-system", page)
         self.assertIn("Zomato Delivery", page)
         self.assertIn("Not a 30-day average", page)
         self.assertIn("not in yet", page)
@@ -508,8 +620,10 @@ class PageTests(unittest.TestCase):
         view = build_menu()
         self.assertTrue(view["margin_mode"])
         self.assertGreater(view["unmatched_items"], 0)
-        self.assertIn("benne sada dosa", [name.casefold() for name in view["unmatched_names"]])
         self.assertIn("packaging charge", [name.casefold() for name in view["unmatched_names"]])
+        self.assertTrue(any("Pacific" in name for name in view["coming_stores"]))
+        loaded_stores = " ".join(store for item in view["items"] for store in item["stores"])
+        self.assertNotIn("Pacific", loaded_stores)
         outlets = " ".join(view["unmatched_outlets"]).casefold()
         self.assertIn("swiming", outlets)
         self.assertIn("salt lake sec-1", outlets)
@@ -519,6 +633,15 @@ class PageTests(unittest.TestCase):
         self.assertTrue(priced)
         self.assertTrue(any(item["channel_costs"] for item in priced))
         self.assertTrue(any(item["partial"] for item in priced))
+        self.assertTrue(all(item["city"] in {"", "Kolkata"} for item in plaza["items"]))
+        onions = [item for item in view["items"] if item["item"] == "Onion Uttapam" and item["city"]]
+        self.assertEqual({item["city"] for item in onions}, {"Kolkata", "Delhi NCR"})
+        self.assertTrue(all(item["quadrant"] for item in onions))
+        self.assertNotEqual(onions[0]["margin"], onions[1]["margin"])
+        unmatched_onion = [item for item in view["items"] if item["item"] == "Onion Uttapam" and not item["city"]]
+        self.assertTrue(unmatched_onion)
+        self.assertTrue(all(not item["quadrant"] for item in unmatched_onion))
+        self.assertNotIn("under review", view["city_note"].lower())
 
     def test_login_required(self):
         with self.client.session_transaction() as sess:

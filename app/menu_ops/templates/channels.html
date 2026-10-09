@@ -52,10 +52,13 @@
 </section>
 
 <section data-empty="channel-sales">
-  <h2>Sales mix</h2>
+  <h2>Delivery vs dine-in</h2>
   <p>{{ view.pos_note }}</p>
   {% if view.sales_present %}
     {% if view.coverage_label %}<p class="meta">{{ view.coverage_label }}{% if view.period_label %}, {{ view.period_label }}{% endif %}.</p>{% elif view.period_label %}<p class="meta">{{ view.period_label }}.</p>{% endif %}
+    {% if view.coming_stores and not view.store_coming %}
+      <p class="meta" data-coming="{{ view.coming_stores|length }}">Data coming for {{ view.coming_stores|length }} {{ 'store' if view.coming_stores|length == 1 else 'stores' }}.</p>
+    {% endif %}
     {% if view.stores %}
       <form class="filters" method="get" action="{{ url_for('menu_ops.channels') }}">
         <label>Store
@@ -69,7 +72,9 @@
         <button type="submit">Apply</button>
       </form>
     {% endif %}
-    {% if view.totals_present and view.mix.channels %}
+    {% if view.store_coming %}
+      <p class="empty" data-empty="coming">Data coming. {{ view.store }} is not in this period yet. There is no zero to show.</p>
+    {% elif view.totals_present and view.mix.channels %}
       <div class="mix">
         {% for row in view.mix.channels %}
           <article class="mix-row" data-channel-name="{{ row.channel }}" data-gross="{{ row.gross }}" data-orders="{{ row.orders }}">
@@ -84,8 +89,33 @@
         {% endfor %}
       </div>
       <p class="meta">Gross total {{ view.mix.gross_total or 'Not on the report' }}. Orders total {{ view.mix.orders_total or 'Not on the report' }}.</p>
-    {% else %}
+      {% if view.mall_note %}<p class="meta" data-note="mall">{{ view.mall_note }}</p>{% endif %}
+    {% elif not view.store_coming %}
       <p class="empty">The period totals are not in yet.</p>
+    {% endif %}
+    {% if view.comparison %}
+      <div class="mix">
+        {% for card in view.comparison %}
+          <article class="mix-row" data-store="{{ card.store }}" {% if card.coming %}data-coming="1"{% endif %} {% if card.mall_bulk %}data-mall="1"{% endif %}>
+            <h3>{{ card.store }}</h3>
+            {% if card.coming %}
+              <p>Data coming</p>
+            {% else %}
+              <p>Dine-in Gross <strong data-field="dine-gross">{{ card.dine_gross or 'Not on the report' }}</strong></p>
+              {% if card.mall_bulk %}
+                <p data-note="mall-store">In-store bills include bulk mall-system entries. Bills and the average bill are not compared.</p>
+              {% else %}
+                <p>Dine-in bills <strong data-field="dine-orders">{{ card.dine_orders or 'Not on the report' }}</strong>{% if card.dine_apb %} · APB, calculated <strong data-field="dine-apb">{{ card.dine_apb }}</strong>{% endif %}</p>
+              {% endif %}
+              <p>Delivery Gross <strong data-field="delivery-gross">{{ card.delivery_gross or 'Not on the report' }}</strong></p>
+              <p>Delivery bills <strong data-field="delivery-orders">{{ card.delivery_orders or 'Not on the report' }}</strong>{% if card.delivery_apb %} · APB, calculated <strong data-field="delivery-apb">{{ card.delivery_apb }}</strong>{% endif %}</p>
+              {% for other in card.others %}
+                <p>{{ other.channel }} Gross {{ other.gross or 'Not on the report' }}, bills {{ other.orders or 'Not on the report' }}</p>
+              {% endfor %}
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
     {% endif %}
     {% if view.daily_present %}
       <h3>Daily trend</h3>

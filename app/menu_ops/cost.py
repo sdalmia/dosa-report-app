@@ -3,7 +3,7 @@
 The rows come from recipe_costs(), the same helper as
 /food-cost/recipe-cost.json. This module does not read the recipe CSVs.
 It only indexes those rows for a margin: base cost at average price,
-North flagged from the recipe region, and Ideal Plaza takeout and delivery
+the city median beside that cost, and Ideal Plaza takeout and delivery
 kept beside the item.
 """
 
@@ -25,6 +25,7 @@ def load_menu_costs(directory=None):
         "as_of": None,
         "outlets": [],
         "outlet_region": {},
+        "outlet_city": {},
         "by_outlet": {},
         "item_names": set(),
         "summary": {},
@@ -38,6 +39,7 @@ def load_menu_costs(directory=None):
     by_outlet = {}
     item_names = set()
     outlet_region = {}
+    outlet_city = {}
     channels = {}
     as_of = None
     for row in payload.get("items") or []:
@@ -54,8 +56,11 @@ def load_menu_costs(directory=None):
             as_of = stamped if as_of is None else max(as_of, stamped)
         if tab == "base":
             region = (row.get("region") or "").strip()
+            city = (row.get("city") or "").strip()
             if region:
                 outlet_region.setdefault(outlet, region)
+            if city:
+                outlet_city.setdefault(outlet, city)
             item_names.add(key)
             _keep_cost(
                 by_outlet.setdefault(outlet, {}),
@@ -66,6 +71,8 @@ def load_menu_costs(directory=None):
                     "cost": cost,
                     "partial": partial,
                     "status": row.get("cost_status") or "",
+                    "city": city,
+                    "city_median": row.get("city_baseline_median"),
                 },
             )
         elif tab in {"takeout", "delivery"} and item_key(outlet) == "ideal plaza":
@@ -76,20 +83,22 @@ def load_menu_costs(directory=None):
         if not name:
             continue
         key = item_key(name)
+        city = (row.get("city") or "").strip()
         result["summary"].setdefault(
-            key,
+            (key, city.casefold()),
             {
+                "city": city,
                 "min": row.get("min_cost"),
                 "median": row.get("median_cost"),
                 "max": row.get("max_cost"),
-                "median_east": row.get("median_east"),
-                "median_north": row.get("median_north"),
+                "spread": row.get("spread_pct"),
             },
         )
     result["by_outlet"] = by_outlet
     result["item_names"] = item_names
     result["outlets"] = sorted(by_outlet)
     result["outlet_region"] = outlet_region
+    result["outlet_city"] = outlet_city
     result["channels"] = {key: value for key, value in channels.items() if value.get("takeout") is not None or value.get("delivery") is not None}
     result["as_of"] = as_of
     result["present"] = bool(by_outlet)
@@ -127,6 +136,8 @@ def _keep_cost(slot, key, record):
             "cost": None,
             "partial": False,
             "status": record["status"],
+            "city": record.get("city") or "",
+            "city_median": None,
         }
 
 

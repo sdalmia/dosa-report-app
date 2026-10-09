@@ -9,13 +9,72 @@
   <p class="lede">Popularity is share of orders. Contribution is {% if view.margin_mode %}margin per order{% else %}share of Gross{% endif %}.</p>
 </header>
 
-{% if view.empty_sales %}
+{% if view.store_names %}
+<form class="filters" method="get" action="{{ url_for('menu_ops.menu') }}">
+  {% if view.show_category %}
+  <label>Category
+    <select name="category">
+      <option value="">All categories</option>
+      {% for name in view.category_names %}
+        <option value="{{ name }}" {% if view.category == name %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+      {% if view.has_unknown_category %}
+        <option value="{{ no_category }}" {% if view.category == no_category %}selected{% endif %}>No category</option>
+      {% endif %}
+    </select>
+  </label>
+  {% endif %}
+  <label>Region
+    <select name="region">
+      <option value="">All regions</option>
+      {% for name in view.region_names %}
+        <option value="{{ name }}" {% if view.region == name %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+      {% if view.has_unknown_region %}
+        <option value="{{ no_region }}" {% if view.region == no_region %}selected{% endif %}>Region not on file</option>
+      {% endif %}
+    </select>
+  </label>
+  <label>Store
+    <select name="store">
+      <option value="">All stores</option>
+      {% for name in view.store_names %}
+        <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Quadrant
+    <select name="quadrant">
+      <option value="">All quadrants</option>
+      {% for key, label in quadrants.items() %}
+        <option value="{{ key }}" {% if view.quadrant == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+      <option value="unclassified" {% if view.quadrant == 'unclassified' %}selected{% endif %}>Not classified</option>
+    </select>
+  </label>
+  <button type="submit">Apply</button>
+</form>
+{% endif %}
+
+{% if view.store_coming %}
+  <section class="empty" data-empty="coming">
+    <h2>Data coming</h2>
+    <p>{{ view.store }} is not in this period yet. There is no zero to show.</p>
+  </section>
+{% elif view.empty_sales %}
   <section class="empty" data-empty="sales">
     <h2>Menu sales are not in yet</h2>
     <p>Stars, plowhorses, puzzles and dogs need item Gross and orders for each store.</p>
   </section>
 {% else %}
   <p class="meta"><strong>Gross</strong>{% if view.period_label %}, {{ view.period_label }}{% endif %}{% if view.coverage_label %}. {{ view.coverage_label }}{% endif %}.</p>
+  {% if view.coming_stores %}
+    <p class="meta" data-coming="{{ view.coming_stores|length }}">Data coming for {{ view.coming_stores|length }} {{ 'store' if view.coming_stores|length == 1 else 'stores' }}.</p>
+    <details class="info">
+      <summary>Stores still to come</summary>
+      <p>{{ view.coming_stores|join(', ') }}.</p>
+    </details>
+  {% endif %}
   {% if view.margin_mode %}
     <p class="meta" data-note="margin">{{ view.margin_note }}</p>
     {% if view.unmatched_items %}
@@ -26,10 +85,10 @@
     {% if view.unmatched_outlets %}
       <p class="meta" data-unmatched-outlets="{{ view.unmatched_outlets|length }}">{{ view.unmatched_outlets|length }} outlet{{ 's' if view.unmatched_outlets|length != 1 else '' }} {{ 'are' if view.unmatched_outlets|length != 1 else 'is' }} not on the recipe list.</p>
     {% endif %}
-    {% if view.north_review_note %}
+    {% if view.city_note %}
     <details class="info">
-      <summary>Why North recipes are under review</summary>
-      <p data-note="north-review">{{ view.north_review_note }}</p>
+      <summary>Why the cities are ranked separately</summary>
+      <p data-note="city-rank">{{ view.city_note }}</p>
     </details>
     {% endif %}
     <details class="info">
@@ -46,10 +105,6 @@
     <p class="empty" data-empty="margin">{{ view.margin_note }}</p>
   {% endif %}
 
-  {% if view.review_only %}
-    <p class="meta" data-note="review-only">These margins are shown. They are not ranked while the Delhi NCR recipes are under review.</p>
-  {% endif %}
-
   <section class="quads" aria-label="Quadrant counts">
     {% for key, label in quadrants.items() %}
       <a class="quad {{ key }}" href="{{ url_for('menu_ops.menu', category=view.category, region=view.region, store=view.store, quadrant=key) }}" data-quadrant="{{ key }}" data-count="{{ view.counts[key] }}">
@@ -63,73 +118,32 @@
     </a>
   </section>
 
-  {% if view.svg %}
+  {% for plot in view.plots %}
     <section class="plot-card">
-      <h2>Popularity vs contribution</h2>
-      {{ view.svg|safe }}
-      <p class="meta">Each dot is an item in this filter. The lines are the cutoffs.</p>
+      <h2>{{ plot.title }}</h2>
+      {{ plot.svg|safe }}
+      <p class="meta">Each dot is an item in this {% if plot.city %}city{% else %}filter{% endif %}. The lines are that ranking's cutoffs.</p>
     </section>
-  {% endif %}
+  {% endfor %}
 
-  <form class="filters" method="get" action="{{ url_for('menu_ops.menu') }}">
-    {% if view.show_category %}
-    <label>Category
-      <select name="category">
-        <option value="">All categories</option>
-        {% for name in view.category_names %}
-          <option value="{{ name }}" {% if view.category == name %}selected{% endif %}>{{ name }}</option>
-        {% endfor %}
-        {% if view.has_unknown_category %}
-          <option value="{{ no_category }}" {% if view.category == no_category %}selected{% endif %}>No category</option>
-        {% endif %}
-      </select>
-    </label>
+  <p class="meta">Classified items {{ view.classified }}. Gross of those items {{ view.gross_total or 'Not on the report' }}. Orders {{ view.orders_total or 'Not on the report' }}.</p>
+  {% for cutoff in view.cutoffs %}
+    {% if cutoff.popularity is not none or cutoff.contribution is not none %}
+    <p class="meta" data-cutoff="{{ cutoff.city or 'all' }}">{% if cutoff.city %}{{ cutoff.city }}. {% endif %}{% if cutoff.popularity is not none %}Popularity line {{ cutoff.popularity_text }} of orders (70% of an equal share).{% endif %}
+      {% if cutoff.contribution is not none %}
+        {% if view.margin_mode %}Margin line {{ cutoff.contribution_text }} per order (average of classified items in this ranking).
+        {% else %}Revenue line {{ cutoff.contribution_text }} of Gross (an equal share).{% endif %}
+      {% endif %}
+    </p>
     {% endif %}
-    <label>Region
-      <select name="region">
-        <option value="">All regions</option>
-        {% for name in view.region_names %}
-          <option value="{{ name }}" {% if view.region == name %}selected{% endif %}>{{ name }}</option>
-        {% endfor %}
-        {% if view.has_unknown_region %}
-          <option value="{{ no_region }}" {% if view.region == no_region %}selected{% endif %}>Region not on file</option>
-        {% endif %}
-      </select>
-    </label>
-    <label>Store
-      <select name="store">
-        <option value="">All stores</option>
-        {% for name in view.store_names %}
-          <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
-        {% endfor %}
-      </select>
-    </label>
-    <label>Quadrant
-      <select name="quadrant">
-        <option value="">All quadrants</option>
-        {% for key, label in quadrants.items() %}
-          <option value="{{ key }}" {% if view.quadrant == key %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-        <option value="unclassified" {% if view.quadrant == 'unclassified' %}selected{% endif %}>Not classified</option>
-      </select>
-    </label>
-    <button type="submit">Apply</button>
-  </form>
-
-  <p class="meta">Classified items {{ view.classified }}. Gross of those items {{ view.gross_total or 'Not on the report' }}. Orders {{ view.orders_total or 'Not on the report' }}.
-    {% if view.cutoff.popularity is not none %}Popularity line {{ view.cutoff_popularity }} of orders (70% of an equal share).{% endif %}
-    {% if view.cutoff.contribution is not none %}
-      {% if view.margin_mode %}Margin line {{ view.cutoff_contribution }} per order (average of classified items).
-      {% else %}Revenue line {{ view.cutoff_contribution }} of Gross (an equal share).{% endif %}
-    {% endif %}
-  </p>
+  {% endfor %}
 
   <section class="item-list">
     {% for item in view['items'] %}
-      <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}">
+      <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}" {% if item.city %}data-city="{{ item.city }}"{% endif %}>
         <header>
           <h2>{{ item.item }}</h2>
-          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% elif item.under_review %}<span class="pill review">Recipe under review</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
+          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
           {% if item.partial %}<span class="pill partial">Partial</span>{% endif %}
         </header>
         <dl>
@@ -138,15 +152,14 @@
           <div><dt>Popularity</dt><dd data-field="popularity">{{ item.popularity or 'Not on the report' }}</dd></div>
           <div><dt>{% if view.margin_mode %}Margin per order{% else %}Revenue contribution{% endif %}</dt><dd data-field="contribution">{{ item.contribution or 'Not on the report' }}</dd></div>
           {% if view.margin_mode %}
-            <div><dt>{% if item.north_cost %}Kolkata cost, excl. packaging{% else %}Cost, excl. packaging{% endif %}</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
-            <div><dt>{% if item.north_margin %}Kolkata margin{% else %}Margin{% endif %}</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
-            {% if item.north_cost %}
-              <div><dt>North cost, excl. packaging</dt><dd data-field="north-cost">{{ item.north_cost }} <span class="pill review">Recipe under review</span></dd></div>
-              <div><dt>North margin</dt><dd data-field="north-margin">{{ item.north_margin or 'Not on the report' }}</dd></div>
-            {% endif %}
+            {% if item.city %}<div><dt>City</dt><dd data-field="city">{{ item.city }}</dd></div>{% endif %}
+            <div><dt>Cost, excl. packaging</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
+            <div><dt>Margin</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
+            {% if item.city_median %}<div><dt>City median</dt><dd data-field="city-median">{{ item.city_median }}</dd></div>{% endif %}
+            {% if item.vs_city %}<div><dt>Vs city median</dt><dd data-field="vs-city">{{ item.vs_city }}</dd></div>{% endif %}
             {% if item.cost_coverage %}<div><dt>Recipe coverage</dt><dd data-field="coverage">{{ item.cost_coverage }}</dd></div>{% endif %}
             {% if item.cost_min or item.cost_median or item.cost_max %}
-              <div><dt>Across outlets</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>
+              <div><dt>Within the city</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>
             {% endif %}
             {% if item.channel_costs %}
               {% if item.channel_costs.same %}

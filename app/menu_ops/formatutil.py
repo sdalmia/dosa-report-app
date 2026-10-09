@@ -27,6 +27,22 @@ def format_inr(value):
     return f"{sign}₹{body}"
 
 
+def format_sales(value):
+    """Whole rupees, or lakhs from 1 lakh up. No paise."""
+    if value is None:
+        return ""
+    number = float(value)
+    if number == 0:
+        return "₹0"
+    sign = "-" if number < 0 else ""
+    amount = abs(number)
+    if amount >= 100_000:
+        body = f"{amount / 100_000:.2f}L"
+    else:
+        body = group_indian(str(int(round(amount))))
+    return f"{sign}₹{body}"
+
+
 def format_count(value):
     if value is None:
         return ""

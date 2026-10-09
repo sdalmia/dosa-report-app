@@ -11,8 +11,10 @@ of Gross.
 from xml.sax.saxutils import escape
 
 from app.menu_ops.cost import load_menu_costs, match_outlet
-from app.menu_ops.formatutil import format_count, format_inr, format_pct, format_period, format_stamp
+from app.menu_ops.formatutil import format_count, format_inr, format_pct, format_period, format_sales, format_stamp
 from app.menu_ops.loader import (
+    _same_store,
+    coming_stores,
     is_ideal_plaza,
     item_key,
     load_categories,
@@ -39,33 +41,42 @@ MARGIN_INFO = (
     "Margin is Gross per order minus the base recipe cost per portion. "
     "The base cost leaves out packaging. A partial cost is missing at least one ingredient price, so the margin is high. "
     "Items with no exact recipe name, and outlets with no priced ingredients, stay empty. "
-    "When several outlets are included, the cost is the order-weighted average of the outlets that have a cost, "
+    "When several outlets in the same city are included, the cost is the order-weighted average of the outlets that have a cost, "
     "and the other outlets' Gross and orders are left out of that margin. "
+    "Delhi and Kolkata are not averaged together. "
     "Swiggy and Zomato at Ideal Plaza use the takeout and delivery recipe, which includes packaging. "
     "Those costs are shown beside the item and are not subtracted from this Gross, because these sales are not split by channel. "
-    "The min, median and max are across outlets priced on the same ingredient basis. They are not the margin."
+    "The lowest, city median and highest are within that city. They are not the margin."
+)
+
+CITY_RANK_NOTE = (
+    "Delhi NCR and Kolkata are ranked separately. "
+    "A cost is compared with that city's median, not with the other city. "
+    "Delhi recipes use three chutneys per dish and Kolkata uses one, so a higher Delhi cost is expected."
 )
 
 
-def _north_review_note(costs):
-    """Explain the Delhi recipe gap from the file, without ranking those margins."""
+def _city_rank_note(costs):
+    """Say why the two cities are not placed on one cost or margin scale."""
     if not costs.get("present"):
         return ""
-    regions = {str(value).strip().casefold() for value in (costs.get("outlet_region") or {}).values()}
-    if "north" not in regions:
+    cities = {str(value).strip() for value in (costs.get("outlet_city") or {}).values() if str(value).strip()}
+    if len(cities) < 2:
         return ""
-    example = (costs.get("summary") or {}).get(item_key("Onion Uttapam")) or {}
-    east = example.get("median_east")
-    north = example.get("median_north")
+    summary = costs.get("summary") or {}
+    east = _summary_median(summary, "Onion Uttapam", "Kolkata")
+    north = _summary_median(summary, "Onion Uttapam", "Delhi NCR")
     comparison = ""
     if east not in (None, 0) and north is not None:
-        comparison = f" Onion Uttapam is {format_inr(north)} in Delhi NCR and {format_inr(east)} in Kolkata."
-    return (
-        "North (Delhi NCR) recipe costs are under review. "
-        "The same dish costs more than in Kolkata because the Delhi recipes use more coconut and chutney, not because ingredient prices are higher."
-        + comparison
-        + " Those North margins are shown with a Recipe under review badge and are not used to rank an item as losing money. Kolkata margins are unchanged."
-    )
+        comparison = (
+            f" Onion Uttapam's city median is {format_inr(north)} in Delhi NCR and {format_inr(east)} in Kolkata."
+        )
+    return CITY_RANK_NOTE + comparison
+
+
+def _summary_median(summary, item, city):
+    row = summary.get((item_key(item), city.casefold())) or {}
+    return row.get("median")
 
 
 def build_menu(
@@ -99,13 +110,18 @@ def build_menu(
 
     category_names = sorted({category_map.get(item_key(row["item"]), "") for row in enriched if category_map.get(item_key(row["item"]))})
     region_names = sorted({row["region"] for row in enriched if row["region"]})
-    store_names = sorted({row["store"] for row in enriched})
+    sales_names = {row["store"] for row in enriched}
+    coming = coming_stores(sales_names, regions) if rows else []
+    if regions:
+        store_names = sorted(regions, key=str.casefold)
+    else:
+        store_names = sorted(sales_names)
     has_unknown_region = any(not row["region"] for row in enriched)
     has_unknown_category = show_category and any(not category_map.get(item_key(row["item"])) for row in enriched)
 
     filtered = []
     for row in enriched:
-        if store and row["store"] != store:
+        if store and not _same_store(row["store"], store, list(regions) or [row["store"], store]):
             continue
         if region == NO_REGION and row["region"]:
             continue
@@ -113,6 +129,12 @@ def build_menu(
             continue
         filtered.append(row)
 
+    shown_coming = list(coming)
+    if region == NO_REGION:
+        shown_coming = [name for name in coming if not regions.get(name)]
+    elif region:
+        shown_coming = [name for name in coming if (regions.get(name) or "") == region]
+    store_coming = bool(store) and any(_same_store(store, name, list(regions) or [store]) for name in coming)
     ideal_only = bool(filtered) and all(is_ideal_plaza(row["store"]) for row in filtered)
     items = _aggregate(filtered, category_map, costs, margin_mode, outlet_for_store, ideal_only)
     if show_category and category == NO_CATEGORY:
@@ -120,7 +142,7 @@ def build_menu(
     elif show_category and category:
         items = [item for item in items if item["category"] == category]
 
-    classified, cutoff = _classify(items, margin_mode)
+    classified, cutoffs = _classify(items, margin_mode)
     counts = {name: 0 for name in QUADRANT_LABELS}
     counts["unclassified"] = 0
     for item in items:
@@ -138,12 +160,13 @@ def build_menu(
     listed = sorted(
         listed,
         key=lambda item: (
-            (item["quadrant"] or "zzz"),
+            item.get("city") or "zzz",
+            item["quadrant"] or "zzz",
             -(item["gross"] if item["gross"] is not None else float("-inf")),
             item["item"].casefold(),
         ),
     )
-    points = [item for item in items if item["quadrant"]]
+    plots = _plots(items, cutoffs, margin_mode)
     unmatched_items, unmatched_names, unmatched_outlets = _unmatched(filtered, costs, outlet_for_store)
     coverage = store_coverage({row["store"] for row in enriched}, regions) if rows else None
     return {
@@ -164,18 +187,17 @@ def build_menu(
         "show_category": show_category,
         "region_names": region_names,
         "store_names": store_names,
+        "coming_stores": shown_coming,
+        "store_coming": store_coming,
         "has_unknown_region": has_unknown_region,
         "has_unknown_category": has_unknown_category,
         "matched_categories": sum(1 for key in {item_key(row["item"]) for row in enriched} if key in category_map),
-        "cutoff": cutoff,
-        "cutoff_popularity": format_pct(cutoff.get("popularity")),
-        "cutoff_contribution": format_inr(cutoff.get("contribution")) if cutoff.get("unit") == "inr" else format_pct(cutoff.get("contribution")),
+        "cutoffs": [_present_cutoff(cutoff, margin_mode) for cutoff in cutoffs],
         "counts": counts,
         "classified": len(classified),
         "items": [_present_item(item, margin_mode) for item in listed],
-        "plot_items": [_present_item(item, margin_mode) for item in points],
-        "svg": scatter_svg(points, cutoff, margin_mode),
-        "gross_total": format_inr(_known_sum(classified, "gross")),
+        "plots": plots,
+        "gross_total": format_sales(_known_sum(classified, "gross")),
         "orders_total": format_count(_known_sum(classified, "orders")),
         "empty_sales": not rows,
         "ideal_only": ideal_only and margin_mode,
@@ -184,13 +206,7 @@ def build_menu(
         "unmatched_outlets": unmatched_outlets,
         "coverage_label": _coverage_label(coverage),
         "partial_any": any(item.get("partial") for item in items),
-        "north_review_note": _north_review_note(costs) if margin_mode else "",
-        "review_only": bool(
-            margin_mode
-            and items
-            and any(item.get("under_review") for item in items)
-            and not any(item.get("ranked") for item in items)
-        ),
+        "city_note": _city_rank_note(costs) if margin_mode else "",
     }
 
 
@@ -211,21 +227,23 @@ def _category_map(rows, catalogue):
 def _aggregate(rows, categories, costs, margin_mode, outlet_for_store, ideal_only):
     grouped = {}
     for row in rows:
-        grouped.setdefault(row["item"], []).append(row)
+        city = _city_for(row["store"], outlet_for_store, costs) if margin_mode else ""
+        grouped.setdefault((row["item"], city), []).append(row)
     items = []
-    for name, group in grouped.items():
+    for (name, city), group in grouped.items():
         gross = _sum_known(group, "gross")
         orders = _sum_known(group, "orders")
         key = item_key(name)
         category = categories.get(key, "")
         regions = sorted({row["region"] for row in group if row["region"]})
-        margin = _margin_for_group(name, group, costs, outlet_for_store) if margin_mode else _empty_margin()
+        margin = _margin_for_group(name, city, group, costs, outlet_for_store) if margin_mode else _empty_margin()
         file_contribution = group[0].get("contribution_pct") if len(group) == 1 else None
-        summary = (costs.get("summary") or {}).get(key) if margin_mode else None
+        summary = _summary_for(costs, key, city) if margin_mode else None
         channels = (costs.get("channels") or {}).get(key) if ideal_only else None
         items.append(
             {
                 "item": name,
+                "city": city,
                 "gross": gross,
                 "orders": orders,
                 "category": category,
@@ -246,6 +264,26 @@ def _aggregate(rows, categories, costs, margin_mode, outlet_for_store, ideal_onl
     return items
 
 
+def _city_for(store, outlet_for_store, costs):
+    outlet = outlet_for_store.get(store)
+    if not outlet:
+        return ""
+    return str((costs.get("outlet_city") or {}).get(outlet) or "").strip()
+
+
+def _summary_for(costs, key, city):
+    summary = costs.get("summary") or {}
+    found = summary.get((key, city.casefold()))
+    if found:
+        return found
+    if city:
+        return None
+    matches = [row for (item, _row_city), row in summary.items() if item == key]
+    if len(matches) == 1:
+        return matches[0]
+    return None
+
+
 def _empty_margin():
     return {
         "unit_margin": None,
@@ -256,14 +294,12 @@ def _empty_margin():
         "item_stores_for_cost": 0,
         "margin_reason": "",
         "coverage_note": "",
-        "ranked": False,
-        "under_review": False,
-        "north_margin": None,
-        "north_cost": None,
+        "city_median": None,
+        "vs_city": None,
     }
 
 
-def _margin_for_group(name, group, costs, outlet_for_store):
+def _margin_for_group(name, city, group, costs, outlet_for_store):
     used = []
     gaps = []
     for row in group:
@@ -290,30 +326,13 @@ def _margin_for_group(name, group, costs, outlet_for_store):
             "item_stores_for_cost": store_total,
             "margin_reason": _combine_gaps(gaps),
         }
-    east_pairs = [(row, record) for row, record in used if not _is_north(record.get("outlet"), costs)]
-    north_pairs = [(row, record) for row, record in used if _is_north(record.get("outlet"), costs)]
-    east_margin, east_cost, east_partial = _weighted_margin(east_pairs)
-    north_margin, north_cost, _north_partial = _weighted_margin(north_pairs)
-    ranked = east_margin is not None
-    east_stores = len({row["store"] for row, _record in east_pairs})
-    north_stores = len({row["store"] for row, _record in north_pairs})
-    if ranked:
-        unit_margin, recipe_cost, partial = east_margin, east_cost, east_partial
-        used_stores = east_stores
-    else:
-        unit_margin, recipe_cost, partial = north_margin, north_cost, _north_partial
-        used_stores = north_stores
-    if ranked and north_pairs:
-        note = (
-            f"Margin uses {east_stores} of {store_total} stores. "
-            "North outlets are under review and are not in this rank."
-        )
-    elif north_pairs and not ranked:
-        note = "Shown, and not ranked, while this Delhi NCR recipe is under review."
-    elif used_stores != store_total:
-        note = f"Margin uses {used_stores} of {store_total} stores."
-    else:
-        note = ""
+    unit_margin, recipe_cost, partial = _weighted_margin(used)
+    used_stores = len({row["store"] for row, _record in used})
+    note = f"Margin uses {used_stores} of {store_total} stores." if used_stores != store_total else ""
+    city_median = _group_city_median(name, city, used, costs)
+    vs_city = None
+    if city_median not in (None, 0) and recipe_cost is not None:
+        vs_city = (recipe_cost - city_median) / city_median * 100.0
     return {
         "unit_margin": unit_margin,
         "recipe_cost": recipe_cost,
@@ -323,16 +342,19 @@ def _margin_for_group(name, group, costs, outlet_for_store):
         "item_stores_for_cost": store_total,
         "margin_reason": "",
         "coverage_note": note,
-        "ranked": ranked,
-        "under_review": bool(north_pairs),
-        "north_margin": north_margin if ranked else None,
-        "north_cost": north_cost if ranked else None,
+        "city_median": city_median,
+        "vs_city": vs_city,
     }
 
 
-def _is_north(outlet, costs):
-    region = str((costs.get("outlet_region") or {}).get(outlet) or "").strip().casefold()
-    return region == "north"
+def _group_city_median(name, city, used, costs):
+    summary = _summary_for(costs, item_key(name), city)
+    if summary and summary.get("median") is not None:
+        return summary["median"]
+    values = [record.get("city_median") for _row, record in used if record.get("city_median") is not None]
+    if values and all(value == values[0] for value in values):
+        return values[0]
+    return None
 
 
 def _weighted_margin(pairs):
@@ -375,33 +397,26 @@ def _known_sum(items, field):
     return float(sum(values))
 
 
-def _show_review_popularity(items):
-    """North-only rows stay off the matrix, and their order share is still shown."""
-    review = [
-        item
-        for item in items
-        if item.get("under_review") and not item.get("ranked") and item.get("orders") not in (None, 0)
-    ]
-    order_total = sum(item["orders"] for item in review)
-    if not order_total:
-        return
-    for item in review:
-        item["popularity"] = item["orders"] / order_total * 100.0
-        if item.get("unit_margin") is not None:
-            item["contribution"] = item["unit_margin"]
-
-
 def _classify(items, margin_mode):
+    """Rank each city on its own. A blank city is its own group, not mixed in."""
+    buckets = {}
+    for item in items:
+        buckets.setdefault(item.get("city") or "", []).append(item)
+    classified = []
+    cutoffs = []
+    for city in sorted(buckets, key=lambda name: (name == "", name.casefold())):
+        done, cutoff = _classify_city(buckets[city], margin_mode)
+        classified.extend(done)
+        cutoff["city"] = city
+        cutoffs.append(cutoff)
+    return classified, cutoffs
+
+
+def _classify_city(items, margin_mode):
     classified = []
     for item in items:
         if item["orders"] is None:
             item["reason"] = "Orders are missing, so popularity is empty."
-            continue
-        if margin_mode and item.get("under_review") and not item.get("ranked"):
-            if item["unit_margin"] is None:
-                item["reason"] = item.get("margin_reason") or "Margin is empty."
-            else:
-                item["contribution"] = item["unit_margin"]
             continue
         if margin_mode:
             if item["unit_margin"] is None:
@@ -412,8 +427,7 @@ def _classify(items, margin_mode):
             continue
         classified.append(item)
 
-    _show_review_popularity(items)
-    cutoff = {"popularity": None, "contribution": None, "unit": "percent"}
+    cutoff = {"popularity": None, "contribution": None, "unit": "percent", "city": ""}
     if not classified:
         return classified, cutoff
     count = len(classified)
@@ -455,6 +469,36 @@ def _classify(items, margin_mode):
         else:
             item["quadrant"] = "dog"
     return classified, cutoff
+
+
+def _plots(items, cutoffs, margin_mode):
+    plots = []
+    for cutoff in cutoffs:
+        city = cutoff.get("city") or ""
+        points = [item for item in items if item["quadrant"] and (item.get("city") or "") == city]
+        svg = scatter_svg(points, cutoff, margin_mode)
+        if not svg:
+            continue
+        title = "Popularity vs contribution"
+        if city:
+            title = f"{title} · {city}"
+        plots.append({"city": city, "title": title, "svg": svg})
+    return plots
+
+
+def _present_cutoff(cutoff, margin_mode):
+    contribution = cutoff.get("contribution")
+    if margin_mode:
+        contribution_text = format_inr(contribution)
+    else:
+        contribution_text = format_pct(contribution)
+    return {
+        "city": cutoff.get("city") or "",
+        "popularity": cutoff.get("popularity"),
+        "contribution": contribution,
+        "popularity_text": format_pct(cutoff.get("popularity")),
+        "contribution_text": contribution_text,
+    }
 
 
 def _unmatched(rows, costs, outlet_for_store):
@@ -510,19 +554,18 @@ def _present_item(item, margin_mode):
     summary = item.get("summary") or {}
     return {
         "item": item["item"],
+        "city": item.get("city") or "",
         "quadrant": item["quadrant"],
         "quadrant_label": QUADRANT_LABELS.get(item["quadrant"], ""),
-        "gross": format_inr(item["gross"]),
+        "gross": format_sales(item["gross"]),
         "orders": format_count(item["orders"]),
         "popularity": format_pct(item["popularity"]),
         "contribution": contribution,
         "margin": format_inr(item["unit_margin"]),
         "recipe_cost": format_inr(item["recipe_cost"]),
         "partial": bool(item.get("partial")),
-        "under_review": bool(item.get("under_review")),
-        "ranked": bool(item.get("ranked")),
-        "north_margin": format_inr(item.get("north_margin")),
-        "north_cost": format_inr(item.get("north_cost")),
+        "city_median": format_inr(item.get("city_median")) if item.get("city_median") is not None else "",
+        "vs_city": format_pct(item.get("vs_city")) if item.get("vs_city") is not None else "",
         "cost_coverage": item.get("cost_coverage") or "",
         "coverage_note": item.get("coverage_note") or "",
         "file_contribution": format_pct(item["file_contribution"]),

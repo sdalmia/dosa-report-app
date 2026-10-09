@@ -133,6 +133,7 @@ def recipe_section(bundle):
         payload["rows"] = [
             {
                 "menu_item": row["item_name"],
+                "city": row.get("city") or "",
                 "unit": row["unit"],
                 "low": money_pair(row["min_cost"]),
                 "typical": money_pair(row["median_cost"]),
@@ -144,7 +145,7 @@ def recipe_section(bundle):
             }
             for row in menu_summary
         ]
-        payload["rows"].sort(key=lambda row: row["menu_item"].casefold())
+        payload["rows"].sort(key=lambda row: (row["city"].casefold(), row["menu_item"].casefold()))
     else:
         payload["list_kind"] = "items"
         rows = []
@@ -229,6 +230,8 @@ def _item_record(
     comparable=None,
     region="",
     as_of="",
+    city_baseline=None,
+    vs_city_baseline=None,
 ):
     gap = None
     if avg is not None and last is not None:
@@ -259,6 +262,8 @@ def _item_record(
         "label": RECIPE_LABEL,
         "region": region,
         "as_of": as_of,
+        "city_baseline_median": city_baseline,
+        "vs_city_baseline_pct": vs_city_baseline,
     }
 
 
@@ -296,6 +301,8 @@ def _read_menu_items(path):
                     else None,
                     region=(raw.get("region") or "").strip(),
                     as_of=(raw.get("as_of") or "").strip(),
+                    city_baseline=parse_number(raw.get("city_baseline_median_cost")),
+                    vs_city_baseline=parse_number(raw.get("vs_city_baseline_pct")),
                 )
             )
     return rows
@@ -311,20 +318,28 @@ def _read_summary(path):
             name = (raw.get("item_name") or "").strip()
             if not name:
                 continue
+            median = parse_number(raw.get("city_baseline_median_cost"))
+            if median is None:
+                median = parse_number(raw.get("median_cost_avg"))
+            spread = parse_number(raw.get("spread_within_city_pct"))
+            if spread is None:
+                spread = parse_number(raw.get("spread_pct"))
             rows.append(
                 {
+                    "city": (raw.get("city") or "").strip(),
+                    "region": (raw.get("region") or "").strip(),
                     "item_name": name,
                     "unit": (raw.get("unit") or "").strip(),
                     "is_menu_item": _truthy(raw.get("is_menu_item")),
                     "outlets_with_recipe": parse_number(raw.get("outlets_with_recipe")),
+                    "outlets_compared": parse_number(raw.get("outlets_compared")),
                     "min_cost": parse_number(raw.get("min_cost_avg")),
-                    "median_cost": parse_number(raw.get("median_cost_avg")),
+                    "median_cost": median,
                     "max_cost": parse_number(raw.get("max_cost_avg")),
                     "outlet_min": (raw.get("outlet_min") or "").strip(),
                     "outlet_max": (raw.get("outlet_max") or "").strip(),
-                    "spread_pct": parse_number(raw.get("spread_pct")),
-                    "median_east": parse_number(raw.get("median_cost_east")),
-                    "median_north": parse_number(raw.get("median_cost_north")),
+                    "spread_pct": spread,
+                    "max_vs_city_baseline_pct": parse_number(raw.get("max_vs_city_baseline_pct")),
                 }
             )
     return rows
