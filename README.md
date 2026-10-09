@@ -56,7 +56,10 @@ FLASK_ENV=development
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 SECRET_KEY=your_flask_secret_key
+OWNER_EMAILS=siddhant@dalgreenfoods.com,dalmia.siddhant@gmail.com
 ```
+
+`OWNER_EMAILS` is a comma-separated list of Google sign-in emails. Set it in Render. When it is missing or blank, the app uses `siddhant@dalgreenfoods.com` and `dalmia.siddhant@gmail.com`. Those accounts can see flags with area `accounts` or `people`, and any future accounts or HR page. Every other signed-in user does not receive those rows in the dashboard, on `/flags`, or in `/flags.json`.
 
 > Need help automating this? Let me know.
 

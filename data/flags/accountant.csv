@@ -1,0 +1,6 @@
+area,severity,title,detail,owner,as_of,source
+accounts,red,07-10 salary run (~₹1 Cr) not yet in Tally,"Bank shows staff payouts ~₹62L Kol, ₹32L Delhi, ₹6L UP + ₹58L inter-account transfers; none in day books",Shilajit,2026-10-09,HDFC/Karnataka bank statements 07-10 vs Tally day books
+accounts,red,₹8.76L to director's personal HDFC booked as inter-company,"Karnataka Bank 310001 NEFT ₹8,76,003.97 on 01-10; Haryana books show it as payment to Dalgreen Kolkata (Vch 43) — explanation asked",Shilajit / Siddhant,2026-10-09,Karnataka Bank 310001 statement 01-10 + Haryana day book
+accounts,amber,Delhi and UP bank balances thin after salaries,"08-10 close: HDFC Delhi ₹80,508, UP ₹58,325 (were ₹6.7K and ₹1.5K on 07-10)",Shilajit,2026-10-09,HDFC statements 08-10
+accounts,amber,₹4.16L of bank entries not booked or unclear,"SK Yeamin Aktar ₹18,810 + ₹71,280 from HDFC 9944 (01-10) not in Kolkata books; PMVBRY credit ₹3,25,694 (02-10) booking unclear",Shilajit,2026-10-09,HDFC 9944 and 4035 statements vs day books
+accounts,amber,Possible duplicate entries awaiting answer,"Kolkata Santoshpur rent ₹48,623 twice (05-10); ₹12,612 as repairs and advance; Delhi Rohini rent ₹1,13,832 on 01-10 and 03-10",Shilajit,2026-10-09,Tally day books

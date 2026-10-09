@@ -1,6 +1,16 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, jsonify, render_template, request, session
 from functools import wraps
 from flask import redirect, url_for
+
+from app.access import signed_in_email
+from app.flags import (
+    flag_files_present,
+    flag_public_dict,
+    group_flags,
+    load_flag_rows,
+    visible_flags,
+)
+from app.owner_dashboard import build_owner_dashboard
 
 main_bp = Blueprint('main', __name__)
 
@@ -27,10 +37,78 @@ def login_required(f):
 def home():
     return render_template('home.html')
 
+def _flag_view():
+    email = signed_in_email()
+    loaded = flag_files_present()
+    visible = visible_flags(load_flag_rows(), email) if loaded else []
+    if not loaded:
+        state = "missing"
+    elif visible:
+        state = "ready"
+    else:
+        state = "empty"
+    return visible, state
+
+
+def _dashboard_view():
+    region = (request.args.get("region") or "").strip()
+    if region not in {"", "East", "North"}:
+        region = ""
+    low_only = (request.args.get("low") or "").strip() == "1"
+    return build_owner_dashboard(region=region, low_only=low_only), region, low_only
+
+
 @main_bp.route('/dashboard')
 @login_required
 def dashboard():
-    print("Hi we are inside dashboard()")
-    user_info = session.get('user')
-    return render_template('dashboard.html', user_name=user_info['name'])
+    user_info = session.get('user') or {}
+    view, _region, _low_only = _dashboard_view()
+    flags, flag_state = _flag_view()
+    return render_template(
+        'dashboard.html',
+        user_name=user_info.get('name') or "",
+        flags=flags[:5],
+        flag_count=len(flags),
+        flag_state=flag_state,
+        **view,
+    )
+
+
+@main_bp.route("/stores")
+@login_required
+def stores_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("stores.html", **view)
+
+
+@main_bp.route("/attention")
+@login_required
+def attention_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("attention.html", alerts=view["alerts"], window_subtitle=view["window_subtitle"])
+
+
+@main_bp.route("/procurement")
+@login_required
+def procurement_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("procurement.html", procurement=view["procurement"])
+
+
+@main_bp.route("/flags")
+@login_required
+def flags_page():
+    flags, flag_state = _flag_view()
+    return render_template(
+        "flags.html",
+        groups=group_flags(flags),
+        flag_state=flag_state,
+    )
+
+
+@main_bp.route("/flags.json")
+@login_required
+def flags_json():
+    flags, _state = _flag_view()
+    return jsonify({"flags": [flag_public_dict(row) for row in flags]})
 

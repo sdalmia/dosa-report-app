@@ -166,15 +166,15 @@ class StoreHealthTests(unittest.TestCase):
             reader = csv.DictReader(handle)
             self.assertEqual(tuple(reader.fieldnames), CALENDAR_COLUMNS)
             calendar_rows = list(reader)
-            self.assertEqual(len(calendar_rows), 990)
+            self.assertEqual(len(calendar_rows), 1452)
             self.assertEqual(len({row["store"] for row in calendar_rows}), 33)
             self.assertEqual(min(row["date"] for row in calendar_rows), "2026-10-03")
-            self.assertEqual(max(row["date"] for row in calendar_rows), "2026-11-01")
+            self.assertEqual(max(row["date"] for row in calendar_rows), "2026-11-15")
             self.assertTrue(all(row["actual_net"] == "" for row in calendar_rows))
             self.assertTrue(all(row["variance_vs_mid"] == "" for row in calendar_rows))
             self.assertTrue(all(row["variance_pct"] == "" for row in calendar_rows))
-            self.assertEqual(sum(1 for row in calendar_rows if row["pred_mid"]), 900)
-            self.assertEqual(sum(1 for row in calendar_rows if row["status"] == "not_on_deployment_report"), 90)
+            self.assertEqual(sum(1 for row in calendar_rows if row["pred_mid"]), 1320)
+            self.assertEqual(sum(1 for row in calendar_rows if row["status"] == "not_on_deployment_report"), 132)
 
     def test_login_required(self):
         anon = self.app.test_client()
@@ -572,7 +572,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertIn('data-posist-state="ready"', html)
         self.assertIn('data-calendar-state="ready"', html)
         self.assertEqual(cell(html, "posist_newest_date"), "8 Oct 2026")
-        self.assertEqual(cell(html, "calendar_newest_date"), "1 Nov 2026")
+        self.assertEqual(cell(html, "calendar_newest_date"), "15 Nov 2026")
         self.assertRegex(cell(html, "posist_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
         self.assertRegex(cell(html, "calendar_saved_at"), r"\d{1,2} [A-Z][a-z]{2} \d{4}, \d{1,2}:\d{2} (am|pm) IST")
         self.assertRegex(html, r'<option value=""[^>]*selected')
@@ -767,7 +767,7 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn('data-field="reelo_newest_date"', index)
         self.assertNotIn('data-field="famepilot_newest_date"', index)
         self.assertEqual(cell(index, "posist_newest_date"), "8 Oct 2026")
-        self.assertEqual(cell(index, "calendar_newest_date"), "1 Nov 2026")
+        self.assertEqual(cell(index, "calendar_newest_date"), "15 Nov 2026")
 
         def open_store(label):
             slug = self._option_slug(index, label)

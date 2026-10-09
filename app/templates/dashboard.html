@@ -1,165 +1,187 @@
 {% extends "base.html" %}
-
-{% block title %}Dashboard - Dosa Coffee{% endblock %}
-
+{% block title %}Command Centre - Dosa Coffee{% endblock %}
 {% block content %}
-<div class="container mt-5">
-  <h1 class="text-center mb-5 text-light">Command Centre</h1>
-
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <!-- Store Health -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-shop me-3 fs-2 text-light"></i>
-            <h5 class="card-title mb-0">Store Health</h5>
-          </div>
-          <p class="card-text">One page per store for Posist sales, mystery audit, staff, Famepilot, Reelo, insights, and the predicted band versus Actual Gross.</p>
-          <a href="{{ url_for('store_health.page') }}" class="btn btn-light btn-sm">Open Tool</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Zomato Uploader -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-upload me-3 fs-2 text-primary"></i>
-            <h5 class="card-title mb-0">Zomato Settlement Uploader</h5>
-          </div>
-          <p class="card-text">Upload multiple settlement Excel files and receive a master payout report.</p>
-          <a href="{{ url_for('uploader.upload_index') }}" class="btn btn-primary btn-sm">Open Tool</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ingredient Tracker -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-basket-fill me-3 fs-2 text-success"></i>
-            <h5 class="card-title mb-0">Ingredient Price Tracker</h5>
-          </div>
-          <p class="card-text">Track ingredient trends over time.</p>
-          <a href="{{ url_for('ingredient_tracker.dashboard') }}" class="btn btn-success btn-sm">Open Tool</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Location Tool -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-geo-alt-fill me-3 fs-2 text-info"></i>
-            <h5 class="card-title mb-0">Location Finder</h5>
-          </div>
-          <p class="card-text">Score a site for a new restaurant, see which brands already fit, or map one brand across a city.</p>
-          <a href="{{ url_for('location_finder.location_finder') }}" class="btn btn-info btn-sm">Open Tool</a>
-        </div>
-      </div>
-    </div>
-    <!-- Trello -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-kanban-fill me-3 fs-2 text-info"></i>
-            <h5 class="card-title mb-0">Trello</h5>
-          </div>
-          <p class="card-text">Organize team tasks, workflows, and project timelines visually with Trello.</p>
-          <a href="https://trello.com/" target="_blank" class="btn btn-info btn-sm">Go to Trello</a>
-        </div>
-      </div>
-    </div>
-
-     <!-- Buzzready -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-bell-fill me-3 fs-2 text-primary"></i>
-            <h5 class="card-title mb-0">Buzzready</h5>
-          </div>
-          <p class="card-text">Digital Buzzer System enables restaurants to notify their customers when their order is ready</p>
-          <a href="https://www.buzzready.app/" target="_blank" class="btn btn-primary btn-sm">Go to Buzzready</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Keka -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-people-fill me-3 fs-2 text-warning"></i>
-            <h5 class="card-title mb-0">Keka</h5>
-          </div>
-          <p class="card-text">Manage payroll, attendance, and employee performance with Keka HR software.</p>
-          <a href="https://www.keka.com/" target="_blank" class="btn btn-warning btn-sm">Go to Keka</a>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Posist Insights -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-graph-up-arrow me-3 fs-2 text-warning"></i>
-            <h5 class="card-title mb-0">Insights</h5>
-          </div>
-          <p class="card-text">Log in to Posist Insights to access performance analytics and dashboards.</p>
-          <a href="https://insights.posist.co/login" target="_blank" class="btn btn-warning btn-sm">Go to Insights</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Posist -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-box me-3 fs-2 text-success"></i>
-            <h5 class="card-title mb-0">Posist</h5>
-          </div>
-          <p class="card-text">Manage restaurant operations and billing through Posist platform.</p>
-          <a href="https://dosacoffee.posist.biz/login" target="_blank" class="btn btn-success btn-sm">Go to Posist</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Fame Pilot -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-megaphone-fill me-3 fs-2 text-danger"></i>
-            <h5 class="card-title mb-0">Fame Pilot</h5>
-          </div>
-          <p class="card-text">Handle online reputation and customer feedback with Fame Pilot.</p>
-          <a href="https://famepilot.com/" target="_blank" class="btn btn-danger btn-sm">Go to Fame Pilot</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Reelo -->
-    <div class="col">
-      <div class="card bg-dark text-light h-100 border-secondary shadow-sm">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-stars me-3 fs-2 text-primary"></i>
-            <h5 class="card-title mb-0">Reelo</h5>
-          </div>
-          <p class="card-text">Automate customer loyalty and engagement through Reelo’s CRM tools.</p>
-          <a href="https://app.reelo.io/" target="_blank" class="btn btn-primary btn-sm">Go to Reelo</a>
-        </div>
-      </div>
-    </div>
+<div class="cc-home">
+<section class="cc-section" id="red-flags" aria-labelledby="flags-title">
+  <div class="section-head">
+    <h2 id="flags-title">Red flags</h2>
+    {% if flag_count %}
+      <a href="{{ url_for('main.flags_page') }}">See all</a>
+    {% endif %}
   </div>
+  {% if flag_state == "missing" %}
+    <p class="empty">No flags to show</p>
+  {% elif not flags %}
+    <p class="empty">No flags to show</p>
+  {% else %}
+    <div class="flag-row">
+      {% for flag in flags %}
+        <a class="flag-card sev-{{ flag.severity }}" href="{{ url_for('main.flags_page') }}#area-{{ flag.area }}">
+          <span class="flag-kicker"><i class="bi {{ flag.icon }}" aria-hidden="true"></i> {{ flag.label }}</span>
+          <strong>{{ flag.title }}</strong>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+<section class="cc-section" id="kpis" aria-label="Window sales">
+  <div class="section-head">
+    <h2>This window</h2>
+    {% if window_note %}
+      <details class="info-note">
+        <summary aria-label="About this window">ⓘ</summary>
+        <p>{{ window_note }}</p>
+      </details>
+    {% endif %}
+  </div>
+  {% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
+  {% if not regions %}
+    <p class="empty">No data</p>
+  {% else %}
+    <div class="kpi-grid">
+      {% for key, title in (("gross", "Gross"), ("bills", "Bills"), ("apb", "APB")) %}
+        <article class="kpi-card">
+          <h3>{{ title }}</h3>
+          <p class="kpi-value">{% if regions[0][key] %}{{ regions[0][key] }}{% else %}no data{% endif %}</p>
+          <div class="kpi-chips">
+            {% for region in regions %}
+              <span>{{ region.label }} <b class="{% if region[key ~ '_change'].startswith('-') %}chg-down{% elif region[key ~ '_change'].startswith('+') %}chg-up{% endif %}">{% if region[key ~ '_change'] %}{{ region[key ~ '_change'] }}{% else %}–{% endif %}</b></span>
+            {% endfor %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+<section class="cc-section" id="alerts" aria-labelledby="alerts-title">
+  <div class="section-head">
+    <h2 id="alerts-title">Needs attention</h2>
+    {% if alerts|length > 5 %}
+      <a href="{{ url_for('main.attention_page') }}">See all</a>
+    {% endif %}
+  </div>
+  {% if not alerts %}
+    <p class="empty">Nothing needs attention</p>
+  {% else %}
+    <div class="alert-list">
+      {% for alert in alerts[:5] %}
+        <article class="alert-row"><strong>{{ alert.kind }}.</strong> {{ alert.text }}</article>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+<section class="cc-section" id="trend" aria-labelledby="trend-title">
+  <div class="section-head">
+    <h2 id="trend-title">Daily gross</h2>
+    {% if chart_note %}
+      <details class="info-note">
+        <summary aria-label="About the chart">ⓘ</summary>
+        <p>{{ chart_note }}</p>
+      </details>
+    {% endif %}
+  </div>
+  {% if chart.svg %}
+    <div class="chart-wrap panel">{{ chart.svg }}</div>
+  {% else %}
+    <p class="empty">No data</p>
+  {% endif %}
+</section>
+
+<section class="cc-section" id="next-days" aria-labelledby="next-title">
+  <div class="section-head">
+    <h2 id="next-title">Next 7 days</h2>
+    <details class="info-note">
+      <summary aria-label="About the next 7 days">ⓘ</summary>
+      <p>Each day shows the shared day type. A day that differs by store says Varies.</p>
+    </details>
+  </div>
+  <div class="day-row">
+    {% for day in next_days[:7] %}
+      <article class="day-chip{% if day.tier %} tier-{{ day.tier|lower|replace(' / ', '-')|replace(' ', '-') }}{% endif %}">
+        <strong>{{ day.weekday }}</strong>
+        <span>{{ day.label.split(' ')[0] }} {{ day.label.split(' ')[1] }}</span>
+        <span class="day-tier">{% if day.tier %}{{ day.tier }}{% else %}–{% endif %}</span>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="cc-section" id="reputation" aria-labelledby="rep-title">
+  <div class="section-head">
+    <h2 id="rep-title">Reputation</h2>
+    <details class="info-note">
+      <summary aria-label="About reputation">ⓘ</summary>
+      <p>{{ reputation.rating_note }} {{ reputation.period }}</p>
+      {% if reelo.not_in_reelo %}<p>{{ reelo.not_in_reelo }} stores are not in Reelo. Those stores are left out, not counted as zero.</p>{% endif %}
+      {% if reputation.worst %}
+        <ul>
+          {% for store in reputation.worst %}
+            <li>{{ store.label }} {{ store.rating }} from {{ store.reviews }} reviews</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </details>
+  </div>
+  <article class="tile rep-compact">
+    <p class="kpi-value">{% if reputation.rating %}{{ reputation.rating }}{% else %}no data{% endif %}</p>
+    <p class="rep-line">Reviews {% if reputation.reviews %}{{ reputation.reviews }}{% else %}no data{% endif %} · Visits {% if reelo.visits %}{{ reelo.visits }}{% else %}no data{% endif %} · Rewards {% if reelo.redeemed %}{{ reelo.redeemed }}{% else %}no data{% endif %}</p>
+  </article>
+</section>
+
+<section class="cc-section" id="league" aria-labelledby="league-title">
+  <div class="section-head">
+    <h2 id="league-title">Stores</h2>
+    <a href="{{ url_for('main.stores_page') }}">See all stores</a>
+  </div>
+  {% if not league %}
+    <p class="empty">No data</p>
+  {% else %}
+    <div class="league-list">
+      {% for store in league_top %}
+        <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
+          <span class="rank">{{ store.rank }}</span>
+          <strong>{{ store.label }}</strong>
+          <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
+        </a>
+      {% endfor %}
+      {% if league_bottom %}
+        <p class="league-split">Bottom</p>
+        {% for store in league_bottom %}
+          <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
+            <span class="rank">{{ store.rank }}</span>
+            <strong>{{ store.label }}</strong>
+            <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+
+<section class="cc-section" id="procurement" aria-labelledby="buy-title">
+  <div class="section-head">
+    <h2 id="buy-title">Procurement</h2>
+    <a href="{{ url_for('main.procurement_page') }}">See procurement</a>
+  </div>
+  <div class="tile-grid">
+    {% for tile in procurement[:3] %}
+      <article class="tile">
+        <h3>{{ tile.title }}</h3>
+        {% if tile.period %}<p class="source-line">{{ tile.period }}</p>{% endif %}
+        {% if tile.note %}<p class="empty">{{ tile.note }}</p>{% endif %}
+        {% if tile.lines %}
+          <ul>
+            {% for line in tile.lines[:3] %}
+              <li><span>{{ line.label }}</span>{% if line.value %}<b>{{ line.value }}</b>{% endif %}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
 </div>
 {% endblock %}

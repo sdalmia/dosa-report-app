@@ -48,6 +48,7 @@ TIER_BORDER_CLASS = {
     "Holiday": "tier-holiday",
     "Weekend": "tier-weekend",
     "Working weekday": "tier-working-weekday",
+    "Festive": "tier-festive",
 }
 
 KEKA_CAVEAT = (
