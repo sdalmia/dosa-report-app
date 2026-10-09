@@ -1,4 +1,3 @@
 area,severity,title,detail,owner,as_of,source
 sales,red,North ticket size slipping: net −7.6% while bills +2.2%,"Thu 8 Oct vs Thu 1 Oct North net ₹6.38L vs ₹6.90L; Rohini Sec-7, Kalkaji, Model Town bills up but gross down; Delhi dry, so not weather",Sanjoy / Subhra (Ops),2026-10-09,Posist Insights closed cards + Deployments List 8 vs 1 Oct
 sales,amber,"Soft stores: Faridabad −36%, Paschim Vihar −32%, Santoshpur −30%","Gross Thu 8 Oct vs Thu 1 Oct; also Gurgaon Sec 10 −27%, Forum −26%, Jasola −26%, Sec 18 Noida −25%",Sanjoy / Subhra (Ops),2026-10-09,Posist Insights Deployments List 8 vs 1 Oct (gross)
-tech,amber,Posist Restroworks login signed out: stock entry relies on Procurement files,dosacoffee.restroworks.biz; Siddhant to sign in on Tony 1:1,Siddhant,2026-10-09,Box browser login check

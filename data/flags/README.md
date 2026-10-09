@@ -29,7 +29,7 @@ area,severity,title,detail,owner,as_of,source
 - `as_of`: `YYYY-MM-DD`. A flag older than 7 days is hidden.
 - `source`: where the line came from.
 
-A row with a bad severity, a missing title, or a date that cannot be read is skipped and logged. The rest of the file still loads.
+A row with a bad severity, a missing title, or a date that cannot be read is skipped and logged. The rest of the file still loads. A file that is only the header, or is empty, adds no rows and does not error. `alfred.csv` is header-only when there is no tech flag.
 
 ## Who can see them
 

@@ -55,7 +55,13 @@ class FlagAccessTests(unittest.TestCase):
         tony = (FLAGS / "tony.csv").read_text(encoding="utf-8")
         self.assertTrue(tony.startswith("area,severity,title,detail,owner,as_of,source"))
         self.assertIn("North ticket size slipping", tony)
-        self.assertIn("marketing,red,WhatsApp Utility credits", (FLAGS / "logan.csv").read_text(encoding="utf-8"))
+        self.assertNotIn("Restroworks login", tony)
+        logan = (FLAGS / "logan.csv").read_text(encoding="utf-8")
+        self.assertNotIn("WhatsApp", logan)
+        self.assertNotIn("Reelo", logan)
+        alfred = (FLAGS / "alfred.csv").read_text(encoding="utf-8")
+        self.assertEqual(alfred.strip(), "area,severity,title,detail,owner,as_of,source")
+        self.assertNotIn("Batcave", alfred)
 
     def test_default_owners_and_override(self):
         self.assertEqual(
@@ -73,22 +79,25 @@ class FlagAccessTests(unittest.TestCase):
         rows = load_flag_rows(FLAGS, today=date(2026, 10, 9))
         visible = visible_flags(rows, "siddhant@dalgreenfoods.com")
         titles = " ".join(row["title"] for row in visible)
-        self.assertIn("WhatsApp Utility credits", titles)
+        self.assertNotIn("WhatsApp", titles)
+        self.assertNotIn("Batcave", titles)
+        self.assertNotIn("Restroworks login", titles)
         self.assertIn("Staff are not using Frontlyne", titles)
         self.assertIn("07-10 salary run", titles)
+        self.assertIn("North ticket size slipping", titles)
         areas = {row["area"] for row in visible}
-        self.assertIn("marketing", areas)
         self.assertIn("people", areas)
         self.assertIn("accounts", areas)
+        self.assertNotIn("alfred.csv", {row["file"] for row in visible})
         self._login("dalmia.siddhant@gmail.com")
         html = self.client.get("/flags").get_data(as_text=True)
         payload = self.client.get("/flags.json").get_json()
         blob = html + " ".join(item["title"] for item in payload["flags"])
         for bit in RESTRICTED_BITS:
             self.assertIn(bit, blob)
-        self.assertIn('id="area-marketing"', html)
         self.assertIn('id="area-people"', html)
-        self.assertIn("WhatsApp Utility credits", html)
+        self.assertNotIn("Batcave", html)
+        self.assertNotIn("WhatsApp", html)
 
     def test_non_owner_does_not_receive_accounts_or_people(self):
         self._login("asha@dosacoffee.com")
@@ -104,12 +113,15 @@ class FlagAccessTests(unittest.TestCase):
         for bit in RESTRICTED_BITS:
             self.assertNotIn(bit, html)
             self.assertNotIn(bit, titles)
-        self.assertIn("WhatsApp Utility credits", html)
-        self.assertIn("WhatsApp Utility credits", titles)
+        self.assertIn("North ticket size slipping", html)
+        self.assertIn("North ticket size slipping", titles)
+        self.assertNotIn("WhatsApp", html)
+        self.assertNotIn("Batcave", html)
+        self.assertNotIn("Restroworks login", html)
         self.assertNotIn("accounts", areas)
         self.assertNotIn("people", areas)
-        self.assertIn("marketing", areas)
-        self.assertEqual(html.count('class="flag-card'), 5)
+        self.assertIn("sales", areas)
+        self.assertEqual(page.get_data(as_text=True).count('class="flag-card'), 5)
         self.assertIn("See all", page.get_data(as_text=True))
 
     def test_bad_row_is_skipped_and_training_is_kept(self):
@@ -134,6 +146,28 @@ class FlagAccessTests(unittest.TestCase):
         self.assertNotIn("Too old", titles)
         self.assertNotIn("Not a real severity", titles)
         self.assertEqual([row["area"] for row in rows if row["title"] == "Floor training is late"], ["training"])
+
+    def test_header_only_and_empty_files_add_nothing(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        Path(folder.name, "alfred.csv").write_text(
+            "area,severity,title,detail,owner,as_of,source\n",
+            encoding="utf-8",
+        )
+        Path(folder.name, "blank.csv").write_text("", encoding="utf-8")
+        rows = load_flag_rows(folder.name, today=date(2026, 10, 9))
+        self.assertEqual(rows, [])
+        os.environ["FLAGS_DATA_DIR"] = folder.name
+        self._login("asha@dosacoffee.com")
+        page = self.client.get("/dashboard")
+        flags = self.client.get("/flags")
+        payload = self.client.get("/flags.json")
+        self.assertEqual(page.status_code, 200)
+        self.assertEqual(flags.status_code, 200)
+        self.assertEqual(payload.status_code, 200)
+        self.assertEqual(payload.get_json()["flags"], [])
+        self.assertNotIn('class="flag-card', page.get_data(as_text=True))
+        self.assertIn("No flags to show", page.get_data(as_text=True))
 
 
 class OwnerDashboardTests(unittest.TestCase):

@@ -1,5 +1,6 @@
 area,severity,title,detail,owner,as_of,source
 procurement,red,Warehouses up ₹21L in 8 days: buying 1.6x what goes out,1–8 Oct: Kolkata bought ₹30.1L vs ₹19.0L sent out; Delhi ₹27.1L vs ₹16.2L,Sailesh,2026-10-09,Restroworks Entry Report + Indent + Issue + Enterprise Consumption 01–08 Oct
+procurement,amber,No purchase orders: ₹1.37 Cr bought in 30 days with zero POs,"All 2,003 warehouse receipts 9 Sep–8 Oct have blank PO fields in Restroworks; short deliveries can't be tracked",Sailesh,2026-10-09,Restroworks Purchase Detail 09 Sep–08 Oct
 procurement,red,Delhi packaging: ₹10.5L bought vs ₹2.6L used,"33–250 days of cover; about ₹4.9L beyond a month (Glen containers, takeaway boxes, bags, flasks)",Sailesh,2026-10-09,Restroworks 01–08 Oct
 procurement,red,Idli Daal 60+ days in stock in both cities,"Kolkata 1,258 Kg, Delhi 1,320 Kg; about ₹3.6L beyond 10 days of use — hold orders",Sailesh,2026-10-09,Restroworks 01–08 Oct
 procurement,red,Sec 18 Noida: ₹1.8L Hershey's unit error,Indent IN-1854 on 2 Oct booked 623 Ltr instead of 623 ml; return booked twice — reverse in Posist,Sanjoy / Subhra,2026-10-09,Restroworks Indent + Enterprise Consumption

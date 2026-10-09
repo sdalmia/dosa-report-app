@@ -147,6 +147,8 @@ def load_flag_rows(directory=None, today=None):
         except OSError as exc:
             log.warning("flags file %s could not be read: %s", path.name, exc)
             continue
+        if not text.strip():
+            continue
         try:
             reader = csv.DictReader(io.StringIO(text))
             fieldnames = reader.fieldnames

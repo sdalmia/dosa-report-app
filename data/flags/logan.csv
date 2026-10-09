@@ -1,6 +1,5 @@
 area,severity,title,detail,owner,as_of,source
-marketing,red,WhatsApp Utility credits run out ~10 Oct,"2,982 left on 9 Oct, dropping about 4K a day (15,645 on 5 Oct); the 50K refill is not bought yet",Logan (OTP from Siddhant),2026-10-09,Reelo dashboard daily check
-people,red,Staff are not using Frontlyne training,"683 of 718 users have never logged in; only 57 logged in 30 Sep-3 Oct; 339 of 718 are marked inactive",Sanjoy / Subhra,2026-10-03,Frontlyne User Login Report + Participants export
+people,red,Staff are not using Frontlyne training,683 of 718 users have never logged in; only 57 logged in 30 Sep-3 Oct; 339 of 718 are marked inactive,Sanjoy / Subhra,2026-10-03,Frontlyne User Login Report + Participants export
 people,red,Frontlyne completion data is blank,"Course completion and course status reports are NA or empty for all users, so store-wise training can't be tracked",Sanjoy / Subhra,2026-10-03,Frontlyne Reports
-people,amber,Frontlyne lagging stores,"Model Town has 20 of 40 users stale 30+ days; Central Kitchen Kolkata 21 of 32 stale with no logins in the last 4 days; Gurgaon Sec 10A only 6 of 17 active; Dalgreen Branch only 10 of 33 active",Store managers via ops,2026-10-03,Frontlyne User Login Report + Participants export
+people,amber,Frontlyne lagging stores,Model Town has 20 of 40 users stale 30+ days; Central Kitchen Kolkata 21 of 32 stale with no logins in the last 4 days; Gurgaon Sec 10A only 6 of 17 active; Dalgreen Branch only 10 of 33 active,Store managers via ops,2026-10-03,Frontlyne User Login Report + Participants export
 people,amber,Frontlyne training attendance 62%,"9 trainings created, 8 conducted",Sanjoy / Subhra,2026-10-03,Frontlyne Training dashboard

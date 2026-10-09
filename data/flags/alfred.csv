@@ -1,2 +1,1 @@
 area,severity,title,detail,owner,as_of,source
-tech,amber,Batcave database free plan expires 2 Nov,Upgrade to cheapest paid Render Postgres scheduled for 28 Oct with saved card; chat history kept,Alfred,2026-10-09,Render dashboard
