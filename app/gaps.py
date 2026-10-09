@@ -142,23 +142,23 @@ def system_gap_records(rows):
         for gap in store_gaps(row):
             kind = gap["kind"]
             threat = kind in THREAT_KINDS
-            records.append(
-                _record(
-                    gap_id=f"{store_id}:{kind}",
-                    area="reputation" if threat else kind,
-                    store=store,
-                    title=gap["label"],
-                    why=gap["detail"],
-                    fix=gap["status"],
-                    owner=gap["owner"],
-                    status="open",
-                    due=None,
-                    as_of=None,
-                    source="",
-                    threat=threat,
-                    kind=kind,
-                )
+            record = _record(
+                gap_id=f"{store_id}:{kind}",
+                area="reputation" if threat else kind,
+                store=store,
+                title=gap["label"],
+                why=gap["detail"],
+                fix=gap["status"],
+                owner=gap["owner"],
+                status="open",
+                due=None,
+                as_of=None,
+                source="",
+                threat=threat,
+                kind=kind,
             )
+            record["store_ids"] = [store_id] if row.get("store_id") else []
+            records.append(record)
     return records
 
 
@@ -292,3 +292,154 @@ def load_gap_board(master_rows, directory=None, email=None):
         "groups": group_gaps_by_owner(rows),
         "gaps": rows,
     }
+
+
+_PLACE_SPLIT = re.compile(r"\s*(?:,|\||\band\b)\s*", re.IGNORECASE)
+_REGION_WORDS = {"kolkata": "East", "east": "East", "delhi": "North", "ncr": "North", "north": "North"}
+
+
+def _is_subsequence(needle, haystack):
+    if not needle or len(needle) > len(haystack):
+        return False
+    index = 0
+    for word in haystack:
+        if word == needle[index]:
+            index += 1
+            if index == len(needle):
+                return True
+    return False
+
+
+def _row_labels(row):
+    labels = [row.get("display_name"), row.get("posist_name"), row.get("store_id")]
+    from app.store_master import known_names
+
+    labels.extend(known_names(row.get("notes")))
+    return [label for label in labels if label]
+
+
+def _prefix_of_another(words, rows, own):
+    """True when these words are the start of a different outlet's name."""
+    if not words:
+        return False
+    from app.store_master import name_words
+
+    for other in rows:
+        if other is own:
+            continue
+        for label in (other.get("display_name"), other.get("posist_name")):
+            other_words = name_words(label)
+            if len(other_words) > len(words) and other_words[: len(words)] == tuple(words):
+                return True
+    return False
+
+
+def _shared_region(rows):
+    regions = {(row.get("region") or "") for row in rows}
+    regions.discard("")
+    if len(regions) == 1:
+        return next(iter(regions))
+    return ""
+
+
+def _match_place(part, index):
+    """One outlet, or none when the words fit two outlets.
+
+    A city word such as Delhi is a region, not a list of every store there.
+    A short name that starts another outlet, such as Salt Lake, stays unmatched.
+    """
+    from app.store_master import name_words, normalise_key
+
+    text = (part or "").strip()
+    if not text:
+        return [], ""
+    hit = index.find(text)
+    if hit is not None:
+        return [hit], ""
+    token = normalise_key(text)
+    exact = [row for row in index.rows if any(normalise_key(label) == token for label in _row_labels(row))]
+    words = name_words(text)
+    if len(exact) == 1 and not _prefix_of_another(words, index.rows, exact[0]):
+        return exact, ""
+    if words and set(words) <= set(_REGION_WORDS):
+        region = ""
+        for word in words:
+            region = _REGION_WORDS.get(word, region)
+        return [], region
+    if len(words) == 1 and (len(words[0]) < 4 or words[0].isdigit()):
+        return [], ""
+    hits = []
+    for row in index.rows:
+        if any(_is_subsequence(words, name_words(label)) for label in _row_labels(row)):
+            hits.append(row)
+    if len(hits) == 1:
+        return hits, ""
+    if len(hits) > 1:
+        return [], _shared_region(hits)
+    if len(exact) > 1:
+        return [], _shared_region(exact)
+    return [], ""
+
+
+def gap_places(row, index):
+    """Outlets named on a gap, and a region when the text only names a city."""
+    pinned = [item for item in (row.get("store_ids") or []) if item]
+    if pinned:
+        wanted = set(pinned)
+        return [item for item in index.rows if item.get("store_id") in wanted], set()
+    text = row.get("store") or ""
+    parts = [part.strip() for part in _PLACE_SPLIT.split(text) if part and part.strip()]
+    outlets = []
+    seen = set()
+    regions = set()
+    for part in parts:
+        matched, region = _match_place(part, index)
+        for outlet in matched:
+            store_id = outlet.get("store_id")
+            if store_id in seen:
+                continue
+            seen.add(store_id)
+            outlets.append(outlet)
+        if not matched and region:
+            regions.add(region)
+    if not outlets:
+        blob = " ".join(str(row.get(key) or "") for key in ("store", "title", "why_it_matters"))
+        from app.store_master import normalise_key
+
+        for word in normalise_key(blob).split():
+            region = _REGION_WORDS.get(word)
+            if region:
+                regions.add(region)
+    return outlets, regions
+
+
+def filter_gaps(rows, filters, index):
+    """Keep gaps for the chosen store and city. A date range is left alone.
+
+    A gap with no store is company-wide, so a store or city choice hides it.
+    A city named in the title, such as Kolkata, keeps the gap for that city.
+    """
+    from app.view_filters import city_region
+
+    filters = filters or {}
+    store_id = (filters.get("cc_store") or "").strip()
+    region = city_region(filters)
+    if not store_id and not region:
+        return list(rows)
+    kept = []
+    for row in rows:
+        outlets, word_regions = gap_places(row, index)
+        if store_id and region:
+            if any(item.get("store_id") == store_id and (item.get("region") or "") == region for item in outlets):
+                kept.append(row)
+            continue
+        if store_id:
+            if any(item.get("store_id") == store_id for item in outlets):
+                kept.append(row)
+            continue
+        if outlets:
+            if any((item.get("region") or "") == region for item in outlets):
+                kept.append(row)
+        elif region in word_regions:
+            kept.append(row)
+    return kept

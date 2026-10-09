@@ -5,6 +5,7 @@
 {% block owner_body %}
 <h1>Data gaps</h1>
 <p class="subtitle">Open work, grouped by who owns it. Threats are listed first.</p>
+{% include "_filters.html" %}
 
 <div class="gap-counts">
   <div class="ot-stat">
@@ -22,7 +23,7 @@
 </div>
 
 {% if not groups %}
-<div class="empty"><p>No open gaps.</p></div>
+<div class="empty"><p>{% if filters.cc_store or filters.cc_city %}No gaps for this store or city.{% else %}No open gaps.{% endif %}</p></div>
 {% endif %}
 
 {% for group in groups %}

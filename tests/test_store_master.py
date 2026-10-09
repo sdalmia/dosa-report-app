@@ -10,7 +10,7 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.store_health.stores import store_from_label, unique_store_label
-from app.gaps import load_gap_board
+from app.gaps import filter_gaps, load_gap_board
 from app.owner_tools.metrics import build_scorecard
 from app.store_health.contract import load_feeds
 from app.store_master import (
@@ -18,6 +18,7 @@ from app.store_master import (
     NOT_ON_REELO,
     UNKNOWN_STATUS,
     find_store,
+    get_index,
     human_notes,
     is_trading,
     load_rows,
@@ -184,7 +185,7 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn("Data gaps", brief.get_data(as_text=True))
 
         self._session(OWNER)
-        page = self.client.get("/data-gaps")
+        page = self.client.get("/data-gaps?cc_store=&cc_city=&cc_range=")
         self.assertEqual(page.status_code, 200)
         html = page.get_data(as_text=True)
         self.assertIn("Data gaps", html)
@@ -200,9 +201,12 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn("Known names", html)
         self.assertNotIn("Not on Reelo", html)
         self.assertNotIn(NOT_ON_REELO, html)
+        self.assertIn("Store Master", html)
+        self.assertIn('name="cc_store"', html)
         self.assertIn('class="cc-bottom"', html)
         bottom = html.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
         self.assertNotIn("Data gaps", bottom)
+        self.assertNotIn("Store Master", bottom)
         self.assertEqual(bottom.count("<a "), 5)
         section = html.split('data-owner="Sanjoy / Subhra"', 1)[1]
         self.assertLess(section.find('data-threat="1"'), section.find("No Swiggy or Zomato id"))
@@ -254,3 +258,95 @@ class StoreMasterTests(unittest.TestCase):
         self.assertEqual(shown["counts"]["fixed"], 1)
         self.assertEqual(shown["counts"]["open"], 2)
         folder.cleanup()
+
+    def test_albus_gaps_follow_store_and_city(self):
+        index = get_index()
+        board = load_gap_board(index.rows, email=OWNER)
+        titles = [gap["title"] for gap in board["gaps"]]
+        self.assertIn("No single store list", titles)
+        self.assertIn("221 unpriced Restroworks ingredients", titles)
+        self.assertIn("No store-level net sales", titles)
+        waiting = next(gap for gap in board["gaps"] if gap["title"] == "No store-level net sales")
+        self.assertEqual(waiting["status"], "waiting")
+        self.assertEqual(waiting["owner"], "Anup, Vikas")
+        pin = next(gap for gap in board["gaps"] if "share one map pin" in gap["title"])
+        self.assertEqual(pin["owner"], "Sanjoy")
+        self.assertTrue(pin["threat"])
+
+        def titles_for(**filters):
+            kept = filter_gaps(board["gaps"], filters, index)
+            return [gap["title"] for gap in kept]
+
+        kolkata = titles_for(cc_city="Kolkata")
+        self.assertIn("Kolkata Regular Masala Dosa base recipe is coriander only at 18 outlets", kolkata)
+        self.assertIn("No Google listing", kolkata)
+        self.assertIn("New Town CK and Rosedale share one map pin", kolkata)
+        self.assertNotIn("Delhi Extra Sambar recipe is container only", kolkata)
+        self.assertNotIn("No single store list", kolkata)
+        self.assertNotIn("221 unpriced Restroworks ingredients", kolkata)
+        self.assertNotIn("No store-level net sales", kolkata)
+        self.assertFalse(any("Connaught" in title or "Faridabad" in title for title in kolkata))
+
+        delhi = titles_for(cc_city="Delhi NCR")
+        self.assertIn("Delhi Extra Sambar recipe is container only", delhi)
+        self.assertIn("Duplicate listing", delhi)
+        self.assertIn("Unverified listing", delhi)
+        self.assertNotIn("Kolkata Regular Masala Dosa base recipe is coriander only at 18 outlets", delhi)
+        self.assertNotIn("New Town CK and Rosedale share one map pin", delhi)
+        self.assertFalse(any("Quest Mall" in (gap.get("store") or "") for gap in filter_gaps(board["gaps"], {"cc_city": "Delhi NCR"}, index) if gap["owner"] == "Siddhant" and gap["title"] == "No Google listing"))
+
+        cp = "connaught-place-02-0012"
+        one = titles_for(cc_store=cp)
+        self.assertIn("Duplicate listing", one)
+        self.assertNotIn("No single store list", one)
+        self.assertNotIn("Kolkata Regular Masala Dosa base recipe is coriander only at 18 outlets", one)
+        self.assertNotIn("Delhi Extra Sambar recipe is container only", one)
+        self.assertNotIn("No Google listing", one)
+        self.assertNotIn("New Town CK and Rosedale share one map pin", one)
+
+        salt = filter_gaps(
+            [{"title": "Salt Lake only", "store": "Salt Lake", "why_it_matters": "", "store_ids": []}],
+            {"cc_store": "dosa-coffee-salt-lake-002"},
+            index,
+        )
+        self.assertEqual(salt, [])
+
+        self._session(OWNER)
+        page = self.client.get("/data-gaps?cc_city=Kolkata&cc_store=")
+        self.assertEqual(page.status_code, 200)
+        html = page.get_data(as_text=True)
+        self.assertIn("coriander only", html)
+        self.assertIn("share one map pin", html)
+        self.assertNotIn("Extra Sambar", html)
+        self.assertNotIn("No single store list", html)
+        self.assertIn('value="Kolkata" selected', html)
+        self.assertIn(">Today<", html)
+        self.assertIn(">Outside<", html)
+
+    def test_store_master_page_is_owner_only(self):
+        self._session(None)
+        anon = self.client.get("/store-master")
+        self.assertEqual(anon.status_code, 302)
+        self.assertIn("login", anon.headers["Location"])
+
+        self._session(OTHER)
+        blocked = self.client.get("/store-master")
+        self.assertEqual(blocked.status_code, 302)
+        brief = blocked.headers["Location"] and self.client.get("/brief")
+        self.assertNotIn("Store Master", brief.get_data(as_text=True))
+
+        self._session(OWNER)
+        page = self.client.get("/store-master?cc_store=&cc_city=")
+        self.assertEqual(page.status_code, 200)
+        html = page.get_data(as_text=True)
+        self.assertIn("Store Master", html)
+        self.assertIn("Connaught place", html)
+        self.assertIn('name="cc_store"', html)
+        self.assertNotIn("Known names", html)
+        self.assertNotIn(".csv", html)
+        self.assertNotIn(NOT_ON_REELO, html)
+        city = self.client.get("/store-master?cc_city=Kolkata&cc_store=")
+        body = city.get_data(as_text=True)
+        self.assertIn("Quest Mall", body)
+        self.assertNotIn("Connaught place", body)
+        self.assertNotIn("Sec 15 Faridabad", body)

@@ -3,6 +3,7 @@
 from app.store_health.contract import load_feeds
 from app.store_health.present import list_stores
 from app.store_health.stores import match_menu_store
+from app.store_master import resolve_store_label
 
 PAGES = (
     {"kind": "Page", "label": "Home", "href": "/dashboard"},
@@ -14,6 +15,8 @@ PAGES = (
     {"kind": "Page", "label": "Food cost", "href": "/food-cost"},
     {"kind": "Page", "label": "Vendors", "href": "/vendors"},
     {"kind": "Page", "label": "Store Health", "href": "/store-health"},
+    {"kind": "Page", "label": "Store Master", "href": "/store-master"},
+    {"kind": "Page", "label": "Data gaps", "href": "/data-gaps"},
     {"kind": "Page", "label": "Red flags", "href": "/flags"},
     {"kind": "Page", "label": "Needs attention", "href": "/attention"},
     {"kind": "Page", "label": "Stores", "href": "/stores"},
@@ -46,7 +49,9 @@ def search_index():
 
     def store_for(name):
         if name not in resolved:
-            matched = match_menu_store(name, labels) if name else None
+            matched = resolve_store_label(name, labels) if name else None
+            if matched is None and name:
+                matched = match_menu_store(name, labels)
             resolved[name] = by_label.get(matched) if matched else None
         return resolved[name]
 

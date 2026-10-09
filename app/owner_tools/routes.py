@@ -3,7 +3,7 @@
 from flask import jsonify, render_template, request, Response
 
 from app.access import owner_required, signed_in_email
-from app.gaps import load_gap_board
+from app.gaps import filter_gaps, gap_counts, group_gaps_by_owner, load_gap_board
 from app.routes.main import login_required
 from app.store_health.contract import load_feeds
 from app.store_master import get_index
@@ -113,10 +113,43 @@ def goals():
 @login_required
 @owner_required
 def data_gaps():
-    board = load_gap_board(get_index().rows, email=signed_in_email())
+    filters = remember_filters()
+    index = get_index()
+    board = load_gap_board(index.rows, email=signed_in_email())
+    gaps = filter_gaps(board["gaps"], filters, index)
     return render_template(
         "owner/data_gaps.html",
-        counts=board["counts"],
-        groups=board["groups"],
+        counts=gap_counts(gaps),
+        groups=group_gaps_by_owner(gaps),
         active="data-gaps",
+        filters=filters,
+        filter_stores=visible_stores(store_options(), filters),
+    )
+
+
+@owner_bp.route("/store-master")
+@login_required
+@owner_required
+def store_master():
+    filters = remember_filters()
+    rows = []
+    wanted = (filters.get("cc_store") or "").strip()
+    region = city_region(filters)
+    for row in get_index().rows:
+        if wanted and row.get("store_id") != wanted:
+            continue
+        if region and (row.get("region") or "") != region:
+            continue
+        name = row.get("display_name") or row.get("posist_name") or ""
+        line = " · ".join(
+            part for part in (row.get("city"), row.get("region"), row.get("format"), row.get("status")) if part
+        )
+        rows.append({"store_id": row.get("store_id") or "", "name": name, "line": line})
+    rows.sort(key=lambda row: row["name"].casefold())
+    return render_template(
+        "owner/store_master.html",
+        stores=rows,
+        active="store-master",
+        filters=filters,
+        filter_stores=visible_stores(store_options(), filters),
     )
