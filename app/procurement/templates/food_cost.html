@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% from "_info.html" import info %}
+{% macro money(pair, field, city, window='', hero=false) -%}
+<details class="exact">
+  <summary class="figure{% if hero %} hero{% endif %}" data-field="{{ field }}" {% if window %}data-window="{{ window }}" {% endif %}data-city="{{ city }}" data-value="{{ pair.attr }}">{{ pair.compact }}</summary>
+  <p class="exact-figure">{{ pair.text }}</p>
+</details>
+{%- endmacro %}
+{% macro pct(pair, field, city, window) -%}
+<strong class="figure hero" data-field="{{ field }}" data-window="{{ window }}" data-city="{{ city }}" data-value="{{ pair.attr }}">{{ pair.text }}</strong>
+{%- endmacro %}
 {% block title %}Food cost - Dosa Coffee{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('procurement.static', filename='procurement.css') }}">
@@ -23,67 +32,72 @@
       <div class="heading-row">
         <h2>{{ city.region_label }}</h2>
         {% call info() %}
-        <p>The percent is this figure divided by Posist gross for the same dates. Freight is separate and is not in the percent. Raw goods received is food and beverage only, for the consumption window.</p>
+        <p>The percent is this figure divided by Posist gross for the same dates. Freight is separate and is not in the percent. Raw goods received is food and beverage only, for the consumption window. Tap a figure for the exact rupees.</p>
+        <p>Exact {{ city.week.label }}: gross {{ city.week.gross.text }}, purchases {{ city.week.grn_all.text }}, raw consumption {{ city.week.consumption.text }}, wastage {{ city.week.wastage.text }}.</p>
         {% if store_purchase_note %}<p>{{ store_purchase_note }}</p>{% endif %}
         {% endcall %}
       </div>
-      <h3>Same dates as consumption{% if city.week.label %} · {{ city.week.label }}{% endif %}</h3>
+      <p class="subline">{{ city.week.label }}</p>
       <div class="metrics">
-        <div class="metric">
-          <span>Posist gross</span>
-          <strong data-field="gross" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.gross.attr }}">{{ city.week.gross.text }}</strong>
-        </div>
-        <div class="metric">
-          <span>Goods received</span>
-          <strong data-field="grn-all" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.grn_all.attr }}">{{ city.week.grn_all.text }}</strong>
-          <em data-field="grn-all-pct" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.grn_all_pct.attr }}">{{ city.week.grn_all_pct.text }}</em>
-        </div>
-        <div class="metric">
-          <span>Raw goods received</span>
-          <strong data-field="grn-raw" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.grn_raw.attr }}">{{ city.week.grn_raw.text }}</strong>
-          <em data-field="grn-raw-pct" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.grn_raw_pct.attr }}">{{ city.week.grn_raw_pct.text }}</em>
-        </div>
         <div class="metric">
           <span>Raw consumption</span>
-          <strong data-field="consumption" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.consumption.attr }}">{{ city.week.consumption.text }}</strong>
-          <em data-field="consumption-pct" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.consumption_pct.attr }}">{{ city.week.consumption_pct.text }}</em>
+          {{ pct(city.week.consumption_pct, 'consumption-pct', city.slug, 'week') }}
+          {{ money(city.week.consumption, 'consumption', city.slug, 'week') }}
         </div>
         <div class="metric">
-          <span>Freight, not in the %</span>
-          <strong data-field="freight" data-window="week" data-city="{{ city.slug }}" data-value="{{ city.week.freight.attr }}">{{ city.week.freight.text }}</strong>
+          <span>Purchases</span>
+          {{ pct(city.week.grn_all_pct, 'grn-all-pct', city.slug, 'week') }}
+          {{ money(city.week.grn_all, 'grn-all', city.slug, 'week') }}
         </div>
         <div class="metric">
-          <span>Raw wastage</span>
-          <strong data-field="wastage" data-city="{{ city.slug }}" data-value="{{ city.week.wastage.attr }}">{{ city.week.wastage.text }}</strong>
+          <span>Wastage</span>
+          {{ money(city.week.wastage, 'wastage', city.slug, hero=true) }}
         </div>
       </div>
-      <p class="muted">Stores {{ city.week.outlet_consumption.text }} · central kitchen {{ city.week.kitchen_consumption.text }} · warehouse consumption {{ city.week.warehouse_consumption.text }}</p>
-      {% if city.week.grn_raw_missing %}
-      <p class="empty">Raw goods received are not on file for this window.</p>
-      {% endif %}
-      {% if city.week.gross_blanks %}
-      <p class="muted">{{ city.week.gross_blanks }} Posist rows have a blank gross and are not in this total.</p>
-      {% endif %}
-
-      {% if city.span %}
-      <h3>Full purchase window · {{ city.span.label }}</h3>
-      <div class="metrics">
-        <div class="metric">
-          <span>Posist gross</span>
-          <strong data-field="gross" data-window="span" data-city="{{ city.slug }}" data-value="{{ city.span.gross.attr }}">{{ city.span.gross.text }}</strong>
+      <details class="more">
+        <summary>More</summary>
+        <div class="metrics">
+          <div class="metric">
+            <span>Posist gross</span>
+            {{ money(city.week.gross, 'gross', city.slug, 'week') }}
+          </div>
+          <div class="metric">
+            <span>Raw goods received</span>
+            {{ pct(city.week.grn_raw_pct, 'grn-raw-pct', city.slug, 'week') }}
+            {{ money(city.week.grn_raw, 'grn-raw', city.slug, 'week') }}
+          </div>
+          <div class="metric">
+            <span>Freight, not in the %</span>
+            {{ money(city.week.freight, 'freight', city.slug, 'week') }}
+          </div>
         </div>
-        <div class="metric">
-          <span>Goods received</span>
-          <strong data-field="grn-all" data-window="span" data-city="{{ city.slug }}" data-value="{{ city.span.grn_all.attr }}">{{ city.span.grn_all.text }}</strong>
-          <em data-field="grn-all-pct" data-window="span" data-city="{{ city.slug }}" data-value="{{ city.span.grn_all_pct.attr }}">{{ city.span.grn_all_pct.text }}</em>
+        <p class="muted">Stores {{ city.week.outlet_consumption.compact }} · central kitchen {{ city.week.kitchen_consumption.compact }} · warehouse consumption {{ city.week.warehouse_consumption.compact }}</p>
+        {% if city.week.grn_raw_missing %}
+        <p class="empty">Raw goods received are not on file for this window.</p>
+        {% endif %}
+        {% if city.week.gross_blanks %}
+        <p class="muted">{{ city.week.gross_blanks }} Posist rows have a blank gross and are not in this total.</p>
+        {% endif %}
+        {% if city.span %}
+        <h3>{{ city.span.label }}</h3>
+        <div class="metrics">
+          <div class="metric">
+            <span>Posist gross</span>
+            {{ money(city.span.gross, 'gross', city.slug, 'span') }}
+          </div>
+          <div class="metric">
+            <span>Goods received</span>
+            {{ pct(city.span.grn_all_pct, 'grn-all-pct', city.slug, 'span') }}
+            {{ money(city.span.grn_all, 'grn-all', city.slug, 'span') }}
+          </div>
+          <div class="metric">
+            <span>Freight, not in the %</span>
+            {{ money(city.span.freight, 'freight', city.slug, 'span') }}
+          </div>
         </div>
-        <div class="metric">
-          <span>Freight, not in the %</span>
-          <strong data-field="freight" data-window="span" data-city="{{ city.slug }}" data-value="{{ city.span.freight.attr }}">{{ city.span.freight.text }}</strong>
-        </div>
-      </div>
-      <p class="empty" data-field="span-consumption-missing" data-city="{{ city.slug }}">{{ city.span.consumption_missing }}</p>
-      {% endif %}
+        <p class="empty" data-field="span-consumption-missing" data-city="{{ city.slug }}">{{ city.span.consumption_missing }}</p>
+        {% endif %}
+      </details>
     </article>
     {% endfor %}
   </section>

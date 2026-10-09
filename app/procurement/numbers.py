@@ -209,6 +209,24 @@ def format_inr(value):
     return f"{sign}₹{body}"
 
 
+def format_compact_inr(value):
+    """Lakhs or crores for large amounts, whole rupees below that. No paise."""
+    if value is None:
+        return ""
+    number = float(value)
+    if number == 0:
+        return "₹0"
+    sign = "-" if number < 0 else ""
+    amount = abs(number)
+    if amount >= 10_000_000:
+        body = f"{amount / 10_000_000:.2f}Cr"
+    elif amount >= 100_000:
+        body = f"{amount / 100_000:.2f}L"
+    else:
+        body = group_indian(str(int(round(amount))))
+    return f"{sign}₹{body}"
+
+
 def format_pct(value):
     if value is None:
         return ""
@@ -229,7 +247,14 @@ def num_attr(value):
 
 
 def money_pair(value):
-    return {"value": value, "text": format_inr(value), "attr": num_attr(value)}
+    exact = format_inr(value)
+    return {
+        "value": value,
+        "text": exact,
+        "exact": exact,
+        "compact": format_compact_inr(value),
+        "attr": num_attr(value),
+    }
 
 
 def pct_pair(value):

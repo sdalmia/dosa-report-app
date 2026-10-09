@@ -11,7 +11,13 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.procurement.loader import load_procurement, newest_file
-from app.procurement.numbers import dates_in_filename, format_inr, parse_number, sum_present
+from app.procurement.numbers import (
+    dates_in_filename,
+    format_compact_inr,
+    format_inr,
+    parse_number,
+    sum_present,
+)
 from app.procurement.recipe import ideal_plaza_recipe_costs, recipe_costs
 from app.procurement.vendors import SHORT_DELIVERY_MESSAGE
 
@@ -58,6 +64,11 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(sum_present([None, 0]), 0.0)
         self.assertEqual(format_inr(None), "")
         self.assertEqual(format_inr(0), "₹0")
+        self.assertEqual(format_compact_inr(None), "")
+        self.assertEqual(format_compact_inr(0), "₹0")
+        self.assertEqual(format_compact_inr(7573666.12), "₹75.74L")
+        self.assertEqual(format_compact_inr(26636745.7), "₹2.66Cr")
+        self.assertEqual(format_compact_inr(9144.98), "₹9,145")
 
     def test_newest_file_uses_the_date_in_the_name(self):
         self.assertEqual(dates_in_filename("grn_lines_01-30Sep2026.csv")[1], date(2026, 9, 30))
@@ -101,13 +112,21 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(_attr(html, "gross", window="span", city="kolkata"), "26636745.7")
         self.assertEqual(_attr(html, "gross", window="span", city="delhi"), "24958355.98")
         self.assertIn("16.5%", _field(html, "consumption-pct", window="week", city="kolkata")[0])
-        self.assertNotIn('data-window="span" data-city="kolkata" data-value=""></em>\n', html)
+        self.assertEqual(week_grn, "₹30.14L")
+        self.assertIn("₹75.74L", html)
+        self.assertIn("₹75,73,666.12", html)
+        self.assertIn(">More</summary>", html)
+        self.assertNotIn("Command Centre", html)
+        self.assertNotIn("repeat(3, 1fr)", (ROOT / "app/procurement/static/procurement.css").read_text(encoding="utf-8"))
         self.assertIn(week_grn, html)
         self.assertIn("Consumption is on file for", html)
         self.assertNotIn(".csv", html)
         self.assertNotIn(".xlsx", html)
         self.assertNotIn("recipe-cost.json", html)
         self.assertIn("theme-toggle", html)
+        buying = self.get("/procurement")
+        self.assertIn('href="/food-cost"', buying)
+        self.assertIn('href="/vendors"', buying)
         self.assertNotIn("prefers-color-scheme", html)
         self.assertNotIn("data-field=\"grn-raw\" data-window=\"span\"", html)
 

@@ -32,7 +32,7 @@
         <div class="row-card">
           <b>{{ row.supplier }}</b>
           <p class="muted">{{ row.city }} · {{ row.first_text }}–{{ row.last_text }} · {{ row.bills }} bills · {{ row.items }} items</p>
-          <p data-field="supplier-spend" data-city="{{ row.city }}" data-supplier="{{ row.supplier }}" data-value="{{ row.total.attr }}">{{ row.total.text }}{% if row.share.text %} · {{ row.share.text }} of city{% endif %}</p>
+          <p data-field="supplier-spend" data-city="{{ row.city }}" data-supplier="{{ row.supplier }}" data-value="{{ row.total.attr }}"><span class="num" title="{{ row.total.exact }}">{{ row.total.compact }}</span>{% if row.share.text %} · {{ row.share.text }} of city{% endif %}</p>
         </div>
         {% else %}
         <p class="empty">No supplier spend is on file.</p>
