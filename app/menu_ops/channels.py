@@ -48,11 +48,16 @@ _MALL_CODE = re.compile(r"\((?:01/)?000[34]\)\s*$")
 def build_channels(famepilot=None, channels=None, store="", region="", window=None):
     ratings = load_channel_ratings(famepilot or famepilot_directory())
     sales = load_channel_sales(channels or channels_directory())
-    rows = list(ratings["rows"])
-    rows.sort(key=_rating_sort)
-    as_of = sorted({row["as_of"] for row in rows if row.get("as_of")})
     regions, _region_warnings = load_regions()
     labels = list(regions)
+    rows = list(ratings["rows"])
+    if region:
+        rows = [row for row in rows if _store_region(row["store"], region, regions)]
+    if store:
+        pool = labels or [store]
+        rows = [row for row in rows if _same_store(row["store"], store, pool)]
+    rows.sort(key=_rating_sort)
+    as_of = sorted({row["as_of"] for row in rows if row.get("as_of")})
     usable, mode = channel_rows_for_window(sales["rows"], window)
     daily = [row for row in sales["rows"] if row.get("kind") == "daily"]
     if window and window[0] and window[1] and mode == "daily":
