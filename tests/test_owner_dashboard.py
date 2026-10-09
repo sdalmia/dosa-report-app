@@ -209,7 +209,8 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertIn("/ingredient-tracker/", html)
         self.assertIn("/location-finder", html)
         self.assertIn("/store-health", html)
-        self.assertIn("No data", html)
+        self.assertIn("₹20,90,655.02", html)
+        self.assertIn("15 Nov 2026", html)
         self.assertNotIn("Not in feed", html)
         self.assertTrue(view["chart"]["svg"])
         self.assertTrue(view["chart"]["last_band"])
@@ -234,6 +235,60 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertNotIn("Kolkata", bought["lines"][0]["value"])
         self.assertEqual(tiles["wastage"]["note"], "No data")
         self.assertIn("data/procurement/", tiles["wastage"]["source"])
+
+    def test_light_is_the_default_theme(self):
+        root = Path(__file__).resolve().parents[1]
+        base = (root / "app/templates/base.html").read_text(encoding="utf-8")
+        home = (root / "app/templates/home.html").read_text(encoding="utf-8")
+        css = (root / "static/css/theme.css").read_text(encoding="utf-8")
+        script = (root / "static/js/command.js").read_text(encoding="utf-8")
+        for text in (base, home):
+            self.assertIn('stored === "dark" ? "dark" : "light"', text)
+            self.assertNotIn("prefers-color-scheme", text)
+        self.assertNotIn("prefers-color-scheme", css)
+        self.assertNotIn("prefers-color-scheme", script)
+        tokens = css.split('html[data-theme="dark"]', 1)[0]
+        self.assertIn("--bg: #f7f6f3", tokens)
+        self.assertIn("--surface: #ffffff", tokens)
+        self.assertIn("--text: #141414", tokens)
+        self.assertIn("--text-muted: #3f3a33", tokens)
+
+    def test_consumption_pack_and_base_kitchen_use_the_files(self):
+        root = Path(__file__).resolve().parents[1] / "data" / "procurement"
+        tiles = {tile["id"]: tile for tile in procurement_tiles(root)}
+        bought = " ".join(
+            f"{line['label']} {line['value']}" for line in tiles["bought_consumed"]["lines"]
+        )
+        self.assertIn("₹20,90,655.02", bought)
+        self.assertIn("₹12,49,845.52", bought)
+        self.assertIn("₹15,00,003.85", bought)
+        self.assertIn("Kolkata", bought)
+        self.assertIn("Delhi", bought)
+        stock = " ".join(
+            f"{line['label']} {line['value']}" for line in tiles["warehouse"]["lines"]
+        )
+        self.assertIn("₹11,69,932", stock)
+        self.assertIn("₹21,74,378", stock)
+        self.assertIn("₹10,04,447", stock)
+        self.assertIn("₹14,89,757", stock)
+        self.assertIn("₹26,18,445", stock)
+        self.assertTrue(tiles["overstock"]["lines"])
+        self.assertTrue(tiles["no_purchase"]["lines"])
+        self.assertTrue(tiles["packaging"]["lines"])
+        self.assertIn("₹44,115.68", tiles["wastage"]["lines"][0]["value"])
+        hershey = " ".join(
+            f"{line['label']} {line['value']}" for line in tiles["hershey"]["lines"]
+        )
+        self.assertIn("IN-1854", hershey)
+        self.assertIn("₹1,80,174", hershey)
+        summary = " ".join(
+            f"{line['label']} {line['value']}" for line in tiles["purchase_summary"]["lines"]
+        )
+        self.assertIn("₹73,05,434.52", summary)
+        self.assertIn("Grand total", summary)
+        headlines = " ".join(line["label"] for line in tiles["headlines"]["lines"])
+        self.assertIn("Warehouses absorbed", headlines)
+        self.assertEqual(tiles["bought_consumed"]["period"], "1 Oct 2026 to 8 Oct 2026")
 
 
 if __name__ == "__main__":

@@ -1,77 +1,53 @@
 /* Command Centre design system.
-   Tokens live here. base.html loads this file and templates/nav.html.
-   data-theme is set before paint from localStorage or the system preference. */
+   Light is the default. Dark is used only when data-theme="dark"
+   (the toggle writes that choice to localStorage). */
 
-:root,
+:root {
+  color-scheme: light;
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface-2: #f3f1ec;
+  --text: #141414;
+  --text-muted: #3f3a33;
+  --muted: #3f3a33;
+  --line: rgba(20, 20, 20, 0.14);
+  --accent: #7a4e0d;
+  --accent-ink: #ffffff;
+  --header: rgba(247, 246, 243, 0.96);
+  --red: #9f1239;
+  --amber: #8a5a10;
+  --up: #166534;
+  --down: #9f1239;
+  --shadow: 0 8px 22px rgba(40, 30, 10, 0.08);
+  --chart-band: rgba(122, 78, 13, 0.16);
+  --chart-mid: #7a4e0d;
+  --chart-gross: #0b5f8a;
+  --danger: #9f1239;
+  --focus: #7a4e0d;
+}
+
 html[data-theme="dark"] {
   color-scheme: dark;
   --bg: #12110e;
-  --surface: #1d1b16;
-  --surface-2: #28251f;
-  --text: #f6f3ec;
-  --muted: #b7b1a4;
-  --line: rgba(246, 243, 236, 0.14);
+  --surface: #1c1b17;
+  --surface-2: #2a2822;
+  --text: #f7f4ee;
+  --text-muted: #d2cdc3;
+  --muted: #d2cdc3;
+  --line: rgba(247, 244, 238, 0.16);
   --accent: #e4b15a;
-  --accent-ink: #2a2112;
+  --accent-ink: #1a140c;
   --header: rgba(18, 17, 14, 0.94);
-  --red: #f07178;
-  --amber: #e3b15a;
-  --up: #6dcf96;
-  --down: #f07178;
+  --red: #ff8b8b;
+  --amber: #e4b15a;
+  --up: #7ddea6;
+  --down: #ff8b8b;
   --shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
   --chart-band: rgba(228, 177, 90, 0.22);
   --chart-mid: #e4b15a;
   --chart-gross: #8fd0ff;
-  --danger: #f07178;
+  --danger: #ff8b8b;
   --focus: #e4b15a;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --bg: #f4f1ea;
-    --surface: #fffdf9;
-    --surface-2: #efeae1;
-    --text: #1d1a15;
-    --muted: #5f584e;
-    --line: rgba(29, 26, 21, 0.12);
-    --accent: #8d5b12;
-    --accent-ink: #fffaf2;
-    --header: rgba(255, 253, 249, 0.94);
-    --red: #b4232c;
-    --amber: #8a5a10;
-    --up: #0f7a45;
-    --down: #b4232c;
-    --shadow: 0 8px 22px rgba(40, 30, 10, 0.08);
-    --chart-band: rgba(141, 91, 18, 0.16);
-    --chart-mid: #8d5b12;
-    --chart-gross: #0b5f8a;
-    --danger: #b4232c;
-    --focus: #8d5b12;
-  }
-}
-
-html[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f4f1ea;
-  --surface: #fffdf9;
-  --surface-2: #efeae1;
-  --text: #1d1a15;
-  --muted: #5f584e;
-  --line: rgba(29, 26, 21, 0.12);
-  --accent: #8d5b12;
-  --accent-ink: #fffaf2;
-  --header: rgba(255, 253, 249, 0.94);
-  --red: #b4232c;
-  --amber: #8a5a10;
-  --up: #0f7a45;
-  --down: #b4232c;
-  --shadow: 0 8px 22px rgba(40, 30, 10, 0.08);
-  --chart-band: rgba(141, 91, 18, 0.16);
-  --chart-mid: #8d5b12;
-  --chart-gross: #0b5f8a;
-  --danger: #b4232c;
-  --focus: #8d5b12;
 }
 
 * { box-sizing: border-box; }
@@ -312,6 +288,7 @@ button, input, select, textarea { font-size: 16px; }
 .tier-holiday { border-color: #7c6af7; }
 .tier-weekend { border-color: #3db8e0; }
 .tier-working-weekday { border-color: #8b949e; }
+.tier-festive { border-color: #c2410c; }
 
 .league-row {
   display: grid;
@@ -339,9 +316,11 @@ button, input, select, textarea { font-size: 16px; }
 .filters a.is-on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
 .alert-row { border-left: 4px solid var(--amber); }
-.tile h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+.tile h3 { margin: 0 0 0.25rem; font-size: 1rem; color: var(--text); }
 .tile ul { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 0.35rem; }
-.tile li { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.88rem; }
+.tile li { display: flex; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; font-size: 0.88rem; color: var(--text); }
+.tile li span { min-width: 0; }
+.tile li b { font-variant-numeric: tabular-nums; }
 
 .tool-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .tool-row a {
@@ -405,45 +384,137 @@ button, input, select, textarea { font-size: 16px; }
 .login-card img { width: 120px; height: auto; }
 .login-card .btn { width: 100%; }
 
+.card,
+.modal-content,
+.list-group-item,
+.dropdown-menu,
+.accordion-item,
+.accordion-body,
+.offcanvas,
+.toast,
+.popover {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text);
+  --bs-table-border-color: var(--line);
+  --bs-table-striped-bg: var(--surface-2);
+  --bs-table-striped-color: var(--text);
+  --bs-table-hover-bg: var(--surface-2);
+  --bs-table-hover-color: var(--text);
+  color: var(--text);
+}
+
+.form-control,
+.form-select,
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.form-control::placeholder { color: var(--text-muted); opacity: 1; }
+
+.text-muted,
+.text-secondary,
+.text-body-secondary { color: var(--text-muted) !important; }
+
 html[data-theme="light"] .text-light,
-html[data-theme="light"] .text-white { color: var(--text) !important; }
-html[data-theme="light"] .bg-dark {
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-info { color: var(--text) !important; }
+
+.card.bg-dark,
+.card.bg-dark .text-white,
+div.bg-dark,
+div.bg-dark .text-light,
+div.bg-dark .text-white,
+.bg-white {
   background-color: var(--surface) !important;
   color: var(--text) !important;
 }
+
 html[data-theme="light"] .btn-outline-light {
   color: var(--text);
   border-color: var(--line);
 }
-html[data-theme="light"] .bg-white {
-  background-color: var(--surface) !important;
-  color: var(--text);
-}
 
-html[data-theme="light"] .store-health,
-html[data-theme="light"] .store-health a { color: var(--text); }
-html[data-theme="light"] .store-health .health-box,
-html[data-theme="light"] .store-health .last-updated,
-html[data-theme="light"] .store-health .metric,
-html[data-theme="light"] .store-health .cal-cell,
-html[data-theme="light"] .store-health .menu-mix-row {
-  background: var(--surface);
-  color: var(--text);
-}
-html[data-theme="light"] .store-health .form-control,
-html[data-theme="light"] .store-health .form-select {
+html .store-health,
+html .store-health a,
+html .store-health h1,
+html .store-health h2,
+html .store-health h3,
+html .store-health p,
+html .store-health li,
+html .store-health td,
+html .store-health th,
+html .store-health .cal-line,
+html .store-health .cal-line b,
+html .store-health .contract,
+html .store-health .contract code,
+html .store-health .identity li,
+html .store-health .sub-value,
+html .store-health .value { color: var(--text); }
+
+html .store-health .eyebrow,
+html .store-health .box-source,
+html .store-health .metric h3,
+html .store-health .metric .note,
+html .store-health .sub-label,
+html .store-health .dow,
+html .store-health .range-note,
+html .store-health .match-hint,
+html .store-health .public-name,
+html .store-health .context-meta,
+html .store-health .last-updated h2,
+html .store-health .cal-table th { color: var(--text-muted); }
+
+html .store-health .health-box,
+html .store-health .last-updated {
   background: var(--surface);
   color: var(--text);
   border-color: var(--line);
 }
-html[data-theme="light"] .store-health .eyebrow,
-html[data-theme="light"] .store-health .box-source,
-html[data-theme="light"] .store-health .metric h3,
-html[data-theme="light"] .store-health .dow,
-html[data-theme="light"] .store-health .range-note { color: var(--muted); }
-html[data-theme="light"] .store-health .cal-line,
-html[data-theme="light"] .store-health .cal-line b,
-html[data-theme="light"] .store-health .identity li { color: var(--text); }
+
+html .store-health .metric,
+html .store-health .cal-cell,
+html .store-health .menu-mix-row,
+html .store-health .empty-state,
+html .store-health .map-slot,
+html .store-health .insight-col,
+html .store-health .badge-soft,
+html .store-health .caveat {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+html .store-health .cal-cell.pad {
+  background: transparent;
+  border-color: transparent;
+}
+
+html .store-health .form-control,
+html .store-health .form-select,
+html .store-health .form-control:focus,
+html .store-health .form-select:focus {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+html .store-health .var-down { color: var(--down); }
+html .store-health .var-up { color: var(--up); }
+
+html .store-health .box-index {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
 
 @media (max-width: 767px) {
   .store-health .cal-scroll { overflow-x: hidden; }

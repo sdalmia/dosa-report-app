@@ -27,6 +27,7 @@ TIER_PRINT_COLOUR = {
     "Holiday": (88, 72, 184),
     "Weekend": (12, 112, 156),
     "Working weekday": (139, 148, 158),
+    "Festive": (194, 65, 12),
 }
 _NEUTRAL_BORDER = (150, 150, 150)
 

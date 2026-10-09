@@ -6,17 +6,18 @@
 
   function applyLabel() {
     if (!toggle) return;
-    var dark = root.getAttribute("data-theme") !== "light";
+    var dark = root.getAttribute("data-theme") === "dark";
     toggle.textContent = dark ? "Light" : "Dark";
     toggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", dark ? "#12110e" : "#f4f1ea");
+    if (meta) meta.setAttribute("content", dark ? "#12110e" : "#f7f6f3");
   }
 
   if (toggle) {
     toggle.addEventListener("click", function () {
-      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
+      root.setAttribute("data-bs-theme", next);
       try { localStorage.setItem("dosa-theme", next); } catch (err) {}
       applyLabel();
       if (window.Plotly) {
