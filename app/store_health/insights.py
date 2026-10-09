@@ -459,7 +459,7 @@ def _apb_line(feeds, store):
     shown = posist_window(feeds, store)["fields"].get("apb") or ""
     if not shown:
         return ""
-    return f"APB is {shown}, gross divided by bills. Add one more item on the next bill to lift that APB."
+    return f"APB is {shown}, calculated as gross divided by bills. Add one more item on the next bill to lift that APB."
 
 
 def _calendar_line(rows):
