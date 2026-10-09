@@ -2,6 +2,7 @@
 {% block title %}Command Centre - Dosa Coffee{% endblock %}
 {% block content %}
 <div class="cc-home">
+{% include "_filters.html" %}
 <section class="cc-section" id="red-flags" aria-labelledby="flags-title">
   <div class="section-head">
     <h2 id="flags-title">Red flags</h2>
@@ -43,7 +44,7 @@
       {% for key, title in (("gross", "Gross"), ("bills", "Bills"), ("apb", "APB")) %}
         <article class="kpi-card">
           <h3>{{ title }}</h3>
-          <p class="kpi-value">{% if regions[0][key] %}{{ regions[0][key] }}{% else %}no data{% endif %}</p>
+          <p class="kpi-value"{% if regions[0][key ~ '_exact'] %} title="{{ regions[0][key ~ '_exact'] }}"{% endif %}>{% if regions[0][key] %}{{ regions[0][key] }}{% else %}no data{% endif %}</p>
           <div class="kpi-chips">
             {% for region in regions %}
               <span>{{ region.label }} <b class="{% if region[key ~ '_change'].startswith('-') %}chg-down{% elif region[key ~ '_change'].startswith('+') %}chg-up{% endif %}">{% if region[key ~ '_change'] %}{{ region[key ~ '_change'] }}{% else %}–{% endif %}</b></span>
@@ -144,7 +145,7 @@
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>
           <strong>{{ store.label }}</strong>
-          <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
+          <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
         </a>
       {% endfor %}
       {% if league_bottom %}
@@ -153,7 +154,7 @@
           <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
             <span class="rank">{{ store.rank }}</span>
             <strong>{{ store.label }}</strong>
-            <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
+            <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
           </a>
         {% endfor %}
       {% endif %}
@@ -175,7 +176,16 @@
         {% if tile.lines %}
           <ul>
             {% for line in tile.lines[:3] %}
-              <li><span>{{ line.label }}</span>{% if line.value %}<b>{{ line.value }}</b>{% endif %}</li>
+              <li class="stat-block">
+              <span class="stat-name">{{ line.label }}</span>
+              {% if line.stats %}
+                <ul class="stat-list">
+                  {% for stat in line.stats %}
+                    <li class="stat-row"><span>{{ stat.label }}</span><b title="{{ stat.exact }}">{{ stat.text }}</b></li>
+                  {% endfor %}
+                </ul>
+              {% elif line.value %}<b title="{{ line.value }}">{{ line.value }}</b>{% endif %}
+            </li>
             {% endfor %}
           </ul>
         {% endif %}

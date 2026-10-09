@@ -1,6 +1,6 @@
 """Display figures. None stays blank. A real zero is kept and formatted."""
 
-from app.store_health.present import format_count, format_inr, format_pct
+from app.store_health.present import format_count, format_inr, format_owner_rupee, format_pct
 
 
 def fig(value, text=""):
@@ -12,7 +12,9 @@ def fig(value, text=""):
 def money_fig(value):
     if value is None:
         return fig(None)
-    return fig(value, format_inr(value))
+    shown = fig(value, format_owner_rupee(value))
+    shown["exact"] = format_inr(value)
+    return shown
 
 
 def count_fig(value):

@@ -225,6 +225,7 @@ def _group_rows(rows):
 
 
 def _store_change(feeds, store, day):
+    from app.food_courts import is_mall_food_court
     current = _row(feeds, store.label, day)
     prior_day = day - timedelta(days=PRIOR_DAYS) if day else None
     prior = _row(feeds, store.label, prior_day)
@@ -232,17 +233,19 @@ def _store_change(feeds, store, day):
     bills = current.get("bills") if current else None
     prior_gross = prior.get("gross") if prior else None
     prior_bills = prior.get("bills") if prior else None
+    mall = is_mall_food_court(store.label)
     return {
         "id": store.id,
         "label": store.label,
         "region": store.region,
+        "mall_bills": mall,
         "gross": money_fig(gross),
         "bills": count_fig(bills),
-        "apb": money_fig(_apb(gross, bills)),
+        "apb": money_fig(None if mall else _apb(gross, bills)),
         "prior_gross": money_fig(prior_gross),
-        "prior_bills": count_fig(prior_bills),
+        "prior_bills": count_fig(None if mall else prior_bills),
         "gross_change_pct": pct_fig(percent_change(gross, prior_gross)),
-        "bills_change_pct": pct_fig(percent_change(bills, prior_bills)),
+        "bills_change_pct": pct_fig(None if mall else percent_change(bills, prior_bills)),
     }
 
 
@@ -279,13 +282,16 @@ def build_brief(feeds, attention, procurement):
     for row in rows:
         if row["gross"]["value"] is not None:
             gross_values.append(row["gross"]["value"])
-        if row["bills"]["value"] is not None:
+        if row["bills"]["value"] is not None and not row.get("mall_bills"):
             bill_values.append(row["bills"]["value"])
+        if row.get("mall_bills"):
+            continue
         if row["gross"]["value"] is not None and row["bills"]["value"] is not None:
             paired_gross.append(row["gross"]["value"])
             paired_bills.append(row["bills"]["value"])
     gross_change, gross_compared = _network_change(rows, "gross", "prior_gross")
-    bills_change, bills_compared = _network_change(rows, "bills", "prior_bills")
+    comparable = [row for row in rows if not row.get("mall_bills")]
+    bills_change, bills_compared = _network_change(comparable, "bills", "prior_bills")
     paired_gross_sum = _sum_present(paired_gross)
     paired_bills_sum = _sum_present(paired_bills)
     network = {
@@ -543,8 +549,13 @@ def build_scorecard(feeds, wastage, month):
     built = []
     for item in prepared:
         store = item["store"]
+        from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
+
         sales, sales_raw = _sales_component(feeds, store.label, selected) if selected else (None, "No Posist month.")
-        bills, bills_raw = _bills_component(feeds, store.label, selected) if selected else (None, "No Posist month.")
+        if is_mall_food_court(store.label):
+            bills, bills_raw = None, f"{MALL_BILL_NOTE}. Left out of the score."
+        else:
+            bills, bills_raw = _bills_component(feeds, store.label, selected) if selected else (None, "No Posist month.")
         rating, rating_raw = _rating_component((feeds.get("famepilot_by_store") or {}).get(store.label))
         audit, audit_raw = _audit_component((feeds.get("audit_by_store") or {}).get(store.label))
         waste, waste_raw = _wastage_component(wastage_rows.get(store.label), wastage.get("present"))
@@ -654,7 +665,10 @@ def build_labour(feeds):
         if employees is not None and employees != 0 and gross is not None:
             matched_gross.append(gross)
             matched_gross_employees.append(employees)
-        if employees is not None and employees != 0 and bills is not None:
+        from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
+
+        mall = is_mall_food_court(store.label)
+        if (not mall) and employees is not None and employees != 0 and bills is not None:
             matched_bills.append(bills)
             matched_bill_employees.append(employees)
         rows.append(
@@ -662,16 +676,18 @@ def build_labour(feeds):
                 "id": store.id,
                 "label": store.label,
                 "region": store.region,
+                "mall_bills": mall,
+                "mall_note": MALL_BILL_NOTE if mall else "",
                 "employees": count_fig(employees),
                 "match_status": status,
                 "day_gross": money_fig(gross),
                 "day_bills": count_fig(bills),
                 "day_gross_per": money_fig(_per(gross, employees)),
-                "day_bills_per": ratio_fig(_per(bills, employees)),
+                "day_bills_per": ratio_fig(None if mall else _per(bills, employees)),
                 "mtd_gross": money_fig(mtd_gross),
                 "mtd_bills": count_fig(mtd_bills),
                 "mtd_gross_per": money_fig(_per(mtd_gross, employees)),
-                "mtd_bills_per": ratio_fig(_per(mtd_bills, employees)),
+                "mtd_bills_per": ratio_fig(None if mall else _per(mtd_bills, employees)),
             }
         )
     rows.sort(

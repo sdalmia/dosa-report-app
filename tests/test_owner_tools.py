@@ -364,7 +364,15 @@ class ShippedOwnerTests(unittest.TestCase):
         apb = payload["network"]["apb"]["value"]
         self.assertGreater(gross, 0)
         self.assertGreater(bills, 0)
-        self.assertAlmostEqual(apb, gross / bills)
+        self.assertGreater(apb, 0)
+        # Mall food-court gross stays in the total. Their bills do not, so APB is not gross divided by every bill.
+        self.assertNotAlmostEqual(apb, gross / bills, places=1)
+        forum = next(
+            store for region in payload["regions"] for store in region["stores"] if "Forum" in store["label"]
+        )
+        self.assertTrue(forum["mall_bills"])
+        self.assertIsNone(forum["apb"]["value"])
+        self.assertIsNone(forum["bills_change_pct"]["value"])
         self.assertLessEqual(len(payload["worst_vs_mid"]), 5)
         self.assertGreater(len(payload["worst_vs_mid"]), 0)
         variances = [item["variance_pct"]["value"] for item in payload["worst_vs_mid"]]

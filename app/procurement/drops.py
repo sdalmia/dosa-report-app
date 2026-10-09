@@ -13,7 +13,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from app.store_health.contract import parse_number
-from app.store_health.present import format_inr, format_count
+from app.store_health.present import format_count, format_inr, format_owner_rupee
 
 MONTHS = {
     "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
@@ -275,9 +275,23 @@ def _present_topic(topic, path):
             consumed_value = _num(row, consumed)
             if not label or (bought_value is None and consumed_value is None):
                 continue
+            difference = None
+            if bought_value is not None and consumed_value is not None:
+                difference = bought_value - consumed_value
             lines.append({
                 "label": label,
-                "value": f"Bought {_money(bought_value) or 'no data'} · Consumed {_money(consumed_value) or 'no data'}",
+                "value": " ".join(
+                    part for part in (
+                        _money(bought_value),
+                        _money(consumed_value),
+                        _money(difference) if difference is not None else "",
+                    ) if part
+                ),
+                "stats": _stat_rows((
+                    ("Bought", bought_value),
+                    ("Used", consumed_value),
+                    ("Difference", difference),
+                )),
             })
         if not lines:
             tile["note"] = "No data"
@@ -403,6 +417,19 @@ def _money(value):
     return format_inr(number)
 
 
+def _stat_rows(pairs):
+    rows = []
+    for label, number in pairs:
+        if number is None:
+            continue
+        rows.append({
+            "label": label,
+            "text": format_owner_rupee(number),
+            "exact": format_inr(number),
+        })
+    return rows
+
+
 def _topic_by_id(topic_id):
     for topic in TOPICS:
         if topic["id"] == topic_id:
@@ -503,8 +530,13 @@ def _tiles_from_consumption(path):
         consumed = _money(used[column]) if used and used[column] is not None else ""
         difference = _money(gap[column]) if gap and gap[column] is not None else ""
         bought_lines.append({
-            "label": f"{city} raw bought {bought}",
-            "value": f"consumed {consumed}" + (f" · difference {difference}" if difference else ""),
+            "label": city,
+            "value": " ".join(part for part in (bought, consumed, difference) if part),
+            "stats": _stat_rows((
+                ("Bought", raw[column]),
+                ("Used", used[column] if used else None),
+                ("Difference", gap[column] if gap else None),
+            )),
         })
     if bought_lines:
         tiles["bought_consumed"] = _ready_tile("bought_consumed", source, period, bought_lines)
@@ -517,7 +549,12 @@ def _tiles_from_consumption(path):
         opening = _money(row["opening"]) if row["opening"] is not None else ""
         stock_lines.append({
             "label": f"{row['city']} all categories",
-            "value": f"{opening} to {_money(row['closing'])}" + (f" · change {change}" if change else ""),
+            "value": " ".join(part for part in (opening, _money(row["closing"]), change) if part),
+            "stats": _stat_rows((
+                ("Opening", row["opening"]),
+                ("Closing", row["closing"]),
+                ("Change", row["change"]),
+            )),
         })
     if stock_lines:
         tiles["warehouse"] = _ready_tile("warehouse", source, period, stock_lines)

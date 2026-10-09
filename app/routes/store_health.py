@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 
-from flask import Blueprint, render_template, request, send_file
+from flask import Blueprint, redirect, render_template, request, send_file, url_for
 
 from app.routes.main import login_required
 from app.store_health.context_slots import build_context_slots
@@ -9,6 +9,7 @@ from app.store_health.contract import load_feeds
 from app.store_health.insights import build_insights
 from app.store_health.pdf_report import render_store_pdf
 from app.store_health.present import (
+    _window_bounds,
     build_view,
     business_today,
     calendar_bounds,
@@ -18,18 +19,23 @@ from app.store_health.present import (
     parse_range,
     resolve_store,
 )
+from app.view_filters import city_region, remember_filters, resolve_bounds, store_options, visible_stores
 
 store_health_bp = Blueprint("store_health", __name__)
 log = logging.getLogger(__name__)
 
 
-def _assemble(token, args):
+def _assemble(token, args, filters=None):
     today = business_today()
     feeds = load_feeds()
     selection = parse_range(args, today, default_span=calendar_bounds(feeds))
     stores = list_stores(feeds)
     store = resolve_store(stores, token)
-    view = build_view(feeds, store, selection, today)
+    start, end = _window_bounds(feeds)
+    window = resolve_bounds(filters or {}, start, end)
+    menu_window = window if window[0] and window[1] else None
+    posist_bounds = menu_window if (filters or {}).get("cc_range") else None
+    view = build_view(feeds, store, selection, today, menu_window=menu_window, posist_bounds=posist_bounds)
     insights = build_insights(feeds, store)
     context_slots = build_context_slots(store, today)
     for warning in feeds.get("warnings") or []:
@@ -51,8 +57,20 @@ def _assemble(token, args):
 @store_health_bp.route("/store-health/<store_id>")
 @login_required
 def page(store_id=None):
-    token = (store_id or request.args.get("store") or "").strip()
-    packed = _assemble(token, request.args)
+    filters = remember_filters()
+    if "cc_store" in request.args:
+        wanted = filters.get("cc_store") or ""
+        current = (store_id or "").strip()
+        if wanted != current:
+            target = url_for("store_health.page", store_id=wanted) if wanted else url_for("store_health.page")
+            return redirect(target)
+    token = (store_id or request.args.get("store") or filters.get("cc_store") or "").strip()
+    packed = _assemble(token, request.args, filters)
+    options = visible_stores(store_options(), filters)
+    region = city_region(filters)
+    groups = grouped_stores(packed["stores"])
+    if region:
+        groups = [(name, items) for name, items in groups if name == region]
     store = packed["store"]
     selection = packed["selection"]
     return render_template(
@@ -60,7 +78,9 @@ def page(store_id=None):
         store=store,
         unknown_store=bool(packed["token"]) and store is None,
         unknown_token=packed["token"] if packed["token"] and store is None else "",
-        groups=grouped_stores(packed["stores"]),
+        groups=groups,
+        filters=filters,
+        filter_stores=options,
         selection=selection,
         day_label=format_date(selection["day"]) if selection["day"] else "",
         match_keys=sorted(store.match_keys(), key=str.lower) if store else [],

@@ -1310,9 +1310,9 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(page, "variance_vs_mid", "2026-10-03"), "")
         self.assertNotIn('data-date="2026-10-02"', page)
         self.assertNotIn("historical-total-revenue", page)
-        self.assertEqual(cell(page, "menu_mix_period"), "1–30 Sep 2026")
-        self.assertIn("Benne Masala Dosa", page)
-        self.assertIn("₹5,59,226.59", page)
+        self.assertEqual(cell(page, "menu_mix_period"), "9 Sep–8 Oct 2026")
+        self.assertEqual(cell(page, "menu_mix"), "Per-store item sales for this window are not on file yet.")
+        self.assertNotIn("Benne Masala Dosa", page[page.index('id="menu-mix"'):page.index('id="mystery-audit"')])
         self.assertNotIn("last 30 days", page[page.index('id="menu-mix"'):page.index('id="mystery-audit"')])
 
     def test_calendar_file_net_keeps_its_own_label_beside_actual_gross(self):
@@ -1467,22 +1467,17 @@ class StoreHealthTests(unittest.TestCase):
         index = self.get("/store-health")
         self.assertIn("Menu mix is not on file.", index)
         ideal = self.get(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Ideal Plaza (01/0001)')}")
-        self.assertEqual(cell(ideal, "menu_mix_period"), "1–30 Sep 2026")
-        self.assertEqual(len(re.findall(r'data-field="menu_item"', ideal)), 10)
-        self.assertIn("Masala Dosa", ideal)
-        self.assertIn("₹4,90,578.11", ideal)
-        self.assertIn("2,750 orders", ideal)
-        self.assertIn("14.13%", ideal)
-        self.assertNotIn("Ghee Roast Masala Dosa", ideal[ideal.index('id="menu-mix"'):ideal.index('id="mystery-audit"')])
+        self.assertEqual(cell(ideal, "menu_mix_period"), "9 Sep–8 Oct 2026")
+        self.assertEqual(cell(ideal, "menu_mix"), "Per-store item sales for this window are not on file yet.")
+        self.assertNotIn("Masala Dosa", ideal[ideal.index('id="menu-mix"'):ideal.index('id="mystery-audit"')])
         self.assertNotIn("last 30 days", ideal[ideal.index('id="menu-mix"'):ideal.index('id="mystery-audit"')])
         for label in ("GK1 Cloud Kitchen (02/0002)", "Chattarpur (02/0005)"):
             page = self.get(f"/store-health/{self._option_slug(index, label)}")
-            self.assertEqual(cell(page, "menu_mix"), "Menu mix is not on file for this store.", label)
+            self.assertEqual(cell(page, "menu_mix"), "Per-store item sales for this window are not on file yet.", label)
             self.assertNotIn('data-field="menu_item"', page, label)
         pdf = self._pdf_text(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Ideal Plaza (01/0001)')}/print")
-        self.assertIn("1–30 Sep 2026", pdf)
-        self.assertIn("Masala Dosa", pdf)
-        self.assertIn("₹4,90,578.11", pdf)
+        self.assertIn("9 Sep–8 Oct 2026", pdf)
+        self.assertIn("Per-store item sales for this window are not on file yet.", pdf)
         self.assertNotIn("Ghee Roast Masala Dosa", pdf)
         start, end = forward_calendar_bounds(date(2026, 10, 3))
         self.assertEqual((start, end), (date(2026, 10, 3), date(2026, 11, 1)))
@@ -1502,6 +1497,19 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(shown["period_label"], "1–30 Sep 2026")
         self.assertEqual([item["item"] for item in shown["entries"]], ["Newer Dosa", "Day Dosa"])
         self.assertNotIn("Older Dosa", " ".join(item["item"] for item in shown["entries"]))
+        self.write(
+            "item_sales.csv",
+            "store,item,date,sales,orders\n"
+            "Only Mix,Window Dosa,2026-09-09,12,2\n"
+            "Only Mix,Window Dosa,2026-10-08,8,1\n"
+            "Only Mix,Outside Dosa,2026-08-01,99,9\n",
+        )
+        feeds = load_feeds(self.data.name)
+        shown = present_menu_mix(feeds, list_stores(feeds)[0], (date(2026, 9, 9), date(2026, 10, 8)))
+        self.assertEqual(shown["period_label"], "9 Sep–8 Oct 2026")
+        self.assertEqual([item["item"] for item in shown["entries"]], ["Window Dosa"])
+        self.assertEqual(shown["entries"][0]["sales"], "₹20")
+        self.assertEqual(shown["entries"][0]["orders"], "3")
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ from markupsafe import Markup
 
 from app.procurement import procurement_tiles
 from app.store_health.contract import data_directory, load_feeds, parse_number
+from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
 from app.store_health.present import (
     POSIST_WINDOW_DAYS,
     _sum_present,
@@ -20,9 +21,11 @@ from app.store_health.present import (
     format_count,
     format_date,
     format_inr,
+    format_owner_rupee,
     format_pct,
     list_stores,
 )
+from app.view_filters import city_region, resolve_bounds
 
 LAKH = 100_000
 LOW_BILL_DROP = -15
@@ -50,34 +53,65 @@ def _metric(rows, field, kind):
     return _sum_present(rows, field, kind)
 
 
-def _region_block(feeds, region, start, end, compare_day):
-    window_rows = []
-    for (_store, day), row in feeds["posist"].items():
+def _named_rows(feeds, start, end, region=None, store=None):
+    keys = store.match_keys() if store is not None else None
+    found = []
+    for (name, day), row in feeds["posist"].items():
         if day < start or day > end:
             continue
         if region and (row.get("region") or "") != region:
             continue
-        window_rows.append(row)
+        if keys is not None and name not in keys:
+            continue
+        found.append((name, row))
+    return found
+
+
+def _region_block(feeds, region, start, end, compare_day, store=None, label=None):
+    named = _named_rows(feeds, start, end, region, store)
+    comparable = [(name, row) for name, row in named if not is_mall_food_court(name)]
+    window_rows = [row for _name, row in named]
+    comparable_rows = [row for _name, row in comparable]
     gross = _metric(window_rows, "gross", "money")
-    bills = _metric(window_rows, "bills", "count")
-    apb = _window_apb(gross, bills)
-    latest = _rows_on(feeds, end, region)
-    prior = _rows_on(feeds, compare_day, region)
-    latest_gross = _metric(latest, "gross", "money")
-    prior_gross = _metric(prior, "gross", "money")
-    latest_bills = _metric(latest, "bills", "count")
-    prior_bills = _metric(prior, "bills", "count")
-    latest_apb = _window_apb(latest_gross, latest_bills)
-    prior_apb = _window_apb(prior_gross, prior_bills)
+    bills = _metric(comparable_rows, "bills", "count")
+    comparable_gross = _metric(comparable_rows, "gross", "money")
+    apb = _window_apb(comparable_gross, bills)
+    latest = _named_rows(feeds, end, end, region, store)
+    prior = _named_rows(feeds, compare_day, compare_day, region, store)
+    latest_gross = _metric([row for _name, row in latest], "gross", "money")
+    prior_gross = _metric([row for _name, row in prior], "gross", "money")
+    latest_bills = _metric(
+        [row for name, row in latest if not is_mall_food_court(name)],
+        "bills",
+        "count",
+    )
+    prior_bills = _metric(
+        [row for name, row in prior if not is_mall_food_court(name)],
+        "bills",
+        "count",
+    )
+    latest_apb = _window_apb(
+        _metric([row for name, row in latest if not is_mall_food_court(name)], "gross", "money"),
+        latest_bills,
+    )
+    prior_apb = _window_apb(
+        _metric([row for name, row in prior if not is_mall_food_court(name)], "gross", "money"),
+        prior_bills,
+    )
     return {
         "key": region or "all",
-        "label": region or "All",
+        "label": label or region or "All",
         "gross_value": gross,
         "bills_value": bills,
         "apb_value": apb,
-        "gross": format_inr(gross) if gross is not None else "",
+        "comparable_gross": comparable_gross,
+        "comparable_bills": bills,
+        "gross": format_owner_rupee(gross) if gross is not None else "",
+        "gross_exact": format_inr(gross) if gross is not None else "",
         "bills": format_count(bills) if bills is not None else "",
-        "apb": format_inr(apb) if apb is not None else "",
+        "bills_exact": "",
+        "apb": format_owner_rupee(apb) if apb is not None else "",
+        "apb_exact": format_inr(apb) if apb is not None else "",
         "gross_change": format_pct(_change(latest_gross, prior_gross)) if _change(latest_gross, prior_gross) is not None else "",
         "bills_change": format_pct(_change(latest_bills, prior_bills)) if _change(latest_bills, prior_bills) is not None else "",
         "apb_change": format_pct(_change(latest_apb, prior_apb)) if _change(latest_apb, prior_apb) is not None else "",
@@ -109,14 +143,15 @@ def _league(feeds, stores, start, end, region, low_only):
             continue
         rows = _store_rows(feeds, store, start, end)
         gross = _metric(rows, "gross", "money")
-        bills = _metric(rows, "bills", "count")
-        apb = _window_apb(gross, bills)
+        mall = is_mall_food_court(store.label)
+        bills = None if mall else _metric(rows, "bills", "count")
+        apb = None if mall else _window_apb(gross, bills)
         latest = _store_on(feeds, store, end)
         prior = _store_on(feeds, store, end - timedelta(days=7))
-        latest_bills = latest.get("bills") if latest else None
-        prior_bills = prior.get("bills") if prior else None
+        latest_bills = None if mall or latest is None else latest.get("bills")
+        prior_bills = None if mall or prior is None else prior.get("bills")
         bills_change = _change(latest_bills, prior_bills)
-        low = bills_change is not None and bills_change <= LOW_BILL_DROP
+        low = (not mall) and bills_change is not None and bills_change <= LOW_BILL_DROP
         if low_only and not low:
             continue
         if gross is None and bills is None:
@@ -126,9 +161,11 @@ def _league(feeds, stores, start, end, region, low_only):
             "label": store.label,
             "region": store.region,
             "gross_value": gross,
-            "gross": format_inr(gross) if gross is not None else "",
+            "gross": format_owner_rupee(gross) if gross is not None else "",
+            "gross_exact": format_inr(gross) if gross is not None else "",
             "bills_change": format_pct(bills_change) if bills_change is not None else "",
-            "apb": format_inr(apb) if apb is not None else "",
+            "apb": format_owner_rupee(apb) if apb is not None else "",
+            "mall_bills": mall,
             "low": low,
         })
     ranked.sort(
@@ -487,6 +524,8 @@ def _alerts(feeds, stores, end):
     for store in stores:
         if end is None:
             break
+        if is_mall_food_court(store.label):
+            continue
         latest = _store_on(feeds, store, end)
         prior = _store_on(feeds, store, compare)
         latest_bills = latest.get("bills") if latest else None
@@ -513,7 +552,7 @@ def _alerts(feeds, stores, end):
     return alerts
 
 
-def _window_copy(start, end, days_in_window):
+def _window_copy(start, end, days_in_window, feeds=None):
     if start is None or end is None:
         return "", ""
     compare = end - timedelta(days=7)
@@ -528,23 +567,48 @@ def _window_copy(start, end, days_in_window):
         f"Change versus {compare.strftime('%A')} {compare.day} {compare.strftime('%b')}. "
         "Calculated. Gross divided by bills. A blank day is left out."
     )
+    if feeds and _window_has_mall(feeds):
+        note += f" {MALL_BILL_NOTE}. Those bills and APB are left out of rankings and comparisons."
     return subtitle, note
 
 
-def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, procurement_dir=None):
+def _window_has_mall(feeds):
+    for name, _day in feeds.get("posist") or {}:
+        if is_mall_food_court(name):
+            return True
+    return False
+
+
+def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, procurement_dir=None, view_filters=None):
     feeds = feeds if feeds is not None else load_feeds()
     today = today or business_today()
+    view_filters = view_filters or {}
+    if view_filters.get("cc_city"):
+        region = city_region(view_filters) or region
     start, end = _window_bounds(feeds)
+    start, end = resolve_bounds(view_filters, start, end)
     regions = []
     compare_label = ""
     window_label = ""
+    stores = list_stores(feeds)
+    chosen = None
+    wanted = (view_filters.get("cc_store") or "").strip()
+    if wanted:
+        for store in stores:
+            if wanted == store.id or wanted in store.match_keys():
+                chosen = store
+                break
     if start is not None and end is not None:
         window_label = f"{format_date(start)} through {format_date(end)}"
         compare_day = end - timedelta(days=7)
         compare_label = f"{format_date(end)} vs {format_date(compare_day)}"
-        for name in (None, "East", "North"):
-            regions.append(_region_block(feeds, name, start, end, compare_day))
-    stores = list_stores(feeds)
+        city_name = {"East": "Kolkata", "North": "Delhi NCR"}.get(region, "")
+        names = (region,) if region else (None, "East", "North")
+        for name in names:
+            label = city_name if name == region and city_name else None
+            regions.append(_region_block(feeds, name, start, end, compare_day, chosen, label))
+    if chosen is not None:
+        stores = [chosen]
     league = _league(feeds, stores, start, end, region, low_only) if start else []
     chart = _chart(feeds, feeds.get("directory") or data_directory(), start, end) if start else {
         "points": [], "source": "", "last_band": "", "svg": "",
@@ -552,7 +616,7 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
     days_in_window = 0
     if start and end:
         days_in_window = sum(1 for offset in range((end - start).days + 1) if _rows_on(feeds, start + timedelta(days=offset)))
-    subtitle, window_note = _window_copy(start, end, days_in_window)
+    subtitle, window_note = _window_copy(start, end, days_in_window, feeds)
     if len(league) > 10:
         league_top, league_bottom = league[:5], league[-5:]
     else:
