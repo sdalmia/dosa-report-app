@@ -2,8 +2,10 @@
 
 from flask import jsonify, render_template, request, Response
 
+from app.access import owner_required
 from app.routes.main import login_required
 from app.store_health.contract import load_feeds
+from app.store_master import get_index, human_notes, store_gaps
 from app.view_filters import city_region, remember_filters, resolve_bounds, store_options, visible_stores
 
 from . import owner_bp
@@ -104,3 +106,54 @@ def goals():
     festive = _festive_choice(request.args.get("festive"), festive_available(feeds, selected))
     payload = build_goals(feeds, load_goals(), selected, festive)
     return render_template("owner/goals.html", goals=payload, active="goals")
+
+
+GAP_FILTERS = (
+    ("", "All"),
+    ("google", "No Google listing"),
+    ("reelo", "Not on Reelo"),
+    ("delivery", "No Swiggy or Zomato"),
+    ("unverified", "Unverified listing"),
+    ("duplicate", "Duplicate listing"),
+    ("name", "Name mismatch"),
+)
+
+
+@owner_bp.route("/data-gaps")
+@login_required
+@owner_required
+def data_gaps():
+    selected = (request.args.get("gap") or "").strip()
+    if selected not in {key for key, _label in GAP_FILTERS}:
+        selected = ""
+    cards = []
+    counts = {key: 0 for key, _label in GAP_FILTERS if key}
+    for row in get_index().rows:
+        gaps = store_gaps(row)
+        for gap in gaps:
+            counts[gap["kind"]] = counts.get(gap["kind"], 0) + 1
+        shown = [gap for gap in gaps if not selected or gap["kind"] == selected]
+        if not shown:
+            continue
+        note = human_notes(row.get("notes"))
+        if any(gap["detail"] == note for gap in shown):
+            note = ""
+        place = " · ".join(part for part in (row.get("city"), row.get("format")) if part)
+        cards.append(
+            {
+                "store_id": row.get("store_id"),
+                "name": row.get("display_name") or row.get("posist_name"),
+                "place": place,
+                "note": note,
+                "gaps": shown,
+            }
+        )
+    cards.sort(key=lambda card: card["name"].casefold())
+    return render_template(
+        "owner/data_gaps.html",
+        cards=cards,
+        filters=GAP_FILTERS,
+        counts=counts,
+        selected=selected,
+        active="data-gaps",
+    )

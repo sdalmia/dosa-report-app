@@ -105,17 +105,30 @@ def unique_store_label(file_label, posist_labels):
 def extra_store_labels(rows, posist_labels):
     """Labels from other feeds that are not on the Posist deployment report.
 
-    A shorter label is dropped when it names a longer label already kept, so
-    "Events & Catering" stays on "Dosa Coffee - Events & Catering".
+    A name the store master already lists uses that outlet's Posist label.
+    Anything the master does not list still falls back to a unique longer label,
+    so "Events & Catering" stays on "Dosa Coffee - Events & Catering".
     """
+    from app.store_master import find_store
+
     found = []
     for row in rows:
         label = (row.get("posist_store") or "").strip()
         if label:
             found.append(label)
-    outside = []
     deployments = [str(label).strip() for label in posist_labels if str(label).strip()]
+    promoted = []
+    pending = []
     for label in found:
+        hit = find_store(label)
+        if hit is not None:
+            name = (hit.get("posist_name") or "").strip()
+            if name and name not in deployments and name not in promoted:
+                promoted.append(name)
+            continue
+        pending.append(label)
+    outside = []
+    for label in pending:
         wanted = label_words(label)
         if not wanted:
             continue
@@ -127,9 +140,11 @@ def extra_store_labels(rows, posist_labels):
         ):
             continue
         outside.append(label)
-    kept = []
+    kept = list(promoted)
     for label in sorted(set(outside), key=lambda text: (-len(text), text.casefold())):
-        if unique_store_label(label, kept):
+        if unique_store_label(label, kept + deployments):
+            continue
+        if label in kept:
             continue
         kept.append(label)
     return kept
@@ -199,10 +214,14 @@ def assign_rows(rows, label_key, posist_labels):
 
     A label that hits no store, or more than one row, is left unassigned.
     """
+    from app.store_master import resolve_store_label
+
     buckets = {}
     unmatched = []
     for row in rows:
-        label = unique_store_label(row.get(label_key), posist_labels)
+        label = resolve_store_label(row.get(label_key), posist_labels)
+        if label is None:
+            label = unique_store_label(row.get(label_key), posist_labels)
         if label is None:
             unmatched.append(row)
             continue

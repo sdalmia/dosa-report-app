@@ -1,0 +1,35 @@
+{% extends "owner/layout.html" %}
+
+{% block title %}Data gaps - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Data gaps</h1>
+<p class="subtitle">Each store, and the systems it is still missing from. Every gap has an owner and what has to happen next.</p>
+
+<nav class="filters" aria-label="Gap type">
+  {% for key, label in filters %}
+  <a href="{% if key %}/data-gaps?gap={{ key }}{% else %}/data-gaps{% endif %}" {% if selected == key %}class="is-current"{% endif %}>
+    {{ label }}{% if key %} · {{ counts.get(key, 0) }}{% endif %}
+  </a>
+  {% endfor %}
+</nav>
+
+{% if not cards %}
+<div class="empty"><p>No gaps of this kind.</p></div>
+{% endif %}
+
+{% for card in cards %}
+<article class="store" data-store="{{ card.store_id }}">
+  <h2>{{ card.name }}</h2>
+  {% if card.place %}<p class="note">{{ card.place }}</p>{% endif %}
+  {% if card.note %}<p class="note">{{ card.note }}</p>{% endif %}
+  {% for gap in card.gaps %}
+  <div class="component" data-gap="{{ gap.kind }}">
+    <strong>{{ gap.label }}</strong>
+    <p class="meta">{{ gap.owner }} · <span class="gap-status">{{ gap.status }}</span></p>
+    {% if gap.detail and gap.detail != gap.label %}<p>{{ gap.detail }}</p>{% endif %}
+  </div>
+  {% endfor %}
+</article>
+{% endfor %}
+{% endblock %}

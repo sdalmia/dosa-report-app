@@ -234,6 +234,35 @@
 .owner-tools .weight { margin-bottom: 0.55rem; }
 .owner-tools .weight b { float: right; color: var(--accent); }
 
+.owner-tools .filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
+}
+
+.owner-tools .filters a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.owner-tools .filters a.is-current {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.owner-tools .gap-status {
+  color: var(--accent);
+  font-weight: 650;
+}
+
 @media (min-width: 768px) {
   .owner-tools { max-width: 42rem; }
 }

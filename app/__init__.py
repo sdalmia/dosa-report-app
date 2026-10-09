@@ -47,4 +47,10 @@ def create_app():
     from .routes import register_routes
     register_routes(app)
 
+    @app.context_processor
+    def inject_access():
+        from app.access import is_owner
+
+        return {"is_owner": is_owner}
+
     return app
