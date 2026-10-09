@@ -24,6 +24,8 @@ FOOD_SAFETY_TERMS = (
 EMERGENCY_TERMS = ("emergency", "fire", "injury", "injured", "accident", "ambulance", "evacuation")
 _SKIP_VALUES = {"no", "none", "n/a", "na", "not shown", "not available", "-"}
 _FLAG_COLUMNS = {"flag", "flags", "alert", "alerts", "status", "issue", "issues"}
+# Bill reconciliation uses status for match / amount_mismatch. That is not an owner flag.
+_STATUS_NOT_A_FLAG = {"match", "amount_mismatch"}
 _ID_COLUMNS = {
     "posist_store",
     "famepilot_location",
@@ -192,6 +194,8 @@ def scan_procurement():
             parts = []
             for column in columns:
                 text = str(row.get(column) or "").strip()
+                if column.strip().casefold() == "status" and text.casefold() in _STATUS_NOT_A_FLAG:
+                    continue
                 if text and text.casefold() not in _SKIP_VALUES:
                     parts.append(f"{column}: {text}")
             if not parts:

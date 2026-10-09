@@ -97,6 +97,7 @@ class ProcurementTests(unittest.TestCase):
         self.assertNotIn("September purchases are not in these files", html)
         self.assertIn("Net is blank", html)
         self.assertIn("Posist gross", html)
+        self.assertIn("Purchases (all categories)", html)
 
         week_grn, _ = _field(html, "grn-all", window="week", city="kolkata")
         self.assertEqual(_attr(html, "grn-all", window="week", city="kolkata"), "3013530.15")
