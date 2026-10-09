@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}Menu history - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <h1>Menu history</h1>
+    <p class="muted">Each upload is kept. An older menu is not replaced.</p>
+  </header>
+  {{ menu_nav('history') }}
+
+  {% if not versions %}
+  <p class="empty">No menu versions yet.{% if is_owner %} Load a menu with the date it took effect.{% endif %}</p>
+  {% else %}
+  <section class="cc-section">
+    <div class="mc-list">
+      {% for version in versions %}
+      <article class="tile" data-field="menu-version" data-id="{{ version.id }}">
+        <strong>{{ version.city }} · {{ version.channel }}</strong>
+        <p>{{ version.store_scope }}</p>
+        <p class="muted">{{ version.effective_from.strftime('%d %b %Y') }}{% if version.effective_to %} – {{ version.effective_to.strftime('%d %b %Y') }}{% else %} onwards{% endif %}</p>
+        <p class="muted">{{ version['items']|length }} items{% if version.source %} · {{ version.source }}{% endif %}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="cc-section">
+    <div class="section-head"><h2>Compare</h2></div>
+    <form class="mc-filters" method="get" action="{{ url_for('menu_costing.history_page') }}">
+      <label>First
+        <select name="left">
+          {% for version in versions %}
+          <option value="{{ version.id }}" {% if version.id == left_id %}selected{% endif %}>{{ version.effective_from.strftime('%d %b %Y') }} · {{ version.city }} · {{ version.channel }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Second
+        <select name="right">
+          {% for version in versions %}
+          <option value="{{ version.id }}" {% if version.id == right_id %}selected{% endif %}>{{ version.effective_from.strftime('%d %b %Y') }} · {{ version.city }} · {{ version.channel }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button type="submit">Show the difference</button>
+    </form>
+    {% if diff %}
+    <h3>Added</h3>
+    {% if diff.added %}
+    <ul class="mc-diff">
+      {% for row in diff.added %}
+      <li data-field="diff-added" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">Nothing added.</p>{% endif %}
+    <h3>Removed</h3>
+    {% if diff.removed %}
+    <ul class="mc-diff">
+      {% for row in diff.removed %}
+      <li data-field="diff-removed" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">Nothing removed.</p>{% endif %}
+    <h3>Repriced</h3>
+    {% if diff.repriced %}
+    <ul class="mc-diff">
+      {% for row in diff.repriced %}
+      <li data-field="diff-repriced" data-item="{{ row.item }}">{{ row.item }} · {{ row.old_text }} to {{ row.new_text }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">No price changes.</p>{% endif %}
+    {% endif %}
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

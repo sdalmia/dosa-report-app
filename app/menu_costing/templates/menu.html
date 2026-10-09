@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}Menu and costing - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <h1>Menu &amp; Costing</h1>
+    <p class="muted">{{ city_note }}</p>
+  </header>
+  {{ menu_nav('menu') }}
+
+  <section class="cc-section" id="threats">
+    <div class="section-head"><h2>Threats</h2></div>
+    <h3>Above the {{ city }} median</h3>
+    {% if above_count %}
+    <p class="muted">{{ above_count }} items are above the {{ city }} median. The largest gaps are first.</p>
+    {% endif %}
+    {% if threats_above %}
+    <div class="flag-row">
+      {% for row in threats_above %}
+      <a class="flag-card sev-red" href="{{ url_for('menu_costing.item_page', city=row.city, store=row.outlet, item=row.item) }}">
+        <span class="flag-kicker">{{ row.outlet }}</span>
+        <strong>{{ row.item }}</strong>
+        <span data-field="threat-above" data-city="{{ row.city }}" data-store="{{ row.outlet }}" data-item="{{ row.item }}" data-value="{{ row.vs_attr }}"><span class="mc-num">{{ row.cost }}</span> · {{ row.vs }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No item is above the {{ city }} median.</p>
+    {% endif %}
+
+    <h3>Priced below cost</h3>
+    {% if priced_below %}
+    <div class="flag-row">
+      {% for row in priced_below %}
+      <article class="flag-card sev-red">
+        <strong>{{ row.item }}</strong>
+        <span class="mc-num" data-field="priced-below" data-item="{{ row.item }}">Price {{ row.price }} · cost {{ row.cost }}</span>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">{{ priced_below_gap or "No item is priced below its recipe cost." }}</p>
+    {% endif %}
+
+    <h3>Price changes that hurt margin</h3>
+    {% if margin_hurts %}
+    <div class="flag-row">
+      {% for row in margin_hurts %}
+      <article class="flag-card sev-amber">
+        <strong>{{ row.item }}</strong>
+        <span class="mc-num" data-field="margin-hurt" data-item="{{ row.item }}">{{ row.old_price }} to {{ row.new_price }} · margin {{ row.old_margin }} to {{ row.new_margin }}</span>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">{{ margin_gap or "No price change hurt the margin." }}</p>
+    {% endif %}
+  </section>
+
+  <section class="cc-section">
+    <form class="mc-filters" method="get" action="{{ url_for('menu_costing.menu_page') }}">
+      <label>City
+        <select name="city">
+          {% for name in cities %}
+          <option value="{{ name }}" {% if name == city %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Channel
+        <select name="channel">
+          {% for name in channels %}
+          <option value="{{ name }}" {% if name == channel %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Store
+        <select name="store">
+          <option value="">All stores in {{ city }}</option>
+          {% for name in outlets %}
+          <option value="{{ name }}" {% if name == store %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Search
+        <input type="search" name="q" value="{{ query }}" placeholder="Item name">
+      </label>
+      <button type="submit">Show</button>
+    </form>
+  </section>
+
+  <section class="cc-section" id="current">
+    <div class="section-head"><h2>{{ channel }} · {{ city }}{% if store %} · {{ store }}{% endif %}</h2></div>
+    {% if price_gap %}<p class="empty" data-field="price-gap">{{ price_gap }}</p>{% endif %}
+    {% if shown_count < row_count %}
+    <p class="muted">Showing {{ shown_count }} of {{ row_count }}. Search to narrow.</p>
+    {% endif %}
+    {% if rows %}
+    <div class="mc-list">
+      {% for row in rows %}
+      <a class="tile mc-item" href="{{ url_for('menu_costing.item_page', city=city, store=store, item=row.item) }}">
+        <strong>{{ row.item }}</strong>
+        {% if row.category %}<p class="muted">{{ row.category }}</p>{% endif %}
+        <div class="mc-pair">
+          <p>{% if row.basis == 'median' %}City median{% else %}Cost{% endif %}
+            <span class="mc-num" data-field="menu-cost" data-item="{{ row.item }}" data-value="{{ row.cost_attr }}">{{ row.cost }}</span>
+          </p>
+          <p>Price
+            <span class="mc-num" data-field="menu-price" data-item="{{ row.item }}" data-value="{{ row.price_attr }}">{{ row.price }}</span>
+          </p>
+        </div>
+        <div class="mc-pair">
+          <p>Food cost
+            <span class="mc-num" data-field="food-cost-pct" data-item="{{ row.item }}" data-value="{{ row.food_attr }}">{{ row.food_pct }}</span>
+          </p>
+          <p>Margin
+            <span class="mc-num" data-field="menu-margin" data-item="{{ row.item }}" data-value="{{ row.margin_attr }}">{{ row.margin }}</span>
+          </p>
+        </div>
+        {% if row.vs %}<p>{{ row.vs }}</p>{% endif %}
+        {% if row.orders or row.sold %}
+        <p class="muted">Sold <span data-field="orders" data-item="{{ row.item }}" data-value="{{ row.orders_attr }}">{{ row.orders }}</span>{% if sales_period %} · {{ sales_period }}{% endif %}{% if row.sold %} · <span class="mc-num">{{ row.sold }}</span>{% endif %}</p>
+        {% elif not sales_available %}
+        <p class="muted" data-field="sales-coming">Data coming</p>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No items match this city, store, and search.</p>
+    {% endif %}
+  </section>
+
+  <section class="cc-section" id="sold">
+    <div class="section-head"><h2>What actually sold</h2></div>
+    {% if sales_available %}
+    <p class="muted">{{ sales_period }}. {{ sales_coming }}</p>
+    {% if sellers %}
+    <div class="mc-list">
+      {% for row in sellers %}
+      <article class="tile">
+        <strong>{{ row.item }}</strong>
+        <div class="mc-pair">
+          <p>Orders <span class="mc-num" data-field="seller-orders" data-item="{{ row.item }}" data-value="{{ row.orders_attr }}">{{ row.orders }}</span></p>
+          <p>Sales <span class="mc-num">{{ row.sold }}</span></p>
+        </div>
+        <div class="mc-pair">
+          <p>Cost <span class="mc-num">{{ row.cost }}</span></p>
+          <p>Price <span class="mc-num">{{ row.price }}</span></p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No item sales match this city and store.</p>
+    {% endif %}
+    {% else %}
+    <p class="empty" data-field="sales-coming">{{ sales_coming }}</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

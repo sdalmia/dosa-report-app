@@ -16,6 +16,10 @@
       <h3>Vendors</h3>
       <p class="muted">Supplier prices, gaps, and bill checks.</p>
     </a>
+    <a class="tile" href="{{ url_for('menu_costing.menu_page') }}">
+      <h3>Menu &amp; Costing</h3>
+      <p class="muted">Prices, recipe cost, and what sold, by city and channel.</p>
+    </a>
     {% for tile in procurement %}
       <article class="tile">
         <h3>{{ tile.title }}</h3>

@@ -40,6 +40,7 @@
   <a href="{{ url_for('menu_ops.tickets') }}" {% if request.endpoint == 'menu_ops.tickets' %}aria-current="page"{% endif %}>Tickets</a>
   <h2>Buying</h2>
   <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
+  <a href="{{ url_for('menu_costing.menu_page') }}" {% if request.endpoint and request.endpoint.startswith('menu_costing.') %}class="is-current"{% endif %}>Menu &amp; Costing</a>
   <a href="{{ url_for('procurement.food_cost') }}">Food cost</a>
   <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
   <h2>Tools</h2>

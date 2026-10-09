@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}Upload a menu - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <h1>Upload a menu</h1>
+    <p class="muted">Sanjoy's Excel, CSV, or PDF. The date is the day this menu took effect. The previous menu stays on file.</p>
+  </header>
+  {{ menu_nav('upload') }}
+  {% if error %}<p class="empty">{{ error }}</p>{% endif %}
+  <form class="mc-filters" method="post" enctype="multipart/form-data" action="{{ url_for('menu_costing.upload_page') }}">
+    <label>City
+      <select name="city" required>
+        {% for name in cities %}<option value="{{ name }}">{{ name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Channel
+      <select name="channel" required>
+        {% for name in channels %}<option value="{{ name }}">{{ name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Stores
+      <input name="store_scope" placeholder="All stores, or one store name">
+    </label>
+    <label>Effective date
+      <input type="date" name="effective_from" required>
+    </label>
+    <label>Menu file
+      <input type="file" name="menu_file" accept=".csv,.xlsx,.xlsm,.xls,.pdf" required>
+    </label>
+    <button type="submit">Save this version</button>
+  </form>
+</div>
+{% endblock %}
