@@ -18,6 +18,7 @@ from app.menu_ops.loader import (
     is_ideal_plaza,
     item_key,
     load_categories,
+    load_recon,
     load_regions,
     load_sales,
     menu_directory,
@@ -28,6 +29,7 @@ from app.menu_ops.loader import (
 
 NO_CATEGORY = "__none__"
 NO_REGION = "__none__"
+UNALLOCATED_NOTE = "Probably delivery packaging charges. Still unconfirmed. This is not a dish."
 POPULARITY_OF_EQUAL = 0.70
 
 QUADRANT_LABELS = {
@@ -44,8 +46,9 @@ MARGIN_INFO = (
     "When several outlets in the same city are included, the cost is the order-weighted average of the outlets that have a cost, "
     "and the other outlets' Gross and orders are left out of that margin. "
     "Delhi and Kolkata are not averaged together. "
-    "Swiggy and Zomato at Ideal Plaza use the takeout and delivery recipe, which includes packaging. "
-    "Those costs are shown beside the item and are not subtracted from this Gross, because these sales are not split by channel. "
+    "Aggregator orders use Procurement's takeout and delivery cost, which includes packaging. "
+    "That aggregator margin is shown beside the item. "
+    "The ranked margin stays the base cost, because item sales are not split by channel. "
     "The lowest, city median and highest are within that city. They are not the margin."
 )
 
@@ -87,10 +90,24 @@ def build_menu(
     region="",
     store="",
     quadrant="",
+    window=None,
 ):
     directory = directory or menu_directory()
     regions, region_warnings = load_regions(posist)
     rows, warnings, sources = load_sales(directory, posist_labels=list(regions))
+    window_miss = False
+    if window and window[0] and window[1] and rows:
+        start, end = window
+        fitting = [
+            row for row in rows
+            if row.get("period_start") and row.get("period_end")
+            and row["period_start"] >= start and row["period_end"] <= end
+        ]
+        if fitting:
+            rows = fitting
+        else:
+            window_miss = True
+            rows = []
     catalogue = load_categories(directory)
     costs = load_menu_costs(procurement or procurement_directory())
     warnings = list(warnings) + list(region_warnings)
@@ -172,7 +189,8 @@ def build_menu(
     return {
         "sources": sources,
         "warnings": warnings,
-        "period_label": _period_label(rows),
+        "period_label": format_period(window[0], window[1]) if window and window[0] and window[1] and window_miss else _period_label(rows),
+        "window_miss": window_miss,
         "category_source": catalogue,
         "recipe": costs,
         "margin_mode": margin_mode,
@@ -207,7 +225,48 @@ def build_menu(
         "coverage_label": _coverage_label(coverage),
         "partial_any": any(item.get("partial") for item in items),
         "city_note": _city_rank_note(costs) if margin_mode else "",
+        "unallocated": _unallocated(directory, regions, store, region, window_miss),
+        "unallocated_note": UNALLOCATED_NOTE,
     }
+
+
+def _unallocated(directory, regions, store, region, window_miss):
+    """Bill total minus item total. Never returned as a menu item."""
+    empty = {"amount": "", "gaps": [], "note": UNALLOCATED_NOTE}
+    if window_miss:
+        return empty
+    kept = []
+    labels = list(regions or [])
+    for row in load_recon(directory):
+        label, region_name = region_for_store(row["store"], regions)
+        label = label or row["store"]
+        if store and not _same_store(label, store, labels or [store, label]):
+            continue
+        if region and region != NO_REGION and region_name != region:
+            continue
+        copied = dict(row)
+        copied["label"] = label
+        kept.append(copied)
+    amount = None
+    if kept and all(row.get("items_gross") is not None and row.get("channel_gross") is not None for row in kept):
+        amount = sum(row["channel_gross"] - row["items_gross"] for row in kept)
+    gaps = []
+    for row in kept:
+        if not row.get("flag"):
+            continue
+        gap_amount = None
+        if row.get("items_gross") is not None and row.get("channel_gross") is not None:
+            gap_amount = row["channel_gross"] - row["items_gross"]
+        pct = row.get("gap_pct")
+        gaps.append(
+            {
+                "store": row["label"],
+                "amount": format_sales(gap_amount),
+                "pct": format_pct(abs(pct)) if pct is not None else "",
+            }
+        )
+    gaps.sort(key=lambda item: item["store"].casefold())
+    return {"amount": format_sales(amount) if amount is not None else "", "gaps": gaps, "note": UNALLOCATED_NOTE}
 
 
 def _category_map(rows, catalogue):
@@ -240,12 +299,15 @@ def _aggregate(rows, categories, costs, margin_mode, outlet_for_store, ideal_onl
         file_contribution = group[0].get("contribution_pct") if len(group) == 1 else None
         summary = _summary_for(costs, key, city) if margin_mode else None
         channels = (costs.get("channels") or {}).get(key) if ideal_only else None
+        aggregator_cost, aggregator_margin = _aggregator_margin(channels, gross, orders)
         items.append(
             {
                 "item": name,
                 "city": city,
                 "gross": gross,
                 "orders": orders,
+                "aggregator_cost": aggregator_cost,
+                "aggregator_margin": aggregator_margin,
                 "category": category,
                 "regions": regions,
                 "region_missing": any(not row["region"] for row in group),
@@ -282,6 +344,18 @@ def _summary_for(costs, key, city):
     if len(matches) == 1:
         return matches[0]
     return None
+
+
+def _aggregator_margin(channels, gross, orders):
+    """Takeout/delivery cost for an aggregator order. Ranking stays on the base cost."""
+    if not channels or gross is None or orders in (None, 0):
+        return None, None
+    cost = channels.get("delivery")
+    if cost is None:
+        cost = channels.get("takeout")
+    if cost is None:
+        return None, None
+    return cost, (gross / orders) - cost
 
 
 def _empty_margin():
@@ -580,6 +654,7 @@ def _present_item(item, margin_mode):
         "cost_median": format_inr(summary.get("median")) if summary else "",
         "cost_max": format_inr(summary.get("max")) if summary else "",
         "channel_costs": _present_channels(item.get("channel_costs")),
+        "aggregator_margin": format_inr(item.get("aggregator_margin")) if item.get("aggregator_margin") is not None else "",
     }
 
 

@@ -134,7 +134,8 @@ class LoaderTests(unittest.TestCase):
 
     def test_sales_display_has_no_paise(self):
         self.assertEqual(format_sales(684.37), "₹684")
-        self.assertEqual(format_sales(250000), "₹2.50L")
+        self.assertEqual(format_sales(250000), "₹2.5L")
+        self.assertEqual(format_sales(13_000_000), "₹1.3Cr")
         self.assertNotIn(".", format_sales(684.37))
 
     def test_blank_category_column_hides_the_filter(self):
@@ -212,8 +213,10 @@ class MatrixTests(unittest.TestCase):
             )
             self.assertTrue(plaza["margin_mode"])
             by_name = {item["item"]: item for item in plaza["items"]}
-            # 500/50 - 4 = 6. Takeout 23 and delivery 25 are shown and not subtracted.
+            # Ranked margin stays the base cost: 500/50 - 4 = 6.
+            # Aggregator margin uses the delivery cost: 10 - 25 = -15.
             self.assertEqual(by_name["Star Dosa"]["margin"], "₹6")
+            self.assertEqual(by_name["Star Dosa"]["aggregator_margin"], "-₹15")
             self.assertEqual(by_name["Star Dosa"]["recipe_cost"], "₹4")
             self.assertTrue(by_name["Star Dosa"]["partial"])
             self.assertEqual(by_name["Star Dosa"]["channel_costs"]["takeout"], "₹23")
@@ -345,7 +348,9 @@ class ChannelTests(unittest.TestCase):
         self.assertEqual(faridabad["google"], "4")
         self.assertEqual(len(view["ratings"]), 25)
         self.assertTrue(view["sales_present"])
-        self.assertTrue(any(card["coming"] for card in view["comparison"]))
+        self.assertEqual(view["coming_stores"], [])
+        self.assertIn("30 of 30", view["coverage_label"])
+        self.assertFalse(any(card["coming"] for card in view["comparison"]))
         self.assertTrue(any(card["mall_bulk"] for card in view["comparison"]))
         self.assertIn("bulk mall-system", view["mall_note"])
         self.assertIn("commission", view["payout_note"].lower())
@@ -551,6 +556,8 @@ class PageTests(unittest.TestCase):
     def setUp(self):
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
+            for key in ("cc_store", "cc_city", "cc_range", "cc_start", "cc_end"):
+                sess.pop(key, None)
 
     def test_pages_render_real_data_and_empty_states(self):
         menu = self.client.get("/menu")
@@ -559,7 +566,9 @@ class PageTests(unittest.TestCase):
         self.assertIn("Gross", html)
         self.assertIn("Star", html)
         self.assertIn("excl. packaging", html)
-        self.assertIn("Data coming", html)
+        self.assertIn("Unallocated charges", html)
+        self.assertIn("Data gaps", html)
+        self.assertIn("Probably delivery packaging", html)
         self.assertIn("three chutneys", html)
         self.assertIn("City median", html)
         self.assertIn("Masala Dosa", html)
@@ -576,7 +585,12 @@ class PageTests(unittest.TestCase):
         self.assertEqual(channels.status_code, 200)
         page = channels.get_data(as_text=True)
         self.assertIn("Delivery vs dine-in", page)
-        self.assertIn("Data coming", page)
+        self.assertIn("₹5.16Cr", page)
+        self.assertIn("POS ₹3.31Cr", page)
+        self.assertIn("Zomato ₹1.11Cr", page)
+        self.assertIn("Swiggy ₹72.3L", page)
+        self.assertIn("others ₹1.7L", page)
+        self.assertIn("Not shown", page)
         self.assertIn("bulk mall-system", page)
         self.assertIn("Zomato Delivery", page)
         self.assertIn("Not a 30-day average", page)
@@ -621,9 +635,13 @@ class PageTests(unittest.TestCase):
         self.assertTrue(view["margin_mode"])
         self.assertGreater(view["unmatched_items"], 0)
         self.assertIn("packaging charge", [name.casefold() for name in view["unmatched_names"]])
-        self.assertTrue(any("Pacific" in name for name in view["coming_stores"]))
+        self.assertEqual(view["coming_stores"], [])
+        self.assertIn("30 of 30", view["coverage_label"])
         loaded_stores = " ".join(store for item in view["items"] for store in item["stores"])
-        self.assertNotIn("Pacific", loaded_stores)
+        self.assertIn("Pacific", loaded_stores)
+        self.assertNotIn("unallocated", [item["item"].casefold() for item in view["items"]])
+        self.assertTrue(view["unallocated"]["gaps"])
+        self.assertTrue(any("Ideal Plaza" in gap["store"] for gap in view["unallocated"]["gaps"]))
         outlets = " ".join(view["unmatched_outlets"]).casefold()
         self.assertIn("swiming", outlets)
         self.assertIn("salt lake sec-1", outlets)

@@ -11,6 +11,7 @@ Blank cells stay None. Zero is kept only when the file contains 0.
 import csv
 import os
 import re
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
@@ -45,7 +46,7 @@ _FIELD_ALIASES = (
     ("store", ("store", "outlet", "site")),
     ("item", ("item", "dish name", "item name", "dish")),
     ("gross", ("total sales", "total sale", "gross sale", "gross", "sales")),
-    ("orders", ("total orders", "orders", "order")),
+    ("orders", ("total orders", "orders", "order", "qty")),
     ("contribution_pct", ("contribution pct", "pct contribution", "contribution")),
     ("period_start", ("period start", "start date")),
     ("period_end", ("period end", "end date")),
@@ -53,10 +54,16 @@ _FIELD_ALIASES = (
     ("date", ("date",)),
     ("quantity", ("sold qty", "quantity", "qty")),
     ("channel", ("channel", "order type", "source")),
+    ("status", ("status",)),
     ("recipe_cost", ("recipe cost", "recipe_cost", "food cost", "unit cost", "cost")),
     ("category", ("category",)),
     ("period_from", ("period from",)),
     ("period_to", ("period to",)),
+    ("items_gross", ("items gross",)),
+    ("channel_gross", ("channel gross",)),
+    ("gap", ("gap",)),
+    ("gap_pct", ("gap pct",)),
+    ("flag", ("flag",)),
 )
 
 
@@ -283,10 +290,13 @@ def sniff_menu_kind(path):
         return ""
     names = set(columns)
     has_item = "item" in names or "dish name" in names
-    has_orders = "total orders" in names or "orders" in names
+    has_orders = "total orders" in names or "orders" in names or "qty" in names
     has_sales = "total sales" in names or "gross" in names or "sales" in names
     if path.name.lower().startswith("menu_analysis_") and has_item and has_sales:
         return "analysis"
+    # Tony's processed item file. It wins over a menu mix built from raw folders.
+    if "store" in names and has_item and "qty" in names and "gross" in names and "total sales" not in names:
+        return "items"
     if "store" in names and has_item and has_sales and has_orders:
         return "network"
     if path.name.lower().startswith("menu_mix") and has_item and has_sales:
@@ -332,6 +342,19 @@ def _same_store(left, right, labels):
     return bool(left_match and right_match and left_match == right_match)
 
 
+def _csv_signature(directory):
+    """Name, mtime and size. A changed drop-in file misses the cache."""
+    parts = []
+    if directory.exists():
+        for path in sorted(directory.glob("*.csv")):
+            stat = path.stat()
+            parts.append((path.name, stat.st_mtime_ns, stat.st_size))
+    return tuple(parts)
+
+
+_SALES_CACHE = {}
+
+
 def load_sales(directory=None, posist_labels=None):
     """Item rows from the newest dated menu file for each store.
 
@@ -340,19 +363,17 @@ def load_sales(directory=None, posist_labels=None):
     Orders stay orders. A quantity column is ignored for popularity.
     """
     directory = Path(directory) if directory else menu_directory()
+    labels = tuple(posist_labels or [])
+    cache_key = (str(directory), _csv_signature(directory), labels)
+    cached = _SALES_CACHE.get(cache_key)
+    if cached is not None:
+        chosen, warnings, sources = cached
+        return [dict(row) for row in chosen], list(warnings), [dict(source) for source in sources]
     warnings = []
     if not directory.exists():
         warnings.append(f"{directory} is not on file, so menu sales are blank.")
         return [], warnings, []
-    files = []
-    for path in sorted(directory.glob("*.csv")):
-        kind = sniff_menu_kind(path)
-        if kind == "network":
-            rows, columns = _load_network(path)
-            files.append({"path": path, "kind": "network", "rows": rows, "columns": columns, "stamp": file_stamp(path)})
-        elif kind == "analysis":
-            rows, columns = _load_analysis(path)
-            files.append({"path": path, "kind": "analysis", "rows": rows, "columns": columns, "stamp": file_stamp(path)})
+    files = _read_sales_files(directory)
     if not files:
         warnings.append(
             "No menu_mix or menu_analysis CSV is on file in data/menu. "
@@ -361,28 +382,58 @@ def load_sales(directory=None, posist_labels=None):
         )
         return [], warnings, []
 
-    files = _period_files(files)
-    labels = list(posist_labels or [])
+    item_files = [entry for entry in files if entry["kind"] == "items"]
+    if item_files:
+        newest = max(entry["stamp"] for entry in item_files)
+        files = [entry for entry in item_files if entry["stamp"] == newest]
+        for entry in files:
+            entry["kind"] = "network"
+    else:
+        files = _period_files(files)
     names = sorted({row["store"] for entry in files for row in entry["rows"]})
     network_names = {row["store"] for entry in files if entry["kind"] == "network" for row in entry["rows"]}
+    rows_by_store = defaultdict(list)
+    for entry in files:
+        for row in entry["rows"]:
+            rows_by_store[row["store"]].append((entry, row))
     chosen = []
     used = {}
-    for cluster in _store_clusters(names, labels):
+    for cluster in _store_clusters(names, list(labels)):
         canonical = _canonical_store(cluster, network_names)
-        candidates = []
-        for entry in files:
-            rows = [row for row in entry["rows"] if any(_same_store(row["store"], name, labels) for name in cluster)]
-            if rows:
-                candidates.append((entry["stamp"], entry, rows))
-        if not candidates:
+        buckets = {}
+        for name in cluster:
+            for entry, row in rows_by_store.get(name, ()):
+                bucket = buckets.get(entry["path"].name)
+                if bucket is None:
+                    kept = []
+                    buckets[entry["path"].name] = (entry["stamp"], entry, kept)
+                else:
+                    kept = bucket[2]
+                kept.append(row)
+        if not buckets:
             continue
-        _stamp, entry, rows = max(candidates, key=lambda item: item[0])
+        _stamp, entry, rows = max(buckets.values(), key=lambda item: item[0])
         for row in rows:
             copied = dict(row)
             copied["store"] = canonical
             chosen.append(copied)
         used[entry["path"].name] = {"name": entry["path"].name, "columns": entry["columns"], "kind": entry["kind"]}
-    return chosen, warnings, [used[name] for name in sorted(used)]
+    sources = [used[name] for name in sorted(used)]
+    _SALES_CACHE[cache_key] = (chosen, warnings, sources)
+    return [dict(row) for row in chosen], list(warnings), [dict(source) for source in sources]
+
+
+def _read_sales_files(directory):
+    files = []
+    for path in sorted(directory.glob("*.csv")):
+        kind = sniff_menu_kind(path)
+        if kind in {"network", "items"}:
+            rows, columns = _load_network(path)
+            files.append({"path": path, "kind": kind, "rows": rows, "columns": columns, "stamp": file_stamp(path)})
+        elif kind == "analysis":
+            rows, columns = _load_analysis(path)
+            files.append({"path": path, "kind": "analysis", "rows": rows, "columns": columns, "stamp": file_stamp(path)})
+    return files
 
 
 def _period_files(files):
@@ -604,11 +655,89 @@ def _rating(value):
     return {"value": number, "text": str(value).strip()}
 
 
-def load_channel_sales(directory=None):
-    """Newest data/channels/channel_sales*.csv.
+def _channel_row(raw, store, channel, date_text, kind, not_shown):
+    period_from = parse_date(raw.get("period_from")) if raw.get("period_from") else None
+    if period_from is None and raw.get("period_start"):
+        period_from = parse_date(raw.get("period_start"))
+    period_to = parse_date(raw.get("period_to")) if raw.get("period_to") else None
+    if period_to is None and raw.get("period_end"):
+        period_to = parse_date(raw.get("period_end"))
+    return {
+        "store": store,
+        "channel": canonical_channel(channel),
+        "gross": None if not_shown else (parse_number(raw.get("gross")) if "gross" in raw else None),
+        "orders": None if not_shown else (parse_number(raw.get("orders")) if "orders" in raw else None),
+        "when": date_text,
+        "kind": kind,
+        "period_from": period_from,
+        "period_to": period_to,
+        "status": "not shown" if not_shown else "shown",
+        "gross_blank": bool(not_shown) or ("gross" in raw and _blank(raw.get("gross"))),
+        "orders_blank": bool(not_shown) or ("orders" not in raw or _blank(raw.get("orders"))),
+    }
 
-    A blank date is a period total. A date, even one that does not parse, is a
-    daily row and is not added into the period totals.
+
+def _load_processed_channels(directory, range_path, result):
+    """Range file is the period. Daily file stays daily, including not-shown days."""
+    parsed, columns = _dict_rows(range_path)
+    rows = []
+    for raw in parsed:
+        store = str(raw.get("store") or "").strip()
+        channel = str(raw.get("channel") or "").strip()
+        if not store or not channel:
+            continue
+        rows.append(_channel_row(raw, store, channel, "", "total", False))
+    dailies = sorted(directory.glob("channel_sales_daily_*.csv"), key=lambda path: (file_stamp(path), path.name))
+    if dailies:
+        for raw in _dict_rows(dailies[-1])[0]:
+            store = str(raw.get("store") or "").strip()
+            channel = str(raw.get("channel") or "").strip()
+            status = str(raw.get("status") or "").strip().casefold()
+            not_shown = status == "not shown"
+            if not store or (not channel and not not_shown):
+                continue
+            date_text = str(raw.get("date") or "").strip()
+            rows.append(_channel_row(raw, store, channel, date_text, "daily", not_shown))
+    result["file"] = range_path.name
+    result["columns"] = columns
+    result["rows"] = rows
+    result["present"] = bool(rows)
+    return result
+
+
+def load_recon(directory=None):
+    """Item gross against channel gross. The gap is not a dish."""
+    directory = Path(directory) if directory else menu_directory()
+    paths = sorted(directory.glob("item_vs_channel_recon*.csv"))
+    rows = []
+    if not paths:
+        return rows
+    parsed, _columns = _dict_rows(paths[-1])
+    for raw in parsed:
+        store = str(raw.get("store") or "").strip()
+        if not store:
+            continue
+        flag = str(raw.get("flag") or "").strip().casefold()
+        rows.append(
+            {
+                "store": store,
+                "items_gross": parse_number(raw.get("items_gross")),
+                "channel_gross": parse_number(raw.get("channel_gross")),
+                "gap": parse_number(raw.get("gap")),
+                "gap_pct": parse_number(raw.get("gap_pct")),
+                "flag": flag in {"true", "1", "yes"},
+            }
+        )
+    return rows
+
+
+def load_channel_sales(directory=None):
+    """Channel gross for the period, plus daily rows that are not added in.
+
+    Tony's processed range and daily files win when they are on disk.
+    A single channel_sales file from load_posist_raw.py is the fallback.
+    A blank date is a period total. A date is a daily row. Status "not shown"
+    stays blank, not zero.
     """
     directory = Path(directory) if directory else channels_directory()
     result = {
@@ -622,7 +751,14 @@ def load_channel_sales(directory=None):
     if not directory.exists():
         result["warnings"].append(_missing_channel_sales())
         return result
-    paths = sorted(directory.glob("channel_sales*.csv"), key=lambda path: (file_stamp(path), path.name))
+    ranges = sorted(directory.glob("channel_sales_range_*.csv"), key=lambda path: (file_stamp(path), path.name))
+    if ranges:
+        return _load_processed_channels(directory, ranges[-1], result)
+    paths = [
+        path for path in directory.glob("channel_sales_*.csv")
+        if not path.name.startswith("channel_sales_range_") and not path.name.startswith("channel_sales_daily_")
+    ]
+    paths = sorted(paths, key=lambda path: (file_stamp(path), path.name))
     if not paths:
         result["warnings"].append(_missing_channel_sales())
         return result
@@ -642,24 +778,15 @@ def load_channel_sales(directory=None):
     for raw in parsed:
         store = str(raw.get("store") or "").strip()
         channel = str(raw.get("channel") or "").strip()
-        if not store or not channel:
+        if not store:
             continue
         date_text = str(raw.get("date") or "").strip() if "date" in raw else ""
+        status = str(raw.get("status") or "").strip().casefold()
+        not_shown = status == "not shown"
+        if not channel and not not_shown:
+            continue
         kind = "daily" if date_text else "total"
-        rows.append(
-            {
-                "store": store,
-                "channel": canonical_channel(channel),
-                "gross": parse_number(raw.get("gross")) if "gross" in raw else None,
-                "orders": parse_number(raw.get("orders")) if "orders" in raw else None,
-                "when": date_text,
-                "kind": kind,
-                "period_from": parse_date(raw.get("period_from")) if "period_from" in raw else None,
-                "period_to": parse_date(raw.get("period_to")) if "period_to" in raw else None,
-                "gross_blank": "gross" in raw and _blank(raw.get("gross")),
-                "orders_blank": "orders" not in raw or _blank(raw.get("orders")),
-            }
-        )
+        rows.append(_channel_row(raw, store, channel, date_text, kind, not_shown))
     result["rows"] = rows
     result["present"] = True
     return result
@@ -678,8 +805,18 @@ def store_coverage(store_names, regions):
 
 
 def canonical_channel(value):
-    key = re.sub(r"\s+", " ", str(value or "").strip()).casefold()
-    return {"pos": "POS", "swiggy": "Swiggy", "zomato": "Zomato"}.get(key, str(value).strip())
+    key = re.sub(r"[\s\-]+", " ", str(value or "").strip()).casefold()
+    if not key:
+        return ""
+    return {
+        "pos": "POS",
+        "swiggy": "Swiggy",
+        "zomato": "Zomato",
+        "swiggy bolt urgent": "Swiggy-Bolt Urgent",
+        "magicpin ordering": "MagicPin-Ordering",
+        "rapido": "Rapido",
+        "swiggy toing": "Swiggy-Toing",
+    }.get(key, str(value).strip())
 
 
 def _missing_channel_sales():

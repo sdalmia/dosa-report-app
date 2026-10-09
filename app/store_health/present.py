@@ -125,7 +125,7 @@ def format_owner_rupee(value):
     sign = "-" if number < 0 else ""
     amount = abs(number)
     if amount >= 10_000_000:
-        body = f"{amount / 10_000_000:.1f}".rstrip("0").rstrip(".")
+        body = f"{amount / 10_000_000:.2f}".rstrip("0").rstrip(".")
         return f"{sign}₹{body}Cr"
     if amount >= 100_000:
         body = f"{amount / 100_000:.1f}".rstrip("0").rstrip(".")
@@ -871,12 +871,57 @@ def _mix_entries(rows):
         items.append(
             {
                 "item": bucket["item"],
-                "sales": format_money(bucket["sales"], "total_sales"),
+                "sales": format_owner_rupee(bucket["sales"]),
                 "orders": format_count(bucket["orders"]),
                 "contribution": format_share(contribution),
             }
         )
     return items
+
+
+def _store_unallocated(store_label):
+    """Bill total minus item total for one store. Not a dish."""
+    from app.menu_ops.loader import _same_store, load_recon, load_regions, region_for_store
+
+    regions, _warnings = load_regions()
+    labels = list(regions)
+    for row in load_recon():
+        label, _region = region_for_store(row["store"], regions)
+        label = label or row["store"]
+        if not _same_store(label, store_label, labels or [store_label, label]):
+            continue
+        if row.get("items_gross") is None or row.get("channel_gross") is None:
+            return "", False
+        return format_owner_rupee(row["channel_gross"] - row["items_gross"]), bool(row.get("flag"))
+    return "", False
+
+
+def _ops_menu_rows(store_label):
+    """Item rows from the per-store Posist export, matched to one store."""
+    from collections import defaultdict
+
+    from app.menu_ops.loader import _same_store, load_regions, load_sales
+
+    regions, _warnings = load_regions()
+    rows, _warnings, _sources = load_sales(posist_labels=list(regions))
+    pool = list(regions) or [store_label]
+    by_store = defaultdict(list)
+    for row in rows:
+        by_store[row.get("store")].append(row)
+    chosen = []
+    for name, group in by_store.items():
+        if not _same_store(name, store_label, pool):
+            continue
+        for row in group:
+            chosen.append({
+                "item": row.get("item") or "",
+                "total_sales": row.get("gross"),
+                "total_orders": row.get("orders"),
+                "contribution_pct": row.get("contribution_pct"),
+                "period_start": row.get("period_start"),
+                "period_end": row.get("period_end"),
+            })
+    return chosen
 
 
 def present_menu_mix(feeds, store, window=None):
@@ -902,18 +947,24 @@ def present_menu_mix(feeds, store, window=None):
         result["period_label"] = menu_period_label(start, end)
         sales = (feeds.get("item_sales_by_store") or {}).get(store.label) or []
         chosen = [row for row in sales if _inside_window(row, start, end)]
+        period_rows = [] if chosen else _ops_menu_rows(store.label)
+        if not chosen:
+            chosen = [row for row in period_rows if _inside_window(row, start, end)]
         if chosen:
             result["has_items"] = True
             result["empty"] = ""
             result["entries"] = _mix_entries(chosen)
+            amount, flagged = _store_unallocated(store.label)
+            result["unallocated"] = amount
+            result["unallocated_flagged"] = flagged
             return result
         item_rows = feeds.get("item_sales") or []
         mix_rows = feeds.get("menu_mix") or []
-        if not item_rows and not mix_rows:
-            result["period_label"] = ""
-            result["empty"] = "Menu mix is not on file."
+        if period_rows or item_rows or mix_rows:
+            result["empty"] = "Data coming"
             return result
-        result["empty"] = "Per-store item sales for this window are not on file yet."
+        result["period_label"] = ""
+        result["empty"] = "Menu mix is not on file."
         return result
     if state in {"missing", "empty"}:
         return result
@@ -928,6 +979,28 @@ def present_menu_mix(feeds, store, window=None):
     result["empty"] = ""
     result["entries"] = _mix_entries(chosen)
     return result
+
+
+def _present_delivery(store, window):
+    from app.menu_ops.channels import store_delivery
+
+    if store is None:
+        return {
+            "has_rows": False,
+            "coming": False,
+            "empty": "Delivery versus dine-in is not on file.",
+            "period_label": "",
+            "mall_bulk": False,
+            "mall_note": "",
+            "dine_gross": "",
+            "dine_orders": "",
+            "dine_apb": "",
+            "delivery_gross": "",
+            "delivery_orders": "",
+            "delivery_apb": "",
+            "others": [],
+        }
+    return store_delivery(store.label, window)
 
 
 def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=None):
@@ -961,6 +1034,7 @@ def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=N
         "famepilot_columns": FAMEPILOT_COLUMNS,
         "keka": present_keka(feeds, store),
         "menu_mix": present_menu_mix(feeds, store, menu_window),
+        "delivery": _present_delivery(store, menu_window),
         "audit": present_audit(feeds, store),
         "reelo": present_reelo(feeds, store),
         "fame": present_famepilot(feeds, store),

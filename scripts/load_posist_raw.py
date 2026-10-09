@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""Load per-store Posist folders into the menu-mix and channel-sales files.
+"""Fallback loader for per-store Posist folders.
 
-Drop a new store folder under data/posist_raw and run this again:
+The pages prefer Tony's processed files when they are present:
+item_sales_*.csv, channel_sales_range_*.csv, channel_sales_daily_*.csv,
+and item_vs_channel_recon.csv. This script is the fallback. Drop a new
+store folder under data/posist_raw and run:
 
     python3 scripts/load_posist_raw.py
 
 A folder is named by store code (0004, 002, 01-0001, 02-0013). It can hold
 store.txt, menu_items_<from>_to_<to>.xlsx (two halves are added together),
 source_range_<from>_to_<to>.tsv, and source_daily_<from>_to_<to>.tsv.
-A partial folder is loaded for the files it actually has. Stores with no
-folder stay off these files; the pages show them as data coming.
+A partial folder is loaded for the files it actually has.
 """
 
 import argparse

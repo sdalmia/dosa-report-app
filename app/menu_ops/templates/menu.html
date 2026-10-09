@@ -9,6 +9,8 @@
   <p class="lede">Popularity is share of orders. Contribution is {% if view.margin_mode %}margin per order{% else %}share of Gross{% endif %}.</p>
 </header>
 
+{% include "_filters.html" %}
+
 {% if view.store_names %}
 <form class="filters" method="get" action="{{ url_for('menu_ops.menu') }}">
   {% if view.show_category %}
@@ -24,25 +26,6 @@
     </select>
   </label>
   {% endif %}
-  <label>Region
-    <select name="region">
-      <option value="">All regions</option>
-      {% for name in view.region_names %}
-        <option value="{{ name }}" {% if view.region == name %}selected{% endif %}>{{ name }}</option>
-      {% endfor %}
-      {% if view.has_unknown_region %}
-        <option value="{{ no_region }}" {% if view.region == no_region %}selected{% endif %}>Region not on file</option>
-      {% endif %}
-    </select>
-  </label>
-  <label>Store
-    <select name="store">
-      <option value="">All stores</option>
-      {% for name in view.store_names %}
-        <option value="{{ name }}" {% if view.store == name %}selected{% endif %}>{{ name }}</option>
-      {% endfor %}
-    </select>
-  </label>
   <label>Quadrant
     <select name="quadrant">
       <option value="">All quadrants</option>
@@ -56,7 +39,12 @@
 </form>
 {% endif %}
 
-{% if view.store_coming %}
+{% if view.window_miss %}
+  <section class="empty" data-empty="window">
+    <h2>Data coming</h2>
+    <p>Item sales for this window are not on file yet. There is no zero to show.</p>
+  </section>
+{% elif view.store_coming %}
   <section class="empty" data-empty="coming">
     <h2>Data coming</h2>
     <p>{{ view.store }} is not in this period yet. There is no zero to show.</p>
@@ -74,6 +62,25 @@
       <summary>Stores still to come</summary>
       <p>{{ view.coming_stores|join(', ') }}.</p>
     </details>
+  {% endif %}
+  {% if view.unallocated.amount %}
+    <section data-note="unallocated">
+      <h2>Unallocated charges</h2>
+      <p data-field="unallocated">{{ view.unallocated.amount }}</p>
+      <p>{{ view.unallocated_note }}</p>
+    </section>
+    <section data-note="gaps">
+      <h2>Data gaps</h2>
+      {% if view.unallocated.gaps %}
+        <ul>
+          {% for gap in view.unallocated.gaps %}
+            <li data-gap="{{ gap.store }}">{{ gap.store }} {{ gap.amount }}{% if gap.pct %}, {{ gap.pct }} of bills{% endif %}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No store is past 2%.</p>
+      {% endif %}
+    </section>
   {% endif %}
   {% if view.margin_mode %}
     <p class="meta" data-note="margin">{{ view.margin_note }}</p>
@@ -160,6 +167,9 @@
             {% if item.cost_coverage %}<div><dt>Recipe coverage</dt><dd data-field="coverage">{{ item.cost_coverage }}</dd></div>{% endif %}
             {% if item.cost_min or item.cost_median or item.cost_max %}
               <div><dt>Within the city</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>
+            {% endif %}
+            {% if item.aggregator_margin %}
+              <div><dt>Aggregator margin</dt><dd data-field="aggregator-margin">{{ item.aggregator_margin }}</dd></div>
             {% endif %}
             {% if item.channel_costs %}
               {% if item.channel_costs.same %}

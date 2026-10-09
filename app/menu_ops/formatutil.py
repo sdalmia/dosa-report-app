@@ -28,19 +28,10 @@ def format_inr(value):
 
 
 def format_sales(value):
-    """Whole rupees, or lakhs from 1 lakh up. No paise."""
-    if value is None:
-        return ""
-    number = float(value)
-    if number == 0:
-        return "₹0"
-    sign = "-" if number < 0 else ""
-    amount = abs(number)
-    if amount >= 100_000:
-        body = f"{amount / 100_000:.2f}L"
-    else:
-        body = group_indian(str(int(round(amount))))
-    return f"{sign}₹{body}"
+    """Owner money. Whole rupees, lakhs, or crores. No paise."""
+    from app.store_health.present import format_owner_rupee
+
+    return format_owner_rupee(value)
 
 
 def format_count(value):
