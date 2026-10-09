@@ -10,11 +10,14 @@ from app.menu_costing.catalog import (
     build_item,
     build_page,
     diff_items,
+    owner_count,
     owner_rupee,
     present_line,
     vs_own_city,
 )
+from app.menu_costing.history import dish_history, load_history, present_history
 from app.menu_costing.parse_menu import parse_upload
+from app.menu_costing.pnl import load_pnl
 from app.menu_costing.recipes import load_recipes
 from app.menu_costing.sales import load_sales
 from app.menu_costing.versions import save_version, version_dicts
@@ -75,11 +78,27 @@ def item_page():
             "outlet": row["outlet"],
             "cost": owner_rupee(row["cost"]),
             "vs": vs_own_city(row["vs_pct"], detail["city"]),
+            "incomplete": bool(row.get("incomplete")),
+            "unpriced_count": (
+                owner_count(row.get("unpriced_excl"))
+                if row.get("incomplete") and row.get("unpriced_excl")
+                else ""
+            ),
         }
         for row in detail["stores"]
     ]
     detail["line_rows"] = [present_line(row) for row in detail["lines"]]
     detail["lines_total_text"] = owner_rupee(detail["lines_total"])
+    detail["chosen_incomplete"] = bool(chosen and chosen.get("incomplete"))
+    detail["chosen_unpriced"] = (
+        owner_count(chosen.get("unpriced_excl"))
+        if chosen and chosen.get("incomplete") and chosen.get("unpriced_excl")
+        else ""
+    )
+    detail["median_incomplete"] = bool(summary and summary.get("incomplete"))
+    detail.update(
+        present_history(dish_history(load_history(), detail["city"], detail["store"], detail["item"]))
+    )
     detail["is_owner"] = is_owner()
     return render_template("item.html", **detail)
 
@@ -104,6 +123,16 @@ def history_page():
             row["new_text"] = owner_rupee(row["new_price"])
         for row in diff["added"] + diff["removed"]:
             row["price_text"] = owner_rupee(row.get("price"))
+    recipes = load_recipes()
+    city = (request.args.get("city") or "").strip()
+    if city not in recipes["cities"]:
+        city = recipes["cities"][0] if recipes["cities"] else ""
+    outlets = recipes["outlets"].get(city, [])
+    store = (request.args.get("store") or "").strip()
+    if store not in outlets:
+        store = ""
+    item = (request.args.get("item") or "").strip()
+    recipe = present_history(dish_history(load_history(), city, store, item))
     return render_template(
         "history.html",
         versions=versions,
@@ -111,7 +140,20 @@ def history_page():
         left_id=left_id,
         right_id=right_id,
         is_owner=is_owner(),
+        cities=recipes["cities"],
+        outlets=outlets,
+        city=city,
+        store=store,
+        item=item,
+        **recipe,
     )
+
+
+@menu_bp.route("/menu/pl")
+@owner_required
+def pnl_page():
+    report = load_pnl()
+    return render_template("pnl.html", is_owner=True, **report)
 
 
 @menu_bp.route("/menu/upload", methods=["GET", "POST"])

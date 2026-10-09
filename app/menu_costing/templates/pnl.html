@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}Company P&amp;L - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <h1>Company P&amp;L</h1>
+    <p class="muted">Book food cost against recipe cost, plus rent, salaries, and aggregator commissions.</p>
+    {% if coming %}
+    <p data-field="pl-coming">Data coming until the Accountant's files arrive.</p>
+    {% elif month_label %}
+    <p>{{ month_label }}</p>
+    {% endif %}
+  </header>
+  {{ menu_nav('pl') }}
+
+  <div class="mc-list">
+    {% for company in companies %}
+    <article class="tile" data-field="company-pl" data-company="{{ company.name }}">
+      <strong>{{ company.name }}</strong>
+      <div class="mc-pair">
+        <p>{{ company.lines[0].label }}
+          <span class="mc-num" data-field="pl-line" data-company="{{ company.name }}" data-line="{{ company.lines[0].key }}" data-value="{{ company.lines[0].attr }}">{{ company.lines[0].text }}</span>
+        </p>
+        <p>{{ company.lines[1].label }}
+          <span class="mc-num" data-field="pl-line" data-company="{{ company.name }}" data-line="{{ company.lines[1].key }}" data-value="{{ company.lines[1].attr }}">{{ company.lines[1].text }}</span>
+        </p>
+      </div>
+      <div class="mc-pair">
+        <p>{{ company.lines[2].label }}
+          <span class="mc-num" data-field="pl-line" data-company="{{ company.name }}" data-line="{{ company.lines[2].key }}" data-value="{{ company.lines[2].attr }}">{{ company.lines[2].text }}</span>
+        </p>
+        <p>{{ company.lines[3].label }}
+          <span class="mc-num" data-field="pl-line" data-company="{{ company.name }}" data-line="{{ company.lines[3].key }}" data-value="{{ company.lines[3].attr }}">{{ company.lines[3].text }}</span>
+        </p>
+      </div>
+      <div class="mc-pair">
+        <p>{{ company.lines[4].label }}
+          <span class="mc-num" data-field="pl-line" data-company="{{ company.name }}" data-line="{{ company.lines[4].key }}" data-value="{{ company.lines[4].attr }}">{{ company.lines[4].text }}</span>
+        </p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@ Prices come only from an uploaded menu. Recipe cost comes from the cost file.
 A missing price, cost, or sale stays blank.
 """
 
-from app.menu_costing.recipes import recipe_lines
+from app.menu_costing.recipes import is_ro_water, recipe_lines
 from app.menu_costing.sales import city_sale, lookup_sale
 from app.procurement.numbers import format_pct, format_qty, num_attr, percent
 from app.store_health.present import format_owner_rupee, group_indian
@@ -122,7 +122,11 @@ def build_page(recipes, sales, versions, *, city, channel, store, query, today):
     newer, older = version_pair(versions, city, channel, store)
     rows = _menu_rows(recipes, sales, city, store, version, query_key)
     shown = rows[:LIST_LIMIT]
-    costs = {row["key"]: row["cost"] for row in _menu_rows(recipes, sales, city, store, None, "")}
+    costs = {
+        row["key"]: row["cost"]
+        for row in _menu_rows(recipes, sales, city, store, None, "")
+        if not row["incomplete"]
+    }
     return {
         "city": city,
         "channel": channel,
@@ -152,6 +156,11 @@ def build_page(recipes, sales, versions, *, city, channel, store, query, today):
             ""
             if newer and older
             else "No earlier menu to compare, so price changes that hurt margin cannot be listed."
+        ),
+        "unpriced": purchasing_list(recipes, city, store),
+        "unpriced_note": (
+            "RO water has no purchase price. Other ingredients with no price make the dish "
+            "cost incomplete, and its food cost % stays blank."
         ),
         "rows": [_present_row(row) for row in shown],
         "row_count": len(rows),
@@ -256,7 +265,15 @@ def _cost_row(recipes, city, store, item):
     summary = recipes["by_city"].get((city, key))
     if summary is None:
         return None
-    return {"item": summary["item"], "cost": summary["median"], "median": summary["median"], "vs_pct": None, "partial": False}
+    return {
+        "item": summary["item"],
+        "cost": summary["median"],
+        "median": summary["median"],
+        "vs_pct": None,
+        "partial": False,
+        "incomplete": bool(summary.get("incomplete")),
+        "unpriced_excl": None,
+    }
 
 
 def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
@@ -264,14 +281,19 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
     median = None
     vs_pct = None
     partial = False
+    incomplete = False
+    unpriced_excl = None
     if cost_row is not None:
         cost = cost_row.get("cost")
         median = cost_row.get("median")
         vs_pct = cost_row.get("vs_pct")
         partial = bool(cost_row.get("partial"))
+        incomplete = bool(cost_row.get("incomplete"))
+        unpriced_excl = cost_row.get("unpriced_excl")
     elif summary is not None:
         cost = summary.get("median")
         median = summary.get("median")
+        incomplete = bool(summary.get("incomplete"))
     price = None if price_row is None else price_row.get("price")
     category = "" if price_row is None else (price_row.get("category") or "")
     if store:
@@ -292,9 +314,11 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         "median": median,
         "vs_pct": vs_pct,
         "partial": partial,
+        "incomplete": incomplete,
+        "unpriced_excl": unpriced_excl,
         "basis": "store" if store else "median",
-        "food_pct": food_cost_pct(cost, price),
-        "margin": margin_amount(cost, price),
+        "food_pct": None if incomplete else food_cost_pct(cost, price),
+        "margin": None if incomplete else margin_amount(cost, price),
         "orders": orders,
         "sold": sold,
     }
@@ -333,6 +357,8 @@ def _above_count(recipes, city, store, query_key):
 def _priced_below(rows):
     found = []
     for row in rows:
+        if row.get("incomplete"):
+            continue
         if row["price"] is None or row["cost"] is None:
             continue
         if row["price"] < row["cost"]:
@@ -390,6 +416,7 @@ def _sellers(recipes, sales, city, store, version):
                     price = row.get("price")
                     break
         cost = None if cost_row is None else cost_row.get("cost")
+        incomplete = bool(cost_row and cost_row.get("incomplete"))
         ranked.append(
             {
                 "item": bucket["item"],
@@ -397,7 +424,7 @@ def _sellers(recipes, sales, city, store, version):
                 "sold": sold,
                 "cost": cost,
                 "price": price,
-                "food_pct": food_cost_pct(cost, price),
+                "food_pct": None if incomplete else food_cost_pct(cost, price),
             }
         )
     ranked.sort(key=lambda row: (-(row["orders"] or -1), row["item"].casefold()))
@@ -423,6 +450,12 @@ def _present_row(row):
         "sold": owner_rupee(row["sold"]),
         "sold_attr": num_attr(row["sold"]),
         "partial": row["partial"],
+        "incomplete": bool(row.get("incomplete")),
+        "unpriced_count": (
+            owner_count(row.get("unpriced_excl"))
+            if row.get("incomplete") and row.get("unpriced_excl")
+            else ""
+        ),
         "basis": row.get("basis") or "store",
         "city_vs": row["vs_pct"],
     }
@@ -436,7 +469,32 @@ def present_threat(row):
         "cost": owner_rupee(row["cost"]),
         "vs": vs_own_city(row["vs_pct"], row["city"]),
         "vs_attr": num_attr(row["vs_pct"]),
+        "incomplete": bool(row.get("incomplete")),
     }
+
+
+def purchasing_list(recipes, city, store):
+    buckets = {}
+    for (row_city, outlet, _item_key), row in recipes["by_outlet"].items():
+        if row_city != city:
+            continue
+        if store and outlet != store:
+            continue
+        if not row.get("incomplete"):
+            continue
+        for name in row.get("unpriced_names") or []:
+            if is_ro_water(name):
+                continue
+            key = name.casefold()
+            bucket = buckets.setdefault(key, {"name": name, "dishes": set(), "outlets": set()})
+            bucket["dishes"].add(row["key"])
+            bucket["outlets"].add(outlet)
+    rows = [
+        {"name": bucket["name"], "dishes": len(bucket["dishes"]), "outlets": len(bucket["outlets"])}
+        for bucket in buckets.values()
+    ]
+    rows.sort(key=lambda row: (-row["dishes"], row["name"].casefold()))
+    return rows
 
 
 def present_below(row):

@@ -4,6 +4,7 @@
   <a href="{{ url_for('menu_costing.history_page') }}" {% if current == 'history' %}aria-current="page"{% endif %}>History</a>
   {% if is_owner %}
   <a href="{{ url_for('menu_costing.upload_page') }}" {% if current == 'upload' %}aria-current="page"{% endif %}>Upload</a>
+  <a href="{{ url_for('menu_costing.pnl_page') }}" {% if current == 'pl' %}aria-current="page"{% endif %}>P&amp;L</a>
   {% endif %}
 </nav>
 {%- endmacro %}

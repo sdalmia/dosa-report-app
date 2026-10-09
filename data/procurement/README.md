@@ -169,6 +169,14 @@ This compares Stock Recipe cost with the Recipe Consumption cost for Ideal Plaza
 
 Delhi NCR costs more than Kolkata because Delhi serves 3 chutneys with each dish and Kolkata serves 1. Compare each city with its own median. Do not label a Delhi or North margin as a recipe that needs checking. Selling prices are not in these files.
 
+`cost_status` of `partial_unpriced_ingredients` or `no_priced_ingredients`, or `unpriced_excl_ro_water_count` above zero, means the dish cost is incomplete. RO water alone does not. A city median is incomplete when `outlets_fully_priced` is below `outlets_compared`, or `common_unpriced_ingredients` names something other than RO water.
+
+### 5e. history/YYYY-MM/
+Procurement drops a dated monthly snapshot of `menu_item_cost.csv` and `menu_item_cost_lines.csv` into `data/procurement/history/YYYY-MM/`. October 2026 (`2026-10`) is the first folder. The files at the procurement root stay the current export.
+
+### 5f. Company P&L
+When the Accountant's Tally export arrives, put a CSV in `data/tally/YYYY-MM/`. Columns: `company`, `month`, `book_food_cost`, `recipe_cost`, `rent`, `salaries`, `aggregator_commissions`. Companies are Kolkata, Delhi, UP, and Haryana. A blank cell stays blank. Until a file is present, the owner P&L shows data coming.
+
 ## Missing / pending
 - **Short deliveries:** cannot be built, because PO quantities are blank in Restroworks.
 - **Older recipe export:** `recipe_cost_by_item.csv` covers Ideal Plaza and Connaught Place only. `menu_item_cost.csv` is the recipe cost for every outlet when it is on disk.

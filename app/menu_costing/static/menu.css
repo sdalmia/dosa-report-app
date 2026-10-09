@@ -35,7 +35,10 @@
 .mc-num { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 700; }
 .mc-diff { margin: 0.2rem 0 0.6rem; padding-left: 1.1rem; }
 .mc-diff li { margin: 0.25rem 0; }
+.mc-scroll { max-height: 22rem; overflow: auto; display: grid; gap: 0.6rem; }
+.mc-split { display: grid; gap: 0.8rem; }
 @media (min-width: 720px) {
   .mc-filters { grid-template-columns: 1fr 1fr; }
   .mc-filters button { grid-column: 1 / -1; }
+  .mc-split { grid-template-columns: 1fr 1fr; align-items: start; }
 }

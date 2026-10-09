@@ -179,7 +179,7 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(base["vs_city_baseline_pct"], -9.2)
         self.assertIsNone(base["selling_price"])
         self.assertIsNone(base["margin"])
-        self.assertIn("takeout", {row["recipe_tab"] for row in payload["items"]})
+        self.assertEqual({row["recipe_tab"] for row in payload["items"]}, {"base", "delivery", "table", "takeout"})
         self.assertAlmostEqual(payload["packaging_gap"]["share"], 24.9, delta=0.1)
         ideal = ideal_plaza_recipe_costs(menu_item="Masala Dosa", include_lines=True)
         self.assertEqual(ideal["lines"], [])

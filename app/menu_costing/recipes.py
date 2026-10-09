@@ -11,6 +11,8 @@ from app.procurement.numbers import parse_number
 _CACHE = {}
 _LINE_CACHE = {}
 
+INCOMPLETE_STATUSES = frozenset({"partial_unpriced_ingredients", "no_priced_ingredients"})
+
 
 def procurement_dir():
     return Path(__file__).resolve().parents[2] / "data" / "procurement"
@@ -71,6 +73,34 @@ def _truthy(value):
     return str(value or "").strip().casefold() in {"true", "1", "yes"}
 
 
+def is_ro_water(name):
+    text = " ".join((name or "").casefold().replace(".", " ").split())
+    return text in {"ro water", "r o water"}
+
+
+def split_names(value):
+    names = []
+    for part in str(value or "").split(";"):
+        name = part.strip()
+        if name:
+            names.append(name)
+    return names
+
+
+def dish_incomplete(excl_count, status):
+    if excl_count is not None and excl_count > 0:
+        return True
+    return (status or "").strip() in INCOMPLETE_STATUSES
+
+
+def summary_incomplete(compared, fully_priced, names):
+    if any(name for name in names if not is_ro_water(name)):
+        return True
+    if compared is None or fully_priced is None:
+        return False
+    return fully_priced < compared
+
+
 def _read_items(path):
     if not path.is_file():
         return []
@@ -82,6 +112,9 @@ def _read_items(path):
             outlet = (raw.get("outlet") or "").strip()
             if not name or not city or not outlet:
                 continue
+            excl = parse_number(raw.get("unpriced_excl_ro_water_count"))
+            status = (raw.get("cost_status") or "").strip()
+            names = split_names(raw.get("unpriced_ingredients"))
             rows.append(
                 {
                     "outlet": outlet,
@@ -94,6 +127,10 @@ def _read_items(path):
                     "median": parse_number(raw.get("city_baseline_median_cost")),
                     "vs_pct": parse_number(raw.get("vs_city_baseline_pct")),
                     "partial": _truthy(raw.get("has_unpriced_ingredient")),
+                    "unpriced_excl": excl,
+                    "cost_status": status,
+                    "unpriced_names": names,
+                    "incomplete": dish_incomplete(excl, status),
                 }
             )
     return rows
@@ -109,6 +146,9 @@ def _read_summary(path):
             city = (raw.get("city") or "").strip()
             if not name or not city:
                 continue
+            compared = parse_number(raw.get("outlets_compared"))
+            fully = parse_number(raw.get("outlets_fully_priced"))
+            names = split_names(raw.get("common_unpriced_ingredients"))
             rows.append(
                 {
                     "city": city,
@@ -121,8 +161,11 @@ def _read_summary(path):
                     "high": parse_number(raw.get("max_cost_avg")),
                     "outlet_min": (raw.get("outlet_min") or "").strip(),
                     "outlet_max": (raw.get("outlet_max") or "").strip(),
-                    "compared": parse_number(raw.get("outlets_compared")),
+                    "compared": compared,
+                    "fully_priced": fully,
+                    "common_unpriced": names,
                     "with_recipe": parse_number(raw.get("outlets_with_recipe")),
+                    "incomplete": summary_incomplete(compared, fully, names),
                 }
             )
     return rows

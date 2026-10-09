@@ -11,8 +11,10 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.menu_costing.catalog import build_page, food_cost_pct, margin_amount
+from app.menu_costing.history import dish_history, load_history
 from app.menu_costing.models import MenuItemPrice, MenuVersion
 from app.menu_costing.parse_menu import parse_menu_text, parse_upload
+from app.menu_costing.pnl import load_pnl
 from app.extensions import db
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -225,6 +227,201 @@ class MenuCostingTests(unittest.TestCase):
         blank = parse_upload("menu.csv", b"Item,Price\nMasala Dosa,\n")
         self.assertIsNone(blank["items"][0]["price"])
         self.assertEqual(parse_upload("menu.xls", b"nope")["items"], [])
+
+    def test_incomplete_dish_never_shows_a_real_food_cost(self):
+        recipes = {
+            "cities": ["Delhi NCR"],
+            "outlets": {"Delhi NCR": ["Chattarpur"]},
+            "by_outlet": {
+                ("Delhi NCR", "Chattarpur", "abc juice"): {
+                    "outlet": "Chattarpur",
+                    "city": "Delhi NCR",
+                    "item": "ABC Juice",
+                    "key": "abc juice",
+                    "cost": 9.65,
+                    "median": 12.0,
+                    "vs_pct": -10.0,
+                    "partial": True,
+                    "incomplete": True,
+                    "unpriced_excl": 3,
+                    "unpriced_names": ["Apple", "Beetroot", "Mint leaf", "RO Water"],
+                }
+            },
+            "by_city": {},
+            "lines_path": Path("missing"),
+        }
+        sales = {"available": False, "by_store_item": {}, "period_label": "", "coming": "Data coming."}
+        older = {
+            "id": 1,
+            "city": "Delhi NCR",
+            "channel": "Dine-in",
+            "store_scope": "All stores",
+            "effective_from": date(2026, 9, 1),
+            "effective_to": date(2026, 9, 30),
+            "items": [{"item": "ABC Juice", "category": "", "price": 80}],
+        }
+        newer = {
+            "id": 2,
+            "city": "Delhi NCR",
+            "channel": "Dine-in",
+            "store_scope": "All stores",
+            "effective_from": date(2026, 10, 1),
+            "effective_to": None,
+            "items": [{"item": "ABC Juice", "category": "", "price": 5}],
+        }
+        page = build_page(
+            recipes,
+            sales,
+            [newer, older],
+            city="Delhi NCR",
+            channel="Dine-in",
+            store="Chattarpur",
+            query="",
+            today=date(2026, 10, 9),
+        )
+        row = page["rows"][0]
+        self.assertTrue(row["incomplete"])
+        self.assertEqual(row["food_pct"], "")
+        self.assertEqual(row["food_attr"], "")
+        self.assertEqual(row["margin"], "")
+        self.assertEqual(row["cost_attr"], "9.65")
+        self.assertEqual(page["priced_below"], [])
+        self.assertEqual(page["margin_hurts"], [])
+        names = [item["name"] for item in page["unpriced"]]
+        self.assertEqual(names, ["Apple", "Beetroot", "Mint leaf"])
+        self.assertNotIn("RO Water", names)
+
+    def test_live_unpriced_ingredients_and_recipe_history(self):
+        ideal = self.client.get(
+            "/menu/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertNotIn("Cost incomplete", ideal)
+        self.assertIn("no earlier month", ideal.lower())
+        self.assertEqual(_attr(ideal, "recipe-cost", **{"data-month": "2026-10"}), "23.82")
+        truck = self.client.get(
+            "/menu?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="cost-incomplete" data-item="Masala Dosa"', truck)
+        self.assertIn("6 ingredients have no price", truck)
+        city = self.client.get("/menu?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
+        self.assertNotIn('data-field="cost-incomplete" data-item="Masala Dosa"', city)
+        buying = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        self.assertIn(
+            'data-field="unpriced-ingredient" data-item="Spicy Coconut Chutney Mix 1Pkt (16gm)"',
+            buying,
+        )
+        self.assertIn("RO water has no purchase price", buying)
+        start = 0
+        while True:
+            index = buying.find('data-field="unpriced-ingredient"', start)
+            if index < 0:
+                break
+            tag = buying[index : buying.find(">", index)]
+            self.assertNotIn("RO Water", tag)
+            self.assertNotIn("R.O. Water", tag)
+            start = index + 1
+        history = self.client.get("/menu/history").get_data(as_text=True)
+        self.assertIn('data-month="2026-10"', history)
+        self.assertIn("October 2026 is the first snapshot", history)
+        self.assertIn("no earlier month", history.lower())
+        self.assertIn("No menu versions yet", history)
+        self.client.post(
+            "/menu/upload",
+            data={
+                "city": "Delhi NCR",
+                "channel": "Dine-in",
+                "store_scope": "",
+                "effective_from": "2026-10-01",
+                "menu_file": (io.BytesIO(b"Item,Price\nABC Juice,5\n"), "delhi.csv"),
+            },
+            content_type="multipart/form-data",
+        )
+        priced = self.client.get(
+            "/menu?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=ABC+Juice"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="cost-incomplete" data-item="ABC Juice"', priced)
+        self.assertEqual(_attr(priced, "food-cost-pct", item="ABC Juice"), "")
+        self.assertEqual(_attr(priced, "menu-margin", item="ABC Juice"), "")
+        self.assertEqual(_attr(priced, "menu-price", item="ABC Juice"), "5")
+        self.assertNotEqual(_attr(priced, "menu-cost", item="ABC Juice"), "")
+        self.assertNotIn('data-field="priced-below" data-item="ABC Juice"', priced)
+
+    def test_recipe_snapshots_show_cost_and_ingredient_changes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "notes").mkdir()
+            (root / "2026-13").mkdir()
+            self._month(
+                root / "2026-09",
+                "20",
+                [("Oil", "0.02", "Kg", "1"), ("Dosa Batter Mix", "0.10", "Kg", "2")],
+            )
+            self._month(
+                root / "2026-10",
+                "24",
+                [("Dosa Batter Mix", "0.14", "Kg", "4"), ("Ghee", "0.01", "Kg", "1")],
+            )
+            detail = dish_history(load_history(root), "Kolkata", "Ideal Plaza", "Masala Dosa")
+        self.assertEqual([row["key"] for row in detail["months"]], ["2026-09", "2026-10"])
+        self.assertEqual([row["cost"] for row in detail["points"]], [20, 24])
+        self.assertEqual(detail["note"], "")
+        change = detail["changes"][0]
+        self.assertEqual(change["added"], ["Ghee"])
+        self.assertEqual(change["removed"], ["Oil"])
+        self.assertEqual(change["qty_changed"][0]["ingredient"], "Dosa Batter Mix")
+        self.assertEqual(change["qty_changed"][0]["old_qty"], "0.1")
+        self.assertEqual(change["qty_changed"][0]["new_qty"], "0.14")
+
+    def test_company_pl_is_owner_only_and_blank_until_tally(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            empty = load_pnl(Path(tmp) / "missing")
+            self.assertEqual([row["name"] for row in empty["companies"]], ["Kolkata", "Delhi", "UP", "Haryana"])
+            self.assertTrue(all(line["coming"] for row in empty["companies"] for line in row["lines"]))
+            folder = Path(tmp) / "2026-10"
+            folder.mkdir()
+            (folder / "pl.csv").write_text(
+                "company,month,book_food_cost,recipe_cost,rent,salaries,aggregator_commissions\n"
+                "Kolkata,2026-10,,1200,50000,,\n",
+                encoding="utf-8",
+            )
+            filled = load_pnl(Path(tmp))
+            kolkata = filled["companies"][0]
+            self.assertEqual(kolkata["lines"][0]["text"], "Data coming")
+            self.assertEqual(kolkata["lines"][1]["attr"], "1200")
+            self.assertEqual(kolkata["lines"][2]["attr"], "50000")
+            self.assertTrue(kolkata["lines"][4]["coming"])
+            self.assertTrue(filled["companies"][1]["lines"][2]["coming"])
+        with self.client.session_transaction() as sess:
+            sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
+            sess["user_email"] = "asha@dosacoffee.com"
+        menu = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        self.assertNotIn("Aggregator commissions", menu)
+        self.assertNotIn("/menu/pl", menu)
+        blocked = self.client.get("/menu/pl")
+        self.assertEqual(blocked.status_code, 302)
+        self.assertIn("dashboard", blocked.headers["Location"])
+        with self.client.session_transaction() as sess:
+            sess["user"] = {"name": "Siddhant Dalmia", "email": "siddhant@dalgreenfoods.com"}
+            sess["user_email"] = "siddhant@dalgreenfoods.com"
+        page = self.client.get("/menu/pl").get_data(as_text=True)
+        for company in ("Kolkata", "Delhi", "UP", "Haryana"):
+            self.assertIn(f'data-company="{company}"', page)
+        self.assertIn("Aggregator commissions", page)
+        self.assertIn("Data coming", page)
+        self.assertEqual(_attr(page, "pl-line", **{"data-company": "Kolkata", "data-line": "rent"}), "")
+        self.assertIn('href="/menu/pl"', self.client.get("/menu").get_data(as_text=True))
+
+    def _month(self, folder, cost, lines):
+        folder.mkdir()
+        (folder / "menu_item_cost.csv").write_text(
+            "outlet,city,recipe_tab,item_name,is_menu_item,cost_per_portion_avg\n"
+            f"Ideal Plaza,Kolkata,base,Masala Dosa,True,{cost}\n",
+            encoding="utf-8",
+        )
+        body = ["outlet,recipe_tab,item_name,ingredient_name,ingredient_qty,ingredient_unit,ingredient_cost_avg_per_portion\n"]
+        for name, qty, unit, line in lines:
+            body.append(f"Ideal Plaza,base,Masala Dosa,{name},{qty},{unit},{line}\n")
+        (folder / "menu_item_cost_lines.csv").write_text("".join(body), encoding="utf-8")
 
     def _upload(self, day, text, name):
         return self.client.post(
