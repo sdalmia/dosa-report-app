@@ -1,0 +1,3 @@
+level,city,key,pd_lines,pd_purchase_amount,pd_discount,pd_total,grn_lines,grn_total,diff_pd_total_minus_grn
+city,Kolkata,ALL,991,6821676.99,550.04,6821126.96,991,6818676.98,2449.98
+city,Delhi,ALL,1012,6865531.75,203.0,6865328.74,1012,6865817.74,-489.0

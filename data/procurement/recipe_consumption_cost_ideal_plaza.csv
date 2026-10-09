@@ -1,0 +1,108 @@
+outlet,period,menu_item,qty_sold,ingredient_lines,ingredient_cost_total,theoretical_cost_per_unit,rw_parent_cost_per_unit,lines_missing_price,basis
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Regular Sambar,3770.0,2,20636.15,5.47,5.47,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Masala Dosa,828.0,19,34504.81,41.67,41.67,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Idli Plate (2 pc),668.0,15,19549.05,29.27,29.27,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Filter Coffee,342.0,4,6113.63,17.88,17.88,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Jain Sambar,339.0,2,1707.26,5.04,5.04,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Potato Masala,267.0,3,2617.42,9.8,9.8,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Benne Masala Dosa,264.0,18,14056.8,53.25,53.25,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Plain Dosa,253.0,17,7657.24,30.27,30.27,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Thatte Idli Plate,239.0,24,11615.51,48.6,48.6,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Medu Vada Plate (2 pc),217.0,16,7918.64,36.49,36.49,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Cheese,200.0,1,4034.8,20.17,20.17,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Onion,166.0,1,282.6,1.7,1.7,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Schweppes Bottled water (500ml),139.0,1,3865.59,27.81,27.81,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Idli Vada Plate,138.0,16,4735.38,34.31,34.31,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Garlic Ghee Roast Dosa,138.0,17,8737.49,63.32,63.32,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Benne Dosa,123.0,16,5308.05,43.15,43.15,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rava Plain Dosa,122.0,19,3410.5,27.95,27.95,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Spicy Tomato Onion Chutney,111.0,10,1400.75,12.62,12.62,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Kesari Halwa,109.0,10,3532.47,32.41,32.41,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Garlic Benne Dosa,98.0,18,4874.64,49.74,49.74,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Ghee Roast Masala Dosa,97.0,17,5289.32,54.53,54.53,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malkapodi Idli Plate (2pc),92.0,17,3524.86,38.31,38.31,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Service of Lemonade,91.0,3,1648.92,18.12,18.12,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Butter,81.0,1,1325.98,16.37,16.37,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dahi Vada Plate (2 pc),79.0,14,3451.43,43.69,43.69,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Cold Coffee-Classic,75.0,6,3184.78,42.46,42.46,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Special White Coconut Chutney,71.0,3,885.43,12.47,12.47,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Fresh Buttermilk,65.0,10,697.82,10.74,10.74,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dosa Coffee Tiffin,61.0,26,5382.03,88.23,88.23,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Plain Ghee Roast Dosa,60.0,16,2842.8,47.38,47.38,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Srivilli Kheer,60.0,5,1801.44,30.02,30.02,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Homemade Sparkling Lemonade,58.0,6,954.15,16.45,16.45,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malabar Paratha with Paneer Korma,58.0,13,4648.94,80.15,80.15,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Ghee,54.0,1,761.11,14.09,14.09,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Mysore Ghee Roast Dosa,51.0,17,2804.56,54.99,54.99,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Paper Plain Dosa,51.0,17,1331.23,26.1,26.1,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Fresh Watermelon Juice,47.0,4,1702.39,36.22,36.22,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Mixed Uttapam,41.0,22,1475.56,35.99,35.99,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Appalam Papad (1pc),41.0,1,156.62,3.82,3.82,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Mysore Dosa,40.0,18,1527.42,38.19,38.19,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Idli Fries,38.0,15,927.34,24.4,24.4,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Raw Mango Chutney,37.0,7,449.94,12.16,12.16,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Tomato Rice,37.0,21,1624.33,43.9,43.9,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malkapodi Dosa,37.0,17,1468.44,39.69,39.69,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dosa Coffee Glass Bottle,33.0,1,399.3,12.1,12.1,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Mysore Benne Dosa,33.0,18,1474.38,44.68,44.68,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Raw Mango Benne Dosa,31.0,14,1348.76,43.51,43.51,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Lemon Rice,30.0,16,1338.16,44.61,44.61,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dosa Coffee Benne Tiffin,30.0,21,2369.07,78.97,78.97,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Ghee Idli Plate (2pc),30.0,16,1127.14,37.57,37.57,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Garlic Dosa,30.0,18,1327.03,44.23,44.23,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Paniyaram (10 Pcs),29.0,17,1469.79,50.68,50.68,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Upma,29.0,18,1597.37,55.08,55.08,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Curd Rice,28.0,19,1143.12,40.83,40.83,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Black Coffee,25.0,3,322.13,12.89,12.88,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dadu`s Special Spicy Chutney,25.0,17,346.08,13.84,13.84,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Raw Mango Ghee Roast Dosa,24.0,20,1230.64,51.28,51.28,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Onion Uttapam,23.0,19,821.58,35.72,35.72,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Lemon Iced Tea,22.0,6,235.26,10.69,10.69,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Sambar Vada Plate (2pc),21.0,11,434.82,20.71,20.71,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rasam & Papad,20.0,5,212.76,10.64,10.64,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malkapodi & Ghee,20.0,3,355.52,17.78,17.78,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Cold Coffee-Nuttela,19.0,7,1070.72,56.35,56.35,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Plain Idli Pc,19.0,14,347.44,18.29,18.29,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dosa Batter Kit (1 Kg),18.0,16,3861.88,214.55,214.55,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Medu Vada Pc,18.0,16,388.75,21.6,21.6,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Bisbelle Bhaat,18.0,19,849.64,47.2,47.2,2,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Butter Idli Plate (2pc),18.0,16,564.63,31.37,31.37,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Guntur Karampodi Dosa,17.0,20,934.03,54.94,54.94,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Filter Coffee Ice-Cream,16.0,2,448.18,28.01,28.01,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Open Butter Masala Dosa,16.0,19,694.4,43.4,43.4,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Tomato Onion Uttapam,16.0,20,591.73,36.98,36.98,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Homemade Lemonade,15.0,5,181.51,12.1,12.1,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Jaggery Cinnamon Filter Coffee,15.0,6,283.02,18.87,18.87,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Sambar Vada Pc,14.0,10,221.16,15.8,15.8,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Spicy Tomato Onion Ghee Roast Dosa,14.0,22,683.95,48.85,48.85,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Cold Coffee-Crunchy Oreo,14.0,7,878.14,62.72,62.72,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Filter Coffee Cappuccino,14.0,4,246.28,17.59,17.59,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Filter Coffee Flask,13.0,8,803.9,61.84,61.84,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Cheese Paniyaram (10 Pcs),13.0,15,896.08,68.93,68.93,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Sambar Idli Pc,9.0,11,121.18,13.46,13.46,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Sambar Idli Plate (2pc),9.0,11,139.36,15.48,15.48,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dosa Batter 1Kg,8.0,6,516.48,64.56,64.56,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dahi Idli,6.0,10,156.41,26.07,26.07,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Masala Uttapam,6.0,14,143.72,23.95,23.95,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malkapodi Idli pc,6.0,13,105.96,17.66,17.66,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Thindi Podi Ghee Masala Dosa,5.0,19,297.79,59.56,59.56,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Tomato Uttapam,5.0,14,117.03,23.41,23.4,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rasam Idli Plate (2pc),5.0,13,114.5,22.9,22.9,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Chocolate Filter Coffee,4.0,5,88.06,22.02,22.01,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Dahi Vada pc,4.0,11,113.45,28.36,28.36,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Benne Dosa Batter Kit (1 Kg),4.0,16,858.49,214.62,214.62,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Strawberry Shake,3.0,5,90.33,30.11,30.11,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Kesari Halwa (Complimentary),3.0,7,75.35,25.12,25.12,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rasam Idli Pc,3.0,13,52.62,17.54,17.54,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Malkapodi Powder,3.0,2,100.02,33.34,33.34,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Iced Filter Coffee,3.0,4,42.92,14.31,14.31,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Thindi Podi Idli,3.0,14,85.57,28.52,28.52,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Plain Uttapam,2.0,15,39.32,19.66,19.66,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Vegetable Uttapam,2.0,17,44.19,22.09,22.1,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Extra Paneer Korma,1.0,4,28.64,28.64,28.64,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Butter Idli pc,1.0,12,14.62,14.62,14.62,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Ghee Idli pc,1.0,12,10.55,10.55,10.55,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Mango Shake,1.0,5,35.95,35.95,35.96,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rasam Vada Plate (2 Pc),1.0,13,27.02,27.02,27.02,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Rasam Vada pc,1.0,12,18.03,18.03,18.03,1,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption
+Ideal Plaza (Kolkata),2026-10-01 to 2026-10-08,Coconut Rice,1.0,13,34.16,34.16,34.16,0,Theoretical cost at Restroworks average price; Ideal Plaza only; billing-driven recipe consumption

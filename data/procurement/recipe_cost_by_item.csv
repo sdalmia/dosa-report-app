@@ -1,0 +1,442 @@
+deployment,city,recipe_code,menu_item,recipe_type,is_menu_item,recipe_qty,recipe_unit,cost_per_unit_avg_price,cost_per_unit_last_price,last_vs_avg_pct,ingredient_count,unpriced_ingredient_count,unpriced_ingredient_count_last
+Connaught Place,Delhi,10,Butter Idli Plate (2pc),MI,True,1.0,No.,35.52,35.47,-0.1,12,1,1
+Connaught Place,Delhi,100,Dosa Batter Kit (500ml),MI,True,1.0,No.,52.63,53.27,1.2,5,0,0
+Connaught Place,Delhi,101,Dosa Batter Kit (1 Kg),MI,True,1.0,No.,211.29,213.05,0.8,7,0,0
+Connaught Place,Delhi,103,Rava Dosa Batter Kit (500ml),MI,True,1.0,No.,50.79,51.02,0.5,13,3,3
+Connaught Place,Delhi,104,Rava Dosa Batter Kit (1 Kg),MI,True,1.0,No.,138.93,139.74,0.6,15,3,3
+Connaught Place,Delhi,106,Paniyaram Batter Kit (500ml),MI,True,1.0,No.,55.21,55.86,1.2,9,0,0
+Connaught Place,Delhi,107,Paniyaram Batter Kit (1Ltr),MI,True,1.0,No.,51.4,51.62,0.4,9,0,0
+Connaught Place,Delhi,109,Appam Batter Kit (500ml),MI,True,1.0,No.,11.01,11.01,0.0,2,1,1
+Connaught Place,Delhi,11,Malkapodi Idli pc,MI,True,1.0,No.,14.65,15.17,3.5,6,1,1
+Connaught Place,Delhi,110,Appam Batter Kit (1Ltr),MI,True,1.0,No.,22.01,22.01,0.0,2,1,1
+Connaught Place,Delhi,111,Masala Vada Combo,MI,True,1.0,No.,18.24,18.1,-0.8,9,4,4
+Connaught Place,Delhi,112,Malkapodi Dosa Combo,MI,True,1.0,No.,42.4,43.75,3.2,13,4,4
+Connaught Place,Delhi,113,Malabar Paratha Combo,MI,True,1.0,No.,57.79,59.98,3.8,10,3,3
+Connaught Place,Delhi,114,Dosa Coffee Tiffin,MI,True,1.0,No.,44.14,44.94,1.8,17,1,1
+Connaught Place,Delhi,115,Dosa Coffee Bhaat Tiffin,MI,True,1.0,No.,56.63,59.19,4.5,22,4,5
+Connaught Place,Delhi,116,Dosa Coffee Malabar Tiffin,MI,True,1.0,No.,74.27,78.07,5.1,18,4,4
+Connaught Place,Delhi,117,Dosa Coffee Appam Tiffin,MI,True,1.0,No.,86.47,89.74,3.8,20,3,3
+Connaught Place,Delhi,118,Appalam Papad (1pc),MI,True,1.0,No.,3.71,3.82,3.0,1,0,0
+Connaught Place,Delhi,119,Malkapodi & Ghee,MI,True,1.0,No.,16.99,18.16,6.9,2,0,0
+Connaught Place,Delhi,12,Malkapodi Idli Plate (2pc),MI,True,1.0,No.,39.26,39.63,0.9,14,1,1
+Connaught Place,Delhi,120,Punjabi Samosa,MI,True,1.0,No.,0.26,0.25,-3.8,3,2,2
+Connaught Place,Delhi,125,Chola Bhatura,MI,True,1.0,No.,4.74,4.59,-3.2,9,3,3
+Connaught Place,Delhi,126,Pav Bhaji,MI,True,1.0,No.,22.97,23.61,2.8,6,2,2
+Connaught Place,Delhi,13,Idli Fries,MI,True,1.0,No.,16.17,16.77,3.7,10,0,0
+Connaught Place,Delhi,131,Maharaja Delight,MI,True,1.0,No.,122.21,124.75,2.1,17,3,3
+Connaught Place,Delhi,134,Extra Sambar - 250ml,MI,True,1.0,No.,3.77,4.22,11.9,1,0,0
+Connaught Place,Delhi,135,Breakfast Combo,MI,True,1.0,No.,55.77,56.9,2.0,22,2,2
+Connaught Place,Delhi,136,Uttapam Combo,MI,True,1.0,No.,75.78,76.38,0.8,25,4,4
+Connaught Place,Delhi,137,Cold Coffee Combo,MI,True,1.0,No.,45.4,46.73,2.9,13,5,5
+Connaught Place,Delhi,138,Chola Bhatura Combo,MI,True,1.0,No.,8.92,8.95,0.3,13,5,5
+Connaught Place,Delhi,139,Pav Bhaji Combo,MI,True,1.0,No.,30.39,31.02,2.1,12,4,4
+Connaught Place,Delhi,14,Idli Vada Plate,MI,True,1.0,No.,36.1,36.04,-0.2,14,1,1
+Connaught Place,Delhi,140,Paper Dosa Combo,MI,True,1.0,No.,31.19,31.93,2.4,15,3,3
+Connaught Place,Delhi,141,Dosa Coffee Combo,MI,True,1.0,No.,24.88,25.34,1.8,14,2,2
+Connaught Place,Delhi,142,Masala Dosa Combo,MI,True,1.0,No.,44.93,46.03,2.4,17,2,2
+Connaught Place,Delhi,143,Idli Vada Combo,MI,True,1.0,No.,39.79,40.75,2.4,15,2,2
+Connaught Place,Delhi,144,All Time Favourite,MI,True,1.0,No.,26.41,27.09,2.6,6,0,0
+Connaught Place,Delhi,145,Cheese,MI,True,1.0,No.,15.65,15.79,0.9,1,0,0
+Connaught Place,Delhi,146,Ghee,MI,True,1.0,No.,7.21,7.79,8.0,1,0,0
+Connaught Place,Delhi,147,Butter,MI,True,1.0,No.,5.45,5.6,2.8,1,0,0
+Connaught Place,Delhi,148,Potato Masala,MI,True,1.0,No.,7.86,8.07,2.7,12,1,1
+Connaught Place,Delhi,149,Onion,MI,True,1.0,No.,0.7,0.71,1.4,1,0,0
+Connaught Place,Delhi,15,Medu Vada pc,MI,True,1.0,No.,12.99,13.17,1.4,4,1,1
+Connaught Place,Delhi,150,Malkapodi,MI,True,1.0,No.,3.43,3.44,0.3,1,0,0
+Connaught Place,Delhi,151,Extra Paratha(1 Pc),MI,True,1.0,No.,10.09,11.06,9.6,3,0,0
+Connaught Place,Delhi,152,Extra Paneer Korma,MI,True,1.0,No.,15.55,15.96,2.6,2,0,0
+Connaught Place,Delhi,154,Thindi Podi Dosa,MI,True,1.0,No.,24.25,24.84,2.4,8,1,1
+Connaught Place,Delhi,155,Thindi Podi Idli,MI,True,1.0,No.,32.73,32.54,-0.6,14,2,2
+Connaught Place,Delhi,158,Idli & Chutney,MI,True,1.0,No.,15.67,16.42,4.8,4,0,0
+Connaught Place,Delhi,159,Masala Dosa & Chutney,MI,True,1.0,No.,20.28,21.15,4.3,6,0,0
+Connaught Place,Delhi,16,Medu Vada Plate (2 pc),MI,True,1.0,No.,37.73,37.67,-0.2,12,1,1
+Connaught Place,Delhi,160,Idli Vada & Chutney,MI,True,1.0,No.,18.62,19.32,3.8,5,0,0
+Connaught Place,Delhi,161,Homemade Lemonade,MI,True,1.0,No.,7.48,7.16,-4.3,7,2,2
+Connaught Place,Delhi,164,Thumsup (Small),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,165,Fanta (Small),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,166,Sprite (Small),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,167,Coke (Small),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,168,Thumsup (Regular),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,169,Fanta (Regular),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,17,Sambar Vada Pc,MI,True,1.0,No.,12.99,13.17,1.4,4,1,1
+Connaught Place,Delhi,170,Sprite (Regular),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,171,Coka Cola (Regular),MI,True,1.0,No.,0.43,0.45,4.7,4,3,3
+Connaught Place,Delhi,172,Dum Tomato Rice,MI,True,1.0,No.,3.71,3.82,3.0,2,1,1
+Connaught Place,Delhi,173,Vanilla Ice Cream,MI,True,1.0,No.,0.26,0.25,-3.8,2,1,1
+Connaught Place,Delhi,174,Mint Choco Chips Ice Cream,MI,True,1.0,No.,0.26,0.25,-3.8,2,1,1
+Connaught Place,Delhi,175,Chocolate Ice Cream,MI,True,1.0,No.,0.26,0.25,-3.8,2,1,1
+Connaught Place,Delhi,176,Tutty Fruity Ice Cream,MI,True,1.0,No.,0.26,0.25,-3.8,2,1,1
+Connaught Place,Delhi,177,Dahi Idli,MI,True,1.0,No.,4.48,4.68,4.5,3,1,1
+Connaught Place,Delhi,178,Idli Batter (1Ltr),MI,True,1.0,No.,26.55,25.56,-3.7,1,0,0
+Connaught Place,Delhi,179,Dosa Batter (1Ltr),MI,True,1.0,No.,27.31,27.5,0.7,1,0,0
+Connaught Place,Delhi,18,Sambar Vada Plate (2pc),MI,True,1.0,No.,35.98,35.69,-0.8,11,1,1
+Connaught Place,Delhi,180,Dosa Coffee Upma Mix (300grm),MI,True,1.0,No.,25.12,25.64,2.1,1,0,0
+Connaught Place,Delhi,181,Dosa Coffee Rava Powder Mix (1Kg),MI,True,1.0,No.,93.33,90.57,-3.0,1,0,0
+Connaught Place,Delhi,182,Dosa Coffee Malkapodi Mix (500grm),MI,True,1.0,No.,85.77,85.92,0.2,1,0,0
+Connaught Place,Delhi,183,Dosa Coffee Thindi Podi Mix (500grm),MI,True,1.0,No.,100.05,100.05,0.0,1,0,0
+Connaught Place,Delhi,184,Dosa Coffee Kesari Halwa Mix (550grm),MI,True,1.0,No.,39.04,42.07,7.8,1,0,0
+Connaught Place,Delhi,19,Rasam Vada pc,MI,True,1.0,No.,16.78,17.14,2.1,6,1,1
+Connaught Place,Delhi,191,Cotton's Lemonade (For Combo),MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,192,Buttermilk (For Combo),MI,True,1.0,No.,1.76,1.76,0.0,5,2,2
+Connaught Place,Delhi,193,Filter Coffee (For Combo),MI,True,1.0,No.,22.04,22.62,2.6,7,1,1
+Connaught Place,Delhi,194,Paper Masala Dosa,MI,True,1.0,No.,45.03,45.46,1.0,14,1,1
+Connaught Place,Delhi,195,Rava Masala Dosa,MI,True,1.0,No.,42.78,43.03,0.6,19,3,3
+Connaught Place,Delhi,196,Dhaniya Masala Dosa,MI,True,1.0,No.,49.09,49.5,0.8,15,1,1
+Connaught Place,Delhi,197,Mysore Masala Dosa,MI,True,1.0,No.,50.97,51.65,1.3,15,1,1
+Connaught Place,Delhi,198,Malkapodi Masala Dosa,MI,True,1.0,No.,56.97,58.0,1.8,15,1,1
+Connaught Place,Delhi,199,Garlic Masala Dosa,MI,True,1.0,No.,41.67,42.64,2.3,14,2,2
+Connaught Place,Delhi,2,Idli Plate (2 pc),MI,True,1.0,No.,30.63,30.43,-0.7,12,1,1
+Connaught Place,Delhi,20,Rasam Vada Plate (2 Pc),MI,True,1.0,No.,43.73,43.77,0.1,13,1,1
+Connaught Place,Delhi,21,Masala Vada pc,MI,True,1.0,No.,12.28,12.42,1.1,4,1,1
+Connaught Place,Delhi,213,Cold Coffee-Classic,MI,True,1.0,No.,36.93,38.36,3.9,5,0,0
+Connaught Place,Delhi,214,Cold Coffee-Nuttela,MI,True,1.0,No.,54.1,55.02,1.7,6,0,0
+Connaught Place,Delhi,215,Cold Coffee-Crunchy Oreo,MI,True,1.0,No.,60.38,61.57,2.0,6,0,0
+Connaught Place,Delhi,216,Regular Sambar,MI,True,1.0,No.,6.84,6.74,-1.5,2,0,0
+Connaught Place,Delhi,217,Jain Sambar,MI,True,1.0,No.,6.52,6.5,-0.3,2,0,0
+Connaught Place,Delhi,22,Masala Vada Plate (2 pc),MI,True,1.0,No.,34.57,34.2,-1.1,11,1,1
+Connaught Place,Delhi,226,Kitty Party Meal @ 349,MI,True,1.0,No.,109.96,112.01,1.9,31,2,2
+Connaught Place,Delhi,23,Dahi Vada pc,MI,True,1.0,No.,12.56,12.74,1.4,9,0,0
+Connaught Place,Delhi,234,Regular White Chutney Bucket Outlet,,False,1.3,Kg,79.58,80.89,1.6,7,1,1
+Connaught Place,Delhi,237,Rasam & Papad,MI,True,1.0,No.,10.24,10.45,2.1,6,0,0
+Connaught Place,Delhi,238,Filter Coffee @ 80,MI,True,1.0,No.,18.52,19.06,2.9,5,0,0
+Connaught Place,Delhi,239,Dosa Coffee Tiffin @ 199,MI,True,1.0,No.,50.52,52.33,3.6,23,1,1
+Connaught Place,Delhi,24,Dahi Vada Plate (2 pc),MI,True,1.0,No.,26.15,26.72,2.2,11,0,0
+Connaught Place,Delhi,240,Packaged Drinking Water-500 ml,MI,True,1.0,No.,12.84,13.8,7.5,1,0,0
+Connaught Place,Delhi,241,Fresh Watermelon Juice,MI,True,1.0,No.,27.58,30.37,10.1,3,0,0
+Connaught Place,Delhi,242,Kesari Halwa (Complimentary),MI,True,1.0,No.,26.25,27.99,6.6,7,1,1
+Connaught Place,Delhi,243,Lemon Iced Tea,MI,True,1.0,No.,9.37,9.21,-1.7,6,1,1
+Connaught Place,Delhi,244,Fresh Orange Juice,MI,True,1.0,No.,37.09,39.87,7.5,3,0,0
+Connaught Place,Delhi,247,Thatte Idli Plate,MI,True,1.0,No.,44.83,47.16,5.2,20,1,1
+Connaught Place,Delhi,248,Filter Coffee Cappuccino,MI,True,1.0,No.,38.12,39.08,2.5,7,0,0
+Connaught Place,Delhi,249,Chocolate Filter Coffee,MI,True,1.0,No.,43.51,44.62,2.6,8,0,0
+Connaught Place,Delhi,25,Plain Uttapam,MI,True,1.0,No.,37.81,37.94,0.3,16,1,1
+Connaught Place,Delhi,250,Jaggery Cinnamon Filter Coffee,MI,True,1.0,No.,39.66,40.58,2.3,8,0,0
+Connaught Place,Delhi,251,Irish Filter Coffee,MI,True,1.0,No.,45.53,46.37,1.8,8,0,0
+Connaught Place,Delhi,252,Vegan Iced Cold Coffee,MI,True,1.0,No.,28.76,29.39,2.2,5,0,0
+Connaught Place,Delhi,254,Filter Coffee Tiramisu,MI,True,1.0,No.,1.86,1.68,-9.7,3,1,1
+Connaught Place,Delhi,255,Coconut Cookies,MI,True,1.0,No.,1.86,1.68,-9.7,3,1,1
+Connaught Place,Delhi,256,Banana Masala Chips,MI,True,1.0,No.,33.47,33.22,-0.7,8,0,0
+Connaught Place,Delhi,258,Fresh Buttermilk.,MI,True,1.0,No.,5.99,6.07,1.3,9,1,1
+Connaught Place,Delhi,259,Homemade Lemonade.,MI,True,1.0,No.,11.32,10.97,-3.1,6,1,1
+Connaught Place,Delhi,26,Vegetable Uttapam,MI,True,1.0,No.,39.49,39.58,0.2,18,1,1
+Connaught Place,Delhi,260,Homemade Sparkling Lemonade.,MI,True,1.0,No.,14.62,14.4,-1.5,5,0,0
+Connaught Place,Delhi,261,Open Butter Masala Dosa,MI,True,1.0,No.,94.3,94.0,-0.3,16,1,1
+Connaught Place,Delhi,262,Benne Dosa,MI,True,1.0,No.,54.21,53.16,-1.9,13,1,1
+Connaught Place,Delhi,263,Benne Masala Dosa,MI,True,1.0,No.,60.79,59.95,-1.4,14,1,1
+Connaught Place,Delhi,264,Cheese Paniyaram (10 Pcs),MI,True,1.0,No.,97.38,98.34,1.0,16,1,1
+Connaught Place,Delhi,265,Fresh Sweet Lime Juice,MI,True,1.0,No.,32.71,32.88,0.5,3,0,0
+Connaught Place,Delhi,267,Gulab Jamun (2 Pc),MI,True,1.0,No.,39.04,39.27,0.6,2,0,0
+Connaught Place,Delhi,268,ABC Juice,MI,True,1.0,No.,46.67,46.4,-0.6,9,0,0
+Connaught Place,Delhi,269,Srivillli Kheer,MI,True,1.0,No.,32.02,36.82,15.0,2,0,0
+Connaught Place,Delhi,27,Masala Uttapam,MI,True,1.0,No.,23.43,24.24,3.5,8,1,1
+Connaught Place,Delhi,270,Mango Shake,MI,True,1.0,No.,32.79,32.92,0.4,5,0,0
+Connaught Place,Delhi,271,Tender Coconut Shake,MI,True,1.0,No.,44.22,44.39,0.4,4,0,0
+Connaught Place,Delhi,272,Aam Panna,MI,True,1.0,No.,22.72,22.72,0.0,4,1,1
+Connaught Place,Delhi,275,DC Tiffin @ 150,MI,True,1.0,No.,61.09,62.46,2.2,17,2,2
+Connaught Place,Delhi,276,Srivilli Kheer (Complimentary),MI,True,1.0,No.,33.61,38.25,13.8,3,0,0
+Connaught Place,Delhi,277,Fresh Buttermilk - Complimentary,MI,True,1.0,No.,5.62,5.6,-0.4,8,1,1
+Connaught Place,Delhi,28,Tomato Onion Uttapam,MI,True,1.0,No.,40.33,40.51,0.4,17,1,1
+Connaught Place,Delhi,287,Thatte Idli @ 79,MI,True,1.0,No.,45.17,47.26,4.6,20,1,1
+Connaught Place,Delhi,288,Dosa Coffee Tiffin @ 249,MI,True,1.0,No.,38.98,40.23,3.2,21,1,1
+Connaught Place,Delhi,289,Paneer Dosa,MI,True,1.0,No.,82.29,83.07,0.9,17,1,1
+Connaught Place,Delhi,29,Tomato Uttapam,MI,True,1.0,No.,38.99,39.14,0.4,15,1,1
+Connaught Place,Delhi,290,Idli Fries & Filter Coffee @ 199,MI,True,1.0,No.,46.52,47.86,2.9,12,0,0
+Connaught Place,Delhi,291,Benne Dosa Batter Kit (1 kg),MI,True,1.0,No.,254.41,255.64,0.5,22,5,5
+Connaught Place,Delhi,292,Dosa Coffee Benne Tiffin,MI,True,1.0,No.,50.34,50.97,1.3,16,1,1
+Connaught Place,Delhi,293,Ghee Roast Masala Dosa,MI,True,1.0,No.,58.33,59.92,2.7,14,1,1
+Connaught Place,Delhi,294,Garlic Benne Dosa,MI,True,1.0,No.,64.88,65.53,1.0,19,1,1
+Connaught Place,Delhi,295,Raw Mango Benne Dosa,MI,True,1.0,No.,63.23,64.0,1.2,19,1,1
+Connaught Place,Delhi,296,Mysore Benne Dosa,MI,True,1.0,No.,60.56,61.51,1.6,19,1,1
+Connaught Place,Delhi,297,Benne Masala Dosa.,MI,True,1.0,No.,60.79,59.95,-1.4,14,1,1
+Connaught Place,Delhi,298,Ghee Roast Masala Dosa.,MI,True,1.0,No.,58.33,59.92,2.7,14,1,1
+Connaught Place,Delhi,299,Regular Masala Dosa,MI,True,1.0,No.,41.01,41.29,0.7,15,1,1
+Connaught Place,Delhi,3,Rasam Idli Pc,MI,True,1.0,No.,13.98,14.38,2.9,6,1,1
+Connaught Place,Delhi,30,Mixed Uttapam,MI,True,1.0,No.,42.32,42.48,0.4,19,1,1
+Connaught Place,Delhi,303,Benne Masala Dosa @ 0,MI,True,1.0,No.,44.51,44.12,-0.9,8,0,0
+Connaught Place,Delhi,304,Strawberry Shake,MI,True,1.0,No.,29.3,29.8,1.7,5,0,0
+Connaught Place,Delhi,305,Iced Filter Coffee,MI,True,1.0,No.,13.3,13.64,2.6,4,0,0
+Connaught Place,Delhi,31,Onion Uttapam,MI,True,1.0,No.,52.88,54.14,2.4,16,1,1
+Connaught Place,Delhi,32,Upma,MI,True,1.0,No.,64.46,66.34,2.9,16,1,1
+Connaught Place,Delhi,33,Thindi Dosa,MI,True,1.0,No.,21.82,22.44,2.8,6,1,1
+Connaught Place,Delhi,34,Thindi Ghee Masala Dosa,MI,True,1.0,No.,43.95,46.13,5.0,8,0,0
+Connaught Place,Delhi,35,Thindi Ghee Podi Masala Dosa,MI,True,1.0,No.,53.12,54.13,1.9,15,1,1
+Connaught Place,Delhi,36,Plain Dosa,MI,True,1.0,No.,33.02,32.92,-0.3,14,1,1
+Connaught Place,Delhi,37,Paper Plain Dosa,MI,True,1.0,No.,39.54,39.83,0.7,14,1,1
+Connaught Place,Delhi,38,Rava Plain Dosa,MI,True,1.0,No.,36.66,36.68,0.1,19,3,3
+Connaught Place,Delhi,39,Masala Dosa,MI,True,1.0,No.,41.01,41.29,0.7,15,1,1
+Connaught Place,Delhi,4,Rasam Idli Plate (2pc),MI,True,1.0,No.,37.82,37.95,0.3,13,1,1
+Connaught Place,Delhi,40,Thindi Garlic Ghee Dosa,MI,True,1.0,No.,15.97,16.28,1.9,6,1,1
+Connaught Place,Delhi,41,Thindi Raw Mango Ghee Dosa,MI,True,1.0,No.,20.87,21.29,2.0,6,1,1
+Connaught Place,Delhi,42,Thindi Mysore Ghee Dosa,MI,True,1.0,No.,15.11,15.57,3.0,6,1,1
+Connaught Place,Delhi,43,Dhaniya Dosa,MI,True,1.0,No.,40.31,40.22,-0.2,15,1,1
+Connaught Place,Delhi,44,Mysore Dosa,MI,True,1.0,No.,45.38,45.92,1.2,15,1,1
+Connaught Place,Delhi,446,Potato Masala Bucket Outlet,,False,4.5,Kg,43.89,45.24,3.1,11,1,1
+Connaught Place,Delhi,45,Malkapodi Dosa,MI,True,1.0,No.,50.29,51.11,1.6,14,1,1
+Connaught Place,Delhi,46,Garlic Dosa,MI,True,1.0,No.,48.06,48.24,0.4,15,1,1
+Connaught Place,Delhi,47,Steam Dosa With Paneer Korma,MI,True,1.0,No.,39.38,40.31,2.4,6,1,1
+Connaught Place,Delhi,48,Guntur Karampodi Dosa,MI,True,1.0,No.,63.89,64.16,0.4,17,2,2
+Connaught Place,Delhi,49,Plain Ghee Roast Dosa,MI,True,1.0,No.,51.74,53.13,2.7,13,1,1
+Connaught Place,Delhi,50,Garlic Ghee Roast Dosa,MI,True,1.0,No.,64.48,65.89,2.2,14,1,1
+Connaught Place,Delhi,51,Mysore Ghee Roast Dosa,MI,True,1.0,No.,60.92,62.58,2.7,14,1,1
+Connaught Place,Delhi,52,Dhaniya Ghee Roast Dosa,MI,True,1.0,No.,56.95,58.34,2.4,14,1,1
+Connaught Place,Delhi,53,Beetroot Ghee Roast Dosa,MI,True,1.0,No.,33.03,34.92,5.7,7,2,2
+Connaught Place,Delhi,54,Spicy Tomato Onion Ghee Roast Dosa,MI,True,1.0,No.,73.07,71.95,-1.5,13,1,1
+Connaught Place,Delhi,55,Spicy Onion Ghee Roast Dosa,MI,True,1.0,No.,33.64,35.53,5.6,7,2,2
+Connaught Place,Delhi,56,Raw Mango Ghee Roast Dosa,MI,True,1.0,No.,67.53,69.08,2.3,14,1,1
+Connaught Place,Delhi,57,Spicy Coconut Ghee Roast Dosa,MI,True,1.0,No.,61.47,63.36,3.1,14,1,1
+Connaught Place,Delhi,58,Special White Coconut Chutney,MI,True,1.0,No.,19.56,19.93,1.9,8,1,1
+Connaught Place,Delhi,59,Beetroot Chutney,MI,True,1.0,No.,0.15,0.15,0.0,2,1,1
+Connaught Place,Delhi,6,Sambar Idli Plate (2pc),MI,True,1.0,No.,30.33,30.12,-0.7,12,1,1
+Connaught Place,Delhi,60,Raw Mango Chutney,MI,True,1.0,No.,22.69,22.93,1.1,2,0,0
+Connaught Place,Delhi,61,Spicy Tomato Onion Chutney,MI,True,1.0,No.,12.69,11.22,-11.6,2,0,0
+Connaught Place,Delhi,62,Spicy Onion Chutney,MI,True,1.0,No.,0.15,0.15,0.0,2,1,1
+Connaught Place,Delhi,63,Paniyaram (10 Pcs),MI,True,1.0,No.,78.99,79.87,1.1,16,1,1
+Connaught Place,Delhi,64,Appam with Stew,MI,True,1.0,No.,18.39,18.95,3.0,13,2,2
+Connaught Place,Delhi,65,Malabar Paratha with Paneer Korma,MI,True,1.0,No.,78.86,82.25,4.3,8,0,0
+Connaught Place,Delhi,66,Coconut Rice,MI,True,1.0,No.,31.05,32.84,5.8,13,0,0
+Connaught Place,Delhi,67,Curd Rice,MI,True,1.0,No.,29.11,30.45,4.6,14,0,0
+Connaught Place,Delhi,68,Lemon Rice,MI,True,1.0,No.,24.42,25.83,5.8,12,0,0
+Connaught Place,Delhi,69,Bisbelle Bhaat,MI,True,1.0,No.,34.44,35.0,1.6,13,1,2
+Connaught Place,Delhi,70,Tomato Rice,MI,True,1.0,No.,34.79,36.33,4.4,17,0,0
+Connaught Place,Delhi,71,Tomato Sevai,MI,True,1.0,No.,18.44,18.95,2.8,16,1,1
+Connaught Place,Delhi,72,Lemon Sevai,MI,True,1.0,No.,9.99,10.67,6.8,12,1,1
+Connaught Place,Delhi,73,Coconut Sevai,MI,True,1.0,No.,21.97,22.57,2.7,12,1,1
+Connaught Place,Delhi,74,Kesari Halwa,MI,True,1.0,No.,24.65,26.56,7.7,6,1,1
+Connaught Place,Delhi,75,Service of Kinley Bottled Water (500ml),MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,76,Schweppes Bottled water (500ml),MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,77,Service of Maaza,MI,True,1.0,No.,18.72,18.72,0.0,1,0,0
+Connaught Place,Delhi,78,Service of Lemonade,MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,79,Service of Ice-Cream Soda,MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,8,Ghee Idli Plate (2pc),MI,True,1.0,No.,37.28,37.67,1.0,12,1,1
+Connaught Place,Delhi,80,Homemade Sparkling Lemonade,MI,True,1.0,No.,11.52,11.31,-1.8,6,1,1
+Connaught Place,Delhi,81,Coca Cola Can (330 ml),MI,True,1.0,No.,27.54,27.54,0.0,1,0,0
+Connaught Place,Delhi,82,Thums Up Can (330 ml),MI,True,1.0,No.,27.53,27.53,0.0,1,0,0
+Connaught Place,Delhi,83,Fanta Can (330 ml),MI,True,1.0,No.,27.53,27.53,0.0,1,0,0
+Connaught Place,Delhi,84,Coke Zero Can (330 ml),MI,True,1.0,No.,27.53,27.53,0.0,1,0,0
+Connaught Place,Delhi,85,Sprite Can (330 ml),MI,True,1.0,No.,27.71,27.71,0.0,1,0,0
+Connaught Place,Delhi,86,Fresh Buttermilk,MI,True,1.0,No.,5.99,6.07,1.3,9,1,1
+Connaught Place,Delhi,87,Service of Schweppes Ginger Ale,MI,True,1.0,No.,0.0,0.0,,1,1,1
+Connaught Place,Delhi,88,Homemade Ginger Ale,MI,True,1.0,No.,5.73,5.84,1.9,4,1,1
+Connaught Place,Delhi,89,Cold Coffee,MI,True,1.0,No.,18.29,18.92,3.4,6,2,2
+Connaught Place,Delhi,9,Butter Idli pc,MI,True,1.0,No.,31.13,30.9,-0.7,13,1,1
+Connaught Place,Delhi,90,Nutella Cold Coffee,MI,True,1.0,No.,30.54,30.52,-0.1,7,1,1
+Connaught Place,Delhi,91,Crunchy Oreo Cold Coffee,MI,True,1.0,No.,36.48,36.77,0.8,7,1,1
+Connaught Place,Delhi,92,Rasam,MI,True,1.0,No.,5.9,6.15,4.2,3,0,0
+Connaught Place,Delhi,93,Black Coffee,MI,True,1.0,No.,12.68,13.21,4.2,3,0,0
+Connaught Place,Delhi,94,Filter Coffee,MI,True,1.0,No.,20.21,20.86,3.2,4,0,0
+Connaught Place,Delhi,95,Milk Tea,MI,True,1.0,No.,10.89,10.97,0.7,5,1,1
+Connaught Place,Delhi,97,Filter Coffee Flask (250ml),MI,True,1.0,No.,35.49,36.66,3.3,4,0,0
+Connaught Place,Delhi,98,Filter Coffee Flask (500ml),MI,True,1.0,No.,100.41,102.3,1.9,8,1,1
+Ideal Plaza,Kolkata,1,Raw Mango Dosa,MI,True,1.0,No.,24.72,25.49,3.1,12,1,1
+Ideal Plaza,Kolkata,10,Butter Idli Plate (2pc),MI,True,1.0,No.,19.57,19.77,1.0,11,1,1
+Ideal Plaza,Kolkata,101,Dosa Batter Kit (1 Kg),MI,True,1.0,No.,134.23,130.12,-3.1,7,0,0
+Ideal Plaza,Kolkata,104,Rava Dosa Batter Kit (1 Kg),MI,True,1.0,No.,131.16,128.15,-2.3,15,2,2
+Ideal Plaza,Kolkata,11,Malkapodi Idli pc,MI,True,1.0,No.,16.47,16.63,1.0,12,1,1
+Ideal Plaza,Kolkata,114,Dosa Coffee Tiffin,MI,True,1.0,No.,64.01,65.84,2.9,22,1,1
+Ideal Plaza,Kolkata,118,Appalam Papad (1pc),MI,True,1.0,No.,3.82,3.78,-1.0,1,0,0
+Ideal Plaza,Kolkata,119,Malkapodi & Ghee,MI,True,1.0,No.,16.64,17.63,5.9,2,0,0
+Ideal Plaza,Kolkata,12,Malkapodi Idli Plate (2pc),MI,True,1.0,No.,22.86,23.35,2.1,12,1,1
+Ideal Plaza,Kolkata,13,Idli Fries,MI,True,1.0,No.,15.4,15.75,2.3,10,0,0
+Ideal Plaza,Kolkata,132,Maharaja Delight,MI,True,1.0,No.,117.82,121.7,3.3,23,2,2
+Ideal Plaza,Kolkata,135,Extra Sambar - 250ml,MI,True,1.0,No.,3.61,3.87,7.2,1,0,0
+Ideal Plaza,Kolkata,136,Breakfast Combo,MI,True,1.0,No.,50.43,50.77,0.7,27,3,3
+Ideal Plaza,Kolkata,137,Uttapam Combo,MI,True,1.0,No.,85.21,84.52,-0.8,34,4,4
+Ideal Plaza,Kolkata,138,Cold Coffee Combo,MI,True,1.0,No.,74.86,75.25,0.5,18,3,3
+Ideal Plaza,Kolkata,14,Idli Vada Plate,MI,True,1.0,No.,15.27,15.18,-0.6,10,1,1
+Ideal Plaza,Kolkata,141,Paper Dosa Combo,MI,True,1.0,No.,57.61,57.36,-0.4,25,3,3
+Ideal Plaza,Kolkata,142,Dosa Coffee Combo,MI,True,1.0,No.,25.68,25.87,0.7,18,2,2
+Ideal Plaza,Kolkata,143,Masala Dosa Combo,MI,True,1.0,No.,32.22,31.99,-0.7,20,2,2
+Ideal Plaza,Kolkata,145,All Time Favourite,MI,True,1.0,No.,28.99,29.37,1.3,6,1,1
+Ideal Plaza,Kolkata,146,Cheese,MI,True,1.0,No.,20.18,20.5,1.6,1,0,0
+Ideal Plaza,Kolkata,147,Ghee,MI,True,1.0,No.,14.1,15.15,7.4,1,0,0
+Ideal Plaza,Kolkata,148,Butter,MI,True,1.0,No.,16.37,16.94,3.5,1,0,0
+Ideal Plaza,Kolkata,149,Potato Masala,MI,True,1.0,No.,8.66,8.35,-3.6,2,0,0
+Ideal Plaza,Kolkata,15,Medu Vada for Combo,MI,True,1.0,No.,14.51,14.33,-1.2,9,1,1
+Ideal Plaza,Kolkata,150,Onion,MI,True,1.0,No.,1.7,1.45,-14.7,1,0,0
+Ideal Plaza,Kolkata,151,Malkapodi,MI,True,1.0,No.,3.39,3.3,-2.7,1,0,0
+Ideal Plaza,Kolkata,152,Extra Paratha(1 Pc),MI,True,1.0,No.,10.13,11.75,16.0,3,0,0
+Ideal Plaza,Kolkata,153,Extra Paneer Korma,MI,True,1.0,No.,28.49,28.56,0.2,4,0,0
+Ideal Plaza,Kolkata,154,Special Spicy Coconut Chutney,MI,True,1.0,No.,6.79,6.68,-1.6,9,1,1
+Ideal Plaza,Kolkata,155,Thindi Podi Ghee Masala Dosa,MI,True,1.0,No.,48.97,49.44,1.0,14,1,1
+Ideal Plaza,Kolkata,156,Thindi Podi Idli,MI,True,1.0,No.,26.96,27.44,1.8,13,1,1
+Ideal Plaza,Kolkata,157,Regular Sambar,MI,True,1.0,No.,5.47,5.19,-5.1,2,0,0
+Ideal Plaza,Kolkata,158,Jain Sambar,MI,True,1.0,No.,5.03,4.86,-3.4,2,0,0
+Ideal Plaza,Kolkata,16,Medu Vada Plate (2 pc),MI,True,1.0,No.,22.5,22.69,0.8,11,1,1
+Ideal Plaza,Kolkata,163,Homemade Lemonade,MI,True,1.0,No.,12.1,12.16,0.5,5,1,1
+Ideal Plaza,Kolkata,164,Dosa Coffee Glass Bottle,MI,True,1.0,No.,12.1,12.17,0.6,1,0,0
+Ideal Plaza,Kolkata,166,Thumsup (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,167,Fanta (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,168,Sprite (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,17,Sambar Vada Pc,MI,True,1.0,No.,14.51,14.33,-1.2,9,1,1
+Ideal Plaza,Kolkata,170,Thumsup (Regular),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,171,Fanta (Regular),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,172,Sprite (Regular),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,174,Dum Tomato Rice,MI,True,1.0,No.,3.82,3.78,-1.0,2,1,1
+Ideal Plaza,Kolkata,179,Dahi Idli,MI,True,1.0,No.,24.93,25.32,1.6,9,0,0
+Ideal Plaza,Kolkata,18,Sambar Vada Plate (2pc),MI,True,1.0,No.,19.49,19.31,-0.9,10,1,1
+Ideal Plaza,Kolkata,180,Idli Batter (1Ltr),MI,True,1.0,No.,29.84,26.33,-11.8,1,0,0
+Ideal Plaza,Kolkata,19,Rasam Vada pc,MI,True,1.0,No.,18.31,18.34,0.2,11,1,1
+Ideal Plaza,Kolkata,193,Cotton's Lemonade (For Combo),MI,True,1.0,No.,17.5,17.5,0.0,1,0,0
+Ideal Plaza,Kolkata,194,Buttermilk (For Combo),MI,True,1.0,No.,5.51,5.56,0.9,11,3,3
+Ideal Plaza,Kolkata,195,Filter Coffee (For Combo),MI,True,1.0,No.,21.14,21.48,1.6,7,1,1
+Ideal Plaza,Kolkata,196,Dosa Coffee Meal,MI,True,1.0,No.,37.75,37.85,0.3,11,1,1
+Ideal Plaza,Kolkata,197,Cold Coffee-Classic,MI,True,1.0,No.,38.27,38.27,0.0,5,0,0
+Ideal Plaza,Kolkata,198,Cold Coffee-Nuttela,MI,True,1.0,No.,56.18,56.58,0.7,7,1,1
+Ideal Plaza,Kolkata,199,Cold Coffee-Crunchy Oreo,MI,True,1.0,No.,62.46,62.58,0.2,7,1,1
+Ideal Plaza,Kolkata,2,Idli Plate (2 pc),MI,True,1.0,No.,14.11,14.12,0.1,10,1,1
+Ideal Plaza,Kolkata,20,Rasam Vada Plate (2 Pc),MI,True,1.0,No.,26.78,27.01,0.9,12,1,1
+Ideal Plaza,Kolkata,200,Fountain Combo - Thumsup (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,202,Fountain Combo - Sprite (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,203,Fountain Combo - Fanta (Small),MI,True,1.0,No.,0.39,0.39,0.0,4,3,3
+Ideal Plaza,Kolkata,205,Masala Dosa - EV,MI,True,1.0,No.,31.79,31.99,0.6,10,2,2
+Ideal Plaza,Kolkata,206,Plain Idli- EV,MI,True,1.0,No.,26.83,26.95,0.4,8,2,2
+Ideal Plaza,Kolkata,207,Idli Vada - EV,MI,True,1.0,No.,12.22,12.24,0.2,8,2,2
+Ideal Plaza,Kolkata,208,Idli Fries- EV,MI,True,1.0,No.,7.06,7.3,3.4,7,2,2
+Ideal Plaza,Kolkata,209,Medu Vada - EV,MI,True,1.0,No.,15.11,15.04,-0.5,7,2,2
+Ideal Plaza,Kolkata,210,Filter Coffee - EV,MI,True,1.0,No.,20.71,21.05,1.6,6,0,0
+Ideal Plaza,Kolkata,213,Dosa Coffee Tiffin @ 249,MI,True,1.0,No.,33.49,33.31,-0.5,21,1,1
+Ideal Plaza,Kolkata,221,Comp - Rasam & Papad,MI,True,1.0,No.,9.16,9.43,2.9,3,0,0
+Ideal Plaza,Kolkata,225,Dhaniya Chutney,MI,True,1.0,No.,9.08,9.07,-0.1,2,0,0
+Ideal Plaza,Kolkata,226,Mysore Chutney,MI,True,1.0,No.,17.43,17.7,1.5,2,0,0
+Ideal Plaza,Kolkata,227,Garlic Chutney,MI,True,1.0,No.,25.64,26.15,2.0,2,0,0
+Ideal Plaza,Kolkata,23,Dahi Vada pc,MI,True,1.0,No.,27.06,27.46,1.5,10,0,0
+Ideal Plaza,Kolkata,230,Fresh Watermelon Juice,MI,True,1.0,No.,32.1,32.1,0.0,3,0,0
+Ideal Plaza,Kolkata,231,Thatte Idli Plate,MI,True,1.0,No.,39.51,40.8,3.3,18,1,1
+Ideal Plaza,Kolkata,232,Dadu`s Special Spicy Chutney,MI,True,1.0,No.,10.61,10.49,-1.1,14,1,1
+Ideal Plaza,Kolkata,233,Kesari Halwa (Complimentary),MI,True,1.0,No.,25.11,26.68,6.3,7,1,1
+Ideal Plaza,Kolkata,234,Regular White Chutney Bucket Outlet,,False,1.3,Kg,52.32,51.38,-1.8,7,1,1
+Ideal Plaza,Kolkata,235,Lemon Iced Tea,MI,True,1.0,No.,10.66,10.78,1.1,6,1,1
+Ideal Plaza,Kolkata,239,Filter Coffee Cappuccino,MI,True,1.0,No.,17.72,18.05,1.9,4,0,0
+Ideal Plaza,Kolkata,24,Dahi Vada Plate (2 pc),MI,True,1.0,No.,33.31,33.88,1.7,10,0,0
+Ideal Plaza,Kolkata,240,Jaggery Cinnamon Filter Coffee,MI,True,1.0,No.,18.87,19.23,1.9,6,0,0
+Ideal Plaza,Kolkata,241,Irish Filter Coffee,MI,True,1.0,No.,23.88,24.27,1.6,5,0,0
+Ideal Plaza,Kolkata,242,Chocolate Filter Coffee,MI,True,1.0,No.,22.75,23.23,2.1,5,0,0
+Ideal Plaza,Kolkata,243,Vegan Iced Cold Coffee,MI,True,1.0,No.,29.2,29.58,1.3,5,0,0
+Ideal Plaza,Kolkata,246,Salt & Pepper Banana Masala Chips,MI,True,1.0,No.,33.23,32.92,-0.9,8,0,0
+Ideal Plaza,Kolkata,247,Idli for Combo,MI,True,1.0,No.,13.34,13.26,-0.6,11,1,1
+Ideal Plaza,Kolkata,248,Tomato Banana Chips,MI,True,1.0,No.,72.45,72.45,0.0,1,0,0
+Ideal Plaza,Kolkata,249,Spicy Banana Chips,MI,True,1.0,No.,72.45,72.45,0.0,1,0,0
+Ideal Plaza,Kolkata,25,Plain Uttapam,MI,True,1.0,No.,19.62,19.27,-1.8,14,1,1
+Ideal Plaza,Kolkata,250,Salt & Pepper Banana Chips,MI,True,1.0,No.,68.09,68.09,0.0,1,0,0
+Ideal Plaza,Kolkata,252,Benne Dosa,MI,True,1.0,No.,32.72,32.28,-1.3,11,1,1
+Ideal Plaza,Kolkata,253,Benne Masala Dosa,MI,True,1.0,No.,39.49,38.82,-1.7,13,1,1
+Ideal Plaza,Kolkata,254,Open Butter Masala Dosa,MI,True,1.0,No.,40.34,40.0,-0.8,14,1,1
+Ideal Plaza,Kolkata,255,Cheese Paniyaram (10 Pcs),MI,True,1.0,No.,67.64,68.93,1.9,14,1,1
+Ideal Plaza,Kolkata,256,Fresh Sweet Lime Juice,MI,True,1.0,No.,44.62,44.5,-0.3,3,0,0
+Ideal Plaza,Kolkata,257,ABC Juice,MI,True,1.0,No.,54.64,54.52,-0.2,9,0,0
+Ideal Plaza,Kolkata,258,Srivilli Kheer,MI,True,1.0,No.,27.78,33.24,19.7,3,0,0
+Ideal Plaza,Kolkata,259,Mango Shake,MI,True,1.0,No.,35.96,36.12,0.4,5,0,0
+Ideal Plaza,Kolkata,26,Vegetable Uttapam,MI,True,1.0,No.,21.49,21.19,-1.4,16,1,1
+Ideal Plaza,Kolkata,260,Aam Panna,MI,True,1.0,No.,20.22,20.23,0.0,4,1,1
+Ideal Plaza,Kolkata,261,Tender Coconut Shake,MI,True,1.0,No.,43.7,43.97,0.6,4,0,0
+Ideal Plaza,Kolkata,262,Filter Coffee Ice-Cream,MI,True,1.0,No.,28.01,26.19,-6.5,2,0,0
+Ideal Plaza,Kolkata,263,Homemade Lemonade.,MI,True,1.0,No.,12.1,12.16,0.5,5,1,1
+Ideal Plaza,Kolkata,264,Homemade Sparkling Lemonade.,MI,True,1.0,No.,16.45,16.56,0.7,6,1,1
+Ideal Plaza,Kolkata,265,Fresh Buttermilk.,MI,True,1.0,No.,5.51,5.56,0.9,9,1,1
+Ideal Plaza,Kolkata,266,Lemon Iced Tea.,MI,True,1.0,No.,10.66,10.78,1.1,6,1,1
+Ideal Plaza,Kolkata,267,Srivilli Kheer (Complimentary),MI,True,1.0,No.,27.78,33.24,19.7,3,0,0
+Ideal Plaza,Kolkata,268,Fresh Buttermilk - Complimentary,MI,True,1.0,No.,4.9,4.96,1.2,8,1,1
+Ideal Plaza,Kolkata,269,Service of ice cream soda,MI,True,1.0,Pc,18.12,18.12,0.0,3,0,0
+Ideal Plaza,Kolkata,27,Masala Uttapam,MI,True,1.0,No.,23.37,22.95,-1.8,14,1,1
+Ideal Plaza,Kolkata,270,Dosa Batter 1Kg,MI,True,1.0,Kg,64.55,60.06,-7.0,6,0,0
+Ideal Plaza,Kolkata,271,Rava Batter 1Kg,MI,True,1.0,Kg,58.77,58.03,-1.3,10,1,1
+Ideal Plaza,Kolkata,272,Malkapodi powder 500gm,MI,True,1.0,Kg,91.97,89.52,-2.7,2,0,0
+Ideal Plaza,Kolkata,273,Tomato Banana Masala Chips,MI,True,1.0,No.,43.82,43.51,-0.7,8,0,0
+Ideal Plaza,Kolkata,274,Spicy Banana Masala Chips,MI,True,1.0,No.,43.82,43.51,-0.7,8,0,0
+Ideal Plaza,Kolkata,275,Idli Plate (2 pc) @ 79,MI,True,1.0,No.,14.11,14.12,0.1,10,1,1
+Ideal Plaza,Kolkata,276,Rasam Idli Plate (2 pc) @ 79,MI,True,1.0,No.,21.4,21.83,2.0,12,1,1
+Ideal Plaza,Kolkata,277,Sambar Idli Plate (2 pc) @ 79,MI,True,1.0,No.,14.11,14.12,0.1,10,1,1
+Ideal Plaza,Kolkata,278,Ghee Idli Plate (2 pc) @ 79,MI,True,1.0,No.,21.16,21.7,2.6,11,1,1
+Ideal Plaza,Kolkata,279,Buter Idli Plate (2 pc) @ 79,MI,True,1.0,No.,19.57,19.77,1.0,11,1,1
+Ideal Plaza,Kolkata,28,Tomato Onion Uttapam,MI,True,1.0,No.,22.35,21.84,-2.3,15,1,1
+Ideal Plaza,Kolkata,280,Malkapodi Idli Plate (2 pc) @ 79,MI,True,1.0,No.,22.86,23.35,2.1,12,1,1
+Ideal Plaza,Kolkata,281,Idli Fries @ 79,MI,True,1.0,No.,15.4,15.75,2.3,10,0,0
+Ideal Plaza,Kolkata,282,Thindi Podi Idli (2 pc) @ 79,MI,True,1.0,No.,26.96,27.44,1.8,13,1,1
+Ideal Plaza,Kolkata,283,Dahi Idli (2 pc) @ 79,MI,True,1.0,No.,24.63,25.03,1.6,9,0,0
+Ideal Plaza,Kolkata,284,Thatte Idli @ 79,MI,True,1.0,No.,39.74,41.04,3.3,19,1,1
+Ideal Plaza,Kolkata,285,Thindi Podi Powder,MI,True,1.0,Pkt,35.1,35.79,2.0,2,0,0
+Ideal Plaza,Kolkata,286,Malkapodi Powder,MI,True,1.0,Pkt,33.34,33.01,-1.0,2,0,0
+Ideal Plaza,Kolkata,287,Gunturkaram Podi Powder,MI,True,1.0,Pkt,35.0,35.01,0.0,2,0,0
+Ideal Plaza,Kolkata,289,Medu Vada Pc,MI,True,1.0,No.,18.44,18.45,0.1,11,1,1
+Ideal Plaza,Kolkata,29,Tomato Uttapam,MI,True,1.0,No.,20.7,20.44,-1.3,13,1,1
+Ideal Plaza,Kolkata,291,Plain Idli Pc,MI,True,1.0,No.,11.86,11.78,-0.7,9,1,1
+Ideal Plaza,Kolkata,292,Benne Dosa Batter Kit (1 Kg),MI,True,1.0,No.,134.28,128.29,-4.5,7,0,0
+Ideal Plaza,Kolkata,293,Garlic Benne Dosa,MI,True,1.0,No.,48.27,48.14,-0.3,13,1,1
+Ideal Plaza,Kolkata,294,Raw Mango Benne Dosa,MI,True,1.0,No.,42.86,42.9,0.1,13,1,1
+Ideal Plaza,Kolkata,295,Mysore Benne Dosa,MI,True,1.0,No.,43.25,42.97,-0.6,13,1,1
+Ideal Plaza,Kolkata,296,Ghee Roast Masala Dosa,MI,True,1.0,No.,41.46,42.45,2.4,12,1,1
+Ideal Plaza,Kolkata,297,Dosa Coffee Benne Tiffin,MI,True,1.0,No.,54.69,54.43,-0.5,17,1,1
+Ideal Plaza,Kolkata,298,Benne Masala Dosa.,MI,True,1.0,No.,39.49,38.82,-1.7,13,1,1
+Ideal Plaza,Kolkata,299,Ghee Roast Masala Dosa.,MI,True,1.0,No.,43.16,44.25,2.5,13,1,1
+Ideal Plaza,Kolkata,3,Rasam Idli Pc,MI,True,1.0,No.,15.89,16.02,0.8,12,1,1
+Ideal Plaza,Kolkata,30,Mixed Uttapam,MI,True,1.0,No.,23.03,22.64,-1.7,17,1,1
+Ideal Plaza,Kolkata,300,Regular Masala Dosa,MI,True,1.0,No.,0.1,0.1,0.0,1,0,0
+Ideal Plaza,Kolkata,301,Masala Dosa.,MI,True,1.0,No.,23.86,23.46,-1.7,14,1,1
+Ideal Plaza,Kolkata,302,Fresh Orange Juice,MI,True,1.0,No.,42.73,42.74,0.0,3,0,0
+Ideal Plaza,Kolkata,303,DC Benne Tiffin,MI,True,1.0,No.,47.65,47.61,-0.1,20,2,2
+Ideal Plaza,Kolkata,304,Benne Masala Dosa - Forum,MI,True,1.0,No.,31.62,31.32,-0.9,22,3,3
+Ideal Plaza,Kolkata,305,Garlic Benne Masala Dosa - Forum,MI,True,1.0,No.,37.29,37.07,-0.6,23,3,3
+Ideal Plaza,Kolkata,306,Raw Mango Benne Masala Dosa - Forum,MI,True,1.0,No.,35.04,34.89,-0.4,23,3,3
+Ideal Plaza,Kolkata,307,Ghee Roast Masala Dosa - Forum,MI,True,1.0,No.,29.93,30.39,1.5,22,3,3
+Ideal Plaza,Kolkata,308,Garlic Ghee Roast Masala Dosa - Forum,MI,True,1.0,No.,36.26,36.86,1.7,23,3,3
+Ideal Plaza,Kolkata,309,Raw Mango Ghee Roast Masala Dosa - Forum,MI,True,1.0,No.,34.01,34.68,2.0,23,3,3
+Ideal Plaza,Kolkata,31,Onion Uttapam,MI,True,1.0,No.,22.02,21.33,-3.1,14,1,1
+Ideal Plaza,Kolkata,310,Thatte Idli - Forum,MI,True,1.0,No.,18.5,18.53,0.2,20,3,3
+Ideal Plaza,Kolkata,311,Ghee Podi Thatte Idli - Forum,MI,True,1.0,No.,34.54,35.62,3.1,22,3,3
+Ideal Plaza,Kolkata,312,Medu Vada - Forum,MI,True,1.0,No.,12.03,11.98,-0.4,20,5,5
+Ideal Plaza,Kolkata,314,Dahi Vada - Forum,MI,True,1.0,No.,23.65,24.23,2.5,14,4,4
+Ideal Plaza,Kolkata,316,Strawberry Shake,MI,True,1.0,No.,30.11,30.07,-0.1,5,0,0
+Ideal Plaza,Kolkata,317,Iced Filter Coffee,MI,True,1.0,No.,12.91,13.14,1.8,4,0,0
+Ideal Plaza,Kolkata,318,Filter Coffee @ 80,MI,True,1.0,No.,17.88,18.22,1.9,4,0,0
+Ideal Plaza,Kolkata,32,Upma,MI,True,1.0,No.,48.31,49.98,3.5,14,1,1
+Ideal Plaza,Kolkata,36,Plain Dosa,MI,True,1.0,No.,16.72,16.56,-1.0,12,1,1
+Ideal Plaza,Kolkata,37,Paper Plain Dosa,MI,True,1.0,No.,23.01,23.0,-0.0,12,1,1
+Ideal Plaza,Kolkata,38,Rava Plain Dosa,MI,True,1.0,No.,17.91,17.87,-0.2,14,1,1
+Ideal Plaza,Kolkata,39,Masala Dosa,MI,True,1.0,No.,23.82,23.42,-1.7,14,1,1
+Ideal Plaza,Kolkata,4,Rasam Idli Plate (2pc),MI,True,1.0,No.,21.4,21.83,2.0,12,1,1
+Ideal Plaza,Kolkata,43,Dhaniya Dosa,MI,True,1.0,No.,23.42,23.24,-0.8,13,1,1
+Ideal Plaza,Kolkata,44,Mysore Dosa,MI,True,1.0,No.,30.93,30.97,0.1,13,1,1
+Ideal Plaza,Kolkata,446,Potato Masala Bucket Outlet,,False,4.5,Kg,42.78,41.24,-3.6,11,1,1
+Ideal Plaza,Kolkata,45,Malkapodi Dosa,MI,True,1.0,No.,33.98,34.53,1.6,12,1,1
+Ideal Plaza,Kolkata,46,Garlic Dosa,MI,True,1.0,No.,36.35,36.56,0.6,13,1,1
+Ideal Plaza,Kolkata,48,Guntur Karampodi Dosa,MI,True,1.0,No.,51.05,50.8,-0.5,15,1,1
+Ideal Plaza,Kolkata,49,Plain Ghee Roast Dosa,MI,True,1.0,No.,34.9,36.14,3.6,11,1,1
+Ideal Plaza,Kolkata,5,Sambar Idli Pc,MI,True,1.0,No.,12.09,12.02,-0.6,10,1,1
+Ideal Plaza,Kolkata,50,Garlic Ghee Roast Dosa,MI,True,1.0,No.,50.36,51.9,3.1,12,1,1
+Ideal Plaza,Kolkata,51,Mysore Ghee Roast Dosa,MI,True,1.0,No.,45.34,46.73,3.1,12,1,1
+Ideal Plaza,Kolkata,52,Dhaniya Ghee Roast Dosa,MI,True,1.0,No.,39.54,40.77,3.1,12,1,1
+Ideal Plaza,Kolkata,53,Beetroot Ghee Roast Dosa,MI,True,1.0,No.,39.83,41.15,3.3,12,1,1
+Ideal Plaza,Kolkata,54,Spicy Tomato Onion Ghee Roast Dosa,MI,True,1.0,No.,42.94,44.21,3.0,17,1,1
+Ideal Plaza,Kolkata,55,Spicy Onion Ghee Roast Dosa,MI,True,1.0,No.,43.14,44.31,2.7,12,1,1
+Ideal Plaza,Kolkata,56,Raw Mango Ghee Roast Dosa,MI,True,1.0,No.,42.68,43.98,3.0,15,1,1
+Ideal Plaza,Kolkata,57,Spicy Coconut Ghee Roast Dosa,MI,True,1.0,No.,35.65,36.9,3.5,14,1,1
+Ideal Plaza,Kolkata,58,Special White Coconut Chutney,MI,True,1.0,No.,11.31,11.3,-0.1,2,0,0
+Ideal Plaza,Kolkata,59,Beetroot Chutney,MI,True,1.0,No.,13.22,13.22,0.0,2,0,0
+Ideal Plaza,Kolkata,6,Sambar Idli Plate (2pc),MI,True,1.0,No.,14.11,14.12,0.1,10,1,1
+Ideal Plaza,Kolkata,60,Raw Mango Chutney,MI,True,1.0,No.,11.58,11.66,0.7,6,0,0
+Ideal Plaza,Kolkata,61,Spicy Tomato Onion Chutney,MI,True,1.0,No.,11.81,11.85,0.3,9,0,0
+Ideal Plaza,Kolkata,62,Spicy Onion Chutney,MI,True,1.0,No.,12.24,12.13,-0.9,2,0,0
+Ideal Plaza,Kolkata,63,Paniyaram (10 Pcs),MI,True,1.0,No.,34.39,34.75,1.0,12,1,1
+Ideal Plaza,Kolkata,64,Appam with Stew,MI,True,1.0,No.,35.14,35.53,1.1,12,1,1
+Ideal Plaza,Kolkata,65,Malabar Paratha with Paneer Korma,MI,True,1.0,No.,68.86,72.22,4.9,8,0,0
+Ideal Plaza,Kolkata,66,Coconut Rice,MI,True,1.0,No.,32.28,32.13,-0.5,12,0,0
+Ideal Plaza,Kolkata,67,Curd Rice,MI,True,1.0,No.,24.51,24.54,0.1,14,1,1
+Ideal Plaza,Kolkata,68,Lemon Rice,MI,True,1.0,No.,29.85,29.51,-1.1,11,0,0
+Ideal Plaza,Kolkata,69,Bisbelle Bhaat,MI,True,1.0,No.,33.65,33.66,0.0,14,2,2
+Ideal Plaza,Kolkata,7,Ghee Idli pc,MI,True,1.0,No.,7.73,8.07,4.4,11,1,1
+Ideal Plaza,Kolkata,70,Tomato Rice,MI,True,1.0,No.,32.41,32.39,-0.1,16,0,0
+Ideal Plaza,Kolkata,71,Tomato Sevai,MI,True,1.0,No.,37.38,37.2,-0.5,17,0,0
+Ideal Plaza,Kolkata,72,Lemon Sevai,MI,True,1.0,No.,40.78,41.04,0.6,12,0,0
+Ideal Plaza,Kolkata,73,Coconut Sevai,MI,True,1.0,No.,36.46,36.15,-0.9,13,0,0
+Ideal Plaza,Kolkata,74,Kesari Halwa,MI,True,1.0,No.,23.86,25.43,6.6,6,1,1
+Ideal Plaza,Kolkata,75,Service of Kinley Bottled Water (500ml),MI,True,1.0,No.,7.11,7.16,0.7,1,0,0
+Ideal Plaza,Kolkata,76,Schweppes Bottled water (500ml),MI,True,1.0,No.,27.77,24.94,-10.2,1,0,0
+Ideal Plaza,Kolkata,78,Service of Lemonade,MI,True,1.0,No.,18.11,18.12,0.1,3,0,0
+Ideal Plaza,Kolkata,8,Ghee Idli Plate (2pc),MI,True,1.0,No.,21.16,21.7,2.6,11,1,1
+Ideal Plaza,Kolkata,80,Homemade Sparkling Lemonade,MI,True,1.0,No.,16.45,16.56,0.7,6,1,1
+Ideal Plaza,Kolkata,86,Fresh Buttermilk,MI,True,1.0,No.,5.51,5.56,0.9,9,1,1
+Ideal Plaza,Kolkata,9,Butter Idli pc,MI,True,1.0,No.,12.03,12.2,1.4,11,1,1
+Ideal Plaza,Kolkata,92,Rasam & Papad,MI,True,1.0,No.,10.64,10.92,2.6,5,0,0
+Ideal Plaza,Kolkata,93,Black Coffee,MI,True,1.0,No.,12.89,13.14,1.9,3,0,0
+Ideal Plaza,Kolkata,94,Filter Coffee,MI,True,1.0,No.,17.88,18.22,1.9,4,0,0
+Ideal Plaza,Kolkata,97,Filter Coffee Flask,MI,True,1.0,No.,34.92,35.59,1.9,5,0,0

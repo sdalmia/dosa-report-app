@@ -1,0 +1,214 @@
+menu_item_consumption,qty_sold,theoretical_cost_per_unit,lines_missing_price,menu_item_recipe,cost_per_unit_avg_price,cost_per_unit_last_price,ingredient_count,unpriced_ingredient_count,consumption_cost_base_ingredients,consumption_cost_extra_not_in_base_recipe,extra_ingredients,diff_recipe_avg_minus_consumption,diff_pct,base_ingredient_diff_pct,match_status
+,,,,Aam Panna,20.22,20.23,4,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,ABC Juice,54.64,54.52,9,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,All Time Favourite,28.99,29.37,6,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Appalam Papad (1pc),41.0,3.82,0.0,Appalam Papad (1pc),3.82,3.78,1,0,3.82,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Appam with Stew,35.14,35.53,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Beetroot Chutney,13.22,13.22,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Beetroot Ghee Roast Dosa,39.83,41.15,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Benne Dosa,123.0,43.15,1.0,Benne Dosa,32.72,32.28,11,1,32.73,10.42,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-10.43,-24.2,0.0,differs_gt_5pct
+Benne Dosa Batter Kit (1 Kg),4.0,214.62,0.0,Benne Dosa Batter Kit (1 Kg),134.28,128.29,7,0,134.33,80.29,1000ml Round Bucket (DIY); DIY Kits Box; Dosa Batter Sticker (DIY) Cap Cover; Glen Container With Lid - 100ml (1pkt = 50pc); Glen Container With Lid - 500ml (1pkt = 50pc); Malkapodi Powder Sticker (DIY); Round Bucket Back Sticker (DIY); Round Bucket Dosa Batter Front Sticker (DIY); Sambar Sticker (DIY) Cap Cover,-80.34,-37.4,0.0,differs_gt_5pct
+Benne Masala Dosa,264.0,53.25,1.0,Benne Masala Dosa,39.49,38.82,13,1,39.49,13.75,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-13.76,-25.8,0.0,differs_gt_5pct
+,,,,Benne Masala Dosa - Forum,31.62,31.32,22,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Benne Masala Dosa.,39.49,38.82,13,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Bisbelle Bhaat,18.0,47.2,2.0,Bisbelle Bhaat,33.65,33.66,14,2,33.71,13.49,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Compartment Tray With Lid - 2CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-13.55,-28.7,0.2,differs_gt_5pct
+Black Coffee,25.0,12.89,0.0,Black Coffee,12.89,13.14,3,0,12.89,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Breakfast Combo,50.43,50.77,27,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Buter Idli Plate (2 pc) @ 79,19.57,19.77,11,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Butter,81.0,16.37,0.0,Butter,16.37,16.94,1,0,16.37,0.0,,0.0,0.0,0.0,within_5pct
+Butter Idli pc,1.0,14.62,1.0,Butter Idli pc,12.03,12.2,11,1,13.37,1.25,Banana Leaf Small (1bundle = 50pc),-2.59,-17.7,11.1,differs_gt_5pct
+Butter Idli Plate (2pc),18.0,31.37,1.0,Butter Idli Plate (2pc),19.57,19.77,11,1,19.59,11.78,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-11.8,-37.6,0.1,differs_gt_5pct
+,,,,Buttermilk (For Combo),5.51,5.56,11,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Cheese,200.0,20.17,0.0,Cheese,20.18,20.5,1,0,20.17,0.0,,0.01,0.0,-0.0,within_5pct
+Cheese Paniyaram (10 Pcs),13.0,68.93,1.0,Cheese Paniyaram (10 Pcs),67.64,68.93,14,1,67.68,1.25,Banana Leaf Small (1bundle = 50pc),-1.29,-1.9,0.1,within_5pct
+Chocolate Filter Coffee,4.0,22.02,0.0,Chocolate Filter Coffee,22.75,23.23,5,0,22.02,0.0,,0.73,3.3,-3.2,within_5pct
+Coconut Rice,1.0,34.16,0.0,Coconut Rice,32.28,32.13,12,0,32.46,1.7,Banana Leaf Big (1bundle = 50pc),-1.88,-5.5,0.6,differs_gt_5pct
+,,,,Coconut Sevai,36.46,36.15,13,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Cold Coffee Combo,74.86,75.25,18,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Cold Coffee-Classic,75.0,42.46,0.0,Cold Coffee-Classic,38.27,38.27,5,0,38.27,4.19,Glass Bottle 300ml W/Cap (1box = 48pc),-4.19,-9.9,0.0,differs_gt_5pct
+Cold Coffee-Crunchy Oreo,14.0,62.72,1.0,Cold Coffee-Crunchy Oreo,62.46,62.58,7,1,62.72,0.0,,-0.26,-0.4,0.4,within_5pct
+Cold Coffee-Nuttela,19.0,56.35,1.0,Cold Coffee-Nuttela,56.18,56.58,7,1,56.35,0.0,,-0.17,-0.3,0.3,within_5pct
+,,,,Comp - Rasam & Papad,9.16,9.43,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Cotton's Lemonade (For Combo),17.5,17.5,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Curd Rice,28.0,40.83,1.0,Curd Rice,24.51,24.54,14,1,24.55,16.28,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Compartment Tray With Lid - 2CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-16.32,-40.0,0.2,differs_gt_5pct
+Dadu`s Special Spicy Chutney,25.0,13.84,1.0,Dadu`s Special Spicy Chutney,10.61,10.49,14,1,10.64,3.21,Bio-Degradable Spoon (1pkt = 50pc); Glen Container With Lid - 250ml (1pkt = 50pc); Paper Napkin (1pkt = 100pc),-3.23,-23.3,0.3,differs_gt_5pct
+Dahi Idli,6.0,26.07,0.0,Dahi Idli,24.93,25.32,9,0,24.82,1.25,Banana Leaf Small (1bundle = 50pc),-1.14,-4.4,-0.4,within_5pct
+,,,,Dahi Idli (2 pc) @ 79,24.63,25.03,9,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Dahi Vada - Forum,23.65,24.23,14,4,,,,,,,recipe_only (not sold 1-8 Oct)
+Dahi Vada pc,4.0,28.36,0.0,Dahi Vada pc,27.06,27.46,10,0,27.11,1.25,Banana Leaf Small (1bundle = 50pc),-1.3,-4.6,0.2,within_5pct
+Dahi Vada Plate (2 pc),79.0,43.69,0.0,Dahi Vada Plate (2 pc),33.31,33.88,10,0,33.33,10.36,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 500ml (1pkt = 50pc),-10.38,-23.8,0.1,differs_gt_5pct
+,,,,DC Benne Tiffin,47.65,47.61,20,2,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Dhaniya Chutney,9.08,9.07,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Dhaniya Dosa,23.42,23.24,13,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Dhaniya Ghee Roast Dosa,39.54,40.77,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Dosa Batter 1Kg,8.0,64.56,0.0,Dosa Batter 1Kg,64.55,60.06,6,0,64.56,0.0,,-0.01,-0.0,0.0,within_5pct
+Dosa Batter Kit (1 Kg),18.0,214.55,0.0,Dosa Batter Kit (1 Kg),134.23,130.12,7,0,134.26,80.29,1000ml Round Bucket (DIY); DIY Kits Box; Dosa Batter Sticker (DIY) Cap Cover; Glen Container With Lid - 100ml (1pkt = 50pc); Glen Container With Lid - 500ml (1pkt = 50pc); Malkapodi Powder Sticker (DIY); Round Bucket Back Sticker (DIY); Round Bucket Dosa Batter Front Sticker (DIY); Sambar Sticker (DIY) Cap Cover,-80.32,-37.4,0.0,differs_gt_5pct
+Dosa Coffee Benne Tiffin,30.0,78.97,1.0,Dosa Coffee Benne Tiffin,54.69,54.43,17,1,54.72,24.25,Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Large(1pkt = 100pc); Compartment Tray With Lid - 5CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-24.28,-30.7,0.1,differs_gt_5pct
+,,,,Dosa Coffee Combo,25.68,25.87,18,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Dosa Coffee Glass Bottle,33.0,12.1,0.0,Dosa Coffee Glass Bottle,12.1,12.17,1,0,12.1,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Dosa Coffee Meal,37.75,37.85,11,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Dosa Coffee Tiffin,61.0,88.23,1.0,Dosa Coffee Tiffin,64.01,65.84,22,1,63.98,24.25,Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Large(1pkt = 100pc); Compartment Tray With Lid - 5CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-24.22,-27.5,-0.0,differs_gt_5pct
+,,,,Dosa Coffee Tiffin @ 249,33.49,33.31,21,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Dum Tomato Rice,3.82,3.78,2,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Extra Paneer Korma,1.0,28.64,0.0,Extra Paneer Korma,28.49,28.56,4,0,28.64,0.0,,-0.15,-0.5,0.5,within_5pct
+,,,,Extra Paratha(1 Pc),10.13,11.75,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Extra Sambar - 250ml,3.61,3.87,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fanta (Regular),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fanta (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Filter Coffee,342.0,17.88,0.0,Filter Coffee,17.88,18.22,4,0,17.88,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Filter Coffee (For Combo),21.14,21.48,7,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Filter Coffee - EV,20.71,21.05,6,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Filter Coffee @ 80,17.88,18.22,4,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Filter Coffee Cappuccino,14.0,17.59,0.0,Filter Coffee Cappuccino,17.72,18.05,4,0,17.59,0.0,,0.13,0.7,-0.7,within_5pct
+Filter Coffee Flask,13.0,61.84,0.0,Filter Coffee Flask,34.92,35.59,5,0,35.23,26.61,Carry Bag - Small (1pkt = 100pc); Coffee/Tea Flask - 250ml (1pkt = 25pc); Hot Coffee Cup 150ml (1pkt=25pc),-26.92,-43.5,0.9,differs_gt_5pct
+Filter Coffee Ice-Cream,16.0,28.01,0.0,Filter Coffee Ice-Cream,28.01,26.19,2,0,28.01,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Fountain Combo - Fanta (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fountain Combo - Sprite (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fountain Combo - Thumsup (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Fresh Buttermilk,65.0,10.74,1.0,Fresh Buttermilk,5.51,5.56,9,1,5.52,5.21,Glass Bottle 300ml W/Cap (1box = 48pc),-5.23,-48.7,0.2,differs_gt_5pct
+,,,,Fresh Buttermilk - Complimentary,4.9,4.96,8,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fresh Buttermilk.,5.51,5.56,9,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fresh Orange Juice,42.73,42.74,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Fresh Sweet Lime Juice,44.62,44.5,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Fresh Watermelon Juice,47.0,36.22,0.0,Fresh Watermelon Juice,32.1,32.1,3,0,32.1,4.12,Glass Bottle 300ml W/Cap (1box = 48pc),-4.12,-11.4,0.0,differs_gt_5pct
+Garlic Benne Dosa,98.0,49.74,1.0,Garlic Benne Dosa,48.27,48.14,13,1,48.27,1.47,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 100ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-1.47,-3.0,0.0,within_5pct
+,,,,Garlic Benne Masala Dosa - Forum,37.29,37.07,23,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Garlic Chutney,25.64,26.15,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Garlic Dosa,30.0,44.23,1.0,Garlic Dosa,36.35,36.56,13,1,36.37,7.87,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-7.88,-17.8,0.1,differs_gt_5pct
+Garlic Ghee Roast Dosa,138.0,63.32,1.0,Garlic Ghee Roast Dosa,50.36,51.9,12,1,50.35,12.96,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-12.96,-20.5,-0.0,differs_gt_5pct
+,,,,Garlic Ghee Roast Masala Dosa - Forum,36.26,36.86,23,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Ghee,54.0,14.09,0.0,Ghee,14.1,15.15,1,0,14.09,0.0,,0.01,0.1,-0.1,within_5pct
+Ghee Idli pc,1.0,10.55,1.0,Ghee Idli pc,7.73,8.07,11,1,9.3,1.25,Banana Leaf Small (1bundle = 50pc),-2.82,-26.7,20.3,differs_gt_5pct
+,,,,Ghee Idli Plate (2 pc) @ 79,21.16,21.7,11,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Ghee Idli Plate (2pc),30.0,37.57,1.0,Ghee Idli Plate (2pc),21.16,21.7,11,1,21.16,16.41,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-16.41,-43.7,0.0,differs_gt_5pct
+,,,,Ghee Podi Thatte Idli - Forum,34.54,35.62,22,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Ghee Roast Masala Dosa,97.0,54.53,1.0,Ghee Roast Masala Dosa,41.46,42.45,12,1,41.44,13.09,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-13.07,-24.0,-0.0,differs_gt_5pct
+,,,,Ghee Roast Masala Dosa - Forum,29.93,30.39,22,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Ghee Roast Masala Dosa.,43.16,44.25,13,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Guntur Karampodi Dosa,17.0,54.94,1.0,Guntur Karampodi Dosa,51.05,50.8,15,1,51.07,3.88,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-3.89,-7.1,0.0,differs_gt_5pct
+,,,,Gunturkaram Podi Powder,35.0,35.01,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Homemade Lemonade,15.0,12.1,1.0,Homemade Lemonade,12.1,12.16,5,1,12.1,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Homemade Lemonade.,12.1,12.16,5,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Homemade Sparkling Lemonade,58.0,16.45,1.0,Homemade Sparkling Lemonade,16.45,16.56,6,1,16.45,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Homemade Sparkling Lemonade.,16.45,16.56,6,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Iced Filter Coffee,3.0,14.31,0.0,Iced Filter Coffee,12.91,13.14,4,0,14.31,0.0,,-1.4,-9.8,10.8,differs_gt_5pct
+,,,,Idli Batter (1Ltr),29.84,26.33,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Idli for Combo,13.34,13.26,11,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Idli Fries,38.0,24.4,0.0,Idli Fries,15.4,15.75,10,0,15.41,9.0,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 100ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-9.0,-36.9,0.1,differs_gt_5pct
+,,,,Idli Fries @ 79,15.4,15.75,10,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Idli Fries- EV,7.06,7.3,7,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Idli Plate (2 pc),668.0,29.27,1.0,Idli Plate (2 pc),14.11,14.12,10,1,14.11,15.15,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-15.16,-51.8,0.0,differs_gt_5pct
+,,,,Idli Plate (2 pc) @ 79,14.11,14.12,10,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Idli Vada - EV,12.22,12.24,8,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Idli Vada Plate,138.0,34.31,1.0,Idli Vada Plate,15.27,15.18,10,1,15.27,19.04,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Idli Pc Raw (1 Pkt =40pc); Take Away Packing Box - Small (1bundle = 50pc),-19.04,-55.5,0.0,differs_gt_5pct
+,,,,Irish Filter Coffee,23.88,24.27,5,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Jaggery Cinnamon Filter Coffee,15.0,18.87,0.0,Jaggery Cinnamon Filter Coffee,18.87,19.23,6,0,18.87,0.0,,0.0,0.0,0.0,within_5pct
+Jain Sambar,339.0,5.04,0.0,Jain Sambar,5.03,4.86,2,0,5.04,0.0,,-0.01,-0.2,0.2,within_5pct
+Kesari Halwa,109.0,32.41,1.0,Kesari Halwa,23.86,25.43,6,1,23.9,8.51,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc),-8.55,-26.4,0.2,differs_gt_5pct
+Kesari Halwa (Complimentary),3.0,25.12,1.0,Kesari Halwa (Complimentary),25.11,26.68,7,1,25.12,0.0,,-0.01,-0.0,0.0,within_5pct
+Lemon Iced Tea,22.0,10.69,1.0,Lemon Iced Tea,10.66,10.78,6,1,10.69,0.0,,-0.03,-0.3,0.3,within_5pct
+,,,,Lemon Iced Tea.,10.66,10.78,6,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Lemon Rice,30.0,44.61,0.0,Lemon Rice,29.85,29.51,11,0,29.84,14.76,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Compartment Tray With Lid - 2CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-14.76,-33.1,-0.0,differs_gt_5pct
+,,,,Lemon Sevai,40.78,41.04,12,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Maharaja Delight,117.82,121.7,23,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Malabar Paratha with Paneer Korma,58.0,80.15,0.0,Malabar Paratha with Paneer Korma,68.86,72.22,8,0,68.88,11.27,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Compartment Tray With Lid - 2CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-11.29,-14.1,0.0,differs_gt_5pct
+,,,,Malkapodi,3.39,3.3,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Malkapodi & Ghee,20.0,17.78,0.0,Malkapodi & Ghee,16.64,17.63,2,0,16.64,1.14,Glen Container With Lid - 100ml (1pkt = 50pc),-1.14,-6.4,0.0,differs_gt_5pct
+Malkapodi Dosa,37.0,39.69,1.0,Malkapodi Dosa,33.98,34.53,12,1,33.99,5.7,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-5.71,-14.4,0.0,differs_gt_5pct
+Malkapodi Idli pc,6.0,17.66,1.0,Malkapodi Idli pc,16.47,16.63,12,1,16.41,1.25,Banana Leaf Small (1bundle = 50pc),-1.19,-6.7,-0.4,differs_gt_5pct
+,,,,Malkapodi Idli Plate (2 pc) @ 79,22.86,23.35,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Malkapodi Idli Plate (2pc),92.0,38.31,1.0,Malkapodi Idli Plate (2pc),22.86,23.35,12,1,22.85,15.46,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-15.45,-40.3,-0.0,differs_gt_5pct
+Malkapodi Powder,3.0,33.34,0.0,Malkapodi Powder,33.34,33.01,2,0,33.34,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Malkapodi powder 500gm,91.97,89.52,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Mango Shake,1.0,35.95,0.0,Mango Shake,35.96,36.12,5,0,35.95,0.0,,0.01,0.0,-0.0,within_5pct
+Masala Dosa,828.0,41.67,1.0,Masala Dosa,23.82,23.42,14,1,23.82,17.85,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-17.85,-42.8,0.0,differs_gt_5pct
+,,,,Masala Dosa - EV,31.79,31.99,10,2,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Masala Dosa Combo,32.22,31.99,20,2,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Masala Dosa.,23.86,23.46,14,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Masala Uttapam,6.0,23.95,1.0,Masala Uttapam,23.37,22.95,14,1,23.95,0.0,,-0.58,-2.4,2.5,within_5pct
+,,,,Medu Vada - EV,15.11,15.04,7,2,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Medu Vada - Forum,12.03,11.98,20,5,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Medu Vada for Combo,14.51,14.33,9,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Medu Vada Pc,18.0,21.6,1.0,Medu Vada Pc,18.44,18.45,11,1,18.51,3.08,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Paper Napkin (1pkt = 100pc),-3.16,-14.6,0.4,differs_gt_5pct
+Medu Vada Plate (2 pc),217.0,36.49,1.0,Medu Vada Plate (2 pc),22.5,22.69,11,1,22.49,14.0,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-13.99,-38.3,-0.0,differs_gt_5pct
+Mixed Uttapam,41.0,35.99,1.0,Mixed Uttapam,23.03,22.64,17,1,23.01,12.98,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-12.96,-36.0,-0.1,differs_gt_5pct
+Mysore Benne Dosa,33.0,44.68,1.0,Mysore Benne Dosa,43.25,42.97,13,1,43.26,1.42,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 100ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-1.43,-3.2,0.0,within_5pct
+,,,,Mysore Chutney,17.43,17.7,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Mysore Dosa,40.0,38.19,1.0,Mysore Dosa,30.93,30.97,13,1,30.94,7.25,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-7.26,-19.0,0.0,differs_gt_5pct
+Mysore Ghee Roast Dosa,51.0,54.99,1.0,Mysore Ghee Roast Dosa,45.34,46.73,12,1,45.31,9.68,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-9.65,-17.5,-0.1,differs_gt_5pct
+Onion,166.0,1.7,0.0,Onion,1.7,1.45,1,0,1.7,0.0,,0.0,0.0,0.0,within_5pct
+Onion Uttapam,23.0,35.72,1.0,Onion Uttapam,22.02,21.33,14,1,21.96,13.77,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-13.7,-38.4,-0.3,differs_gt_5pct
+Open Butter Masala Dosa,16.0,43.4,1.0,Open Butter Masala Dosa,40.34,40.0,14,1,40.38,3.02,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Big (1bundle = 50pc),-3.06,-7.1,0.1,differs_gt_5pct
+Paniyaram (10 Pcs),29.0,50.68,1.0,Paniyaram (10 Pcs),34.39,34.75,12,1,34.4,16.28,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-16.29,-32.1,0.0,differs_gt_5pct
+,,,,Paper Dosa Combo,57.61,57.36,25,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Paper Plain Dosa,51.0,26.1,1.0,Paper Plain Dosa,23.01,23.0,12,1,22.95,3.15,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-3.09,-11.8,-0.3,differs_gt_5pct
+Plain Dosa,253.0,30.27,1.0,Plain Dosa,16.72,16.56,12,1,16.72,13.55,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-13.55,-44.8,0.0,differs_gt_5pct
+Plain Ghee Roast Dosa,60.0,47.38,1.0,Plain Ghee Roast Dosa,34.9,36.14,11,1,34.89,12.49,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-12.48,-26.3,-0.0,differs_gt_5pct
+Plain Idli Pc,19.0,18.29,1.0,Plain Idli Pc,11.86,11.78,9,1,11.92,6.37,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Glen Container With Lid - 250ml (1pkt = 50pc); Paper Napkin (1pkt = 100pc); Take Away Packing Box - Small (1bundle = 50pc),-6.43,-35.2,0.5,differs_gt_5pct
+,,,,Plain Idli- EV,26.83,26.95,8,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Plain Uttapam,2.0,19.66,1.0,Plain Uttapam,19.62,19.27,14,1,17.96,1.7,Banana Leaf Big (1bundle = 50pc),-0.04,-0.2,-8.5,within_5pct
+Potato Masala,267.0,9.8,0.0,Potato Masala,8.66,8.35,2,0,8.66,1.15,Glen Container With Lid - 250ml (1pkt = 50pc),-1.14,-11.6,0.0,differs_gt_5pct
+,,,,Potato Masala Bucket Outlet,42.78,41.24,11,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Rasam & Papad,20.0,10.64,0.0,Rasam & Papad,10.64,10.92,5,0,10.64,0.0,,0.0,0.0,0.0,within_5pct
+Rasam Idli Pc,3.0,17.54,1.0,Rasam Idli Pc,15.89,16.02,12,1,16.29,1.25,Banana Leaf Small (1bundle = 50pc),-1.65,-9.4,2.5,differs_gt_5pct
+,,,,Rasam Idli Plate (2 pc) @ 79,21.4,21.83,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Rasam Idli Plate (2pc),5.0,22.9,1.0,Rasam Idli Plate (2pc),21.4,21.83,12,1,21.65,1.25,Banana Leaf Small (1bundle = 50pc),-1.5,-6.6,1.2,differs_gt_5pct
+Rasam Vada pc,1.0,18.03,1.0,Rasam Vada pc,18.31,18.34,11,1,16.78,1.25,Banana Leaf Small (1bundle = 50pc),0.28,1.6,-8.4,within_5pct
+Rasam Vada Plate (2 Pc),1.0,27.02,1.0,Rasam Vada Plate (2 Pc),26.78,27.01,12,1,25.77,1.25,Banana Leaf Small (1bundle = 50pc),-0.24,-0.9,-3.8,within_5pct
+,,,,Rava Batter 1Kg,58.77,58.03,10,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Rava Dosa Batter Kit (1 Kg),131.16,128.15,15,2,,,,,,,recipe_only (not sold 1-8 Oct)
+Rava Plain Dosa,122.0,27.95,1.0,Rava Plain Dosa,17.91,17.87,14,1,17.91,10.04,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-10.04,-35.9,0.0,differs_gt_5pct
+Raw Mango Benne Dosa,31.0,43.51,1.0,Raw Mango Benne Dosa,42.86,42.9,13,1,42.8,0.71,Banana Leaf Big (1bundle = 50pc),-0.65,-1.5,-0.1,within_5pct
+,,,,Raw Mango Benne Masala Dosa - Forum,35.04,34.89,23,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Raw Mango Chutney,37.0,12.16,0.0,Raw Mango Chutney,11.58,11.66,6,0,11.59,0.57,Glen Container With Lid - 100ml (1pkt = 50pc),-0.58,-4.8,0.1,within_5pct
+,,,,Raw Mango Dosa,24.72,25.49,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Raw Mango Ghee Roast Dosa,24.0,51.28,1.0,Raw Mango Ghee Roast Dosa,42.68,43.98,15,1,42.64,8.64,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-8.6,-16.8,-0.1,differs_gt_5pct
+,,,,Raw Mango Ghee Roast Masala Dosa - Forum,34.01,34.68,23,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Regular Masala Dosa,0.1,0.1,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Regular Sambar,3770.0,5.47,0.0,Regular Sambar,5.47,5.19,2,0,5.47,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Regular White Chutney Bucket Outlet,52.32,51.38,7,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Salt & Pepper Banana Chips,68.09,68.09,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Salt & Pepper Banana Masala Chips,33.23,32.92,8,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Sambar Idli Pc,9.0,13.46,1.0,Sambar Idli Pc,12.09,12.02,10,1,12.21,1.25,Banana Leaf Small (1bundle = 50pc),-1.37,-10.2,1.0,differs_gt_5pct
+,,,,Sambar Idli Plate (2 pc) @ 79,14.11,14.12,10,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Sambar Idli Plate (2pc),9.0,15.48,1.0,Sambar Idli Plate (2pc),14.11,14.12,10,1,14.23,1.25,Banana Leaf Small (1bundle = 50pc),-1.37,-8.9,0.9,differs_gt_5pct
+Sambar Vada Pc,14.0,15.8,1.0,Sambar Vada Pc,14.51,14.33,9,1,14.55,1.25,Banana Leaf Small (1bundle = 50pc),-1.29,-8.2,0.3,differs_gt_5pct
+Sambar Vada Plate (2pc),21.0,20.71,1.0,Sambar Vada Plate (2pc),19.49,19.31,10,1,19.46,1.25,Banana Leaf Small (1bundle = 50pc),-1.22,-5.9,-0.2,differs_gt_5pct
+Schweppes Bottled water (500ml),139.0,27.81,0.0,Schweppes Bottled water (500ml),27.77,24.94,1,0,27.81,0.0,,-0.04,-0.1,0.1,within_5pct
+,,,,Service of ice cream soda,18.12,18.12,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Service of Kinley Bottled Water (500ml),7.11,7.16,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Service of Lemonade,91.0,18.12,0.0,Service of Lemonade,18.11,18.12,3,0,18.12,0.0,,-0.01,-0.1,0.1,within_5pct
+,,,,Special Spicy Coconut Chutney,6.79,6.68,9,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Special White Coconut Chutney,71.0,12.47,0.0,Special White Coconut Chutney,11.31,11.3,2,0,11.3,1.17,Glen Container With Lid - 100ml (1pkt = 50pc),-1.16,-9.3,-0.1,differs_gt_5pct
+,,,,Spicy Banana Chips,72.45,72.45,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Spicy Banana Masala Chips,43.82,43.51,8,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Spicy Coconut Ghee Roast Dosa,35.65,36.9,14,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Spicy Onion Chutney,12.24,12.13,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Spicy Onion Ghee Roast Dosa,43.14,44.31,12,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Spicy Tomato Onion Chutney,111.0,12.62,0.0,Spicy Tomato Onion Chutney,11.81,11.85,9,0,11.84,0.78,Glen Container With Lid - 100ml (1pkt = 50pc),-0.81,-6.4,0.3,differs_gt_5pct
+Spicy Tomato Onion Ghee Roast Dosa,14.0,48.85,1.0,Spicy Tomato Onion Ghee Roast Dosa,42.94,44.21,17,1,42.9,5.96,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-5.91,-12.1,-0.1,differs_gt_5pct
+,,,,Sprite (Regular),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Sprite (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+Srivilli Kheer,60.0,30.02,0.0,Srivilli Kheer,27.78,33.24,3,0,27.76,2.26,Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc),-2.24,-7.5,-0.1,differs_gt_5pct
+,,,,Srivilli Kheer (Complimentary),27.78,33.24,3,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Strawberry Shake,3.0,30.11,0.0,Strawberry Shake,30.11,30.07,5,0,30.11,0.0,,0.0,0.0,0.0,within_5pct
+,,,,Tender Coconut Shake,43.7,43.97,4,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Thatte Idli - Forum,18.5,18.53,20,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Thatte Idli @ 79,39.74,41.04,19,1,,,,,,,recipe_only (not sold 1-8 Oct)
+Thatte Idli Plate,239.0,48.6,1.0,Thatte Idli Plate,39.51,40.8,18,1,39.51,9.09,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Paper Napkin (1pkt = 100pc); Take Away Packing Box - Small (1bundle = 50pc),-9.09,-18.7,0.0,differs_gt_5pct
+Thindi Podi Ghee Masala Dosa,5.0,59.56,1.0,Thindi Podi Ghee Masala Dosa,48.97,49.44,14,1,49.29,10.27,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-10.59,-17.8,0.7,differs_gt_5pct
+Thindi Podi Idli,3.0,28.52,1.0,Thindi Podi Idli,26.96,27.44,13,1,27.27,1.25,Banana Leaf Small (1bundle = 50pc),-1.56,-5.5,1.1,differs_gt_5pct
+,,,,Thindi Podi Idli (2 pc) @ 79,26.96,27.44,13,1,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Thindi Podi Powder,35.1,35.79,2,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Thumsup (Regular),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Thumsup (Small),0.39,0.39,4,3,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Tomato Banana Chips,72.45,72.45,1,0,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Tomato Banana Masala Chips,43.82,43.51,8,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Tomato Onion Uttapam,16.0,36.98,1.0,Tomato Onion Uttapam,22.35,21.84,15,1,22.56,14.42,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc); Take Away Packing Box - Small (1bundle = 50pc),-14.63,-39.6,0.9,differs_gt_5pct
+Tomato Rice,37.0,43.9,0.0,Tomato Rice,32.41,32.39,16,0,32.49,11.41,Banana Leaf Big (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Compartment Tray With Lid - 2CP (1pkt = 25pc); Paper Sleeve (1pkt = 50pc),-11.49,-26.2,0.2,differs_gt_5pct
+,,,,Tomato Sevai,37.38,37.2,17,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Tomato Uttapam,5.0,23.41,1.0,Tomato Uttapam,20.7,20.44,13,1,21.71,1.7,Banana Leaf Big (1bundle = 50pc),-2.71,-11.6,4.9,differs_gt_5pct
+Upma,29.0,55.08,1.0,Upma,48.31,49.98,14,1,48.23,6.85,Banana Leaf Small (1bundle = 50pc); Bio-Degradable Spoon (1pkt = 50pc); Carry Bag - Small (1pkt = 100pc); Glen Container With Lid - 250ml (1pkt = 50pc),-6.77,-12.3,-0.2,differs_gt_5pct
+,,,,Uttapam Combo,85.21,84.52,34,4,,,,,,,recipe_only (not sold 1-8 Oct)
+,,,,Vegan Iced Cold Coffee,29.2,29.58,5,0,,,,,,,recipe_only (not sold 1-8 Oct)
+Vegetable Uttapam,2.0,22.09,1.0,Vegetable Uttapam,21.49,21.19,16,1,20.4,1.7,Banana Leaf Big (1bundle = 50pc),-0.6,-2.7,-5.1,within_5pct

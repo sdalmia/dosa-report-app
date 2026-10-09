@@ -1,0 +1,283 @@
+/* Theme hook. A later redesign can set these on .procurement or on :root. */
+.procurement {
+  --pc-bg: var(--app-bg, #f6f3ee);
+  --pc-surface: var(--app-surface, #fffdfb);
+  --pc-text: var(--app-text, #1c1917);
+  --pc-muted: var(--app-muted, #57534e);
+  --pc-line: var(--app-line, #e7e0d8);
+  --pc-accent: var(--app-accent, #9a3412);
+  --pc-accent-soft: var(--app-accent-soft, #f8efe9);
+  --pc-warn: #9a3412;
+  --pc-warn-bg: #fff4ed;
+  --pc-ok: #3f6212;
+  --pc-chip: #efe8df;
+  --pc-shadow: 0 10px 28px rgba(60, 36, 20, 0.06);
+  --pc-radius: 16px;
+  color: var(--pc-text);
+  background: var(--pc-bg);
+  margin: -0.5rem -12px 0;
+  padding: 0 16px 32px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  .procurement {
+    --pc-bg: var(--app-bg, #171412);
+    --pc-surface: var(--app-surface, #241f1c);
+    --pc-text: var(--app-text, #f5f0ea);
+    --pc-muted: var(--app-muted, #c4bbb3);
+    --pc-line: var(--app-line, #3d342e);
+    --pc-accent: var(--app-accent, #f0b429);
+    --pc-accent-soft: var(--app-accent-soft, #3a2a22);
+    --pc-warn: #fdba74;
+    --pc-warn-bg: #3a271c;
+    --pc-ok: #bef264;
+    --pc-chip: #322b26;
+    --pc-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  }
+}
+
+:root[data-theme="light"] .procurement {
+  --pc-bg: var(--app-bg, #f6f3ee);
+  --pc-surface: var(--app-surface, #fffdfb);
+  --pc-text: var(--app-text, #1c1917);
+  --pc-muted: var(--app-muted, #57534e);
+  --pc-line: var(--app-line, #e7e0d8);
+  --pc-accent: var(--app-accent, #9a3412);
+  --pc-accent-soft: var(--app-accent-soft, #f8efe9);
+  --pc-warn: #9a3412;
+  --pc-warn-bg: #fff4ed;
+  --pc-ok: #3f6212;
+  --pc-chip: #efe8df;
+}
+
+:root[data-theme="dark"] .procurement {
+  --pc-bg: var(--app-bg, #171412);
+  --pc-surface: var(--app-surface, #241f1c);
+  --pc-text: var(--app-text, #f5f0ea);
+  --pc-muted: var(--app-muted, #c4bbb3);
+  --pc-line: var(--app-line, #3d342e);
+  --pc-accent: var(--app-accent, #f0b429);
+  --pc-accent-soft: var(--app-accent-soft, #3a2a22);
+  --pc-warn: #fdba74;
+  --pc-warn-bg: #3a271c;
+  --pc-ok: #bef264;
+  --pc-chip: #322b26;
+}
+
+body:has(.procurement) {
+  background: var(--pc-bg);
+  color: var(--pc-text);
+}
+
+.procurement h1,
+.procurement h2,
+.procurement h3,
+.procurement p {
+  color: inherit;
+}
+
+.pc-kicker {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pc-muted);
+}
+
+.procurement h1 {
+  font-size: 1.7rem;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+
+.pc-period {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.pc-note,
+.pc-source,
+.tile-meta {
+  color: var(--pc-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 8px 0 0;
+}
+
+.pc-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.pc-subnav a,
+.pc-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--pc-chip);
+  color: var(--pc-text);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.pc-subnav a[aria-current="page"] {
+  background: var(--pc-accent);
+  color: #fffdfb;
+}
+
+.pc-jump {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+}
+
+.tile {
+  background: var(--pc-surface);
+  border: 1px solid var(--pc-line);
+  border-radius: var(--pc-radius);
+  box-shadow: var(--pc-shadow);
+  padding: 16px;
+  margin: 0 0 14px;
+}
+
+.tile h2 {
+  font-size: 1.15rem;
+  margin: 0 0 4px;
+}
+
+.tile h3 {
+  font-size: 0.95rem;
+  margin: 14px 0 8px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.metric {
+  background: var(--pc-accent-soft);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.metric span {
+  display: block;
+  color: var(--pc-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.metric em {
+  display: block;
+  margin-top: 2px;
+  font-style: normal;
+  color: var(--pc-accent);
+  font-weight: 700;
+}
+
+.empty {
+  border: 1px dashed var(--pc-line);
+  background: var(--pc-warn-bg);
+  color: var(--pc-text);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.row-card,
+.alert {
+  border: 1px solid var(--pc-line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.alert {
+  border-left: 4px solid var(--pc-warn);
+}
+
+.row-card b,
+.alert b {
+  display: block;
+}
+
+.muted {
+  color: var(--pc-muted);
+  font-size: 0.8rem;
+}
+
+.scroll {
+  max-height: 28rem;
+  overflow: auto;
+  margin-top: 8px;
+}
+
+select,
+button {
+  font: inherit;
+  color: var(--pc-text);
+  background: var(--pc-surface);
+  border: 1px solid var(--pc-line);
+  border-radius: 12px;
+  min-height: 44px;
+  width: 100%;
+  padding: 8px 12px;
+}
+
+.pc-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+button {
+  background: var(--pc-accent);
+  color: #fffdfb;
+  border: 0;
+  font-weight: 650;
+}
+
+@media (min-width: 800px) {
+  .procurement {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .city-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

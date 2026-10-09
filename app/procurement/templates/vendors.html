@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Vendors - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('procurement.static', filename='procurement.css') }}">
+{% set page_title = 'Vendors' %}
+<div class="procurement">
+  {% include "_head.html" %}
+  <nav class="pc-jump" aria-label="On this page">
+    <a href="#suppliers">Suppliers</a>
+    <a href="#prices">Prices</a>
+    <a href="#moves">Rate moves</a>
+    <a href="#above">Above cheapest</a>
+    <a href="#short">Short delivery</a>
+    <a href="#bills">Bills</a>
+  </nav>
+
+  {% if missing_grn %}<p class="empty">{{ missing_grn }}</p>{% endif %}
+  {% if missing_summary %}<p class="empty">{{ missing_summary }}</p>{% endif %}
+  {% if missing_rates %}<p class="empty">{{ missing_rates }}</p>{% endif %}
+
+  <section id="suppliers">
+    <article class="tile">
+      <h2>Suppliers by spend</h2>
+      <p class="tile-meta">{{ period_label }} · {{ sources.summary }} · line totals, freight excluded</p>
+      <div class="scroll stack">
+        {% for row in suppliers %}
+        <div class="row-card">
+          <b>{{ row.supplier }}</b>
+          <p class="muted">{{ row.city }} · {{ row.first_text }}–{{ row.last_text }} · {{ row.bills }} bills · {{ row.items }} items</p>
+          <p data-field="supplier-spend" data-city="{{ row.city }}" data-supplier="{{ row.supplier }}" data-value="{{ row.total.attr }}">{{ row.total.text }}{% if row.share.text %} · {{ row.share.text }} of city{% endif %}</p>
+        </div>
+        {% else %}
+        <p class="empty">No rows in {{ sources.summary }}.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section id="prices">
+    <article class="tile">
+      <h2>Price per unit over time</h2>
+      <p class="tile-meta">{{ period_label }} · {{ sources.grn }} · one row per stock-entry line</p>
+      <form class="pc-form" method="get" action="{{ url_for('procurement.vendors') }}">
+        <label for="item">Item</label>
+        <select id="item" name="item">
+          {% for item in item_names %}
+          <option value="{{ item.name }}" {% if item.name == selected_item %}selected{% endif %}>{{ item.name }}{% if item.moved %} · rate moved{% endif %}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Show rates</button>
+      </form>
+      {% if selected_item and not price_rows %}
+      <p class="empty">No GRN line for {{ selected_item }} in {{ sources.grn }}.</p>
+      {% endif %}
+      <div class="stack">
+        {% for row in price_rows %}
+        <div class="row-card">
+          <b>{{ row.date_text }} · {{ row.supplier }}</b>
+          <p class="muted">{{ row.city }} · {{ row.se_number }}</p>
+          <p data-field="unit-price" data-item="{{ selected_item }}" data-date="{{ row.date }}" data-supplier="{{ row.supplier }}" data-value="{{ row.rate.attr }}">{{ row.qty_text }} {{ row.unit }} · {{ row.rate.text }} · {{ row.total.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% if rate_rows %}
+      <h3>Weighted average on the rate file</h3>
+      <p class="tile-meta">{{ sources.rates }}</p>
+      {% for row in rate_rows %}
+      <div class="row-card">
+        <b>{{ row.supplier }}</b>
+        <p class="muted">{{ row.city }} · {{ row.unit }} · {{ row.lines }} lines · last {{ row.last_date }}</p>
+        <p>Wavg {{ row.wavg.text }} · min {{ row.min_rate.text }} · max {{ row.max_rate.text }} · last {{ row.last_rate.text }}</p>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="moves">
+    <article class="tile">
+      <h2>Unit price moved more than 10%</h2>
+      <p class="tile-meta">{{ period_label }} · {{ sources.rates }} · (max rate − min rate) / min rate, same supplier, item, unit and city, at least two lines</p>
+      <p class="pc-note">{{ period_note }}</p>
+      {% if time_moves %}
+      <div class="scroll stack">
+        {% for row in time_moves %}
+        <div class="alert" data-field="rate-move" data-item="{{ row.item }}" data-supplier="{{ row.supplier }}" data-city="{{ row.city }}">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }} · {{ row.supplier }} · {{ row.unit }}</p>
+          <p data-field="rate-move-pct" data-value="{{ row.move.attr }}">{{ row.min_rate.text }} to {{ row.max_rate.text }} · {{ row.move.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty">No supplier-item row in {{ sources.rates }} has a min-to-max move above 10%.</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="above">
+    <article class="tile">
+      <h2>Paying above the cheapest supplier</h2>
+      <p class="tile-meta">{{ period_label }} · {{ sources.rates }} · pct_vs_cheapest_supplier over 10. Same item and unit. Not a change over time.</p>
+      {% if largest_gap %}
+      <p class="pc-note">Largest gap on file: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier (weighted average {{ largest_gap.wavg.text }}).</p>
+      {% endif %}
+      {% if above_cheapest %}
+      <div class="scroll stack">
+        {% for row in above_cheapest %}
+        <div class="row-card" data-field="above-cheapest" data-item="{{ row.item }}" data-supplier="{{ row.supplier }}" data-city="{{ row.city }}" data-value="{{ row.pct_vs_cheapest.attr }}">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }} · {{ row.supplier }} · {{ row.unit }} · {{ row.n_suppliers }} suppliers</p>
+          <p>{{ row.wavg.text }} · {{ row.pct_vs_cheapest.text }} above cheapest</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty">No row in {{ sources.rates }} is more than 10% above the cheapest supplier.</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="short">
+    <article class="tile">
+      <h2>Short delivery</h2>
+      <p class="tile-meta">{{ sources.po_coverage }}</p>
+      <p class="empty" data-field="short-delivery">{{ short_delivery.missing }}</p>
+      {% if po_coverage.available %}
+      <p class="pc-note">{{ po_coverage.period }} · {{ po_coverage.source }}. Received value on the coverage file {{ po_coverage.received.text }} across {{ po_coverage.suppliers }} supplier rows.</p>
+      <p class="muted">{{ po_coverage.note }}</p>
+      {% elif po_coverage.missing %}
+      <p class="empty">{{ po_coverage.missing }}</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="bills">
+    <article class="tile">
+      <h2>Bill reconciliation</h2>
+      <p class="tile-meta">{{ period_label }} · {{ sources.po_summary }} · {{ sources.po_by_se }}</p>
+      {% if not reconciliation.available %}
+      <p class="empty">{{ reconciliation.missing }}</p>
+      {% else %}
+      <p data-field="bills-matched" data-matched="{{ reconciliation.matched }}" data-bills="{{ reconciliation.bills }}">{{ reconciliation.matched }} of {{ reconciliation.bills }} bills match on amount.</p>
+      <div class="stack">
+        {% for city in reconciliation.cities %}
+        <div class="row-card">
+          <b>{{ city.city }}</b>
+          <p class="muted">Purchase Detail {{ city.pd_lines }} lines · GRN {{ city.grn_lines }} lines{% if city.discount.text %} · discount {{ city.discount.text }}{% endif %}</p>
+          <p>Purchase Detail {{ city.pd_total.text }} · GRN {{ city.grn_total.text }} · gap {{ city.diff.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% if reconciliation.mismatches %}
+      <h3>Bills that differ</h3>
+      {% for row in reconciliation.mismatches %}
+      <div class="alert" data-field="bill-mismatch" data-se="{{ row.se_number }}">
+        <b>{{ row.se_number }} · {{ row.city }}</b>
+        <p class="muted">{{ row.date }} · {{ row.supplier }} · {{ row.status }}</p>
+        <p>Purchase Detail {{ row.pd_total.text }} · Entry Report {{ row.grn_total.text }} · gap {{ row.diff.text }}</p>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endif %}
+    </article>
+  </section>
+</div>
+{% endblock %}

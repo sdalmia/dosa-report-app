@@ -1,0 +1,307 @@
+city,deployment,store,rank_in_store,item_code,item_name,category,super_category,unit,avg_price,wastage_qty,wastage_amt,yield_wastage_qty,yield_wastage_amt,total_wastage_amt,consumption_qty,consumption_amt,wastage_pct_of_consumption
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,1,279,Raw Lauki,Raw Vegetable,Food,Kg,25.0,99.5,2487.26,0,0,2487.26,153.068,3826.34,65.0
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,2,132,Onion,Raw Vegetable,Food,Kg,36.31,53.126,1929.11,0,0,1929.11,177.365,6440.46,30.0
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,3,280,Raw Pumpkin,Raw Vegetable,Food,Kg,27.0,64.1,1730.54,0,0,1730.54,123.367,3330.6,52.0
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,4,141,Tomato,Raw Vegetable,Food,Kg,40.0,18.95,757.93,0,0,757.93,490.129,19603.44,3.9
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,5,107,Carrot,Raw Vegetable,Food,Kg,40.99,12.5,512.43,0,0,512.43,55.889,2291.13,22.4
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,6,237,Beans,Raw Vegetable,Food,Kg,76.2,5.846,445.47,0,0,445.47,0.75,57.15,779.5
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,7,115,Coriander Leaves,Raw Vegetable,Food,Kg,99.99,1.978,197.78,0,0,197.78,2.0,199.98,98.9
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,8,108,Ginger,Raw Vegetable,Food,Kg,131.15,0.996,130.62,0,0,130.62,6.703,879.05,14.9
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,9,18,Idli Rice (Miniket),Rice,Food,Kg,53.41,2.0,106.82,0,0,106.82,1163.942,62167.31,0.2
+Kolkata,Base Kitchen,Central Kitchen - Kolkata,10,131,Curry Leaves,Raw Vegetable,Food,Kg,71.19,1.392,99.09,0,0,99.09,3.92,279.03,35.5
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,1,10,Nuttella (350gm),Dairy,Food,Kg,921.57,0.4,368.63,0,0,368.63,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,2,35,Nutmeg (Jaiphal),Raw Material,Food,Pc,4.04,87.0,351.48,0,0,351.48,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,3,542,Paper Glass 300ml,Packaging Material,Packaging,Pc,2.53,100.0,253.0,0,0,253.0,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,4,119,Glen Container With Lid - 250ml (1pkt = 50pc),Packaging Material,Packaging,Pc,3.87,50.0,193.41,0,0,193.41,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,5,111,Glen Container With Lid - 100ml (1pkt = 50pc),Packaging Material,Packaging,Pc,1.76,100.0,176.32,0,0,176.32,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,6,416,Watermelon,Raw Vegetable,Food,Kg,34.98,3.6,125.91,0,0,125.91,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,7,108,Ginger,Raw Vegetable,Food,Kg,131.15,0.6,78.69,0,0,78.69,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,8,115,Coriander Leaves,Raw Vegetable,Food,Kg,99.99,0.6,59.99,0,0,59.99,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,9,116,Raw Green Chili,Raw Vegetable,Food,Kg,74.93,0.8,59.95,0,0,59.95,0.0,0.0,
+Kolkata,Base Kitchen,Central Warehouse -Kolkata,10,489,Mosambi,Fruit,Fruit,Kg,73.13,0.6,43.88,0,0,43.88,0.0,0.0,
+Kolkata,Dosa Coffee - Calcutta Swiming Club (0007),Dosa Coffee - CSC,1,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,2.02,13.0,26.3,0,0,26.3,240.0,485.59,5.4
+Kolkata,Dosa Coffee - Calcutta Swiming Club (0007),Dosa Coffee - CSC,2,429,Thatte Idli Pc Raw,Semi Process,Semi Process,Pc,5.0,5.0,24.98,0,0,24.98,25.0,124.91,20.0
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,175.63,6.0,1053.81,0,0,1053.81,37.936,6662.93,15.8
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,2,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,78.55,10.0,785.46,0,0,785.46,104.29,8191.56,9.6
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,3,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.63,268.0,706.15,0,0,706.15,2193.0,5778.27,12.2
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,4,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.34,22.1,670.61,0,0,670.61,211.72,6424.51,10.4
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,5,14,Amul Butter,Raw Material,Food,Kg,544.54,1.2,653.45,0,0,653.45,3.89,2118.27,30.8
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,6,75,Ghee,Dairy,Food,Kg,721.05,0.9,648.95,0,0,648.95,25.935,18700.74,3.5
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,7,416,Watermelon,Raw Vegetable,Food,Kg,29.88,18.0,537.76,0,0,537.76,61.2,1828.38,29.4
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,8,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.59,270.0,430.46,0,0,430.46,969.0,1544.88,27.9
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,9,294,Green T-Shirt,Uniform,Uniform,Pc,369.7,1.0,369.7,0,0,369.7,0.0,0.0,
+Delhi,Dosa Coffee - Connaught place (02/0012),Main Kitchen-Dosa Coffee - Connaught place,10,184,Sambar Bucket,Semi Process,Semi Process,Ltr,30.48,12.0,365.8,0,0,365.8,1.0,30.48,1200.1
+Kolkata,Dosa Coffee - Food Truck - 1 (0008),Dosa Coffee - Kitchen,1,204,Special White Coconut Chutney Bucket,Semi Process,Semi Process,Kg,67.8,1.6,108.48,0,0,108.48,0.0,0.0,
+Kolkata,Dosa Coffee - Food Truck - 1 (0008),Dosa Coffee - Kitchen,2,356,Jain Potato Masala Bucket,Semi Process,Semi Process,Kg,53.23,1.5,79.85,0,0,79.85,0.0,0.0,
+Kolkata,Dosa Coffee - Food Truck - 1 (0008),Dosa Coffee - Kitchen,3,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,149.73,0.2,29.95,0,0,29.95,0.799,119.63,25.0
+Kolkata,Dosa Coffee - Food Truck - 1 (0008),Dosa Coffee - Kitchen,4,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,2.03,13.0,26.33,0,0,26.33,88.0,178.21,14.8
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.4,1.8,270.72,0,0,270.72,7.939,1194.02,22.7
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.65,7.6,248.18,0,0,248.18,69.32,2263.63,11.0
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,3,209,Raw Mango Chutney Bucket,Semi Process,Semi Process,Kg,165.71,1.496,247.9,0,0,247.9,0.18,29.83,831.0
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,4,188,Tomato Onion Chutney Bucket,Semi Process,Semi Process,Kg,128.77,1.536,197.79,0,0,197.79,0.0,0.0,
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,5,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.73,5.59,188.53,0,0,188.53,17.25,581.77,32.4
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,6,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.36,0.63,159.62,0,0,159.62,2.16,547.26,29.2
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,7,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.0,2.1,159.6,0,0,159.6,24.37,1852.08,8.6
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,8,60,Paneer,Dairy,Food,Kg,299.01,0.47,140.54,0,0,140.54,1.4,418.62,33.6
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,9,513,Filter Coffee Ice Cream (700gm= 1 Bucket),Semi Process,Semi Process,Kg,223.74,0.6,134.25,0,0,134.25,0.24,53.7,250.0
+Kolkata,Dosa Coffee - Forum (0003),Dosa Coffee - Forum,10,235,Raw Curd,Dairy,Food,Kg,70.71,1.841,130.18,0,0,130.18,6.02,425.68,30.6
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,177.35,12.0,2128.16,0,0,2128.16,15.15,2686.74,79.2
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,2,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,78.57,4.0,314.3,0,0,314.3,20.5,1610.78,19.5
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,3,235,Raw Curd,Dairy,Food,Kg,76.86,2.0,153.72,0,0,153.72,12.17,935.36,16.4
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,4,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,1.93,37.0,71.49,0,0,71.49,613.0,1184.48,6.0
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,5,189,Lemon Rice Bucket,Semi Process,Semi Process,Kg,76.56,0.8,61.25,0,0,61.25,1.4,107.18,57.1
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,6,211,Steam Rice Bucket,Semi Process,Semi Process,Kg,49.21,0.8,39.37,0,0,39.37,6.8,334.62,11.8
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,7,199,Medu Vada Batter,Semi Process,Semi Process,Kg,63.52,0.5,31.76,0,0,31.76,0.0,0.0,
+Delhi,Dosa Coffee - Gurgaon DLF (02/0009),Main Kitchen-Dosa Coffee - Gurgaon DLF 020009,8,429,Thatte Idli Pc Raw,Semi Process,Semi Process,Pc,4.97,5.0,24.87,0,0,24.87,85.0,422.75,5.9
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,1,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,33.6,6.0,201.62,0,0,201.62,171.15,5751.08,3.5
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.26,4.6,139.19,0,0,139.19,50.0,1512.97,9.2
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,3,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,32.1,3.0,96.3,0,0,96.3,9.0,288.9,33.3
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,4,132,Onion,Raw Vegetable,Food,Kg,34.53,2.7,93.22,0,0,93.22,16.049,554.14,16.8
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,5,206,Medu Vada Batter Mix,Semi Process,Semi Process,Kg,72.5,1.15,83.37,0,0,83.37,0.48,34.8,239.6
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,6,429,Thatte Idli Pc Raw,Semi Process,Semi Process,Pc,4.92,15.0,73.81,0,0,73.81,23.0,113.17,65.2
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,7,75,Ghee,Dairy,Food,Kg,731.57,0.1,73.16,0,0,73.16,4.083,2987.0,2.4
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,8,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,177.86,0.4,71.14,0,0,71.14,7.787,1385.07,5.1
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,9,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,1.93,35.0,67.45,0,0,67.45,215.0,414.31,16.3
+Delhi,Dosa Coffee - Gurgaon Sec 10,Main Kitchen Gurgaon Sec 10,10,30,Appalam Papad (1pkt = 47pc),Raw Material,Food,Pc,3.71,18.0,66.79,0,0,66.79,20.0,74.21,90.0
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,174.15,3.45,600.83,0,0,600.83,17.98,3131.22,19.2
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.31,18.1,548.63,0,0,548.63,113.43,3438.16,16.0
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,3,195,Korma Gravy Mix (1pkt=700gm),Semi Process,Semi Process,Kg,154.5,2.75,424.87,0,0,424.87,7.56,1168.02,36.4
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,4,294,Green T-Shirt,Uniform,Uniform,Pc,369.35,1.0,369.35,0,0,369.35,0.0,0.0,
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,5,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,78.48,4.45,349.24,0,0,349.24,22.33,1752.47,19.9
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,6,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.64,118.0,312.01,0,0,312.01,720.0,1903.79,16.4
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,7,132,Onion,Raw Vegetable,Food,Kg,35.01,7.5,262.61,0,0,262.61,39.04,1366.97,19.2
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,8,297,Amul IC BP Vanilla (5L) CF,Ice Cream,Food,Ltr,91.29,2.85,260.18,0,0,260.18,11.522,1051.84,24.7
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,9,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.61,120.0,192.92,0,0,192.92,335.0,538.57,35.8
+Delhi,Dosa Coffee - Gurgaon Sec-15 (02/0010),Main Kitchen-Dosa Coffee - Gurgaon Sec-15 020010,10,141,Tomato,Raw Vegetable,Food,Kg,37.14,4.4,163.43,0,0,163.43,6.421,238.49,68.5
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.3,13.0,1953.92,0,0,1953.92,48.701,7319.8,26.7
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.79,20.0,655.88,0,0,655.88,290.136,9514.71,6.9
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,3,211,Steam Rice Bucket,Semi Process,Semi Process,Kg,56.29,7.787,438.31,0,0,438.31,10.513,591.74,74.1
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,4,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.85,10.5,344.95,0,0,344.95,88.6,2910.72,11.9
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,5,195,Korma Gravy Mix (1pkt=700gm),Semi Process,Semi Process,Kg,151.55,1.923,291.43,0,0,291.43,10.548,1598.55,18.2
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,6,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.01,3.65,277.45,0,0,277.45,49.96,3797.7,7.3
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,7,391,White Butter,Dairy,Food,Kg,579.85,0.475,275.43,0,0,275.43,17.4,10089.35,2.7
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,8,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,26.28,10.0,262.81,0,0,262.81,60.0,1576.84,16.7
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,9,14,Amul Butter,Raw Material,Food,Kg,545.67,0.35,190.98,0,0,190.98,3.295,1797.98,10.6
+Kolkata,Dosa Coffee - Ideal Plaza (01/0001),Dosa Coffee - Ideal Plaza,10,68,Amul Cheese,Dairy,Food,Kg,504.35,0.3,151.31,0,0,151.31,8.65,4362.67,3.5
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.25,12.0,1815.0,0,0,1815.0,25.973,3928.37,46.2
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.78,21.3,698.14,0,0,698.14,170.926,5602.4,12.5
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,3,60,Paneer,Dairy,Food,Kg,299.29,1.65,493.82,0,0,493.82,3.71,1110.35,44.5
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,4,195,Korma Gravy Mix (1pkt=700gm),Semi Process,Semi Process,Kg,151.58,3.02,457.78,0,0,457.78,9.54,1446.09,31.7
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,5,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.24,13.0,432.16,0,0,432.16,31.425,1044.66,41.4
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,6,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.04,4.55,345.97,0,0,345.97,37.55,2855.19,12.1
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,7,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,26.37,13.0,342.81,0,0,342.81,26.0,685.61,50.0
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,8,210,Mysore Chutney Bucket,Semi Process,Semi Process,Kg,169.92,1.9,322.84,0,0,322.84,3.54,601.5,53.7
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,9,211,Steam Rice Bucket,Semi Process,Semi Process,Kg,56.35,5.7,321.17,0,0,321.17,4.383,246.96,130.0
+Kolkata,Dosa Coffee - James long Sarani (01/0011),Main Kitchen-James long Sarani,10,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.03,1.2,303.63,0,0,303.63,7.125,1802.82,16.8
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,1,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.79,25.5,836.1,0,0,836.1,109.214,3580.95,23.3
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,2,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.49,3.2,481.57,0,0,481.57,17.462,2627.83,18.3
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,3,199,Medu Vada Batter,Semi Process,Semi Process,Kg,63.97,7.5,479.75,0,0,479.75,0.0,0.0,
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,4,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.39,13.5,450.81,0,0,450.81,20.25,676.22,66.7
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,5,4,Cothas Coffee Powder,Raw Material,Food,Kg,845.02,0.25,211.26,0,0,211.26,3.887,3284.61,6.4
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,6,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,26.29,8.0,210.33,0,0,210.33,28.0,736.14,28.6
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,7,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.33,0.6,152.0,0,0,152.0,4.815,1219.81,12.5
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,8,222,Upma Mix (1pkt = 300gm),Semi Process,Semi Process,Kg,86.56,1.65,142.82,0,0,142.82,1.14,98.67,144.7
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,9,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.1,1.45,110.34,0,0,110.34,31.52,2398.56,4.6
+Kolkata,Dosa Coffee - Kalikapur (01/0014),Main Kitchen-Dosa Coffee - Kalikapur,10,91,Milk (Adya Dairy),Dairy,Food,Ltr,61.12,1.8,110.02,0,0,110.02,1.9,116.13,94.7
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,1,132,Onion,Raw Vegetable,Food,Kg,34.99,11.8,412.87,0,0,412.87,23.184,811.2,50.9
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,2,4,Cothas Coffee Powder,Raw Material,Food,Kg,855.96,0.39,333.82,0,0,333.82,3.146,2692.85,12.4
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,3,75,Ghee,Dairy,Food,Kg,724.76,0.44,318.89,0,0,318.89,10.355,7504.83,4.2
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,4,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.64,94.0,247.89,0,0,247.89,350.0,923.0,26.9
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,5,391,White Butter,Dairy,Food,Kg,574.04,0.41,235.36,0,0,235.36,9.585,5502.22,4.3
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,6,188,Tomato Onion Chutney Bucket,Semi Process,Semi Process,Kg,134.18,1.6,214.69,0,0,214.69,79.813,10709.34,2.0
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,7,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.32,7.0,212.23,0,0,212.23,104.15,3157.61,6.7
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,8,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,177.05,1.18,208.92,0,0,208.92,12.024,2128.87,9.8
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,9,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,33.52,6.0,201.14,0,0,201.14,348.3,11675.95,1.7
+Delhi,Dosa Coffee - Kalkaji (02/0004),Dosa Coffee - Kalkaji,10,108,Ginger,Raw Vegetable,Food,Kg,117.64,1.6,188.23,0,0,188.23,14.507,1706.59,11.0
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.62,4.8,727.78,0,0,727.78,20.224,3066.41,23.7
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.77,10.9,357.2,0,0,357.2,124.881,4092.49,8.7
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,3,132,Onion,Raw Vegetable,Food,Kg,42.53,4.68,199.04,0,0,199.04,24.369,1036.42,19.2
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,4,108,Ginger,Raw Vegetable,Food,Kg,131.5,0.845,111.12,0,0,111.12,5.053,664.48,16.7
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,5,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.83,2.64,86.66,0,0,86.66,27.975,918.28,9.4
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,6,133,Raw Mango,Raw Vegetable,Food,Kg,85.2,1.015,86.48,0,0,86.48,1.825,155.5,55.6
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,7,115,Coriander Leaves,Raw Vegetable,Food,Kg,99.9,0.795,79.42,0,0,79.42,4.415,441.04,18.0
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,8,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.04,0.85,64.64,0,0,64.64,28.8,2190.08,3.0
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,9,391,White Butter,Dairy,Food,Kg,580.0,0.1,58.0,0,0,58.0,5.685,3297.29,1.8
+Kolkata,Dosa Coffee - Lake Town (0005),Dosa Coffee - Lake Town,10,486,Upma Bucket,Semi Process,Semi Process,Kg,125.34,0.4,50.14,0,0,50.14,0.0,0.0,
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,1,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.81,50.0,1640.25,0,0,1640.25,182.106,5973.99,27.5
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,2,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.1,7.0,1057.69,0,0,1057.69,31.248,4721.52,22.4
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,3,4,Cothas Coffee Powder,Raw Material,Food,Kg,845.33,1.0,845.33,0,0,845.33,5.682,4803.19,17.6
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,4,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,1.71,410.0,700.44,0,0,700.44,1066.0,1821.14,38.5
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,5,391,White Butter,Dairy,Food,Kg,579.8,1.05,608.79,0,0,608.79,13.53,7844.71,7.8
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,6,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.25,426.0,532.52,0,0,532.52,705.0,881.29,60.4
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,7,235,Raw Curd,Dairy,Food,Kg,70.77,5.85,413.99,0,0,413.99,27.54,1948.94,21.2
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,8,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.62,11.5,375.16,0,0,375.16,67.15,2190.61,17.1
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,9,14,Amul Butter,Raw Material,Food,Kg,545.83,0.5,272.92,0,0,272.92,2.02,1102.58,24.8
+Kolkata,Dosa Coffee - Lake road 01/0015,Main Kitchen-Dosa Coffee - Lake road 010015,10,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.09,3.3,251.09,0,0,251.09,50.68,3856.2,6.5
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.32,8.949,1354.12,0,0,1354.12,21.937,3319.35,40.8
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.76,32.945,1079.25,0,0,1079.25,184.702,6050.66,17.8
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,3,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.15,7.025,232.84,0,0,232.84,33.15,1098.76,21.2
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,4,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.17,2.568,195.6,0,0,195.6,75.34,5738.4,3.4
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,5,91,Milk (Adya Dairy),Dairy,Food,Ltr,61.18,2.234,136.67,0,0,136.67,0.8,48.94,279.3
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,6,209,Raw Mango Chutney Bucket,Semi Process,Semi Process,Kg,164.82,0.6,98.89,0,0,98.89,0.72,118.67,83.3
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,7,4,Cothas Coffee Powder,Raw Material,Food,Kg,847.53,0.1,84.75,0,0,84.75,8.297,7031.95,1.2
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,8,188,Tomato Onion Chutney Bucket,Semi Process,Semi Process,Kg,130.32,0.6,78.19,0,0,78.19,0.0,0.0,
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,9,199,Medu Vada Batter,Semi Process,Semi Process,Kg,64.04,0.932,59.69,0,0,59.69,0.0,0.0,
+Kolkata,Dosa Coffee - Manisquare (0004),Dosa Coffee - Manisquare,10,235,Raw Curd,Dairy,Food,Kg,70.73,0.7,49.51,0,0,49.51,12.322,871.59,5.7
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,174.8,6.5,1136.22,0,0,1136.22,22.925,4007.35,28.4
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,2,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.65,155.0,410.51,0,0,410.51,862.0,2282.94,18.0
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,3,132,Onion,Raw Vegetable,Food,Kg,35.02,9.732,340.83,0,0,340.83,43.62,1527.64,22.3
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,4,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.32,10.8,327.5,0,0,327.5,143.04,4337.61,7.6
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,5,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.6,114.0,182.7,0,0,182.7,453.0,726.01,25.2
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,6,115,Coriander Leaves,Raw Vegetable,Food,Kg,98.87,1.606,158.78,0,0,158.78,18.79,1857.7,8.5
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,7,428,Thatte Idli Batter,Semi Process,Semi Process,Kg,25.42,6.0,152.51,0,0,152.51,0.0,0.0,
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,8,75,Ghee,Dairy,Food,Kg,718.56,0.2,143.71,0,0,143.71,14.139,10159.71,1.4
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,9,397,Boiled & Mashed Potato (1Pkt = 3Kg),Semi Process,Semi Process,Kg,33.38,3.86,128.83,0,0,128.83,89.2,2977.15,4.3
+Delhi,Dosa Coffee - Model Town (02/0013),Main Kitchen-Dosa Coffee - Model Town,10,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,31.01,3.5,108.54,0,0,108.54,43.95,1362.9,8.0
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.26,2.5,378.16,0,0,378.16,15.114,2286.25,16.5
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,2,274,Raw Potato,Raw Vegetable,Food,Kg,19.86,17.0,337.54,0,0,337.54,0.0,0.0,
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,3,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.76,7.8,255.5,0,0,255.5,82.722,2709.65,9.4
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,4,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,26.42,7.0,184.91,0,0,184.91,11.0,290.57,63.6
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,5,211,Steam Rice Bucket,Semi Process,Semi Process,Kg,56.57,1.95,110.32,0,0,110.32,3.35,189.52,58.2
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,6,4,Cothas Coffee Powder,Raw Material,Food,Kg,845.89,0.105,88.82,0,0,88.82,0.4,338.36,26.3
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,7,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.4,0.35,88.69,0,0,88.69,1.65,418.11,21.2
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,8,210,Mysore Chutney Bucket,Semi Process,Semi Process,Kg,169.33,0.45,76.2,0,0,76.2,1.44,243.84,31.2
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,9,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.76,1.75,57.33,0,0,57.33,14.425,472.57,12.1
+Kolkata,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Main Kitchen-Dosa Coffee - New Town - Cloud Kitchen,10,108,Ginger,Raw Vegetable,Food,Kg,131.42,0.38,49.94,0,0,49.94,3.44,452.04,11.0
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,1,75,Ghee,Dairy,Food,Kg,725.86,1.21,878.29,0,0,878.29,17.242,12515.22,7.0
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,2,229,Coconut Shredded,Semi Process,Semi Process,Kg,247.6,2.8,693.29,0,0,693.29,108.874,26957.73,2.6
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,3,391,White Butter,Dairy,Food,Kg,573.69,1.18,676.95,0,0,676.95,10.53,6040.91,11.2
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,4,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,176.15,2.45,431.57,0,0,431.57,28.766,5067.2,8.5
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,5,14,Amul Butter,Raw Material,Food,Kg,544.11,0.64,348.23,0,0,348.23,2.32,1262.35,27.6
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,6,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.3,9.5,287.86,0,0,287.86,185.435,5618.93,5.1
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,7,209,Raw Mango Chutney Bucket,Semi Process,Semi Process,Kg,226.51,1.2,271.81,0,0,271.81,3.74,847.14,32.1
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,8,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,33.55,8.0,268.38,0,0,268.38,502.05,16842.79,1.6
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,9,115,Coriander Leaves,Raw Vegetable,Food,Kg,99.09,2.4,237.82,0,0,237.82,22.642,2243.68,10.6
+Delhi,"Dosa Coffee - Pacific mall, Jasola",Main Kitchen-Dosa Coffee - Pacific mall Jasola,10,108,Ginger,Raw Vegetable,Food,Kg,117.93,1.6,188.69,0,0,188.69,22.083,2604.27,7.2
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,1,294,Green T-Shirt,Uniform,Uniform,Pc,367.68,4.0,1470.73,0,0,1470.73,0.0,0.0,
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,2,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,175.17,3.81,667.4,0,0,667.4,13.509,2366.48,28.2
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,3,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,33.72,15.9,536.12,0,0,536.12,431.65,14554.5,3.7
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,4,75,Ghee,Dairy,Food,Kg,714.89,0.7,500.43,0,0,500.43,8.633,6171.33,8.1
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,5,14,Amul Butter,Raw Material,Food,Kg,543.34,0.807,438.47,0,0,438.47,1.53,831.31,52.7
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,6,132,Onion,Raw Vegetable,Food,Kg,34.97,10.08,352.5,0,0,352.5,27.324,955.53,36.9
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,7,391,White Butter,Dairy,Food,Kg,572.78,0.602,344.81,0,0,344.81,5.97,3419.47,10.1
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,8,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.31,10.9,330.37,0,0,330.37,84.72,2567.81,12.9
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,9,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,31.81,8.0,254.47,0,0,254.47,7.0,222.66,114.3
+Delhi,Dosa Coffee - Paschim Vihar (02/0003),Dosa Coffee - Paschim Vihar,10,229,Coconut Shredded,Semi Process,Semi Process,Kg,247.02,1.0,247.02,0,0,247.02,67.658,16712.6,1.5
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,1,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.5,38.0,1235.08,0,0,1235.08,94.101,3058.48,40.4
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,2,235,Raw Curd,Dairy,Food,Kg,70.71,7.325,517.98,0,0,517.98,6.0,424.28,122.1
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,3,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,152.89,3.0,458.66,0,0,458.66,14.186,2168.88,21.1
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,4,4,Cothas Coffee Powder,Raw Material,Food,Kg,839.53,0.521,437.39,0,0,437.39,4.544,3814.81,11.5
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,5,132,Onion,Raw Vegetable,Food,Kg,42.32,9.031,382.18,0,0,382.18,26.364,1115.68,34.3
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,6,274,Raw Potato,Raw Vegetable,Food,Kg,19.76,17.7,349.75,0,0,349.75,0.0,0.0,
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,7,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.86,9.6,325.06,0,0,325.06,29.85,1010.74,32.2
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,8,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,75.85,3.5,265.48,0,0,265.48,43.53,3301.85,8.0
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,9,91,Milk (Adya Dairy),Dairy,Food,Ltr,61.17,3.4,207.98,0,0,207.98,0.8,48.94,425.0
+Kolkata,Dosa Coffee - Quest Mall (01/0016),Main Kitchen-Quest Mall 010016,10,195,Korma Gravy Mix (1pkt=700gm),Semi Process,Semi Process,Kg,151.62,1.34,203.17,0,0,203.17,2.34,354.78,57.3
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.75,4.5,678.36,0,0,678.36,19.691,2968.37,22.9
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.86,13.0,427.13,0,0,427.13,158.45,5206.02,8.2
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,3,486,Upma Bucket,Semi Process,Semi Process,Kg,124.71,2.4,299.3,0,0,299.3,0.0,0.0,
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,4,499,Malabar Paratha Dough,Semi Process,Semi Process,Pc,8.63,32.0,276.29,0,0,276.29,0.0,0.0,
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,5,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.46,8.0,267.67,0,0,267.67,26.425,884.15,30.3
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,6,209,Raw Mango Chutney Bucket,Semi Process,Semi Process,Kg,161.38,1.4,225.93,0,0,225.93,0.12,19.37,1166.4
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,7,132,Onion,Raw Vegetable,Food,Kg,42.93,4.831,207.4,0,0,207.4,27.0,1159.15,17.9
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,8,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.46,0.7,177.42,0,0,177.42,11.775,2984.52,5.9
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,9,188,Tomato Onion Chutney Bucket,Semi Process,Semi Process,Kg,139.16,1.15,160.04,0,0,160.04,0.0,0.0,
+Kolkata,Dosa Coffee - Rangoli Mall (01/0010),Dosa Coffee - Rangoli Mall-Main Kitchen,10,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,2.02,72.0,145.43,0,0,145.43,574.0,1159.4,12.5
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,176.0,8.9,1566.37,0,0,1566.37,27.215,4789.69,32.7
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.31,26.3,797.18,0,0,797.18,165.68,5021.93,15.9
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,3,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,78.52,8.9,698.86,0,0,698.86,21.53,1690.6,41.3
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,4,199,Medu Vada Batter,Semi Process,Semi Process,Kg,64.69,5.8,375.22,0,0,375.22,0.0,0.0,
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,5,30,Appalam Papad (1pkt = 47pc),Raw Material,Food,Pc,3.71,95.0,352.46,0,0,352.46,80.0,296.81,118.7
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,6,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.64,115.0,303.36,0,0,303.36,915.0,2413.68,12.6
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,7,416,Watermelon,Raw Vegetable,Food,Kg,29.77,10.0,297.74,0,0,297.74,14.4,428.75,69.4
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,8,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,255.38,1.1,280.92,0,0,280.92,6.58,1680.43,16.7
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,9,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,32.09,7.0,224.6,0,0,224.6,10.0,320.85,70.0
+Delhi,Dosa Coffee - Rohini Sec-7 (02/0008),Main Kitchen-Dosa Coffee - Rohini Sec-7 020008,10,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,30.75,6.0,184.51,0,0,184.51,63.775,1961.18,9.4
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,1,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.84,27.5,903.18,0,0,903.18,165.932,5449.71,16.6
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,2,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.91,4.0,603.63,0,0,603.63,32.692,4933.46,12.2
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,3,4,Cothas Coffee Powder,Raw Material,Food,Kg,845.46,0.6,507.27,0,0,507.27,5.143,4348.18,11.7
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,4,14,Amul Butter,Raw Material,Food,Kg,544.99,0.7,381.49,0,0,381.49,1.98,1079.09,35.4
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,5,391,White Butter,Dairy,Food,Kg,580.03,0.5,290.02,0,0,290.02,7.905,4585.15,6.3
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,6,132,Onion,Raw Vegetable,Food,Kg,43.04,5.8,249.62,0,0,249.62,40.532,1744.38,14.3
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,7,108,Ginger,Raw Vegetable,Food,Kg,131.36,1.81,237.77,0,0,237.77,7.363,967.23,24.6
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,8,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,75.98,3.02,229.45,0,0,229.45,46.57,3538.26,6.5
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,9,124,Lime,Raw Vegetable,Food,Pc,3.5,61.0,213.59,0,0,213.59,150.0,525.22,40.7
+Kolkata,Dosa Coffee - Rosedale Plaza(0006),Dosa Coffee - Rosedale Plaza,10,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.67,5.7,186.21,0,0,186.21,38.925,1271.65,14.6
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,151.22,9.65,1459.27,0,0,1459.27,35.491,5366.9,27.2
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.8,26.3,862.59,0,0,862.59,234.106,7678.26,11.2
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,3,4,Cothas Coffee Powder,Raw Material,Food,Kg,844.3,0.69,582.57,0,0,582.57,8.919,7530.31,7.7
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,4,132,Onion,Raw Vegetable,Food,Kg,42.8,12.06,516.23,0,0,516.23,44.676,1912.37,27.0
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,5,391,White Butter,Dairy,Food,Kg,580.24,0.71,411.97,0,0,411.97,8.85,5135.15,8.0
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,6,14,Amul Butter,Raw Material,Food,Kg,545.36,0.7,381.76,0,0,381.76,4.253,2319.39,16.5
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,7,68,Amul Cheese,Dairy,Food,Kg,503.66,0.5,251.83,0,0,251.83,6.16,3102.55,8.1
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,8,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.11,7.6,251.62,0,0,251.62,41.55,1375.66,18.3
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,9,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,253.14,0.75,189.86,0,0,189.86,7.08,1792.26,10.6
+Kolkata,Dosa Coffee - Salt Lake (002),Dosa Coffee - Salt Lake,10,108,Ginger,Raw Vegetable,Food,Kg,131.43,1.272,167.18,0,0,167.18,9.047,1189.05,14.1
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,1,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,150.61,9.52,1433.82,0,0,1433.82,32.488,4893.05,29.3
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.83,38.4,1260.59,0,0,1260.59,203.527,6681.34,18.9
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,3,391,White Butter,Dairy,Food,Kg,579.7,1.12,649.27,0,0,649.27,10.47,6069.5,10.7
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,4,108,Ginger,Raw Vegetable,Food,Kg,131.55,2.84,373.59,0,0,373.59,9.244,1215.95,30.7
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,5,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.14,4.69,357.08,0,0,357.08,72.49,5519.13,6.5
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,6,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,32.35,9.4,304.11,0,0,304.11,51.15,1654.82,18.4
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,7,14,Amul Butter,Raw Material,Food,Kg,544.86,0.55,299.67,0,0,299.67,3.25,1770.79,16.9
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,8,132,Onion,Raw Vegetable,Food,Kg,42.68,6.56,280.0,0,0,280.0,47.684,2035.26,13.8
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,9,195,Korma Gravy Mix (1pkt=700gm),Semi Process,Semi Process,Kg,151.71,1.82,276.12,0,0,276.12,8.46,1283.5,21.5
+Kolkata,Dosa Coffee - Salt Lake Sec-1 (0009),Dosa Coffee - Salt Lake Sec-1 0009,10,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,1.71,111.0,189.39,0,0,189.39,1263.0,2154.98,8.8
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,1,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,32.81,27.315,896.2,0,0,896.2,99.756,3272.97,27.4
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,2,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,149.91,1.936,290.22,0,0,290.22,17.436,2613.85,11.1
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,3,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,33.44,8.435,282.09,0,0,282.09,22.875,765.01,36.9
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,4,503,Srivilli Kheer (1 Pc),Semi Process,Semi Process,Pc,26.3,10.0,262.96,0,0,262.96,22.0,578.52,45.5
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,5,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,76.02,1.584,120.41,0,0,120.41,22.77,1730.9,7.0
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,6,222,Upma Mix (1pkt = 300gm),Semi Process,Semi Process,Kg,86.56,1.135,98.24,0,0,98.24,0.72,62.32,157.6
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,7,229,Coconut Shredded,Semi Process,Semi Process,Kg,195.21,0.5,97.61,0,0,97.61,53.865,10515.28,0.9
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,8,132,Onion,Raw Vegetable,Food,Kg,43.0,2.19,94.17,0,0,94.17,20.554,883.84,10.7
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,9,429,Thatte Idli Pc Raw,Semi Process,Semi Process,Pc,5.03,15.0,75.52,0,0,75.52,44.0,221.54,34.1
+Kolkata,Dosa Coffee - Santoshpur (01/0012),Main Kitchen-Santoshpur,10,218,Idli Pc Raw (1 Pkt =40pc),Semi Process,Semi Process,Pc,2.02,30.0,60.52,0,0,60.52,567.0,1143.91,5.3
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,1,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,33.67,15.5,521.9,0,0,521.9,236.2,7953.15,6.6
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,2,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.31,10.28,311.58,0,0,311.58,72.43,2195.33,14.2
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,3,75,Ghee,Dairy,Food,Kg,721.89,0.36,259.88,0,0,259.88,7.148,5160.06,5.0
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,4,391,White Butter,Dairy,Food,Kg,573.13,0.38,217.79,0,0,217.79,3.96,2269.6,9.6
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,5,14,Amul Butter,Raw Material,Food,Kg,542.95,0.39,211.75,0,0,211.75,0.48,260.62,81.2
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,6,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,175.28,0.87,152.5,0,0,152.5,9.954,1744.75,8.7
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,7,115,Coriander Leaves,Raw Vegetable,Food,Kg,98.82,0.79,78.06,0,0,78.06,9.238,912.86,8.6
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,8,204,Special White Coconut Chutney Bucket,Semi Process,Semi Process,Kg,85.71,0.9,77.14,0,0,77.14,1.5,128.56,60.0
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,9,108,Ginger,Raw Vegetable,Food,Kg,117.64,0.56,65.88,0,0,65.88,9.417,1107.81,5.9
+Delhi,Dosa Coffee - Sec 15 Faridabad (02/0007),Main Kitchen-Dosa Coffee - Sec 15 Faridabad,10,132,Onion,Raw Vegetable,Food,Kg,34.94,1.88,65.7,0,0,65.7,17.531,612.62,10.7
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,1,229,Coconut Shredded,Semi Process,Semi Process,Kg,247.46,5.1,1262.06,0,0,1262.06,80.416,19899.91,6.3
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,2,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.64,164.0,433.72,0,0,433.72,561.0,1483.64,29.2
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,3,115,Coriander Leaves,Raw Vegetable,Food,Kg,98.82,4.1,405.16,0,0,405.16,16.101,1591.09,25.5
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,4,416,Watermelon,Raw Vegetable,Food,Kg,29.86,13.1,391.1,0,0,391.1,14.4,429.92,91.0
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,5,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.3,10.0,303.01,0,0,303.01,133.23,4037.04,7.5
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,6,199,Medu Vada Batter,Semi Process,Semi Process,Kg,64.15,4.3,275.85,0,0,275.85,0.0,0.0,
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,7,397,Boiled & Mashed Potato (1Pkt = 3Kg),Semi Process,Semi Process,Kg,33.39,7.552,252.15,0,0,252.15,10.0,333.89,75.5
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,8,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.61,144.0,231.9,0,0,231.9,269.0,433.21,53.5
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,9,141,Tomato,Raw Vegetable,Food,Kg,37.09,6.1,226.25,0,0,226.25,4.964,184.12,122.9
+Delhi,Dosa Coffee - Sec 18 Noida (02/0001),Dosa Coffee - Sec 18 Noida,10,132,Onion,Raw Vegetable,Food,Kg,34.97,6.45,225.55,0,0,225.55,24.656,862.19,26.2
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,1,229,Coconut Shredded,Semi Process,Semi Process,Kg,252.23,2.9,731.47,0,0,731.47,85.261,21505.69,3.4
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,2,540,Sambar Bucket - Delhi,Semi Process,Semi Process,Ltr,32.82,20.25,664.64,0,0,664.64,308.75,10133.77,6.6
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,3,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,30.26,14.7,444.87,0,0,444.87,80.52,2436.77,18.3
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,4,14,Amul Butter,Raw Material,Food,Kg,550.55,0.8,440.44,0,0,440.44,1.21,666.17,66.1
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,5,75,Ghee,Dairy,Food,Kg,750.73,0.5,375.37,0,0,375.37,8.209,6162.48,6.1
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,6,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,28.9,10.0,289.02,0,0,289.02,45.075,1302.78,22.2
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,7,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),Raw Material,Food,Ltr,183.07,1.1,201.38,0,0,201.38,17.259,3159.65,6.4
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,8,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.56,77.0,197.34,0,0,197.34,650.0,1665.83,11.8
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,9,202,Garlic Chutney Bucket,Semi Process,Semi Process,Kg,250.53,0.65,162.84,0,0,162.84,3.61,904.41,18.0
+Delhi,Dosa Coffee - Shalimar Bagh (02/0015),Dosa Coffee - Shalimar Bagh 020015,10,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,78.96,2.05,161.87,0,0,161.87,24.52,1936.13,8.4
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,1,75,Ghee,Dairy,Food,Kg,759.25,0.7,531.48,0,0,531.48,7.6,5770.31,9.2
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,2,76,Milk - Tetra 1Ltr,Dairy,Food,Ltr,79.31,6.0,475.89,0,0,475.89,14.09,1117.55,42.6
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,3,4,Cothas Coffee Powder,Raw Material,Food,Kg,882.87,0.53,467.92,0,0,467.92,2.052,1811.65,25.8
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,4,14,Amul Butter,Raw Material,Food,Kg,552.27,0.75,414.2,0,0,414.2,0.63,347.93,119.0
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,5,84,Banana Leaf Big (1bundle = 50pc),Packaging Material,Packaging,Pc,2.54,85.0,215.85,0,0,215.85,436.0,1107.2,19.5
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,6,534,Benne Dosa Batter (Pack Size -3 Kg ),Semi Process,Semi Process,Kg,28.46,6.25,177.88,0,0,177.88,31.65,900.76,19.7
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,7,190,Dosa Batter Mix,Semi Process,Semi Process,Kg,29.96,5.25,157.29,0,0,157.29,61.12,1831.11,8.6
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,8,92,Banana Leaf Small (1bundle = 50pc),Packaging Material,Packaging,Pc,1.47,105.0,154.86,0,0,154.86,194.0,286.13,54.1
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,9,141,Tomato,Raw Vegetable,Food,Kg,35.87,3.75,134.51,0,0,134.51,3.477,124.72,107.8
+Delhi,Sec 31 - Gurgaon (02/0016),Dosa Coffee -  Sec 31 - Gurgaon 020016,10,132,Onion,Raw Vegetable,Food,Kg,34.46,3.75,129.24,0,0,129.24,18.346,632.26,20.4
+Delhi,Warehouse,Central Kitchen - Delhi,1,132,Onion,Raw Vegetable,Food,Kg,35.37,56.96,2014.84,0,0,2014.84,219.757,7773.43,25.9
+Delhi,Warehouse,Central Kitchen - Delhi,2,504,Round Kulhad,Packaging Material,Packaging,Pc,5.0,212.0,1060.0,0,0,1060.0,392.0,1960.0,54.1
+Delhi,Warehouse,Central Kitchen - Delhi,3,280,Raw Pumpkin,Raw Vegetable,Food,Kg,23.0,32.38,744.74,0,0,744.74,118.4,2723.2,27.3
+Delhi,Warehouse,Central Kitchen - Delhi,4,279,Raw Lauki,Raw Vegetable,Food,Kg,23.22,21.15,491.11,0,0,491.11,122.95,2854.92,17.2
+Delhi,Warehouse,Central Kitchen - Delhi,5,107,Carrot,Raw Vegetable,Food,Kg,32.37,13.9,449.89,0,0,449.89,70.977,2297.26,19.6
+Delhi,Warehouse,Central Kitchen - Delhi,6,40,Dry Red Chili,Raw Material,Food,gm,0.31,1263.0,391.03,0,0,391.03,5938.103,1838.46,21.3
+Delhi,Warehouse,Central Kitchen - Delhi,7,108,Ginger,Raw Vegetable,Food,Kg,116.99,3.172,371.09,0,0,371.09,9.729,1138.12,32.6
+Delhi,Warehouse,Central Kitchen - Delhi,8,131,Curry Leaves,Raw Vegetable,Food,Kg,38.14,5.74,218.92,0,0,218.92,5.378,205.12,106.7
+Delhi,Warehouse,Central Kitchen - Delhi,9,115,Coriander Leaves,Raw Vegetable,Food,Kg,108.95,1.52,165.6,0,0,165.6,2.933,319.58,51.8
+Delhi,Warehouse,Central Kitchen - Delhi,10,116,Raw Green Chili,Raw Vegetable,Food,Kg,40.81,1.51,61.62,0,0,61.62,2.433,99.28,62.1
+Delhi,Warehouse,Central Warehouse - Delhi,1,461,Irish Syrup,Raw Material,Food,Ltr,730.11,1.0,730.11,0,0,730.11,0.0,0.0,
+Delhi,Warehouse,Central Warehouse - Delhi,2,235,Raw Curd,Dairy,Food,Kg,78.04,1.0,78.04,0,0,78.04,0.0,0.0,

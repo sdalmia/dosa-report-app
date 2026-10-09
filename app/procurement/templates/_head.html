@@ -1,0 +1,14 @@
+<header class="pc-top">
+  <p class="pc-kicker"><a href="{{ url_for('main.dashboard') }}">Command Centre</a></p>
+  <h1>{{ page_title }}</h1>
+  <p class="pc-period">{{ period_label }}</p>
+  {% if september_note %}
+  <p class="pc-note">{{ september_note }}</p>
+  {% elif period_note %}
+  <p class="pc-note">{{ period_note }}</p>
+  {% endif %}
+  <nav class="pc-subnav" aria-label="Procurement">
+    <a href="{{ url_for('procurement.food_cost') }}" {% if page_title == 'Food cost' %}aria-current="page"{% endif %}>Food cost</a>
+    <a href="{{ url_for('procurement.vendors') }}" {% if page_title == 'Vendors' %}aria-current="page"{% endif %}>Vendors</a>
+  </nav>
+</header>
