@@ -263,6 +263,33 @@
   font-weight: 650;
 }
 
+.owner-tools .gap-counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
+}
+
+.owner-tools .gap-counts .ot-stat {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.7rem;
+}
+
+.owner-tools .kicker.threat {
+  color: var(--down);
+}
+
+.owner-tools .owner-group {
+  margin: 0 0 0.4rem;
+}
+
+.owner-tools .owner-group h2 {
+  margin-top: 0.4rem;
+}
+
 @media (min-width: 768px) {
   .owner-tools { max-width: 42rem; }
 }

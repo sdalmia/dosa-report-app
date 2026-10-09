@@ -137,8 +137,12 @@ def _store_on(feeds, store, day):
 
 
 def _league(feeds, stores, start, end, region, low_only):
+    from app.store_master import is_trading
+
     ranked = []
     for store in stores:
+        if not is_trading(store.label):
+            continue
         if region and store.region != region:
             continue
         rows = _store_rows(feeds, store, start, end)

@@ -23,6 +23,7 @@ COLUMNS = (
     "gbp_reviews",
     "gbp_verified",
     "reelo_name",
+    "reelo_status",
     "famepilot_name",
     "keka_location",
     "swiggy_id",
@@ -42,6 +43,39 @@ AUDIT_NAMES = {
 }
 
 GAP_OWNER = "Sanjoy / Subhra"
+NOT_ON_REELO = "not on Reelo by choice"
+UNKNOWN_STATUS = "unknown, asked Sanjoy"
+
+# Posist Insights outlets that are not in the latest sales drop.
+# FRA, GK1, Chattarpur and Events stay unknown until Sanjoy answers.
+INSIGHTS_OUTLETS = (
+    {
+        "posist_name": "DEMO OUTLET",
+        "display_name": "DEMO OUTLET",
+        "status": "test",
+        "notes": "Posist Insights test outlet.",
+    },
+    {
+        "posist_name": "Salt Lake Sec-3 (Not In Use)",
+        "display_name": "Salt Lake Sec-3, not in use",
+        "status": "closed",
+        "notes": "Posist Insights lists this outlet as not in use.",
+    },
+    {
+        "posist_name": "Dosa Coffee, FRA (02/0017)",
+        "display_name": "FRA",
+        "region": "North",
+        "posist_code": "02/0017",
+        "status": UNKNOWN_STATUS,
+        "notes": "Status asked of Sanjoy.",
+    },
+)
+ASKED_SANJOY = {
+    "Dosa Coffee - Events & Catering",
+    "GK1 Cloud Kitchen (02/0002)",
+    "Chattarpur (02/0005)",
+    "Dosa Coffee, FRA (02/0017)",
+}
 
 _BRAND = re.compile(r"^dosa coffee\s*-\s*", re.IGNORECASE)
 _CODE = re.compile(r"(?i)(0[12])\s*/\s*(\d{3,4})")
@@ -256,6 +290,7 @@ def build_rows(posist_path, gbp_path, places_path, store_health_dir):
         row["posist_code"] = posist_code(name, row["region"])
         row["display_name"] = display_name_for(name)
         row["store_id"] = _slug(name)
+        row["status"] = "trading"
         seen[name] = row
         order.append(name)
 
@@ -307,8 +342,25 @@ def build_rows(posist_path, gbp_path, places_path, store_health_dir):
         row["display_name"] = display_name_for(label)
         row["store_id"] = _slug(label)
         row["notes"] = "No sales in the latest Posist drop."
+        if label in ASKED_SANJOY:
+            row["status"] = UNKNOWN_STATUS
         seen[label] = row
         order.append(label)
+
+    for spec in INSIGHTS_OUTLETS:
+        name = spec["posist_name"]
+        if name in seen:
+            continue
+        row = _blank_row()
+        row["posist_name"] = name
+        row["display_name"] = spec.get("display_name") or display_name_for(name)
+        row["region"] = spec.get("region") or ""
+        row["posist_code"] = spec.get("posist_code") or posist_code(name, row["region"])
+        row["store_id"] = _slug(name)
+        row["status"] = spec.get("status") or ""
+        row["notes"] = spec.get("notes") or ""
+        seen[name] = row
+        order.append(name)
 
     rows = [seen[name] for name in order]
     known = {row["posist_name"]: [row["posist_name"]] for row in rows}
@@ -333,7 +385,6 @@ def build_rows(posist_path, gbp_path, places_path, store_health_dir):
         row["gbp_rating"] = (chosen.get("rating") or "").strip()
         row["gbp_reviews"] = (chosen.get("reviews") or "").strip()
         row["gbp_verified"] = (chosen.get("verified") or "").strip()
-        row["status"] = (chosen.get("status") or "").strip()
         if not row["city"]:
             row["city"] = _city(chosen.get("address"))
         if not row["format"]:
@@ -434,6 +485,12 @@ def build_rows(posist_path, gbp_path, places_path, store_health_dir):
         if names:
             prefix = "Known names: " + " | ".join(names)
             row["notes"] = "\n".join(part for part in (prefix, row["notes"]) if part)
+        if row["posist_name"] in ASKED_SANJOY:
+            row["status"] = UNKNOWN_STATUS
+        if row.get("reelo_name"):
+            row["reelo_status"] = ""
+        else:
+            row["reelo_status"] = NOT_ON_REELO
 
     return rows
 
@@ -559,6 +616,17 @@ def find_store(label, path=None):
     return get_index(path).find(label)
 
 
+def is_trading(label, path=None):
+    """Rankings include a store when the master calls it trading.
+
+    A name the master does not list stays eligible, so a fixture store still ranks.
+    """
+    row = find_store(label, path)
+    if row is None:
+        return True
+    return (row.get("status") or "").strip().casefold() == "trading"
+
+
 def resolve_store_label(label, posist_labels, path=None):
     """The Posist label this name is, when the master names exactly one of them."""
     row = find_store(label, path)
@@ -600,8 +668,7 @@ def store_gaps(row):
         add("duplicate", "Duplicate listing", "Needs a cleanup", "A second Google listing points at this store.")
     if "not a confirmed match" in note or "should be confirmed" in note or "does not match" in note or "not the store" in note or "shared with another" in note or "outside the Dosa Coffee group" in note:
         add("name", "Name mismatch", "Needs a check", note)
-    if not row.get("reelo_name"):
-        add("reelo", "Not on Reelo", "Needs a Reelo name", "There is no Reelo name for this store.")
+    # A store left off Reelo on purpose is not a gap.
     if not row.get("swiggy_id") or not row.get("zomato_id"):
         missing = []
         if not row.get("swiggy_id"):

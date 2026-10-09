@@ -4,32 +4,39 @@
 
 {% block owner_body %}
 <h1>Data gaps</h1>
-<p class="subtitle">Each store, and the systems it is still missing from. Every gap has an owner and what has to happen next.</p>
+<p class="subtitle">Open work, grouped by who owns it. Threats are listed first.</p>
 
-<nav class="filters" aria-label="Gap type">
-  {% for key, label in filters %}
-  <a href="{% if key %}/data-gaps?gap={{ key }}{% else %}/data-gaps{% endif %}" {% if selected == key %}class="is-current"{% endif %}>
-    {{ label }}{% if key %} · {{ counts.get(key, 0) }}{% endif %}
-  </a>
-  {% endfor %}
-</nav>
+<div class="gap-counts">
+  <div class="ot-stat">
+    <p class="kicker">Open</p>
+    <p class="figure-sm" data-field="open">{{ counts.open }}</p>
+  </div>
+  <div class="ot-stat">
+    <p class="kicker">Waiting</p>
+    <p class="figure-sm" data-field="waiting">{{ counts.waiting }}</p>
+  </div>
+  <div class="ot-stat">
+    <p class="kicker">Fixed</p>
+    <p class="figure-sm" data-field="fixed">{{ counts.fixed }}</p>
+  </div>
+</div>
 
-{% if not cards %}
-<div class="empty"><p>No gaps of this kind.</p></div>
+{% if not groups %}
+<div class="empty"><p>No open gaps.</p></div>
 {% endif %}
 
-{% for card in cards %}
-<article class="store" data-store="{{ card.store_id }}">
-  <h2>{{ card.name }}</h2>
-  {% if card.place %}<p class="note">{{ card.place }}</p>{% endif %}
-  {% if card.note %}<p class="note">{{ card.note }}</p>{% endif %}
-  {% for gap in card.gaps %}
-  <div class="component" data-gap="{{ gap.kind }}">
-    <strong>{{ gap.label }}</strong>
-    <p class="meta">{{ gap.owner }} · <span class="gap-status">{{ gap.status }}</span></p>
-    {% if gap.detail and gap.detail != gap.label %}<p>{{ gap.detail }}</p>{% endif %}
-  </div>
+{% for group in groups %}
+<section class="owner-group" data-owner="{{ group.owner }}">
+  <h2>{{ group.owner }}</h2>
+  {% for gap in group.gaps %}
+  <article class="store" data-gap="{{ gap.gap_id }}" {% if gap.threat %}data-threat="1"{% endif %}>
+    {% if gap.threat %}<p class="kicker threat">Threat</p>{% endif %}
+    <h3>{{ gap.title }}</h3>
+    {% if gap.store %}<p class="note">{{ gap.store }}</p>{% endif %}
+    {% if gap.why_it_matters %}<p>{{ gap.why_it_matters }}</p>{% endif %}
+    <p class="meta">{{ gap.status_label }}{% if gap.fix %} · {{ gap.fix }}{% endif %}{% if gap.due_label %} · Due {{ gap.due_label }}{% endif %}</p>
+  </article>
   {% endfor %}
-</article>
+</section>
 {% endfor %}
 {% endblock %}
