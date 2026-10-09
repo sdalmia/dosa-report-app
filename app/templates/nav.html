@@ -12,6 +12,9 @@
 </header>
 <nav class="cc-drawer" id="nav-drawer" aria-label="More">
   <a href="{{ url_for('main.dashboard') }}">Home</a>
+  <a href="/brief">Brief</a>
+  <a href="/scorecard">Scorecard</a>
+  <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
   <a href="{{ url_for('store_health.page') }}">Store Health</a>
   <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
   <a href="{{ url_for('uploader.upload_index') }}">Zomato Settlement Uploader</a>
@@ -34,16 +37,16 @@
   <a href="{{ url_for('main.dashboard') }}" {% if request.endpoint == 'main.dashboard' %}class="is-current"{% endif %}>
     <i class="bi bi-house"></i><span>Home</span>
   </a>
+  <a href="/brief">
+    <i class="bi bi-sunrise"></i><span>Brief</span>
+  </a>
+  <a href="/scorecard">
+    <i class="bi bi-clipboard-data"></i><span>Scorecard</span>
+  </a>
+  <a href="{{ url_for('main.procurement_page') }}" {% if request.endpoint == 'main.procurement_page' %}class="is-current"{% endif %}>
+    <i class="bi bi-box-seam"></i><span>Procurement</span>
+  </a>
   <a href="{{ url_for('store_health.page') }}" {% if request.endpoint == 'store_health.page' %}class="is-current"{% endif %}>
     <i class="bi bi-shop"></i><span>Store Health</span>
-  </a>
-  <a href="{{ url_for('ingredient_tracker.dashboard') }}">
-    <i class="bi bi-basket"></i><span>Ingredients</span>
-  </a>
-  <a href="{{ url_for('uploader.upload_index') }}">
-    <i class="bi bi-upload"></i><span>Upload</span>
-  </a>
-  <a href="{{ url_for('location_finder.location_finder') }}">
-    <i class="bi bi-geo-alt"></i><span>Locations</span>
   </a>
 </nav>

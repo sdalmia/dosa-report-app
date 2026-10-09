@@ -50,15 +50,19 @@ def _flag_view():
     return visible, state
 
 
-@main_bp.route('/dashboard')
-@login_required
-def dashboard():
-    user_info = session.get('user') or {}
+def _dashboard_view():
     region = (request.args.get("region") or "").strip()
     if region not in {"", "East", "North"}:
         region = ""
     low_only = (request.args.get("low") or "").strip() == "1"
-    view = build_owner_dashboard(region=region, low_only=low_only)
+    return build_owner_dashboard(region=region, low_only=low_only), region, low_only
+
+
+@main_bp.route('/dashboard')
+@login_required
+def dashboard():
+    user_info = session.get('user') or {}
+    view, _region, _low_only = _dashboard_view()
     flags, flag_state = _flag_view()
     return render_template(
         'dashboard.html',
@@ -68,6 +72,27 @@ def dashboard():
         flag_state=flag_state,
         **view,
     )
+
+
+@main_bp.route("/stores")
+@login_required
+def stores_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("stores.html", **view)
+
+
+@main_bp.route("/attention")
+@login_required
+def attention_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("attention.html", alerts=view["alerts"], window_subtitle=view["window_subtitle"])
+
+
+@main_bp.route("/procurement")
+@login_required
+def procurement_page():
+    view, _region, _low_only = _dashboard_view()
+    return render_template("procurement.html", procurement=view["procurement"])
 
 
 @main_bp.route("/flags")

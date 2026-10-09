@@ -513,6 +513,24 @@ def _alerts(feeds, stores, end):
     return alerts
 
 
+def _window_copy(start, end, days_in_window):
+    if start is None or end is None:
+        return "", ""
+    compare = end - timedelta(days=7)
+    left = f"{start.day} {start.strftime('%b')}"
+    right = f"{end.day} {end.strftime('%b')}"
+    if start.year != end.year:
+        left = f"{left} {start.year}"
+        right = f"{right} {end.year}"
+    subtitle = f"{left} – {right} · vs last {end.strftime('%A')}"
+    note = (
+        f"{days_in_window} days in the window. "
+        f"Change versus {compare.strftime('%A')} {compare.day} {compare.strftime('%b')}. "
+        "Calculated. Gross divided by bills. A blank day is left out."
+    )
+    return subtitle, note
+
+
 def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, procurement_dir=None):
     feeds = feeds if feeds is not None else load_feeds()
     today = today or business_today()
@@ -534,16 +552,29 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
     days_in_window = 0
     if start and end:
         days_in_window = sum(1 for offset in range((end - start).days + 1) if _rows_on(feeds, start + timedelta(days=offset)))
+    subtitle, window_note = _window_copy(start, end, days_in_window)
+    if len(league) > 10:
+        league_top, league_bottom = league[:5], league[-5:]
+    else:
+        league_top, league_bottom = league, []
+    chart_note = "The line is gross. The dashed line is the middle of the band. The shade runs from low to high."
+    if chart.get("last_band"):
+        chart_note = f"{chart_note} The band runs through {chart['last_band']}."
     return {
         "window_label": window_label,
+        "window_subtitle": subtitle,
+        "window_note": window_note,
         "compare_label": compare_label,
         "days_with_rows": days_in_window,
+        "league_top": league_top,
+        "league_bottom": league_bottom,
+        "chart_note": chart_note,
         "window_days": POSIST_WINDOW_DAYS,
         "regions": regions,
         "league": league,
         "region_filter": region,
         "low_only": low_only,
-        "low_rule": "Low performers: bills on the newest Posist day are 15% or more below the same weekday last week. A store missing either day is not called low.",
+        "low_rule": "Low performers: bills on the latest day are 15% or more below the same weekday last week. A store missing either day is left off this list.",
         "chart": chart,
         "next_days": _next_days(feeds, today),
         "reputation": _reputation(feeds, stores),

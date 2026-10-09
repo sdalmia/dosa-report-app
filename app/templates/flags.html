@@ -6,7 +6,11 @@
     <h2>Red flags</h2>
     <a href="{{ url_for('main.dashboard') }}">Home</a>
   </div>
-  <p class="source-line">From data/flags. Red first, then the newest as_of. Hidden after 7 days. Accounts and people stay with the owners.</p>
+  <p class="window-sub">Red first. Hidden after 7 days.</p>
+  <details class="info-note info-inline">
+    <summary aria-label="About red flags">ⓘ</summary>
+    <p>Accounts and people are shown only to the owners.</p>
+  </details>
   {% if flag_state == "missing" %}
     <p class="empty">No flags loaded</p>
   {% elif not groups %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Needs attention - Dosa Coffee{% endblock %}
+{% block content %}
+<section class="cc-section">
+  <div class="section-head">
+    <h2>Needs attention</h2>
+    <a href="{{ url_for('main.dashboard') }}">Home</a>
+  </div>
+  {% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
+  <details class="info-note info-inline">
+    <summary aria-label="About needs attention">ⓘ</summary>
+    <p>Bills down 15% or more versus the same weekday, or a public rating under 4. A missing rating is left out.</p>
+  </details>
+  {% if not alerts %}
+    <p class="empty">Nothing needs attention</p>
+  {% else %}
+    <div class="alert-list">
+      {% for alert in alerts %}
+        <article class="alert-row"><strong>{{ alert.kind }}.</strong> {{ alert.text }}</article>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

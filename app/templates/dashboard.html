@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Command Centre - Dosa Coffee{% endblock %}
 {% block content %}
+<div class="cc-home">
 <section class="cc-section" id="red-flags" aria-labelledby="flags-title">
   <div class="section-head">
     <h2 id="flags-title">Red flags</h2>
@@ -9,7 +10,7 @@
     {% endif %}
   </div>
   {% if flag_state == "missing" %}
-    <p class="empty">No flags loaded</p>
+    <p class="empty">No flags to show</p>
   {% elif not flags %}
     <p class="empty">No flags to show</p>
   {% else %}
@@ -27,23 +28,27 @@
 <section class="cc-section" id="kpis" aria-label="Window sales">
   <div class="section-head">
     <h2>This window</h2>
+    {% if window_note %}
+      <details class="info-note">
+        <summary aria-label="About this window">ⓘ</summary>
+        <p>{{ window_note }}</p>
+      </details>
+    {% endif %}
   </div>
-  <p class="source-line">Source posist_daily.csv{% if window_label %}. {{ window_label }}. {{ days_with_rows }} days with a row{% endif %}{% if compare_label %}. Same weekday {{ compare_label }}{% endif %}.</p>
+  {% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
   {% if not regions %}
     <p class="empty">No data</p>
   {% else %}
     <div class="kpi-grid">
-      {% for key, title, note in (("gross", "Gross", ""), ("bills", "Bills", ""), ("apb", "APB", "Calculated. Gross divided by bills.")) %}
+      {% for key, title in (("gross", "Gross"), ("bills", "Bills"), ("apb", "APB")) %}
         <article class="kpi-card">
           <h3>{{ title }}</h3>
           <p class="kpi-value">{% if regions[0][key] %}{{ regions[0][key] }}{% else %}no data{% endif %}</p>
-          {% if note %}<p class="kpi-note">{{ note }}</p>{% endif %}
-          {% for region in regions %}
-            <div class="split">
-              <span>{{ region.label }}</span>
-              <b class="{% if region[key ~ '_change'].startswith('-') %}chg-down{% elif region[key ~ '_change'].startswith('+') %}chg-up{% endif %}">{% if region[key ~ '_change'] %}{{ region[key ~ '_change'] }}{% else %}no data{% endif %}</b>
-            </div>
-          {% endfor %}
+          <div class="kpi-chips">
+            {% for region in regions %}
+              <span>{{ region.label }} <b class="{% if region[key ~ '_change'].startswith('-') %}chg-down{% elif region[key ~ '_change'].startswith('+') %}chg-up{% endif %}">{% if region[key ~ '_change'] %}{{ region[key ~ '_change'] }}{% else %}–{% endif %}</b></span>
+            {% endfor %}
+          </div>
         </article>
       {% endfor %}
     </div>
@@ -51,114 +56,125 @@
 </section>
 
 <section class="cc-section" id="alerts" aria-labelledby="alerts-title">
-  <div class="section-head"><h2 id="alerts-title">Needs attention</h2></div>
-  <p class="source-line">Bills down 15% or more versus the same weekday, or a public rating under 4. Blank ratings are not treated as zero.</p>
+  <div class="section-head">
+    <h2 id="alerts-title">Needs attention</h2>
+    {% if alerts|length > 5 %}
+      <a href="{{ url_for('main.attention_page') }}">See all</a>
+    {% endif %}
+  </div>
   {% if not alerts %}
-    <p class="empty">No data</p>
+    <p class="empty">Nothing needs attention</p>
   {% else %}
     <div class="alert-list">
-      {% for alert in alerts[:8] %}
+      {% for alert in alerts[:5] %}
         <article class="alert-row"><strong>{{ alert.kind }}.</strong> {{ alert.text }}</article>
       {% endfor %}
     </div>
-    {% if alerts|length > 8 %}<p class="source-line">{{ alerts|length }} in total. Showing 8.</p>{% endif %}
   {% endif %}
 </section>
 
 <section class="cc-section" id="trend" aria-labelledby="trend-title">
-  <div class="section-head"><h2 id="trend-title">Daily gross</h2></div>
-  <p class="source-line">{{ chart.source }}{% if chart.last_band %}. Band through {{ chart.last_band }}{% endif %}.</p>
+  <div class="section-head">
+    <h2 id="trend-title">Daily gross</h2>
+    {% if chart_note %}
+      <details class="info-note">
+        <summary aria-label="About the chart">ⓘ</summary>
+        <p>{{ chart_note }}</p>
+      </details>
+    {% endif %}
+  </div>
   {% if chart.svg %}
     <div class="chart-wrap panel">{{ chart.svg }}</div>
-    <p class="kpi-note">Line is Gross. Dashed line is the mid of the band. The shade is low to high.</p>
   {% else %}
     <p class="empty">No data</p>
   {% endif %}
 </section>
 
 <section class="cc-section" id="next-days" aria-labelledby="next-title">
-  <div class="section-head"><h2 id="next-title">Today and the next 7 days</h2></div>
-  <p class="source-line">Source sales_pred_vs_actual.csv. Tier and driver, one line when every store agrees.</p>
-  <div class="day-list">
-    {% for day in next_days %}
-      <article class="day-card">
-        <strong>{{ day.weekday }} {{ day.label }}</strong>
-        {% if day.tier %}
-          <span class="tier tier-{{ day.tier|lower|replace(' / ', '-')|replace(' ', '-') }}">{{ day.tier }}</span>
-          <span>{% if day.driver %}{{ day.driver }}{% else %}no data{% endif %}</span>
-        {% else %}
-          <span class="muted">no data</span>
-        {% endif %}
+  <div class="section-head">
+    <h2 id="next-title">Next 7 days</h2>
+    <details class="info-note">
+      <summary aria-label="About the next 7 days">ⓘ</summary>
+      <p>Each day shows the shared day type. A day that differs by store says Varies.</p>
+    </details>
+  </div>
+  <div class="day-row">
+    {% for day in next_days[:7] %}
+      <article class="day-chip{% if day.tier %} tier-{{ day.tier|lower|replace(' / ', '-')|replace(' ', '-') }}{% endif %}">
+        <strong>{{ day.weekday }}</strong>
+        <span>{{ day.label.split(' ')[0] }} {{ day.label.split(' ')[1] }}</span>
+        <span class="day-tier">{% if day.tier %}{{ day.tier }}{% else %}–{% endif %}</span>
       </article>
     {% endfor %}
   </div>
 </section>
 
 <section class="cc-section" id="reputation" aria-labelledby="rep-title">
-  <div class="section-head"><h2 id="rep-title">Reputation</h2></div>
-  <div class="rep-grid">
-    <article class="tile">
-      <h3>Famepilot</h3>
-      <p class="source-line">{{ reputation.source }}. {{ reputation.period }}</p>
-      <p class="kpi-value">{% if reputation.rating %}{{ reputation.rating }}{% else %}no data{% endif %}</p>
-      <p class="kpi-note">{{ reputation.rating_note }}</p>
-      <p class="source-line">Reviews {% if reputation.reviews %}{{ reputation.reviews }}{% else %}no data{% endif %}</p>
+  <div class="section-head">
+    <h2 id="rep-title">Reputation</h2>
+    <details class="info-note">
+      <summary aria-label="About reputation">ⓘ</summary>
+      <p>{{ reputation.rating_note }} {{ reputation.period }}</p>
+      {% if reelo.not_in_reelo %}<p>{{ reelo.not_in_reelo }} stores are not in Reelo. Those stores are left out, not counted as zero.</p>{% endif %}
       {% if reputation.worst %}
         <ul>
           {% for store in reputation.worst %}
-            <li>
-              {% if store.id %}<a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a>{% else %}{{ store.label }}{% endif %}
-              <span>{{ store.rating }} / {{ store.reviews }}</span>
-            </li>
+            <li>{{ store.label }} {{ store.rating }} from {{ store.reviews }} reviews</li>
           {% endfor %}
         </ul>
       {% endif %}
-    </article>
-    <article class="tile">
-      <h3>Reelo</h3>
-      <p class="source-line">{{ reelo.source }}{% if reelo.period %}. {{ reelo.period }}{% endif %}</p>
-      <p>Visits {% if reelo.visits %}{{ reelo.visits }}{% else %}no data{% endif %}</p>
-      <p>Rewards redeemed {% if reelo.redeemed %}{{ reelo.redeemed }}{% else %}no data{% endif %}</p>
-      <p class="kpi-note">{{ reelo.not_in_reelo }} stores are marked not in Reelo. Those rows are not added as zero.</p>
-    </article>
+    </details>
   </div>
+  <article class="tile rep-compact">
+    <p class="kpi-value">{% if reputation.rating %}{{ reputation.rating }}{% else %}no data{% endif %}</p>
+    <p class="rep-line">Reviews {% if reputation.reviews %}{{ reputation.reviews }}{% else %}no data{% endif %} · Visits {% if reelo.visits %}{{ reelo.visits }}{% else %}no data{% endif %} · Rewards {% if reelo.redeemed %}{{ reelo.redeemed }}{% else %}no data{% endif %}</p>
+  </article>
 </section>
 
 <section class="cc-section" id="league" aria-labelledby="league-title">
-  <div class="section-head"><h2 id="league-title">Stores by gross</h2></div>
-  <p class="source-line">{{ low_rule }} APB is calculated: window gross divided by window bills.</p>
-  <div class="filters">
-    {% for name in ("", "East", "North") %}
-      <a href="{{ url_for('main.dashboard', region=name, low='1' if low_only else none) }}" {% if region_filter == name %}class="is-on"{% endif %}>{{ name or "All" }}</a>
-    {% endfor %}
-    <a href="{{ url_for('main.dashboard', region=region_filter, low='1' if not low_only else none) }}" {% if low_only %}class="is-on"{% endif %}>Low performers</a>
+  <div class="section-head">
+    <h2 id="league-title">Stores</h2>
+    <a href="{{ url_for('main.stores_page') }}">See all stores</a>
   </div>
   {% if not league %}
     <p class="empty">No data</p>
   {% else %}
     <div class="league-list">
-      {% for store in league %}
+      {% for store in league_top %}
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>
           <strong>{{ store.label }}</strong>
-          <span class="league-meta">Gross {% if store.gross %}{{ store.gross }}{% else %}no data{% endif %} · Bills {% if store.bills_change %}{{ store.bills_change }}{% else %}no data{% endif %} · APB {% if store.apb %}{{ store.apb }}{% else %}no data{% endif %} calculated</span>
+          <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
         </a>
       {% endfor %}
+      {% if league_bottom %}
+        <p class="league-split">Bottom</p>
+        {% for store in league_bottom %}
+          <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
+            <span class="rank">{{ store.rank }}</span>
+            <strong>{{ store.label }}</strong>
+            <span class="league-meta">{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
+          </a>
+        {% endfor %}
+      {% endif %}
     </div>
   {% endif %}
 </section>
 
 <section class="cc-section" id="procurement" aria-labelledby="buy-title">
-  <div class="section-head"><h2 id="buy-title">Procurement</h2></div>
+  <div class="section-head">
+    <h2 id="buy-title">Procurement</h2>
+    <a href="{{ url_for('main.procurement_page') }}">See procurement</a>
+  </div>
   <div class="tile-grid">
-    {% for tile in procurement %}
+    {% for tile in procurement[:3] %}
       <article class="tile">
         <h3>{{ tile.title }}</h3>
-        <p class="source-line">Source {{ tile.source }}{% if tile.period %}. {{ tile.period }}{% endif %}</p>
+        {% if tile.period %}<p class="source-line">{{ tile.period }}</p>{% endif %}
         {% if tile.note %}<p class="empty">{{ tile.note }}</p>{% endif %}
         {% if tile.lines %}
           <ul>
-            {% for line in tile.lines %}
+            {% for line in tile.lines[:3] %}
               <li><span>{{ line.label }}</span>{% if line.value %}<b>{{ line.value }}</b>{% endif %}</li>
             {% endfor %}
           </ul>
@@ -167,14 +183,5 @@
     {% endfor %}
   </div>
 </section>
-
-<section class="cc-section" id="tools" aria-label="Tools">
-  <h2>Tools</h2>
-  <div class="tool-row">
-    <a href="{{ url_for('store_health.page') }}">Store Health</a>
-    <a href="{{ url_for('uploader.upload_index') }}">Zomato Settlement Uploader</a>
-    <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
-    <a href="{{ url_for('location_finder.location_finder') }}">Location Finder</a>
-  </div>
-</section>
+</div>
 {% endblock %}

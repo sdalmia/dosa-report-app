@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Procurement - Dosa Coffee{% endblock %}
+{% block content %}
+<section class="cc-section">
+  <div class="section-head">
+    <h2>Procurement</h2>
+    <a href="{{ url_for('main.dashboard') }}">Home</a>
+  </div>
+  <div class="tile-grid">
+    {% for tile in procurement %}
+      <article class="tile">
+        <h3>{{ tile.title }}</h3>
+        {% if tile.period %}<p class="source-line">{{ tile.period }}</p>{% endif %}
+        {% if tile.note %}<p class="empty">{{ tile.note }}</p>{% endif %}
+        {% if tile.lines %}
+          <ul>
+            {% for line in tile.lines %}
+              <li><span>{{ line.label }}</span>{% if line.value %}<b>{{ line.value }}</b>{% endif %}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

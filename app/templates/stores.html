@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Stores - Dosa Coffee{% endblock %}
+{% block content %}
+<section class="cc-section">
+  <div class="section-head">
+    <h2>Stores</h2>
+    <a href="{{ url_for('main.dashboard') }}">Home</a>
+  </div>
+  {% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
+  <details class="info-note info-inline">
+    <summary aria-label="About the store list">ⓘ</summary>
+    <p>{{ low_rule }} APB is calculated. Gross divided by bills.</p>
+  </details>
+  <div class="filters">
+    {% for name in ("", "East", "North") %}
+      <a href="{{ url_for('main.stores_page', region=name, low='1' if low_only else none) }}" {% if region_filter == name %}class="is-on"{% endif %}>{{ name or "All" }}</a>
+    {% endfor %}
+    <a href="{{ url_for('main.stores_page', region=region_filter, low='1' if not low_only else none) }}" {% if low_only %}class="is-on"{% endif %}>Low performers</a>
+  </div>
+  {% if not league %}
+    <p class="empty">No data</p>
+  {% else %}
+    <div class="league-list">
+      {% for store in league %}
+        <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
+          <span class="rank">{{ store.rank }}</span>
+          <strong>{{ store.label }}</strong>
+          <span class="league-meta">Gross {% if store.gross %}{{ store.gross }}{% else %}no data{% endif %} · Bills {% if store.bills_change %}{{ store.bills_change }}{% else %}no data{% endif %} · APB {% if store.apb %}{{ store.apb }}{% else %}no data{% endif %}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
