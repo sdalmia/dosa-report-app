@@ -12,14 +12,15 @@
     </div>
 
     <h1 class="mb-3">Should we open a restaurant here?</h1>
-    <p class="fs-4 fw-semibold mb-4">{{ verdict.answer }}</p>
+    <p class="fs-4 fw-semibold mb-2">{{ pattern_answer }}</p>
+    <p class="mb-4">Format: {{ pattern.format_label }}. {% if pattern.repin %}The classic score is shown for comparison only.{% else %}{{ verdict.answer }}{% endif %}</p>
 
     <div class="premium-score-box mb-3">
         <div class="d-flex align-items-center">
-            <div class="premium-score-badge">{{ score }}</div>
+            <div class="premium-score-badge">{% if pattern.repin or pattern.pattern.score is none %}–{% else %}{{ pattern.pattern.score }}{% endif %}</div>
             <div class="score-details-text">
-                <div class="score-label">Restaurant site score</div>
-                <div class="score-category">{{ verdict.label }}</div>
+                <div class="score-label">{{ pattern.format_label }} score</div>
+                <div class="score-category">Classic score {{ score }}</div>
             </div>
         </div>
         <div class="score-details-text">
@@ -27,6 +28,46 @@
             <div class="score-category">{{ location_name }}</div>
         </div>
     </div>
+    <h2 class="h5">Why this score</h2>
+    <ul class="lf-parts">
+        {% for part in pattern.pattern.parts %}
+        <li>
+            <strong>{{ part.label }}</strong>
+            <span>{{ part.weight_pct }}%</span>
+            {% if part.status == 'data coming' %}
+            <span>data coming</span>
+            {% elif part.status == 'not used' %}
+            <span>not used</span>
+            {% else %}
+            <span>{% if part.points is not none %}{{ part.points }}{% endif %}{% if part.detail %} · {{ part.detail }}{% endif %}</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <h2 class="h5">Delivery potential</h2>
+    <p>{% if pattern.delivery.score is none %}data coming{% else %}{{ pattern.delivery.score }} out of 10. It is shown beside the site score and is not blended in, except where the format uses it.{% endif %}</p>
+    <ul class="lf-parts">
+        {% for part in pattern.delivery.parts %}
+        <li>
+            <strong>{{ part.label }}</strong>
+            {% if part.status == 'data coming' %}<span>data coming</span>{% else %}<span>{% if part.points is not none %}{{ part.points }}{% endif %}{% if part.detail %} · {{ part.detail }}{% endif %}</span>{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% if pattern.format == 'cloud_kitchen' and pattern.cannibal %}
+    <p>Another store is within 2 km.</p>
+    {% endif %}
+    {% if pattern.peers %}
+    <h2 class="h5">Nearest peers in this format</h2>
+    <ul class="lf-parts">
+        {% for peer in pattern.peers %}
+        <li><strong>{{ peer.name }}</strong> <span>{{ peer.pattern_score }} · {{ money(peer.gross_per_day) }} a day</span></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if pattern.nearest_store %}
+    <p>Nearest own store: {{ pattern.nearest_store }}{% if pattern.nearest_store_m is not none %}, {{ pattern.nearest_store_m }} m{% endif %}.</p>
+    {% endif %}
     <p>{{ verdict.explanation }}</p>
 
     <div class="card mt-4 mb-4 shadow-sm">
@@ -201,21 +242,22 @@
 }
 .lf-page h1, .lf-page h2, .lf-page h3, .lf-page p, .lf-page li, .lf-page td, .lf-page th { color: var(--text); }
 .premium-score-box {
-    background: linear-gradient(135deg, #4da0ff 0%, #005eff 100%);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 24px 32px;
-    color: white;
+    padding: 16px;
+    color: var(--text);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 .premium-score-box .score-label,
-.premium-score-box .score-category { color: white; }
+.premium-score-box .score-category { color: var(--text); }
 .premium-score-badge {
-    background: rgba(255,255,255,0.2);
+    background: var(--surface);
+    color: var(--text);
     border-radius: 50%;
     width: 90px;
     height: 90px;
@@ -224,8 +266,11 @@
     justify-content: center;
     font-size: 32px;
     font-weight: 700;
-    border: 3px solid rgba(255,255,255,0.35);
+    border: 1px solid var(--line);
 }
+.lf-parts { list-style: none; padding: 0; margin: 0 0 1rem; }
+.lf-parts li { padding: 0.45rem 0; border-bottom: 1px solid var(--line); }
+.lf-parts span { color: var(--text-muted); }
 .score-details-text { margin-left: 24px; }
 .score-label { font-size: 16px; font-weight: 500; opacity: 0.9; }
 .score-category { font-size: 22px; font-weight: 700; margin-top: 4px; }

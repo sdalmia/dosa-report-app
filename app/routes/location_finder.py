@@ -11,6 +11,8 @@ from app.brands import (
     known_brand_choices,
     site_verdict,
 )
+from app.site_pattern import DATA_COMING, load_board, score_live_site
+from app.store_health.present import format_owner_rupee
 
 location_finder_bp = Blueprint('location_finder', __name__)
 
@@ -247,6 +249,7 @@ def compute_new_score(places, lat, lng, radius):
     diversity_score = 1 if unique_cuisines >= 5 else 0
 
     metro_score = compute_metro_score(lat, lng)
+    station_m, station_name = nearest_station(lat, lng)
     bus_score = compute_bus_score(lat, lng)
     road_score = compute_road_score(lat, lng)
 
@@ -268,8 +271,71 @@ def compute_new_score(places, lat, lng, radius):
         "diversity_score": diversity_score,
         "total_reviews": total_reviews,
         "unique_cuisines": unique_cuisines,
-        "transport_score": transport_score
+        "transport_score": transport_score,
+        "nearest_station_m": station_m,
+        "nearest_station_name": station_name,
     }
+
+
+def nearest_station(lat, lng):
+    """Metres to the nearest metro or rail exit, and that station's name.
+
+    An empty result means the search ran and nothing was inside 1 km.
+    A failed search returns no distance, which the score leaves out.
+    """
+    places = []
+    try:
+        for keyword in ("metro", "railway station"):
+            places.extend(fetch_places_by_type(lat, lng, 1000, "transit_station", keyword=keyword) or [])
+    except Exception:
+        return None, ""
+    usable = []
+    for place in places:
+        loc = (place.get("geometry") or {}).get("location") or {}
+        if loc.get("lat") is None or loc.get("lng") is None:
+            continue
+        usable.append(place)
+    if not usable:
+        return 1000.0, ""
+
+    def distance(place):
+        loc = place["geometry"]["location"]
+        return haversine_distance(lat, lng, loc["lat"], loc["lng"])
+
+    nearest = min(usable, key=distance)
+    return distance(nearest), nearest.get("name") or ""
+
+
+def _money(value):
+    if value is None:
+        return ""
+    return format_owner_rupee(value)
+
+
+def _pattern_answer(view):
+    repin = view.get("repin")
+    if repin:
+        metres = repin["metres"]
+        far = f"{metres / 1000:.1f} km" if metres >= 1000 else f"{metres} m"
+        return (
+            f"Re-pin needed. This suggestion is {far} from the store's Google pin, "
+            "so there is no verdict."
+        )
+    score = view["pattern"]["score"]
+    label = view["format_label"].lower()
+    if score is None:
+        return "Not enough inputs are in yet for a verdict."
+    if score >= 9:
+        lead = f"Yes. This is a strong {label} site."
+    elif score >= 7:
+        lead = f"Yes. This looks like a strong {label} site."
+    elif score >= 5:
+        lead = f"Maybe. This is a possible {label} site, not a standout."
+    else:
+        lead = f"No. This looks like a weak {label} site."
+    if any(part["status"] == DATA_COMING and part.get("weight", 0) > 0 for part in view["pattern"]["parts"]):
+        lead += " Some inputs are still data coming, so they are left out of the score."
+    return lead
 
 
 def _render_form(**extra):
@@ -279,8 +345,11 @@ def _render_form(**extra):
         "error": None,
         "brand": "",
         "region": "",
+        "money": _money,
     }
     context.update(extra)
+    if context.get("board") is None:
+        context["board"] = load_board()
     return render_template("location_finder_form.html", **context)
 
 
@@ -334,6 +403,10 @@ def location_finder():
         # Same 0–10 factors as before. A higher score is a stronger restaurant site.
         result = compute_new_score(places, lat, lng, radius)
         score = result["score"]
+        fmt = (request.form.get("site_format") or "high_street").strip()
+        if fmt not in {"high_street", "mall", "cloud_kitchen", "metro"}:
+            fmt = "high_street"
+        pattern = score_live_site(lat, lng, fmt, location_name, result, places)
         _with_logos(places)
         positioning = build_positioning(places)
         verdict = site_verdict(score, result)
@@ -343,6 +416,9 @@ def location_finder():
             score=score,
             breakdown=result,
             verdict=verdict,
+            pattern=pattern,
+            pattern_answer=_pattern_answer(pattern),
+            money=_money,
             positioning=positioning,
             places=places,
             latitude=lat,
@@ -352,7 +428,7 @@ def location_finder():
         )
 
     # GET request → show form
-    return _render_form()
+    return _render_form(board=load_board())
 
 
 @location_finder_bp.route("/location-finder/brand", methods=["POST"])
