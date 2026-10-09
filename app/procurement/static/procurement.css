@@ -1,0 +1,280 @@
+/* Uses the Command Centre theme. Light is the default; dark is the toggle only. */
+.procurement {
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.procurement h1,
+.procurement h2,
+.procurement h3,
+.procurement p {
+  color: inherit;
+}
+
+.procurement h1 {
+  font-size: 1.7rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.pc-period,
+.subline {
+  margin: 6px 0 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.pc-period {
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.subline {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.pc-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.pc-subnav a,
+.pc-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.pc-subnav a[aria-current="page"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.pc-jump {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+}
+
+.procurement .tile {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin: 0 0 14px;
+}
+
+.procurement .tile h2 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.procurement .tile h3 {
+  font-size: 0.95rem;
+  margin: 14px 0 8px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.metric {
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.figure,
+.num,
+.exact-figure {
+  white-space: nowrap;
+}
+
+.metric .figure {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.45rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.metric .exact summary.figure {
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+.metric .exact summary.figure.hero {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.exact summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.exact summary::-webkit-details-marker {
+  display: none;
+}
+
+.exact-figure {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.more {
+  margin-top: 12px;
+}
+
+.more > summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+.procurement .empty {
+  border: 1px dashed var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.row-card,
+.alert {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.alert {
+  border-left: 4px solid var(--amber);
+}
+
+.row-card b,
+.alert b {
+  display: block;
+  color: var(--text);
+}
+
+.procurement .muted {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.scroll {
+  max-height: 28rem;
+  overflow: auto;
+  margin-top: 8px;
+}
+
+.procurement select,
+.procurement button {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-height: 44px;
+  width: 100%;
+  padding: 8px 12px;
+}
+
+.pc-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.procurement button {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 0;
+  font-weight: 650;
+}
+
+.heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.heading-row h1,
+.heading-row h2 {
+  margin: 0;
+}
+
+.info summary {
+  list-style: none;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.info summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-body {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 4px;
+}
+
+@media (min-width: 800px) {
+  .city-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}

@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% from "_info.html" import info %}
+{% macro money(pair, field, city, window='', hero=false) -%}
+<details class="exact">
+  <summary class="figure{% if hero %} hero{% endif %}" data-field="{{ field }}" {% if window %}data-window="{{ window }}" {% endif %}data-city="{{ city }}" data-value="{{ pair.attr }}">{{ pair.compact }}</summary>
+  <p class="exact-figure">{{ pair.text }}</p>
+</details>
+{%- endmacro %}
+{% macro pct(pair, field, city, window) -%}
+<strong class="figure hero" data-field="{{ field }}" data-window="{{ window }}" data-city="{{ city }}" data-value="{{ pair.attr }}">{{ pair.text }}</strong>
+{%- endmacro %}
+{% block title %}Food cost - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('procurement.static', filename='procurement.css') }}">
+{% set page_title = 'Food cost' %}
+<div class="procurement">
+  {% include "_head.html" %}
+  <nav class="pc-jump" aria-label="On this page">
+    <a href="#cities">Cities</a>
+    <a href="#stores">Stores</a>
+    <a href="#alerts">Alerts</a>
+    <a href="#recipe">Recipe cost</a>
+  </nav>
+
+  {% if missing_grn %}<p class="empty">{{ missing_grn }}</p>{% endif %}
+  {% if missing_consumption %}<p class="empty">{{ missing_consumption }}</p>{% endif %}
+  {% if missing_posist %}<p class="empty">{{ missing_posist }}</p>{% endif %}
+
+  <section id="cities" class="city-grid">
+    {% for city in cities %}
+    <article class="tile" id="city-{{ city.slug }}">
+      <div class="heading-row">
+        <h2>{{ city.region_label }}</h2>
+        {% call info() %}
+        <p>The percent is this figure divided by Posist gross for the same dates. Freight is separate and is not in the percent. Raw goods received is food and beverage only, for the consumption window. Tap a figure for the exact rupees.</p>
+        <p>Exact {{ city.week.label }}: gross {{ city.week.gross.text }}, purchases {{ city.week.grn_all.text }}, raw consumption {{ city.week.consumption.text }}, wastage {{ city.week.wastage.text }}.</p>
+        {% if store_purchase_note %}<p>{{ store_purchase_note }}</p>{% endif %}
+        {% endcall %}
+      </div>
+      <p class="subline">{{ city.week.label }}</p>
+      <div class="metrics">
+        <div class="metric">
+          <span>Raw consumption</span>
+          {{ pct(city.week.consumption_pct, 'consumption-pct', city.slug, 'week') }}
+          {{ money(city.week.consumption, 'consumption', city.slug, 'week') }}
+        </div>
+        <div class="metric">
+          <span>Purchases (all categories)</span>
+          {{ pct(city.week.grn_all_pct, 'grn-all-pct', city.slug, 'week') }}
+          {{ money(city.week.grn_all, 'grn-all', city.slug, 'week') }}
+        </div>
+        <div class="metric">
+          <span>Wastage</span>
+          {{ money(city.week.wastage, 'wastage', city.slug, hero=true) }}
+        </div>
+      </div>
+      <details class="more">
+        <summary>More</summary>
+        <div class="metrics">
+          <div class="metric">
+            <span>Posist gross</span>
+            {{ money(city.week.gross, 'gross', city.slug, 'week') }}
+          </div>
+          <div class="metric">
+            <span>Raw goods received</span>
+            {{ pct(city.week.grn_raw_pct, 'grn-raw-pct', city.slug, 'week') }}
+            {{ money(city.week.grn_raw, 'grn-raw', city.slug, 'week') }}
+          </div>
+          <div class="metric">
+            <span>Freight, not in the %</span>
+            {{ money(city.week.freight, 'freight', city.slug, 'week') }}
+          </div>
+        </div>
+        <p class="muted">Stores {{ city.week.outlet_consumption.compact }} · central kitchen {{ city.week.kitchen_consumption.compact }} · warehouse consumption {{ city.week.warehouse_consumption.compact }}</p>
+        {% if city.week.grn_raw_missing %}
+        <p class="empty">Raw goods received are not on file for this window.</p>
+        {% endif %}
+        {% if city.week.gross_blanks %}
+        <p class="muted">{{ city.week.gross_blanks }} Posist rows have a blank gross and are not in this total.</p>
+        {% endif %}
+        {% if city.span %}
+        <h3>{{ city.span.label }}</h3>
+        <div class="metrics">
+          <div class="metric">
+            <span>Posist gross</span>
+            {{ money(city.span.gross, 'gross', city.slug, 'span') }}
+          </div>
+          <div class="metric">
+            <span>Goods received</span>
+            {{ pct(city.span.grn_all_pct, 'grn-all-pct', city.slug, 'span') }}
+            {{ money(city.span.grn_all, 'grn-all', city.slug, 'span') }}
+          </div>
+          <div class="metric">
+            <span>Freight, not in the %</span>
+            {{ money(city.span.freight, 'freight', city.slug, 'span') }}
+          </div>
+        </div>
+        <p class="empty" data-field="span-consumption-missing" data-city="{{ city.slug }}">{{ city.span.consumption_missing }}</p>
+        {% endif %}
+      </details>
+    </article>
+    {% endfor %}
+  </section>
+
+  {% if unassigned %}
+  <p class="muted">{{ unassigned.names|join(', ') }} has no city. Raw consumption {{ unassigned.consumption.text }}. It is not added to Kolkata or Delhi.</p>
+  {% endif %}
+
+  <section id="stores">
+    <article class="tile">
+      <div class="heading-row">
+        <h2>Stores</h2>
+        {% call info() %}
+        <p>{{ week_label }}. Raw consumption against Posist gross for the same dates.</p>
+        <p>{{ variance_note }}</p>
+        {% endcall %}
+      </div>
+      <div class="stack">
+        {% for store in stores %}
+        <div class="row-card">
+          <b>{{ store.name }}</b>
+          <p class="muted">{{ store.city }}{% if store.region %} · {{ store.region }}{% endif %}</p>
+          <p>Raw consumption <span data-field="store-consumption" data-key="{{ store.key }}" data-value="{{ store.consumption.attr }}">{{ store.consumption.text }}</span>
+            · Posist gross <span data-field="store-gross" data-key="{{ store.key }}" data-value="{{ store.gross.attr }}">{{ store.gross.text }}</span>
+            · <span data-field="store-pct" data-key="{{ store.key }}" data-value="{{ store.food_cost_pct.attr }}">{{ store.food_cost_pct.text }}</span></p>
+          <p class="muted">Raw wastage {{ store.wastage.text }}
+            {% if store.physical_blank %}· No physical count{% else %}· Raw physical gain or loss {{ store.physical.text }}{% if store.physical_partial %} (counted lines only; another part of the store has no count){% endif %}{% endif %}
+          </p>
+          {% if not store.gross_matched %}
+          <p class="muted">Not in Posist sales, so gross and the percent are blank.</p>
+          {% endif %}
+        </div>
+        {% else %}
+        <p class="empty">No outlet rows are on file.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section id="alerts">
+    <article class="tile">
+      <div class="heading-row">
+        <h2>Days of cover over 15</h2>
+        {% call info() %}
+        <p>{{ week_label }}. Cover is how many days the warehouse stock would last at the rate it was used in this window.</p>
+        {% endcall %}
+      </div>
+      {% if not alerts.available %}
+      <p class="empty">{{ alerts.missing }}</p>
+      {% elif not alerts.cover %}
+      <p class="empty">No item has warehouse cover over 15 days.</p>
+      {% else %}
+      <div class="stack">
+        {% for row in alerts.cover %}
+        <div class="alert">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }}{% if row.unit %} · {{ row.unit }}{% endif %} · {{ row.basis }}</p>
+          <p data-field="cover-days" data-city="{{ row.city|lower }}" data-item="{{ row.item }}" data-value="{{ row.days_attr }}">{{ row.days_text }} days{% if row.closing_qty_text %} · closing {{ row.closing_qty_text }} {{ row.unit }}{% endif %}</p>
+          {% if row.detail %}<p class="muted">{{ row.detail }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+
+    <article class="tile">
+      <div class="heading-row">
+        <h2>Value beyond 10 days of cover</h2>
+        {% call info() %}
+        <p>Warehouse stock above 10 days of network use, times the average receipt rate. A missing rate stays blank.</p>
+        {% endcall %}
+      </div>
+      {% if alerts.available and alerts.beyond_10 %}
+      <div class="stack">
+        {% for row in alerts.beyond_10 %}
+        <div class="alert">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }} · {{ row.days_text }} days{% if row.excess_qty_text %} · excess {{ row.excess_qty_text }} {{ row.unit }}{% endif %}{% if row.rate_text %} · rate {{ row.rate_text }}{% endif %}</p>
+          <p data-field="excess-value" data-city="{{ row.city|lower }}" data-item="{{ row.item }}" data-value="{{ row.value.attr }}">{{ row.value.text }}</p>
+          {% if row.detail %}<p class="muted">{{ row.detail }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% elif alerts.available %}
+      <p class="empty">No item is beyond 10 days of cover with a value on file.</p>
+      {% endif %}
+    </article>
+
+    <article class="tile">
+      <h2>Used with no purchase, or negative stock</h2>
+      {% if alerts.available and alerts.stock %}
+      <div class="stack">
+        {% for row in alerts.stock %}
+        <div class="alert" data-field="stock-alert" data-item="{{ row.item }}" data-city="{{ row.city }}">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }} · {{ row.label }}{% if row.severity %} · {{ row.severity }}{% endif %}{% if row.amount.text %} · {{ row.amount.text }}{% endif %}</p>
+          {% if row.detail %}
+          {% call info() %}<p>{{ row.detail }}</p>{% endcall %}
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% elif alerts.available %}
+      <p class="empty">No item was used with nothing bought, and no stock went negative.</p>
+      {% endif %}
+    </article>
+
+    <article class="tile" id="hershey">
+      <div class="heading-row">
+        <h2>Hershey's IN-1854</h2>
+        {% call info() %}
+        <p>Warehouse dispatch. IN-1854 recorded 623 litres; later lines are under a litre. Treat 623 litres as a data-entry error.</p>
+        {% if hershey.flag and hershey.flag.detail %}<p>{{ hershey.flag.detail }}</p>{% endif %}
+        {% if hershey.flag and hershey.flag.action %}<p>{{ hershey.flag.action }}</p>{% endif %}
+        {% endcall %}
+      </div>
+      {% if not hershey.available %}
+      <p class="empty">{{ hershey.missing }}</p>
+      {% else %}
+      {% if hershey.missing %}<p class="empty">{{ hershey.missing }}</p>{% endif %}
+      <div class="stack">
+        {% for line in hershey.lines %}
+        <div class="alert" {% if line.is_error %}data-field="hershey-error"{% endif %}>
+          <b>{{ line.reference }} · {{ line.item }}</b>
+          <p>{{ line.date_text }} · {{ line.receiver }}</p>
+          <p data-field="hershey-qty" data-ref="{{ line.reference }}" data-value="{{ line.qty_attr }}">{{ line.qty_text }} {{ line.unit }} · {{ line.subtotal.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="wastage">
+    <article class="tile">
+      <h2>Largest wastage lines</h2>
+      <p class="muted">{{ week_label }}</p>
+      {% if not wastage.available %}
+      <p class="empty">{{ wastage.missing }}</p>
+      {% else %}
+      <div class="stack">
+        {% for row in wastage.rows %}
+        <div class="row-card">
+          <b>{{ row.item }}</b>
+          <p class="muted">{{ row.city }} · {{ row.store }}{% if row.super_category %} · {{ row.super_category }}{% endif %}</p>
+          <p>{{ row.amount.text }}{% if row.qty_text %} · {{ row.qty_text }} {{ row.unit }}{% endif %}{% if row.pct.text %} · {{ row.pct.text }} of consumption{% endif %}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+  </section>
+
+  <section id="recipe">
+    <article class="tile">
+      <div class="heading-row">
+        <h2>Recipe cost excl. packaging</h2>
+        {% call info() %}
+        <p>{{ recipe.basis }}</p>
+        {% if recipe.other_outlets_missing %}<p>{{ recipe.other_outlets_missing }}</p>{% endif %}
+        <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero.</p>
+        {% endcall %}
+      </div>
+      {% if not recipe.available %}
+      <p class="empty">Recipe cost is not on file.</p>
+      {% else %}
+      {% if recipe.packaging_gap %}
+      <p data-field="packaging-gap">{{ recipe.packaging_gap.note }}</p>
+      {% endif %}
+      <p class="empty" data-field="recipe-margin">{{ recipe.margin_unavailable }}</p>
+      <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
+      {% if recipe.list_kind == 'summary' %}
+      <details>
+        <summary>Costs across outlets</summary>
+        <div class="scroll stack">
+          {% for row in recipe.rows %}
+          <div class="row-card">
+            <b>{{ row.menu_item }}</b>
+            <p class="muted">{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
+            <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
+              · typical {{ row.typical.text }}
+              · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
+              {% if row.spread.text %} · spread {{ row.spread.text }}{% endif %}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+      {% else %}
+      <details>
+        <summary>All menu items</summary>
+        <div class="scroll stack">
+          {% for row in recipe.rows %}
+          <div class="row-card">
+            <b>{{ row.menu_item }}</b>
+            <p class="muted">{{ row.deployment }} · {{ row.city }} · {{ row.unit }}{% if row.partial %} · partial{% endif %}</p>
+            <p>Avg <span data-field="recipe-avg" data-outlet="{{ row.deployment }}" data-item="{{ row.menu_item }}" data-value="{{ row.avg.attr }}">{{ row.avg.text }}</span>
+              · last {{ row.last.text }}{% if row.gap.text %} · last vs avg {{ row.gap.text }}{% endif %}
+              {% if row.unpriced %} · {{ row.unpriced }} unpriced{% endif %}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+      {% endif %}
+    </article>
+
+    <article class="tile">
+      <div class="heading-row">
+        <h2>Consumed recipe cost · Ideal Plaza</h2>
+        {% if recipe.consumption and recipe.consumption.scope_note %}
+        {% call info() %}
+        <p>{{ recipe.consumption.scope_note }}</p>
+        {% if recipe.consumption.period_label %}<p>{{ recipe.consumption.period_label }}</p>{% endif %}
+        {% endcall %}
+        {% endif %}
+      </div>
+      {% if not recipe.consumption or not recipe.consumption.available %}
+      <p class="empty">What Ideal Plaza actually spent on recipes is not on file.</p>
+      {% else %}
+      <div class="scroll stack">
+        {% for row in recipe.consumption_rows %}
+        <div class="row-card">
+          <b>{{ row.menu_item }}</b>
+          <p>Sold {{ row.qty_text }} · per unit <span data-field="consumed-cost" data-item="{{ row.menu_item }}" data-value="{{ row.cost.attr }}">{{ row.cost.text }}</span> · total {{ row.total.text }}{% if row.missing_price %} · {{ row.missing_price }} unpriced lines{% endif %}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+  </section>
+</div>
+{% endblock %}

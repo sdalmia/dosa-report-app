@@ -1,0 +1,14 @@
+{% from "_info.html" import info %}
+<header class="pc-top">
+  <div class="heading-row">
+    <h1>{{ page_title }}</h1>
+    {% if page_help %}
+    {% call info() %}<p>{{ page_help }}</p>{% endcall %}
+    {% endif %}
+  </div>
+  <p class="pc-period">{{ period_label }}</p>
+  <nav class="pc-subnav" aria-label="Procurement">
+    <a href="{{ url_for('procurement.food_cost') }}" {% if page_title == 'Food cost' %}aria-current="page"{% endif %}>Food cost</a>
+    <a href="{{ url_for('procurement.vendors') }}" {% if page_title == 'Vendors' %}aria-current="page"{% endif %}>Vendors</a>
+  </nav>
+</header>

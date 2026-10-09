@@ -1,0 +1,20 @@
+date,city,warehouse,supplier,se_number,invoice_no,charge,amount
+2026-09-16,Kolkata,Central Warehouse -Kolkata,BM Agarwal,SE-8644,160926,Freight,400
+2026-09-19,Kolkata,Central Warehouse -Kolkata,Cash Purchase,SE-8669,190926,Transport Charges,20
+2026-09-28,Kolkata,Central Warehouse -Kolkata,Just Uniform,SE-8739,JU/00498/26-27,Transport Charges,200
+2026-09-28,Kolkata,Central Warehouse -Kolkata,Just Uniform,SE-8740,JU/00477/26-27,Transport Charges,250
+2026-09-09,Delhi,Central Warehouse - Delhi,BM Agarwal,SE-7821,2908,Freight,400
+2026-09-14,Delhi,Central Warehouse - Delhi,Cash Purchase,SE-7860,N-1814,Freight,18
+2026-09-14,Delhi,Central Warehouse - Delhi,Cash Purchase,SE-7863,CP14,Freight,63
+2026-09-19,Delhi,Central Warehouse - Delhi,Cash Purchase,SE-7888,56003,Freight,12
+2026-09-28,Delhi,Central Warehouse - Delhi,Cash Purchase,SE-7964,003782,Freight,12
+2026-09-28,Delhi,Central Warehouse - Delhi,FoodPro Packaging Private Limited,SE-7970,FPPL/26-27/1834,Freight,18
+2026-09-21,Delhi,Central Warehouse - Delhi,LOTUS & CO.,SE-7916,LC/00151/26-27,Freight,2
+2026-09-12,Delhi,Central Warehouse - Delhi,Maa Pet Pvt.Ltd,SE-7829,3663,Freight,2041
+2026-09-12,Delhi,Central Warehouse - Delhi,NEW JORAVAR TRADERS,SE-7845,356/2026-27,Freight,1550
+2026-10-01,Kolkata,Central Warehouse -Kolkata,Damji Pasu &Co,SE-8764,13899,Freight,2220
+2026-10-08,Kolkata,Central Warehouse -Kolkata,BM Agarwal,SE-8826,081026,Freight,300
+2026-10-01,Delhi,Central Warehouse - Delhi,EECO PACK,SE-8007,2026-2027/080,Freight,927
+2026-10-04,Delhi,Central Warehouse - Delhi,Damji Pasu &Co,SE-8020,13900,Freight,2231
+2026-10-05,Delhi,Central Warehouse - Delhi,Cash Purchase,SE-8042,12645,Freight,12
+2026-10-06,Delhi,Central Warehouse - Delhi,Gopal Printers Private Limited,SE-8049,GPPL/2143/26-27,Freight,4300

@@ -1,0 +1,1266 @@
+menu_item,qty_sold,ingredient_code,ingredient_name,ingredient_type,consumed_qty,unit,price_per_unit,subtotal,qty_per_unit,cost_per_unit
+Filter Coffee Ice-Cream,16.0,513,Filter Coffee Ice Cream (700gm= 1 Bucket),RM,1.92,Kg,231.5124286317994,444.5,0.12,27.7812
+Filter Coffee Ice-Cream,16.0,97,Paper Napkin (1pkt = 100pc),RM,16.0,Pc,0.23037295446244285,3.68,1.0,0.23
+Tomato Rice,37.0,211,Steam Rice Bucket,RM,5.55,Kg,56.286965344612774,312.41,0.15,8.4435
+Tomato Rice,37.0,84,Banana Leaf Big (1bundle = 50pc),RM,15.0,Pc,1.703601473376457,25.5,0.40541,0.6892
+Tomato Rice,37.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,1.11,Ltr,150.3014727467051,166.83,0.03,4.5089
+Tomato Rice,37.0,132,Onion,RM,1.85,Kg,42.55770583508858,78.74,0.05,2.1281
+Tomato Rice,37.0,116,Raw Green Chili,RM,0.074,Kg,74.40646916516131,5.21,0.002,0.1408
+Tomato Rice,37.0,108,Ginger,RM,0.555,Kg,131.32663125194048,72.23,0.015,1.9522
+Tomato Rice,37.0,131,Curry Leaves,RM,0.037,Kg,70.81733193701771,2.83,0.001,0.0765
+Tomato Rice,37.0,25,Turmeric Powder,RM,37.0,gm,0.340556695336546,12.58,1.0,0.34
+Tomato Rice,37.0,29,Salt,RM,0.185,Kg,27.13239693784672,5.15,0.005,0.1392
+Tomato Rice,37.0,97,Paper Napkin (1pkt = 100pc),RM,37.0,Pc,0.23037295446244285,8.51,1.0,0.23
+Tomato Rice,37.0,30,Appalam Papad (1pkt = 47pc),RM,37.0,Pc,3.8225628521104107,141.34,1.0,3.82
+Tomato Rice,37.0,110,Compartment Tray With Lid - 2CP (1pkt = 25pc),RM,22.0,Pc,6.976966408845769,153.56,0.59459,4.1503
+Tomato Rice,37.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,22.0,Pc,1.182894040567659,25.96,0.59459,0.7016
+Tomato Rice,37.0,98,Carry Bag - Small (1pkt = 100pc),RM,22.0,Pc,7.309971955277055,160.82,0.59459,4.3465
+Tomato Rice,37.0,105,Paper Sleeve (1pkt = 50pc),RM,22.0,Pc,2.564001453406654,56.32,0.59459,1.5222
+Tomato Rice,37.0,115,Coriander Leaves,RM,0.37,Kg,99.8851752413249,36.96,0.01,0.9989
+Tomato Rice,37.0,141,Tomato,RM,1.48,Kg,40.14091608454381,59.41,0.04,1.6057
+Tomato Rice,37.0,32,Whole Cumin,RM,0.037,Kg,570.8962149163865,22.84,0.001,0.6173
+Tomato Rice,37.0,34,Kashmiri Chili Powder,RM,185.0,gm,0.8049313245739148,148.0,5.0,4.0
+Tomato Rice,37.0,221,Garam Masala Powder Bucket,RM,0.037,Kg,1267.696003976077,50.71,0.001,1.3705
+Tomato Rice,37.0,100,Garlic,RM,0.555,Kg,142.5845948296042,78.42,0.015,2.1195
+Bisbelle Bhaat,18.0,211,Steam Rice Bucket,RM,1.98,Kg,56.286965344612774,111.45,0.11,6.1917
+Bisbelle Bhaat,18.0,84,Banana Leaf Big (1bundle = 50pc),RM,5.0,Pc,1.703601473376457,8.5,0.27778,0.4722
+Bisbelle Bhaat,18.0,116,Raw Green Chili,RM,0.036,Kg,74.40646916516131,2.98,0.002,0.1656
+Bisbelle Bhaat,18.0,131,Curry Leaves,RM,0.018,Kg,70.81733193701771,1.42,0.001,0.0789
+Bisbelle Bhaat,18.0,21,RO Water,RM,0.09,Ltr,0.0,0.0,0.005,0.0
+Bisbelle Bhaat,18.0,29,Salt,RM,0.054,Kg,27.13239693784672,1.36,0.003,0.0756
+Bisbelle Bhaat,18.0,97,Paper Napkin (1pkt = 100pc),RM,18.0,Pc,0.23037295446244285,4.14,1.0,0.23
+Bisbelle Bhaat,18.0,30,Appalam Papad (1pkt = 47pc),RM,18.0,Pc,3.8225628521104107,68.76,1.0,3.82
+Bisbelle Bhaat,18.0,110,Compartment Tray With Lid - 2CP (1pkt = 25pc),RM,13.0,Pc,6.976966408845769,90.74,0.72222,5.0411
+Bisbelle Bhaat,18.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,13.0,Pc,1.182894040567659,15.34,0.72222,0.8522
+Bisbelle Bhaat,18.0,98,Carry Bag - Small (1pkt = 100pc),RM,13.0,Pc,7.309971955277055,95.03,0.72222,5.2794
+Bisbelle Bhaat,18.0,105,Paper Sleeve (1pkt = 50pc),RM,13.0,Pc,2.564001453406654,33.28,0.72222,1.8489
+Bisbelle Bhaat,18.0,184,Sambar Bucket,RM,7.2,Ltr,26.365123238948957,189.86,0.4,10.5478
+Bisbelle Bhaat,18.0,115,Coriander Leaves,RM,0.054,Kg,99.8851752413249,4.99,0.003,0.2772
+Bisbelle Bhaat,18.0,75,Ghee,RM,0.27,Kg,704.7318063212573,190.28,0.015,10.5711
+Bisbelle Bhaat,18.0,53,Sugar,RM,0.09,Kg,49.02456184895188,4.41,0.005,0.245
+Bisbelle Bhaat,18.0,32,Whole Cumin,RM,0.018,Kg,570.8962149163865,11.42,0.001,0.6344
+Bisbelle Bhaat,18.0,20,Raw Imli,RM,0.18,Kg,0.0,0.0,0.01,0.0
+Bisbelle Bhaat,18.0,181,Raw Mango Pickle Bucket,RM,0.09,Kg,174.25719240350165,15.68,0.005,0.8711
+Curd Rice,28.0,211,Steam Rice Bucket,RM,2.8,Kg,56.286965344612774,157.61,0.1,5.6289
+Curd Rice,28.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.28,Ltr,150.3014727467051,42.08,0.01,1.5029
+Curd Rice,28.0,116,Raw Green Chili,RM,0.056,Kg,74.40646916516131,4.46,0.002,0.1593
+Curd Rice,28.0,108,Ginger,RM,0.084,Kg,131.32663125194048,10.51,0.003,0.3754
+Curd Rice,28.0,131,Curry Leaves,RM,0.028,Kg,70.81733193701771,2.12,0.001,0.0757
+Curd Rice,28.0,21,RO Water,RM,7.0,Ltr,0.0,0.0,0.25,0.0
+Curd Rice,28.0,29,Salt,RM,0.196,Kg,27.13239693784672,5.43,0.007,0.1939
+Curd Rice,28.0,97,Paper Napkin (1pkt = 100pc),RM,28.0,Pc,0.23037295446244285,6.44,1.0,0.23
+Curd Rice,28.0,30,Appalam Papad (1pkt = 47pc),RM,28.0,Pc,3.8225628521104107,106.96,1.0,3.82
+Curd Rice,28.0,110,Compartment Tray With Lid - 2CP (1pkt = 25pc),RM,25.0,Pc,6.976966408845769,174.5,0.89286,6.2321
+Curd Rice,28.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,25.0,Pc,1.182894040567659,29.5,0.89286,1.0536
+Curd Rice,28.0,98,Carry Bag - Small (1pkt = 100pc),RM,25.0,Pc,7.309971955277055,182.75,0.89286,6.5268
+Curd Rice,28.0,105,Paper Sleeve (1pkt = 50pc),RM,25.0,Pc,2.564001453406654,64.0,0.89286,2.2857
+Curd Rice,28.0,235,Raw Curd,RM,2.8,Kg,70.72940641437685,198.04,0.1,7.0729
+Curd Rice,28.0,91,Milk (Adya Dairy),RM,0.84,Ltr,61.081702898027864,51.31,0.03,1.8325
+Curd Rice,28.0,48,Dosa Daal (Urad),RM,0.28,Kg,129.97204637983205,36.39,0.01,1.2996
+Curd Rice,28.0,32,Whole Cumin,RM,0.028,Kg,570.8962149163865,17.13,0.001,0.6118
+Curd Rice,28.0,181,Raw Mango Pickle Bucket,RM,0.28,Kg,174.25719240350165,48.79,0.01,1.7425
+Curd Rice,28.0,84,Banana Leaf Big (1bundle = 50pc),RM,3.0,Pc,1.703601473376457,5.1,0.10714,0.1821
+Dosa Coffee Benne Tiffin,30.0,92,Banana Leaf Small (1bundle = 50pc),RM,30.0,Pc,1.25004021314515,37.5,1.0,1.25
+Dosa Coffee Benne Tiffin,30.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.3,Ltr,150.3014727467051,45.09,0.01,1.503
+Dosa Coffee Benne Tiffin,30.0,218,Idli Pc Raw (1 Pkt =40pc),RM,30.0,Pc,2.019284352521556,60.6,1.0,2.02
+Dosa Coffee Benne Tiffin,30.0,116,Raw Green Chili,RM,0.066,Kg,74.40646916516131,5.21,0.0022,0.1737
+Dosa Coffee Benne Tiffin,30.0,108,Ginger,RM,0.075,Kg,131.32663125194048,10.51,0.0025,0.3503
+Dosa Coffee Benne Tiffin,30.0,21,RO Water,RM,3.75,Ltr,0.0,0.0,0.125,0.0
+Dosa Coffee Benne Tiffin,30.0,29,Salt,RM,0.094,Kg,27.13239693784672,2.44,0.00313,0.0813
+Dosa Coffee Benne Tiffin,30.0,97,Paper Napkin (1pkt = 100pc),RM,30.0,Pc,0.23037295446244285,6.9,1.0,0.23
+Dosa Coffee Benne Tiffin,30.0,56,Cottons Lemonade,RM,30.0,Pc,17.495102465948545,525.0,1.0,17.5
+Dosa Coffee Benne Tiffin,30.0,47,Fried Chana Daal,RM,0.938,Kg,103.52067122738376,97.31,0.03127,3.2437
+Dosa Coffee Benne Tiffin,30.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,30.0,Pc,1.182894040567659,35.4,1.0,1.18
+Dosa Coffee Benne Tiffin,30.0,142,Carry Bag - Large(1pkt = 100pc),RM,30.0,Pc,10.53748317930936,316.2,1.0,10.54
+Dosa Coffee Benne Tiffin,30.0,105,Paper Sleeve (1pkt = 50pc),RM,30.0,Pc,2.564001453406654,76.8,1.0,2.56
+Dosa Coffee Benne Tiffin,30.0,391,White Butter,RM,0.45,Kg,579.8475688818112,260.93,0.015,8.6977
+Dosa Coffee Benne Tiffin,30.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,2.25,Kg,32.852335731680704,73.91,0.075,2.4637
+Dosa Coffee Benne Tiffin,30.0,229,Coconut Shredded,RM,1.313,Kg,141.5076066259222,185.38,0.04377,6.1793
+Dosa Coffee Benne Tiffin,30.0,53,Sugar,RM,0.005,Kg,49.02456184895188,0.0,0.00017,0.0
+Dosa Coffee Benne Tiffin,30.0,206,Medu Vada Batter Mix,RM,1.8,Kg,75.31794072052114,135.58,0.06,4.5193
+Dosa Coffee Benne Tiffin,30.0,15,Black Salt,RM,90.0,gm,0.02672023788527695,2.7,3.0,0.09
+Dosa Coffee Benne Tiffin,30.0,118,Compartment Tray With Lid - 5CP (1pkt = 25pc),RM,30.0,Pc,9.966572348591667,299.1,1.0,9.97
+Dosa Coffee Benne Tiffin,30.0,446,Potato Masala Bucket Outlet,SF,4.5,Kg,42.78058589216412,192.51,0.15,6.417
+Idli Plate (2 pc),668.0,92,Banana Leaf Small (1bundle = 50pc),RM,178.0,Pc,1.25004021314515,222.5,0.26647,0.3331
+Idli Plate (2 pc),668.0,218,Idli Pc Raw (1 Pkt =40pc),RM,1336.0,Pc,2.019284352521556,2698.72,2.0,4.04
+Idli Plate (2 pc),668.0,116,Raw Green Chili,RM,1.336,Kg,74.40646916516131,99.71,0.002,0.1493
+Idli Plate (2 pc),668.0,108,Ginger,RM,1.336,Kg,131.32663125194048,175.98,0.002,0.2634
+Idli Plate (2 pc),668.0,21,RO Water,RM,80.16,Ltr,0.0,0.0,0.12,0.0
+Idli Plate (2 pc),668.0,29,Salt,RM,2.672,Kg,27.13239693784672,72.44,0.004,0.1084
+Idli Plate (2 pc),668.0,97,Paper Napkin (1pkt = 100pc),RM,668.0,Pc,0.23037295446244285,153.64,1.0,0.23
+Idli Plate (2 pc),668.0,47,Fried Chana Daal,RM,20.04,Kg,103.52067122738376,2074.54,0.03,3.1056
+Idli Plate (2 pc),668.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,490.0,Pc,4.505947440252137,2209.9,0.73353,3.3082
+Idli Plate (2 pc),668.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,490.0,Pc,1.182894040567659,578.2,0.73353,0.8656
+Idli Plate (2 pc),668.0,98,Carry Bag - Small (1pkt = 100pc),RM,490.0,Pc,7.309971955277055,3581.9,0.73353,5.3621
+Idli Plate (2 pc),668.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,980.0,Pc,3.603089449256527,3528.0,1.46707,5.2814
+Idli Plate (2 pc),668.0,207,Special Daal Bucket,RM,2.004,Kg,153.33997340097807,306.68,0.003,0.4591
+Idli Plate (2 pc),668.0,229,Coconut Shredded,RM,26.72,Kg,141.5076066259222,3781.15,0.04,5.6604
+Idli Plate (2 pc),668.0,53,Sugar,RM,1.336,Kg,49.02456184895188,65.69,0.002,0.0983
+Butter Idli Plate (2pc),18.0,92,Banana Leaf Small (1bundle = 50pc),RM,8.0,Pc,1.25004021314515,10.0,0.44444,0.5556
+Butter Idli Plate (2pc),18.0,218,Idli Pc Raw (1 Pkt =40pc),RM,36.0,Pc,2.019284352521556,72.72,2.0,4.04
+Butter Idli Plate (2pc),18.0,116,Raw Green Chili,RM,0.036,Kg,74.40646916516131,2.98,0.002,0.1656
+Butter Idli Plate (2pc),18.0,108,Ginger,RM,0.036,Kg,131.32663125194048,5.25,0.002,0.2917
+Butter Idli Plate (2pc),18.0,21,RO Water,RM,2.16,Ltr,0.0,0.0,0.12,0.0
+Butter Idli Plate (2pc),18.0,29,Salt,RM,0.072,Kg,27.13239693784672,1.9,0.004,0.1056
+Butter Idli Plate (2pc),18.0,97,Paper Napkin (1pkt = 100pc),RM,18.0,Pc,0.23037295446244285,4.14,1.0,0.23
+Butter Idli Plate (2pc),18.0,47,Fried Chana Daal,RM,0.54,Kg,103.52067122738376,55.9,0.03,3.1056
+Butter Idli Plate (2pc),18.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,10.0,Pc,4.505947440252137,45.1,0.55556,2.5056
+Butter Idli Plate (2pc),18.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,10.0,Pc,1.182894040567659,11.8,0.55556,0.6556
+Butter Idli Plate (2pc),18.0,98,Carry Bag - Small (1pkt = 100pc),RM,10.0,Pc,7.309971955277055,73.1,0.55556,4.0611
+Butter Idli Plate (2pc),18.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,20.0,Pc,3.603089449256527,72.0,1.11111,4.0
+Butter Idli Plate (2pc),18.0,14,Amul Butter,RM,0.18,Kg,545.6704860150979,98.22,0.01,5.4567
+Butter Idli Plate (2pc),18.0,207,Special Daal Bucket,RM,0.054,Kg,153.33997340097807,7.67,0.003,0.4261
+Butter Idli Plate (2pc),18.0,229,Coconut Shredded,RM,0.72,Kg,141.5076066259222,101.89,0.04,5.6606
+Butter Idli Plate (2pc),18.0,53,Sugar,RM,0.036,Kg,49.02456184895188,1.96,0.002,0.1089
+Rasam & Papad,20.0,92,Banana Leaf Small (1bundle = 50pc),RM,20.0,Pc,1.25004021314515,25.0,1.0,1.25
+Rasam & Papad,20.0,97,Paper Napkin (1pkt = 100pc),RM,20.0,Pc,0.23037295446244285,4.6,1.0,0.23
+Rasam & Papad,20.0,30,Appalam Papad (1pkt = 47pc),RM,20.0,Pc,3.8225628521104107,76.4,1.0,3.82
+Rasam & Papad,20.0,115,Coriander Leaves,RM,0.02,Kg,99.8851752413249,2.0,0.001,0.1
+Rasam & Papad,20.0,177,Rasam Bucket,RM,3.0,Ltr,34.922956594648184,104.76,0.15,5.238
+Upma,29.0,92,Banana Leaf Small (1bundle = 50pc),RM,20.0,Pc,1.25004021314515,25.0,0.68966,0.8621
+Upma,29.0,132,Onion,RM,0.464,Kg,42.55770583508858,19.58,0.016,0.6752
+Upma,29.0,116,Raw Green Chili,RM,0.145,Kg,74.40646916516131,11.16,0.005,0.3848
+Upma,29.0,108,Ginger,RM,0.058,Kg,131.32663125194048,7.88,0.002,0.2717
+Upma,29.0,21,RO Water,RM,6.38,Ltr,0.0,0.0,0.22,0.0
+Upma,29.0,29,Salt,RM,0.116,Kg,27.13239693784672,3.26,0.004,0.1124
+Upma,29.0,97,Paper Napkin (1pkt = 100pc),RM,29.0,Pc,0.23037295446244285,6.67,1.0,0.23
+Upma,29.0,47,Fried Chana Daal,RM,0.87,Kg,103.52067122738376,90.06,0.03,3.1055
+Upma,29.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,9.0,Pc,1.182894040567659,10.62,0.31034,0.3662
+Upma,29.0,98,Carry Bag - Small (1pkt = 100pc),RM,9.0,Pc,7.309971955277055,65.79,0.31034,2.2686
+Upma,29.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,27.0,Pc,3.603089449256527,97.2,0.93103,3.3517
+Upma,29.0,222,Upma Mix (1pkt = 300gm),RM,1.74,Kg,86.63826382482208,150.75,0.06,5.1983
+Upma,29.0,141,Tomato,RM,0.464,Kg,40.14091608454381,18.46,0.016,0.6366
+Upma,29.0,91,Milk (Adya Dairy),RM,2.9,Ltr,61.081702898027864,177.13,0.1,6.1079
+Upma,29.0,75,Ghee,RM,1.044,Kg,704.7318063212573,732.92,0.036,25.2731
+Upma,29.0,207,Special Daal Bucket,RM,0.087,Kg,153.33997340097807,13.8,0.003,0.4759
+Upma,29.0,229,Coconut Shredded,RM,1.16,Kg,141.5076066259222,164.15,0.04,5.6603
+Upma,29.0,53,Sugar,RM,0.058,Kg,49.02456184895188,2.94,0.002,0.1014
+Medu Vada Plate (2 pc),217.0,92,Banana Leaf Small (1bundle = 50pc),RM,71.0,Pc,1.25004021314515,88.75,0.32719,0.409
+Medu Vada Plate (2 pc),217.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,4.34,Ltr,150.3014727467051,652.3,0.02,3.006
+Medu Vada Plate (2 pc),217.0,116,Raw Green Chili,RM,0.434,Kg,74.40646916516131,32.0,0.002,0.1475
+Medu Vada Plate (2 pc),217.0,108,Ginger,RM,0.434,Kg,131.32663125194048,56.47,0.002,0.2602
+Medu Vada Plate (2 pc),217.0,21,RO Water,RM,26.04,Ltr,0.0,0.0,0.12,0.0
+Medu Vada Plate (2 pc),217.0,29,Salt,RM,0.868,Kg,27.13239693784672,23.6,0.004,0.1088
+Medu Vada Plate (2 pc),217.0,97,Paper Napkin (1pkt = 100pc),RM,217.0,Pc,0.23037295446244285,49.91,1.0,0.23
+Medu Vada Plate (2 pc),217.0,47,Fried Chana Daal,RM,6.51,Kg,103.52067122738376,673.92,0.03,3.1056
+Medu Vada Plate (2 pc),217.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,146.0,Pc,4.505947440252137,658.46,0.67281,3.0344
+Medu Vada Plate (2 pc),217.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,146.0,Pc,1.182894040567659,172.28,0.67281,0.7939
+Medu Vada Plate (2 pc),217.0,98,Carry Bag - Small (1pkt = 100pc),RM,146.0,Pc,7.309971955277055,1067.26,0.67281,4.9182
+Medu Vada Plate (2 pc),217.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,292.0,Pc,3.603089449256527,1051.2,1.34562,4.8442
+Medu Vada Plate (2 pc),217.0,207,Special Daal Bucket,RM,0.651,Kg,153.33997340097807,99.67,0.003,0.4593
+Medu Vada Plate (2 pc),217.0,229,Coconut Shredded,RM,8.68,Kg,141.5076066259222,1228.31,0.04,5.6604
+Medu Vada Plate (2 pc),217.0,53,Sugar,RM,0.434,Kg,49.02456184895188,21.08,0.002,0.0971
+Medu Vada Plate (2 pc),217.0,206,Medu Vada Batter Mix,RM,27.125,Kg,75.31794072052114,2043.43,0.125,9.4167
+Malkapodi Idli Plate (2pc),92.0,92,Banana Leaf Small (1bundle = 50pc),RM,23.0,Pc,1.25004021314515,28.75,0.25,0.3125
+Malkapodi Idli Plate (2pc),92.0,218,Idli Pc Raw (1 Pkt =40pc),RM,184.0,Pc,2.019284352521556,371.68,2.0,4.04
+Malkapodi Idli Plate (2pc),92.0,116,Raw Green Chili,RM,0.184,Kg,74.40646916516131,13.39,0.002,0.1455
+Malkapodi Idli Plate (2pc),92.0,108,Ginger,RM,0.184,Kg,131.32663125194048,23.64,0.002,0.257
+Malkapodi Idli Plate (2pc),92.0,21,RO Water,RM,11.04,Ltr,0.0,0.0,0.12,0.0
+Malkapodi Idli Plate (2pc),92.0,29,Salt,RM,0.368,Kg,27.13239693784672,10.04,0.004,0.1091
+Malkapodi Idli Plate (2pc),92.0,97,Paper Napkin (1pkt = 100pc),RM,92.0,Pc,0.23037295446244285,21.16,1.0,0.23
+Malkapodi Idli Plate (2pc),92.0,47,Fried Chana Daal,RM,2.76,Kg,103.52067122738376,285.72,0.03,3.1057
+Malkapodi Idli Plate (2pc),92.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,69.0,Pc,4.505947440252137,311.19,0.75,3.3825
+Malkapodi Idli Plate (2pc),92.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,69.0,Pc,1.182894040567659,81.42,0.75,0.885
+Malkapodi Idli Plate (2pc),92.0,98,Carry Bag - Small (1pkt = 100pc),RM,69.0,Pc,7.309971955277055,504.39,0.75,5.4825
+Malkapodi Idli Plate (2pc),92.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,138.0,Pc,3.603089449256527,496.8,1.5,5.4
+Malkapodi Idli Plate (2pc),92.0,75,Ghee,RM,0.92,Kg,704.7318063212573,648.35,0.01,7.0473
+Malkapodi Idli Plate (2pc),92.0,207,Special Daal Bucket,RM,0.276,Kg,153.33997340097807,42.94,0.003,0.4667
+Malkapodi Idli Plate (2pc),92.0,229,Coconut Shredded,RM,3.68,Kg,141.5076066259222,520.76,0.04,5.6604
+Malkapodi Idli Plate (2pc),92.0,53,Sugar,RM,0.184,Kg,49.02456184895188,8.82,0.002,0.0959
+Malkapodi Idli Plate (2pc),92.0,193,Malkapodi Bucket,RM,0.92,Kg,169.3584292783018,155.81,0.01,1.6936
+Idli Vada Plate,138.0,92,Banana Leaf Small (1bundle = 50pc),RM,34.0,Pc,1.25004021314515,42.5,0.24638,0.308
+Idli Vada Plate,138.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.69,Ltr,150.3014727467051,103.71,0.005,0.7515
+Idli Vada Plate,138.0,218,Idli Pc Raw (1 Pkt =40pc),RM,240.0,Pc,2.019284352521556,484.8,1.73913,3.513
+Idli Vada Plate,138.0,116,Raw Green Chili,RM,0.276,Kg,74.40646916516131,20.83,0.002,0.1509
+Idli Vada Plate,138.0,108,Ginger,RM,0.276,Kg,131.32663125194048,36.77,0.002,0.2664
+Idli Vada Plate,138.0,21,RO Water,RM,17.25,Ltr,0.0,0.0,0.125,0.0
+Idli Vada Plate,138.0,29,Salt,RM,0.552,Kg,27.13239693784672,14.92,0.004,0.1081
+Idli Vada Plate,138.0,47,Fried Chana Daal,RM,4.14,Kg,103.52067122738376,428.57,0.03,3.1056
+Idli Vada Plate,138.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,104.0,Pc,4.505947440252137,469.04,0.75362,3.3988
+Idli Vada Plate,138.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,104.0,Pc,1.182894040567659,122.72,0.75362,0.8893
+Idli Vada Plate,138.0,98,Carry Bag - Small (1pkt = 100pc),RM,104.0,Pc,7.309971955277055,760.24,0.75362,5.509
+Idli Vada Plate,138.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,208.0,Pc,3.603089449256527,748.8,1.50725,5.4261
+Idli Vada Plate,138.0,207,Special Daal Bucket,RM,0.414,Kg,153.33997340097807,62.87,0.003,0.4556
+Idli Vada Plate,138.0,229,Coconut Shredded,RM,5.52,Kg,141.5076066259222,781.14,0.04,5.6604
+Idli Vada Plate,138.0,53,Sugar,RM,0.276,Kg,49.02456184895188,13.73,0.002,0.0995
+Idli Vada Plate,138.0,206,Medu Vada Batter Mix,RM,8.556,Kg,75.31794072052114,644.74,0.062,4.672
+Thatte Idli Plate,239.0,92,Banana Leaf Small (1bundle = 50pc),RM,143.0,Pc,1.25004021314515,178.75,0.59833,0.7479
+Thatte Idli Plate,239.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.956,Ltr,150.3014727467051,144.29,0.004,0.6037
+Thatte Idli Plate,239.0,116,Raw Green Chili,RM,1.912,Kg,74.40646916516131,142.12,0.008,0.5946
+Thatte Idli Plate,239.0,108,Ginger,RM,0.239,Kg,131.32663125194048,31.52,0.001,0.1319
+Thatte Idli Plate,239.0,131,Curry Leaves,RM,0.239,Kg,70.81733193701771,17.0,0.001,0.0711
+Thatte Idli Plate,239.0,21,RO Water,RM,28.68,Ltr,0.0,0.0,0.12,0.0
+Thatte Idli Plate,239.0,29,Salt,RM,0.621,Kg,27.13239693784672,16.82,0.0026,0.0704
+Thatte Idli Plate,239.0,97,Paper Napkin (1pkt = 100pc),RM,239.0,Pc,0.23037295446244285,54.97,1.0,0.23
+Thatte Idli Plate,239.0,47,Fried Chana Daal,RM,9.56,Kg,103.52067122738376,989.65,0.04,4.1408
+Thatte Idli Plate,239.0,40,Dry Red Chili,RM,239.0,gm,0.23817300099128869,57.36,1.0,0.24
+Thatte Idli Plate,239.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,96.0,Pc,4.505947440252137,432.96,0.40167,1.8115
+Thatte Idli Plate,239.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,96.0,Pc,1.182894040567659,113.28,0.40167,0.474
+Thatte Idli Plate,239.0,98,Carry Bag - Small (1pkt = 100pc),RM,96.0,Pc,7.309971955277055,701.76,0.40167,2.9362
+Thatte Idli Plate,239.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,192.0,Pc,3.603089449256527,691.2,0.80335,2.8921
+Thatte Idli Plate,239.0,26,Jaggery,RM,0.478,Kg,57.26513251387301,27.49,0.002,0.115
+Thatte Idli Plate,239.0,451,Mint leaf,RM,0.717,Kg,199.24980825117015,143.46,0.003,0.6003
+Thatte Idli Plate,239.0,329,Imli Water,RM,1.912,Ltr,25.47936351195457,48.67,0.008,0.2036
+Thatte Idli Plate,239.0,75,Ghee,RM,5.975,Kg,704.7318063212573,4214.29,0.025,17.633
+Thatte Idli Plate,239.0,229,Coconut Shredded,RM,7.648,Kg,141.5076066259222,1082.55,0.032,4.5295
+Thatte Idli Plate,239.0,27,Mustard Seed,RM,1195.0,gm,0.18475142983998463,215.1,5.0,0.9
+Thatte Idli Plate,239.0,48,Dosa Daal (Urad),RM,0.478,Kg,129.97204637983205,62.39,0.002,0.261
+Thatte Idli Plate,239.0,328,Spicy Coconut Chutney Mix 1Pkt (16gm),RM,2.151,Kg,156.52596078138978,336.54,0.009,1.4081
+Thatte Idli Plate,239.0,194,Thindi Malkapodi Powder Bucket,RM,3.585,Kg,194.77278181720277,699.22,0.015,2.9256
+Thatte Idli Plate,239.0,429,Thatte Idli Pc Raw,RM,239.0,Pc,5.075930902987548,1214.12,1.0,5.08
+Sambar Vada Plate (2pc),21.0,92,Banana Leaf Small (1bundle = 50pc),RM,21.0,Pc,1.25004021314515,26.25,1.0,1.25
+Sambar Vada Plate (2pc),21.0,116,Raw Green Chili,RM,0.042,Kg,74.40646916516131,2.98,0.002,0.1419
+Sambar Vada Plate (2pc),21.0,108,Ginger,RM,0.042,Kg,131.32663125194048,5.25,0.002,0.25
+Sambar Vada Plate (2pc),21.0,21,RO Water,RM,2.52,Ltr,0.0,0.0,0.12,0.0
+Sambar Vada Plate (2pc),21.0,29,Salt,RM,0.084,Kg,27.13239693784672,2.17,0.004,0.1033
+Sambar Vada Plate (2pc),21.0,97,Paper Napkin (1pkt = 100pc),RM,21.0,Pc,0.23037295446244285,4.83,1.0,0.23
+Sambar Vada Plate (2pc),21.0,47,Fried Chana Daal,RM,0.63,Kg,103.52067122738376,65.22,0.03,3.1057
+Sambar Vada Plate (2pc),21.0,207,Special Daal Bucket,RM,0.063,Kg,153.33997340097807,9.2,0.003,0.4381
+Sambar Vada Plate (2pc),21.0,229,Coconut Shredded,RM,0.84,Kg,141.5076066259222,118.87,0.04,5.6605
+Sambar Vada Plate (2pc),21.0,53,Sugar,RM,0.042,Kg,49.02456184895188,1.96,0.002,0.0933
+Sambar Vada Plate (2pc),21.0,206,Medu Vada Batter Mix,RM,2.625,Kg,75.31794072052114,198.09,0.125,9.4329
+Cheese Paniyaram (10 Pcs),13.0,92,Banana Leaf Small (1bundle = 50pc),RM,13.0,Pc,1.25004021314515,16.25,1.0,1.25
+Cheese Paniyaram (10 Pcs),13.0,190,Dosa Batter Mix,RM,3.25,Kg,32.79396150244082,106.57,0.25,8.1977
+Cheese Paniyaram (10 Pcs),13.0,132,Onion,RM,0.325,Kg,42.55770583508858,13.62,0.025,1.0477
+Cheese Paniyaram (10 Pcs),13.0,116,Raw Green Chili,RM,0.091,Kg,74.40646916516131,6.7,0.007,0.5154
+Cheese Paniyaram (10 Pcs),13.0,108,Ginger,RM,0.13,Kg,131.32663125194048,17.07,0.01,1.3131
+Cheese Paniyaram (10 Pcs),13.0,131,Curry Leaves,RM,0.026,Kg,70.81733193701771,2.12,0.002,0.1631
+Cheese Paniyaram (10 Pcs),13.0,21,RO Water,RM,1.625,Ltr,0.0,0.0,0.125,0.0
+Cheese Paniyaram (10 Pcs),13.0,29,Salt,RM,0.052,Kg,27.13239693784672,1.36,0.004,0.1046
+Cheese Paniyaram (10 Pcs),13.0,97,Paper Napkin (1pkt = 100pc),RM,13.0,Pc,0.23037295446244285,2.99,1.0,0.23
+Cheese Paniyaram (10 Pcs),13.0,47,Fried Chana Daal,RM,0.403,Kg,103.52067122738376,41.41,0.031,3.1854
+Cheese Paniyaram (10 Pcs),13.0,75,Ghee,RM,0.39,Kg,704.7318063212573,274.84,0.03,21.1415
+Cheese Paniyaram (10 Pcs),13.0,207,Special Daal Bucket,RM,0.026,Kg,153.33997340097807,4.6,0.002,0.3538
+Cheese Paniyaram (10 Pcs),13.0,229,Coconut Shredded,RM,0.559,Kg,141.5076066259222,79.25,0.043,6.0962
+Cheese Paniyaram (10 Pcs),13.0,53,Sugar,RM,0.026,Kg,49.02456184895188,1.47,0.002,0.1131
+Cheese Paniyaram (10 Pcs),13.0,68,Amul Cheese,RM,0.65,Kg,504.3544931815672,327.83,0.05,25.2177
+Paniyaram (10 Pcs),29.0,92,Banana Leaf Small (1bundle = 50pc),RM,6.0,Pc,1.25004021314515,7.5,0.2069,0.2586
+Paniyaram (10 Pcs),29.0,190,Dosa Batter Mix,RM,7.25,Kg,32.79396150244082,237.73,0.25,8.1976
+Paniyaram (10 Pcs),29.0,132,Onion,RM,0.725,Kg,42.55770583508858,30.64,0.025,1.0566
+Paniyaram (10 Pcs),29.0,116,Raw Green Chili,RM,0.145,Kg,74.40646916516131,11.16,0.005,0.3848
+Paniyaram (10 Pcs),29.0,108,Ginger,RM,0.29,Kg,131.32663125194048,38.09,0.01,1.3134
+Paniyaram (10 Pcs),29.0,131,Curry Leaves,RM,0.058,Kg,70.81733193701771,4.25,0.002,0.1466
+Paniyaram (10 Pcs),29.0,21,RO Water,RM,3.48,Ltr,0.0,0.0,0.12,0.0
+Paniyaram (10 Pcs),29.0,29,Salt,RM,0.116,Kg,27.13239693784672,3.26,0.004,0.1124
+Paniyaram (10 Pcs),29.0,97,Paper Napkin (1pkt = 100pc),RM,29.0,Pc,0.23037295446244285,6.67,1.0,0.23
+Paniyaram (10 Pcs),29.0,47,Fried Chana Daal,RM,0.87,Kg,103.52067122738376,90.06,0.03,3.1055
+Paniyaram (10 Pcs),29.0,75,Ghee,RM,0.58,Kg,704.7318063212573,408.74,0.02,14.0945
+Paniyaram (10 Pcs),29.0,229,Coconut Shredded,RM,1.16,Kg,141.5076066259222,164.15,0.04,5.6603
+Paniyaram (10 Pcs),29.0,53,Sugar,RM,0.058,Kg,49.02456184895188,2.94,0.002,0.1014
+Paniyaram (10 Pcs),29.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,23.0,Pc,4.505947440252137,103.73,0.7931,3.5769
+Paniyaram (10 Pcs),29.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,46.0,Pc,3.603089449256527,165.6,1.58621,5.7103
+Paniyaram (10 Pcs),29.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,23.0,Pc,1.182894040567659,27.14,0.7931,0.9359
+Paniyaram (10 Pcs),29.0,98,Carry Bag - Small (1pkt = 100pc),RM,23.0,Pc,7.309971955277055,168.13,0.7931,5.7976
+Srivilli Kheer,60.0,92,Banana Leaf Small (1bundle = 50pc),RM,60.0,Pc,1.25004021314515,75.0,1.0,1.25
+Srivilli Kheer,60.0,97,Paper Napkin (1pkt = 100pc),RM,60.0,Pc,0.23037295446244285,13.8,1.0,0.23
+Srivilli Kheer,60.0,503,Srivilli Kheer (1 Pc),RM,60.0,Pc,26.28066391581321,1576.8,1.0,26.28
+Srivilli Kheer,60.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,16.0,Pc,1.182894040567659,18.88,0.26667,0.3147
+Srivilli Kheer,60.0,98,Carry Bag - Small (1pkt = 100pc),RM,16.0,Pc,7.309971955277055,116.96,0.26667,1.9493
+Sambar Idli Pc,9.0,92,Banana Leaf Small (1bundle = 50pc),RM,9.0,Pc,1.25004021314515,11.25,1.0,1.25
+Sambar Idli Pc,9.0,218,Idli Pc Raw (1 Pkt =40pc),RM,9.0,Pc,2.019284352521556,18.18,1.0,2.02
+Sambar Idli Pc,9.0,116,Raw Green Chili,RM,0.018,Kg,74.40646916516131,1.49,0.002,0.1656
+Sambar Idli Pc,9.0,108,Ginger,RM,0.018,Kg,131.32663125194048,2.63,0.002,0.2922
+Sambar Idli Pc,9.0,21,RO Water,RM,1.08,Ltr,0.0,0.0,0.12,0.0
+Sambar Idli Pc,9.0,29,Salt,RM,0.036,Kg,27.13239693784672,1.09,0.004,0.1211
+Sambar Idli Pc,9.0,97,Paper Napkin (1pkt = 100pc),RM,9.0,Pc,0.23037295446244285,2.07,1.0,0.23
+Sambar Idli Pc,9.0,47,Fried Chana Daal,RM,0.27,Kg,103.52067122738376,27.95,0.03,3.1056
+Sambar Idli Pc,9.0,207,Special Daal Bucket,RM,0.027,Kg,153.33997340097807,4.6,0.003,0.5111
+Sambar Idli Pc,9.0,229,Coconut Shredded,RM,0.36,Kg,141.5076066259222,50.94,0.04,5.66
+Sambar Idli Pc,9.0,53,Sugar,RM,0.018,Kg,49.02456184895188,0.98,0.002,0.1089
+Sambar Vada Pc,14.0,92,Banana Leaf Small (1bundle = 50pc),RM,14.0,Pc,1.25004021314515,17.5,1.0,1.25
+Sambar Vada Pc,14.0,116,Raw Green Chili,RM,0.028,Kg,74.40646916516131,2.23,0.002,0.1593
+Sambar Vada Pc,14.0,108,Ginger,RM,0.028,Kg,131.32663125194048,3.94,0.002,0.2814
+Sambar Vada Pc,14.0,21,RO Water,RM,1.68,Ltr,0.0,0.0,0.12,0.0
+Sambar Vada Pc,14.0,29,Salt,RM,0.056,Kg,27.13239693784672,1.63,0.004,0.1164
+Sambar Vada Pc,14.0,47,Fried Chana Daal,RM,0.42,Kg,103.52067122738376,43.48,0.03,3.1057
+Sambar Vada Pc,14.0,207,Special Daal Bucket,RM,0.042,Kg,153.33997340097807,6.13,0.003,0.4379
+Sambar Vada Pc,14.0,229,Coconut Shredded,RM,0.56,Kg,141.5076066259222,79.25,0.04,5.6607
+Sambar Vada Pc,14.0,53,Sugar,RM,0.028,Kg,49.02456184895188,1.47,0.002,0.105
+Sambar Vada Pc,14.0,206,Medu Vada Batter Mix,RM,0.868,Kg,75.31794072052114,65.53,0.062,4.6807
+Sambar Idli Plate (2pc),9.0,92,Banana Leaf Small (1bundle = 50pc),RM,9.0,Pc,1.25004021314515,11.25,1.0,1.25
+Sambar Idli Plate (2pc),9.0,218,Idli Pc Raw (1 Pkt =40pc),RM,18.0,Pc,2.019284352521556,36.36,2.0,4.04
+Sambar Idli Plate (2pc),9.0,116,Raw Green Chili,RM,0.018,Kg,74.40646916516131,1.49,0.002,0.1656
+Sambar Idli Plate (2pc),9.0,108,Ginger,RM,0.018,Kg,131.32663125194048,2.63,0.002,0.2922
+Sambar Idli Plate (2pc),9.0,21,RO Water,RM,1.08,Ltr,0.0,0.0,0.12,0.0
+Sambar Idli Plate (2pc),9.0,29,Salt,RM,0.036,Kg,27.13239693784672,1.09,0.004,0.1211
+Sambar Idli Plate (2pc),9.0,97,Paper Napkin (1pkt = 100pc),RM,9.0,Pc,0.23037295446244285,2.07,1.0,0.23
+Sambar Idli Plate (2pc),9.0,47,Fried Chana Daal,RM,0.27,Kg,103.52067122738376,27.95,0.03,3.1056
+Sambar Idli Plate (2pc),9.0,207,Special Daal Bucket,RM,0.027,Kg,153.33997340097807,4.6,0.003,0.5111
+Sambar Idli Plate (2pc),9.0,229,Coconut Shredded,RM,0.36,Kg,141.5076066259222,50.94,0.04,5.66
+Sambar Idli Plate (2pc),9.0,53,Sugar,RM,0.018,Kg,49.02456184895188,0.98,0.002,0.1089
+Kesari Halwa,109.0,92,Banana Leaf Small (1bundle = 50pc),RM,36.0,Pc,1.25004021314515,45.0,0.33028,0.4128
+Kesari Halwa,109.0,21,RO Water,RM,10.246,Ltr,0.0,0.0,0.094,0.0
+Kesari Halwa,109.0,97,Paper Napkin (1pkt = 100pc),RM,109.0,Pc,0.23037295446244285,25.07,1.0,0.23
+Kesari Halwa,109.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,73.0,Pc,1.182894040567659,86.14,0.66972,0.7903
+Kesari Halwa,109.0,98,Carry Bag - Small (1pkt = 100pc),RM,73.0,Pc,7.309971955277055,533.63,0.66972,4.8957
+Kesari Halwa,109.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,73.0,Pc,3.603089449256527,262.8,0.66972,2.411
+Kesari Halwa,109.0,217,Kesari Halwa Mix  (1pkt = 550gm),RM,7.521,Kg,69.19901016806514,520.38,0.069,4.7741
+Kesari Halwa,109.0,75,Ghee,RM,2.725,Kg,704.7318063212573,1923.91,0.025,17.6506
+Kesari Halwa,109.0,39,Cashew,RM,0.109,Kg,838.1582076999871,92.2,0.001,0.8459
+Kesari Halwa,109.0,9,Raisin,RM,0.109,Kg,393.97763828197,43.34,0.001,0.3976
+Dahi Idli,6.0,92,Banana Leaf Small (1bundle = 50pc),RM,6.0,Pc,1.25004021314515,7.5,1.0,1.25
+Dahi Idli,6.0,218,Idli Pc Raw (1 Pkt =40pc),RM,12.0,Pc,2.019284352521556,24.24,2.0,4.04
+Dahi Idli,6.0,116,Raw Green Chili,RM,0.015,Kg,74.40646916516131,1.49,0.0025,0.2483
+Dahi Idli,6.0,108,Ginger,RM,0.015,Kg,131.32663125194048,2.63,0.0025,0.4383
+Dahi Idli,6.0,131,Curry Leaves,RM,0.002,Kg,70.81733193701771,0.0,0.00033,0.0
+Dahi Idli,6.0,97,Paper Napkin (1pkt = 100pc),RM,6.0,Pc,0.23037295446244285,1.38,1.0,0.23
+Dahi Idli,6.0,310,Dahi Bucket Mix (1pkt =105gm),RM,0.15,Kg,63.29345749038362,9.49,0.025,1.5817
+Dahi Idli,6.0,235,Raw Curd,RM,1.5,Kg,70.72940641437685,106.1,0.25,17.6833
+Dahi Idli,6.0,32,Whole Cumin,RM,0.002,Kg,570.8962149163865,0.0,0.00033,0.0
+Dahi Idli,6.0,208,Chaat Masala Bucket,RM,0.012,Kg,358.1226020596591,3.58,0.002,0.5967
+Kesari Halwa (Complimentary),3.0,92,Banana Leaf Small (1bundle = 50pc),RM,3.0,Pc,1.25004021314515,3.75,1.0,1.25
+Kesari Halwa (Complimentary),3.0,21,RO Water,RM,0.282,Ltr,0.0,0.0,0.094,0.0
+Kesari Halwa (Complimentary),3.0,97,Paper Napkin (1pkt = 100pc),RM,3.0,Pc,0.23037295446244285,0.69,1.0,0.23
+Kesari Halwa (Complimentary),3.0,217,Kesari Halwa Mix  (1pkt = 550gm),RM,0.207,Kg,69.19901016806514,14.53,0.069,4.8433
+Kesari Halwa (Complimentary),3.0,75,Ghee,RM,0.075,Kg,704.7318063212573,56.38,0.025,18.7933
+Kesari Halwa (Complimentary),3.0,39,Cashew,RM,0.003,Kg,838.1582076999871,0.0,0.001,0.0
+Kesari Halwa (Complimentary),3.0,9,Raisin,RM,0.003,Kg,393.97763828197,0.0,0.001,0.0
+Ghee Idli Plate (2pc),30.0,92,Banana Leaf Small (1bundle = 50pc),RM,6.0,Pc,1.25004021314515,7.5,0.2,0.25
+Ghee Idli Plate (2pc),30.0,218,Idli Pc Raw (1 Pkt =40pc),RM,60.0,Pc,2.019284352521556,121.2,2.0,4.04
+Ghee Idli Plate (2pc),30.0,116,Raw Green Chili,RM,0.06,Kg,74.40646916516131,4.46,0.002,0.1487
+Ghee Idli Plate (2pc),30.0,108,Ginger,RM,0.06,Kg,131.32663125194048,7.88,0.002,0.2627
+Ghee Idli Plate (2pc),30.0,21,RO Water,RM,3.6,Ltr,0.0,0.0,0.12,0.0
+Ghee Idli Plate (2pc),30.0,29,Salt,RM,0.12,Kg,27.13239693784672,3.26,0.004,0.1087
+Ghee Idli Plate (2pc),30.0,97,Paper Napkin (1pkt = 100pc),RM,30.0,Pc,0.23037295446244285,6.9,1.0,0.23
+Ghee Idli Plate (2pc),30.0,47,Fried Chana Daal,RM,0.9,Kg,103.52067122738376,93.17,0.03,3.1057
+Ghee Idli Plate (2pc),30.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,24.0,Pc,4.505947440252137,108.24,0.8,3.608
+Ghee Idli Plate (2pc),30.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,24.0,Pc,1.182894040567659,28.32,0.8,0.944
+Ghee Idli Plate (2pc),30.0,98,Carry Bag - Small (1pkt = 100pc),RM,24.0,Pc,7.309971955277055,175.44,0.8,5.848
+Ghee Idli Plate (2pc),30.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,48.0,Pc,3.603089449256527,172.8,1.6,5.76
+Ghee Idli Plate (2pc),30.0,75,Ghee,RM,0.3,Kg,704.7318063212573,211.42,0.01,7.0473
+Ghee Idli Plate (2pc),30.0,207,Special Daal Bucket,RM,0.09,Kg,153.33997340097807,13.8,0.003,0.46
+Ghee Idli Plate (2pc),30.0,229,Coconut Shredded,RM,1.2,Kg,141.5076066259222,169.81,0.04,5.6603
+Ghee Idli Plate (2pc),30.0,53,Sugar,RM,0.06,Kg,49.02456184895188,2.94,0.002,0.098
+Idli Fries,38.0,92,Banana Leaf Small (1bundle = 50pc),RM,16.0,Pc,1.25004021314515,20.0,0.42105,0.5263
+Idli Fries,38.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.38,Ltr,150.3014727467051,57.11,0.01,1.5029
+Idli Fries,38.0,218,Idli Pc Raw (1 Pkt =40pc),RM,76.0,Pc,2.019284352521556,153.52,2.0,4.04
+Idli Fries,38.0,116,Raw Green Chili,RM,0.038,Kg,74.40646916516131,2.98,0.001,0.0784
+Idli Fries,38.0,108,Ginger,RM,0.038,Kg,131.32663125194048,5.25,0.001,0.1382
+Idli Fries,38.0,131,Curry Leaves,RM,0.038,Kg,70.81733193701771,2.83,0.001,0.0745
+Idli Fries,38.0,97,Paper Napkin (1pkt = 100pc),RM,38.0,Pc,0.23037295446244285,8.74,1.0,0.23
+Idli Fries,38.0,310,Dahi Bucket Mix (1pkt =105gm),RM,0.38,Kg,63.29345749038362,24.05,0.01,0.6329
+Idli Fries,38.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,22.0,Pc,4.505947440252137,99.22,0.57895,2.6111
+Idli Fries,38.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,22.0,Pc,1.182894040567659,25.96,0.57895,0.6832
+Idli Fries,38.0,98,Carry Bag - Small (1pkt = 100pc),RM,22.0,Pc,7.309971955277055,160.82,0.57895,4.2321
+Idli Fries,38.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,22.0,Pc,1.633952618998613,35.86,0.57895,0.9437
+Idli Fries,38.0,235,Raw Curd,RM,3.8,Kg,70.72940641437685,268.77,0.1,7.0729
+Idli Fries,38.0,32,Whole Cumin,RM,0.038,Kg,570.8962149163865,22.84,0.001,0.6011
+Idli Fries,38.0,208,Chaat Masala Bucket,RM,0.114,Kg,358.1226020596591,39.39,0.003,1.0366
+Rasam Idli Pc,3.0,92,Banana Leaf Small (1bundle = 50pc),RM,3.0,Pc,1.25004021314515,3.75,1.0,1.25
+Rasam Idli Pc,3.0,218,Idli Pc Raw (1 Pkt =40pc),RM,3.0,Pc,2.019284352521556,6.06,1.0,2.02
+Rasam Idli Pc,3.0,116,Raw Green Chili,RM,0.006,Kg,74.40646916516131,0.74,0.002,0.2467
+Rasam Idli Pc,3.0,108,Ginger,RM,0.006,Kg,131.32663125194048,1.31,0.002,0.4367
+Rasam Idli Pc,3.0,21,RO Water,RM,0.36,Ltr,0.0,0.0,0.12,0.0
+Rasam Idli Pc,3.0,29,Salt,RM,0.012,Kg,27.13239693784672,0.27,0.004,0.09
+Rasam Idli Pc,3.0,97,Paper Napkin (1pkt = 100pc),RM,3.0,Pc,0.23037295446244285,0.69,1.0,0.23
+Rasam Idli Pc,3.0,47,Fried Chana Daal,RM,0.09,Kg,103.52067122738376,9.32,0.03,3.1067
+Rasam Idli Pc,3.0,115,Coriander Leaves,RM,0.009,Kg,99.8851752413249,1.0,0.003,0.3333
+Rasam Idli Pc,3.0,207,Special Daal Bucket,RM,0.009,Kg,153.33997340097807,1.53,0.003,0.51
+Rasam Idli Pc,3.0,229,Coconut Shredded,RM,0.12,Kg,141.5076066259222,16.98,0.04,5.66
+Rasam Idli Pc,3.0,53,Sugar,RM,0.006,Kg,49.02456184895188,0.49,0.002,0.1633
+Rasam Idli Pc,3.0,177,Rasam Bucket,RM,0.3,Ltr,34.922956594648184,10.48,0.1,3.4933
+Plain Idli Pc,19.0,92,Banana Leaf Small (1bundle = 50pc),RM,18.0,Pc,1.25004021314515,22.5,0.94737,1.1842
+Plain Idli Pc,19.0,218,Idli Pc Raw (1 Pkt =40pc),RM,19.0,Pc,2.019284352521556,38.38,1.0,2.02
+Plain Idli Pc,19.0,116,Raw Green Chili,RM,0.038,Kg,74.40646916516131,2.98,0.002,0.1568
+Plain Idli Pc,19.0,108,Ginger,RM,0.038,Kg,131.32663125194048,5.25,0.002,0.2763
+Plain Idli Pc,19.0,21,RO Water,RM,2.28,Ltr,0.0,0.0,0.12,0.0
+Plain Idli Pc,19.0,29,Salt,RM,0.076,Kg,27.13239693784672,2.17,0.004,0.1142
+Plain Idli Pc,19.0,97,Paper Napkin (1pkt = 100pc),RM,19.0,Pc,0.23037295446244285,4.37,1.0,0.23
+Plain Idli Pc,19.0,47,Fried Chana Daal,RM,0.57,Kg,103.52067122738376,59.01,0.03,3.1058
+Plain Idli Pc,19.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,19.0,Pc,4.505947440252137,85.69,1.0,4.51
+Plain Idli Pc,19.0,207,Special Daal Bucket,RM,0.057,Kg,153.33997340097807,9.2,0.003,0.4842
+Plain Idli Pc,19.0,229,Coconut Shredded,RM,0.76,Kg,141.5076066259222,107.55,0.04,5.6605
+Plain Idli Pc,19.0,53,Sugar,RM,0.038,Kg,49.02456184895188,1.96,0.002,0.1032
+Plain Idli Pc,19.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,1.0,Pc,1.182894040567659,1.18,0.05263,0.0621
+Plain Idli Pc,19.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,2.0,Pc,3.603089449256527,7.2,0.10526,0.3789
+Thindi Podi Ghee Masala Dosa,5.0,92,Banana Leaf Small (1bundle = 50pc),RM,3.0,Pc,1.25004021314515,3.75,0.6,0.75
+Thindi Podi Ghee Masala Dosa,5.0,190,Dosa Batter Mix,RM,0.625,Kg,32.79396150244082,20.66,0.125,4.132
+Thindi Podi Ghee Masala Dosa,5.0,116,Raw Green Chili,RM,0.014,Kg,74.40646916516131,0.74,0.0028,0.148
+Thindi Podi Ghee Masala Dosa,5.0,108,Ginger,RM,0.006,Kg,131.32663125194048,1.31,0.0012,0.262
+Thindi Podi Ghee Masala Dosa,5.0,21,RO Water,RM,0.268,Ltr,0.0,0.0,0.0536,0.0
+Thindi Podi Ghee Masala Dosa,5.0,97,Paper Napkin (1pkt = 100pc),RM,5.0,Pc,0.23037295446244285,1.15,1.0,0.23
+Thindi Podi Ghee Masala Dosa,5.0,47,Fried Chana Daal,RM,0.09,Kg,103.52067122738376,9.32,0.018,1.864
+Thindi Podi Ghee Masala Dosa,5.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,2.0,Pc,4.505947440252137,9.02,0.4,1.804
+Thindi Podi Ghee Masala Dosa,5.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,2.0,Pc,1.182894040567659,2.36,0.4,0.472
+Thindi Podi Ghee Masala Dosa,5.0,98,Carry Bag - Small (1pkt = 100pc),RM,2.0,Pc,7.309971955277055,14.62,0.4,2.924
+Thindi Podi Ghee Masala Dosa,5.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,6.0,Pc,3.603089449256527,21.6,1.2,4.32
+Thindi Podi Ghee Masala Dosa,5.0,115,Coriander Leaves,RM,0.022,Kg,99.8851752413249,2.0,0.0044,0.4
+Thindi Podi Ghee Masala Dosa,5.0,329,Imli Water,RM,0.018,Ltr,25.47936351195457,0.51,0.0036,0.102
+Thindi Podi Ghee Masala Dosa,5.0,75,Ghee,RM,0.1,Kg,704.7318063212573,70.47,0.02,14.094
+Thindi Podi Ghee Masala Dosa,5.0,207,Special Daal Bucket,RM,0.005,Kg,153.33997340097807,1.53,0.001,0.306
+Thindi Podi Ghee Masala Dosa,5.0,229,Coconut Shredded,RM,0.125,Kg,141.5076066259222,18.4,0.025,3.68
+Thindi Podi Ghee Masala Dosa,5.0,328,Spicy Coconut Chutney Mix 1Pkt (16gm),RM,0.012,Kg,156.52596078138978,1.57,0.0024,0.314
+Thindi Podi Ghee Masala Dosa,5.0,194,Thindi Malkapodi Powder Bucket,RM,0.5,Kg,194.77278181720277,97.39,0.1,19.478
+Thindi Podi Ghee Masala Dosa,5.0,446,Potato Masala Bucket Outlet,SF,0.5,Kg,42.78058589216412,21.39,0.1,4.278
+Medu Vada Pc,18.0,92,Banana Leaf Small (1bundle = 50pc),RM,16.0,Pc,1.25004021314515,20.0,0.88889,1.1111
+Medu Vada Pc,18.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.18,Ltr,150.3014727467051,27.05,0.01,1.5028
+Medu Vada Pc,18.0,116,Raw Green Chili,RM,0.036,Kg,74.40646916516131,2.98,0.002,0.1656
+Medu Vada Pc,18.0,108,Ginger,RM,0.036,Kg,131.32663125194048,5.25,0.002,0.2917
+Medu Vada Pc,18.0,21,RO Water,RM,2.16,Ltr,0.0,0.0,0.12,0.0
+Medu Vada Pc,18.0,29,Salt,RM,0.072,Kg,27.13239693784672,1.9,0.004,0.1056
+Medu Vada Pc,18.0,97,Paper Napkin (1pkt = 100pc),RM,18.0,Pc,0.23037295446244285,4.14,1.0,0.23
+Medu Vada Pc,18.0,47,Fried Chana Daal,RM,0.54,Kg,103.52067122738376,55.9,0.03,3.1056
+Medu Vada Pc,18.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,2.0,Pc,1.182894040567659,2.36,0.11111,0.1311
+Medu Vada Pc,18.0,98,Carry Bag - Small (1pkt = 100pc),RM,2.0,Pc,7.309971955277055,14.62,0.11111,0.8122
+Medu Vada Pc,18.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,4.0,Pc,3.603089449256527,14.4,0.22222,0.8
+Medu Vada Pc,18.0,115,Coriander Leaves,RM,0.018,Kg,99.8851752413249,2.0,0.001,0.1111
+Medu Vada Pc,18.0,207,Special Daal Bucket,RM,0.054,Kg,153.33997340097807,7.67,0.003,0.4261
+Medu Vada Pc,18.0,229,Coconut Shredded,RM,1.035,Kg,141.5076066259222,147.17,0.0575,8.1761
+Medu Vada Pc,18.0,53,Sugar,RM,0.036,Kg,49.02456184895188,1.96,0.002,0.1089
+Medu Vada Pc,18.0,206,Medu Vada Batter Mix,RM,1.08,Kg,75.31794072052114,81.35,0.06,4.5194
+Benne Masala Dosa,264.0,84,Banana Leaf Big (1bundle = 50pc),RM,120.0,Pc,1.703601473376457,204.0,0.45455,0.7727
+Benne Masala Dosa,264.0,116,Raw Green Chili,RM,0.554,Kg,74.40646916516131,40.93,0.0021,0.155
+Benne Masala Dosa,264.0,108,Ginger,RM,0.66,Kg,131.32663125194048,86.68,0.0025,0.3283
+Benne Masala Dosa,264.0,21,RO Water,RM,33.0,Ltr,0.0,0.0,0.125,0.0
+Benne Masala Dosa,264.0,29,Salt,RM,0.792,Kg,27.13239693784672,21.43,0.003,0.0812
+Benne Masala Dosa,264.0,97,Paper Napkin (1pkt = 100pc),RM,264.0,Pc,0.23037295446244285,60.72,1.0,0.23
+Benne Masala Dosa,264.0,47,Fried Chana Daal,RM,8.184,Kg,103.52067122738376,846.79,0.031,3.2075
+Benne Masala Dosa,264.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,144.0,Pc,4.505947440252137,649.44,0.54545,2.46
+Benne Masala Dosa,264.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,144.0,Pc,1.182894040567659,169.92,0.54545,0.6436
+Benne Masala Dosa,264.0,98,Carry Bag - Small (1pkt = 100pc),RM,144.0,Pc,7.309971955277055,1052.64,0.54545,3.9873
+Benne Masala Dosa,264.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,432.0,Pc,3.603089449256527,1555.2,1.63636,5.8909
+Benne Masala Dosa,264.0,391,White Butter,RM,7.92,Kg,579.8475688818112,4592.41,0.03,17.3955
+Benne Masala Dosa,264.0,115,Coriander Leaves,RM,0.528,Kg,99.8851752413249,52.94,0.002,0.2005
+Benne Masala Dosa,264.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,39.6,Kg,32.852335731680704,1300.86,0.15,4.9275
+Benne Masala Dosa,264.0,207,Special Daal Bucket,RM,0.792,Kg,153.33997340097807,121.14,0.003,0.4589
+Benne Masala Dosa,264.0,229,Coconut Shredded,RM,11.352,Kg,141.5076066259222,1606.14,0.043,6.0839
+Benne Masala Dosa,264.0,53,Sugar,RM,0.026,Kg,49.02456184895188,1.47,0.0001,0.0056
+Benne Masala Dosa,264.0,446,Potato Masala Bucket Outlet,SF,39.6,Kg,42.78058589216412,1694.09,0.15,6.417
+Garlic Dosa,30.0,84,Banana Leaf Big (1bundle = 50pc),RM,20.0,Pc,1.703601473376457,34.0,0.66667,1.1333
+Garlic Dosa,30.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.27,Ltr,150.3014727467051,40.58,0.009,1.3527
+Garlic Dosa,30.0,190,Dosa Batter Mix,RM,4.2,Kg,32.79396150244082,137.72,0.14,4.5907
+Garlic Dosa,30.0,116,Raw Green Chili,RM,0.066,Kg,74.40646916516131,5.21,0.0022,0.1737
+Garlic Dosa,30.0,108,Ginger,RM,0.075,Kg,131.32663125194048,10.51,0.0025,0.3503
+Garlic Dosa,30.0,21,RO Water,RM,3.75,Ltr,0.0,0.0,0.125,0.0
+Garlic Dosa,30.0,29,Salt,RM,0.094,Kg,27.13239693784672,2.44,0.00313,0.0813
+Garlic Dosa,30.0,97,Paper Napkin (1pkt = 100pc),RM,30.0,Pc,0.23037295446244285,6.9,1.0,0.23
+Garlic Dosa,30.0,47,Fried Chana Daal,RM,0.938,Kg,103.52067122738376,97.31,0.03127,3.2437
+Garlic Dosa,30.0,202,Garlic Chutney Bucket,RM,2.25,Kg,253.34841697542748,570.04,0.075,19.0013
+Garlic Dosa,30.0,75,Ghee,RM,0.03,Kg,704.7318063212573,21.14,0.001,0.7047
+Garlic Dosa,30.0,207,Special Daal Bucket,RM,0.09,Kg,153.33997340097807,13.8,0.003,0.46
+Garlic Dosa,30.0,229,Coconut Shredded,RM,1.313,Kg,141.5076066259222,185.38,0.04377,6.1793
+Garlic Dosa,30.0,53,Sugar,RM,0.005,Kg,49.02456184895188,0.0,0.00017,0.0
+Garlic Dosa,30.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,10.0,Pc,4.505947440252137,45.1,0.33333,1.5033
+Garlic Dosa,30.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,10.0,Pc,1.182894040567659,11.8,0.33333,0.3933
+Garlic Dosa,30.0,98,Carry Bag - Small (1pkt = 100pc),RM,10.0,Pc,7.309971955277055,73.1,0.33333,2.4367
+Garlic Dosa,30.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,20.0,Pc,3.603089449256527,72.0,0.66667,2.4
+Rava Plain Dosa,122.0,84,Banana Leaf Big (1bundle = 50pc),RM,67.0,Pc,1.703601473376457,113.9,0.54918,0.9336
+Rava Plain Dosa,122.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,1.098,Ltr,150.3014727467051,165.33,0.009,1.3552
+Rava Plain Dosa,122.0,116,Raw Green Chili,RM,0.511,Kg,74.40646916516131,37.95,0.00419,0.3111
+Rava Plain Dosa,122.0,108,Ginger,RM,0.549,Kg,131.32663125194048,72.23,0.0045,0.592
+Rava Plain Dosa,122.0,131,Curry Leaves,RM,0.122,Kg,70.81733193701771,8.5,0.001,0.0697
+Rava Plain Dosa,122.0,21,RO Water,RM,41.48,Ltr,0.0,0.0,0.34,0.0
+Rava Plain Dosa,122.0,29,Salt,RM,0.747,Kg,27.13239693784672,20.35,0.00612,0.1668
+Rava Plain Dosa,122.0,97,Paper Napkin (1pkt = 100pc),RM,122.0,Pc,0.23037295446244285,28.06,1.0,0.23
+Rava Plain Dosa,122.0,47,Fried Chana Daal,RM,3.66,Kg,103.52067122738376,378.88,0.03,3.1056
+Rava Plain Dosa,122.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,55.0,Pc,4.505947440252137,248.05,0.45082,2.0332
+Rava Plain Dosa,122.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,55.0,Pc,1.182894040567659,64.9,0.45082,0.532
+Rava Plain Dosa,122.0,98,Carry Bag - Small (1pkt = 100pc),RM,55.0,Pc,7.309971955277055,402.05,0.45082,3.2955
+Rava Plain Dosa,122.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,110.0,Pc,3.603089449256527,396.0,0.90164,3.2459
+Rava Plain Dosa,122.0,75,Ghee,RM,0.122,Kg,704.7318063212573,84.57,0.001,0.6932
+Rava Plain Dosa,122.0,207,Special Daal Bucket,RM,0.366,Kg,153.33997340097807,56.74,0.003,0.4651
+Rava Plain Dosa,122.0,229,Coconut Shredded,RM,4.88,Kg,141.5076066259222,690.57,0.04,5.6604
+Rava Plain Dosa,122.0,53,Sugar,RM,0.244,Kg,49.02456184895188,11.76,0.002,0.0964
+Rava Plain Dosa,122.0,213,Rava Powder Mix,RM,6.1,Kg,96.15220715542905,586.52,0.05,4.8075
+Rava Plain Dosa,122.0,77,Whole Black Pepper,RM,0.049,Kg,882.8660773497102,44.14,0.0004,0.3618
+Ghee Roast Masala Dosa,97.0,84,Banana Leaf Big (1bundle = 50pc),RM,47.0,Pc,1.703601473376457,79.9,0.48454,0.8237
+Ghee Roast Masala Dosa,97.0,190,Dosa Batter Mix,RM,11.64,Kg,32.79396150244082,381.68,0.12,3.9348
+Ghee Roast Masala Dosa,97.0,116,Raw Green Chili,RM,0.194,Kg,74.40646916516131,14.14,0.002,0.1458
+Ghee Roast Masala Dosa,97.0,108,Ginger,RM,0.194,Kg,131.32663125194048,24.95,0.002,0.2572
+Ghee Roast Masala Dosa,97.0,21,RO Water,RM,12.125,Ltr,0.0,0.0,0.125,0.0
+Ghee Roast Masala Dosa,97.0,29,Salt,RM,0.291,Kg,27.13239693784672,7.87,0.003,0.0811
+Ghee Roast Masala Dosa,97.0,97,Paper Napkin (1pkt = 100pc),RM,97.0,Pc,0.23037295446244285,22.31,1.0,0.23
+Ghee Roast Masala Dosa,97.0,47,Fried Chana Daal,RM,2.91,Kg,103.52067122738376,301.24,0.03,3.1056
+Ghee Roast Masala Dosa,97.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,50.0,Pc,4.505947440252137,225.5,0.51546,2.3247
+Ghee Roast Masala Dosa,97.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,50.0,Pc,1.182894040567659,59.0,0.51546,0.6082
+Ghee Roast Masala Dosa,97.0,98,Carry Bag - Small (1pkt = 100pc),RM,50.0,Pc,7.309971955277055,365.5,0.51546,3.768
+Ghee Roast Masala Dosa,97.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,150.0,Pc,3.603089449256527,540.0,1.54639,5.567
+Ghee Roast Masala Dosa,97.0,75,Ghee,RM,2.91,Kg,704.7318063212573,2050.76,0.03,21.1419
+Ghee Roast Masala Dosa,97.0,207,Special Daal Bucket,RM,0.291,Kg,153.33997340097807,44.47,0.003,0.4585
+Ghee Roast Masala Dosa,97.0,229,Coconut Shredded,RM,3.88,Kg,141.5076066259222,549.06,0.04,5.6604
+Ghee Roast Masala Dosa,97.0,53,Sugar,RM,0.01,Kg,49.02456184895188,0.49,0.0001,0.0051
+Ghee Roast Masala Dosa,97.0,446,Potato Masala Bucket Outlet,SF,14.55,Kg,42.78058589216412,622.45,0.15,6.417
+Plain Dosa,253.0,84,Banana Leaf Big (1bundle = 50pc),RM,91.0,Pc,1.703601473376457,154.7,0.35968,0.6115
+Plain Dosa,253.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,2.277,Ltr,150.3014727467051,342.68,0.009,1.3545
+Plain Dosa,253.0,190,Dosa Batter Mix,RM,35.42,Kg,32.79396150244082,1161.42,0.14,4.5906
+Plain Dosa,253.0,116,Raw Green Chili,RM,0.506,Kg,74.40646916516131,37.95,0.002,0.15
+Plain Dosa,253.0,108,Ginger,RM,0.506,Kg,131.32663125194048,66.98,0.002,0.2647
+Plain Dosa,253.0,21,RO Water,RM,30.36,Ltr,0.0,0.0,0.12,0.0
+Plain Dosa,253.0,29,Salt,RM,1.012,Kg,27.13239693784672,27.4,0.004,0.1083
+Plain Dosa,253.0,97,Paper Napkin (1pkt = 100pc),RM,253.0,Pc,0.23037295446244285,58.19,1.0,0.23
+Plain Dosa,253.0,47,Fried Chana Daal,RM,7.59,Kg,103.52067122738376,785.72,0.03,3.1056
+Plain Dosa,253.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,162.0,Pc,4.505947440252137,730.62,0.64032,2.8878
+Plain Dosa,253.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,162.0,Pc,1.182894040567659,191.16,0.64032,0.7556
+Plain Dosa,253.0,98,Carry Bag - Small (1pkt = 100pc),RM,162.0,Pc,7.309971955277055,1184.22,0.64032,4.6807
+Plain Dosa,253.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,324.0,Pc,3.603089449256527,1166.4,1.28063,4.6103
+Plain Dosa,253.0,75,Ghee,RM,0.253,Kg,704.7318063212573,176.18,0.001,0.6964
+Plain Dosa,253.0,207,Special Daal Bucket,RM,0.759,Kg,153.33997340097807,116.54,0.003,0.4606
+Plain Dosa,253.0,229,Coconut Shredded,RM,10.12,Kg,141.5076066259222,1432.08,0.04,5.6604
+Plain Dosa,253.0,53,Sugar,RM,0.506,Kg,49.02456184895188,25.0,0.002,0.0988
+Mysore Ghee Roast Dosa,51.0,84,Banana Leaf Big (1bundle = 50pc),RM,29.0,Pc,1.703601473376457,49.3,0.56863,0.9667
+Mysore Ghee Roast Dosa,51.0,190,Dosa Batter Mix,RM,6.12,Kg,32.79396150244082,200.67,0.12,3.9347
+Mysore Ghee Roast Dosa,51.0,116,Raw Green Chili,RM,0.102,Kg,74.40646916516131,7.44,0.002,0.1459
+Mysore Ghee Roast Dosa,51.0,108,Ginger,RM,0.102,Kg,131.32663125194048,13.13,0.002,0.2575
+Mysore Ghee Roast Dosa,51.0,21,RO Water,RM,6.12,Ltr,0.0,0.0,0.12,0.0
+Mysore Ghee Roast Dosa,51.0,29,Salt,RM,0.204,Kg,27.13239693784672,5.43,0.004,0.1065
+Mysore Ghee Roast Dosa,51.0,210,Mysore Chutney Bucket,RM,3.06,Kg,169.69405494226174,519.25,0.06,10.1814
+Mysore Ghee Roast Dosa,51.0,97,Paper Napkin (1pkt = 100pc),RM,51.0,Pc,0.23037295446244285,11.73,1.0,0.23
+Mysore Ghee Roast Dosa,51.0,47,Fried Chana Daal,RM,1.53,Kg,103.52067122738376,158.39,0.03,3.1057
+Mysore Ghee Roast Dosa,51.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,22.0,Pc,4.505947440252137,99.22,0.43137,1.9455
+Mysore Ghee Roast Dosa,51.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,22.0,Pc,1.182894040567659,25.96,0.43137,0.509
+Mysore Ghee Roast Dosa,51.0,98,Carry Bag - Small (1pkt = 100pc),RM,22.0,Pc,7.309971955277055,160.82,0.43137,3.1533
+Mysore Ghee Roast Dosa,51.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,44.0,Pc,3.603089449256527,158.4,0.86275,3.1059
+Mysore Ghee Roast Dosa,51.0,75,Ghee,RM,1.53,Kg,704.7318063212573,1078.24,0.03,21.142
+Mysore Ghee Roast Dosa,51.0,207,Special Daal Bucket,RM,0.153,Kg,153.33997340097807,23.0,0.003,0.451
+Mysore Ghee Roast Dosa,51.0,229,Coconut Shredded,RM,2.04,Kg,141.5076066259222,288.68,0.04,5.6604
+Mysore Ghee Roast Dosa,51.0,53,Sugar,RM,0.102,Kg,49.02456184895188,4.9,0.002,0.0961
+Garlic Ghee Roast Dosa,138.0,84,Banana Leaf Big (1bundle = 50pc),RM,54.0,Pc,1.703601473376457,91.8,0.3913,0.6652
+Garlic Ghee Roast Dosa,138.0,190,Dosa Batter Mix,RM,16.56,Kg,32.79396150244082,543.0,0.12,3.9348
+Garlic Ghee Roast Dosa,138.0,116,Raw Green Chili,RM,0.276,Kg,74.40646916516131,20.83,0.002,0.1509
+Garlic Ghee Roast Dosa,138.0,108,Ginger,RM,0.276,Kg,131.32663125194048,36.77,0.002,0.2664
+Garlic Ghee Roast Dosa,138.0,21,RO Water,RM,16.56,Ltr,0.0,0.0,0.12,0.0
+Garlic Ghee Roast Dosa,138.0,29,Salt,RM,0.552,Kg,27.13239693784672,14.92,0.004,0.1081
+Garlic Ghee Roast Dosa,138.0,97,Paper Napkin (1pkt = 100pc),RM,138.0,Pc,0.23037295446244285,31.74,1.0,0.23
+Garlic Ghee Roast Dosa,138.0,47,Fried Chana Daal,RM,4.14,Kg,103.52067122738376,428.57,0.03,3.1056
+Garlic Ghee Roast Dosa,138.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,84.0,Pc,4.505947440252137,378.84,0.6087,2.7452
+Garlic Ghee Roast Dosa,138.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,84.0,Pc,1.182894040567659,99.12,0.6087,0.7183
+Garlic Ghee Roast Dosa,138.0,98,Carry Bag - Small (1pkt = 100pc),RM,84.0,Pc,7.309971955277055,614.04,0.6087,4.4496
+Garlic Ghee Roast Dosa,138.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,168.0,Pc,3.603089449256527,604.8,1.21739,4.3826
+Garlic Ghee Roast Dosa,138.0,202,Garlic Chutney Bucket,RM,8.28,Kg,253.34841697542748,2097.74,0.06,15.201
+Garlic Ghee Roast Dosa,138.0,75,Ghee,RM,4.14,Kg,704.7318063212573,2917.58,0.03,21.1419
+Garlic Ghee Roast Dosa,138.0,207,Special Daal Bucket,RM,0.414,Kg,153.33997340097807,62.87,0.003,0.4556
+Garlic Ghee Roast Dosa,138.0,229,Coconut Shredded,RM,5.52,Kg,141.5076066259222,781.14,0.04,5.6604
+Garlic Ghee Roast Dosa,138.0,53,Sugar,RM,0.276,Kg,49.02456184895188,13.73,0.002,0.0995
+Masala Dosa,828.0,84,Banana Leaf Big (1bundle = 50pc),RM,223.0,Pc,1.703601473376457,379.1,0.26932,0.4579
+Masala Dosa,828.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,7.452,Ltr,150.3014727467051,1119.74,0.009,1.3523
+Masala Dosa,828.0,190,Dosa Batter Mix,RM,115.92,Kg,32.79396150244082,3801.02,0.14,4.5906
+Masala Dosa,828.0,116,Raw Green Chili,RM,1.739,Kg,74.40646916516131,129.47,0.0021,0.1564
+Masala Dosa,828.0,108,Ginger,RM,2.07,Kg,131.32663125194048,271.85,0.0025,0.3283
+Masala Dosa,828.0,21,RO Water,RM,99.36,Ltr,0.0,0.0,0.12,0.0
+Masala Dosa,828.0,29,Salt,RM,2.567,Kg,27.13239693784672,69.72,0.0031,0.0842
+Masala Dosa,828.0,97,Paper Napkin (1pkt = 100pc),RM,828.0,Pc,0.23037295446244285,190.44,1.0,0.23
+Masala Dosa,828.0,47,Fried Chana Daal,RM,25.668,Kg,103.52067122738376,2657.36,0.031,3.2094
+Masala Dosa,828.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,605.0,Pc,4.505947440252137,2728.55,0.73068,3.2954
+Masala Dosa,828.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,605.0,Pc,1.182894040567659,713.9,0.73068,0.8622
+Masala Dosa,828.0,98,Carry Bag - Small (1pkt = 100pc),RM,605.0,Pc,7.309971955277055,4422.55,0.73068,5.3412
+Masala Dosa,828.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,1815.0,Pc,3.603089449256527,6534.0,2.19203,7.8913
+Masala Dosa,828.0,115,Coriander Leaves,RM,0.828,Kg,99.8851752413249,82.91,0.001,0.1001
+Masala Dosa,828.0,75,Ghee,RM,0.828,Kg,704.7318063212573,584.93,0.001,0.7064
+Masala Dosa,828.0,207,Special Daal Bucket,RM,2.484,Kg,153.33997340097807,380.28,0.003,0.4593
+Masala Dosa,828.0,229,Coconut Shredded,RM,36.184,Kg,141.5076066259222,5119.83,0.0437,6.1834
+Masala Dosa,828.0,53,Sugar,RM,0.124,Kg,49.02456184895188,5.88,0.00015,0.0071
+Masala Dosa,828.0,446,Potato Masala Bucket Outlet,SF,124.2,Kg,42.78058589216412,5313.28,0.15,6.417
+Plain Uttapam,2.0,84,Banana Leaf Big (1bundle = 50pc),RM,2.0,Pc,1.703601473376457,3.4,1.0,1.7
+Plain Uttapam,2.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.018,Ltr,150.3014727467051,3.01,0.009,1.505
+Plain Uttapam,2.0,190,Dosa Batter Mix,RM,0.4,Kg,32.79396150244082,13.12,0.2,6.56
+Plain Uttapam,2.0,116,Raw Green Chili,RM,0.004,Kg,74.40646916516131,0.0,0.002,0.0
+Plain Uttapam,2.0,108,Ginger,RM,0.004,Kg,131.32663125194048,0.0,0.002,0.0
+Plain Uttapam,2.0,21,RO Water,RM,0.24,Ltr,0.0,0.0,0.12,0.0
+Plain Uttapam,2.0,29,Salt,RM,0.008,Kg,27.13239693784672,0.27,0.004,0.135
+Plain Uttapam,2.0,97,Paper Napkin (1pkt = 100pc),RM,2.0,Pc,0.23037295446244285,0.46,1.0,0.23
+Plain Uttapam,2.0,47,Fried Chana Daal,RM,0.06,Kg,103.52067122738376,6.21,0.03,3.105
+Plain Uttapam,2.0,75,Ghee,RM,0.002,Kg,704.7318063212573,0.0,0.001,0.0
+Plain Uttapam,2.0,207,Special Daal Bucket,RM,0.006,Kg,153.33997340097807,1.53,0.003,0.765
+Plain Uttapam,2.0,229,Coconut Shredded,RM,0.08,Kg,141.5076066259222,11.32,0.04,5.66
+Plain Uttapam,2.0,53,Sugar,RM,0.004,Kg,49.02456184895188,0.0,0.002,0.0
+Plain Uttapam,2.0,32,Whole Cumin,RM,0.002,Kg,570.8962149163865,0.0,0.001,0.0
+Plain Uttapam,2.0,208,Chaat Masala Bucket,RM,0.002,Kg,358.1226020596591,0.0,0.001,0.0
+Spicy Tomato Onion Ghee Roast Dosa,14.0,84,Banana Leaf Big (1bundle = 50pc),RM,10.0,Pc,1.703601473376457,17.0,0.71429,1.2143
+Spicy Tomato Onion Ghee Roast Dosa,14.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.218,Ltr,150.3014727467051,33.07,0.01557,2.3621
+Spicy Tomato Onion Ghee Roast Dosa,14.0,190,Dosa Batter Mix,RM,1.568,Kg,32.79396150244082,51.48,0.112,3.6771
+Spicy Tomato Onion Ghee Roast Dosa,14.0,132,Onion,RM,0.544,Kg,42.55770583508858,22.98,0.03886,1.6414
+Spicy Tomato Onion Ghee Roast Dosa,14.0,116,Raw Green Chili,RM,0.028,Kg,74.40646916516131,2.23,0.002,0.1593
+Spicy Tomato Onion Ghee Roast Dosa,14.0,108,Ginger,RM,0.056,Kg,131.32663125194048,7.88,0.004,0.5629
+Spicy Tomato Onion Ghee Roast Dosa,14.0,21,RO Water,RM,1.68,Ltr,0.0,0.0,0.12,0.0
+Spicy Tomato Onion Ghee Roast Dosa,14.0,29,Salt,RM,0.077,Kg,27.13239693784672,2.17,0.0055,0.155
+Spicy Tomato Onion Ghee Roast Dosa,14.0,97,Paper Napkin (1pkt = 100pc),RM,14.0,Pc,0.23037295446244285,3.22,1.0,0.23
+Spicy Tomato Onion Ghee Roast Dosa,14.0,523,Tomato Onion Powder Mix (1 Pkt = 24gm),RM,0.052,Kg,524.1734077690518,26.21,0.00371,1.8721
+Spicy Tomato Onion Ghee Roast Dosa,14.0,47,Fried Chana Daal,RM,0.42,Kg,103.52067122738376,43.48,0.03,3.1057
+Spicy Tomato Onion Ghee Roast Dosa,14.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,4.0,Pc,4.505947440252137,18.04,0.28571,1.2886
+Spicy Tomato Onion Ghee Roast Dosa,14.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,4.0,Pc,1.182894040567659,4.72,0.28571,0.3371
+Spicy Tomato Onion Ghee Roast Dosa,14.0,98,Carry Bag - Small (1pkt = 100pc),RM,4.0,Pc,7.309971955277055,29.24,0.28571,2.0886
+Spicy Tomato Onion Ghee Roast Dosa,14.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,4.0,Pc,3.603089449256527,14.4,0.28571,1.0286
+Spicy Tomato Onion Ghee Roast Dosa,14.0,26,Jaggery,RM,0.041,Kg,57.26513251387301,2.29,0.00293,0.1636
+Spicy Tomato Onion Ghee Roast Dosa,14.0,141,Tomato,RM,0.544,Kg,40.14091608454381,21.68,0.03886,1.5486
+Spicy Tomato Onion Ghee Roast Dosa,14.0,329,Imli Water,RM,0.045,Ltr,25.47936351195457,1.02,0.00321,0.0729
+Spicy Tomato Onion Ghee Roast Dosa,14.0,75,Ghee,RM,0.42,Kg,704.7318063212573,295.99,0.03,21.1421
+Spicy Tomato Onion Ghee Roast Dosa,14.0,207,Special Daal Bucket,RM,0.042,Kg,153.33997340097807,6.13,0.003,0.4379
+Spicy Tomato Onion Ghee Roast Dosa,14.0,229,Coconut Shredded,RM,0.56,Kg,141.5076066259222,79.25,0.04,5.6607
+Spicy Tomato Onion Ghee Roast Dosa,14.0,53,Sugar,RM,0.028,Kg,49.02456184895188,1.47,0.002,0.105
+Guntur Karampodi Dosa,17.0,84,Banana Leaf Big (1bundle = 50pc),RM,15.0,Pc,1.703601473376457,25.5,0.88235,1.5
+Guntur Karampodi Dosa,17.0,190,Dosa Batter Mix,RM,1.904,Kg,32.79396150244082,62.3,0.112,3.6647
+Guntur Karampodi Dosa,17.0,132,Onion,RM,0.85,Kg,42.55770583508858,36.18,0.05,2.1282
+Guntur Karampodi Dosa,17.0,116,Raw Green Chili,RM,0.036,Kg,74.40646916516131,2.98,0.00212,0.1753
+Guntur Karampodi Dosa,17.0,108,Ginger,RM,0.038,Kg,131.32663125194048,5.25,0.00224,0.3088
+Guntur Karampodi Dosa,17.0,21,RO Water,RM,2.593,Ltr,0.0,0.0,0.15253,0.0
+Guntur Karampodi Dosa,17.0,29,Salt,RM,0.078,Kg,27.13239693784672,2.17,0.00459,0.1276
+Guntur Karampodi Dosa,17.0,97,Paper Napkin (1pkt = 100pc),RM,17.0,Pc,0.23037295446244285,3.91,1.0,0.23
+Guntur Karampodi Dosa,17.0,47,Fried Chana Daal,RM,0.674,Kg,103.52067122738376,69.36,0.03965,4.08
+Guntur Karampodi Dosa,17.0,14,Amul Butter,RM,0.68,Kg,545.6704860150979,371.06,0.04,21.8271
+Guntur Karampodi Dosa,17.0,115,Coriander Leaves,RM,0.051,Kg,99.8851752413249,4.99,0.003,0.2935
+Guntur Karampodi Dosa,17.0,141,Tomato,RM,0.68,Kg,40.14091608454381,27.3,0.04,1.6059
+Guntur Karampodi Dosa,17.0,207,Special Daal Bucket,RM,0.102,Kg,153.33997340097807,15.33,0.006,0.9018
+Guntur Karampodi Dosa,17.0,229,Coconut Shredded,RM,0.967,Kg,141.5076066259222,137.26,0.05688,8.0741
+Guntur Karampodi Dosa,17.0,53,Sugar,RM,0.018,Kg,49.02456184895188,0.98,0.00106,0.0576
+Guntur Karampodi Dosa,17.0,203,Karam Podi Powder Bucket,RM,0.68,Kg,189.80358333736456,129.06,0.04,7.5918
+Guntur Karampodi Dosa,17.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,2.0,Pc,4.505947440252137,9.02,0.11765,0.5306
+Guntur Karampodi Dosa,17.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,2.0,Pc,1.182894040567659,2.36,0.11765,0.1388
+Guntur Karampodi Dosa,17.0,98,Carry Bag - Small (1pkt = 100pc),RM,2.0,Pc,7.309971955277055,14.62,0.11765,0.86
+Guntur Karampodi Dosa,17.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,4.0,Pc,3.603089449256527,14.4,0.23529,0.8471
+Benne Dosa,123.0,84,Banana Leaf Big (1bundle = 50pc),RM,65.0,Pc,1.703601473376457,110.5,0.52846,0.8984
+Benne Dosa,123.0,116,Raw Green Chili,RM,0.258,Kg,74.40646916516131,19.35,0.0021,0.1573
+Benne Dosa,123.0,108,Ginger,RM,0.308,Kg,131.32663125194048,40.71,0.0025,0.331
+Benne Dosa,123.0,21,RO Water,RM,15.375,Ltr,0.0,0.0,0.125,0.0
+Benne Dosa,123.0,29,Salt,RM,0.369,Kg,27.13239693784672,10.04,0.003,0.0816
+Benne Dosa,123.0,97,Paper Napkin (1pkt = 100pc),RM,123.0,Pc,0.23037295446244285,28.29,1.0,0.23
+Benne Dosa,123.0,47,Fried Chana Daal,RM,3.813,Kg,103.52067122738376,394.41,0.031,3.2066
+Benne Dosa,123.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,58.0,Pc,4.505947440252137,261.58,0.47154,2.1267
+Benne Dosa,123.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,58.0,Pc,1.182894040567659,68.44,0.47154,0.5564
+Benne Dosa,123.0,98,Carry Bag - Small (1pkt = 100pc),RM,58.0,Pc,7.309971955277055,423.98,0.47154,3.447
+Benne Dosa,123.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,116.0,Pc,3.603089449256527,417.6,0.94309,3.3951
+Benne Dosa,123.0,391,White Butter,RM,3.69,Kg,579.8475688818112,2139.65,0.03,17.3955
+Benne Dosa,123.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,18.45,Kg,32.852335731680704,606.08,0.15,4.9275
+Benne Dosa,123.0,207,Special Daal Bucket,RM,0.246,Kg,153.33997340097807,38.34,0.002,0.3117
+Benne Dosa,123.0,229,Coconut Shredded,RM,5.289,Kg,141.5076066259222,748.59,0.043,6.0861
+Benne Dosa,123.0,53,Sugar,RM,0.012,Kg,49.02456184895188,0.49,0.0001,0.004
+Mysore Dosa,40.0,84,Banana Leaf Big (1bundle = 50pc),RM,28.0,Pc,1.703601473376457,47.6,0.7,1.19
+Mysore Dosa,40.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.36,Ltr,150.3014727467051,54.11,0.009,1.3527
+Mysore Dosa,40.0,190,Dosa Batter Mix,RM,5.6,Kg,32.79396150244082,183.62,0.14,4.5905
+Mysore Dosa,40.0,116,Raw Green Chili,RM,0.088,Kg,74.40646916516131,6.7,0.0022,0.1675
+Mysore Dosa,40.0,108,Ginger,RM,0.1,Kg,131.32663125194048,13.13,0.0025,0.3283
+Mysore Dosa,40.0,21,RO Water,RM,5.0,Ltr,0.0,0.0,0.125,0.0
+Mysore Dosa,40.0,29,Salt,RM,0.125,Kg,27.13239693784672,3.53,0.00313,0.0882
+Mysore Dosa,40.0,210,Mysore Chutney Bucket,RM,3.2,Kg,169.69405494226174,543.01,0.08,13.5753
+Mysore Dosa,40.0,97,Paper Napkin (1pkt = 100pc),RM,40.0,Pc,0.23037295446244285,9.2,1.0,0.23
+Mysore Dosa,40.0,47,Fried Chana Daal,RM,1.25,Kg,103.52067122738376,129.4,0.03125,3.235
+Mysore Dosa,40.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,12.0,Pc,4.505947440252137,54.12,0.3,1.353
+Mysore Dosa,40.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,12.0,Pc,1.182894040567659,14.16,0.3,0.354
+Mysore Dosa,40.0,98,Carry Bag - Small (1pkt = 100pc),RM,12.0,Pc,7.309971955277055,87.72,0.3,2.193
+Mysore Dosa,40.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,24.0,Pc,3.603089449256527,86.4,0.6,2.16
+Mysore Dosa,40.0,75,Ghee,RM,0.04,Kg,704.7318063212573,28.19,0.001,0.7047
+Mysore Dosa,40.0,207,Special Daal Bucket,RM,0.12,Kg,153.33997340097807,18.4,0.003,0.46
+Mysore Dosa,40.0,229,Coconut Shredded,RM,1.75,Kg,141.5076066259222,247.64,0.04375,6.191
+Mysore Dosa,40.0,53,Sugar,RM,0.006,Kg,49.02456184895188,0.49,0.00015,0.0123
+Garlic Benne Dosa,98.0,84,Banana Leaf Big (1bundle = 50pc),RM,75.0,Pc,1.703601473376457,127.5,0.76531,1.301
+Garlic Benne Dosa,98.0,116,Raw Green Chili,RM,0.196,Kg,74.40646916516131,14.88,0.002,0.1518
+Garlic Benne Dosa,98.0,108,Ginger,RM,0.245,Kg,131.32663125194048,32.83,0.0025,0.335
+Garlic Benne Dosa,98.0,21,RO Water,RM,12.25,Ltr,0.0,0.0,0.125,0.0
+Garlic Benne Dosa,98.0,29,Salt,RM,0.294,Kg,27.13239693784672,7.87,0.003,0.0803
+Garlic Benne Dosa,98.0,97,Paper Napkin (1pkt = 100pc),RM,98.0,Pc,0.23037295446244285,22.54,1.0,0.23
+Garlic Benne Dosa,98.0,47,Fried Chana Daal,RM,3.038,Kg,103.52067122738376,314.7,0.031,3.2112
+Garlic Benne Dosa,98.0,391,White Butter,RM,2.94,Kg,579.8475688818112,1704.76,0.03,17.3955
+Garlic Benne Dosa,98.0,115,Coriander Leaves,RM,0.196,Kg,99.8851752413249,19.98,0.002,0.2039
+Garlic Benne Dosa,98.0,202,Garlic Chutney Bucket,RM,5.88,Kg,253.34841697542748,1489.7,0.06,15.201
+Garlic Benne Dosa,98.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,14.7,Kg,32.852335731680704,482.9,0.15,4.9276
+Garlic Benne Dosa,98.0,207,Special Daal Bucket,RM,0.294,Kg,153.33997340097807,44.47,0.003,0.4538
+Garlic Benne Dosa,98.0,229,Coconut Shredded,RM,4.214,Kg,141.5076066259222,595.76,0.043,6.0792
+Garlic Benne Dosa,98.0,53,Sugar,RM,0.01,Kg,49.02456184895188,0.49,0.0001,0.005
+Garlic Benne Dosa,98.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,1.0,Pc,4.505947440252137,4.51,0.0102,0.046
+Garlic Benne Dosa,98.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,1.0,Pc,1.182894040567659,1.18,0.0102,0.012
+Garlic Benne Dosa,98.0,98,Carry Bag - Small (1pkt = 100pc),RM,1.0,Pc,7.309971955277055,7.31,0.0102,0.0746
+Garlic Benne Dosa,98.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,2.0,Pc,1.633952618998613,3.26,0.02041,0.0333
+Paper Plain Dosa,51.0,84,Banana Leaf Big (1bundle = 50pc),RM,47.0,Pc,1.703601473376457,79.9,0.92157,1.5667
+Paper Plain Dosa,51.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,1.173,Ltr,150.3014727467051,175.85,0.023,3.448
+Paper Plain Dosa,51.0,190,Dosa Batter Mix,RM,12.546,Kg,32.79396150244082,411.51,0.246,8.0688
+Paper Plain Dosa,51.0,116,Raw Green Chili,RM,0.102,Kg,74.40646916516131,7.44,0.002,0.1459
+Paper Plain Dosa,51.0,108,Ginger,RM,0.102,Kg,131.32663125194048,13.13,0.002,0.2575
+Paper Plain Dosa,51.0,21,RO Water,RM,6.375,Ltr,0.0,0.0,0.125,0.0
+Paper Plain Dosa,51.0,29,Salt,RM,0.204,Kg,27.13239693784672,5.43,0.004,0.1065
+Paper Plain Dosa,51.0,97,Paper Napkin (1pkt = 100pc),RM,51.0,Pc,0.23037295446244285,11.73,1.0,0.23
+Paper Plain Dosa,51.0,47,Fried Chana Daal,RM,1.53,Kg,103.52067122738376,158.39,0.03,3.1057
+Paper Plain Dosa,51.0,75,Ghee,RM,0.102,Kg,704.7318063212573,70.47,0.002,1.3818
+Paper Plain Dosa,51.0,207,Special Daal Bucket,RM,0.153,Kg,153.33997340097807,23.0,0.003,0.451
+Paper Plain Dosa,51.0,229,Coconut Shredded,RM,2.04,Kg,141.5076066259222,288.68,0.04,5.6604
+Paper Plain Dosa,51.0,53,Sugar,RM,0.102,Kg,49.02456184895188,4.9,0.002,0.0961
+Paper Plain Dosa,51.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,4.0,Pc,4.505947440252137,18.04,0.07843,0.3537
+Paper Plain Dosa,51.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,8.0,Pc,3.603089449256527,28.8,0.15686,0.5647
+Paper Plain Dosa,51.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,4.0,Pc,1.182894040567659,4.72,0.07843,0.0925
+Paper Plain Dosa,51.0,98,Carry Bag - Small (1pkt = 100pc),RM,4.0,Pc,7.309971955277055,29.24,0.07843,0.5733
+Open Butter Masala Dosa,16.0,84,Banana Leaf Big (1bundle = 50pc),RM,15.0,Pc,1.703601473376457,25.5,0.9375,1.5938
+Open Butter Masala Dosa,16.0,190,Dosa Batter Mix,RM,2.4,Kg,32.79396150244082,78.7,0.15,4.9188
+Open Butter Masala Dosa,16.0,107,Carrot,RM,0.48,Kg,41.35494720622496,19.85,0.03,1.2406
+Open Butter Masala Dosa,16.0,116,Raw Green Chili,RM,0.034,Kg,74.40646916516131,2.23,0.00213,0.1394
+Open Butter Masala Dosa,16.0,108,Ginger,RM,0.04,Kg,131.32663125194048,5.25,0.0025,0.3281
+Open Butter Masala Dosa,16.0,21,RO Water,RM,2.0,Ltr,0.0,0.0,0.125,0.0
+Open Butter Masala Dosa,16.0,29,Salt,RM,0.05,Kg,27.13239693784672,1.36,0.00313,0.085
+Open Butter Masala Dosa,16.0,97,Paper Napkin (1pkt = 100pc),RM,16.0,Pc,0.23037295446244285,3.68,1.0,0.23
+Open Butter Masala Dosa,16.0,47,Fried Chana Daal,RM,0.496,Kg,103.52067122738376,51.76,0.031,3.235
+Open Butter Masala Dosa,16.0,391,White Butter,RM,0.48,Kg,579.8475688818112,278.33,0.03,17.3956
+Open Butter Masala Dosa,16.0,207,Special Daal Bucket,RM,0.048,Kg,153.33997340097807,7.67,0.003,0.4794
+Open Butter Masala Dosa,16.0,229,Coconut Shredded,RM,0.688,Kg,141.5076066259222,97.64,0.043,6.1025
+Open Butter Masala Dosa,16.0,53,Sugar,RM,0.002,Kg,49.02456184895188,0.0,0.00013,0.0
+Open Butter Masala Dosa,16.0,194,Thindi Malkapodi Powder Bucket,RM,0.16,Kg,194.77278181720277,31.16,0.01,1.9475
+Open Butter Masala Dosa,16.0,157,Take Away Packing Box - Big (1bundle = 50pc),RM,1.0,Pc,7.126595028983682,7.13,0.0625,0.4456
+Open Butter Masala Dosa,16.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,1.0,Pc,1.182894040567659,1.18,0.0625,0.0737
+Open Butter Masala Dosa,16.0,98,Carry Bag - Small (1pkt = 100pc),RM,1.0,Pc,7.309971955277055,7.31,0.0625,0.4569
+Open Butter Masala Dosa,16.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,2.0,Pc,3.603089449256527,7.2,0.125,0.45
+Open Butter Masala Dosa,16.0,446,Potato Masala Bucket Outlet,SF,1.6,Kg,42.78058589216412,68.45,0.1,4.2781
+Mysore Benne Dosa,33.0,84,Banana Leaf Big (1bundle = 50pc),RM,18.0,Pc,1.703601473376457,30.6,0.54545,0.9273
+Mysore Benne Dosa,33.0,116,Raw Green Chili,RM,0.066,Kg,74.40646916516131,5.21,0.002,0.1579
+Mysore Benne Dosa,33.0,108,Ginger,RM,0.083,Kg,131.32663125194048,10.51,0.00252,0.3185
+Mysore Benne Dosa,33.0,21,RO Water,RM,4.125,Ltr,0.0,0.0,0.125,0.0
+Mysore Benne Dosa,33.0,29,Salt,RM,0.099,Kg,27.13239693784672,2.71,0.003,0.0821
+Mysore Benne Dosa,33.0,210,Mysore Chutney Bucket,RM,1.98,Kg,169.69405494226174,335.99,0.06,10.1815
+Mysore Benne Dosa,33.0,97,Paper Napkin (1pkt = 100pc),RM,33.0,Pc,0.23037295446244285,7.59,1.0,0.23
+Mysore Benne Dosa,33.0,47,Fried Chana Daal,RM,1.023,Kg,103.52067122738376,105.59,0.031,3.1997
+Mysore Benne Dosa,33.0,391,White Butter,RM,0.99,Kg,579.8475688818112,574.05,0.03,17.3955
+Mysore Benne Dosa,33.0,115,Coriander Leaves,RM,0.066,Kg,99.8851752413249,6.99,0.002,0.2118
+Mysore Benne Dosa,33.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,4.95,Kg,32.852335731680704,162.61,0.15,4.9276
+Mysore Benne Dosa,33.0,207,Special Daal Bucket,RM,0.099,Kg,153.33997340097807,15.33,0.003,0.4645
+Mysore Benne Dosa,33.0,229,Coconut Shredded,RM,1.419,Kg,141.5076066259222,200.94,0.043,6.0891
+Mysore Benne Dosa,33.0,53,Sugar,RM,0.003,Kg,49.02456184895188,0.0,9e-05,0.0
+Mysore Benne Dosa,33.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,1.0,Pc,1.182894040567659,1.18,0.0303,0.0358
+Mysore Benne Dosa,33.0,98,Carry Bag - Small (1pkt = 100pc),RM,1.0,Pc,7.309971955277055,7.31,0.0303,0.2215
+Mysore Benne Dosa,33.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,1.0,Pc,4.505947440252137,4.51,0.0303,0.1367
+Mysore Benne Dosa,33.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,2.0,Pc,1.633952618998613,3.26,0.06061,0.0988
+Raw Mango Ghee Roast Dosa,24.0,84,Banana Leaf Big (1bundle = 50pc),RM,15.0,Pc,1.703601473376457,25.5,0.625,1.0625
+Raw Mango Ghee Roast Dosa,24.0,190,Dosa Batter Mix,RM,2.688,Kg,32.79396150244082,88.21,0.112,3.6754
+Raw Mango Ghee Roast Dosa,24.0,116,Raw Green Chili,RM,0.048,Kg,74.40646916516131,3.72,0.002,0.155
+Raw Mango Ghee Roast Dosa,24.0,108,Ginger,RM,0.048,Kg,131.32663125194048,6.57,0.002,0.2737
+Raw Mango Ghee Roast Dosa,24.0,21,RO Water,RM,2.88,Ltr,0.0,0.0,0.12,0.0
+Raw Mango Ghee Roast Dosa,24.0,29,Salt,RM,0.096,Kg,27.13239693784672,2.71,0.004,0.1129
+Raw Mango Ghee Roast Dosa,24.0,97,Paper Napkin (1pkt = 100pc),RM,24.0,Pc,0.23037295446244285,5.52,1.0,0.23
+Raw Mango Ghee Roast Dosa,24.0,532,Raw mango Powder Mix (1 Pkt = 13gm),RM,0.055,Kg,289.9906421464322,14.5,0.00229,0.6042
+Raw Mango Ghee Roast Dosa,24.0,47,Fried Chana Daal,RM,0.72,Kg,103.52067122738376,74.53,0.03,3.1054
+Raw Mango Ghee Roast Dosa,24.0,26,Jaggery,RM,0.252,Kg,57.26513251387301,14.32,0.0105,0.5967
+Raw Mango Ghee Roast Dosa,24.0,133,Raw Mango,RM,1.05,Kg,85.35117796940261,89.62,0.04375,3.7342
+Raw Mango Ghee Roast Dosa,24.0,122,Amada,RM,0.105,Kg,70.65683481459293,7.77,0.00437,0.3237
+Raw Mango Ghee Roast Dosa,24.0,75,Ghee,RM,0.72,Kg,704.7318063212573,507.41,0.03,21.1421
+Raw Mango Ghee Roast Dosa,24.0,207,Special Daal Bucket,RM,0.072,Kg,153.33997340097807,10.73,0.003,0.4471
+Raw Mango Ghee Roast Dosa,24.0,229,Coconut Shredded,RM,1.38,Kg,141.5076066259222,195.28,0.0575,8.1367
+Raw Mango Ghee Roast Dosa,24.0,53,Sugar,RM,0.048,Kg,49.02456184895188,2.45,0.002,0.1021
+Raw Mango Ghee Roast Dosa,24.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,9.0,Pc,4.505947440252137,40.59,0.375,1.6913
+Raw Mango Ghee Roast Dosa,24.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,9.0,Pc,1.182894040567659,10.62,0.375,0.4425
+Raw Mango Ghee Roast Dosa,24.0,98,Carry Bag - Small (1pkt = 100pc),RM,9.0,Pc,7.309971955277055,65.79,0.375,2.7413
+Raw Mango Ghee Roast Dosa,24.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,18.0,Pc,3.603089449256527,64.8,0.75,2.7
+Malkapodi Dosa,37.0,84,Banana Leaf Big (1bundle = 50pc),RM,29.0,Pc,1.703601473376457,49.3,0.78378,1.3324
+Malkapodi Dosa,37.0,190,Dosa Batter Mix,RM,4.625,Kg,32.79396150244082,151.82,0.125,4.1032
+Malkapodi Dosa,37.0,116,Raw Green Chili,RM,0.081,Kg,74.40646916516131,5.95,0.00219,0.1608
+Malkapodi Dosa,37.0,108,Ginger,RM,0.093,Kg,131.32663125194048,11.82,0.00251,0.3195
+Malkapodi Dosa,37.0,21,RO Water,RM,4.625,Ltr,0.0,0.0,0.125,0.0
+Malkapodi Dosa,37.0,29,Salt,RM,0.116,Kg,27.13239693784672,3.26,0.00314,0.0881
+Malkapodi Dosa,37.0,97,Paper Napkin (1pkt = 100pc),RM,37.0,Pc,0.23037295446244285,8.51,1.0,0.23
+Malkapodi Dosa,37.0,47,Fried Chana Daal,RM,1.156,Kg,103.52067122738376,120.08,0.03124,3.2454
+Malkapodi Dosa,37.0,75,Ghee,RM,0.74,Kg,704.7318063212573,521.5,0.02,14.0946
+Malkapodi Dosa,37.0,207,Special Daal Bucket,RM,0.111,Kg,153.33997340097807,16.87,0.003,0.4559
+Malkapodi Dosa,37.0,229,Coconut Shredded,RM,1.619,Kg,141.5076066259222,229.25,0.04376,6.1959
+Malkapodi Dosa,37.0,53,Sugar,RM,0.006,Kg,49.02456184895188,0.49,0.00016,0.0132
+Malkapodi Dosa,37.0,193,Malkapodi Bucket,RM,1.11,Kg,169.3584292783018,187.99,0.03,5.0808
+Malkapodi Dosa,37.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,8.0,Pc,4.505947440252137,36.08,0.21622,0.9751
+Malkapodi Dosa,37.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,16.0,Pc,3.603089449256527,57.6,0.43243,1.5568
+Malkapodi Dosa,37.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,8.0,Pc,1.182894040567659,9.44,0.21622,0.2551
+Malkapodi Dosa,37.0,98,Carry Bag - Small (1pkt = 100pc),RM,8.0,Pc,7.309971955277055,58.48,0.21622,1.5805
+Malabar Paratha with Paneer Korma,58.0,84,Banana Leaf Big (1bundle = 50pc),RM,24.0,Pc,1.703601473376457,40.8,0.41379,0.7034
+Malabar Paratha with Paneer Korma,58.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,1.044,Ltr,150.3014727467051,156.31,0.018,2.695
+Malabar Paratha with Paneer Korma,58.0,29,Salt,RM,0.116,Kg,27.13239693784672,3.26,0.002,0.0562
+Malabar Paratha with Paneer Korma,58.0,97,Paper Napkin (1pkt = 100pc),RM,58.0,Pc,0.23037295446244285,13.34,1.0,0.23
+Malabar Paratha with Paneer Korma,58.0,110,Compartment Tray With Lid - 2CP (1pkt = 25pc),RM,34.0,Pc,6.976966408845769,237.32,0.58621,4.0917
+Malabar Paratha with Paneer Korma,58.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,34.0,Pc,1.182894040567659,40.12,0.58621,0.6917
+Malabar Paratha with Paneer Korma,58.0,98,Carry Bag - Small (1pkt = 100pc),RM,34.0,Pc,7.309971955277055,248.54,0.58621,4.2852
+Malabar Paratha with Paneer Korma,58.0,105,Paper Sleeve (1pkt = 50pc),RM,34.0,Pc,2.564001453406654,87.04,0.58621,1.5007
+Malabar Paratha with Paneer Korma,58.0,115,Coriander Leaves,RM,0.058,Kg,99.8851752413249,5.99,0.001,0.1033
+Malabar Paratha with Paneer Korma,58.0,195,Korma Gravy Mix (1pkt=700gm),RM,10.44,Kg,151.54994494506286,1582.18,0.18,27.279
+Malabar Paratha with Paneer Korma,58.0,75,Ghee,RM,0.116,Kg,704.7318063212573,84.57,0.002,1.4581
+Malabar Paratha with Paneer Korma,58.0,216,Malabar Paratha  (1pkt= 6Pcs),RM,116.0,Pc,8.058118086550472,934.96,2.0,16.12
+Malabar Paratha with Paneer Korma,58.0,60,Paneer,RM,4.06,Kg,299.13924111258325,1214.51,0.07,20.9398
+Raw Mango Benne Dosa,31.0,84,Banana Leaf Big (1bundle = 50pc),RM,13.0,Pc,1.703601473376457,22.1,0.41935,0.7129
+Raw Mango Benne Dosa,31.0,116,Raw Green Chili,RM,0.062,Kg,74.40646916516131,4.46,0.002,0.1439
+Raw Mango Benne Dosa,31.0,108,Ginger,RM,0.078,Kg,131.32663125194048,10.51,0.00252,0.339
+Raw Mango Benne Dosa,31.0,21,RO Water,RM,3.875,Ltr,0.0,0.0,0.125,0.0
+Raw Mango Benne Dosa,31.0,29,Salt,RM,0.093,Kg,27.13239693784672,2.44,0.003,0.0787
+Raw Mango Benne Dosa,31.0,97,Paper Napkin (1pkt = 100pc),RM,31.0,Pc,0.23037295446244285,7.13,1.0,0.23
+Raw Mango Benne Dosa,31.0,47,Fried Chana Daal,RM,0.961,Kg,103.52067122738376,99.38,0.031,3.2058
+Raw Mango Benne Dosa,31.0,391,White Butter,RM,0.93,Kg,579.8475688818112,539.26,0.03,17.3955
+Raw Mango Benne Dosa,31.0,115,Coriander Leaves,RM,0.062,Kg,99.8851752413249,5.99,0.002,0.1932
+Raw Mango Benne Dosa,31.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,4.65,Kg,32.852335731680704,152.75,0.15,4.9274
+Raw Mango Benne Dosa,31.0,207,Special Daal Bucket,RM,0.093,Kg,153.33997340097807,13.8,0.003,0.4452
+Raw Mango Benne Dosa,31.0,229,Coconut Shredded,RM,1.333,Kg,141.5076066259222,188.21,0.043,6.0713
+Raw Mango Benne Dosa,31.0,53,Sugar,RM,0.003,Kg,49.02456184895188,0.0,0.0001,0.0
+Raw Mango Benne Dosa,31.0,209,Raw Mango Chutney Bucket,RM,1.86,Kg,162.76085240319904,302.73,0.06,9.7655
+Mixed Uttapam,41.0,84,Banana Leaf Big (1bundle = 50pc),RM,16.0,Pc,1.703601473376457,27.2,0.39024,0.6634
+Mixed Uttapam,41.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.369,Ltr,150.3014727467051,55.61,0.009,1.3563
+Mixed Uttapam,41.0,190,Dosa Batter Mix,RM,8.2,Kg,32.79396150244082,268.88,0.2,6.558
+Mixed Uttapam,41.0,107,Carrot,RM,0.615,Kg,41.35494720622496,25.64,0.015,0.6254
+Mixed Uttapam,41.0,132,Onion,RM,0.615,Kg,42.55770583508858,26.39,0.015,0.6437
+Mixed Uttapam,41.0,116,Raw Green Chili,RM,0.082,Kg,74.40646916516131,5.95,0.002,0.1451
+Mixed Uttapam,41.0,108,Ginger,RM,0.082,Kg,131.32663125194048,10.51,0.002,0.2563
+Mixed Uttapam,41.0,21,RO Water,RM,4.92,Ltr,0.0,0.0,0.12,0.0
+Mixed Uttapam,41.0,29,Salt,RM,0.164,Kg,27.13239693784672,4.34,0.004,0.1059
+Mixed Uttapam,41.0,97,Paper Napkin (1pkt = 100pc),RM,41.0,Pc,0.23037295446244285,9.43,1.0,0.23
+Mixed Uttapam,41.0,47,Fried Chana Daal,RM,1.23,Kg,103.52067122738376,127.33,0.03,3.1056
+Mixed Uttapam,41.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,25.0,Pc,4.505947440252137,112.75,0.60976,2.75
+Mixed Uttapam,41.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,25.0,Pc,1.182894040567659,29.5,0.60976,0.7195
+Mixed Uttapam,41.0,98,Carry Bag - Small (1pkt = 100pc),RM,25.0,Pc,7.309971955277055,182.75,0.60976,4.4573
+Mixed Uttapam,41.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,50.0,Pc,3.603089449256527,180.0,1.21951,4.3902
+Mixed Uttapam,41.0,141,Tomato,RM,0.615,Kg,40.14091608454381,24.89,0.015,0.6071
+Mixed Uttapam,41.0,75,Ghee,RM,0.041,Kg,704.7318063212573,28.19,0.001,0.6876
+Mixed Uttapam,41.0,207,Special Daal Bucket,RM,0.041,Kg,153.33997340097807,6.13,0.001,0.1495
+Mixed Uttapam,41.0,229,Coconut Shredded,RM,2.05,Kg,141.5076066259222,290.1,0.05,7.0756
+Mixed Uttapam,41.0,53,Sugar,RM,0.082,Kg,49.02456184895188,3.92,0.002,0.0956
+Mixed Uttapam,41.0,208,Chaat Masala Bucket,RM,0.041,Kg,358.1226020596591,14.32,0.001,0.3493
+Mixed Uttapam,41.0,99,Green Capsicum,RM,0.615,Kg,67.30494845896989,41.73,0.015,1.0178
+Dadu`s Special Spicy Chutney,25.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.1,Ltr,150.3014727467051,15.03,0.004,0.6012
+Dadu`s Special Spicy Chutney,25.0,116,Raw Green Chili,RM,0.2,Kg,74.40646916516131,14.88,0.008,0.5952
+Dadu`s Special Spicy Chutney,25.0,108,Ginger,RM,0.025,Kg,131.32663125194048,3.94,0.001,0.1576
+Dadu`s Special Spicy Chutney,25.0,131,Curry Leaves,RM,0.025,Kg,70.81733193701771,2.12,0.001,0.0848
+Dadu`s Special Spicy Chutney,25.0,21,RO Water,RM,3.0,Ltr,0.0,0.0,0.12,0.0
+Dadu`s Special Spicy Chutney,25.0,29,Salt,RM,0.065,Kg,27.13239693784672,1.9,0.0026,0.076
+Dadu`s Special Spicy Chutney,25.0,97,Paper Napkin (1pkt = 100pc),RM,16.0,Pc,0.23037295446244285,3.68,0.64,0.1472
+Dadu`s Special Spicy Chutney,25.0,47,Fried Chana Daal,RM,1.0,Kg,103.52067122738376,103.52,0.04,4.1408
+Dadu`s Special Spicy Chutney,25.0,40,Dry Red Chili,RM,25.0,gm,0.23817300099128869,6.0,1.0,0.24
+Dadu`s Special Spicy Chutney,25.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,16.0,Pc,1.182894040567659,18.88,0.64,0.7552
+Dadu`s Special Spicy Chutney,25.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,16.0,Pc,3.603089449256527,57.6,0.64,2.304
+Dadu`s Special Spicy Chutney,25.0,26,Jaggery,RM,0.05,Kg,57.26513251387301,2.86,0.002,0.1144
+Dadu`s Special Spicy Chutney,25.0,115,Coriander Leaves,RM,0.25,Kg,99.8851752413249,24.97,0.01,0.9988
+Dadu`s Special Spicy Chutney,25.0,329,Imli Water,RM,0.2,Ltr,25.47936351195457,5.1,0.008,0.204
+Dadu`s Special Spicy Chutney,25.0,229,Coconut Shredded,RM,0.4,Kg,141.5076066259222,56.6,0.016,2.264
+Dadu`s Special Spicy Chutney,25.0,27,Mustard Seed,RM,125.0,gm,0.18475142983998463,22.5,5.0,0.9
+Dadu`s Special Spicy Chutney,25.0,48,Dosa Daal (Urad),RM,0.05,Kg,129.97204637983205,6.5,0.002,0.26
+Spicy Tomato Onion Chutney,111.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,2.466,Ltr,150.3014727467051,371.24,0.02222,3.3445
+Spicy Tomato Onion Chutney,111.0,132,Onion,RM,6.166,Kg,42.55770583508858,262.6,0.05555,2.3658
+Spicy Tomato Onion Chutney,111.0,108,Ginger,RM,0.32,Kg,131.32663125194048,42.03,0.00288,0.3786
+Spicy Tomato Onion Chutney,111.0,29,Salt,RM,0.246,Kg,27.13239693784672,6.78,0.00222,0.0611
+Spicy Tomato Onion Chutney,111.0,523,Tomato Onion Powder Mix (1 Pkt = 24gm),RM,0.555,Kg,524.1734077690518,293.54,0.005,2.6445
+Spicy Tomato Onion Chutney,111.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,53.0,Pc,1.633952618998613,86.39,0.47748,0.7783
+Spicy Tomato Onion Chutney,111.0,26,Jaggery,RM,0.468,Kg,57.26513251387301,26.92,0.00422,0.2425
+Spicy Tomato Onion Chutney,111.0,141,Tomato,RM,6.166,Kg,40.14091608454381,247.66,0.05555,2.2312
+Spicy Tomato Onion Chutney,111.0,329,Imli Water,RM,0.511,Ltr,25.47936351195457,12.99,0.0046,0.117
+Spicy Tomato Onion Chutney,111.0,207,Special Daal Bucket,RM,0.333,Kg,153.33997340097807,50.6,0.003,0.4559
+Dosa Coffee Tiffin,61.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,5.49,Ltr,150.3014727467051,825.15,0.09,13.527
+Dosa Coffee Tiffin,61.0,218,Idli Pc Raw (1 Pkt =40pc),RM,61.0,Pc,2.019284352521556,123.22,1.0,2.02
+Dosa Coffee Tiffin,61.0,190,Dosa Batter Mix,RM,6.1,Kg,32.79396150244082,200.02,0.1,3.279
+Dosa Coffee Tiffin,61.0,116,Raw Green Chili,RM,0.177,Kg,74.40646916516131,13.39,0.0029,0.2195
+Dosa Coffee Tiffin,61.0,108,Ginger,RM,0.122,Kg,131.32663125194048,15.76,0.002,0.2584
+Dosa Coffee Tiffin,61.0,131,Curry Leaves,RM,0.061,Kg,70.81733193701771,4.25,0.001,0.0697
+Dosa Coffee Tiffin,61.0,21,RO Water,RM,3.27,Ltr,0.0,0.0,0.05361,0.0
+Dosa Coffee Tiffin,61.0,97,Paper Napkin (1pkt = 100pc),RM,61.0,Pc,0.23037295446244285,14.03,1.0,0.23
+Dosa Coffee Tiffin,61.0,56,Cottons Lemonade,RM,61.0,Pc,17.495102465948545,1067.5,1.0,17.5
+Dosa Coffee Tiffin,61.0,47,Fried Chana Daal,RM,1.83,Kg,103.52067122738376,189.44,0.03,3.1056
+Dosa Coffee Tiffin,61.0,40,Dry Red Chili,RM,61.0,gm,0.23817300099128869,14.64,1.0,0.24
+Dosa Coffee Tiffin,61.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,61.0,Pc,1.182894040567659,71.98,1.0,1.18
+Dosa Coffee Tiffin,61.0,142,Carry Bag - Large(1pkt = 100pc),RM,61.0,Pc,10.53748317930936,642.94,1.0,10.54
+Dosa Coffee Tiffin,61.0,105,Paper Sleeve (1pkt = 50pc),RM,61.0,Pc,2.564001453406654,156.16,1.0,2.56
+Dosa Coffee Tiffin,61.0,26,Jaggery,RM,0.122,Kg,57.26513251387301,6.87,0.002,0.1126
+Dosa Coffee Tiffin,61.0,115,Coriander Leaves,RM,0.262,Kg,99.8851752413249,25.97,0.0043,0.4257
+Dosa Coffee Tiffin,61.0,329,Imli Water,RM,0.22,Ltr,25.47936351195457,5.61,0.00361,0.092
+Dosa Coffee Tiffin,61.0,75,Ghee,RM,0.61,Kg,704.7318063212573,429.89,0.01,7.0474
+Dosa Coffee Tiffin,61.0,207,Special Daal Bucket,RM,0.183,Kg,153.33997340097807,27.6,0.003,0.4525
+Dosa Coffee Tiffin,61.0,229,Coconut Shredded,RM,2.44,Kg,141.5076066259222,345.28,0.04,5.6603
+Dosa Coffee Tiffin,61.0,27,Mustard Seed,RM,61.0,gm,0.18475142983998463,10.98,1.0,0.18
+Dosa Coffee Tiffin,61.0,48,Dosa Daal (Urad),RM,0.122,Kg,129.97204637983205,15.6,0.002,0.2557
+Dosa Coffee Tiffin,61.0,206,Medu Vada Batter Mix,RM,3.782,Kg,75.31794072052114,284.71,0.062,4.6674
+Dosa Coffee Tiffin,61.0,118,Compartment Tray With Lid - 5CP (1pkt = 25pc),RM,61.0,Pc,9.966572348591667,608.17,1.0,9.97
+Dosa Coffee Tiffin,61.0,328,Spicy Coconut Chutney Mix 1Pkt (16gm),RM,0.14,Kg,156.52596078138978,21.91,0.0023,0.3592
+Dosa Coffee Tiffin,61.0,446,Potato Masala Bucket Outlet,SF,6.1,Kg,42.78058589216412,260.96,0.1,4.278
+Dahi Vada Plate (2 pc),79.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,1.58,Ltr,150.3014727467051,237.47,0.02,3.0059
+Dahi Vada Plate (2 pc),79.0,116,Raw Green Chili,RM,0.197,Kg,74.40646916516131,14.88,0.00249,0.1884
+Dahi Vada Plate (2 pc),79.0,108,Ginger,RM,0.197,Kg,131.32663125194048,26.27,0.00249,0.3325
+Dahi Vada Plate (2 pc),79.0,131,Curry Leaves,RM,0.02,Kg,70.81733193701771,1.42,0.00025,0.018
+Dahi Vada Plate (2 pc),79.0,97,Paper Napkin (1pkt = 100pc),RM,79.0,Pc,0.23037295446244285,18.17,1.0,0.23
+Dahi Vada Plate (2 pc),79.0,310,Dahi Bucket Mix (1pkt =105gm),RM,1.975,Kg,63.29345749038362,125.31,0.025,1.5862
+Dahi Vada Plate (2 pc),79.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,64.0,Pc,1.182894040567659,75.52,0.81013,0.9559
+Dahi Vada Plate (2 pc),79.0,98,Carry Bag - Small (1pkt = 100pc),RM,64.0,Pc,7.309971955277055,467.84,0.81013,5.922
+Dahi Vada Plate (2 pc),79.0,235,Raw Curd,RM,19.75,Kg,70.72940641437685,1396.92,0.25,17.6825
+Dahi Vada Plate (2 pc),79.0,206,Medu Vada Batter Mix,RM,9.875,Kg,75.31794072052114,744.16,0.125,9.4197
+Dahi Vada Plate (2 pc),79.0,32,Whole Cumin,RM,0.02,Kg,570.8962149163865,11.42,0.00025,0.1446
+Dahi Vada Plate (2 pc),79.0,127,Glen Container With Lid - 500ml (1pkt = 50pc),RM,64.0,Pc,4.003103151420383,256.0,0.81013,3.2405
+Dahi Vada Plate (2 pc),79.0,208,Chaat Masala Bucket,RM,0.158,Kg,358.1226020596591,57.3,0.002,0.7253
+Dahi Vada Plate (2 pc),79.0,92,Banana Leaf Small (1bundle = 50pc),RM,15.0,Pc,1.25004021314515,18.75,0.18987,0.2373
+Masala Uttapam,6.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.054,Ltr,150.3014727467051,7.52,0.009,1.2533
+Masala Uttapam,6.0,190,Dosa Batter Mix,RM,1.2,Kg,32.79396150244082,39.35,0.2,6.5583
+Masala Uttapam,6.0,116,Raw Green Chili,RM,0.012,Kg,74.40646916516131,0.74,0.002,0.1233
+Masala Uttapam,6.0,108,Ginger,RM,0.012,Kg,131.32663125194048,1.31,0.002,0.2183
+Masala Uttapam,6.0,21,RO Water,RM,0.72,Ltr,0.0,0.0,0.12,0.0
+Masala Uttapam,6.0,29,Salt,RM,0.024,Kg,27.13239693784672,0.54,0.004,0.09
+Masala Uttapam,6.0,97,Paper Napkin (1pkt = 100pc),RM,6.0,Pc,0.23037295446244285,1.38,1.0,0.23
+Masala Uttapam,6.0,47,Fried Chana Daal,RM,0.18,Kg,103.52067122738376,18.63,0.03,3.105
+Masala Uttapam,6.0,75,Ghee,RM,0.006,Kg,704.7318063212573,7.05,0.001,1.175
+Masala Uttapam,6.0,207,Special Daal Bucket,RM,0.018,Kg,153.33997340097807,3.07,0.003,0.5117
+Masala Uttapam,6.0,229,Coconut Shredded,RM,0.24,Kg,141.5076066259222,33.96,0.04,5.66
+Masala Uttapam,6.0,53,Sugar,RM,0.012,Kg,49.02456184895188,0.49,0.002,0.0817
+Masala Uttapam,6.0,208,Chaat Masala Bucket,RM,0.006,Kg,358.1226020596591,3.58,0.001,0.5967
+Masala Uttapam,6.0,446,Potato Masala Bucket Outlet,SF,0.606,Kg,42.78058589216412,26.1,0.101,4.35
+Onion Uttapam,23.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.207,Ltr,150.3014727467051,31.56,0.009,1.3722
+Onion Uttapam,23.0,190,Dosa Batter Mix,RM,4.6,Kg,32.79396150244082,150.83,0.2,6.5578
+Onion Uttapam,23.0,132,Onion,RM,1.61,Kg,42.55770583508858,68.52,0.07,2.9791
+Onion Uttapam,23.0,116,Raw Green Chili,RM,0.046,Kg,74.40646916516131,3.72,0.002,0.1617
+Onion Uttapam,23.0,108,Ginger,RM,0.046,Kg,131.32663125194048,6.57,0.002,0.2857
+Onion Uttapam,23.0,21,RO Water,RM,2.76,Ltr,0.0,0.0,0.12,0.0
+Onion Uttapam,23.0,29,Salt,RM,0.092,Kg,27.13239693784672,2.44,0.004,0.1061
+Onion Uttapam,23.0,97,Paper Napkin (1pkt = 100pc),RM,23.0,Pc,0.23037295446244285,5.29,1.0,0.23
+Onion Uttapam,23.0,47,Fried Chana Daal,RM,0.69,Kg,103.52067122738376,71.43,0.03,3.1057
+Onion Uttapam,23.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,15.0,Pc,4.505947440252137,67.65,0.65217,2.9413
+Onion Uttapam,23.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,15.0,Pc,1.182894040567659,17.7,0.65217,0.7696
+Onion Uttapam,23.0,98,Carry Bag - Small (1pkt = 100pc),RM,15.0,Pc,7.309971955277055,109.65,0.65217,4.7674
+Onion Uttapam,23.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,30.0,Pc,3.603089449256527,108.0,1.30435,4.6957
+Onion Uttapam,23.0,75,Ghee,RM,0.023,Kg,704.7318063212573,14.09,0.001,0.6126
+Onion Uttapam,23.0,207,Special Daal Bucket,RM,0.069,Kg,153.33997340097807,10.73,0.003,0.4665
+Onion Uttapam,23.0,229,Coconut Shredded,RM,0.92,Kg,141.5076066259222,130.19,0.04,5.6604
+Onion Uttapam,23.0,53,Sugar,RM,0.046,Kg,49.02456184895188,2.45,0.002,0.1065
+Onion Uttapam,23.0,208,Chaat Masala Bucket,RM,0.023,Kg,358.1226020596591,7.16,0.001,0.3113
+Onion Uttapam,23.0,84,Banana Leaf Big (1bundle = 50pc),RM,8.0,Pc,1.703601473376457,13.6,0.34783,0.5913
+Lemon Rice,30.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.15,Ltr,150.3014727467051,22.55,0.005,0.7517
+Lemon Rice,30.0,131,Curry Leaves,RM,0.06,Kg,70.81733193701771,4.25,0.002,0.1417
+Lemon Rice,30.0,29,Salt,RM,0.09,Kg,27.13239693784672,2.44,0.003,0.0813
+Lemon Rice,30.0,189,Lemon Rice Bucket,RM,7.5,Kg,87.14757506279615,653.63,0.25,21.7877
+Lemon Rice,30.0,97,Paper Napkin (1pkt = 100pc),RM,30.0,Pc,0.23037295446244285,6.9,1.0,0.23
+Lemon Rice,30.0,40,Dry Red Chili,RM,30.0,gm,0.23817300099128869,7.2,1.0,0.24
+Lemon Rice,30.0,30,Appalam Papad (1pkt = 47pc),RM,30.0,Pc,3.8225628521104107,114.6,1.0,3.82
+Lemon Rice,30.0,46,Chana Daal,RM,0.18,Kg,86.22730589434195,15.52,0.006,0.5173
+Lemon Rice,30.0,110,Compartment Tray With Lid - 2CP (1pkt = 25pc),RM,24.0,Pc,6.976966408845769,167.52,0.8,5.584
+Lemon Rice,30.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,24.0,Pc,1.182894040567659,28.32,0.8,0.944
+Lemon Rice,30.0,98,Carry Bag - Small (1pkt = 100pc),RM,24.0,Pc,7.309971955277055,175.44,0.8,5.848
+Lemon Rice,30.0,105,Paper Sleeve (1pkt = 50pc),RM,24.0,Pc,2.564001453406654,61.44,0.8,2.048
+Lemon Rice,30.0,27,Mustard Seed,RM,30.0,gm,0.18475142983998463,5.4,1.0,0.18
+Lemon Rice,30.0,48,Dosa Daal (Urad),RM,0.18,Kg,129.97204637983205,23.39,0.006,0.7797
+Lemon Rice,30.0,28,Raw Peanut,RM,0.3,Kg,131.1941790183901,39.36,0.01,1.312
+Lemon Rice,30.0,84,Banana Leaf Big (1bundle = 50pc),RM,6.0,Pc,1.703601473376457,10.2,0.2,0.34
+Tomato Onion Uttapam,16.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.144,Ltr,150.3014727467051,21.04,0.009,1.315
+Tomato Onion Uttapam,16.0,190,Dosa Batter Mix,RM,3.2,Kg,32.79396150244082,104.93,0.2,6.5581
+Tomato Onion Uttapam,16.0,132,Onion,RM,0.64,Kg,42.55770583508858,27.24,0.04,1.7025
+Tomato Onion Uttapam,16.0,116,Raw Green Chili,RM,0.032,Kg,74.40646916516131,2.23,0.002,0.1394
+Tomato Onion Uttapam,16.0,108,Ginger,RM,0.032,Kg,131.32663125194048,3.94,0.002,0.2462
+Tomato Onion Uttapam,16.0,21,RO Water,RM,1.92,Ltr,0.0,0.0,0.12,0.0
+Tomato Onion Uttapam,16.0,29,Salt,RM,0.064,Kg,27.13239693784672,1.63,0.004,0.1019
+Tomato Onion Uttapam,16.0,97,Paper Napkin (1pkt = 100pc),RM,16.0,Pc,0.23037295446244285,3.68,1.0,0.23
+Tomato Onion Uttapam,16.0,47,Fried Chana Daal,RM,0.48,Kg,103.52067122738376,49.69,0.03,3.1056
+Tomato Onion Uttapam,16.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,11.0,Pc,4.505947440252137,49.61,0.6875,3.1006
+Tomato Onion Uttapam,16.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,11.0,Pc,1.182894040567659,12.98,0.6875,0.8113
+Tomato Onion Uttapam,16.0,98,Carry Bag - Small (1pkt = 100pc),RM,11.0,Pc,7.309971955277055,80.41,0.6875,5.0256
+Tomato Onion Uttapam,16.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,22.0,Pc,3.603089449256527,79.2,1.375,4.95
+Tomato Onion Uttapam,16.0,141,Tomato,RM,0.64,Kg,40.14091608454381,25.69,0.04,1.6056
+Tomato Onion Uttapam,16.0,75,Ghee,RM,0.016,Kg,704.7318063212573,14.09,0.001,0.8806
+Tomato Onion Uttapam,16.0,207,Special Daal Bucket,RM,0.048,Kg,153.33997340097807,7.67,0.003,0.4794
+Tomato Onion Uttapam,16.0,229,Coconut Shredded,RM,0.64,Kg,141.5076066259222,90.57,0.04,5.6606
+Tomato Onion Uttapam,16.0,53,Sugar,RM,0.032,Kg,49.02456184895188,1.47,0.002,0.0919
+Tomato Onion Uttapam,16.0,208,Chaat Masala Bucket,RM,0.016,Kg,358.1226020596591,7.16,0.001,0.4475
+Tomato Onion Uttapam,16.0,84,Banana Leaf Big (1bundle = 50pc),RM,5.0,Pc,1.703601473376457,8.5,0.3125,0.5312
+Plain Ghee Roast Dosa,60.0,190,Dosa Batter Mix,RM,6.72,Kg,32.79396150244082,220.35,0.112,3.6725
+Plain Ghee Roast Dosa,60.0,116,Raw Green Chili,RM,0.12,Kg,74.40646916516131,8.93,0.002,0.1488
+Plain Ghee Roast Dosa,60.0,108,Ginger,RM,0.12,Kg,131.32663125194048,15.76,0.002,0.2627
+Plain Ghee Roast Dosa,60.0,21,RO Water,RM,7.2,Ltr,0.0,0.0,0.12,0.0
+Plain Ghee Roast Dosa,60.0,29,Salt,RM,0.24,Kg,27.13239693784672,6.51,0.004,0.1085
+Plain Ghee Roast Dosa,60.0,97,Paper Napkin (1pkt = 100pc),RM,60.0,Pc,0.23037295446244285,13.8,1.0,0.23
+Plain Ghee Roast Dosa,60.0,47,Fried Chana Daal,RM,1.8,Kg,103.52067122738376,186.34,0.03,3.1057
+Plain Ghee Roast Dosa,60.0,112,Take Away Packing Box - Small (1bundle = 50pc),RM,35.0,Pc,4.505947440252137,157.85,0.58333,2.6308
+Plain Ghee Roast Dosa,60.0,93,Bio-Degradable Spoon (1pkt = 50pc),RM,35.0,Pc,1.182894040567659,41.3,0.58333,0.6883
+Plain Ghee Roast Dosa,60.0,98,Carry Bag - Small (1pkt = 100pc),RM,35.0,Pc,7.309971955277055,255.85,0.58333,4.2642
+Plain Ghee Roast Dosa,60.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,70.0,Pc,3.603089449256527,252.0,1.16667,4.2
+Plain Ghee Roast Dosa,60.0,75,Ghee,RM,1.8,Kg,704.7318063212573,1268.51,0.03,21.1418
+Plain Ghee Roast Dosa,60.0,207,Special Daal Bucket,RM,0.18,Kg,153.33997340097807,27.6,0.003,0.46
+Plain Ghee Roast Dosa,60.0,229,Coconut Shredded,RM,2.4,Kg,141.5076066259222,339.62,0.04,5.6603
+Plain Ghee Roast Dosa,60.0,53,Sugar,RM,0.12,Kg,49.02456184895188,5.88,0.002,0.098
+Plain Ghee Roast Dosa,60.0,84,Banana Leaf Big (1bundle = 50pc),RM,25.0,Pc,1.703601473376457,42.5,0.41667,0.7083
+Dosa Batter Kit (1 Kg),18.0,190,Dosa Batter Mix,RM,18.0,Kg,32.79396150244082,590.22,1.0,32.79
+Dosa Batter Kit (1 Kg),18.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,18.0,Pc,1.633952618998613,29.34,1.0,1.63
+Dosa Batter Kit (1 Kg),18.0,184,Sambar Bucket,RM,18.0,Ltr,26.365123238948957,474.66,1.0,26.37
+Dosa Batter Kit (1 Kg),18.0,115,Coriander Leaves,RM,0.054,Kg,99.8851752413249,4.99,0.003,0.2772
+Dosa Batter Kit (1 Kg),18.0,207,Special Daal Bucket,RM,0.036,Kg,153.33997340097807,6.13,0.002,0.3406
+Dosa Batter Kit (1 Kg),18.0,193,Malkapodi Bucket,RM,1.8,Kg,169.3584292783018,304.85,0.1,16.9361
+Dosa Batter Kit (1 Kg),18.0,204,Special White Coconut Chutney Bucket,RM,9.0,Kg,72.30798695662877,650.79,0.5,36.155
+Dosa Batter Kit (1 Kg),18.0,406,Sambar Sticker (DIY) Cap Cover,RM,18.0,Pc,3.912221685926573,70.38,1.0,3.91
+Dosa Batter Kit (1 Kg),18.0,402,Dosa Batter Sticker (DIY) Cap Cover,RM,18.0,Pc,3.872331521332808,69.66,1.0,3.87
+Dosa Batter Kit (1 Kg),18.0,396,DIY Kits Box,RM,18.0,Pc,27.784691295953856,500.04,1.0,27.78
+Dosa Batter Kit (1 Kg),18.0,405,Malkapodi Powder Sticker (DIY),RM,18.0,Pc,1.7674414897084243,31.86,1.0,1.77
+Dosa Batter Kit (1 Kg),18.0,127,Glen Container With Lid - 500ml (1pkt = 50pc),RM,36.0,Pc,4.003103151420383,144.0,2.0,8.0
+Dosa Batter Kit (1 Kg),18.0,407,Round Bucket Dosa Batter Front Sticker (DIY),RM,18.0,Pc,3.8074312302063738,68.58,1.0,3.81
+Dosa Batter Kit (1 Kg),18.0,408,Round Bucket Back Sticker (DIY),RM,18.0,Pc,4.040444908779383,72.72,1.0,4.04
+Dosa Batter Kit (1 Kg),18.0,401,1000ml Round Bucket (DIY),RM,36.0,Piece,12.738761448896474,458.64,2.0,25.48
+Dosa Batter Kit (1 Kg),18.0,446,Potato Masala Bucket Outlet,SF,9.0,Kg,42.78058589216412,385.02,0.5,21.39
+Onion,166.0,132,Onion,RM,6.64,Kg,42.55770583508858,282.6,0.04,1.7024
+Fresh Buttermilk,65.0,116,Raw Green Chili,RM,0.065,Kg,74.40646916516131,5.21,0.001,0.0802
+Fresh Buttermilk,65.0,108,Ginger,RM,0.195,Kg,131.32663125194048,24.95,0.003,0.3838
+Fresh Buttermilk,65.0,131,Curry Leaves,RM,0.065,Kg,70.81733193701771,4.96,0.001,0.0763
+Fresh Buttermilk,65.0,21,RO Water,RM,15.6,Ltr,0.0,0.0,0.24,0.0
+Fresh Buttermilk,65.0,29,Salt,RM,0.065,Kg,27.13239693784672,1.9,0.001,0.0292
+Fresh Buttermilk,65.0,97,Paper Napkin (1pkt = 100pc),RM,65.0,Pc,0.23037295446244285,14.95,1.0,0.23
+Fresh Buttermilk,65.0,235,Raw Curd,RM,3.9,Kg,70.72940641437685,275.85,0.06,4.2438
+Fresh Buttermilk,65.0,15,Black Salt,RM,195.0,gm,0.02672023788527695,5.85,3.0,0.09
+Fresh Buttermilk,65.0,113,Paper Straw (1pkt = 100pc),RM,65.0,Pc,0.3879360637187646,25.35,1.0,0.39
+Fresh Buttermilk,65.0,103,Glass Bottle 300ml W/Cap (1box = 48pc),RM,28.0,Pc,12.097195205951346,338.8,0.43077,5.2123
+Homemade Sparkling Lemonade,58.0,21,RO Water,RM,8.12,Ltr,0.0,0.0,0.14,0.0
+Homemade Sparkling Lemonade,58.0,97,Paper Napkin (1pkt = 100pc),RM,58.0,Pc,0.23037295446244285,13.34,1.0,0.23
+Homemade Sparkling Lemonade,58.0,124,Lime,RM,174.0,Pc,3.501389951770169,609.0,3.0,10.5
+Homemade Sparkling Lemonade,58.0,53,Sugar,RM,1.45,Kg,49.02456184895188,71.08,0.025,1.2255
+Homemade Sparkling Lemonade,58.0,113,Paper Straw (1pkt = 100pc),RM,58.0,Pc,0.3879360637187646,22.62,1.0,0.39
+Homemade Sparkling Lemonade,58.0,64,Kinley Soda 750ml Pet,RM,15.08,Pc,15.791720203878464,238.11,0.26,4.1053
+Lemon Iced Tea,22.0,21,RO Water,RM,3.674,Ltr,0.0,0.0,0.167,0.0
+Lemon Iced Tea,22.0,97,Paper Napkin (1pkt = 100pc),RM,22.0,Pc,0.23037295446244285,5.06,1.0,0.23
+Lemon Iced Tea,22.0,124,Lime,RM,44.0,Pc,3.501389951770169,154.0,2.0,7.0
+Lemon Iced Tea,22.0,53,Sugar,RM,0.66,Kg,49.02456184895188,32.35,0.03,1.4705
+Lemon Iced Tea,22.0,113,Paper Straw (1pkt = 100pc),RM,22.0,Pc,0.3879360637187646,8.58,1.0,0.39
+Lemon Iced Tea,22.0,448,Chhote Lal Tea 250GM,RM,0.088,Kg,391.8829568172731,35.27,0.004,1.6032
+Homemade Lemonade,15.0,21,RO Water,RM,4.35,Ltr,0.0,0.0,0.29,0.0
+Homemade Lemonade,15.0,97,Paper Napkin (1pkt = 100pc),RM,15.0,Pc,0.23037295446244285,3.45,1.0,0.23
+Homemade Lemonade,15.0,124,Lime,RM,45.0,Pc,3.501389951770169,157.5,3.0,10.5
+Homemade Lemonade,15.0,53,Sugar,RM,0.3,Kg,49.02456184895188,14.71,0.02,0.9807
+Homemade Lemonade,15.0,113,Paper Straw (1pkt = 100pc),RM,15.0,Pc,0.3879360637187646,5.85,1.0,0.39
+Filter Coffee,342.0,4,Cothas Coffee Powder,RM,3.42,Kg,842.5017376143393,2881.35,0.01,8.425
+Filter Coffee,342.0,97,Paper Napkin (1pkt = 100pc),RM,342.0,Pc,0.23037295446244285,78.66,1.0,0.23
+Filter Coffee,342.0,76,Milk - Tetra 1Ltr,RM,37.62,Ltr,76.01490558479163,2859.5,0.11,8.3611
+Filter Coffee,342.0,31,White Sugar Sachet (1pkt = 200pc),RM,684.0,Pc,0.4306886070591615,294.12,2.0,0.86
+Black Coffee,25.0,4,Cothas Coffee Powder,RM,0.35,Kg,842.5017376143393,294.88,0.014,11.7952
+Black Coffee,25.0,97,Paper Napkin (1pkt = 100pc),RM,25.0,Pc,0.23037295446244285,5.75,1.0,0.23
+Black Coffee,25.0,31,White Sugar Sachet (1pkt = 200pc),RM,50.0,Pc,0.4306886070591615,21.5,2.0,0.86
+Cold Coffee-Classic,75.0,4,Cothas Coffee Powder,RM,1.05,Kg,842.5017376143393,884.63,0.014,11.7951
+Cold Coffee-Classic,75.0,97,Paper Napkin (1pkt = 100pc),RM,75.0,Pc,0.23037295446244285,17.25,1.0,0.23
+Cold Coffee-Classic,75.0,113,Paper Straw (1pkt = 100pc),RM,75.0,Pc,0.3879360637187646,29.25,1.0,0.39
+Cold Coffee-Classic,75.0,103,Glass Bottle 300ml W/Cap (1box = 48pc),RM,26.0,Pc,12.097195205951346,314.6,0.34667,4.1947
+Cold Coffee-Classic,75.0,76,Milk - Tetra 1Ltr,RM,3.75,Ltr,76.01490558479163,285.04,0.05,3.8005
+Cold Coffee-Classic,75.0,297,Amul IC BP Vanilla (5L) CF,RM,16.65,Ltr,99.34410136414667,1654.01,0.222,22.0535
+Cold Coffee-Nuttela,19.0,4,Cothas Coffee Powder,RM,0.266,Kg,842.5017376143393,227.48,0.014,11.9726
+Cold Coffee-Nuttela,19.0,97,Paper Napkin (1pkt = 100pc),RM,19.0,Pc,0.23037295446244285,4.37,1.0,0.23
+Cold Coffee-Nuttela,19.0,113,Paper Straw (1pkt = 100pc),RM,19.0,Pc,0.3879360637187646,7.41,1.0,0.39
+Cold Coffee-Nuttela,19.0,76,Milk - Tetra 1Ltr,RM,0.95,Ltr,76.01490558479163,72.21,0.05,3.8005
+Cold Coffee-Nuttela,19.0,297,Amul IC BP Vanilla (5L) CF,RM,4.218,Ltr,99.34410136414667,419.21,0.222,22.0637
+Cold Coffee-Nuttela,19.0,94,Cold Coffee Sticker (1sheet = 28pc),RM,19.0,Pc,0.0,0.0,1.0,0.0
+Cold Coffee-Nuttela,19.0,10,Nuttella (350gm),RM,0.38,Kg,894.8533112946698,340.04,0.02,17.8968
+Filter Coffee Cappuccino,14.0,4,Cothas Coffee Powder,RM,0.112,Kg,842.5017376143393,92.68,0.008,6.62
+Filter Coffee Cappuccino,14.0,97,Paper Napkin (1pkt = 100pc),RM,14.0,Pc,0.23037295446244285,3.22,1.0,0.23
+Filter Coffee Cappuccino,14.0,76,Milk - Tetra 1Ltr,RM,1.82,Ltr,76.01490558479163,138.34,0.13,9.8814
+Filter Coffee Cappuccino,14.0,31,White Sugar Sachet (1pkt = 200pc),RM,28.0,Pc,0.4306886070591615,12.04,2.0,0.86
+Jaggery Cinnamon Filter Coffee,15.0,4,Cothas Coffee Powder,RM,0.12,Kg,842.5017376143393,101.1,0.008,6.74
+Jaggery Cinnamon Filter Coffee,15.0,97,Paper Napkin (1pkt = 100pc),RM,15.0,Pc,0.23037295446244285,3.45,1.0,0.23
+Jaggery Cinnamon Filter Coffee,15.0,76,Milk - Tetra 1Ltr,RM,1.95,Ltr,76.01490558479163,148.22,0.13,9.8813
+Jaggery Cinnamon Filter Coffee,15.0,459,Jaggery Powder (250gm=1pkt),RM,0.12,Kg,108.65926717268722,13.04,0.008,0.8693
+Jaggery Cinnamon Filter Coffee,15.0,460,Cinnamon Powder (250gm=1pkt),RM,0.03,Kg,328.57,9.86,0.002,0.6573
+Jaggery Cinnamon Filter Coffee,15.0,463,Brown Sugar Sachet  (1pkt = 200pc),RM,15.0,Pc,0.4893334118067973,7.35,1.0,0.49
+Fresh Watermelon Juice,47.0,97,Paper Napkin (1pkt = 100pc),RM,47.0,Pc,0.23037295446244285,10.81,1.0,0.23
+Fresh Watermelon Juice,47.0,416,Watermelon,RM,42.3,Kg,34.98094555409538,1479.65,0.9,31.4819
+Fresh Watermelon Juice,47.0,113,Paper Straw (1pkt = 100pc),RM,47.0,Pc,0.3879360637187646,18.33,1.0,0.39
+Fresh Watermelon Juice,47.0,103,Glass Bottle 300ml W/Cap (1box = 48pc),RM,16.0,Pc,12.097195205951346,193.6,0.34043,4.1191
+Strawberry Shake,3.0,97,Paper Napkin (1pkt = 100pc),RM,3.0,Pc,0.23037295446244285,0.69,1.0,0.23
+Strawberry Shake,3.0,113,Paper Straw (1pkt = 100pc),RM,3.0,Pc,0.3879360637187646,1.17,1.0,0.39
+Strawberry Shake,3.0,76,Milk - Tetra 1Ltr,RM,0.3,Ltr,76.01490558479163,22.8,0.1,7.6
+Strawberry Shake,3.0,548,Strawberry Crush - 750ml,RM,0.18,Ltr,199.2480526756787,35.87,0.06,11.9567
+Strawberry Shake,3.0,297,Amul IC BP Vanilla (5L) CF,RM,0.3,Ltr,99.34410136414667,29.8,0.1,9.9333
+Service of Lemonade,91.0,97,Paper Napkin (1pkt = 100pc),RM,91.0,Pc,0.23037295446244285,20.93,1.0,0.23
+Service of Lemonade,91.0,56,Cottons Lemonade,RM,91.0,Pc,17.495102465948545,1592.5,1.0,17.5
+Service of Lemonade,91.0,113,Paper Straw (1pkt = 100pc),RM,91.0,Pc,0.3879360637187646,35.49,1.0,0.39
+Raw Mango Chutney,37.0,532,Raw mango Powder Mix (1 Pkt = 13gm),RM,0.12,Kg,289.9906421464322,34.8,0.00324,0.9405
+Raw Mango Chutney,37.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,13.0,Pc,1.633952618998613,21.19,0.35135,0.5727
+Raw Mango Chutney,37.0,26,Jaggery,RM,0.555,Kg,57.26513251387301,32.07,0.015,0.8668
+Raw Mango Chutney,37.0,133,Raw Mango,RM,2.313,Kg,85.35117796940261,197.16,0.06251,5.3286
+Raw Mango Chutney,37.0,122,Amada,RM,0.231,Kg,70.65683481459293,16.25,0.00624,0.4392
+Raw Mango Chutney,37.0,207,Special Daal Bucket,RM,0.111,Kg,153.33997340097807,16.87,0.003,0.4559
+Raw Mango Chutney,37.0,229,Coconut Shredded,RM,0.925,Kg,141.5076066259222,131.6,0.025,3.5568
+Appalam Papad (1pc),41.0,30,Appalam Papad (1pkt = 47pc),RM,41.0,Pc,3.8225628521104107,156.62,1.0,3.82
+Potato Masala,267.0,119,Glen Container With Lid - 250ml (1pkt = 50pc),RM,85.0,Pc,3.603089449256527,306.0,0.31835,1.1461
+Potato Masala,267.0,115,Coriander Leaves,RM,0.267,Kg,99.8851752413249,26.97,0.001,0.101
+Potato Masala,267.0,446,Potato Masala Bucket Outlet,SF,53.4,Kg,42.78058589216412,2284.45,0.2,8.556
+Malkapodi & Ghee,20.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,14.0,Pc,1.633952618998613,22.82,0.7,1.141
+Malkapodi & Ghee,20.0,75,Ghee,RM,0.4,Kg,704.7318063212573,281.89,0.02,14.0945
+Malkapodi & Ghee,20.0,193,Malkapodi Bucket,RM,0.3,Kg,169.3584292783018,50.81,0.015,2.5405
+Butter,81.0,14,Amul Butter,RM,2.43,Kg,545.6704860150979,1325.98,0.03,16.3701
+Regular Sambar,3770.0,184,Sambar Bucket,RM,754.0,Ltr,26.365123238948957,19882.98,0.2,5.274
+Regular Sambar,3770.0,115,Coriander Leaves,RM,7.54,Kg,99.8851752413249,753.17,0.002,0.1998
+Jain Sambar,339.0,225,Jain Sambar Bucket,RM,67.8,Ltr,24.67557280062333,1673.3,0.2,4.936
+Jain Sambar,339.0,115,Coriander Leaves,RM,0.339,Kg,99.8851752413249,33.96,0.001,0.1002
+Ghee,54.0,75,Ghee,RM,1.08,Kg,704.7318063212573,761.11,0.02,14.0946
+Special White Coconut Chutney,71.0,207,Special Daal Bucket,RM,0.213,Kg,153.33997340097807,32.2,0.003,0.4535
+Special White Coconut Chutney,71.0,204,Special White Coconut Chutney Bucket,RM,10.65,Kg,72.30798695662877,770.1,0.15,10.8465
+Special White Coconut Chutney,71.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,51.0,Pc,1.633952618998613,83.13,0.71831,1.1708
+Cheese,200.0,68,Amul Cheese,RM,8.0,Kg,504.3544931815672,4034.8,0.04,20.174
+Dosa Coffee Glass Bottle,33.0,103,Glass Bottle 300ml W/Cap (1box = 48pc),RM,33.0,Pc,12.097195205951346,399.3,1.0,12.1
+Schweppes Bottled water (500ml),139.0,88,Schweppes Water - 500ml,RM,139.0,Pc,27.80611435434131,3865.59,1.0,27.81
+Filter Coffee Flask,13.0,76,Milk - Tetra 1Ltr,RM,1.95,Ltr,76.01490558479163,148.22,0.15,11.4015
+Filter Coffee Flask,13.0,97,Paper Napkin (1pkt = 100pc),RM,26.0,Pc,0.23037295446244285,5.98,2.0,0.46
+Filter Coffee Flask,13.0,98,Carry Bag - Small (1pkt = 100pc),RM,13.0,Pc,7.309971955277055,95.03,1.0,7.31
+Filter Coffee Flask,13.0,4,Cothas Coffee Powder,RM,0.325,Kg,842.5017376143393,278.03,0.025,21.3869
+Filter Coffee Flask,13.0,31,White Sugar Sachet (1pkt = 200pc),RM,52.0,Pc,0.4306886070591615,22.36,4.0,1.72
+Filter Coffee Flask,13.0,114,Wooden Stirrer (1pkt = 100pc),RM,26.0,Pc,0.13457037601129435,3.38,2.0,0.26
+Filter Coffee Flask,13.0,117,Coffee/Tea Flask - 250ml (1pkt = 25pc),RM,13.0,Pc,16.74176640000291,217.62,1.0,16.74
+Filter Coffee Flask,13.0,240,Hot Coffee Cup 150ml (1pkt=25pc),RM,26.0,Pc,1.2752402875224775,33.28,2.0,2.56
+Cold Coffee-Crunchy Oreo,14.0,76,Milk - Tetra 1Ltr,RM,0.7,Ltr,76.01490558479163,53.21,0.05,3.8007
+Cold Coffee-Crunchy Oreo,14.0,97,Paper Napkin (1pkt = 100pc),RM,14.0,Pc,0.23037295446244285,3.22,1.0,0.23
+Cold Coffee-Crunchy Oreo,14.0,4,Cothas Coffee Powder,RM,0.196,Kg,842.5017376143393,168.5,0.014,12.0357
+Cold Coffee-Crunchy Oreo,14.0,113,Paper Straw (1pkt = 100pc),RM,14.0,Pc,0.3879360637187646,5.46,1.0,0.39
+Cold Coffee-Crunchy Oreo,14.0,297,Amul IC BP Vanilla (5L) CF,RM,3.108,Ltr,99.34410136414667,308.95,0.222,22.0679
+Cold Coffee-Crunchy Oreo,14.0,3,Oreo Buiscuits,RM,35.0,Pkt,9.676527591492368,338.8,2.5,24.2
+Cold Coffee-Crunchy Oreo,14.0,94,Cold Coffee Sticker (1sheet = 28pc),RM,14.0,Pc,0.0,0.0,1.0,0.0
+Chocolate Filter Coffee,4.0,76,Milk - Tetra 1Ltr,RM,0.52,Ltr,76.01490558479163,39.53,0.13,9.8825
+Chocolate Filter Coffee,4.0,97,Paper Napkin (1pkt = 100pc),RM,4.0,Pc,0.23037295446244285,0.92,1.0,0.23
+Chocolate Filter Coffee,4.0,4,Cothas Coffee Powder,RM,0.032,Kg,842.5017376143393,25.28,0.008,6.32
+Chocolate Filter Coffee,4.0,31,White Sugar Sachet (1pkt = 200pc),RM,8.0,Pc,0.4306886070591615,3.44,2.0,0.86
+Chocolate Filter Coffee,4.0,469,Hershey's Chocolate Syrup 623 Ml,RM,0.064,Ltr,314.9102636530936,18.89,0.016,4.7225
+Malkapodi Idli pc,6.0,218,Idli Pc Raw (1 Pkt =40pc),RM,6.0,Pc,2.019284352521556,12.12,1.0,2.02
+Malkapodi Idli pc,6.0,116,Raw Green Chili,RM,0.012,Kg,74.40646916516131,0.74,0.002,0.1233
+Malkapodi Idli pc,6.0,108,Ginger,RM,0.012,Kg,131.32663125194048,1.31,0.002,0.2183
+Malkapodi Idli pc,6.0,21,RO Water,RM,0.72,Ltr,0.0,0.0,0.12,0.0
+Malkapodi Idli pc,6.0,29,Salt,RM,0.024,Kg,27.13239693784672,0.54,0.004,0.09
+Malkapodi Idli pc,6.0,97,Paper Napkin (1pkt = 100pc),RM,6.0,Pc,0.23037295446244285,1.38,1.0,0.23
+Malkapodi Idli pc,6.0,92,Banana Leaf Small (1bundle = 50pc),RM,6.0,Pc,1.25004021314515,7.5,1.0,1.25
+Malkapodi Idli pc,6.0,47,Fried Chana Daal,RM,0.18,Kg,103.52067122738376,18.63,0.03,3.105
+Malkapodi Idli pc,6.0,75,Ghee,RM,0.03,Kg,704.7318063212573,21.14,0.005,3.5233
+Malkapodi Idli pc,6.0,207,Special Daal Bucket,RM,0.018,Kg,153.33997340097807,3.07,0.003,0.5117
+Malkapodi Idli pc,6.0,229,Coconut Shredded,RM,0.24,Kg,141.5076066259222,33.96,0.04,5.66
+Malkapodi Idli pc,6.0,53,Sugar,RM,0.012,Kg,49.02456184895188,0.49,0.002,0.0817
+Malkapodi Idli pc,6.0,193,Malkapodi Bucket,RM,0.03,Kg,169.3584292783018,5.08,0.005,0.8467
+Tomato Uttapam,5.0,84,Banana Leaf Big (1bundle = 50pc),RM,5.0,Pc,1.703601473376457,8.5,1.0,1.7
+Tomato Uttapam,5.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.045,Ltr,150.3014727467051,7.52,0.009,1.504
+Tomato Uttapam,5.0,190,Dosa Batter Mix,RM,1.0,Kg,32.79396150244082,32.79,0.2,6.558
+Tomato Uttapam,5.0,116,Raw Green Chili,RM,0.01,Kg,74.40646916516131,0.74,0.002,0.148
+Tomato Uttapam,5.0,108,Ginger,RM,0.01,Kg,131.32663125194048,1.31,0.002,0.262
+Tomato Uttapam,5.0,21,RO Water,RM,0.6,Ltr,0.0,0.0,0.12,0.0
+Tomato Uttapam,5.0,29,Salt,RM,0.02,Kg,27.13239693784672,0.54,0.004,0.108
+Tomato Uttapam,5.0,97,Paper Napkin (1pkt = 100pc),RM,5.0,Pc,0.23037295446244285,1.15,1.0,0.23
+Tomato Uttapam,5.0,207,Special Daal Bucket,RM,0.015,Kg,153.33997340097807,3.07,0.003,0.614
+Tomato Uttapam,5.0,47,Fried Chana Daal,RM,0.15,Kg,103.52067122738376,15.53,0.03,3.106
+Tomato Uttapam,5.0,53,Sugar,RM,0.01,Kg,49.02456184895188,0.49,0.002,0.098
+Tomato Uttapam,5.0,75,Ghee,RM,0.005,Kg,704.7318063212573,7.05,0.001,1.41
+Tomato Uttapam,5.0,141,Tomato,RM,0.25,Kg,40.14091608454381,10.04,0.05,2.008
+Tomato Uttapam,5.0,229,Coconut Shredded,RM,0.2,Kg,141.5076066259222,28.3,0.04,5.66
+Benne Dosa Batter Kit (1 Kg),4.0,534,Benne Dosa Batter (Pack Size -3 Kg ),RM,4.0,Kg,32.852335731680704,131.4,1.0,32.85
+Benne Dosa Batter Kit (1 Kg),4.0,207,Special Daal Bucket,RM,0.008,Kg,153.33997340097807,1.53,0.002,0.3825
+Benne Dosa Batter Kit (1 Kg),4.0,193,Malkapodi Bucket,RM,0.4,Kg,169.3584292783018,67.74,0.1,16.935
+Benne Dosa Batter Kit (1 Kg),4.0,396,DIY Kits Box,RM,4.0,Pc,27.784691295953856,111.12,1.0,27.78
+Benne Dosa Batter Kit (1 Kg),4.0,401,1000ml Round Bucket (DIY),RM,8.0,Piece,12.738761448896474,101.92,2.0,25.48
+Benne Dosa Batter Kit (1 Kg),4.0,111,Glen Container With Lid - 100ml (1pkt = 50pc),RM,4.0,Pc,1.633952618998613,6.52,1.0,1.63
+Benne Dosa Batter Kit (1 Kg),4.0,184,Sambar Bucket,RM,4.0,Ltr,26.365123238948957,105.48,1.0,26.37
+Benne Dosa Batter Kit (1 Kg),4.0,115,Coriander Leaves,RM,0.012,Kg,99.8851752413249,1.0,0.003,0.25
+Benne Dosa Batter Kit (1 Kg),4.0,127,Glen Container With Lid - 500ml (1pkt = 50pc),RM,8.0,Pc,4.003103151420383,32.0,2.0,8.0
+Benne Dosa Batter Kit (1 Kg),4.0,204,Special White Coconut Chutney Bucket,RM,2.0,Kg,72.30798695662877,144.62,0.5,36.155
+Benne Dosa Batter Kit (1 Kg),4.0,406,Sambar Sticker (DIY) Cap Cover,RM,4.0,Pc,3.912221685926573,15.64,1.0,3.91
+Benne Dosa Batter Kit (1 Kg),4.0,402,Dosa Batter Sticker (DIY) Cap Cover,RM,4.0,Pc,3.872331521332808,15.48,1.0,3.87
+Benne Dosa Batter Kit (1 Kg),4.0,405,Malkapodi Powder Sticker (DIY),RM,4.0,Pc,1.7674414897084243,7.08,1.0,1.77
+Benne Dosa Batter Kit (1 Kg),4.0,407,Round Bucket Dosa Batter Front Sticker (DIY),RM,4.0,Pc,3.8074312302063738,15.24,1.0,3.81
+Benne Dosa Batter Kit (1 Kg),4.0,408,Round Bucket Back Sticker (DIY),RM,4.0,Pc,4.040444908779383,16.16,1.0,4.04
+Benne Dosa Batter Kit (1 Kg),4.0,446,Potato Masala Bucket Outlet,SF,2.0,Kg,42.78058589216412,85.56,0.5,21.39
+Dosa Batter 1Kg,8.0,190,Dosa Batter Mix,RM,8.0,Kg,32.79396150244082,262.32,1.0,32.79
+Dosa Batter 1Kg,8.0,401,1000ml Round Bucket (DIY),RM,8.0,Piece,12.738761448896474,101.92,1.0,12.74
+Dosa Batter 1Kg,8.0,98,Carry Bag - Small (1pkt = 100pc),RM,8.0,Pc,7.309971955277055,58.48,1.0,7.31
+Dosa Batter 1Kg,8.0,402,Dosa Batter Sticker (DIY) Cap Cover,RM,8.0,Pc,3.872331521332808,30.96,1.0,3.87
+Dosa Batter 1Kg,8.0,407,Round Bucket Dosa Batter Front Sticker (DIY),RM,8.0,Pc,3.8074312302063738,30.48,1.0,3.81
+Dosa Batter 1Kg,8.0,408,Round Bucket Back Sticker (DIY),RM,8.0,Pc,4.040444908779383,32.32,1.0,4.04
+Iced Filter Coffee,3.0,4,Cothas Coffee Powder,RM,0.015,Kg,842.5017376143393,16.85,0.005,5.6167
+Iced Filter Coffee,3.0,31,White Sugar Sachet (1pkt = 200pc),RM,6.0,Pc,0.4306886070591615,2.58,2.0,0.86
+Iced Filter Coffee,3.0,76,Milk - Tetra 1Ltr,RM,0.3,Ltr,76.01490558479163,22.8,0.1,7.6
+Iced Filter Coffee,3.0,97,Paper Napkin (1pkt = 100pc),RM,3.0,Pc,0.23037295446244285,0.69,1.0,0.23
+Malkapodi Powder,3.0,98,Carry Bag - Small (1pkt = 100pc),RM,3.0,Pc,7.309971955277055,21.93,1.0,7.31
+Malkapodi Powder,3.0,529,Malkapodi Powder (1 Box = 100Gm),RM,3.0,Pc,26.030658202990622,78.09,1.0,26.03
+Rasam Idli Plate (2pc),5.0,92,Banana Leaf Small (1bundle = 50pc),RM,5.0,Pc,1.25004021314515,6.25,1.0,1.25
+Rasam Idli Plate (2pc),5.0,97,Paper Napkin (1pkt = 100pc),RM,5.0,Pc,0.23037295446244285,1.15,1.0,0.23
+Rasam Idli Plate (2pc),5.0,229,Coconut Shredded,RM,0.2,Kg,141.5076066259222,28.3,0.04,5.66
+Rasam Idli Plate (2pc),5.0,115,Coriander Leaves,RM,0.015,Kg,99.8851752413249,2.0,0.003,0.4
+Rasam Idli Plate (2pc),5.0,47,Fried Chana Daal,RM,0.15,Kg,103.52067122738376,15.53,0.03,3.106
+Rasam Idli Plate (2pc),5.0,108,Ginger,RM,0.01,Kg,131.32663125194048,1.31,0.002,0.262
+Rasam Idli Plate (2pc),5.0,218,Idli Pc Raw (1 Pkt =40pc),RM,10.0,Pc,2.019284352521556,20.2,2.0,4.04
+Rasam Idli Plate (2pc),5.0,177,Rasam Bucket,RM,1.0,Ltr,34.922956594648184,34.92,0.2,6.984
+Rasam Idli Plate (2pc),5.0,116,Raw Green Chili,RM,0.01,Kg,74.40646916516131,0.74,0.002,0.148
+Rasam Idli Plate (2pc),5.0,21,RO Water,RM,0.6,Ltr,0.0,0.0,0.12,0.0
+Rasam Idli Plate (2pc),5.0,29,Salt,RM,0.02,Kg,27.13239693784672,0.54,0.004,0.108
+Rasam Idli Plate (2pc),5.0,207,Special Daal Bucket,RM,0.015,Kg,153.33997340097807,3.07,0.003,0.614
+Rasam Idli Plate (2pc),5.0,53,Sugar,RM,0.01,Kg,49.02456184895188,0.49,0.002,0.098
+Extra Paneer Korma,1.0,115,Coriander Leaves,RM,0.001,Kg,99.8851752413249,0.0,0.001,0.0
+Extra Paneer Korma,1.0,195,Korma Gravy Mix (1pkt=700gm),RM,0.108,Kg,151.54994494506286,16.67,0.108,16.67
+Extra Paneer Korma,1.0,60,Paneer,RM,0.04,Kg,299.13924111258325,11.97,0.04,11.97
+Extra Paneer Korma,1.0,29,Salt,RM,0.002,Kg,27.13239693784672,0.0,0.002,0.0
+Dahi Vada pc,4.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.04,Ltr,150.3014727467051,6.01,0.01,1.5025
+Dahi Vada pc,4.0,116,Raw Green Chili,RM,0.01,Kg,74.40646916516131,0.74,0.0025,0.185
+Dahi Vada pc,4.0,108,Ginger,RM,0.01,Kg,131.32663125194048,1.31,0.0025,0.3275
+Dahi Vada pc,4.0,131,Curry Leaves,RM,0.001,Kg,70.81733193701771,0.0,0.00025,0.0
+Dahi Vada pc,4.0,92,Banana Leaf Small (1bundle = 50pc),RM,4.0,Pc,1.25004021314515,5.0,1.0,1.25
+Dahi Vada pc,4.0,32,Whole Cumin,RM,0.001,Kg,570.8962149163865,0.0,0.00025,0.0
+Dahi Vada pc,4.0,310,Dahi Bucket Mix (1pkt =105gm),RM,0.1,Kg,63.29345749038362,6.33,0.025,1.5825
+Dahi Vada pc,4.0,208,Chaat Masala Bucket,RM,0.008,Kg,358.1226020596591,3.58,0.002,0.895
+Dahi Vada pc,4.0,235,Raw Curd,RM,1.0,Kg,70.72940641437685,70.73,0.25,17.6825
+Dahi Vada pc,4.0,97,Paper Napkin (1pkt = 100pc),RM,4.0,Pc,0.23037295446244285,0.92,1.0,0.23
+Dahi Vada pc,4.0,206,Medu Vada Batter Mix,RM,0.248,Kg,75.31794072052114,18.83,0.062,4.7075
+Ghee Idli pc,1.0,116,Raw Green Chili,RM,0.002,Kg,74.40646916516131,0.0,0.002,0.0
+Ghee Idli pc,1.0,108,Ginger,RM,0.002,Kg,131.32663125194048,0.0,0.002,0.0
+Ghee Idli pc,1.0,21,RO Water,RM,0.12,Ltr,0.0,0.0,0.12,0.0
+Ghee Idli pc,1.0,29,Salt,RM,0.004,Kg,27.13239693784672,0.0,0.004,0.0
+Ghee Idli pc,1.0,92,Banana Leaf Small (1bundle = 50pc),RM,1.0,Pc,1.25004021314515,1.25,1.0,1.25
+Ghee Idli pc,1.0,207,Special Daal Bucket,RM,0.003,Kg,153.33997340097807,0.0,0.003,0.0
+Ghee Idli pc,1.0,47,Fried Chana Daal,RM,0.003,Kg,103.52067122738376,0.0,0.003,0.0
+Ghee Idli pc,1.0,75,Ghee,RM,0.005,Kg,704.7318063212573,7.05,0.005,7.05
+Ghee Idli pc,1.0,218,Idli Pc Raw (1 Pkt =40pc),RM,1.0,Pc,2.019284352521556,2.02,1.0,2.02
+Ghee Idli pc,1.0,229,Coconut Shredded,RM,0.004,Kg,141.5076066259222,0.0,0.004,0.0
+Ghee Idli pc,1.0,53,Sugar,RM,0.002,Kg,49.02456184895188,0.0,0.002,0.0
+Ghee Idli pc,1.0,97,Paper Napkin (1pkt = 100pc),RM,1.0,Pc,0.23037295446244285,0.23,1.0,0.23
+Thindi Podi Idli,3.0,116,Raw Green Chili,RM,0.017,Kg,74.40646916516131,1.49,0.00567,0.4967
+Thindi Podi Idli,3.0,108,Ginger,RM,0.006,Kg,131.32663125194048,1.31,0.002,0.4367
+Thindi Podi Idli,3.0,21,RO Water,RM,0.321,Ltr,0.0,0.0,0.107,0.0
+Thindi Podi Idli,3.0,92,Banana Leaf Small (1bundle = 50pc),RM,3.0,Pc,1.25004021314515,3.75,1.0,1.25
+Thindi Podi Idli,3.0,207,Special Daal Bucket,RM,0.009,Kg,153.33997340097807,1.53,0.003,0.51
+Thindi Podi Idli,3.0,47,Fried Chana Daal,RM,0.107,Kg,103.52067122738376,11.39,0.03567,3.7967
+Thindi Podi Idli,3.0,194,Thindi Malkapodi Powder Bucket,RM,0.03,Kg,194.77278181720277,5.84,0.01,1.9467
+Thindi Podi Idli,3.0,75,Ghee,RM,0.03,Kg,704.7318063212573,21.14,0.01,7.0467
+Thindi Podi Idli,3.0,115,Coriander Leaves,RM,0.026,Kg,99.8851752413249,3.0,0.00867,1.0
+Thindi Podi Idli,3.0,329,Imli Water,RM,0.021,Ltr,25.47936351195457,0.51,0.007,0.17
+Thindi Podi Idli,3.0,218,Idli Pc Raw (1 Pkt =40pc),RM,6.0,Pc,2.019284352521556,12.12,2.0,4.04
+Thindi Podi Idli,3.0,229,Coconut Shredded,RM,0.15,Kg,141.5076066259222,21.23,0.05,7.0767
+Thindi Podi Idli,3.0,97,Paper Napkin (1pkt = 100pc),RM,3.0,Pc,0.23037295446244285,0.69,1.0,0.23
+Thindi Podi Idli,3.0,328,Spicy Coconut Chutney Mix 1Pkt (16gm),RM,0.014,Kg,156.52596078138978,1.57,0.00467,0.5233
+Butter Idli pc,1.0,116,Raw Green Chili,RM,0.002,Kg,74.40646916516131,0.0,0.002,0.0
+Butter Idli pc,1.0,108,Ginger,RM,0.002,Kg,131.32663125194048,0.0,0.002,0.0
+Butter Idli pc,1.0,21,RO Water,RM,0.12,Ltr,0.0,0.0,0.12,0.0
+Butter Idli pc,1.0,29,Salt,RM,0.004,Kg,27.13239693784672,0.0,0.004,0.0
+Butter Idli pc,1.0,97,Paper Napkin (1pkt = 100pc),RM,1.0,Pc,0.23037295446244285,0.23,1.0,0.23
+Butter Idli pc,1.0,92,Banana Leaf Small (1bundle = 50pc),RM,1.0,Pc,1.25004021314515,1.25,1.0,1.25
+Butter Idli pc,1.0,47,Fried Chana Daal,RM,0.003,Kg,103.52067122738376,0.0,0.003,0.0
+Butter Idli pc,1.0,14,Amul Butter,RM,0.005,Kg,545.6704860150979,5.46,0.005,5.46
+Butter Idli pc,1.0,218,Idli Pc Raw (1 Pkt =40pc),RM,1.0,Pc,2.019284352521556,2.02,1.0,2.02
+Butter Idli pc,1.0,207,Special Daal Bucket,RM,0.003,Kg,153.33997340097807,0.0,0.003,0.0
+Butter Idli pc,1.0,229,Coconut Shredded,RM,0.04,Kg,141.5076066259222,5.66,0.04,5.66
+Butter Idli pc,1.0,53,Sugar,RM,0.002,Kg,49.02456184895188,0.0,0.002,0.0
+Mango Shake,1.0,76,Milk - Tetra 1Ltr,RM,0.1,Ltr,76.01490558479163,7.6,0.1,7.6
+Mango Shake,1.0,97,Paper Napkin (1pkt = 100pc),RM,1.0,Pc,0.23037295446244285,0.23,1.0,0.23
+Mango Shake,1.0,113,Paper Straw (1pkt = 100pc),RM,1.0,Pc,0.3879360637187646,0.39,1.0,0.39
+Mango Shake,1.0,547,Mango Crush -750ml,RM,0.03,Ltr,198.8195673289931,5.96,0.03,5.96
+Mango Shake,1.0,549,Mango Ice Cream,RM,0.18,Ltr,120.95634466193636,21.77,0.18,21.77
+Rasam Vada Plate (2 Pc),1.0,115,Coriander Leaves,RM,0.003,Kg,99.8851752413249,0.0,0.003,0.0
+Rasam Vada Plate (2 Pc),1.0,92,Banana Leaf Small (1bundle = 50pc),RM,1.0,Pc,1.25004021314515,1.25,1.0,1.25
+Rasam Vada Plate (2 Pc),1.0,116,Raw Green Chili,RM,0.002,Kg,74.40646916516131,0.0,0.002,0.0
+Rasam Vada Plate (2 Pc),1.0,108,Ginger,RM,0.002,Kg,131.32663125194048,0.0,0.002,0.0
+Rasam Vada Plate (2 Pc),1.0,21,RO Water,RM,0.12,Ltr,0.0,0.0,0.12,0.0
+Rasam Vada Plate (2 Pc),1.0,29,Salt,RM,0.004,Kg,27.13239693784672,0.0,0.004,0.0
+Rasam Vada Plate (2 Pc),1.0,97,Paper Napkin (1pkt = 100pc),RM,1.0,Pc,0.23037295446244285,0.23,1.0,0.23
+Rasam Vada Plate (2 Pc),1.0,47,Fried Chana Daal,RM,0.03,Kg,103.52067122738376,3.11,0.03,3.11
+Rasam Vada Plate (2 Pc),1.0,53,Sugar,RM,0.002,Kg,49.02456184895188,0.0,0.002,0.0
+Rasam Vada Plate (2 Pc),1.0,207,Special Daal Bucket,RM,0.003,Kg,153.33997340097807,0.0,0.003,0.0
+Rasam Vada Plate (2 Pc),1.0,229,Coconut Shredded,RM,0.04,Kg,141.5076066259222,5.66,0.04,5.66
+Rasam Vada Plate (2 Pc),1.0,206,Medu Vada Batter Mix,RM,0.125,Kg,75.31794072052114,9.79,0.125,9.79
+Rasam Vada Plate (2 Pc),1.0,177,Rasam Bucket,RM,0.2,Ltr,34.922956594648184,6.98,0.2,6.98
+Rasam Vada pc,1.0,115,Coriander Leaves,RM,0.003,Kg,99.8851752413249,0.0,0.003,0.0
+Rasam Vada pc,1.0,92,Banana Leaf Small (1bundle = 50pc),RM,1.0,Pc,1.25004021314515,1.25,1.0,1.25
+Rasam Vada pc,1.0,116,Raw Green Chili,RM,0.002,Kg,74.40646916516131,0.0,0.002,0.0
+Rasam Vada pc,1.0,108,Ginger,RM,0.002,Kg,131.32663125194048,0.0,0.002,0.0
+Rasam Vada pc,1.0,21,RO Water,RM,0.12,Ltr,0.0,0.0,0.12,0.0
+Rasam Vada pc,1.0,29,Salt,RM,0.004,Kg,27.13239693784672,0.0,0.004,0.0
+Rasam Vada pc,1.0,47,Fried Chana Daal,RM,0.03,Kg,103.52067122738376,3.11,0.03,3.11
+Rasam Vada pc,1.0,53,Sugar,RM,0.002,Kg,49.02456184895188,0.0,0.002,0.0
+Rasam Vada pc,1.0,207,Special Daal Bucket,RM,0.003,Kg,153.33997340097807,0.0,0.003,0.0
+Rasam Vada pc,1.0,229,Coconut Shredded,RM,0.04,Kg,141.5076066259222,5.66,0.04,5.66
+Rasam Vada pc,1.0,206,Medu Vada Batter Mix,RM,0.062,Kg,75.31794072052114,4.52,0.062,4.52
+Rasam Vada pc,1.0,177,Rasam Bucket,RM,0.1,Ltr,34.922956594648184,3.49,0.1,3.49
+Vegetable Uttapam,2.0,84,Banana Leaf Big (1bundle = 50pc),RM,2.0,Pc,1.703601473376457,3.4,1.0,1.7
+Vegetable Uttapam,2.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.018,Ltr,150.3014727467051,3.01,0.009,1.505
+Vegetable Uttapam,2.0,190,Dosa Batter Mix,RM,0.4,Kg,32.79396150244082,13.12,0.2,6.56
+Vegetable Uttapam,2.0,107,Carrot,RM,0.04,Kg,41.35494720622496,1.65,0.02,0.825
+Vegetable Uttapam,2.0,116,Raw Green Chili,RM,0.004,Kg,74.40646916516131,0.0,0.002,0.0
+Vegetable Uttapam,2.0,108,Ginger,RM,0.004,Kg,131.32663125194048,0.0,0.002,0.0
+Vegetable Uttapam,2.0,21,RO Water,RM,0.24,Ltr,0.0,0.0,0.12,0.0
+Vegetable Uttapam,2.0,29,Salt,RM,0.008,Kg,27.13239693784672,0.27,0.004,0.135
+Vegetable Uttapam,2.0,97,Paper Napkin (1pkt = 100pc),RM,2.0,Pc,0.23037295446244285,0.46,1.0,0.23
+Vegetable Uttapam,2.0,47,Fried Chana Daal,RM,0.06,Kg,103.52067122738376,6.21,0.03,3.105
+Vegetable Uttapam,2.0,53,Sugar,RM,0.004,Kg,49.02456184895188,0.0,0.002,0.0
+Vegetable Uttapam,2.0,75,Ghee,RM,0.002,Kg,704.7318063212573,0.0,0.001,0.0
+Vegetable Uttapam,2.0,99,Green Capsicum,RM,0.03,Kg,67.30494845896989,2.02,0.015,1.01
+Vegetable Uttapam,2.0,141,Tomato,RM,0.03,Kg,40.14091608454381,1.2,0.015,0.6
+Vegetable Uttapam,2.0,207,Special Daal Bucket,RM,0.006,Kg,153.33997340097807,1.53,0.003,0.765
+Vegetable Uttapam,2.0,229,Coconut Shredded,RM,0.08,Kg,141.5076066259222,11.32,0.04,5.66
+Vegetable Uttapam,2.0,208,Chaat Masala Bucket,RM,0.002,Kg,358.1226020596591,0.0,0.001,0.0
+Coconut Rice,1.0,43,Sunflower Refined Oil  ( 1pkt = 868 Ml ),RM,0.025,Ltr,150.3014727467051,4.51,0.025,4.51
+Coconut Rice,1.0,211,Steam Rice Bucket,RM,0.183,Kg,56.286965344612774,10.13,0.183,10.13
+Coconut Rice,1.0,132,Onion,RM,0.037,Kg,42.55770583508858,1.7,0.037,1.7
+Coconut Rice,1.0,116,Raw Green Chili,RM,0.002,Kg,74.40646916516131,0.0,0.002,0.0
+Coconut Rice,1.0,131,Curry Leaves,RM,0.002,Kg,70.81733193701771,0.0,0.002,0.0
+Coconut Rice,1.0,29,Salt,RM,0.004,Kg,27.13239693784672,0.0,0.004,0.0
+Coconut Rice,1.0,97,Paper Napkin (1pkt = 100pc),RM,1.0,Pc,0.23037295446244285,0.23,1.0,0.23
+Coconut Rice,1.0,84,Banana Leaf Big (1bundle = 50pc),RM,1.0,Pc,1.703601473376457,1.7,1.0,1.7
+Coconut Rice,1.0,229,Coconut Shredded,RM,0.073,Kg,141.5076066259222,9.91,0.073,9.91
+Coconut Rice,1.0,32,Whole Cumin,RM,0.001,Kg,570.8962149163865,0.0,0.001,0.0
+Coconut Rice,1.0,48,Dosa Daal (Urad),RM,0.006,Kg,129.97204637983205,1.3,0.006,1.3
+Coconut Rice,1.0,30,Appalam Papad (1pkt = 47pc),RM,1.0,Pc,3.8225628521104107,3.82,1.0,3.82
+Coconut Rice,1.0,46,Chana Daal,RM,0.006,Kg,86.22730589434195,0.86,0.006,0.86

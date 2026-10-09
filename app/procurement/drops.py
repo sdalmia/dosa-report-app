@@ -78,7 +78,7 @@ def procurement_directory():
     override = os.getenv("PROCUREMENT_DATA_DIR")
     if override:
         return Path(override)
-    return Path(__file__).resolve().parents[1] / "data" / "procurement"
+    return Path(__file__).resolve().parents[2] / "data" / "procurement"
 
 
 def _norm(name):
