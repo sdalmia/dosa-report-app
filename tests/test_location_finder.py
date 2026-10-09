@@ -326,8 +326,11 @@ class RouteTests(unittest.TestCase):
         self.assertIn("Moderate", body)
         self.assertIn("A moderate cafe brand fits this area.", body)
         self.assertIn("Starbucks", body)
-        for banned in ("₹", "INR", "Rs "):
-            self.assertNotIn(banned, body)
+        self.assertIn("Classic score", body)
+        self.assertIn("data coming", body)
+        self.assertIn("does not estimate rent", body)
+        self.assertNotIn("INR", body)
+        self.assertNotIn("Rs ", body)
 
     def test_score_requires_a_picked_location(self):
         response = self.client.post("/location-finder", data={"radius": "500"})

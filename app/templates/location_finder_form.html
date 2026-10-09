@@ -1,16 +1,11 @@
-<!-- templates/location_finder_form.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}Location Finder – Where should we open?{% endblock %}
 
 {% block content %}
 <div class="lf-page">
-    <h1 class="mb-3">Location Finder</h1>
-    <p class="mb-4">
-        Use this to decide where to open a restaurant. Score one site, or map a single brand
-        across a city or region. Scoring a site stays on this page either way.
-    </p>
+    <h1>Location Finder</h1>
+    <p class="lf-answer">Best next sites are the brand clusters with no Dosa Coffee nearby. Delhi NCR is the stronger list. In Kolkata, score the area before treating it as a go.</p>
 
     {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -21,23 +16,110 @@
         <p class="mt-2 mb-0" id="loader-text">Working…</p>
     </div>
 
-    <div class="card p-4 shadow-sm bg-white mb-4">
-        <h2 class="h4">Score one site</h2>
-        <p class="text-secondary">
+    {% if board %}
+    <section class="lf-card" id="best-sites">
+        <h2>Best next sites</h2>
+        <h3>Delhi NCR</h3>
+        <ol class="lf-rank">
+            {% for area in board.best_ncr %}
+            <li>
+                <strong>{{ area.area }}</strong>
+                <span>{{ area.brand_count }} co-locating brands{% if area.anchor %}, including {{ area.anchor }}{% endif %}. {{ area.nearest_km }} km from {{ area.nearest }}.</span>
+            </li>
+            {% endfor %}
+        </ol>
+        <h3>Kolkata</h3>
+        <p class="lf-note">National chains are a weaker signal here. Run a site score before opening.</p>
+        <ol class="lf-rank">
+            {% for area in board.best_kolkata %}
+            <li>
+                <strong>{{ area.area }}</strong>
+                <span>{{ area.brand_count }} co-locating brands. {{ area.nearest_km }} km from {{ area.nearest }}.</span>
+            </li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <section class="lf-card">
+        <h2>Candidate areas</h2>
+        <p class="lf-note">{{ board.candidates|length }} areas, ranked. Neighbour brands can be shown on the map.</p>
+        <label class="lf-toggle"><input type="checkbox" id="show-neighbours"> Show neighbour brands</label>
+        <div id="candidate-map" class="lf-map" role="region" aria-label="Candidate areas"></div>
+        <div class="lf-scroll">
+            <table class="lf">
+                <thead>
+                    <tr><th>Area</th><th>City</th><th>Brands</th><th>Nearest store</th><th></th></tr>
+                </thead>
+                <tbody>
+                    {% for area in board.candidates %}
+                    <tr>
+                        <td>{{ area.area }}</td>
+                        <td>{{ area.city }}</td>
+                        <td>{{ area.brand_count }}</td>
+                        <td>{{ area.nearest }}{% if area.nearest_km is not none %}, {{ area.nearest_km }} km{% endif %}</td>
+                        <td>{% if area.airport %}Airport, not a site to open{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="lf-card" id="our-stores">
+        <h2>Our stores</h2>
+        <p class="lf-note">Trading stores, 9 Sep–8 Oct. The new score is format-aware. Classic score is the previous 0–10 score. A missing input is data coming, and it is left out. It is not scored as zero.</p>
+        <ul class="lf-corr">
+            <li>High street, classic score and sales: {{ board.correlations.high_street_classic.rho }} ({{ board.correlations.high_street_classic.n }} stores)</li>
+            <li>High street, classic score, without stores that still need a re-pin: {{ board.correlations.high_street_classic_pinned.rho }} ({{ board.correlations.high_street_classic_pinned.n }} stores)</li>
+            <li>High street, new score and sales: {{ board.correlations.high_street_new.rho }} ({{ board.correlations.high_street_new.n }} stores)</li>
+            <li>Mall food court, classic score and sales: {{ board.correlations.mall_classic.rho }} ({{ board.correlations.mall_classic.n }} stores)</li>
+            <li>Mall food court, new score and sales: {{ board.correlations.mall_new.rho }} ({{ board.correlations.mall_new.n }} stores)</li>
+        </ul>
+        <div class="lf-scroll">
+            <table class="lf">
+                <thead>
+                    <tr>
+                        <th>Store</th>
+                        <th>Format</th>
+                        <th>New score</th>
+                        <th>Classic score</th>
+                        <th>Sales, 9 Sep–8 Oct</th>
+                        <th>Google rating</th>
+                        <th>Pin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for store in board.stores %}
+                    <tr>
+                        <td>
+                            {{ store.name }}
+                            {% if store.score_note %}<span class="lf-note">{{ store.score_note }}</span>{% endif %}
+                        </td>
+                        <td>{{ store.format_label }}</td>
+                        <td>{% if store.pattern_score is not none %}{{ store.pattern_score }}{% endif %}</td>
+                        <td>{% if store.classic_score is not none %}{{ store.classic_score }}{% endif %}</td>
+                        <td>{{ money(store.gross_30d) }}</td>
+                        <td>{% if store.google_rating is not none %}{{ '%.1f'|format(store.google_rating) }}{% endif %}</td>
+                        <td>{% if store.repin %}<span class="lf-flag">Re-pin needed</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+    <div class="lf-card">
+        <h2>Score one site</h2>
+        <p>
+            Pick the format first. High street, mall food court, cloud kitchen, and metro / transit unit use different weights.
             The score runs from 0 to 10. A high score means a strong site for a new restaurant.
-            It still uses review energy, ratings, anchor brands, cuisine diversity, and transport.
-            The map keeps the review heatmap. Known brands are marked with their logo.
+            Classic score stays visible so the old number can be compared.
         </p>
         <form method="POST" id="score-form">
             <div class="mb-3">
                 <label for="autocomplete" class="form-label">Site to score</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="autocomplete"
-                    placeholder="Search for a place"
-                    required
-                >
+                <input type="text" class="form-control" id="autocomplete" placeholder="Search for a place" required>
                 <small class="text-muted">Pick a suggestion so the coordinates are set.</small>
             </div>
             <input type="hidden" name="latitude" id="latitude">
@@ -46,44 +128,35 @@
             <input type="hidden" name="place_id" id="place_id">
 
             <div class="mb-3">
+                <label for="site_format" class="form-label">Format</label>
+                <select class="form-control" id="site_format" name="site_format" required>
+                    <option value="high_street">High street</option>
+                    <option value="mall">Mall food court</option>
+                    <option value="cloud_kitchen">Cloud kitchen</option>
+                    <option value="metro">Metro / transit unit</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label for="radius" class="form-label">Search radius (meters)</label>
-                <input
-                    type="number"
-                    class="form-control"
-                    id="radius"
-                    name="radius"
-                    placeholder="500"
-                    value="500"
-                    min="50"
-                    max="5000"
-                    required
-                >
-                <div class="form-text text-muted">Default = 500 meters. This is the area the score and heatmap read.</div>
+                <input type="number" class="form-control" id="radius" name="radius" placeholder="500" value="500" min="50" max="5000" required>
+                <div class="form-text text-muted">Default = 500 meters. This is the area the classic score and heatmap read.</div>
             </div>
 
             <button type="submit" class="btn btn-primary">Score this site</button>
         </form>
     </div>
 
-    <div class="card p-4 shadow-sm bg-white">
-        <h2 class="h4">Map one brand across a city or region</h2>
-        <p class="text-secondary">
+    <div class="lf-card">
+        <h2>Map one brand across a city or region</h2>
+        <p>
             See where one brand already operates, for example Starbucks in Kolkata or KFC across Delhi NCR.
             Each known brand is marked with its logo. This does not replace the site score.
         </p>
         <form method="POST" action="{{ url_for('location_finder.location_finder_brand') }}" id="brand-form">
             <div class="mb-3">
                 <label for="brand" class="form-label">Brand</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="brand"
-                    name="brand"
-                    list="known-brands"
-                    placeholder="Starbucks"
-                    value="{{ brand }}"
-                    required
-                >
+                <input type="text" class="form-control" id="brand" name="brand" list="known-brands" placeholder="Starbucks" value="{{ brand }}" required>
                 <datalist id="known-brands">
                     {% for item in known_brands %}
                     <option value="{{ item.name }}"></option>
@@ -92,15 +165,7 @@
             </div>
             <div class="mb-3">
                 <label for="region" class="form-label">City or region</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="region"
-                    name="region"
-                    placeholder="Kolkata or Delhi NCR"
-                    value="{{ region }}"
-                    required
-                >
+                <input type="text" class="form-control" id="region" name="region" placeholder="Kolkata or Delhi NCR" value="{{ region }}" required>
             </div>
             <button type="submit" class="btn btn-outline-primary">Map this brand</button>
         </form>
@@ -109,15 +174,34 @@
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-.lf-page {
+.lf-page { color: var(--text); margin-bottom: var(--s4); }
+.lf-page h1, .lf-page h2, .lf-page h3, .lf-page p, .lf-page label, .lf-page td, .lf-page th, .lf-page li { color: var(--text); }
+.lf-page h1 { margin: 0 0 var(--s2); }
+.lf-page h2 { font-size: 1.25rem; margin: 0 0 var(--s2); }
+.lf-page h3 { font-size: 1rem; margin: var(--s3) 0 var(--s1); }
+.lf-answer { font-size: 1.2rem; font-weight: 650; margin: 0 0 var(--s3); }
+.lf-card {
     background: var(--surface);
-    color: var(--text);
-    border-radius: 16px;
-    padding: 28px 16px 32px;
-    margin-bottom: 24px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: var(--s3);
+    margin-bottom: var(--s3);
 }
-.lf-page h1, .lf-page h2, .lf-page p, .lf-page label { color: var(--text); }
+.lf-note { display: block; color: var(--text-muted); font-size: 0.92rem; margin: 0.2rem 0 0; }
+.lf-rank { margin: 0; padding-left: 1.2rem; }
+.lf-rank li { margin-bottom: var(--s2); }
+.lf-rank span { display: block; color: var(--text-muted); }
+.lf-map { height: 320px; border-radius: 12px; border: 1px solid var(--line); margin: var(--s2) 0; background: var(--surface-2); }
+.lf-scroll { overflow-x: auto; }
+table.lf { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+table.lf th, table.lf td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.lf th { color: var(--text-muted); font-weight: 650; }
+.lf-flag { color: var(--down); font-weight: 700; }
+.lf-toggle { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.lf-corr { padding-left: 1.1rem; }
+.lf-corr li { margin-bottom: 0.35rem; }
 </style>
 <script>
 document.getElementById("score-form").addEventListener("submit", function (event) {
@@ -136,14 +220,59 @@ document.getElementById("brand-form").addEventListener("submit", function () {
     loader.style.display = "block";
 });
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+    var payload = {{ {"candidates": board.candidates, "outlets": board.outlets}|tojson }};
+    var mapEl = document.getElementById("candidate-map");
+    if (!mapEl || !window.L || !payload.candidates.length) return;
+    var map = L.map(mapEl);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap"
+    }).addTo(map);
+    var bounds = [];
+    payload.candidates.forEach(function (area) {
+        if (area.lat == null || area.lon == null) return;
+        var style = getComputedStyle(document.documentElement);
+        var accent = style.getPropertyValue("--accent").trim();
+        var amber = style.getPropertyValue("--amber").trim();
+        var marker = L.circleMarker([area.lat, area.lon], {
+            radius: area.airport ? 5 : 8,
+            color: area.airport ? amber : accent,
+            fillOpacity: 0.85
+        }).addTo(map);
+        marker.bindPopup("<strong>" + area.area + "</strong><br>" + (area.nearest || "") + (area.nearest_km != null ? " · " + area.nearest_km + " km" : ""));
+        bounds.push([area.lat, area.lon]);
+    });
+    var brands = L.layerGroup();
+    payload.outlets.forEach(function (outlet) {
+        var marker = L.circleMarker([outlet.lat, outlet.lon], {
+            radius: 4,
+            color: getComputedStyle(document.documentElement).getPropertyValue("--chart-gross").trim(),
+            weight: 1,
+            fillOpacity: 0.7
+        });
+        marker.bindPopup(outlet.brand + (outlet.name ? " · " + outlet.name : ""));
+        brands.addLayer(marker);
+    });
+    var toggle = document.getElementById("show-neighbours");
+    if (toggle) {
+        toggle.addEventListener("change", function () {
+            if (toggle.checked) brands.addTo(map);
+            else map.removeLayer(brands);
+        });
+    }
+    if (bounds.length) map.fitBounds(bounds, { padding: [24, 24] });
+})();
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
 <script>
 function initAutocomplete() {
+    if (!window.google || !google.maps || !google.maps.places) return;
     const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete"),
         { types: ["geocode", "establishment"] }
     );
-
     autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
         if (!place.geometry) {
