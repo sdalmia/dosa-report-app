@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('owner.static', filename='owner.css') }}">
+<div class="owner-tools">
+  <nav class="ot-nav" aria-label="Owner tools">
+    <a href="{{ url_for('owner.brief') }}" class="{% if active == 'brief' %}is-on{% endif %}">Brief</a>
+    <a href="{{ url_for('owner.scorecard') }}" class="{% if active == 'scorecard' %}is-on{% endif %}">Scorecard</a>
+    <a href="{{ url_for('owner.labour') }}" class="{% if active == 'labour' %}is-on{% endif %}">Labour</a>
+    <a href="{{ url_for('owner.goals') }}" class="{% if active == 'goals' %}is-on{% endif %}">Goals</a>
+  </nav>
+  {% block owner_body %}{% endblock %}
+</div>
+{% endblock %}

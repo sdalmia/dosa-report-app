@@ -1,0 +1,37 @@
+{% extends "owner/layout.html" %}
+{% from "owner/_macros.html" import show %}
+
+{% block title %}Labour productivity - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<p class="kicker">Owner</p>
+<h1>Labour</h1>
+<p class="lede">Gross and bills per active employee. {{ labour.as_of_label }}. {{ labour.note }}</p>
+
+{% if labour.empty %}
+<div class="empty" data-empty="labour"><p>{{ labour.empty }}</p></div>
+{% else %}
+<section class="card" data-section="network">
+  <p class="kicker">Matched stores, {{ labour.as_of_label }}</p>
+  <div class="pair"><span>Gross per active employee</span><span data-field="network-gross-per">{{ show(labour.network.gross_per) }}</span></div>
+  <div class="pair"><span>Bills per active employee</span><span data-field="network-bills-per">{{ show(labour.network.bills_per) }}</span></div>
+  <p class="note">{{ labour.network.matched_stores }} stores have a count and sales. {{ labour.network.blank_stores }} stores have a blank count and are left out of this total.</p>
+</section>
+
+{% for store in labour.stores %}
+<article class="store" data-store="{{ store.label }}">
+  <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+  <p class="note">{{ store.match_status }}</p>
+  <div class="pair"><span>Active employees</span><span data-field="employees">{{ show(store.employees) }}</span></div>
+  <div class="pair"><span>Gross, {{ labour.as_of_label }}</span><span data-field="day-gross">{{ show(store.day_gross) }}</span></div>
+  <div class="pair"><span>Gross per person</span><span data-field="day-gross-per">{{ show(store.day_gross_per) }}</span></div>
+  <div class="pair"><span>Bills</span><span data-field="day-bills">{{ show(store.day_bills) }}</span></div>
+  <div class="pair"><span>Bills per person</span><span data-field="day-bills-per">{{ show(store.day_bills_per) }}</span></div>
+  <div class="pair"><span>{{ labour.month_label }} gross</span><span data-field="mtd-gross">{{ show(store.mtd_gross) }}</span></div>
+  <div class="pair"><span>Month gross per person</span><span data-field="mtd-gross-per">{{ show(store.mtd_gross_per) }}</span></div>
+  <div class="pair"><span>{{ labour.month_label }} bills</span><span>{{ show(store.mtd_bills) }}</span></div>
+  <div class="pair"><span>Month bills per person</span><span data-field="mtd-bills-per">{{ show(store.mtd_bills_per) }}</span></div>
+</article>
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% macro show(figure) -%}
+{%- if figure is none or figure.value is none -%}
+<span class="blank">Blank</span>
+{%- else -%}
+{{ figure.text }}
+{%- endif -%}
+{%- endmacro %}
+
+{% macro change(figure) -%}
+{%- if figure is none or figure.value is none -%}
+<span class="blank">Blank</span>
+{%- elif figure.value < 0 -%}
+<span class="down">{{ figure.text }}</span>
+{%- elif figure.value > 0 -%}
+<span class="up">{{ figure.text }}</span>
+{%- else -%}
+<span>{{ figure.text }}</span>
+{%- endif -%}
+{%- endmacro %}

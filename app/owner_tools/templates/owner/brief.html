@@ -1,0 +1,124 @@
+{% extends "owner/layout.html" %}
+{% from "owner/_macros.html" import show, change %}
+
+{% block title %}Morning brief - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<p class="kicker">Owner</p>
+<h1>Morning brief</h1>
+{% if brief.as_of_label %}
+<p class="lede">{{ brief.as_of_label }}, the latest date in posist_daily.csv. Sales are gross. {{ brief.net_note }}</p>
+{% endif %}
+
+<div class="renders">
+  <a href="{{ url_for('owner.brief_json') }}">JSON</a>
+  <a href="{{ url_for('owner.brief_text') }}">Plain text</a>
+  <a href="{{ url_for('owner.brief_email') }}">Email HTML</a>
+</div>
+<p class="note">The text and HTML renders are for an external emailer. Nothing is sent from here.</p>
+
+{% if brief.empty %}
+<div class="empty" data-empty="brief"><strong>No brief yet</strong><p>{{ brief.empty }}</p></div>
+{% else %}
+<section class="card" data-section="network">
+  <p class="kicker">Network gross</p>
+  <p class="figure" data-field="network-gross">{{ show(brief.network.gross) }}</p>
+  <div class="pair"><span>Bills</span><span data-field="network-bills">{{ show(brief.network.bills) }}</span></div>
+  <div class="pair"><span>APB, calculated</span><span data-field="network-apb">{{ show(brief.network.apb) }}</span></div>
+  <div class="pair"><span>Gross vs {{ brief.prior_label }}</span><span data-field="network-gross-change">{{ change(brief.network.gross_change_pct) }}</span></div>
+  <div class="pair"><span>Bills vs {{ brief.prior_label }}</span><span data-field="network-bills-change">{{ change(brief.network.bills_change_pct) }}</span></div>
+  <p class="note">{{ brief.network.apb_label }}. Week change uses stores that have both days ({{ brief.network.gross_compared }} for gross). A missing day is left out, not treated as zero.</p>
+</section>
+
+<section>
+  <h2>Lowest 5 versus forecast mid</h2>
+  <p class="note">Forecast mid is pred_mid in sales_pred_vs_actual.csv. Actual is that day's Posist gross. The file's actual_net and variance columns are blank, so this gap is calculated.</p>
+  {% if brief.worst_vs_mid_empty %}
+  <div class="empty" data-empty="forecast"><p>{{ brief.worst_vs_mid_empty }}</p></div>
+  {% else %}
+  <ol class="rank">
+    {% for item in brief.worst_vs_mid %}
+    <li>
+      <a href="{{ url_for('store_health.page', store_id=item.id) }}" data-field="worst-mid">
+        <span class="rank-n">{{ loop.index }}</span>
+        <span>{{ item.label }}<br><span class="note">{{ show(item.gross) }} vs mid {{ show(item.mid) }}</span></span>
+        <span>{{ change(item.variance_pct) }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Lowest 5 versus last week</h2>
+  <p class="note">Gross versus {{ brief.prior_label }}, the same weekday one week earlier in posist_daily.csv.</p>
+  {% if brief.worst_vs_last_week_empty %}
+  <div class="empty" data-empty="last-week"><p>{{ brief.worst_vs_last_week_empty }}</p></div>
+  {% else %}
+  <ol class="rank">
+    {% for item in brief.worst_vs_last_week %}
+    <li>
+      <a href="{{ url_for('store_health.page', store_id=item.id) }}" data-field="worst-week">
+        <span class="rank-n">{{ loop.index }}</span>
+        <span>{{ item.label }}<br><span class="note">{{ show(item.gross) }} vs {{ show(item.prior_gross) }}</span></span>
+        <span>{{ change(item.variance_pct) }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+</section>
+{% endif %}
+
+<section>
+  <h2>Food safety</h2>
+  {% if brief.food_safety_empty %}
+  <div class="empty" data-empty="food-safety"><p>{{ brief.food_safety_empty }}</p></div>
+  {% else %}
+  {% for item in brief.food_safety %}
+  <article class="store" data-field="food-safety"><h3>{{ item.store or "Famepilot" }}</h3><p>{{ item.text }}</p></article>
+  {% endfor %}
+  {% endif %}
+</section>
+
+<section>
+  <h2>Emergency</h2>
+  {% if brief.emergency_empty %}
+  <div class="empty" data-empty="emergency"><p>{{ brief.emergency_empty }}</p></div>
+  {% else %}
+  {% for item in brief.emergency %}
+  <article class="store" data-field="emergency"><h3>{{ item.store or "Famepilot" }}</h3><p>{{ item.text }}</p></article>
+  {% endfor %}
+  {% endif %}
+</section>
+
+<section>
+  <h2>Procurement</h2>
+  {% if brief.procurement_empty %}
+  <div class="empty" data-empty="procurement"><p>{{ brief.procurement_empty }}</p></div>
+  {% else %}
+  {% for item in brief.procurement %}
+  <article class="store" data-field="procurement"><h3>{{ item.store or item.file }}</h3><p>{{ item.text }}</p></article>
+  {% endfor %}
+  {% endif %}
+</section>
+
+{% if not brief.empty %}
+{% for region in brief.regions %}
+<section>
+  <h2>{{ region.name }}</h2>
+  {% for store in region.stores %}
+  <article class="store" data-store="{{ store.label }}">
+    <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+    <div class="pair"><span>Gross</span><span data-field="gross">{{ show(store.gross) }}</span></div>
+    <div class="pair"><span>Vs {{ brief.prior_label }}</span><span data-field="gross-change">{{ change(store.gross_change_pct) }}</span></div>
+    <div class="pair"><span>Bills</span><span data-field="bills">{{ show(store.bills) }}</span></div>
+    <div class="pair"><span>Bills vs last week</span><span data-field="bills-change">{{ change(store.bills_change_pct) }}</span></div>
+    <div class="pair"><span>APB, calculated</span><span data-field="apb">{{ show(store.apb) }}</span></div>
+  </article>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endif %}
+{% endblock %}
