@@ -142,7 +142,7 @@ def posist_daily_path():
 def _skip_menu_cost_side_file(path):
     """Summary, channel, and ingredient-line files are not the per-outlet item cost."""
     name = path.name.casefold()
-    return "summary" in name or "channel" in name or "lines" in name
+    return "summary" in name or "channel" in name or "lines" in name or "estimated" in name
 
 
 def menu_item_cost_path(directory):

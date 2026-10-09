@@ -13,6 +13,7 @@
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
     <h3>Above the {{ city }} median</h3>
+    <p class="muted">{{ median_note }}</p>
     {% if above_count %}
     <p class="muted">{{ above_count }} items are above the {{ city }} median. The largest gaps are first.</p>
     {% endif %}
@@ -57,6 +58,27 @@
     </div>
     {% else %}
     <p class="empty">{{ margin_gap or "No price change hurt the margin." }}</p>
+    {% endif %}
+  </section>
+
+  <section class="cc-section" id="stale-prices">
+    <div class="section-head"><h2>Recipe price out of date</h2></div>
+    <p class="muted">{{ stale_note }}</p>
+    {% if stale_prices %}
+    <div class="mc-scroll">
+      {% for row in stale_prices %}
+      <article class="tile" data-field="stale-price" data-city="{{ row.city }}" data-item="{{ row.item }}" data-value="{{ row.gap_attr }}">
+        <strong>{{ row.item }}</strong>
+        <div class="mc-pair">
+          <p>Restroworks <span class="mc-num" data-field="stale-restroworks" data-item="{{ row.item }}">{{ row.recipe }}</span>{% if row.unit %}/{{ row.unit }}{% endif %}</p>
+          <p>Receipt <span class="mc-num" data-field="stale-receipt" data-item="{{ row.item }}">{{ row.receipt }}</span>{% if row.unit %}/{{ row.unit }}{% endif %}</p>
+        </div>
+        <p>{{ row.gap }} {{ row.direction }} the Restroworks rate</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No ingredient in {{ city }} is more than 10% away from its receipt rate.</p>
     {% endif %}
   </section>
 
@@ -136,8 +158,13 @@
             <span class="mc-num" data-field="menu-margin" data-item="{{ row.item }}" data-value="{{ row.margin_attr }}">{{ row.margin }}</span>
           </p>
         </div>
-        {% if row.incomplete %}
-        <p data-field="cost-incomplete" data-item="{{ row.item }}">Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} ingredients have no price{% endif %}</p>
+        {% if row.cost_kind == 'incomplete' %}
+        <p data-field="cost-incomplete" data-item="{{ row.item }}">Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} {{ 'ingredient has' if row.unpriced_count == '1' else 'ingredients have' }} no price{% endif %}</p>
+        {% elif row.cost_kind == 'estimated' %}
+        <p data-field="cost-estimated" data-item="{{ row.item }}"><span class="mc-tip" title="{{ row.receipt_title }}">Estimated cost</span></p>
+        {% if row.receipt_title %}<p class="muted mc-clip">{{ row.receipt_title }}</p>{% endif %}
+        {% elif row.cost_kind == 'full' %}
+        <p data-field="cost-full" data-item="{{ row.item }}">Full cost</p>
         {% endif %}
         {% if row.vs %}<p>{{ row.vs }}</p>{% endif %}
         {% if row.orders or row.sold %}

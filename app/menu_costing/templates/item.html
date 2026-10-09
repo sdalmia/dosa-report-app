@@ -19,8 +19,13 @@
     {% endif %}
     {% if chosen %}
     <p>This store <span class="mc-num" data-field="store-cost" data-store="{{ store }}" data-item="{{ item }}">{{ chosen_cost }}</span>{% if chosen_vs %} · {{ chosen_vs }}{% endif %}</p>
-    {% if chosen_incomplete %}
-    <p data-field="cost-incomplete" data-item="{{ item }}" data-store="{{ store }}">Cost incomplete{% if chosen_unpriced %} · {{ chosen_unpriced }} ingredients have no price{% endif %}</p>
+    {% if chosen.cost_kind == 'incomplete' %}
+    <p data-field="cost-incomplete" data-item="{{ item }}" data-store="{{ store }}">Cost incomplete{% if chosen_unpriced %} · {{ chosen_unpriced }} {{ 'ingredient has' if chosen_unpriced == '1' else 'ingredients have' }} no price{% endif %}</p>
+    {% elif chosen.cost_kind == 'estimated' %}
+    <p data-field="cost-estimated" data-item="{{ item }}"><span class="mc-tip" title="{{ chosen.receipt_title }}">Estimated cost</span></p>
+    {% if chosen.receipt_title %}<p class="muted mc-clip">{{ chosen.receipt_title }}</p>{% endif %}
+    {% elif chosen.cost_kind == 'full' %}
+    <p data-field="cost-full" data-item="{{ item }}">Full cost</p>
     {% endif %}
     {% elif store_cards %}
     <p class="empty">{{ pick_store }}</p>
@@ -29,7 +34,9 @@
       <a class="tile" href="{{ url_for('menu_costing.item_page', city=city, store=row.outlet, item=item) }}">
         <strong>{{ row.outlet }}</strong>
         <p class="mc-num">{{ row.cost }}{% if row.vs %} · {{ row.vs }}{% endif %}</p>
-        {% if row.incomplete %}<p>Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} ingredients have no price{% endif %}</p>{% endif %}
+        {% if row.cost_kind == 'incomplete' %}<p>Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} {{ 'ingredient has' if row.unpriced_count == '1' else 'ingredients have' }} no price{% endif %}</p>
+        {% elif row.cost_kind == 'estimated' %}<p><span class="mc-tip" title="{{ row.receipt_title }}">Estimated cost</span></p>{% if row.receipt_title %}<p class="muted mc-clip">{{ row.receipt_title }}</p>{% endif %}
+        {% elif row.cost_kind == 'full' %}<p>Full cost</p>{% endif %}
       </a>
       {% endfor %}
     </div>
@@ -82,7 +89,7 @@
       {% for line in line_rows %}
       <article class="tile">
         <strong>{{ line.ingredient }}</strong>
-        <p>{{ line.qty }} {{ line.unit }}{% if line.inactive %} · inactive{% endif %}{% if line.unpriced %} · no price{% endif %}</p>
+        <p>{{ line.qty }} {{ line.unit }}{% if line.inactive %} · inactive{% endif %}{% if line.estimated %} · <span class="mc-tip" title="{{ line.receipt }}">estimated</span>{% elif line.unpriced %} · no price{% endif %}</p>
         <div class="mc-pair">
           <p>Unit cost <span class="mc-num">{{ line.unit_cost }}</span></p>
           <p>Line cost <span class="mc-num" data-field="line-cost" data-ingredient="{{ line.ingredient }}" data-value="{{ line.line_attr }}">{{ line.line_cost }}</span></p>

@@ -11,6 +11,7 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.menu_costing.catalog import build_page, food_cost_pct, margin_amount
+from app.menu_costing.recipes import _apply_full_medians
 from app.menu_costing.history import dish_history, load_history
 from app.menu_costing.models import MenuItemPrice, MenuVersion
 from app.menu_costing.parse_menu import parse_menu_text, parse_upload
@@ -137,6 +138,7 @@ class MenuCostingTests(unittest.TestCase):
         self.assertEqual(_attr(html, "food-cost-pct", item="Masala Dosa"), "")
         self.assertEqual(_attr(html, "menu-margin", item="Masala Dosa"), "")
         self.assertIn("9.2% below the Kolkata median", html)
+        self.assertIn('data-field="cost-full" data-item="Masala Dosa"', html)
         self.assertNotIn("₹23.82", html)
         self.assertIn("₹24", html)
         self.assertEqual(_attr(html, "orders", item="Masala Dosa"), "2750")
@@ -302,9 +304,16 @@ class MenuCostingTests(unittest.TestCase):
             "/menu?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertIn('data-field="cost-incomplete" data-item="Masala Dosa"', truck)
-        self.assertIn("6 ingredients have no price", truck)
+        self.assertIn("2 ingredients have no price", truck)
+        self.assertEqual(_attr(truck, "menu-cost", item="Masala Dosa"), "10.9")
+        self.assertEqual(_attr(truck, "food-cost-pct", item="Masala Dosa"), "")
+        truck_item = self.client.get(
+            "/menu/item?city=Kolkata&store=Food+Truck+-+1&item=Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertEqual(_attr(truck_item, "recipe-cost", **{"data-month": "2026-10"}), "7.49")
         city = self.client.get("/menu?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
         self.assertNotIn('data-field="cost-incomplete" data-item="Masala Dosa"', city)
+        self.assertNotIn('data-field="cost-full" data-item="Masala Dosa"', city)
         buying = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
         self.assertIn(
             'data-field="unpriced-ingredient" data-item="Spicy Coconut Chutney Mix 1Pkt (16gm)"',
@@ -345,6 +354,65 @@ class MenuCostingTests(unittest.TestCase):
         self.assertEqual(_attr(priced, "menu-price", item="ABC Juice"), "5")
         self.assertNotEqual(_attr(priced, "menu-cost", item="ABC Juice"), "")
         self.assertNotIn('data-field="priced-below" data-item="ABC Juice"', priced)
+
+    def test_full_cost_median_ignores_incomplete_and_needs_three_outlets(self):
+        def row(outlet, cost, kind):
+            return {
+                "outlet": outlet,
+                "city": "Kolkata",
+                "item": "Fanta",
+                "key": "fanta",
+                "cost": cost,
+                "cost_kind": kind,
+            }
+
+        two = {
+            ("Kolkata", "Forum", "fanta"): row("Forum", 19.04, "full"),
+            ("Kolkata", "Ideal", "fanta"): row("Ideal", 0.39, "incomplete"),
+            ("Kolkata", "Blank", "fanta"): row("Blank", None, "full"),
+        }
+        city = _apply_full_medians(two)
+        self.assertIsNone(city[("Kolkata", "fanta")]["median"])
+        self.assertIsNone(two[("Kolkata", "Forum", "fanta")]["vs_pct"])
+        self.assertEqual(city[("Kolkata", "fanta")]["full_outlets"], 1)
+        three = dict(two)
+        three[("Kolkata", "A", "fanta")] = row("A", 18, "full")
+        three[("Kolkata", "B", "fanta")] = row("B", 20, "full")
+        three[("Kolkata", "Low", "fanta")] = row("Low", 0.10, "estimated")
+        city = _apply_full_medians(three)
+        self.assertEqual(city[("Kolkata", "fanta")]["median"], 19.04)
+        self.assertEqual(city[("Kolkata", "fanta")]["full_outlets"], 3)
+        self.assertIsNone(three[("Kolkata", "Ideal", "fanta")]["vs_pct"])
+        self.assertIsNone(three[("Kolkata", "Low", "fanta")]["vs_pct"])
+        self.assertIsNotNone(three[("Kolkata", "Forum", "fanta")]["vs_pct"])
+
+    def test_estimated_cost_names_the_receipt_and_skips_wild_medians(self):
+        fanta = self.client.get(
+            "/menu?city=Kolkata&channel=Dine-in&q=Fanta+%28Regular%29"
+        ).get_data(as_text=True)
+        self.assertEqual(_attr(fanta, "menu-cost", item="Fanta (Regular)"), "")
+        self.assertNotIn("4782", fanta)
+        self.assertNotIn("47510", fanta)
+        forum = self.client.get(
+            "/menu/item?city=Kolkata&store=Forum&item=Fanta+%28Regular%29"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="cost-full"', forum)
+        self.assertNotIn("4782", forum)
+        self.assertNotIn("47510", forum)
+        papad = self.client.get(
+            "/menu?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=Appalam+Papad+%281pc%29"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="cost-estimated" data-item="Appalam Papad (1pc)"', papad)
+        self.assertIn("SE-7875", papad)
+        self.assertNotIn(".csv", papad)
+        self.assertNotIn("po_vs_grn", papad)
+        self.assertEqual(_attr(papad, "menu-cost", item="Appalam Papad (1pc)"), "4.1")
+        delhi = self.client.get("/menu?city=Delhi+NCR").get_data(as_text=True)
+        self.assertGreater(float(_attr(delhi, "stale-price", item="Ghee")), 10)
+        self.assertIn('data-field="stale-restroworks" data-item="Ghee">₹722', delhi)
+        self.assertIn('data-field="stale-receipt" data-item="Ghee">₹841', delhi)
+        self.assertIn("Recipe price out of date", delhi)
+        self.assertIn("at least 3 outlets have a full cost", delhi)
 
     def test_recipe_snapshots_show_cost_and_ingredient_changes(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -159,8 +159,17 @@ def build_page(recipes, sales, versions, *, city, channel, store, query, today):
         ),
         "unpriced": purchasing_list(recipes, city, store),
         "unpriced_note": (
-            "RO water has no purchase price. Other ingredients with no price make the dish "
-            "cost incomplete, and its food cost % stays blank."
+            "RO water has no purchase price. A line filled from that city's warehouse receipt "
+            "is an estimated cost. A line that is still blank makes the dish cost incomplete, "
+            "and its food cost % stays blank."
+        ),
+        "median_note": (
+            "A city median uses full-cost dishes only, and only when at least 3 outlets have a full cost."
+        ),
+        "stale_prices": present_stale(recipes.get("price_gaps") or [], city),
+        "stale_note": (
+            f"Restroworks rate against the {city} warehouse receipt rate for 9 Sep to 8 Oct. "
+            "A gap over 10% is listed."
         ),
         "rows": [_present_row(row) for row in shown],
         "row_count": len(rows),
@@ -271,8 +280,10 @@ def _cost_row(recipes, city, store, item):
         "median": summary["median"],
         "vs_pct": None,
         "partial": False,
-        "incomplete": bool(summary.get("incomplete")),
+        "incomplete": False,
         "unpriced_excl": None,
+        "cost_kind": "",
+        "receipt_title": "",
     }
 
 
@@ -283,6 +294,8 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
     partial = False
     incomplete = False
     unpriced_excl = None
+    cost_kind = ""
+    receipt_title = ""
     if cost_row is not None:
         cost = cost_row.get("cost")
         median = cost_row.get("median")
@@ -290,6 +303,8 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         partial = bool(cost_row.get("partial"))
         incomplete = bool(cost_row.get("incomplete"))
         unpriced_excl = cost_row.get("unpriced_excl")
+        cost_kind = cost_row.get("cost_kind") or ""
+        receipt_title = cost_row.get("receipt_title") or ""
     elif summary is not None:
         cost = summary.get("median")
         median = summary.get("median")
@@ -316,6 +331,8 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         "partial": partial,
         "incomplete": incomplete,
         "unpriced_excl": unpriced_excl,
+        "cost_kind": cost_kind,
+        "receipt_title": receipt_title,
         "basis": "store" if store else "median",
         "food_pct": None if incomplete else food_cost_pct(cost, price),
         "margin": None if incomplete else margin_amount(cost, price),
@@ -333,6 +350,8 @@ def _above(recipes, city, store, query_key):
             continue
         if query_key and query_key not in row["item"].casefold():
             continue
+        if row.get("cost_kind") not in (None, "", "full"):
+            continue
         if row["vs_pct"] is None or row["vs_pct"] <= 0 or row["cost"] is None:
             continue
         rows.append(row)
@@ -348,6 +367,8 @@ def _above_count(recipes, city, store, query_key):
         if store and outlet != store:
             continue
         if query_key and query_key not in row["item"].casefold():
+            continue
+        if row.get("cost_kind") not in (None, "", "full"):
             continue
         if row["vs_pct"] is not None and row["vs_pct"] > 0 and row["cost"] is not None:
             count += 1
@@ -451,6 +472,8 @@ def _present_row(row):
         "sold_attr": num_attr(row["sold"]),
         "partial": row["partial"],
         "incomplete": bool(row.get("incomplete")),
+        "cost_kind": row.get("cost_kind") or "",
+        "receipt_title": row.get("receipt_title") or "",
         "unpriced_count": (
             owner_count(row.get("unpriced_excl"))
             if row.get("incomplete") and row.get("unpriced_excl")
@@ -538,5 +561,27 @@ def present_line(row):
         "line_cost": "" if row["unpriced"] else owner_rupee(row["line_cost"]),
         "line_attr": "" if row["unpriced"] else num_attr(row["line_cost"]),
         "unpriced": row["unpriced"],
+        "estimated": bool(row.get("estimated")),
+        "receipt": row.get("receipt") or "",
         "inactive": row["inactive"],
     }
+
+
+def present_stale(gaps, city):
+    rows = []
+    for row in gaps:
+        if row["city"] != city:
+            continue
+        rows.append(
+            {
+                "item": row["item"],
+                "city": row["city"],
+                "unit": row["unit"],
+                "recipe": owner_rupee(row["recipe_rate"]),
+                "receipt": owner_rupee(row["receipt_rate"]),
+                "gap": format_pct(abs(row["gap"])),
+                "gap_attr": num_attr(row["gap"]),
+                "direction": "above" if row["gap"] > 0 else "below",
+            }
+        )
+    return rows

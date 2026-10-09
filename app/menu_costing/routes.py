@@ -79,6 +79,8 @@ def item_page():
             "cost": owner_rupee(row["cost"]),
             "vs": vs_own_city(row["vs_pct"], detail["city"]),
             "incomplete": bool(row.get("incomplete")),
+            "cost_kind": row.get("cost_kind") or "",
+            "receipt_title": row.get("receipt_title") or "",
             "unpriced_count": (
                 owner_count(row.get("unpriced_excl"))
                 if row.get("incomplete") and row.get("unpriced_excl")
