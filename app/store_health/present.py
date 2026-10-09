@@ -207,11 +207,20 @@ def _sum_present(rows, field, kind):
     return total
 
 
+POSIST_WINDOW_DAYS = 30
+
+
 def _window_bounds(feeds):
+    """The last 30 days ending at the newest date in posist_daily.csv.
+
+    The window follows the file. It is never pinned to fixed dates.
+    """
     days = [day for (_store, day) in feeds["posist"]]
     if not days:
         return None, None
-    return min(days), max(days)
+    end = max(days)
+    start = max(min(days), end - timedelta(days=POSIST_WINDOW_DAYS - 1))
+    return start, end
 
 
 def _dates_in_window(start, end):
@@ -254,13 +263,14 @@ def posist_window(feeds, store):
     }
     if store is None:
         return result
-    rows = []
+    all_rows = []
     for (store_name, _day), row in feeds["posist"].items():
         if store_name in store.match_keys():
-            rows.append(row)
-    if not rows:
+            all_rows.append(row)
+    if not all_rows:
         result["not_on_report"] = True
         return result
+    rows = [row for row in all_rows if start <= row["date"] <= end]
     result["has_row"] = True
     summed = {
         "net": _sum_present(rows, "net", "money"),
