@@ -68,7 +68,7 @@
       {% for row in unpriced %}
       <article class="tile" data-field="unpriced-ingredient" data-item="{{ row.name }}" data-dishes="{{ row.dishes }}" data-outlets="{{ row.outlets }}">
         <strong>{{ row.name }}</strong>
-        <p>{{ row.dishes }} dishes · {{ row.outlets }} outlets</p>
+        <p>{{ row.dishes }} {{ 'dish' if row.dishes == 1 else 'dishes' }} · {{ row.outlets }} {{ 'outlet' if row.outlets == 1 else 'outlets' }}</p>
       </article>
       {% endfor %}
     </div>
