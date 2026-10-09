@@ -665,6 +665,20 @@ class PageTests(unittest.TestCase):
         self.assertTrue(all(not item["quadrant"] for item in unmatched_onion))
         self.assertNotIn("under review", view["city_note"].lower())
 
+    def test_flagged_stores_are_on_the_data_gaps_list(self):
+        from app.gaps import filter_gaps, load_gap_files
+        from app.store_master import get_index
+
+        tony = [row for row in load_gap_files() if str(row["gap_id"]).startswith("tony-item-bill-")]
+        self.assertEqual(len(tony), 16)
+        self.assertTrue(any("Ideal Plaza" in row["store"] for row in tony))
+        self.assertTrue(all("packaging" in row["why_it_matters"].lower() for row in tony))
+        self.assertTrue(all(row["source"] == "Tony" for row in tony))
+        north = filter_gaps(tony, {"cc_city": "Delhi NCR"}, get_index())
+        self.assertTrue(north)
+        self.assertFalse(any("Ideal Plaza" in row["store"] for row in north))
+        self.assertTrue(any("Noida" in row["store"] for row in north))
+
     def test_login_required(self):
         with self.client.session_transaction() as sess:
             sess.pop("user", None)
