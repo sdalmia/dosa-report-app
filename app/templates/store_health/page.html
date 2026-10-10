@@ -366,7 +366,7 @@
         {% if menu_mix.unallocated %}
           <p class="box-source" data-field="unallocated">Unallocated charges {{ menu_mix.unallocated }}. Probably delivery packaging charges. Still unconfirmed. This is not a dish.{% if menu_mix.unallocated_flagged %} On the data gaps list.{% endif %}</p>
         {% endif %}
-        <ol class="menu-mix-list">
+        <ol class="menu-mix-list" data-list>
           {% for item in menu_mix.entries %}
             <li class="menu-mix-row" data-field="menu_item">
               <span class="name">{{ item.item }}</span>

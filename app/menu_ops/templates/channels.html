@@ -19,7 +19,7 @@
       <p>Not a 30-day average. A channel that is not listed stays empty. An empty cell is not a zero. Stores are sorted by Zomato Delivery, lowest first. Stores with no Zomato Delivery rating follow.</p>
     </details>
     <div class="heat-wrap">
-      <table class="heat">
+      <table class="heat" data-list>
         <caption>Stores sorted by Zomato Delivery, lowest first.</caption>
         <thead>
           <tr>
@@ -66,7 +66,7 @@
     {% elif view.store_coming %}
       <p class="empty" data-empty="coming">Data coming. {{ view.store }} is not in this period yet. There is no zero to show.</p>
     {% elif view.totals_present and view.mix.channels %}
-      <div class="mix">
+      <div class="mix" data-list>
         {% for row in view.mix.channels %}
           <article class="mix-row" data-channel-name="{{ row.channel }}" data-gross="{{ row.gross }}" data-orders="{{ row.orders }}">
             <h3>{{ row.channel }}</h3>
@@ -85,7 +85,7 @@
       <p class="empty">The period totals are not in yet.</p>
     {% endif %}
     {% if view.comparison %}
-      <div class="mix">
+      <div class="mix" data-list>
         {% for card in view.comparison %}
           <article class="mix-row" data-store="{{ card.store }}" {% if card.coming %}data-coming="1"{% endif %} {% if card.mall_bulk %}data-mall="1"{% endif %}>
             <h3>{{ card.store }}</h3>
@@ -111,6 +111,7 @@
     {% endif %}
     {% if view.daily_present %}
       <h3>Daily trend</h3>
+      <div data-list>
       {% for day in view.trend %}
         <article class="mix-row" data-day="{{ day.when }}">
           <h3>{{ day.when }}</h3>
@@ -120,6 +121,7 @@
           {% endfor %}
         </article>
       {% endfor %}
+      </div>
     {% else %}
       <p class="meta">The daily trend is not in yet.</p>
     {% endif %}

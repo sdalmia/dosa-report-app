@@ -27,7 +27,7 @@
   <h2>Festive days</h2>
   {% if goals.festive_on %}
   <p><a class="tap" href="{{ url_for('owner.goals', month=goals.month, festive=0) }}">Hide festive days</a></p>
-  <div class="chip-row">
+  <div class="chip-row" data-list>
     {% for day in goals.festive_dates %}
     <article class="chip {{ day.kinds|join(' ')|lower }}" data-festive="{{ day.iso }}">
       <strong>{{ day.label }}</strong>
@@ -51,8 +51,9 @@
 {% if goals.empty %}
 <div class="empty"><p>{{ goals.empty }}</p></div>
 {% else %}
+<div data-list>
 {% for store in goals.stores %}
-<article class="store" data-store="{{ store.label }}">
+<article class="store" data-store="{{ store.label }}" data-list-item>
   <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
   <p class="kicker">{{ goals.month_label }} gross</p>
   <p class="figure-sm" data-field="mtd-gross">{{ show(store.mtd_gross) }}</p>
@@ -67,5 +68,6 @@
   {% endif %}
 </article>
 {% endfor %}
+</div>
 {% endif %}
 {% endblock %}

@@ -15,8 +15,10 @@ from app.procurement.numbers import (
     dates_in_filename,
     format_compact_inr,
     format_inr,
+    format_whole,
     parse_number,
     sum_present,
+    unpriced_phrase,
 )
 from app.procurement.recipe import ideal_plaza_recipe_costs, recipe_costs
 from app.procurement.vendors import SHORT_DELIVERY_MESSAGE
@@ -67,6 +69,13 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(format_compact_inr(None), "")
         self.assertEqual(format_compact_inr(0), "₹0")
         self.assertEqual(format_compact_inr(7573666.12), "₹75.74L")
+        self.assertEqual(format_whole(1.0), "1")
+        self.assertEqual(format_whole("2.0"), "2")
+        self.assertEqual(format_whole(None), "")
+        self.assertEqual(unpriced_phrase(1.0), "1 ingredient not priced")
+        self.assertEqual(unpriced_phrase(2), "2 ingredients not priced")
+        self.assertEqual(unpriced_phrase(0), "")
+        self.assertEqual(unpriced_phrase(None), "")
         self.assertEqual(format_compact_inr(26636745.7), "₹2.66Cr")
         self.assertEqual(format_compact_inr(9144.98), "₹9,145")
 
@@ -125,6 +134,10 @@ class ProcurementTests(unittest.TestCase):
         self.assertNotIn(".xlsx", html)
         self.assertNotIn("recipe-cost.json", html)
         self.assertIn("theme-toggle", html)
+        self.assertIn("1 ingredient not priced", html)
+        self.assertIn("2 ingredients not priced", html)
+        self.assertNotIn("unpriced lines", html)
+        self.assertNotIn("1.0 unpriced", html)
         buying = self.get("/procurement")
         self.assertIn('href="/food-cost"', buying)
         self.assertIn('href="/vendors"', buying)

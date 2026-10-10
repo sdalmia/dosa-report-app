@@ -16,7 +16,7 @@
     <h3>Recipe looks incomplete</h3>
     <p class="muted">{{ stub_note }}</p>
     {% if recipe_stubs %}
-    <div class="flag-row">
+    <div class="flag-row" data-list>
       {% for row in recipe_stubs %}
       <a class="flag-card sev-red" href="{{ url_for('menu_costing.item_page', city=row.city, store=row.outlet, item=row.item) }}">
         <span class="flag-kicker">{{ row.where }}</span>
@@ -37,7 +37,7 @@
     <p class="muted">{{ above_count }} items are above the {{ city }} median. The largest gaps are first.</p>
     {% endif %}
     {% if threats_above %}
-    <div class="flag-row">
+    <div class="flag-row" data-list>
       {% for row in threats_above %}
       <a class="flag-card sev-red" href="{{ url_for('menu_costing.item_page', city=row.city, store=row.outlet, item=row.item) }}">
         <span class="flag-kicker">{{ row.outlet }}</span>
@@ -53,7 +53,7 @@
 
     <h3>Priced below cost</h3>
     {% if priced_below %}
-    <div class="flag-row">
+    <div class="flag-row" data-list>
       {% for row in priced_below %}
       <article class="flag-card sev-red">
         <strong>{{ row.item }}</strong>
@@ -67,7 +67,7 @@
 
     <h3>Price changes that hurt margin</h3>
     {% if margin_hurts %}
-    <div class="flag-row">
+    <div class="flag-row" data-list>
       {% for row in margin_hurts %}
       <article class="flag-card sev-amber">
         <strong>{{ row.item }}</strong>
@@ -84,7 +84,7 @@
     <div class="section-head"><h2>Recipe price out of date</h2></div>
     <p class="muted">{{ stale_note }}</p>
     {% if stale_prices %}
-    <div class="mc-scroll">
+    <div class="mc-scroll" data-list>
       {% for row in stale_prices %}
       <article class="tile" data-field="stale-price" data-city="{{ row.city }}" data-item="{{ row.item }}" data-value="{{ row.gap_attr }}">
         <strong>{{ row.item }}</strong>
@@ -105,7 +105,7 @@
     <div class="section-head"><h2>Ingredients with no price</h2></div>
     <p class="muted">{{ unpriced_note }}</p>
     {% if unpriced %}
-    <div class="mc-scroll">
+    <div class="mc-scroll" data-list>
       {% for row in unpriced %}
       <article class="tile" data-field="unpriced-ingredient" data-item="{{ row.name }}" data-dishes="{{ row.dishes }}" data-outlets="{{ row.outlets }}">
         <strong>{{ row.name }}</strong>
@@ -141,7 +141,7 @@
     <p class="muted">Showing {{ shown_count }} of {{ row_count }}. Search to narrow.</p>
     {% endif %}
     {% if rows %}
-    <div class="mc-list">
+    <div class="mc-list" data-list>
       {% for row in rows %}
       <a class="tile mc-item" href="{{ url_for('menu_costing.item_page', city=city, store=store, item=row.item) }}">
         <strong>{{ row.item }}</strong>
@@ -194,7 +194,7 @@
     {% if sales_available %}
     <p class="muted">{{ sales_period }}. {{ sales_coming }}</p>
     {% if sellers %}
-    <div class="mc-list">
+    <div class="mc-list" data-list>
       {% for row in sellers %}
       <article class="tile">
         <strong>{{ row.item }}</strong>

@@ -14,7 +14,7 @@
   {% if not alerts %}
     <p class="empty">Nothing needs attention</p>
   {% else %}
-    <div class="alert-list">
+    <div class="alert-list" data-list>
       {% for alert in alerts %}
         <article class="alert-row"><strong>{{ alert.kind }}.</strong> {{ alert.text }}</article>
       {% endfor %}

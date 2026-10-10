@@ -23,8 +23,9 @@
   </div>
 </section>
 
+<div data-list>
 {% for store in labour.stores %}
-<article class="store" data-store="{{ store.label }}">
+<article class="store" data-store="{{ store.label }}" data-list-item>
   <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
   {% if store.employees.value is none %}
   <p class="note">Staff count is blank</p>
@@ -41,5 +42,6 @@
   <div class="pair"><span>Month bills per person</span><span data-field="mtd-bills-per">{{ show(store.mtd_bills_per) }}</span></div>
 </article>
 {% endfor %}
+</div>
 {% endif %}
 {% endblock %}

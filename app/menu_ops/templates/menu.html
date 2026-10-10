@@ -72,7 +72,7 @@
     <section data-note="gaps">
       <h2>Data gaps</h2>
       {% if view.unallocated.gaps %}
-        <ul>
+        <ul data-list>
           {% for gap in view.unallocated.gaps %}
             <li data-gap="{{ gap.store }}">{{ gap.store }} {{ gap.amount }}{% if gap.pct %}, {{ gap.pct }} of bills{% endif %}</li>
           {% endfor %}
@@ -145,7 +145,7 @@
     {% endif %}
   {% endfor %}
 
-  <section class="item-list">
+  <section class="item-list" data-list>
     {% for item in view['items'] %}
       <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}" {% if item.city %}data-city="{{ item.city }}"{% endif %}>
         <header>

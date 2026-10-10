@@ -27,11 +27,11 @@
         <p>{{ period_label }}. Line totals. Freight is not included.</p>
         {% endcall %}
       </div>
-      <div class="scroll stack">
+      <div class="scroll stack" data-list>
         {% for row in suppliers %}
         <div class="row-card">
           <b>{{ row.supplier }}</b>
-          <p class="muted">{{ row.city }} · {{ row.first_text }}–{{ row.last_text }} · {{ row.bills }} bills · {{ row.items }} items</p>
+          <p class="muted">{{ row.city }} · {{ row.first_text }}–{{ row.last_text }} · {{ row.bills }} {{ 'bill' if row.bills == '1' else 'bills' }} · {{ row.items }} {{ 'item' if row.items == '1' else 'items' }}</p>
           <p data-field="supplier-spend" data-city="{{ row.city }}" data-supplier="{{ row.supplier }}" data-value="{{ row.total.attr }}"><span class="num" title="{{ row.total.exact }}">{{ row.total.compact }}</span>{% if row.share.text %} · {{ row.share.text }} of city{% endif %}</p>
         </div>
         {% else %}
@@ -61,7 +61,7 @@
       {% if selected_item and not price_rows %}
       <p class="empty">No receipt for {{ selected_item }}.</p>
       {% endif %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for row in price_rows %}
         <div class="row-card">
           <b>{{ row.date_text }} · {{ row.supplier }}</b>
@@ -72,13 +72,15 @@
       </div>
       {% if rate_rows %}
       <h3>Weighted average</h3>
+      <div class="stack" data-list>
       {% for row in rate_rows %}
       <div class="row-card">
         <b>{{ row.supplier }}</b>
-        <p class="muted">{{ row.city }} · {{ row.unit }} · {{ row.lines }} receipts · last {{ row.last_date }}</p>
+        <p class="muted">{{ row.city }} · {{ row.unit }} · {{ row.lines }} {{ 'receipt' if row.lines == '1' else 'receipts' }} · last {{ row.last_date }}</p>
         <p>Weighted average {{ row.wavg.text }} · lowest {{ row.min_rate.text }} · highest {{ row.max_rate.text }} · last {{ row.last_rate.text }}</p>
       </div>
       {% endfor %}
+      </div>
       {% endif %}
     </article>
   </section>
@@ -92,7 +94,7 @@
         {% endcall %}
       </div>
       {% if time_moves %}
-      <div class="scroll stack">
+      <div class="scroll stack" data-list>
         {% for row in time_moves %}
         <div class="alert" data-field="rate-move" data-item="{{ row.item }}" data-supplier="{{ row.supplier }}" data-city="{{ row.city }}">
           <b>{{ row.item }}</b>
@@ -119,11 +121,11 @@
       <p class="muted">Largest gap: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier in {{ largest_gap.city }} (weighted average {{ largest_gap.wavg.text }}).</p>
       {% endif %}
       {% if above_cheapest %}
-      <div class="scroll stack">
+      <div class="scroll stack" data-list>
         {% for row in above_cheapest %}
         <div class="row-card" data-field="above-cheapest" data-item="{{ row.item }}" data-supplier="{{ row.supplier }}" data-city="{{ row.city }}" data-value="{{ row.pct_vs_cheapest.attr }}">
           <b>{{ row.item }}</b>
-          <p class="muted">{{ row.city }} · {{ row.supplier }} · {{ row.unit }} · {{ row.n_suppliers }} suppliers</p>
+          <p class="muted">{{ row.city }} · {{ row.supplier }} · {{ row.unit }} · {{ row.n_suppliers }} {{ 'supplier' if row.n_suppliers == '1' else 'suppliers' }}</p>
           <p>{{ row.wavg.text }} · {{ row.pct_vs_cheapest.text }} above cheapest</p>
         </div>
         {% endfor %}
@@ -161,17 +163,18 @@
       <p class="empty">{{ reconciliation.missing }}</p>
       {% else %}
       <p data-field="bills-matched" data-matched="{{ reconciliation.matched }}" data-bills="{{ reconciliation.bills }}">{{ reconciliation.matched }} of {{ reconciliation.bills }} bills match on amount.</p>
-      <div class="stack">
+      <div class="stack" data-list>
         {% for city in reconciliation.cities %}
         <div class="row-card">
           <b>{{ city.city }}</b>
-          <p class="muted">Bill {{ city.pd_lines }} lines · goods received {{ city.grn_lines }} lines{% if city.discount.text %} · discount {{ city.discount.text }}{% endif %}</p>
+          <p class="muted">Bill {{ city.pd_lines }} {{ 'line' if city.pd_lines == '1' else 'lines' }} · goods received {{ city.grn_lines }} {{ 'line' if city.grn_lines == '1' else 'lines' }}{% if city.discount.text %} · discount {{ city.discount.text }}{% endif %}</p>
           <p>Bill {{ city.pd_total.text }} · goods received {{ city.grn_total.text }} · gap {{ city.diff.text }}</p>
         </div>
         {% endfor %}
       </div>
       {% if reconciliation.mismatches %}
       <h3>Bills that differ</h3>
+      <div class="stack" data-list>
       {% for row in reconciliation.mismatches %}
       <div class="alert" data-field="bill-mismatch" data-se="{{ row.se_number }}">
         <b>{{ row.se_number }} · {{ row.city }}</b>
@@ -179,6 +182,7 @@
         <p>Bill {{ row.pd_total.text }} · goods received {{ row.grn_total.text }} · gap {{ row.diff.text }}</p>
       </div>
       {% endfor %}
+      </div>
       {% endif %}
       {% endif %}
     </article>

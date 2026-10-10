@@ -38,7 +38,7 @@
   {% if brief.worst_vs_mid_empty %}
   <div class="empty" data-empty="forecast"><p>{{ brief.worst_vs_mid_empty }}</p></div>
   {% else %}
-  <ol class="rank">
+  <ol class="rank" data-list>
     {% for item in brief.worst_vs_mid %}
     <li>
       <a href="{{ url_for('store_health.page', store_id=item.id) }}" data-field="worst-mid">
@@ -57,7 +57,7 @@
   {% if brief.worst_vs_last_week_empty %}
   <div class="empty" data-empty="last-week"><p>{{ brief.worst_vs_last_week_empty }}</p></div>
   {% else %}
-  <ol class="rank">
+  <ol class="rank" data-list>
     {% for item in brief.worst_vs_last_week %}
     <li>
       <a href="{{ url_for('store_health.page', store_id=item.id) }}" data-field="worst-week">
@@ -72,7 +72,7 @@
 </section>
 {% endif %}
 
-<section>
+<section data-list>
   <h2>Food safety</h2>
   {% if brief.food_safety_empty %}
   <div class="empty" data-empty="food-safety"><p>{{ brief.food_safety_empty }}</p></div>
@@ -83,7 +83,7 @@
   {% endif %}
 </section>
 
-<section>
+<section data-list>
   <h2>Emergency</h2>
   {% if brief.emergency_empty %}
   <div class="empty" data-empty="emergency"><p>{{ brief.emergency_empty }}</p></div>
@@ -94,7 +94,7 @@
   {% endif %}
 </section>
 
-<section>
+<section data-list>
   <h2>Procurement</h2>
   {% if brief.procurement_empty %}
   <div class="empty" data-empty="procurement"><p>{{ brief.procurement_empty }}</p></div>
@@ -107,7 +107,7 @@
 
 {% if not brief.empty %}
 {% for region in brief.regions %}
-<section>
+<section data-list>
   <h2>{{ region.name }}</h2>
   {% for store in region.stores %}
   <article class="store" data-store="{{ store.label }}">

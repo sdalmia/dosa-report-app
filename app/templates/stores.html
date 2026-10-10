@@ -20,7 +20,7 @@
   {% if not league %}
     <p class="empty">No data</p>
   {% else %}
-    <div class="league-list">
+    <div class="league-list" data-list>
       {% for store in league %}
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>

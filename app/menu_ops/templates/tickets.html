@@ -48,7 +48,7 @@
   <section>
     <h2>Repeat stores</h2>
     {% if view.hotspots %}
-      <ul class="hotspots">
+      <ul class="hotspots" data-list>
         {% for row in view.hotspots %}
           <li data-hotspot="{{ row.store }}" data-count="{{ row.count }}">
             <a href="{{ url_for('menu_ops.tickets', store=row.store, keyword=view.keyword) }}">{{ row.store }}</a>
@@ -65,7 +65,7 @@
 
   <section>
     <h2>By keyword</h2>
-    <ul class="keywords">
+    <ul class="keywords" data-list>
       {% for row in view.keywords %}
         <li data-keyword="{{ row.keyword }}" data-count="{{ row.count }}">
           {% if row.keyword %}
@@ -79,7 +79,7 @@
     </ul>
   </section>
 
-  <section>
+  <section data-list>
     <h2>By store</h2>
     {% for group in view.stores %}
       <article class="store-group" data-store="{{ group.store }}">

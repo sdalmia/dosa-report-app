@@ -29,7 +29,7 @@
 <div class="empty" data-empty="scorecard"><p>{{ scorecard.empty }}</p></div>
 {% else %}
 <h2>Monthly ranking</h2>
-<ol class="rank">
+<ol class="rank" data-list>
   {% for store in scorecard.stores if store.rank %}
   <li>
     <a href="#store-{{ store.id }}">
@@ -41,8 +41,9 @@
   {% endfor %}
 </ol>
 
+<div data-list>
 {% for store in scorecard.stores %}
-<article class="store" id="store-{{ store.id }}" data-store="{{ store.label }}">
+<article class="store" id="store-{{ store.id }}" data-store="{{ store.label }}" data-list-item>
   <p class="kicker">{% if store.rank %}Rank {{ store.rank }}{% else %}Not ranked{% endif %}{% if store.region %} · {{ store.region }}{% endif %}</p>
   <h3>{{ store.label }}</h3>
   <p class="figure" data-field="score">{{ show(store.score) }}</p>
@@ -66,5 +67,6 @@
   <p><a class="tap" href="{{ url_for('store_health.page', store_id=store.id) }}">Store Health</a></p>
 </article>
 {% endfor %}
+</div>
 {% endif %}
 {% endblock %}
