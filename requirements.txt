@@ -10,4 +10,5 @@ Flask-Mail
 Flask-Session
 Flask-SQLAlchemy
 fpdf2==2.8.3
-pypdf==6.1.1psycopg2-binary
+pypdf==6.1.1
+psycopg2-binary
