@@ -1,0 +1,401 @@
+import csv
+import json
+import os
+import tempfile
+import unittest
+from pathlib import Path
+
+os.environ.setdefault("GOOGLE_MAPS_API_KEY", "test-key")
+_DB = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
+os.environ.setdefault("DATABASE_URL", "sqlite:///" + _DB.name)
+os.environ.setdefault("SECRET_KEY", "test-secret")
+
+from app import create_app
+from app.location_model import (
+    MIN_FORMAT_N,
+    cap_bounds,
+    delivery_signal,
+    fit_pooled,
+    input_index,
+    learning_rows,
+    log_prediction,
+    metro_signal,
+    metro_stations,
+    outcome_rows,
+    prior_weights,
+    refit_model,
+    review_stats,
+    ridership_coverage,
+    snapshot_rows,
+    south_indian_signal,
+    write_outcomes,
+    write_refit,
+    write_snapshot,
+)
+from app.owner_tools.metrics import build_goals
+from app.owner_tools.sources import load_goals
+from app.site_pattern import clear_cache
+from app.store_health.contract import load_feeds
+from app.store_master import allows_growth, find_store, is_trading, store_gaps
+
+
+OWNER = "siddhant@dalgreenfoods.com"
+OTHER = "siddhant@dosacoffee.com"
+
+
+def _vector(**values):
+    base = {key: 0.5 for key in prior_weights()["high_street"]}
+    base.update(values)
+    return base
+
+
+class StoreStatusTests(unittest.TestCase):
+    def test_closed_stores_are_out_of_rankings_and_gaps(self):
+        for label in ("Chattarpur (02/0005)", "GK1 Cloud Kitchen (02/0002)"):
+            row = find_store(label)
+            self.assertEqual(row["status"], "closed")
+            self.assertFalse(is_trading(label))
+            self.assertEqual(store_gaps(row), [])
+            self.assertFalse(allows_growth(label))
+
+    def test_faridabad_is_closing_with_no_growth_actions(self):
+        row = find_store("Sec 15 Faridabad (02/0007)")
+        self.assertEqual(row["status"], "closing 31 Oct")
+        self.assertTrue(is_trading(row["posist_name"]))
+        self.assertFalse(allows_growth(row["posist_name"]))
+        payload = build_goals(load_feeds(), load_goals(), "2026-10", False)
+        match = next(store for store in payload["stores"] if "Faridabad" in store["label"])
+        self.assertEqual(match["empty"], "No growth actions.")
+        self.assertIsNone(match["bar_pct"])
+
+
+class SnapshotTests(unittest.TestCase):
+    def test_snapshot_uses_the_pin_and_leaves_missing_competitors_blank(self):
+        clear_cache()
+        rows = {row["store"]: row for row in snapshot_rows("2026-10")}
+        self.assertNotIn("Chattarpur (02/0005)", rows)
+        self.assertNotIn("GK1 Cloud Kitchen (02/0002)", rows)
+        kalkaji = rows["Kalkaji (02/0004)"]
+        self.assertEqual(kalkaji["classic_score"], 9.2)
+        self.assertAlmostEqual(kalkaji["lat"], 28.540608)
+        self.assertEqual(kalkaji["market"], "NCR")
+        self.assertGreater(kalkaji["competitor_count"], 0)
+        self.assertGreaterEqual(kalkaji["competitor_count_all"], kalkaji["competitor_count"])
+        self.assertGreaterEqual(kalkaji["south_indian_density"], 0)
+        self.assertLessEqual(kalkaji["south_indian_density"], 1)
+        self.assertEqual(rows["Shalimar Bagh (02/0015)"]["format"], "metro")
+        shalimar = rows["Shalimar Bagh (02/0015)"]
+        self.assertIsNotNone(shalimar["energy"])
+        self.assertIsNotNone(shalimar["neighbour_brands"])
+
+
+class OutcomeTests(unittest.TestCase):
+    def test_mall_bills_and_apb_stay_blank(self):
+        features = snapshot_rows("2026-10")
+        outcomes = {row["store"]: row for row in outcome_rows(features)}
+        for name in ("Dosa Coffee - Manisquare (0004)", "Dosa Coffee - Forum (0003)"):
+            self.assertIsNone(outcomes[name]["bills_per_trading_day"])
+            self.assertIsNone(outcomes[name]["apb"])
+            self.assertIsNotNone(outcomes[name]["gross_per_trading_day"])
+        ideal = outcomes["Dosa Coffee - Ideal Plaza (01/0001)"]
+        self.assertIsNotNone(ideal["gross_per_trading_day"])
+        self.assertIsNotNone(ideal["dine_in_share"])
+        self.assertIsNotNone(ideal["famepilot_rating"])
+        self.assertIsNotNone(ideal["bills_per_trading_day"])
+
+
+class FitTests(unittest.TestCase):
+    def test_weight_move_is_capped_and_small_formats_stay_put(self):
+        priors = prior_weights()
+        high = []
+        for index in range(12):
+            rank_driver = index / 11
+            high.append({
+                "store": f"H{index}",
+                "format": "high_street",
+                "rank": rank_driver,
+                "x": _vector(energy=rank_driver, reviews=0.2, transport=0.2, premium=0.2, diversity=0.2, quality=0.2, anchor=1),
+            })
+        mall = [{
+            "store": f"M{index}",
+            "format": "mall",
+            "rank": 0.5,
+            "x": _vector(),
+        } for index in range(MIN_FORMAT_N - 1)]
+        fitted, frozen, keys = fit_pooled({"high_street": high, "mall": mall}, priors, steps=400)
+        self.assertIn("mall", frozen)
+        self.assertEqual(fitted["mall"], priors["mall"])
+        low, high_cap = cap_bounds(priors["high_street"]["energy"])
+        self.assertGreaterEqual(fitted["high_street"]["energy"], low - 1e-9)
+        self.assertLessEqual(fitted["high_street"]["energy"], high_cap + 1e-9)
+        self.assertGreater(fitted["high_street"]["energy"], priors["high_street"]["energy"])
+        for value in fitted["high_street"].values():
+            self.assertGreaterEqual(value, 0)
+
+    def test_refit_records_spearman_loo_and_misses(self):
+        features = []
+        outcomes = []
+        for index in range(10):
+            features.append({
+                "as_of": "2026-10",
+                "store_id": f"s{index}",
+                "store": f"Store {index}",
+                "market": "NCR",
+                "format": "high_street",
+                "energy_of_6": 6 * (index / 9),
+                "quality": 1,
+                "anchor": 1,
+                "diversity": 1,
+                "transport": 0.4,
+                "energy": index / 9,
+                "reviews": 0.4,
+                "premium": 0.4,
+                "south_indian_density": None,
+            })
+            outcomes.append({
+                "store": f"Store {index}",
+                "gross_per_trading_day": 1000 + index * 100,
+            })
+        # One store is scored as if energy were high but sales are low, so leave-one-out can miss.
+        features.append({
+            "as_of": "2026-10",
+            "store_id": "odd",
+            "store": "Odd store",
+            "market": "NCR",
+            "format": "high_street",
+            "energy_of_6": 6,
+            "quality": 1,
+            "anchor": 1,
+            "diversity": 1,
+            "transport": 0.4,
+            "energy": 1,
+            "reviews": 0.4,
+            "premium": 0.4,
+            "south_indian_density": None,
+        })
+        outcomes.append({"store": "Odd store", "gross_per_trading_day": 1000})
+        payload = refit_model(features, outcomes, "2026-10")
+        self.assertEqual(payload["status"], "proposed")
+        self.assertEqual(payload["prior_version"], "prior")
+        self.assertGreaterEqual(payload["n"], 8)
+        self.assertIsNotNone(payload["spearman"])
+        self.assertIsNotNone(payload["loo_mae"])
+        self.assertTrue(payload["backtest"])
+        self.assertTrue(any(row["miss"] for row in payload["backtest"]))
+        joined = learning_rows(features, outcomes)
+        self.assertTrue(all(row["rank"] is not None for row in joined))
+
+
+class JarvisInputTests(unittest.TestCase):
+    def test_sites_cover_stores_and_clusters(self):
+        sites = input_index()["sites"]
+        self.assertEqual(len(sites), 95)
+        self.assertEqual(sum(1 for site in sites if site["site_type"] == "store"), 29)
+        clusters = [site["site_id"] for site in sites if site["site_type"] == "candidate_cluster"]
+        self.assertEqual(len(clusters), 66)
+        self.assertTrue(any(site_id.startswith("NCR-C01") for site_id in clusters))
+        self.assertTrue(any(site_id.startswith("NCR-C54") for site_id in clusters))
+        self.assertTrue(any(site_id.startswith("KOL-C01") for site_id in clusters))
+        self.assertTrue(any(site_id.startswith("KOL-C12") for site_id in clusters))
+
+    def test_haldiram_is_out_of_strict_density_and_blank_reviews_stay_blank(self):
+        stats = review_stats()
+        self.assertEqual(stats["known"], 625)
+        self.assertEqual(stats["blank"], 768)
+        self.assertGreater(stats["mean_known"], stats["mean_if_blank_were_zero"])
+        cp = next(site for site in input_index()["sites"] if site["site_id"].startswith("Connaught"))
+        signal = south_indian_signal(cp["lat"], cp["lng"])
+        self.assertGreater(signal["all_count"], signal["count"])
+        self.assertTrue(signal["capped"])
+        self.assertIn("Capped", signal["detail"])
+        self.assertIn("Haldiram", signal["detail"])
+        quiet = next(site for site in input_index()["sites"] if site["site_id"].startswith("Gurgaon Sec 10"))
+        quiet_signal = south_indian_signal(quiet["lat"], quiet["lng"])
+        self.assertFalse(quiet_signal["capped"])
+        self.assertLess(quiet_signal["count"], 20)
+        self.assertEqual(quiet_signal["count"], quiet_signal["all_count"])
+
+    def test_delivery_percentile_and_worldpop_note(self):
+        new_town = next(site for site in input_index()["sites"] if "New Town" in site["site_id"] and site["site_type"] == "store")
+        signal = delivery_signal(new_town["lat"], new_town["lng"])
+        self.assertEqual(signal["raw_restaurants"], 23)
+        self.assertLessEqual(signal["restaurants"], 1)
+        self.assertNotEqual(signal["restaurants"], 23)
+        self.assertIn("percentile", signal["restaurant_detail"])
+        self.assertIn("OpenStreetMap", signal["restaurant_detail"])
+        self.assertIn("understates", signal["residential_detail"])
+        self.assertIn("New Town", signal["about"])
+        sector6 = next(site for site in input_index()["sites"] if site["site_id"].startswith("NCR-C02"))
+        plain = delivery_signal(sector6["lat"], sector6["lng"])
+        self.assertNotIn("understates", plain["about"])
+        self.assertNotIn("understates", plain["residential_detail"])
+
+    def test_ridership_keeps_the_latest_period_and_stays_data_coming(self):
+        rajiv = next(station for station in metro_stations() if station["station"] == "Rajiv Chowk")
+        self.assertEqual(rajiv["daily"], 210000)
+        self.assertIn("Jun 2026", rajiv["period"])
+        self.assertNotIn("216524", rajiv["period"])
+        coverage = ridership_coverage()
+        self.assertEqual(coverage["count"], 4)
+        self.assertFalse(coverage["open"])
+        self.assertEqual(
+            {store["name"] for store in coverage["stores"]},
+            {"CP", "Ideal Plaza", "Forum", "Swimming Club"},
+        )
+        cp = next(site for site in input_index()["sites"] if site["site_id"].startswith("Connaught"))
+        signal = metro_signal(cp["lat"], cp["lng"])
+        self.assertIsNone(signal["ridership"])
+        self.assertIn("Rajiv Chowk", signal["station_detail"])
+        self.assertIn("4 stores", signal["about"])
+        self.assertIn("prior weight", signal["about"])
+        self.assertNotIn(".csv", signal["about"])
+
+    def test_score_page_shows_about_this_data(self):
+        from unittest.mock import patch
+
+        self.assertFalse(os.environ.get("LOCATION_DATA_DIR"))
+        app = create_app()
+        app.config["TESTING"] = True
+        client = app.test_client()
+        place = {
+            "name": "Test Cafe",
+            "place_id": "p1",
+            "geometry": {"location": {"lat": 22.561892, "lng": 88.490713}},
+            "types": ["cafe"],
+            "user_ratings_total": 40,
+            "rating": 4.2,
+            "business_status": "OPERATIONAL",
+        }
+        with patch("app.routes.location_finder.fetch_eateries", return_value=[place]), \
+             patch("app.routes.location_finder.get_location_name", return_value="New Town, Kolkata"), \
+             patch("app.routes.location_finder.fetch_places_by_type", return_value=[]):
+            response = client.post("/location-finder", data={
+                "latitude": "22.561892",
+                "longitude": "88.490713",
+                "radius": "500",
+                "location_name": "New Town, Kolkata",
+                "site_format": "cloud_kitchen",
+            })
+        self.assertEqual(response.status_code, 200)
+        html = response.get_data(as_text=True)
+        self.assertIn("About this data", html)
+        self.assertIn("Haldiram", html)
+        self.assertIn("OpenStreetMap", html)
+        self.assertIn("percentile within the city", html)
+        self.assertIn("WorldPop 2020 understates this area", html)
+        self.assertIn("4 stores", html)
+        self.assertIn("data coming", html)
+        self.assertNotIn(".csv", html)
+        self.assertNotIn("401", html)
+
+
+class PageTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.previous = os.environ.get("LOCATION_DATA_DIR")
+        os.environ["LOCATION_DATA_DIR"] = self.tmp.name
+        clear_cache()
+        self.app = create_app()
+        self.app.config["TESTING"] = True
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        if self.previous is None:
+            os.environ.pop("LOCATION_DATA_DIR", None)
+        else:
+            os.environ["LOCATION_DATA_DIR"] = self.previous
+        self.tmp.cleanup()
+        clear_cache()
+
+    def _session(self, email):
+        with self.client.session_transaction() as sess:
+            if email:
+                sess["user"] = {"name": "Siddhant Dalmia", "email": email}
+            else:
+                sess.clear()
+
+    def test_scripts_write_month_files_and_the_page_is_owner_only(self):
+        feature_path = write_snapshot("2026-10")
+        outcome_path = write_outcomes("2026-10")
+        model_path = write_refit("2026-10")
+        self.assertTrue(str(feature_path).endswith("2026-10.csv"))
+        with feature_path.open(encoding="utf-8") as handle:
+            reader = csv.DictReader(handle)
+            self.assertIn("south_indian_density", reader.fieldnames)
+            body = list(reader)
+        self.assertTrue(all(row["competitor_count"] == "" for row in body))
+        with outcome_path.open(encoding="utf-8") as handle:
+            outcomes = {row["store"]: row for row in csv.DictReader(handle)}
+        self.assertEqual(outcomes["Dosa Coffee - Forum (0003)"]["apb"], "")
+        self.assertEqual(outcomes["Dosa Coffee - Manisquare (0004)"]["bills_per_trading_day"], "")
+        payload = json.loads(model_path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["status"], "proposed")
+        self.assertIn("loo_mae", payload)
+
+        self._session(None)
+        self.assertEqual(self.client.get("/location-model").status_code, 302)
+        self._session(OTHER)
+        blocked = self.client.get("/location-model")
+        self.assertEqual(blocked.status_code, 302)
+        self._session(OWNER)
+        page = self.client.get("/location-model").get_data(as_text=True)
+        self.assertIn("Location model", page)
+        self.assertIn("What are we missing", page)
+        self.assertIn("Approve", page)
+        self.assertNotIn(".csv", page)
+        self.assertIn('name="theme-color" content="#f7f6f3"', page)
+        approved = self.client.post("/location-model", data={"version": payload["version"]})
+        self.assertEqual(approved.status_code, 200)
+        self.assertIn("Approved.", approved.get_data(as_text=True))
+        saved = json.loads(model_path.read_text(encoding="utf-8"))
+        self.assertEqual(saved["status"], "approved")
+
+    def test_score_page_logs_the_prediction_and_shows_the_badge(self):
+        from unittest.mock import patch
+
+        place = {
+            "name": "Test Cafe",
+            "place_id": "p1",
+            "geometry": {"location": {"lat": 22.55, "lng": 88.35}},
+            "types": ["cafe"],
+            "user_ratings_total": 25000,
+            "rating": 4.6,
+            "price_level": 2,
+            "business_status": "OPERATIONAL",
+        }
+        with patch("app.routes.location_finder.fetch_eateries", return_value=[place]), \
+             patch("app.routes.location_finder.get_location_name", return_value="Park Street, Kolkata"), \
+             patch("app.routes.location_finder.fetch_places_by_type", return_value=[]):
+            response = self.client.post("/location-finder", data={
+                "latitude": "22.55",
+                "longitude": "88.35",
+                "radius": "500",
+                "location_name": "Park Street, Kolkata",
+                "site_format": "high_street",
+            })
+        self.assertEqual(response.status_code, 200)
+        html = response.get_data(as_text=True)
+        self.assertIn("Why this score", html)
+        self.assertIn("Model prior", html)
+        self.assertIn("South Indian competitor density", html)
+        self.assertIn("data coming", html)
+        self.assertNotIn(".csv", html)
+        logged = list(csv.DictReader((Path(self.tmp.name) / "predictions.csv").open(encoding="utf-8")))
+        self.assertEqual(len(logged), 1)
+        self.assertEqual(logged[0]["format"], "high_street")
+        self.assertEqual(logged[0]["model_version"], "prior")
+        self.assertTrue(logged[0]["score"])
+
+    def test_log_helper_writes_the_header_once(self):
+        log_prediction("A site", 22.5, 88.3, "metro", "prior", 6.2, [
+            {"label": "Energy", "status": "in", "points": 1.2},
+            {"label": "Station ridership", "status": "data coming", "points": None},
+        ])
+        path = Path(self.tmp.name) / "predictions.csv"
+        rows = list(csv.DictReader(path.open(encoding="utf-8")))
+        self.assertEqual(rows[0]["site_id"], "metro-22.50000-88.30000")
+        self.assertIn("data coming", rows[0]["breakdown"])
+
+
+if __name__ == "__main__":
+    unittest.main()

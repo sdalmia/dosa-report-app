@@ -27,6 +27,7 @@ PAGES = (
     {"kind": "Menu", "label": "Ingredient Price Tracker", "href": "/ingredient-tracker/"},
     {"kind": "Menu", "label": "Zomato Settlement Uploader", "href": "/upload"},
     {"kind": "Menu", "label": "Location Finder", "href": "/location-finder"},
+    {"kind": "Menu", "label": "Location model", "href": "/location-model"},
     {"kind": "Menu", "label": "Trello", "href": "https://trello.com/"},
     {"kind": "Menu", "label": "Buzzready", "href": "https://www.buzzready.app/"},
     {"kind": "Menu", "label": "Keka", "href": "https://www.keka.com/"},

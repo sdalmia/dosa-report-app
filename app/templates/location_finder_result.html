@@ -21,6 +21,7 @@
             <div class="score-details-text">
                 <div class="score-label">{{ pattern.format_label }} score</div>
                 <div class="score-category">Classic score {{ score }}</div>
+                <div class="lf-model">Model {{ pattern.model_label }}</div>
             </div>
         </div>
         <div class="score-details-text">
@@ -37,13 +38,21 @@
             {% if part.status == 'data coming' %}
             <span>data coming</span>
             {% elif part.status == 'not used' %}
-            <span>not used</span>
+            <span>not used{% if part.detail %} · {{ part.detail }}{% endif %}</span>
             {% else %}
             <span>{% if part.points is not none %}{{ part.points }}{% endif %}{% if part.detail %} · {{ part.detail }}{% endif %}</span>
             {% endif %}
         </li>
         {% endfor %}
     </ul>
+    {% if pattern.pattern.about %}
+    <p class="lf-about-label">About this data</p>
+    <ul class="lf-about">
+        {% for note in pattern.pattern.about %}
+        <li>{{ note }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <h2 class="h5">Delivery potential</h2>
     <p>{% if pattern.delivery.score is none %}data coming{% else %}{{ pattern.delivery.score }} out of 10. It is shown beside the site score and is not blended in, except where the format uses it.{% endif %}</p>
     <ul class="lf-parts">
@@ -271,6 +280,19 @@
 .lf-parts { list-style: none; padding: 0; margin: 0 0 1rem; }
 .lf-parts li { padding: 0.45rem 0; border-bottom: 1px solid var(--line); }
 .lf-parts span { color: var(--text-muted); }
+.lf-about-label { font-size: 0.85rem; font-weight: 650; margin: 0.15rem 0 0.2rem; }
+.lf-about { list-style: disc; padding-left: 1.15rem; margin: 0 0 1rem; }
+.lf-about li { font-size: 0.85rem; color: var(--text-muted); padding: 0.15rem 0; }
+.lf-model {
+    display: inline-block;
+    margin-top: 0.35rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    font-weight: 650;
+}
 .score-details-text { margin-left: 24px; }
 .score-label { font-size: 16px; font-weight: 500; opacity: 0.9; }
 .score-category { font-size: 22px; font-weight: 700; margin-top: 4px; }

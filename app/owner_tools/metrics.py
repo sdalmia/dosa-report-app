@@ -10,7 +10,7 @@ from datetime import timedelta
 from app.store_health.contract import parse_number
 from app.store_health.present import list_stores
 from app.store_health.stores import assign_rows
-from app.store_master import is_trading
+from app.store_master import allows_growth, is_trading
 
 from .figures import count_fig, date_label, fig, money_fig, month_label, pct_fig, plain_pct_fig, ratio_fig, score_fig
 
@@ -756,7 +756,11 @@ def build_goals(feeds, goals, month, festive_on):
         progress = None
         bar = None
         empty = ""
-        if goal is None:
+        if not allows_growth(store.label):
+            empty = "No growth actions."
+            target = None
+            written = ""
+        elif goal is None:
             empty = "No target for this month."
         elif not written:
             empty = "The target for this month is blank."

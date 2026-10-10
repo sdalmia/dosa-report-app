@@ -1,0 +1,31 @@
+as_of,store_id,store,market,format,gross_per_trading_day,dine_in_share,aggregator_share,trend_4w,famepilot_rating,bills_per_trading_day,apb
+2026-10,dosa-coffee-calcutta-swiming-club-0007,Dosa Coffee - Calcutta Swiming Club (0007),Kolkata,other_club,4688.6274,1,0,0.3681,,7.3143,641.0233
+2026-10,dosa-coffee-food-truck-1-0008,Dosa Coffee - Food Truck - 1 (0008),Kolkata,other_truck,3897.4896,1,0,-0.0828,,31.5,123.7298
+2026-10,dosa-coffee-forum-0003,Dosa Coffee - Forum (0003),Kolkata,mall,27012.0469,1,0,0.0894,5,,
+2026-10,dosa-coffee-ideal-plaza-01-0001,Dosa Coffee - Ideal Plaza (01/0001),Kolkata,mall,123655.3983,0.4982,0.5018,0.0903,4.8,262.0857,471.8128
+2026-10,dosa-coffee-james-long-sarani-01-0011,Dosa Coffee - James long Sarani (01/0011),Kolkata,high_street,62335.9149,0.4821,0.5179,0.1313,4.29,129.4286,481.6241
+2026-10,dosa-coffee-kalikapur-01-0014,Dosa Coffee - Kalikapur (01/0014),Kolkata,high_street,50569.4706,0.5817,0.4183,0.0186,4.13,104.6286,483.3237
+2026-10,dosa-coffee-lake-road-01-0015,Dosa Coffee - Lake road 01/0015,Kolkata,high_street,91374.606,0.6091,0.3909,0.0623,4.27,166.5143,548.7493
+2026-10,dosa-coffee-lake-town-0005,Dosa Coffee - Lake Town (0005),Kolkata,high_street,50829.9089,0.4768,0.5232,0.08,4.89,118.6571,428.3763
+2026-10,dosa-coffee-manisquare-0004,Dosa Coffee - Manisquare (0004),Kolkata,mall,60334.0143,0.912,0.088,0.1181,5,,
+2026-10,dosa-coffee-new-town-cloud-kitchen-01-0013,Dosa Coffee - New Town - Cloud Kitchen (01/0013),Kolkata,cloud_kitchen,28471.02,0.0318,0.9682,0.1701,,77.0882,369.3303
+2026-10,dosa-coffee-quest-mall-01-0016,Dosa Coffee - Quest Mall (01/0016),Kolkata,mall,37624.0257,1,0,0.2226,,106.3429,353.7993
+2026-10,dosa-coffee-rangoli-mall-01-0010,Dosa Coffee - Rangoli Mall (01/0010),Kolkata,mall,49879.0011,0.8035,0.1965,0.2986,4.27,96.1429,518.8009
+2026-10,dosa-coffee-rosedale-plaza-0006,Dosa Coffee - Rosedale Plaza(0006),Kolkata,mall,73605.7191,0.5204,0.4796,-0.0183,4.93,188.6857,390.0969
+2026-10,dosa-coffee-salt-lake-002,Dosa Coffee - Salt Lake (002),Kolkata,high_street,93859.1789,0.7621,0.2379,0.124,4.51,180.7429,519.2968
+2026-10,dosa-coffee-salt-lake-sec-1-0009,Dosa Coffee - Salt Lake Sec-1 (0009),Kolkata,high_street,90554.7917,0.7385,0.2615,0.1417,4.82,158.5429,571.1692
+2026-10,dosa-coffee-santoshpur-01-0012,Dosa Coffee - Santoshpur (01/0012),Kolkata,high_street,45080.9531,0.4427,0.5573,-0.0202,3.6,100.2286,449.7815
+2026-10,connaught-place-02-0012,Connaught place (02/0012),NCR,high_street,134091.9511,0.9359,0.0641,0.001,4.82,189.8857,706.1719
+2026-10,gurgaon-dlf-02-0009,Gurgaon DLF (02/0009),NCR,high_street,65359.4154,0.4585,0.5415,-0.1707,4.14,163.3143,400.2064
+2026-10,gurgaon-sec-10-02-0014,Gurgaon Sec 10 (02/0014),NCR,high_street,21138.7823,0.482,0.518,-0.1149,4.55,50.1429,421.5712
+2026-10,gurgaon-sec-15-02-0010,Gurgaon Sec-15 (02/0010),NCR,high_street,57989.4806,0.7019,0.2981,-0.1044,4.4,109.2857,530.6227
+2026-10,kalkaji-02-0004,Kalkaji (02/0004),NCR,high_street,60666.238,0.3616,0.6384,-0.1118,4.14,141.3714,429.1266
+2026-10,model-town-02-0013,Model Town (02/0013),NCR,high_street,69840.4789,0.6711,0.3289,0.0275,4.16,125.2286,557.704
+2026-10,pacific-mall-jasola-02-0011,"Pacific mall, Jasola (02/0011)",NCR,mall,85819.3223,,,0.1271,4.25,146.1714,587.1142
+2026-10,paschim-vihar-02-0003,Paschim Vihar (02/0003),NCR,high_street,42345.3326,0.5901,0.4099,-0.0134,4.84,83.9714,504.2826
+2026-10,rohini-sec-7-02-0008,Rohini Sec-7 (02/0008),NCR,high_street,81477.558,0.5768,0.4232,-0.0601,3.25,157.2286,518.2109
+2026-10,sec-143-noida-02-0006,Sec 143 Noida (02/0006),NCR,high_street,35918.3177,0.4758,0.5242,-0.1251,4.94,77.7714,461.8446
+2026-10,sec-15-faridabad-02-0007,Sec 15 Faridabad (02/0007),NCR,high_street,33074.5871,0.3439,0.6561,-0.0905,2.18,73.1429,452.1916
+2026-10,sec-18-noida-02-0001,Sec 18 Noida (02/0001),NCR,high_street,65049.1791,0.4869,0.5131,-0.0731,4.84,140.9143,461.6223
+2026-10,sec-31-gurgaon-02-0016,Sec 31 - Gurgaon (02/0016),NCR,high_street,34996.3117,0.6244,0.3756,-0.0339,,70.2,498.523
+2026-10,shalimar-bagh-02-0015,Shalimar Bagh (02/0015),NCR,metro,50281.5609,0.754,0.246,-0.0543,,88.7714,566.416

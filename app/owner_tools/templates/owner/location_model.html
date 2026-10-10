@@ -1,0 +1,88 @@
+{% extends "owner/layout.html" %}
+
+{% block title %}Location model - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<style>
+.owner-tools table { width: 100%; border-collapse: collapse; }
+.owner-tools th, .owner-tools td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.owner-tools .scroll { overflow-x: auto; }
+.owner-tools button.tap { min-height: 44px; }
+</style>
+<h1>Location model</h1>
+<p class="subtitle">Live score uses model {{ model.live_label }}</p>
+{% if model.message %}<p class="note">{{ model.message }}</p>{% endif %}
+
+<section class="ot-box">
+  <h2>Proposed model</h2>
+  {% if model.proposed %}
+  <p>Version {{ model.proposed.version }}. {{ model.proposed.n }} stores. Spearman {{ model.proposed.spearman }}. Leave-one-store-out error {{ model.proposed.loo_mae }}. Prior {{ model.proposed.prior_version }}.</p>
+  <p class="note">A format with fewer than 8 stores keeps its prior weights. No weight moves more than 20% in one month.</p>
+  <form method="post">
+    <input type="hidden" name="version" value="{{ model.proposed.version }}">
+    <button type="submit" class="tap">Approve</button>
+  </form>
+  {% else %}
+  <div class="empty"><p>No proposed model yet.</p></div>
+  {% endif %}
+</section>
+
+<section class="ot-box">
+  <h2>What are we missing</h2>
+  {% if model.misses %}
+  <ul>
+    {% for row in model.misses %}
+    <li>{{ row.store }} is off by {{ row.decile_gap }} rank-deciles.</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><p>No leave-one-store-out miss beyond 1.5 rank-deciles.</p></div>
+  {% endif %}
+</section>
+
+<section class="ot-box">
+  <h2>Backtest</h2>
+  <p class="note">Leave-one-store-out predicted rank against the actual within-market rank. 0 is the lowest gross per day in that market, 1 is the highest.</p>
+  {% if model.backtest %}
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Store</th><th>Format</th><th>Actual</th><th>Predicted</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for row in model.backtest %}
+        <tr>
+          <td>{{ row.store }}</td>
+          <td>{{ row.format }}</td>
+          <td>{{ row.actual_rank }}</td>
+          <td>{{ row.predicted_rank }}</td>
+          <td>{% if row.miss %}Missing{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><p>No backtest yet.</p></div>
+  {% endif %}
+</section>
+
+<section class="ot-box">
+  <h2>Opened sites, first 90 days</h2>
+  <p class="note">{{ model.prediction_count }} scored sites are on the prediction log.</p>
+  {% if model.openings %}
+  <ul>
+    {% for row in model.openings %}
+    <li>
+      {{ row.site or row.site_id }}
+      {% if row.days_tracked is not none %} · {{ row.days_tracked }} days{% endif %}
+      {% if row.predicted_score is not none %} · predicted {{ row.predicted_score }}{% endif %}
+      {% if row.gross_per_trading_day is not none %} · {{ row.gross_per_trading_day }} a day{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><p>No opened site is linked yet.</p></div>
+  {% endif %}
+</section>
+{% endblock %}

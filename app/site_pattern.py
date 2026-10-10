@@ -249,22 +249,37 @@ def _part(key, label, weight, value, detail):
     return {"key": key, "label": label, "weight": weight, "value": value, "detail": detail}
 
 
-def delivery_parts(restaurants, residential, aggregator_sales, sales_band):
+def delivery_parts(restaurants, residential, aggregator_sales, sales_band, restaurant_detail=None, residential_detail=None, restaurants_scaled=False):
     low, high = sales_band
+    if restaurants is None:
+        restaurant_value = None
+        restaurant_text = ""
+    elif restaurants_scaled:
+        restaurant_value = max(0.0, min(1.0, float(restaurants)))
+        restaurant_text = restaurant_detail or "Percentile within the city"
+    else:
+        restaurant_value = scale_log(restaurants, None, None)
+        restaurant_text = restaurant_detail or f"{int(restaurants)} restaurants"
+    if residential is None:
+        residential_value = None
+        residential_text = ""
+    else:
+        residential_value = max(0.0, min(1.0, float(residential)))
+        residential_text = residential_detail or "Density on a 0–1 scale"
     return [
         _part(
             "restaurants",
             "Delivering restaurants within 3 km",
             0.40,
-            scale_log(restaurants, None, None) if restaurants is not None else None,
-            None if restaurants is None else f"{int(restaurants)} restaurants",
+            restaurant_value,
+            restaurant_text,
         ),
         _part(
             "residential",
             "Residential density within 3 km",
             0.40,
-            None if residential is None else max(0.0, min(1.0, residential)),
-            None if residential is None else "Density on a 0–1 scale",
+            residential_value,
+            residential_text,
         ),
         _part(
             "aggregator",
@@ -358,6 +373,9 @@ def score_signals(fmt, signals, bucket, bands):
         signals.get("residential"),
         signals.get("nearest_delivery_sales"),
         bands["delivery"],
+        restaurant_detail=signals.get("restaurant_detail"),
+        residential_detail=signals.get("residential_detail"),
+        restaurants_scaled=bool(signals.get("restaurants_scaled")),
     ))
     formula = FORMULA_FOR.get(fmt)
     if formula == "high_street":
@@ -370,6 +388,9 @@ def score_signals(fmt, signals, bucket, bands):
         pattern = blend(metro_parts(signals, bands["reviews"]))
     else:
         pattern = {"score": None, "parts": [], "weight_sum": 0}
+    from app.location_model import finish_pattern
+
+    pattern = finish_pattern(pattern, formula or "", signals)
     return {"pattern": pattern, "delivery": delivery, "bucket": bucket}
 
 
@@ -445,7 +466,7 @@ def _signals_from_row(row, stores, bands):
     reviews = _float(row.get("nearby_reviews"))
     share = _float(row.get("aggregator_share"))
     nearest_sales = None if nearest is None else nearest.get("delivery_gross_per_day")
-    return {
+    signals = {
         "energy": None if energy is None else max(0.0, min(1.0, energy / 6)),
         "energy_detail": None if energy is None else f"{energy:g} / 6",
         "reviews": reviews,
@@ -477,6 +498,14 @@ def _signals_from_row(row, stores, bands):
         "nearest_store": None if nearest is None else nearest["name"],
         "nearest_store_m": None if distance is None else round(distance),
     }
+    signals.update(_optional_inputs(row.get("lat"), row.get("lon")))
+    return signals
+
+
+def _optional_inputs(lat, lon):
+    from app.location_model import optional_feature_signals
+
+    return optional_feature_signals(lat, lon)
 
 
 def _peer_rows(store, stores):
@@ -510,6 +539,11 @@ def load_board(directory=None):
     ):
         path = directory / name
         stamps.append(path.stat().st_mtime if path.is_file() else None)
+    from app.location_model import inputs_dir
+
+    for name in ("competitors.csv", "delivery_inputs.csv", "metro_ridership.csv"):
+        path = inputs_dir() / name
+        stamps.append(path.stat().st_mtime if path.is_file() else None)
     cached = _CACHE.get(key)
     if cached and cached[0] == tuple(stamps):
         return cached[1]
@@ -520,6 +554,9 @@ def load_board(directory=None):
 
 def clear_cache():
     _CACHE.clear()
+    from app.location_model import clear_input_cache
+
+    clear_input_cache()
 
 
 def _leading_number(value):
@@ -579,19 +616,18 @@ def _apply_ncr_scores(raw_rows, directory):
 
 
 def load_ridership(directory):
+    """One latest period per station. A missing inputs file stays empty."""
+    from app.location_model import metro_stations
+
     rows = []
-    for raw in _read(Path(directory) / "metro_ridership.csv"):
-        daily = _float(raw.get("daily_ridership"))
-        station = (raw.get("station") or "").strip()
-        if not station:
-            continue
+    for raw in metro_stations():
         rows.append({
-            "station": station,
-            "city": (raw.get("city") or "").strip(),
-            "line": (raw.get("line") or "").strip(),
-            "daily": daily,
-            "source": (raw.get("source") or "").strip(),
-            "as_of": (raw.get("as_of") or "").strip(),
+            "station": raw["station"],
+            "city": raw["city"],
+            "line": raw["line"],
+            "daily": raw["daily"],
+            "source": raw["period"],
+            "as_of": raw["period"],
         })
     return rows
 
@@ -630,6 +666,9 @@ def _build_board(directory):
             "diversity": raw.get("diversity"),
             "transport": raw.get("transport"),
             "nearby_reviews": raw.get("nearby_reviews"),
+            "cuisine_types": raw.get("cuisine_types"),
+            "n_anchor_brands_500m": raw.get("n_anchor_brands_500m"),
+            "n_fnb_chains_500m": raw.get("n_fnb_chains_500m"),
             "pin_m": pins.get((raw.get("Store") or "").strip()),
             "score_note": "",
             "earlier_score": None,
@@ -678,6 +717,16 @@ def _build_board(directory):
             "brands_300": parse_neighbour_brands(row["neighbour_brands"], PREMIUM_METRES) or [],
             "score_note": row.get("score_note") or "",
             "earlier_score": row.get("earlier_score"),
+            "energy_of_6": _float(row.get("energy_of_6")),
+            "quality_raw": _float(row.get("quality")),
+            "anchor_raw": _float(row.get("anchor")),
+            "diversity_raw": _float(row.get("diversity")),
+            "transport_raw": _float(row.get("transport")),
+            "nearby_reviews": _float(row.get("nearby_reviews")),
+            "cuisine_types": _float(row.get("cuisine_types")),
+            "n_anchor_brands_500m": _float(row.get("n_anchor_brands_500m")),
+            "n_fnb_chains_500m": _float(row.get("n_fnb_chains_500m")),
+            "neighbour_brands": row.get("neighbour_brands") or "",
         })
     for store in stores:
         store["peers"] = [
@@ -826,6 +875,7 @@ def score_live_site(lat, lng, fmt, location_name, classic, places):
         "residential": None,
         "nearest_delivery_sales": nearest_sales,
     }
+    signals.update(_optional_inputs(lat, lng))
     chosen = fmt if fmt in FORMULA_FOR else "high_street"
     scored = score_signals(chosen, signals, bucket, board["bands"])
     other, other_m = _nearest_store(lat, lng, stores)
@@ -858,4 +908,6 @@ def score_live_site(lat, lng, fmt, location_name, classic, places):
         "cannibal": other_m is not None and other_m <= CANNIBAL_METRES,
         "brands_300": [name for name in names if _brand_key(name)],
         "peers": peers,
+        "model_label": scored["pattern"].get("model_label") or "prior",
+        "model_version": scored["pattern"].get("model_version") or "prior",
     }
