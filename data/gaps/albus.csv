@@ -1,8 +1,6 @@
 gap_id,area,store,title,why_it_matters,fix,owner,status,due,as_of,source
 albus-store-list,general,,"No single store list",Being fixed by Store Master.,Store Master,Albus,open,,2026-10-09,Albus
 albus-unpriced,procurement,,"221 unpriced Restroworks ingredients",These ingredients have no price.,Price them,Sailesh,open,,2026-10-09,Albus
-albus-kolkata-dosa,procurement,,"Kolkata Regular Masala Dosa base recipe is coriander only at 18 outlets",The base recipe is coriander only.,Set the full base recipe,Sailesh,open,,2026-10-09,Albus
-albus-delhi-sambar,procurement,,"Delhi Extra Sambar recipe is container only",The recipe is a container only.,Write the recipe,Sailesh,open,,2026-10-09,Albus
 albus-net-sales,sales,,"No store-level net sales",Waiting on daily ops reports.,Daily ops reports,"Anup, Vikas",waiting,,2026-10-09,Albus
 albus-google-missing,reputation,"Calcutta Swimming Club, Food Truck, New Town CK, Quest Mall",No Google listing,These outlets have no Google listing.,Needs a listing,Siddhant,open,,2026-10-09,Albus
 albus-cp-duplicate,reputation,Connaught Place,Duplicate listing,A second Google listing points at this store.,Needs a cleanup,Siddhant,open,,2026-10-09,Albus

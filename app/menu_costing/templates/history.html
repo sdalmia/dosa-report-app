@@ -9,12 +9,13 @@
     <p class="muted">Each upload is kept. An older menu is not replaced.</p>
   </header>
   {{ menu_nav('history') }}
+  {% include "_filters.html" %}
 
   <div class="mc-split">
     <section class="cc-section">
       <div class="section-head"><h2>Menu versions</h2></div>
       {% if not versions %}
-      <p class="empty">No menu versions yet.{% if is_owner %} Load a menu with the date it took effect.{% endif %}</p>
+      <p class="empty">No menu versions yet.{% if is_owner() %} Load a menu with the date it took effect.{% endif %}</p>
       {% else %}
       <div class="mc-list">
         {% for version in versions %}

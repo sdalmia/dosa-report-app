@@ -177,6 +177,10 @@ class ProcurementTests(unittest.TestCase):
         self.assertEqual(base["city"], "Kolkata")
         self.assertEqual(base["city_baseline_median"], 26.22)
         self.assertEqual(base["vs_city_baseline_pct"], -9.2)
+        self.assertEqual(base["vs_own_city"], "9.2% below the Kolkata median")
+        self.assertNotIn("recipe needs checking", base["vs_own_city"].lower())
+        self.assertEqual(_attr(html, "city-median", city="Kolkata", item="Masala Dosa"), "26.22")
+        self.assertEqual(_attr(html, "city-median", city="Delhi NCR", item="Masala Dosa"), "41.34")
         self.assertIsNone(base["selling_price"])
         self.assertIsNone(base["margin"])
         self.assertEqual({row["recipe_tab"] for row in payload["items"]}, {"base", "delivery", "table", "takeout"})
@@ -259,7 +263,12 @@ class ProcurementTests(unittest.TestCase):
             supplier="Devine &amp; Conquer Store",
             city="Delhi",
         )
-        self.assertEqual(gap, "360.3")
+        self.assertAlmostEqual(float(gap), 360.3, delta=0.1)
+        self.assertIn("in that city", html)
+        self.assertNotIn(
+            'data-field="above-cheapest" data-item="Cling Wrap" data-supplier="M/S MAHAR" data-city="Kolkata"',
+            html,
+        )
         self.assertIn("9 Sep–8 Oct 2026", html)
         self.assertNotIn("September purchases are not in these files", html)
         self.assertNotIn(".csv", html)

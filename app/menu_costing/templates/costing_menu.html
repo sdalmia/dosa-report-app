@@ -9,6 +9,7 @@
     <p class="muted">{{ city_note }}</p>
   </header>
   {{ menu_nav('menu') }}
+  {% include "_filters.html" %}
 
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
@@ -119,25 +120,10 @@
 
   <section class="cc-section">
     <form class="mc-filters" method="get" action="{{ url_for('menu_costing.menu_page') }}">
-      <label>City
-        <select name="city">
-          {% for name in cities %}
-          <option value="{{ name }}" {% if name == city %}selected{% endif %}>{{ name }}</option>
-          {% endfor %}
-        </select>
-      </label>
       <label>Channel
         <select name="channel">
           {% for name in channels %}
           <option value="{{ name }}" {% if name == channel %}selected{% endif %}>{{ name }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <label>Store
-        <select name="store">
-          <option value="">All stores in {{ city }}</option>
-          {% for name in outlets %}
-          <option value="{{ name }}" {% if name == store %}selected{% endif %}>{{ name }}</option>
           {% endfor %}
         </select>
       </label>

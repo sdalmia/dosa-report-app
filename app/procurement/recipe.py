@@ -29,6 +29,17 @@ from app.procurement.numbers import (
 RECIPE_LABEL = "recipe cost excl. packaging"
 
 
+def _vs_own_city(pct, city):
+    """Outlet versus its own city median. A higher Delhi cost is not a recipe check."""
+    place = (city or "").strip()
+    if pct is None or not place:
+        return ""
+    if pct == 0:
+        return f"Same as the {place} median"
+    direction = "above" if pct > 0 else "below"
+    return f"{format_pct(abs(pct))} {direction} the {place} median"
+
+
 def recipe_costs(
     directory=None,
     outlet=None,
@@ -266,6 +277,7 @@ def _item_record(
         "as_of": as_of,
         "city_baseline_median": city_baseline,
         "vs_city_baseline_pct": vs_city_baseline,
+        "vs_own_city": _vs_own_city(vs_city_baseline, city),
     }
 
 

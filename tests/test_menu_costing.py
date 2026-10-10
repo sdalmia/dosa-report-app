@@ -53,6 +53,8 @@ class MenuCostingTests(unittest.TestCase):
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Siddhant Dalmia", "email": "siddhant@dalgreenfoods.com"}
             sess["user_email"] = "siddhant@dalgreenfoods.com"
+            for key in ("cc_store", "cc_city", "cc_range", "cc_start", "cc_end"):
+                sess.pop(key, None)
         with self.app.app_context():
             MenuItemPrice.query.delete()
             MenuVersion.query.delete()
@@ -129,7 +131,7 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIsNone(margin_amount(26, None))
 
     def test_live_menu_uses_the_city_median_and_leaves_price_blank(self):
-        html = self.client.get("/menu?city=Kolkata&channel=Dine-in&store=Ideal+Plaza&q=Masala+Dosa").get_data(as_text=True)
+        html = self.client.get("/menu-costing?city=Kolkata&channel=Dine-in&store=Ideal+Plaza&q=Masala+Dosa").get_data(as_text=True)
         self.assertIn("Delhi serves 3 chutneys with each dish. Kolkata serves 1.", html)
         self.assertNotIn("recipe needs checking", html.lower())
         self.assertNotIn("menu_item_cost", html)
@@ -143,11 +145,11 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn("₹24", html)
         self.assertEqual(_attr(html, "orders", item="Masala Dosa"), "2750")
         self.assertIn("Data coming", html)
-        self.assertIn('href="/menu"', self.client.get("/procurement").get_data(as_text=True))
+        self.assertIn('href="/menu-costing/"', self.client.get("/procurement").get_data(as_text=True))
         self.assertIn("Menu", html)
 
     def test_delhi_threats_stay_inside_delhi(self):
-        html = self.client.get("/menu?city=Delhi+NCR&channel=Zomato").get_data(as_text=True)
+        html = self.client.get("/menu-costing?city=Delhi+NCR&channel=Zomato").get_data(as_text=True)
         self.assertNotIn("recipe needs checking", html.lower())
         self.assertIn("No Zomato prices on file for Delhi NCR", html)
         start = 0
@@ -162,7 +164,7 @@ class MenuCostingTests(unittest.TestCase):
 
     def test_bom_lines_keep_blanks_and_one_city(self):
         html = self.client.get(
-            "/menu/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa"
+            "/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertIn("Kolkata median", html)
         self.assertIn("within Kolkata", html)
@@ -195,13 +197,13 @@ class MenuCostingTests(unittest.TestCase):
             self.assertEqual(old_price.price, 180)
             self.assertEqual(old_price.category, "Dosa")
             left, right = versions[0].id, versions[1].id
-        history = self.client.get(f"/menu/history?left={left}&right={right}").get_data(as_text=True)
+        history = self.client.get(f"/menu-costing/history?left={left}&right={right}").get_data(as_text=True)
         self.assertIn('data-field="diff-added" data-item="Idli"', history)
         self.assertIn('data-field="diff-removed" data-item="Filter Coffee"', history)
         self.assertIn('data-field="diff-repriced" data-item="Masala Dosa"', history)
         self.assertIn("₹180", history)
         self.assertIn("₹10", history)
-        menu = self.client.get("/menu?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
+        menu = self.client.get("/menu-costing?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
         self.assertEqual(_attr(menu, "menu-price", item="Masala Dosa"), "10")
         self.assertIn('data-field="priced-below" data-item="Masala Dosa"', menu)
         self.assertIn('data-field="margin-hurt" data-item="Masala Dosa"', menu)
@@ -209,11 +211,11 @@ class MenuCostingTests(unittest.TestCase):
 
     def test_upload_is_owner_only_and_a_bad_file_is_not_saved(self):
         anon = self.app.test_client()
-        self.assertEqual(anon.get("/menu/upload").status_code, 302)
+        self.assertEqual(anon.get("/menu-costing/upload").status_code, 302)
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
             sess["user_email"] = "asha@dosacoffee.com"
-        blocked = self.client.get("/menu/upload")
+        blocked = self.client.get("/menu-costing/upload")
         self.assertEqual(blocked.status_code, 302)
         self.assertIn("dashboard", blocked.headers["Location"])
         with self.client.session_transaction() as sess:
@@ -295,26 +297,26 @@ class MenuCostingTests(unittest.TestCase):
 
     def test_live_unpriced_ingredients_and_recipe_history(self):
         ideal = self.client.get(
-            "/menu/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa"
+            "/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertNotIn("Cost incomplete", ideal)
         self.assertIn("no earlier month", ideal.lower())
         self.assertEqual(_attr(ideal, "recipe-cost", **{"data-month": "2026-10"}), "23.82")
         truck = self.client.get(
-            "/menu?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
+            "/menu-costing?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertIn('data-field="cost-incomplete" data-item="Masala Dosa"', truck)
         self.assertIn("2 ingredients have no price", truck)
         self.assertEqual(_attr(truck, "menu-cost", item="Masala Dosa"), "10.9")
         self.assertEqual(_attr(truck, "food-cost-pct", item="Masala Dosa"), "")
         truck_item = self.client.get(
-            "/menu/item?city=Kolkata&store=Food+Truck+-+1&item=Masala+Dosa"
+            "/menu-costing/item?city=Kolkata&store=Food+Truck+-+1&item=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertEqual(_attr(truck_item, "recipe-cost", **{"data-month": "2026-10"}), "7.49")
-        city = self.client.get("/menu?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
+        city = self.client.get("/menu-costing?city=Kolkata&channel=Dine-in&q=Masala+Dosa").get_data(as_text=True)
         self.assertNotIn('data-field="cost-incomplete" data-item="Masala Dosa"', city)
         self.assertNotIn('data-field="cost-full" data-item="Masala Dosa"', city)
-        buying = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        buying = self.client.get("/menu-costing?city=Kolkata").get_data(as_text=True)
         self.assertIn(
             'data-field="unpriced-ingredient" data-item="Spicy Coconut Chutney Mix 1Pkt (16gm)"',
             buying,
@@ -329,13 +331,13 @@ class MenuCostingTests(unittest.TestCase):
             self.assertNotIn("RO Water", tag)
             self.assertNotIn("R.O. Water", tag)
             start = index + 1
-        history = self.client.get("/menu/history").get_data(as_text=True)
+        history = self.client.get("/menu-costing/history").get_data(as_text=True)
         self.assertIn('data-month="2026-10"', history)
         self.assertIn("October 2026 is the first snapshot", history)
         self.assertIn("no earlier month", history.lower())
         self.assertIn("No menu versions yet", history)
         self.client.post(
-            "/menu/upload",
+            "/menu-costing/upload",
             data={
                 "city": "Delhi NCR",
                 "channel": "Dine-in",
@@ -346,7 +348,7 @@ class MenuCostingTests(unittest.TestCase):
             content_type="multipart/form-data",
         )
         priced = self.client.get(
-            "/menu?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=ABC+Juice"
+            "/menu-costing?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=ABC+Juice"
         ).get_data(as_text=True)
         self.assertIn('data-field="cost-incomplete" data-item="ABC Juice"', priced)
         self.assertEqual(_attr(priced, "food-cost-pct", item="ABC Juice"), "")
@@ -370,33 +372,33 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn("Fewer than 3 outlets", fanta["baseline_text"])
         self.assertIn("1 outlet", fanta["baseline_text"])
         truck = self.client.get(
-            "/menu?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
+            "/menu-costing?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
         ).get_data(as_text=True)
         self.assertIn("The dish cost is incomplete, so it is left out of the city comparison.", truck)
         self.assertIn("Why this % is blank", truck)
 
     def test_estimated_cost_names_the_receipt_and_skips_wild_medians(self):
         fanta = self.client.get(
-            "/menu?city=Kolkata&channel=Dine-in&q=Fanta+%28Regular%29"
+            "/menu-costing?city=Kolkata&channel=Dine-in&q=Fanta+%28Regular%29"
         ).get_data(as_text=True)
         self.assertEqual(_attr(fanta, "menu-cost", item="Fanta (Regular)"), "")
         self.assertNotIn("4782", fanta)
         self.assertNotIn("47510", fanta)
         forum = self.client.get(
-            "/menu/item?city=Kolkata&store=Forum&item=Fanta+%28Regular%29"
+            "/menu-costing/item?city=Kolkata&store=Forum&item=Fanta+%28Regular%29"
         ).get_data(as_text=True)
         self.assertIn('data-field="cost-full"', forum)
         self.assertNotIn("4782", forum)
         self.assertNotIn("47510", forum)
         papad = self.client.get(
-            "/menu?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=Appalam+Papad+%281pc%29"
+            "/menu-costing?city=Delhi+NCR&channel=Dine-in&store=Chattarpur&q=Appalam+Papad+%281pc%29"
         ).get_data(as_text=True)
         self.assertIn('data-field="cost-estimated" data-item="Appalam Papad (1pc)"', papad)
         self.assertIn("SE-7875", papad)
         self.assertNotIn(".csv", papad)
         self.assertNotIn("po_vs_grn", papad)
         self.assertEqual(_attr(papad, "menu-cost", item="Appalam Papad (1pc)"), "4.1")
-        delhi = self.client.get("/menu?city=Delhi+NCR").get_data(as_text=True)
+        delhi = self.client.get("/menu-costing?city=Delhi+NCR").get_data(as_text=True)
         self.assertGreater(float(_attr(delhi, "stale-price", item="Ghee")), 10)
         self.assertIn('data-field="stale-restroworks" data-item="Ghee">₹722', delhi)
         self.assertIn('data-field="stale-receipt" data-item="Ghee">₹841', delhi)
@@ -405,7 +407,7 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn("The baseline has 1 outlet", forum)
 
     def test_recipe_looks_incomplete_flags_selling_stubs_and_the_container(self):
-        kolkata = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        kolkata = self.client.get("/menu-costing?city=Kolkata").get_data(as_text=True)
         self.assertIn("Recipe looks incomplete", kolkata)
         self.assertIn("Stock under-deduction risk for Sailesh", kolkata)
         self.assertIn('data-field="threat-stub" data-city="Kolkata" data-store="" data-item="Regular Masala Dosa"', kolkata)
@@ -414,21 +416,39 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn('data-field="threat-stub" data-city="Kolkata" data-store="" data-item="Extra Sambar - 250ml"', kolkata)
         self.assertIn("Glen Container", kolkata)
         self.assertNotIn("recipe needs checking", kolkata.lower())
-        delhi = self.client.get("/menu?city=Delhi+NCR").get_data(as_text=True)
+        delhi = self.client.get("/menu-costing?city=Delhi+NCR").get_data(as_text=True)
         self.assertIn('data-field="threat-stub" data-city="Delhi NCR" data-store="" data-item="Extra Sambar - 250ml"', delhi)
         self.assertIn("only the container", delhi.lower())
         dish = self.client.get(
-            "/menu/item?city=Kolkata&store=Ideal+Plaza&item=Regular+Masala+Dosa"
+            "/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Regular+Masala+Dosa"
         ).get_data(as_text=True)
         self.assertIn('data-field="recipe-stub" data-item="Regular Masala Dosa"', dish)
         self.assertIn("Coriander Leaves", dish)
         self.assertIn("Sailesh", dish)
         city_dish = self.client.get(
-            "/menu/item?city=Delhi+NCR&item=Extra+Sambar+-+250ml"
+            "/menu-costing/item?city=Delhi+NCR&item=Extra+Sambar+-+250ml"
         ).get_data(as_text=True)
         self.assertIn('data-field="recipe-stub" data-item="Extra Sambar - 250ml"', city_dish)
         self.assertIn("Glen Container", city_dish)
         self.assertIn("Sailesh", city_dish)
+
+    def test_shared_filters_choose_city_and_store_and_hide_other_dates(self):
+        home = self.client.get("/dashboard").get_data(as_text=True)
+        drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
+        self.assertIn("Menu &amp; Costing", drawer)
+        self.assertIn("/menu-costing", drawer)
+        self.assertIn("Menu engineering", drawer)
+        delhi = self.client.get("/menu-costing?cc_city=Delhi+NCR&cc_store=&cc_range=").get_data(as_text=True)
+        self.assertIn("Above the Delhi NCR median", delhi)
+        self.assertIn('data-item="Onion"', delhi)
+        week = self.client.get("/menu-costing?cc_city=Kolkata&cc_store=&cc_range=7").get_data(as_text=True)
+        self.assertIn("this date range are not on file", week)
+        self.assertNotIn("Sold 823", week)
+        ideal = self.client.get(
+            "/menu-costing?cc_city=Kolkata&cc_store=dosa-coffee-ideal-plaza-01-0001&cc_range=&q=Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertEqual(_attr(ideal, "menu-cost", item="Masala Dosa"), "23.82")
+        self.assertIn("9.2% below the Kolkata median", ideal)
 
     def test_recipe_snapshots_show_cost_and_ingredient_changes(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -478,22 +498,22 @@ class MenuCostingTests(unittest.TestCase):
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
             sess["user_email"] = "asha@dosacoffee.com"
-        menu = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        menu = self.client.get("/menu-costing?city=Kolkata").get_data(as_text=True)
         self.assertNotIn("Aggregator commissions", menu)
-        self.assertNotIn("/menu/pl", menu)
-        blocked = self.client.get("/menu/pl")
+        self.assertNotIn("/menu-costing/pl", menu)
+        blocked = self.client.get("/menu-costing/pl")
         self.assertEqual(blocked.status_code, 302)
         self.assertIn("dashboard", blocked.headers["Location"])
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Siddhant Dalmia", "email": "siddhant@dalgreenfoods.com"}
             sess["user_email"] = "siddhant@dalgreenfoods.com"
-        page = self.client.get("/menu/pl").get_data(as_text=True)
+        page = self.client.get("/menu-costing/pl").get_data(as_text=True)
         for company in ("Kolkata", "Delhi", "UP", "Haryana"):
             self.assertIn(f'data-company="{company}"', page)
         self.assertIn("Aggregator commissions", page)
         self.assertIn("Data coming", page)
         self.assertEqual(_attr(page, "pl-line", **{"data-company": "Kolkata", "data-line": "rent"}), "")
-        self.assertIn('href="/menu/pl"', self.client.get("/menu").get_data(as_text=True))
+        self.assertIn('href="/menu-costing/pl"', self.client.get("/menu-costing").get_data(as_text=True))
 
     def _month(self, folder, cost, lines):
         folder.mkdir()
@@ -509,7 +529,7 @@ class MenuCostingTests(unittest.TestCase):
 
     def _upload(self, day, text, name):
         return self.client.post(
-            "/menu/upload",
+            "/menu-costing/upload",
             data={
                 "city": "Kolkata",
                 "channel": "Dine-in",

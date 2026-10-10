@@ -1,6 +1,7 @@
 """Posist item sales. September menu mix is on file. Later months are not."""
 
 import csv
+from datetime import date
 from pathlib import Path
 
 from app.procurement.numbers import format_period, parse_number
@@ -64,18 +65,59 @@ def _read(path):
         index[(row["store_key"], row["key"])] = row
     period = ""
     if start and latest:
-        from datetime import date
-
         try:
             period = format_period(date.fromisoformat(start), date.fromisoformat(latest))
         except ValueError:
             period = f"{start} to {latest}"
+    start_day = None
+    end_day = None
+    if start and latest:
+        try:
+            start_day = date.fromisoformat(start)
+            end_day = date.fromisoformat(latest)
+        except ValueError:
+            start_day = None
+            end_day = None
     return {
         "available": True,
         "period_label": period,
+        "period_start": start_day,
+        "period_end": end_day,
         "by_store_item": index,
         "coming": "Later months are not on file. Data coming.",
     }
+
+
+def sales_for_filters(sales, filters):
+    """Keep the file's own window unless a date filter asks for another one.
+
+    Item sales are one period total. A last-7, last-30, or custom range that
+    is not that period cannot be sliced, so the totals stay off the page.
+    """
+    if not sales or not sales.get("available"):
+        return sales
+    kind = (filters or {}).get("cc_range") or ""
+    if not kind:
+        return sales
+    start = sales.get("period_start")
+    end = sales.get("period_end")
+    if start is None or end is None:
+        return _hide_sales(sales)
+    from app.view_filters import resolve_bounds
+
+    chosen_start, chosen_end = resolve_bounds(filters, start, end)
+    if chosen_start == start and chosen_end == end:
+        return sales
+    return _hide_sales(sales)
+
+
+def _hide_sales(sales):
+    hidden = dict(sales)
+    hidden["available"] = False
+    hidden["by_store_item"] = {}
+    hidden["period_label"] = ""
+    hidden["coming"] = "Item sales for this date range are not on file. Data coming."
+    return hidden
 
 
 def lookup_sale(sales, outlet, item):

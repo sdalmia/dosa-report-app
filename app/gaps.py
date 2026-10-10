@@ -285,8 +285,50 @@ def gap_counts(rows):
     return counts
 
 
+def recipe_stub_gaps():
+    """Recipe looks incomplete, owned by Sailesh. One card per city and dish."""
+    from app.menu_costing.catalog import stub_gap_rows
+    from app.store_master import get_index
+
+    by_label = {}
+    for row in get_index().rows:
+        store_id = row.get("store_id") or ""
+        for label in (row.get("display_name"), row.get("posist_name")):
+            if label and store_id:
+                by_label.setdefault(label.casefold(), store_id)
+    records = []
+    for stub in stub_gap_rows():
+        city = stub.get("city") or ""
+        item = stub.get("item") or ""
+        ids = []
+        for name in stub.get("outlet_names") or []:
+            store_id = by_label.get((name or "").casefold())
+            if store_id and store_id not in ids:
+                ids.append(store_id)
+        record = _record(
+            gap_id=f"recipe-stub:{city}:{item.casefold()}",
+            area="procurement",
+            store=city,
+            title=f"Recipe looks incomplete: {item}",
+            why=f"{city}. Stock under-deduction risk for Sailesh. {stub.get('reason') or ''}.",
+            fix="Set the full base recipe",
+            owner="Sailesh",
+            status="open",
+            due=None,
+            as_of=None,
+            source="",
+            threat=True,
+        )
+        record["store_ids"] = ids
+        records.append(record)
+    return records
+
+
 def load_gap_board(master_rows, directory=None, email=None):
-    rows = visible_gaps(system_gap_records(master_rows) + load_gap_files(directory), email)
+    rows = system_gap_records(master_rows) + load_gap_files(directory)
+    if directory is None:
+        rows.extend(recipe_stub_gaps())
+    rows = visible_gaps(rows, email)
     return {
         "counts": gap_counts(rows),
         "groups": group_gaps_by_owner(rows),

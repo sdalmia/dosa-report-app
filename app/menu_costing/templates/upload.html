@@ -9,6 +9,7 @@
     <p class="muted">Sanjoy's Excel, CSV, or PDF. The date is the day this menu took effect. The previous menu stays on file.</p>
   </header>
   {{ menu_nav('upload') }}
+  {% include "_filters.html" %}
   {% if error %}<p class="empty">{{ error }}</p>{% endif %}
   <form class="mc-filters" method="post" enctype="multipart/form-data" action="{{ url_for('menu_costing.upload_page') }}">
     <label>City

@@ -2,9 +2,10 @@ from datetime import date
 from pathlib import Path
 
 from flask import Blueprint, redirect, render_template, request, url_for
+from markupsafe import escape
 from werkzeug.utils import secure_filename
 
-from app.access import is_owner, owner_required
+from app.access import owner_required
 from app.menu_costing.catalog import (
     CHANNELS,
     build_item,
@@ -21,7 +22,9 @@ from app.menu_costing.history import dish_history, load_history, present_history
 from app.menu_costing.parse_menu import parse_upload
 from app.menu_costing.pnl import load_pnl
 from app.menu_costing.recipes import load_recipes
-from app.menu_costing.sales import load_sales
+from app.menu_costing.sales import load_sales, sales_for_filters
+from app.menu_costing.scope import filter_context, place_from_request
+from app.view_filters import remember_filters
 from app.menu_costing.versions import save_version, version_dicts
 from app.procurement.numbers import format_pct
 from app.routes.main import login_required
@@ -32,37 +35,40 @@ menu_bp = Blueprint(
     template_folder="templates",
     static_folder="static",
     static_url_path="/menu-costing/static",
+    url_prefix="/menu-costing",
 )
 
 _UPLOAD_LIMIT = 15 * 1024 * 1024
 
 
-@menu_bp.route("/menu")
+@menu_bp.route("/", strict_slashes=False)
 @login_required
 def menu_page():
     recipes = load_recipes()
+    filters, city, store = place_from_request(recipes)
     page = build_page(
         recipes,
-        load_sales(),
+        sales_for_filters(load_sales(), filters),
         version_dicts(),
-        city=(request.args.get("city") or "").strip(),
+        city=city,
         channel=(request.args.get("channel") or "").strip(),
-        store=(request.args.get("store") or "").strip(),
+        store=store,
         query=(request.args.get("q") or "").strip(),
         today=date.today(),
     )
-    page["is_owner"] = is_owner()
-    return render_template("menu.html", **page)
+    page.update(filter_context(filters))
+    return render_template("costing_menu.html", **page)
 
 
-@menu_bp.route("/menu/item")
+@menu_bp.route("/item")
 @login_required
 def item_page():
     recipes = load_recipes()
+    filters, city, store = place_from_request(recipes)
     detail = build_item(
         recipes,
-        city=(request.args.get("city") or "").strip(),
-        store=(request.args.get("store") or "").strip(),
+        city=city,
+        store=store,
         item=(request.args.get("item") or "").strip(),
     )
     chosen = detail["chosen"]
@@ -109,11 +115,12 @@ def item_page():
     detail.update(
         present_history(dish_history(load_history(), detail["city"], detail["store"], detail["item"]))
     )
-    detail["is_owner"] = is_owner()
+    detail.update(filter_context(filters))
+    detail["filter_hidden"] = f'<input type="hidden" name="item" value="{escape(detail["item"])}">'
     return render_template("item.html", **detail)
 
 
-@menu_bp.route("/menu/history")
+@menu_bp.route("/history")
 @login_required
 def history_page():
     versions = version_dicts()
@@ -134,11 +141,10 @@ def history_page():
         for row in diff["added"] + diff["removed"]:
             row["price_text"] = owner_rupee(row.get("price"))
     recipes = load_recipes()
-    city = (request.args.get("city") or "").strip()
+    filters, city, store = place_from_request(recipes)
     if city not in recipes["cities"]:
         city = recipes["cities"][0] if recipes["cities"] else ""
     outlets = recipes["outlets"].get(city, [])
-    store = (request.args.get("store") or "").strip()
     if store not in outlets:
         store = ""
     item = (request.args.get("item") or "").strip()
@@ -149,24 +155,30 @@ def history_page():
         diff=diff,
         left_id=left_id,
         right_id=right_id,
-        is_owner=is_owner(),
         cities=recipes["cities"],
         outlets=outlets,
         city=city,
         store=store,
         item=item,
+        **filter_context(filters),
         **recipe,
     )
 
 
-@menu_bp.route("/menu/pl")
+@menu_bp.route("/pl")
 @owner_required
 def pnl_page():
+    filters = remember_filters()
     report = load_pnl()
-    return render_template("pnl.html", is_owner=True, **report)
+    city = filters.get("cc_city") or ""
+    if city == "Kolkata":
+        report["companies"] = [row for row in report["companies"] if row["name"] == "Kolkata"]
+    elif city == "Delhi NCR":
+        report["companies"] = [row for row in report["companies"] if row["name"] == "Delhi"]
+    return render_template("pnl.html", **filter_context(filters), **report)
 
 
-@menu_bp.route("/menu/upload", methods=["GET", "POST"])
+@menu_bp.route("/upload", methods=["GET", "POST"])
 @owner_required
 def upload_page():
     recipes = load_recipes()
@@ -175,13 +187,14 @@ def upload_page():
         error = _accept_upload(recipes)
         if not error:
             return redirect(url_for("menu_costing.history_page"))
+    filters, _city, _store = place_from_request(recipes)
     return render_template(
         "upload.html",
         cities=recipes["cities"],
         channels=CHANNELS,
         outlets=sorted({name for names in recipes["outlets"].values() for name in names}),
         error=error,
-        is_owner=True,
+        **filter_context(filters),
     )
 
 

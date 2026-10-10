@@ -279,9 +279,9 @@
             <b>{{ row.menu_item }}</b>
             <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
             <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
-              · city median {{ row.typical.text }}
+              · city median <span data-field="city-median" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.typical.attr }}">{{ row.typical.text }}</span>
               · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
-              {% if row.spread.text %} · spread {{ row.spread.text }}{% endif %}</p>
+              {% if row.spread.text %} · spread <span data-field="city-spread" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.spread.attr }}">{{ row.spread.text }}</span>{% endif %}</p>
           </div>
           {% endfor %}
         </div>

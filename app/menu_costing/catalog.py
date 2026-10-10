@@ -445,6 +445,7 @@ def _stub_recipes(recipes, sales, city, store):
                 "item": sample["item"],
                 "city": city,
                 "outlet": sample["outlet"] if store else "",
+                "outlet_names": [hit["row"]["outlet"] for hit in hits],
                 "outlets": len(hits),
                 "cost": sample["cost"],
                 "orders": orders or None,
@@ -452,6 +453,19 @@ def _stub_recipes(recipes, sales, city, store):
             }
         )
     found.sort(key=lambda row: (-(row["orders"] or 0), row["item"].casefold()))
+    return found
+
+
+def stub_gap_rows():
+    """Base recipes that look incomplete, one row per city and dish."""
+    from app.menu_costing.recipes import load_recipes
+    from app.menu_costing.sales import load_sales
+
+    recipes = load_recipes()
+    sales = load_sales()
+    found = []
+    for city in recipes.get("cities") or []:
+        found.extend(_stub_recipes(recipes, sales, city, ""))
     return found
 
 

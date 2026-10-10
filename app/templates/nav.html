@@ -36,11 +36,11 @@
   <a href="{{ url_for('main.flags_page') }}">Red flags</a>
   <h2>Menu</h2>
   <a href="{{ url_for('menu_ops.menu') }}" {% if request.endpoint == 'menu_ops.menu' %}aria-current="page"{% endif %}>Menu engineering</a>
+  <a href="{{ url_for('menu_costing.menu_page') }}" {% if request.endpoint and request.endpoint.startswith('menu_costing.') %}class="is-current"{% endif %}>Menu &amp; Costing</a>
   <a href="{{ url_for('menu_ops.channels') }}" {% if request.endpoint == 'menu_ops.channels' %}aria-current="page"{% endif %}>Channels</a>
   <a href="{{ url_for('menu_ops.tickets') }}" {% if request.endpoint == 'menu_ops.tickets' %}aria-current="page"{% endif %}>Tickets</a>
   <h2>Buying</h2>
   <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
-  <a href="{{ url_for('menu_costing.menu_page') }}" {% if request.endpoint and request.endpoint.startswith('menu_costing.') %}class="is-current"{% endif %}>Menu &amp; Costing</a>
   <a href="{{ url_for('procurement.food_cost') }}">Food cost</a>
   <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
   <h2>Tools</h2>
