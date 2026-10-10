@@ -1,0 +1,104 @@
+city,batch_item,unit,stores_active,made,issued,consumed,cost,issued_qty,issued_amt,consumption_qty,consumption_amt,wastage_qty,avg_price_max,stores_consumed_without_issue,period
+Delhi NCR,Sambar Bucket - Delhi,Ltr,14,no,yes,yes,yes,4204.0,140918.72,5277.65,176952.84,76.65,33.72,0,2026-10-01 to 2026-10-08
+Delhi NCR,Coconut Shredded,Kg,14,no,yes,yes,yes,379.0,93990.73,1260.33,312823.61,12.36,253.5,0,2026-10-01 to 2026-10-08
+Delhi NCR,Dosa Batter Mix,Kg,14,no,yes,yes,yes,2261.0,68501.73,1586.43,48064.62,149.53,30.34,0,2026-10-01 to 2026-10-08
+Delhi NCR,Boiled & Mashed Potato (1Pkt = 3Kg),Kg,14,no,yes,yes,yes,1062.0,35383.22,882.56,29382.72,12.21,33.44,0,2026-10-01 to 2026-10-08
+Delhi NCR,Benne Dosa Batter (Pack Size -3 Kg ),Kg,14,no,yes,yes,yes,877.3,26659.22,630.72,19186.21,45.49,31.1,1,2026-10-01 to 2026-10-08
+Delhi NCR,Korma Gravy Mix (1pkt=700gm),Kg,14,no,yes,yes,yes,147.7,22835.74,99.04,15312.46,6.58,155.48,0,2026-10-01 to 2026-10-08
+Delhi NCR,Garlic Chutney Bucket,Kg,14,no,yes,yes,yes,83.0,21118.49,71.87,18286.71,4.77,255.57,0,2026-10-01 to 2026-10-08
+Delhi NCR,Mysore Chutney Bucket,Kg,14,no,yes,yes,yes,85.5,15718.22,75.27,13836.56,4.24,186.49,0,2026-10-01 to 2026-10-08
+Delhi NCR,Tomato Onion Powder Mix (1 Pkt = 24gm),Kg,14,no,yes,yes,yes,29.41,15297.8,2.72,1416.38,0.0,521.33,0,2026-10-01 to 2026-10-08
+Delhi NCR,Srivilli Kheer (1 Pc),Pc,14,no,yes,yes,yes,347.0,11065.38,254.0,8097.61,33.0,32.38,0,2026-10-01 to 2026-10-08
+Delhi NCR,Idli Pc Raw (1 Pkt =40pc),Pc,14,no,yes,yes,yes,5060.0,9774.28,7080.0,13699.97,238.0,1.97,3,2026-10-01 to 2026-10-08
+Delhi NCR,Malabar Paratha Dough,Pc,14,no,yes,no,yes,1210.0,9139.24,0.0,0.0,39.2,7.71,0,2026-10-01 to 2026-10-08
+Delhi NCR,Medu Vada Batter Mix,Kg,10,no,yes,yes,yes,116.0,8440.6,0.48,34.8,9.38,73.46,0,2026-10-01 to 2026-10-08
+Delhi NCR,Jain Sambar - Delhi,Ltr,14,no,yes,yes,yes,194.0,6240.25,178.0,5724.23,8.03,32.52,0,2026-10-01 to 2026-10-08
+Delhi NCR,Medu Vada Batter,Kg,8,no,yes,no,yes,86.0,5508.4,0.0,0.0,13.52,64.92,0,2026-10-01 to 2026-10-08
+Delhi NCR,Idli Batter,Kg,4,no,yes,no,yes,162.0,4794.8,0.0,0.0,8.38,30.24,0,2026-10-01 to 2026-10-08
+Delhi NCR,Steam Rice Bucket,Kg,14,no,yes,yes,yes,94.5,4677.86,62.93,3120.83,7.81,54.95,0,2026-10-01 to 2026-10-08
+Delhi NCR,Thatte Idli Pc Raw,Pc,14,no,yes,yes,yes,906.0,4532.11,1495.0,7495.47,105.0,5.36,3,2026-10-01 to 2026-10-08
+Delhi NCR,Rava Powder Mix,Kg,13,no,yes,yes,yes,42.5,3967.4,29.15,2721.03,1.1,94.19,1,2026-10-01 to 2026-10-08
+Delhi NCR,Thindi Malkapodi Powder Bucket,Kg,14,no,yes,yes,yes,18.0,3598.0,26.75,5347.81,0.31,200.33,1,2026-10-01 to 2026-10-08
+Delhi NCR,Malkapodi Bucket,Kg,14,no,yes,yes,yes,20.5,3511.59,24.94,4273.71,0.37,171.94,1,2026-10-01 to 2026-10-08
+Delhi NCR,Lemon Rice Bucket,Kg,14,no,yes,yes,yes,44.5,3414.76,25.8,1979.1,3.86,79.64,0,2026-10-01 to 2026-10-08
+Delhi NCR,Potato Masala Mix (1Pkt = 90Gm),Pkt,14,no,yes,yes,yes,286.0,2998.39,293.77,3081.63,0.0,10.6,0,2026-10-01 to 2026-10-08
+Delhi NCR,Thatte Idli Batter,Kg,3,no,yes,no,yes,110.0,2945.06,0.0,0.0,14.78,27.62,0,2026-10-01 to 2026-10-08
+Delhi NCR,Special Daal Bucket,Kg,14,no,yes,yes,yes,19.0,2810.78,37.38,5515.71,0.0,150.47,3,2026-10-01 to 2026-10-08
+Delhi NCR,Kesari Halwa Mix  (1pkt = 550gm),Kg,14,no,yes,yes,yes,35.71,2555.05,26.04,1863.47,0.0,75.01,1,2026-10-01 to 2026-10-08
+Delhi NCR,Karam Podi Powder Bucket,Kg,13,no,yes,yes,yes,11.5,2203.23,9.88,1894.32,0.2,192.74,1,2026-10-01 to 2026-10-08
+Delhi NCR,New Bangalore Benne Batter (Pack Size -4 Kg ),Kg,2,no,yes,no,yes,65.6,2137.71,0.0,0.0,0.0,32.59,0,2026-10-01 to 2026-10-08
+Delhi NCR,Imli Water,Ltr,14,no,yes,yes,yes,68.0,1907.87,69.21,1944.42,0.25,28.67,1,2026-10-01 to 2026-10-08
+Delhi NCR,Chaat Masala Bucket,Kg,14,no,yes,yes,yes,5.0,1546.39,2.6,803.99,0.0,310.81,1,2026-10-01 to 2026-10-08
+Delhi NCR,Jain Potato Masala Bucket,Kg,7,no,yes,no,yes,27.3,1501.8,0.0,0.0,4.25,55.06,0,2026-10-01 to 2026-10-08
+Delhi NCR,Upma Mix (1pkt = 300gm),Kg,13,no,yes,yes,yes,13.2,1105.57,9.25,774.68,1.0,84.27,4,2026-10-01 to 2026-10-08
+Delhi NCR,Rasam Chhoke Pre-Mix (2 Mix -6gm + 42gm)= 48gm,Kg,14,no,yes,no,yes,3.97,1002.55,0.0,0.0,0.0,253.88,0,2026-10-01 to 2026-10-08
+Delhi NCR,Dahi Bucket Mix (1pkt =105gm),gm,14,no,yes,yes,yes,14283.46,968.95,10470.0,711.51,0.0,0.07,1,2026-10-01 to 2026-10-08
+Delhi NCR,Raw Mango Pickle Bucket,Kg,14,no,yes,yes,yes,4.0,927.32,2.54,588.99,0.1,235.21,5,2026-10-01 to 2026-10-08
+Delhi NCR,Medu Vada Batter Powder Mix (1 Pkt = 23gm),Kg,12,no,yes,no,yes,3.66,838.52,0.0,0.0,0.0,233.56,0,2026-10-01 to 2026-10-08
+Delhi NCR,Malabar Paratha  (1pkt= 6Pcs),Pc,14,no,yes,yes,yes,78.0,628.39,1122.0,8867.98,22.0,8.38,10,2026-10-01 to 2026-10-08
+Delhi NCR,Boondi,Kg,14,no,yes,yes,yes,7.5,445.53,6.24,370.49,0.0,59.62,1,2026-10-01 to 2026-10-08
+Delhi NCR,Rasam Mix (1Pkt =15 gm),Kg,13,no,yes,no,yes,1.44,434.83,0.0,0.0,0.03,306.14,0,2026-10-01 to 2026-10-08
+Delhi NCR,Garam Masala Powder Bucket,Kg,14,no,yes,yes,yes,0.3,425.7,0.15,206.1,0.0,1468.46,12,2026-10-01 to 2026-10-08
+Delhi NCR,Raw mango Powder Mix (1 Pkt = 13gm),Kg,14,no,yes,no,yes,0.99,326.16,0.0,0.0,0.0,338.88,0,2026-10-01 to 2026-10-08
+Delhi NCR,Frozen Medu Vada (10pc),Pc,14,no,no,yes,yes,0.0,0.0,3723.0,16414.41,0.0,5.01,14,2026-10-01 to 2026-10-08
+Delhi NCR,Jain Sambar Bucket,Ltr,3,no,no,no,yes,0.0,0.0,0.0,0.0,12.7,28.74,0,2026-10-01 to 2026-10-08
+Delhi NCR,Potato Masala Bucket,Kg,14,no,no,yes,yes,0.0,0.0,50.75,1046.27,1.71,42.34,14,2026-10-01 to 2026-10-08
+Delhi NCR,Rasam Bucket,Ltr,14,no,no,yes,yes,0.0,0.0,48.07,1495.94,4.1,36.95,14,2026-10-01 to 2026-10-08
+Delhi NCR,Raw Mango Chutney Bucket,Kg,13,no,no,yes,yes,0.0,0.0,35.46,7029.74,1.5,226.62,13,2026-10-01 to 2026-10-08
+Delhi NCR,Sambar Bucket,Ltr,10,no,no,yes,yes,0.0,0.0,25.1,609.61,13.0,30.49,10,2026-10-01 to 2026-10-08
+Delhi NCR,Special White Coconut Chutney Bucket,Kg,9,no,no,yes,yes,0.0,0.0,6.0,255.95,2.53,86.31,8,2026-10-01 to 2026-10-08
+Delhi NCR,Spicy Coconut Chutney Bucket,Kg,4,no,no,no,yes,0.0,0.0,0.0,0.0,5.82,58.31,0,2026-10-01 to 2026-10-08
+Delhi NCR,Spicy Coconut Chutney Mix 1Pkt (16gm),Kg,13,no,no,yes,yes,0.0,0.0,45.27,5124.41,0.0,188.13,13,2026-10-01 to 2026-10-08
+Delhi NCR,Sugar Syrup Bucket,Ltr,11,no,no,yes,no,0.0,0.0,23.35,0.0,0.0,0.0,11,2026-10-01 to 2026-10-08
+Delhi NCR,Tomato Onion Chutney Bucket,Kg,13,no,no,yes,yes,0.0,0.0,986.38,116970.49,2.78,134.22,13,2026-10-01 to 2026-10-08
+Kolkata,Coconut Shredded,Kg,16,no,yes,yes,yes,696.9,136419.69,1315.07,247250.24,0.5,196.14,2,2026-10-01 to 2026-10-08
+Kolkata,Sambar Bucket,Ltr,15,no,yes,yes,yes,3627.0,95753.75,5459.2,144154.96,8.0,26.68,0,2026-10-01 to 2026-10-08
+Kolkata,Dosa Batter Mix,Kg,16,no,yes,yes,yes,2519.44,82591.21,2199.83,72118.0,346.56,32.91,0,2026-10-01 to 2026-10-08
+Kolkata,Jain Sambar Bucket,Ltr,16,no,yes,yes,yes,1363.0,33625.41,422.0,10428.0,4.0,24.87,0,2026-10-01 to 2026-10-08
+Kolkata,Idli Pc Raw (1 Pkt =40pc),Pc,16,no,yes,yes,yes,12685.0,25624.04,12206.0,24656.12,543.0,2.03,0,2026-10-01 to 2026-10-08
+Kolkata,Garlic Chutney Bucket,Kg,15,no,yes,yes,yes,84.9,21506.09,94.05,23824.44,6.44,253.66,0,2026-10-01 to 2026-10-08
+Kolkata,Benne Dosa Batter (Pack Size -3 Kg ),Kg,15,no,yes,yes,yes,630.42,20802.42,514.3,16964.32,114.24,33.86,0,2026-10-01 to 2026-10-08
+Kolkata,Korma Gravy Mix (1pkt=700gm),Kg,14,no,yes,yes,yes,110.37,16734.06,128.38,19463.89,10.52,151.71,0,2026-10-01 to 2026-10-08
+Kolkata,Srivilli Kheer (1 Pc),Pc,14,no,yes,yes,yes,524.0,13817.67,454.0,11968.81,72.0,26.52,0,2026-10-01 to 2026-10-08
+Kolkata,Boiled & Mashed Potato (1Pkt = 3Kg),Kg,15,no,yes,yes,yes,414.0,12485.8,1346.18,41439.39,0.0,31.27,10,2026-10-01 to 2026-10-08
+Kolkata,Medu Vada Batter,Kg,7,no,yes,no,yes,181.0,11584.81,0.0,0.0,11.74,64.1,0,2026-10-01 to 2026-10-08
+Kolkata,Malabar Paratha Dough,Pc,12,no,yes,no,yes,1060.0,9153.75,0.0,0.0,87.0,8.72,0,2026-10-01 to 2026-10-08
+Kolkata,Mysore Chutney Bucket,Kg,15,no,yes,yes,yes,51.0,8655.83,57.73,9798.91,6.91,170.03,0,2026-10-01 to 2026-10-08
+Kolkata,Special Daal Bucket,Kg,16,no,yes,yes,yes,47.0,7206.18,82.84,12701.65,0.0,153.87,1,2026-10-01 to 2026-10-08
+Kolkata,Rava Powder Mix,Kg,15,no,yes,yes,yes,57.0,5475.05,43.55,4183.8,6.51,96.7,0,2026-10-01 to 2026-10-08
+Kolkata,Filter Coffee Ice Cream (700gm= 1 Bucket),Kg,12,no,yes,yes,yes,23.8,5457.23,17.52,4018.99,1.41,236.07,0,2026-10-01 to 2026-10-08
+Kolkata,Thatte Idli Pc Raw,Pc,15,no,yes,yes,yes,947.0,4730.87,1417.0,7108.25,82.0,5.13,3,2026-10-01 to 2026-10-08
+Kolkata,Potato Masala Mix (1Pkt = 90Gm),Pkt,15,no,yes,yes,yes,417.0,4532.64,448.73,4877.6,0.0,10.92,0,2026-10-01 to 2026-10-08
+Kolkata,Malabar Paratha  (1pkt= 6Pcs),Pc,14,no,yes,yes,yes,444.0,3982.65,1445.0,12107.52,0.0,9.08,9,2026-10-01 to 2026-10-08
+Kolkata,Kesari Halwa Mix  (1pkt = 550gm),Kg,14,no,yes,yes,yes,53.35,3700.47,46.24,3206.19,9.31,69.73,0,2026-10-01 to 2026-10-08
+Kolkata,Steam Rice Bucket,Kg,6,no,yes,yes,yes,64.0,3605.63,36.98,2082.45,23.73,56.65,0,2026-10-01 to 2026-10-08
+Kolkata,Thindi Malkapodi Powder Bucket,Kg,15,no,yes,yes,yes,17.0,3312.37,33.29,6487.84,0.0,195.12,0,2026-10-01 to 2026-10-08
+Kolkata,Malkapodi Bucket,Kg,15,no,yes,yes,yes,16.5,2792.72,19.8,3351.43,0.0,172.16,2,2026-10-01 to 2026-10-08
+Kolkata,Lemon Rice Bucket,Kg,6,no,yes,yes,yes,29.0,2534.87,22.75,1980.27,4.92,87.66,1,2026-10-01 to 2026-10-08
+Kolkata,Upma Mix (1pkt = 300gm),Kg,14,no,yes,yes,yes,25.8,2233.34,15.66,1355.88,10.28,86.67,0,2026-10-01 to 2026-10-08
+Kolkata,Tomato Onion Powder Mix (1 Pkt = 24gm),Kg,15,no,yes,yes,yes,3.58,1869.2,2.82,1432.38,0.02,525.88,1,2026-10-01 to 2026-10-08
+Kolkata,Medu Vada Batter Powder Mix (1 Pkt = 23gm),Kg,13,no,yes,no,yes,7.0,1837.83,0.0,0.0,0.0,265.84,0,2026-10-01 to 2026-10-08
+Kolkata,Thatte Idli Batter,Kg,4,no,yes,no,yes,62.8,1606.47,0.0,0.0,6.48,26.02,0,2026-10-01 to 2026-10-08
+Kolkata,Karam Podi Powder Bucket,Kg,15,no,yes,yes,yes,8.0,1518.2,6.08,1154.27,0.3,191.4,4,2026-10-01 to 2026-10-08
+Kolkata,Dahi Bucket Mix (1pkt =105gm),gm,15,no,yes,yes,yes,20160.0,1273.85,22915.0,1447.86,0.0,0.06,1,2026-10-01 to 2026-10-08
+Kolkata,Chaat Masala Bucket,Kg,16,no,yes,yes,yes,2.6,931.85,3.32,1188.19,0.0,361.21,2,2026-10-01 to 2026-10-08
+Kolkata,Special White Coconut Chutney Bucket,Kg,15,no,yes,yes,yes,9.3,630.52,59.05,2823.77,1.6,72.31,14,2026-10-01 to 2026-10-08
+Kolkata,Raw Mango Pickle Bucket,Kg,6,no,yes,yes,yes,3.25,566.3,1.53,266.63,0.0,174.69,0,2026-10-01 to 2026-10-08
+Kolkata,Raw mango Powder Mix (1 Pkt = 13gm),Kg,15,no,yes,yes,yes,1.83,532.65,1.37,385.12,0.0,296.85,1,2026-10-01 to 2026-10-08
+Kolkata,Rasam Chhoke Pre-Mix (2 Mix -6gm + 42gm)= 48gm,Kg,8,no,yes,no,yes,2.26,515.42,0.0,0.0,0.0,228.93,0,2026-10-01 to 2026-10-08
+Kolkata,Imli Water,Ltr,15,no,yes,yes,yes,19.2,485.49,16.79,426.24,0.5,26.74,1,2026-10-01 to 2026-10-08
+Kolkata,Jain Potato Masala Bucket,Kg,1,no,yes,no,yes,7.7,409.89,0.0,0.0,1.5,53.23,0,2026-10-01 to 2026-10-08
+Kolkata,Frozen Medu Vada (10pc),Pc,2,no,yes,no,yes,60.0,298.23,0.0,0.0,0.0,4.97,0,2026-10-01 to 2026-10-08
+Kolkata,Rasam Mix (1Pkt =15 gm),Kg,8,no,yes,no,yes,0.55,199.9,0.0,0.0,0.0,361.69,0,2026-10-01 to 2026-10-08
+Kolkata,Tomato Onion Chutney Bucket,Kg,5,no,yes,no,yes,1.2,146.42,0.0,0.0,3.59,140.46,0,2026-10-01 to 2026-10-08
+Kolkata,Garam Masala Powder Bucket,Kg,6,no,yes,yes,yes,0.1,126.93,0.1,132.16,0.0,1301.69,5,2026-10-01 to 2026-10-08
+Kolkata,Raw Mango Chutney Bucket,Kg,15,no,yes,yes,yes,0.6,100.45,9.3,1511.77,4.18,167.61,14,2026-10-01 to 2026-10-08
+Kolkata,Dadu`s Special Spicy Chutney,Kg,1,no,no,no,no,0.0,0.0,0.0,0.0,0.2,0.0,0,2026-10-01 to 2026-10-08
+Kolkata,Kesari Halwa Bucket,Kg,1,no,no,no,yes,0.0,0.0,0.0,0.0,0.8,95.37,0,2026-10-01 to 2026-10-08
+Kolkata,Malkapodi Powder (1 Box = 100Gm),Pc,1,no,no,yes,yes,0.0,0.0,3.0,78.09,0.0,26.03,1,2026-10-01 to 2026-10-08
+Kolkata,Medu Vada Batter Mix,Kg,16,no,no,yes,yes,0.0,0.0,396.02,29825.81,0.85,77.35,16,2026-10-01 to 2026-10-08
+Kolkata,Rasam Bucket,Ltr,8,no,no,yes,yes,0.0,0.0,26.75,933.95,0.0,35.26,8,2026-10-01 to 2026-10-08
+Kolkata,Raw Curd Bucket,Kg,1,no,no,no,no,0.0,0.0,0.0,0.0,0.62,0.0,0,2026-10-01 to 2026-10-08
+Kolkata,Regular White Chutney Bucket,Kg,1,no,no,no,no,0.0,0.0,0.0,0.0,0.5,0.0,0,2026-10-01 to 2026-10-08
+Kolkata,Spicy Coconut Chutney Mix 1Pkt (16gm),Kg,15,no,no,yes,yes,0.0,0.0,13.99,1899.99,0.0,168.77,15,2026-10-01 to 2026-10-08
+Kolkata,Upma Bucket,Kg,2,no,no,no,yes,0.0,0.0,0.0,0.0,2.8,125.34,0,2026-10-01 to 2026-10-08

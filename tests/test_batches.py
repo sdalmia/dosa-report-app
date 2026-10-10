@@ -309,6 +309,52 @@ class BatchVerdictTests(unittest.TestCase):
         self.assertEqual([row["item"] for row in ranked], ["Filter Coffee", "ABC Juice"])
 
 
+class BatchPassTests(unittest.TestCase):
+    def test_the_longer_window_becomes_the_default_when_it_is_on_file(self):
+        from app.menu_costing.batch_pass import pass_view
+
+        header = (
+            "city,store,batch_item,unit,period,city_made_qty,issued_qty,issued_amt,"
+            "returned_qty,consumption_qty,consumption_amt,wastage_qty,wastage_amt,"
+            "opening_qty,closing_qty,avg_price,status,source\n"
+        )
+        cover = (
+            "city,batch_item,unit,stores_active,made,issued,consumed,cost,issued_qty,"
+            "issued_amt,consumption_qty,consumption_amt,wastage_qty,avg_price_max,"
+            "stores_consumed_without_issue,period\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "batch_actual_use_detail.csv",
+                header
+                + "Kolkata,Ideal Plaza,Dosa Batter Mix,Kg,2026-10-01 to 2026-10-08,,10,,,,5,,,,,,,,\n"
+                + "Kolkata,Ideal Plaza,Dosa Batter Mix,Kg,2026-09-24 to 2026-10-08,12,80,,,40,,,,,,,,\n",
+            )
+            _write(
+                root / "batch_item_coverage.csv",
+                cover
+                + "Kolkata,Dosa Batter Mix,Kg,1,no,yes,yes,yes,10,1,5,1,0,32,0,2026-10-01 to 2026-10-08\n"
+                + "Kolkata,Dosa Batter Mix,Kg,1,yes,yes,yes,yes,80,1,40,1,0,33,0,2026-09-24 to 2026-10-08\n",
+            )
+            view = pass_view(root, city="Kolkata")
+        self.assertEqual(view["period"], "24 Sep–8 Oct 2026")
+        self.assertEqual(view["tiles"][0]["issued"], "80 kg")
+        self.assertEqual(view["tiles"][0]["made"], "12 kg")
+        self.assertNotIn("unrecorded", [row["kind"] for row in view["alerts"]])
+
+    def test_a_blank_made_quantity_is_not_recorded(self):
+        from app.menu_costing.batch_pass import pass_view
+
+        view = pass_view(ROOT / "data" / "procurement", city="Kolkata")
+        self.assertEqual(view["period"], "1–8 Oct 2026")
+        self.assertTrue(all(row["made"] == "Not recorded" for row in view["tiles"]))
+        self.assertNotIn("0", [row["made"] for row in view["tiles"]])
+        kinds = [row["kind"] for row in view["alerts"]]
+        self.assertEqual(kinds[0], "unrecorded")
+        self.assertNotIn("tomato", kinds)
+
+
 class BatchGapTests(unittest.TestCase):
     def test_missing_recipes_belong_to_sailesh_and_follow_the_city(self):
         index = get_index()
@@ -400,6 +446,27 @@ class BatchPageTests(unittest.TestCase):
         self.assertIn("900 kg short", delhi)
         self.assertIn("₹43,547", delhi)
         self.assertNotIn("2,594 L", delhi)
+        self.assertIn("Not recorded", html)
+        self.assertIn('data-field="batch-pass-alert" data-kind="unrecorded"', html)
+        self.assertIn("yield and wastage", html)
+        self.assertIn("Sailesh, Kolkata", html)
+        self.assertIn("Shanker, Delhi", html)
+        self.assertIn('data-field="batch-pass-issued" data-item="Sambar Bucket" data-value="3627"', html)
+        self.assertIn("3,627 L", html)
+        self.assertIn('data-field="batch-pass-rate" data-item="Coconut Shredded"', html)
+        self.assertIn("₹196/kg", html)
+        self.assertIn("not recipe cost", html)
+        self.assertIn("data-list", html)
+        self.assertIn("list-search.js", html)
+        self.assertNotIn('data-kind="tomato"', html)
+        self.assertNotIn("entp_consumption", html)
+        self.assertIn('data-field="batch-pass-alert" data-kind="tomato"', delhi)
+        self.assertIn("986 kg", delhi)
+        self.assertIn("₹1.2L", delhi)
+        self.assertIn("4,204 L", delhi)
+        hidden = self.client.get("/menu-costing?city=Kolkata&cc_city=Kolkata&cc_store=&cc_range=7").get_data(as_text=True)
+        self.assertIn('data-field="batch-pass-note"', hidden)
+        self.assertNotIn('data-field="batch-pass" data-city=', hidden)
 
 
 def _cost_attr(html):

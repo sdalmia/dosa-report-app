@@ -13,6 +13,23 @@
 
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
+    {% if batch_pass_alerts %}
+    <div class="flag-row">
+      {% for alert in batch_pass_alerts %}
+      <article class="flag-card {% if alert.severity == 'red' %}sev-red{% elif alert.severity == 'amber' %}sev-amber{% endif %}" data-field="batch-pass-alert" data-kind="{{ alert.kind }}">
+        <span class="flag-kicker">{{ alert.kicker }}</span>
+        <strong>{{ alert.title }}</strong>
+        <p>{{ alert.detail }}</p>
+        {% for pair in alert.pairs %}
+        <div class="mc-pair">
+          <p>{{ pair.left_label }} {% if pair.left %}<span class="mc-num" data-field="batch-pass-figure" data-kind="{{ alert.kind }}" data-label="{{ pair.left_label }}" data-value="{{ pair.left_attr }}">{{ pair.left }}</span>{% endif %}</p>
+          <p>{% if pair.right_label %}{{ pair.right_label }} {% endif %}{% if pair.right %}<span class="mc-num" data-field="batch-pass-figure" data-kind="{{ alert.kind }}" data-label="{{ pair.right_label }}" data-value="{{ pair.right_attr }}">{{ pair.right }}</span>{% endif %}</p>
+        </div>
+        {% endfor %}
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% if batch_alerts %}
     <div class="flag-row">
       {% for alert in batch_alerts %}
@@ -150,6 +167,39 @@
     </div>
     {% else %}
     <p class="empty">No batch items for this view.</p>
+    {% endif %}
+
+    {% if batch_pass_period or batch_pass_note or batch_pass_tiles %}
+    <h3>Issued, used, and transfer price</h3>
+    {% if batch_pass_period %}<p class="muted">{{ batch_pass_period }}. Issued is what the kitchen sent. Used is what the stores deducted. The rate is the transfer price, not a recipe cost.</p>{% endif %}
+    {% if batch_pass_note %}<p class="empty" data-field="batch-pass-note">{{ batch_pass_note }}</p>{% endif %}
+    {% if batch_pass_tiles %}
+    <div class="mc-list" data-list>
+      {% for row in batch_pass_tiles %}
+      <article class="tile" data-field="batch-pass" data-city="{{ row.city }}" data-item="{{ row.item }}">
+        <span class="flag-kicker">{{ row.city }}</span>
+        <strong>{{ row.item }}</strong>
+        <div class="mc-pair">
+          <p>Issued from the kitchen {% if row.issued %}<span class="mc-num" data-field="batch-pass-issued" data-item="{{ row.item }}" data-value="{{ row.issued_attr }}">{{ row.issued }}</span>{% endif %}</p>
+          <p>Used by stores {% if row.used %}<span class="mc-num" data-field="batch-pass-used" data-item="{{ row.item }}" data-value="{{ row.used_attr }}">{{ row.used }}</span>{% endif %}</p>
+        </div>
+        <p>Transfer price {% if row.rate %}<span class="mc-num" data-field="batch-pass-rate" data-item="{{ row.item }}" data-value="{{ row.rate_attr }}">{{ row.rate }}</span>{% endif %}</p>
+      </article>
+      <article class="tile" data-field="batch-pass-coverage" data-city="{{ row.city }}" data-item="{{ row.item }}">
+        <span class="flag-kicker">Coverage</span>
+        <strong>{{ row.item }}</strong>
+        <div class="mc-pair">
+          <p>Made <span data-field="batch-pass-made" data-item="{{ row.item }}" data-value="{{ row.made_attr }}">{{ row.made }}</span></p>
+          <p>Issued <span data-field="batch-pass-flag" data-flag="issued" data-item="{{ row.item }}">{{ row.issued_flag }}</span></p>
+        </div>
+        <div class="mc-pair">
+          <p>Used <span data-field="batch-pass-flag" data-flag="used" data-item="{{ row.item }}">{{ row.used_flag }}</span></p>
+          <p>Costed <span data-field="batch-pass-flag" data-flag="costed" data-item="{{ row.item }}">{{ row.costed_flag }}</span></p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endif %}
 
     {% if batch_kitchens %}

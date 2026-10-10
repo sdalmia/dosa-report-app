@@ -171,7 +171,7 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
         view = verdict_view(use, city=city, store=store, store_id=store_id, query=query_key)
         rows = view["rows"]
         note = "" if rows or view["alerts"] else "No batch use is on file for this view."
-        return {
+        return _with_pass({
             "batch_cards": cards,
             "batch_threats": [],
             "batch_alerts": view["alerts"],
@@ -185,7 +185,7 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
             "batch_store_note": (
                 "Recipes are for the city. The use lines are for this store." if store else ""
             ),
-        }
+        }, city, store, store_id, query_key, filters, procurement)
     rows = _present_use(use, city=city, store=store, store_id=store_id, costs=board["costs"])
     note = ""
     ready = bool(use.get("available"))
@@ -194,7 +194,7 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
     elif not rows:
         note = "No batch use is on file for this view."
     threats = [row for row in rows if row["threat"]][:8]
-    return {
+    return _with_pass({
         "batch_cards": cards,
         "batch_threats": threats,
         "batch_alerts": [],
@@ -208,7 +208,28 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
         "batch_store_note": (
             "Recipes are for the city. The use lines are for this store." if store else ""
         ),
-    }
+    }, city, store, store_id, query_key, filters, procurement)
+
+
+def _with_pass(payload, city, store, store_id, query, filters, procurement):
+    from app.menu_costing.batch_pass import pass_view
+
+    passed = pass_view(
+        procurement,
+        city=city,
+        store=store,
+        store_id=store_id,
+        query=query,
+        filters=filters,
+    )
+    payload.update({
+        "batch_pass_period": passed["period"],
+        "batch_pass_note": passed["note"],
+        "batch_pass_alerts": passed["alerts"],
+        "batch_pass_tiles": passed["tiles"],
+        "batch_pass_ready": passed["ready"],
+    })
+    return payload
 
 
 def load_batch_use(procurement=None, posist=None):

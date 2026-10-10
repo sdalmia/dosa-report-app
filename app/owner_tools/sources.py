@@ -25,7 +25,14 @@ EMERGENCY_TERMS = ("emergency", "fire", "injury", "injured", "accident", "ambula
 _SKIP_VALUES = {"no", "none", "n/a", "na", "not shown", "not available", "-"}
 _FLAG_COLUMNS = {"flag", "flags", "alert", "alerts", "status", "issue", "issues"}
 # Bill reconciliation uses status for match / amount_mismatch. That is not an owner flag.
-_STATUS_NOT_A_FLAG = {"match", "amount_mismatch"}
+# Batch movement files use status for how a row was booked, not as a brief flag.
+_STATUS_NOT_A_FLAG = {
+    "match",
+    "amount_mismatch",
+    "issued_from_ck",
+    "consumed_no_issue_record (made in store or untracked)",
+    "wastage_or_return_only",
+}
 _ID_COLUMNS = {
     "posist_store",
     "famepilot_location",
