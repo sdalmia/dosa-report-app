@@ -3,14 +3,16 @@
 Snapshots, outcomes, and a pooled refit live under data/location.
 A missing input file is data coming. A blank cell stays blank.
 The live score uses the latest approved model. A refit stays proposed
-until an owner approves it.
+until an owner approves it. Approval is stored in the database, not in
+the JSON file, so a deploy does not wipe it.
 """
 
 import csv
 import json
 import os
 import re
-from datetime import date, datetime, timedelta
+from contextlib import contextmanager
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
@@ -1231,20 +1233,111 @@ def list_models():
     return found
 
 
+WEIGHT_LABELS = {
+    "energy": "Energy",
+    "reviews": "Review volume",
+    "transport": "Transport",
+    "premium": "Premium brands",
+    "diversity": "Diversity",
+    "quality": "Quality",
+    "anchor": "Anchor",
+    "restaurants": "Delivering restaurants",
+    "residential": "Residential density",
+    "aggregator": "Nearest delivery sales",
+    "aggregator_enabled": "Aggregator-enabled",
+    "mall_reviews": "Mall reviews",
+    "anchors": "In-mall anchors",
+    "distance": "Distance to the station",
+    "ridership": "Station ridership",
+    "south_indian": "South Indian density",
+}
+
+FORMAT_WORD = {
+    "high_street": "high-street",
+    "mall": "mall",
+    "metro": "metro",
+    "cloud_kitchen": "cloud kitchen",
+}
+
+FORMAT_ORDER = ("high_street", "mall", "metro", "cloud_kitchen")
+
+
+def _utcnow():
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def _when(value):
+    if value is None:
+        return ""
+    return value.strftime("%Y-%m-%d %H:%M UTC")
+
+
+@contextmanager
+def _db_context():
+    from flask import has_app_context
+
+    if has_app_context():
+        yield
+        return
+    from app import create_app
+
+    with create_app().app_context():
+        yield
+
+
+def _approval_query():
+    from app.models import LocationModelApproval
+
+    return LocationModelApproval.query.order_by(
+        LocationModelApproval.approved_at.desc(),
+        LocationModelApproval.id.desc(),
+    )
+
+
+def _current_approval():
+    from app.models import LocationModelApproval
+
+    return (
+        LocationModelApproval.query.filter_by(status="approved")
+        .order_by(LocationModelApproval.approved_at.desc(), LocationModelApproval.id.desc())
+        .first()
+    )
+
+
+def _overlay_approval(payload, row):
+    payload = dict(payload)
+    payload["status"] = row.status
+    payload["approved_at"] = "" if row.approved_at is None else row.approved_at.date().isoformat()
+    payload["approved_by"] = row.approved_by or ""
+    return payload
+
+
 def latest_approved():
-    approved = [model for model in list_models() if model.get("status") == "approved"]
-    if not approved:
-        return None
-    approved.sort(key=lambda model: model.get("version") or "")
-    return approved[-1]
+    """The live model. Read from the approval table, then the JSON for its weights."""
+    with _db_context():
+        row = _current_approval()
+        if row is None:
+            return None
+        payload = load_model(row.version)
+        if payload is None:
+            return None
+        return _overlay_approval(payload, row)
 
 
 def latest_proposed():
-    proposed = [model for model in list_models() if model.get("status") == "proposed"]
-    if not proposed:
+    with _db_context():
+        row = _current_approval()
+        live = "" if row is None else row.version
+    found = []
+    for model in list_models():
+        version = model.get("version") or ""
+        if version and version == live:
+            continue
+        found.append(model)
+    if not found:
         return None
-    proposed.sort(key=lambda model: model.get("version") or "")
-    return proposed[-1]
+    found.sort(key=lambda model: model.get("version") or "")
+    return found[-1]
 
 
 def current_model_label():
@@ -1254,17 +1347,309 @@ def current_model_label():
     return model.get("version") or "prior"
 
 
-def approve_model(version):
+def clear_approvals():
+    """Drop approval rows. Tests use this so one run does not leak into the next."""
+    from app.extensions import db
+    from app.models import LocationModelApproval
+
+    with _db_context():
+        LocationModelApproval.query.delete()
+        db.session.commit()
+
+
+def approve_model(version, email):
+    """Record an approval. The JSON file is not rewritten."""
     payload = load_model(version)
-    if payload is None:
+    if payload is None or not str(email or "").strip():
         return None
-    payload["status"] = "approved"
-    payload["approved_at"] = date.today().isoformat()
-    save_model(payload)
+    from app.extensions import db
+    from app.models import LocationModelApproval
+
+    version_name = payload.get("version") or version
+    with _db_context():
+        current = _current_approval()
+        if current is not None and current.version == version_name:
+            return _overlay_approval(payload, current)
+        row = LocationModelApproval(
+            version=version_name,
+            status="approved",
+            approved_by=str(email).strip(),
+            approved_at=_utcnow(),
+        )
+        db.session.add(row)
+        db.session.commit()
+        saved = _overlay_approval(payload, row)
     from app.site_pattern import clear_cache
 
     clear_cache()
-    return payload
+    return saved
+
+
+def revert_model(email):
+    """Undo the live approval. The previous approval stays, or the prior weights."""
+    if not str(email or "").strip():
+        return None
+    from app.extensions import db
+
+    with _db_context():
+        row = _current_approval()
+        if row is None:
+            return None
+        row.status = "reverted"
+        row.reverted_at = _utcnow()
+        row.reverted_by = str(email).strip()
+        db.session.commit()
+        live = current_model_label()
+        version = row.version
+    from app.site_pattern import clear_cache
+
+    clear_cache()
+    return {"version": version, "live": live}
+
+
+def approval_log():
+    with _db_context():
+        rows = list(_approval_query())
+    events = []
+    for row in rows:
+        events.append({
+            "action": "Approved",
+            "version": row.version,
+            "email": row.approved_by or "",
+            "at": row.approved_at,
+            "when": _when(row.approved_at),
+        })
+        if row.reverted_at is not None:
+            events.append({
+                "action": "Reverted",
+                "version": row.version,
+                "email": row.reverted_by or "",
+                "at": row.reverted_at,
+                "when": _when(row.reverted_at),
+            })
+    events.sort(key=lambda event: event["at"] or datetime.min, reverse=True)
+    return events
+
+
+def _pct(weight):
+    value = float(weight or 0) * 100
+    if abs(value - round(value)) < 0.05:
+        return f"{round(value):.0f}%"
+    return f"{value:.1f}%"
+
+
+def spearman_words(value):
+    if value is None:
+        return "Spearman is not available yet."
+    shown = f"{float(value):.2f}"
+    magnitude = abs(float(value))
+    if magnitude >= 0.7:
+        how = "very well"
+    elif magnitude >= 0.4:
+        how = "moderately well"
+    elif magnitude >= 0.2:
+        how = "only loosely"
+    else:
+        how = "poorly"
+    if float(value) < 0:
+        return f"Spearman {shown} means the model ranks stores {how}, and in the wrong direction."
+    return f"Spearman {shown} means the model ranks stores {how}."
+
+
+def error_words(mae):
+    if mae is None:
+        return "There is no leave-one-store-out check yet."
+    deciles = float(mae) / DECILE
+    shown = f"{deciles:.0f}" if abs(deciles - round(deciles)) < 0.05 else f"{deciles:.1f}"
+    return (
+        f"Leave-one-store-out error {float(mae):.2f} is about {shown} rank-deciles, "
+        "so a held-out store is usually that far off."
+    )
+
+
+def _format_phrase(keys):
+    words = [FORMAT_WORD.get(key, key.replace("_", " ")) for key in keys]
+    if not words:
+        return "no sites"
+    if len(words) == 1:
+        return f"{words[0]} sites"
+    if len(words) == 2:
+        return f"{words[0]} and {words[-1]} sites"
+    return ", ".join(words[:-1]) + f" and {words[-1]} sites"
+
+
+def _short_store(name):
+    text = re.sub(r"^Dosa Coffee\s*-?\s*", "", str(name or ""))
+    text = re.sub(r"\s*\([^)]*\)", "", text)
+    text = " ".join(text.split())
+    folded = text.casefold()
+    if "pacific" in folded:
+        return "Pacific Mall"
+    if "ideal plaza" in folded:
+        return "Ideal Plaza"
+    if "rosedale" in folded:
+        return "Rosedale"
+    return text
+
+
+def _weight_rows(before, after, frozen):
+    rows = []
+    keys = list(WEIGHT_LABELS)
+    for key in list(before or {}) + list(after or {}):
+        if key not in keys:
+            keys.append(key)
+    for key in keys:
+        old = float((before or {}).get(key, 0) or 0)
+        new = float((after or {}).get(key, 0) or 0)
+        if abs(old) < 1e-9 and abs(new) < 1e-9:
+            continue
+        rows.append({
+            "key": key,
+            "label": WEIGHT_LABELS.get(key, key.replace("_", " ")),
+            "before": _pct(old),
+            "after": _pct(new),
+            "changed": abs(old - new) >= 0.0005,
+            "frozen": frozen,
+        })
+    return rows
+
+
+def _frozen_note(model):
+    frozen = [key for key in FORMAT_ORDER if key in set(model.get("frozen_formats") or [])]
+    if not frozen:
+        return ""
+    version = model.get("version") or "this model"
+    note = f"{_format_phrase(frozen).replace(' sites', '').capitalize()} are frozen in {version}."
+    if len(frozen) == 1:
+        word = FORMAT_WORD.get(frozen[0], frozen[0])
+        note = f"{word[:1].upper()}{word[1:]} is frozen in {version}."
+    note += " Their weights stay at the prior because each format has fewer than 8 stores."
+    if "mall" in frozen:
+        misses = [
+            row for row in (model.get("backtest") or [])
+            if row.get("format") == "mall" and row.get("decile_gap") is not None
+        ]
+        misses.sort(key=lambda row: -float(row.get("decile_gap") or 0))
+        names = []
+        for row in misses:
+            if not row.get("miss"):
+                continue
+            label = _short_store(row.get("store"))
+            if label and label not in names:
+                names.append(label)
+            if len(names) == 3:
+                break
+        if names:
+            listed = _format_phrase_names(names)
+            verb = "is" if len(names) == 1 else "are"
+            note += (
+                f" Mall predictions are weak. {listed} {verb} the big misses, until mall inputs "
+                "such as aggregator-enabled, mall reviews and anchors are filled."
+            )
+    return note
+
+
+def _format_phrase_names(names):
+    if len(names) == 1:
+        return names[0]
+    if len(names) == 2:
+        return f"{names[0]} and {names[1]}"
+    return ", ".join(names[:-1]) + f" and {names[-1]}"
+
+
+def _score_moves(model):
+    from app.site_pattern import load_board
+
+    weights = model.get("weights") or {}
+    moves = []
+    for store in load_board().get("stores") or []:
+        formula = FORMULA_FOR.get(store.get("format"))
+        pattern = store.get("pattern") or {}
+        old = pattern.get("score")
+        if not formula or formula not in weights or old is None:
+            continue
+        parts = []
+        for part in pattern.get("parts") or []:
+            key = part.get("key")
+            copy = {
+                "key": key,
+                "label": part.get("label"),
+                "weight": float((weights.get(formula) or {}).get(key, part.get("weight") or 0) or 0),
+                "value": part.get("value"),
+                "detail": part.get("detail") or "",
+            }
+            if part.get("status") == DATA_COMING and part.get("value") is None:
+                copy["status"] = DATA_COMING
+            parts.append(copy)
+        new = blend(parts).get("score")
+        if new is None:
+            continue
+        delta = round(float(new) - float(old), 1)
+        if abs(delta) < 0.05:
+            continue
+        moves.append({
+            "store": store.get("name") or "",
+            "old": old,
+            "new": new,
+            "delta": delta,
+            "delta_label": f"{delta:+.1f}",
+        })
+    up = sorted((row for row in moves if row["delta"] > 0), key=lambda row: -row["delta"])[:5]
+    down = sorted((row for row in moves if row["delta"] < 0), key=lambda row: row["delta"])[:5]
+    return up, down
+
+
+def proposal_changes(model):
+    """Before and after weights, the stores that move, and the confirm line."""
+    if not model:
+        return None
+    frozen = set(model.get("frozen_formats") or [])
+    before = model.get("prior_weights") or {}
+    after = model.get("weights") or {}
+    formats = []
+    moving = []
+    for key in FORMAT_ORDER:
+        if key not in after and key not in before:
+            continue
+        is_frozen = key in frozen
+        rows = _weight_rows(before.get(key), after.get(key), is_frozen)
+        changed = any(row["changed"] for row in rows)
+        if changed and not is_frozen:
+            moving.append(key)
+        formats.append({
+            "key": key,
+            "label": FORMAT_WORD.get(key, key.replace("_", " ")).capitalize() if key != "high_street" else "High street",
+            "frozen": is_frozen,
+            "rows": rows,
+        })
+    # High street label: "High street". cloud kitchen capitalize only first word via FORMAT_WORD title.
+    for item in formats:
+        if item["key"] == "cloud_kitchen":
+            item["label"] = "Cloud kitchen"
+        elif item["key"] == "metro":
+            item["label"] = "Metro"
+        elif item["key"] == "mall":
+            item["label"] = "Mall"
+    version = model.get("version") or "this model"
+    if moving:
+        confirm = (
+            f"Approve {version}? Live scores will change for {_format_phrase(moving)}. You can undo this."
+        )
+    else:
+        confirm = (
+            f"Approve {version}? Live scores will not change, because every format is frozen. You can undo this."
+        )
+    up, down = _score_moves(model)
+    return {
+        "formats": formats,
+        "moving": moving,
+        "confirm": confirm,
+        "spearman_words": spearman_words(model.get("spearman")),
+        "error_words": error_words(model.get("loo_mae")),
+        "frozen_note": _frozen_note(model),
+        "up": up,
+        "down": down,
+    }
 
 
 def write_refit(month=None):
@@ -1392,20 +1777,30 @@ def opening_tracks():
     return tracks
 
 
+def _undo_target():
+    with _db_context():
+        rows = [row for row in _approval_query() if row.status == "approved"]
+    if len(rows) < 2:
+        return "the prior weights"
+    return rows[1].version
+
+
 def model_page():
     proposed = latest_proposed()
     approved = latest_approved()
-    misses = []
-    backtest = []
-    if proposed:
-        backtest = proposed.get("backtest") or []
-        misses = [row for row in backtest if row.get("miss")]
+    discussed = proposed or approved
+    backtest = (discussed or {}).get("backtest") or []
+    misses = [row for row in backtest if row.get("miss")]
+    live = current_model_label()
     return {
-        "live_label": current_model_label(),
+        "live_label": live,
         "approved": approved,
         "proposed": proposed,
+        "changes": proposal_changes(proposed) if proposed else None,
         "backtest": backtest,
         "misses": misses,
+        "log": approval_log(),
+        "undo_target": _undo_target() if approved else "the prior weights",
         "openings": opening_tracks(),
         "prediction_count": len(_read(location_root() / "predictions.csv")),
     }

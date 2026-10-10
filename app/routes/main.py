@@ -3,6 +3,7 @@ from functools import wraps
 from flask import redirect, url_for
 
 from app.access import signed_in_email
+from app.dbstatus import database_health
 from app.flags import (
     flag_files_present,
     flag_public_dict,
@@ -38,6 +39,12 @@ def login_required(f):
 @main_bp.route('/')
 def home():
     return render_template('home.html')
+
+
+@main_bp.route("/healthz/db")
+def healthz_db():
+    """Public. Dialect and whether approvals survive a deploy. Never the URL."""
+    return jsonify(database_health())
 
 def _flag_view():
     email = signed_in_email()
