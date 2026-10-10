@@ -13,6 +13,28 @@
 
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
+    {% if batch_threats %}
+    <h3>Batch wastage and leakage</h3>
+    <p class="muted">A gap of more than 5% between what the dishes should have used and what was made or issued.</p>
+    <div class="flag-row">
+      {% for row in batch_threats %}
+      <article class="flag-card sev-red" data-field="batch-threat" data-store="{{ row.store }}" data-item="{{ row.item }}" data-value="{{ row.pct_attr }}">
+        <span class="flag-kicker">{{ row.store }}</span>
+        <strong>{{ row.item }}</strong>
+        <span>{{ row.kind }} · {{ row.pct }}</span>
+        <div class="mc-pair">
+          <p>Should have used {% if row.expected_missing %}Data coming{% else %}<span class="mc-num">{{ row.expected }}</span>{% endif %}</p>
+          <p>Actually used {% if row.actual_missing %}Data coming{% else %}<span class="mc-num">{{ row.actual }}</span>{% endif %}</p>
+        </div>
+        <div class="mc-pair">
+          <p>Gap {% if row.qty %}<span class="mc-num">{{ row.qty }}</span>{% else %}Data coming{% endif %}</p>
+          <p>{% if row.rupee %}<span class="mc-num">{{ row.rupee }}</span>{% elif row.rupee_missing %}No batch cost, so the amount stays blank.{% else %}Data coming{% endif %}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <h3>Recipe looks incomplete</h3>
     <p class="muted">{{ stub_note }}</p>
     {% if recipe_stubs %}
@@ -77,6 +99,68 @@
     </div>
     {% else %}
     <p class="empty">{{ margin_gap or "No price change hurt the margin." }}</p>
+    {% endif %}
+  </section>
+
+  <section class="cc-section" id="things-we-make">
+    <div class="section-head"><h2>Things we make</h2></div>
+    <p class="muted">Batter, chutney, special daal, sambar, potato masala, shredded coconut, and imli water. One card per city. A batch with no recipe has no cost.</p>
+    {% if batch_store_note %}<p class="muted">{{ batch_store_note }}</p>{% endif %}
+    {% if batch_cards %}
+    <div class="mc-list">
+      {% for row in batch_cards %}
+      <article class="tile" data-field="batch-item" data-city="{{ row.city }}" data-item="{{ row.item }}" data-value="{{ row.cost_attr }}">
+        <span class="flag-kicker">{{ row.group }}</span>
+        <strong>{{ row.item }}</strong>
+        {% if row.coming %}
+        <p data-field="batch-coming" data-city="{{ row.city }}" data-item="{{ row.item }}">{{ row.coming }}</p>
+        {% else %}
+        <div class="mc-pair">
+          <p>Yield <span class="mc-num" data-field="batch-yield" data-item="{{ row.item }}" data-value="{{ row.yield_attr }}">{{ row.yield }}</span></p>
+          <p>Cost {% if row.cost %}<span class="mc-num" data-field="batch-cost" data-item="{{ row.item }}">{{ row.cost }}</span> per {{ row.per }}{% else %}<span data-field="batch-cost" data-item="{{ row.item }}">no cost yet</span>{% endif %}</p>
+        </div>
+        {% if row.ingredients %}
+        <ul class="mc-ings">
+          {% for ing in row.ingredients %}
+          <li data-field="batch-ingredient" data-item="{{ row.item }}" data-ingredient="{{ ing.name }}">{{ ing.name }}{% if ing.qty %} · {{ ing.qty }}{% endif %}{% if ing.unpriced %} · no price{% endif %}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No batch items for this view.</p>
+    {% endif %}
+
+    <h3>Should have used and what was used</h3>
+    <p class="muted">Expected use is dish sales times the quantity in each dish. Actual use is what was made or issued. The gap is wastage or leakage. More than 5% is a threat.</p>
+    {% if batch_use_ready %}
+    <div class="mc-list">
+      {% for row in batch_use_rows %}
+      <article class="tile {% if row.threat %}sev-red{% endif %}" data-field="batch-variance" data-store="{{ row.store }}" data-item="{{ row.item }}" data-threat="{{ 'yes' if row.threat else 'no' }}" data-value="{{ row.pct_attr }}">
+        <span class="flag-kicker">{{ row.store }}{% if row.period %} · {{ row.period }}{% endif %}</span>
+        <strong>{{ row.item }}</strong>
+        <div class="mc-pair">
+          <p>Should have used {% if row.expected_missing %}Data coming{% else %}<span class="mc-num" data-field="batch-expected" data-item="{{ row.item }}">{{ row.expected }}</span>{% endif %}</p>
+          <p>Actually used {% if row.actual_missing %}Data coming{% else %}<span class="mc-num" data-field="batch-actual" data-item="{{ row.item }}">{{ row.actual }}</span>{% endif %}</p>
+        </div>
+        <div class="mc-pair">
+          <p>Made {% if row.made_missing %}Data coming{% else %}<span class="mc-num">{{ row.made }}</span>{% endif %}</p>
+          <p>Issued {% if row.issued_missing %}Data coming{% else %}<span class="mc-num">{{ row.issued }}</span>{% endif %}</p>
+        </div>
+        {% if row.kind %}
+        <div class="mc-pair">
+          <p>{{ row.kind }} {% if row.qty %}<span class="mc-num">{{ row.qty }}</span>{% endif %}{% if row.pct %} · {{ row.pct }}{% endif %}</p>
+          <p>{% if row.rupee %}<span class="mc-num" data-field="batch-variance-rupee" data-item="{{ row.item }}" data-value="{{ row.rupee_attr }}">{{ row.rupee }}</span>{% elif row.rupee_missing %}No batch cost, so the amount stays blank.{% endif %}</p>
+        </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty" data-field="batch-use">{{ batch_use_note }}</p>
     {% endif %}
   </section>
 

@@ -1,6 +1,7 @@
 {% macro menu_nav(current) -%}
 <nav class="mc-subnav" aria-label="Menu and costing">
   <a href="{{ url_for('menu_costing.menu_page') }}" {% if current == 'menu' %}aria-current="page"{% endif %}>Menu</a>
+  <a href="{{ url_for('menu_costing.menu_page') }}#things-we-make">Things we make</a>
   <a href="{{ url_for('menu_costing.history_page') }}" {% if current == 'history' %}aria-current="page"{% endif %}>History</a>
   {% if is_owner() %}
   <a href="{{ url_for('menu_costing.upload_page') }}" {% if current == 'upload' %}aria-current="page"{% endif %}>Upload</a>

@@ -51,6 +51,9 @@ def clear_caches():
     _CACHE.clear()
     _LINE_CACHE.clear()
     _LINE_INDEX.clear()
+    from app.menu_costing.batches import clear_batch_cache
+
+    clear_batch_cache()
 
 
 def _read(directory):
@@ -76,6 +79,9 @@ def _read(directory):
         by_outlet[(row["city"], row["outlet"], row["key"])] = row
         outlets.setdefault(row["city"], set()).add(row["outlet"])
     by_city = _index_cities(by_outlet, _read_spreads(directory / "menu_item_cost_summary.csv"))
+    from app.menu_costing.batches import apply_batch_costs
+
+    apply_batch_costs(list(by_outlet.values()), directory)
     cities = sorted(set(outlets) | {row["city"] for row in by_city.values()}, key=_city_rank)
     return {
         "directory": directory,
@@ -548,5 +554,32 @@ def recipe_lines(bundle, outlet, item):
         return _LINE_CACHE[cache_key]
     grouped = _outlet_lines(path, outlet)
     rows = [_line_dict(row) for row in grouped.get((item or "").casefold(), ())]
+    _fill_batch_lines(rows, _city_for_outlet(bundle, outlet), bundle.get("directory"))
     _LINE_CACHE[cache_key] = rows
     return rows
+
+
+def _city_for_outlet(bundle, outlet):
+    wanted = (outlet or "").casefold()
+    for city, names in (bundle.get("outlets") or {}).items():
+        if any((name or "").casefold() == wanted for name in names):
+            return city
+    return ""
+
+
+def _fill_batch_lines(rows, city, directory):
+    """Price a blank line from a known batch cost. The outlet cache stays slim."""
+    if not city:
+        return
+    from app.menu_costing.batches import batch_line_cost
+
+    for row in rows:
+        if not row["unpriced"]:
+            continue
+        filled = batch_line_cost(city, row["ingredient"], row["qty"], row["unit"], directory)
+        if filled is None:
+            continue
+        row["unpriced"] = False
+        row["line_cost"] = filled
+        if row["qty"] not in (None, 0):
+            row["unit_cost"] = filled / row["qty"]
