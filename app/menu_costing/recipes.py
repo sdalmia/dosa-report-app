@@ -12,6 +12,8 @@ from app.procurement.numbers import parse_number, percent
 
 _CACHE = {}
 _LINE_CACHE = {}
+# Slim rows for one outlet in one cost-line file. Keyed by path mtime. A few outlets only.
+_LINE_INDEX = {}
 
 INCOMPLETE_STATUSES = frozenset({"partial_unpriced_ingredients", "no_priced_ingredients"})
 STALE_GAP = 10
@@ -48,6 +50,7 @@ def load_recipes(directory=None):
 def clear_caches():
     _CACHE.clear()
     _LINE_CACHE.clear()
+    _LINE_INDEX.clear()
 
 
 def _read(directory):
@@ -448,6 +451,93 @@ def _read_summary(path):
     return rows
 
 
+def _file_token(path):
+    st = Path(path).stat()
+    return (str(Path(path).resolve()), st.st_mtime_ns, st.st_size)
+
+
+def _line_from_raw(raw):
+    """One ingredient row as a tuple. Blank line costs stay blank.
+
+    Tuples stay in the cache. Dicts are built only for the dish on screen.
+    """
+    ingredient = (raw.get("ingredient_name") or "").strip()
+    if not ingredient:
+        return None
+    qty = parse_number(raw.get("ingredient_qty"))
+    source = (raw.get("price_source") or "").strip().casefold()
+    if source:
+        line = parse_number(raw.get("ingredient_cost_estimated_per_portion"))
+        if line is None and source == "restroworks":
+            line = parse_number(raw.get("ingredient_cost_avg_per_portion"))
+        blank = source == "none" or line is None
+    else:
+        line = parse_number(raw.get("ingredient_cost_avg_per_portion"))
+        if line is None:
+            line = parse_number(raw.get("ingredient_cost_avg"))
+        blank = _truthy(raw.get("unpriced")) or line is None
+    unit_cost = parse_number(raw.get("est_rate")) if source == "grn_estimate" else None
+    if unit_cost is None and line is not None and qty not in (None, 0) and not blank:
+        unit_cost = line / qty
+    return (
+        ingredient,
+        qty,
+        (raw.get("ingredient_unit") or "").strip(),
+        None if blank else unit_cost,
+        None if blank else line,
+        blank,
+        source == "grn_estimate" and not blank,
+        _receipt_title(raw.get("receipt_ref"), ingredient) if source == "grn_estimate" and not blank else "",
+        _truthy(raw.get("is_inactive_ingredient")),
+    )
+
+
+def _line_dict(row):
+    return {
+        "ingredient": row[0],
+        "qty": row[1],
+        "unit": row[2],
+        "unit_cost": row[3],
+        "line_cost": row[4],
+        "unpriced": row[5],
+        "estimated": row[6],
+        "receipt": row[7],
+        "inactive": row[8],
+    }
+
+
+def _outlet_lines(path, outlet):
+    """Base-tab lines for one outlet, grouped by item.
+
+    Other outlets are skipped while the file is read, so a dish page does not
+    keep all 75,800 rows. A changed mtime rebuilds that outlet.
+    """
+    wanted = (outlet or "").casefold()
+    token = (_file_token(path), wanted)
+    cached = _LINE_INDEX.get(token)
+    if cached is not None:
+        return cached
+    grouped = {}
+    with Path(path).open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            if (raw.get("recipe_tab") or "base").strip().casefold() not in {"", "base"}:
+                continue
+            if (raw.get("outlet") or "").strip().casefold() != wanted:
+                continue
+            name = (raw.get("item_name") or raw.get("recipe_name") or "").strip()
+            if not name:
+                continue
+            row = _line_from_raw(raw)
+            if row is None:
+                continue
+            grouped.setdefault(name.casefold(), []).append(row)
+    if len(_LINE_INDEX) >= 4:
+        _LINE_INDEX.clear()
+        _LINE_CACHE.clear()
+    _LINE_INDEX[token] = grouped
+    return grouped
+
+
 def recipe_lines(bundle, outlet, item):
     """Ingredient rows for one store and item. Blank line costs stay blank."""
     path = bundle.get("lines_path")
@@ -456,48 +546,7 @@ def recipe_lines(bundle, outlet, item):
     cache_key = (str(path), (outlet or "").casefold(), (item or "").casefold())
     if cache_key in _LINE_CACHE:
         return _LINE_CACHE[cache_key]
-    wanted_outlet = (outlet or "").casefold()
-    wanted_item = (item or "").casefold()
-    rows = []
-    with Path(path).open(newline="", encoding="utf-8-sig") as handle:
-        for raw in csv.DictReader(handle):
-            if (raw.get("recipe_tab") or "base").strip().casefold() not in {"", "base"}:
-                continue
-            if (raw.get("outlet") or "").strip().casefold() != wanted_outlet:
-                continue
-            name = (raw.get("item_name") or raw.get("recipe_name") or "").strip()
-            if name.casefold() != wanted_item:
-                continue
-            ingredient = (raw.get("ingredient_name") or "").strip()
-            if not ingredient:
-                continue
-            qty = parse_number(raw.get("ingredient_qty"))
-            source = (raw.get("price_source") or "").strip().casefold()
-            if source:
-                line = parse_number(raw.get("ingredient_cost_estimated_per_portion"))
-                if line is None and source == "restroworks":
-                    line = parse_number(raw.get("ingredient_cost_avg_per_portion"))
-                blank = source == "none" or line is None
-            else:
-                line = parse_number(raw.get("ingredient_cost_avg_per_portion"))
-                if line is None:
-                    line = parse_number(raw.get("ingredient_cost_avg"))
-                blank = _truthy(raw.get("unpriced")) or line is None
-            unit_cost = parse_number(raw.get("est_rate")) if source == "grn_estimate" else None
-            if unit_cost is None and line is not None and qty not in (None, 0) and not blank:
-                unit_cost = line / qty
-            rows.append(
-                {
-                    "ingredient": ingredient,
-                    "qty": qty,
-                    "unit": (raw.get("ingredient_unit") or "").strip(),
-                    "unit_cost": None if blank else unit_cost,
-                    "line_cost": None if blank else line,
-                    "unpriced": blank,
-                    "estimated": source == "grn_estimate" and not blank,
-                    "receipt": _receipt_title(raw.get("receipt_ref"), ingredient) if source == "grn_estimate" and not blank else "",
-                    "inactive": _truthy(raw.get("is_inactive_ingredient")),
-                }
-            )
+    grouped = _outlet_lines(path, outlet)
+    rows = [_line_dict(row) for row in grouped.get((item or "").casefold(), ())]
     _LINE_CACHE[cache_key] = rows
     return rows

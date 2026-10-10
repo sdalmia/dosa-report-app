@@ -1,3 +1,4 @@
+import logging
 import os
 from flask import Flask
 from flask_mail import Mail
@@ -5,6 +6,29 @@ from flask_session import Session
 from dotenv import load_dotenv
 from .config import Config
 from .extensions import db
+
+# Libraries that log OAuth tokens, auth codes, and Authorization headers at DEBUG.
+_QUIET_LOGGERS = (
+    "requests_oauthlib",
+    "oauthlib",
+    "urllib3",
+    "flask_dance",
+    "asyncio",
+)
+
+
+def configure_logging(app):
+    """INFO in production. DEBUG only when the app itself is in debug mode."""
+    debug = bool(app.debug or app.config.get("DEBUG"))
+    level = logging.DEBUG if debug else logging.INFO
+    logging.getLogger().setLevel(level)
+    app.logger.setLevel(level)
+    if not debug:
+        for name in _QUIET_LOGGERS:
+            logging.getLogger(name).setLevel(logging.INFO)
+        # oauthlib logs the Authorization header when this is set.
+        os.environ.pop("OAUTHLIB_DEBUG", None)
+
 
 def create_app():
     load_dotenv()
@@ -54,4 +78,5 @@ def create_app():
 
         return {"is_owner": is_owner}
 
+    configure_logging(app)
     return app

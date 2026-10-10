@@ -23,7 +23,13 @@ from app.owner_tools.metrics import (
     sales_score,
     wastage_score,
 )
-from app.owner_tools.sources import load_goals, load_wastage, scan_famepilot, scan_procurement
+from app.owner_tools.sources import (
+    clear_procurement_scan_cache,
+    load_goals,
+    load_wastage,
+    scan_famepilot,
+    scan_procurement,
+)
 from app.owner_tools.text import render_brief_text
 from app.store_health.contract import load_feeds
 
@@ -433,6 +439,37 @@ class ShippedOwnerTests(unittest.TestCase):
         hidden = self.client.get("/goals?festive=0").get_data(as_text=True)
         self.assertNotIn("Durga Puja peak band", hidden)
         self.assertIn("Festive days are hidden", hidden)
+
+
+class ProcurementScanTests(unittest.TestCase):
+    def test_cost_line_files_are_not_loaded_when_they_have_no_flag_column(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        # A long text column with no flag header. Reading every row is the spike.
+        lines = ["outlet,item_name,receipt_ref"]
+        lines.extend(f"Ideal Plaza,Masala Dosa,{'x' * 400}" for _ in range(500))
+        Path(folder.name, "menu_item_cost_lines.csv").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        Path(folder.name, "notes.csv").write_text(
+            "store,status\nAlpha,late delivery\nBeta,match\n",
+            encoding="utf-8",
+        )
+        previous = os.environ.get("OWNER_PROCUREMENT_DIR")
+        os.environ["OWNER_PROCUREMENT_DIR"] = folder.name
+        clear_procurement_scan_cache()
+
+        def restore():
+            if previous is None:
+                os.environ.pop("OWNER_PROCUREMENT_DIR", None)
+            else:
+                os.environ["OWNER_PROCUREMENT_DIR"] = previous
+            clear_procurement_scan_cache()
+
+        self.addCleanup(restore)
+        payload = scan_procurement()
+        self.assertEqual(payload["items"], [{"file": "notes.csv", "store": "Alpha", "text": "status: late delivery"}])
+        self.assertEqual(payload["empty"], "")
+        again = scan_procurement()
+        self.assertIs(again, payload)
 
 
 if __name__ == "__main__":

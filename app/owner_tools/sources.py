@@ -169,26 +169,67 @@ def _is_flag_column(name):
     return key in _FLAG_COLUMNS or key.endswith("_flag")
 
 
+_PROCUREMENT_SCAN = {}
+
+
+def clear_procurement_scan_cache():
+    _PROCUREMENT_SCAN.clear()
+
+
+def _csv_fieldnames(path):
+    """Header only. The cost-line files are tens of thousands of rows."""
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.reader(handle)
+        try:
+            header = next(reader)
+        except StopIteration:
+            return []
+    # Keep the header text DictReader uses as the key, including spacing.
+    return ["" if name is None else name for name in header]
+
+
+def _directory_signature(directory):
+    parts = []
+    for path in sorted(directory.glob("*.csv")):
+        if not path.is_file():
+            continue
+        st = path.stat()
+        parts.append((path.name, st.st_mtime_ns, st.st_size))
+    return tuple(parts)
+
+
 def scan_procurement():
+    """Flag columns from procurement CSVs.
+
+    A file is opened in full only when its header has a flag column.
+    menu_item_cost_lines*.csv has no such column, so those rows stay on disk.
+    """
     directory = procurement_dir()
     if not directory.exists():
         return {
             "items": [],
             "empty": "No procurement flags yet.",
         }
-    files = sorted(path for path in directory.glob("*.csv") if path.is_file())
+    signature = _directory_signature(directory)
+    cached = _PROCUREMENT_SCAN.get((str(directory), signature))
+    if cached is not None:
+        return cached
+    files = [path for path in sorted(directory.glob("*.csv")) if path.is_file()]
     if not files:
-        return {
+        result = {
             "items": [],
             "empty": "No procurement flags yet.",
         }
+        _PROCUREMENT_SCAN[(str(directory), signature)] = result
+        return result
     items = []
     saw_column = False
     for path in files:
-        rows, fieldnames = read_csv(path)
+        fieldnames = _csv_fieldnames(path)
         columns = [name for name in fieldnames if _is_flag_column(name)]
         if not columns:
             continue
+        rows, fieldnames = read_csv(path)
         saw_column = True
         for row in rows or []:
             parts = []
@@ -208,7 +249,9 @@ def scan_procurement():
         empty = "No procurement flags yet."
     else:
         empty = ""
-    return {"items": items, "empty": empty}
+    result = {"items": items, "empty": empty}
+    _PROCUREMENT_SCAN[(str(directory), signature)] = result
+    return result
 
 
 def load_wastage(directory):
