@@ -1,3 +1,4 @@
+from tests.stitch import stitch
 import csv
 import os
 import tempfile
@@ -595,7 +596,7 @@ class PageTests(unittest.TestCase):
 
         tickets = self.client.get("/tickets")
         self.assertEqual(tickets.status_code, 200)
-        board = tickets.get_data(as_text=True)
+        board = stitch(self.client, tickets.get_data(as_text=True))
         self.assertIn("Open", board)
         self.assertIn("Stale", board)
         self.assertIn("since post", board)

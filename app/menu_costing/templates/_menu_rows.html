@@ -1,0 +1,45 @@
+{% from "_lazy.html" import show_more %}
+{% for row in rows %}
+      <a class="tile mc-item" href="{{ url_for('menu_costing.item_page', city=city, store=store, item=row.item) }}" data-review="{{ 'yes' if row.under_review else 'no' }}">
+        <strong>{{ row.item }}</strong>
+        {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.item }}">{{ review_badge }}</p>{% endif %}
+        {% if row.category %}<p class="muted">{{ row.category }}</p>{% endif %}
+        <div class="mc-pair">
+          <p>{% if row.basis == 'median' %}City median{% else %}Cost{% endif %}
+            <span class="mc-num" data-field="menu-cost" data-item="{{ row.item }}" data-value="{{ row.cost_attr }}">{{ row.cost }}</span>
+          </p>
+          <p>Price
+            <span class="mc-num" data-field="menu-price" data-item="{{ row.item }}" data-value="{{ row.price_attr }}">{{ row.price }}</span>
+          </p>
+        </div>
+        <div class="mc-pair">
+          <p>Food cost
+            <span class="mc-num" data-field="food-cost-pct" data-item="{{ row.item }}" data-value="{{ row.food_attr }}">{{ row.food_pct }}</span>
+          </p>
+          <p>Margin
+            <span class="mc-num" data-field="menu-margin" data-item="{{ row.item }}" data-value="{{ row.margin_attr }}">{{ row.margin }}</span>
+          </p>
+        </div>
+        {% if row.cost_kind == 'incomplete' %}
+        <p data-field="cost-incomplete" data-item="{{ row.item }}">Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} {{ 'ingredient has' if row.unpriced_count == '1' else 'ingredients have' }} no price{% endif %}</p>
+        {% elif row.cost_kind == 'estimated' %}
+        <p data-field="cost-estimated" data-item="{{ row.item }}"><span class="mc-tip" title="{{ row.receipt_title }}">Estimated cost</span></p>
+        {% if row.receipt_title %}<p class="muted mc-clip">{{ row.receipt_title }}</p>{% endif %}
+        {% elif row.cost_kind == 'full' %}
+        <p data-field="cost-full" data-item="{{ row.item }}">Full cost</p>
+        {% endif %}
+        {% if row.vs %}
+        <p>{{ row.vs }}</p>
+        {% elif row.baseline_note %}
+        <p data-field="baseline-note" data-item="{{ row.item }}"><span class="mc-tip" title="{{ row.baseline_note }}">Why this % is blank</span></p>
+        <p class="muted mc-clip">{{ row.baseline_note }}</p>
+        {% endif %}
+        {% if row.orders or row.sold %}
+        <p class="muted">Sold <span data-field="orders" data-item="{{ row.item }}" data-value="{{ row.orders_attr }}">{{ row.orders }}</span>{% if sales_period %} · {{ sales_period }}{% endif %}{% if row.sold %} · <span class="mc-num">{{ row.sold }}</span>{% endif %}</p>
+        {% elif not sales_available %}
+        <p class="muted" data-field="sales-coming">Data coming</p>
+        {% endif %}
+      </a>
+      {% endfor %}
+{{ show_more(menu_more) }}
+<span hidden data-page-shown="{{ rows|length }}" data-page-total="{{ menu_total if menu_total is defined else rows|length }}"></span>

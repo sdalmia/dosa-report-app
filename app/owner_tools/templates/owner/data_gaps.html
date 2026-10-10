@@ -1,4 +1,5 @@
 {% extends "owner/layout.html" %}
+{% from "_lazy.html" import lazy_section %}
 
 {% block title %}Data gaps - Dosa Coffee{% endblock %}
 
@@ -26,20 +27,5 @@
 <div class="empty"><p>{% if filters.cc_store or filters.cc_city %}No gaps for this store or city.{% else %}No open gaps.{% endif %}</p></div>
 {% endif %}
 
-<div data-list>
-{% for group in groups %}
-<section class="owner-group" data-owner="{{ group.owner }}">
-  <h2>{{ group.owner }}</h2>
-  {% for gap in group.gaps %}
-  <article class="store" data-gap="{{ gap.gap_id }}" data-list-item {% if gap.threat %}data-threat="1"{% endif %}>
-    {% if gap.threat %}<p class="kicker threat">Threat</p>{% endif %}
-    <h3>{{ gap.title }}</h3>
-    {% if gap.store %}<p class="note">{{ gap.store }}</p>{% endif %}
-    {% if gap.why_it_matters %}<p>{{ gap.why_it_matters }}</p>{% endif %}
-    <p class="meta">{{ gap.status_label }}{% if gap.fix %} · {{ gap.fix }}{% endif %}{% if gap.due_label %} · Due {{ gap.due_label }}{% endif %}</p>
-  </article>
-  {% endfor %}
-</section>
-{% endfor %}
-</div>
+{{ lazy_section(with_qs(url_for('owner.data_gaps_rest')), height=320, title='Gaps', prefetch=true) }}
 {% endblock %}

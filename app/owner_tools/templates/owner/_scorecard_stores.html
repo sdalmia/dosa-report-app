@@ -1,0 +1,28 @@
+{% from "owner/_macros.html" import show %}
+<div data-list>
+{% for store in scorecard.stores %}
+<article class="store" id="store-{{ store.id }}" data-store="{{ store.label }}" data-list-item>
+  <p class="kicker">{% if store.rank %}Rank {{ store.rank }}{% else %}Not ranked{% endif %}{% if store.region %} · {{ store.region }}{% endif %}</p>
+  <h3>{{ store.label }}</h3>
+  <p class="figure" data-field="score">{{ show(store.score) }}</p>
+  <details>
+    <summary>What went into the score</summary>
+    {% for component in store.components %}
+    <div class="component" data-component="{{ component.key }}">
+      <strong>{{ component.label }}</strong>
+      <p class="meta">
+        Weight {{ component.weight }}.
+        {% if component.included %}
+        Score {{ component.score.text }}.
+        {% else %}
+        Left out. Not scored as zero.
+        {% endif %}
+      </p>
+      <p>{{ component.raw }}</p>
+    </div>
+    {% endfor %}
+  </details>
+  <p><a class="tap" href="{{ url_for('store_health.page', store_id=store.id) }}">Store Health</a></p>
+</article>
+{% endfor %}
+</div>

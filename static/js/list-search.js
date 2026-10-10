@@ -202,8 +202,69 @@
     });
   }
 
+  function bindServer(list) {
+    if (list.getAttribute("data-list-ready") === "1") return;
+    var body = list.querySelector("[data-list-body]") || list;
+    list.setAttribute("data-list-ready", "1");
+    var input = ensureInput(list);
+    if (!input) return;
+    var count = document.createElement("p");
+    count.className = "list-search-count";
+    count.setAttribute("aria-live", "polite");
+    var empty = document.createElement("p");
+    empty.className = "list-search-empty empty";
+    empty.hidden = true;
+    empty.textContent = "No matches";
+    place(list, count);
+    place(list, empty);
+    var timer = null;
+
+    function paint(html) {
+      body.innerHTML = html;
+      var marker = body.querySelector("[data-page-total]");
+      var shown = marker ? marker.getAttribute("data-page-shown") : "";
+      var total = marker ? marker.getAttribute("data-page-total") : "";
+      count.textContent = shown && total ? shown + " of " + total : "";
+      empty.hidden = !(total === "0");
+      var button = input.parentElement && input.parentElement.querySelector(".list-search-clear");
+      if (button) button.hidden = input.value.length === 0;
+      if (window.lazyScan) window.lazyScan();
+    }
+
+    function apply() {
+      var src = list.getAttribute("data-search-src");
+      var url = new URL(src, window.location.origin);
+      var query = input.value || "";
+      if (query) url.searchParams.set("q", query);
+      else url.searchParams.delete("q");
+      url.searchParams.set("offset", "0");
+      fetch(url.toString(), { credentials: "same-origin", headers: { Accept: "text/html" } })
+        .then(function (response) { return response.text(); })
+        .then(paint);
+    }
+
+    if (!input._listApply) {
+      input._listApply = [];
+      input.addEventListener("input", function () {
+        input._listApply.forEach(function (fn) { fn(); });
+      });
+      input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !input.name) event.preventDefault();
+      });
+      wireClear(input);
+    }
+    input._listApply.push(function () {
+      clearTimeout(timer);
+      timer = setTimeout(apply, 180);
+    });
+  }
+
   function bind(list) {
     if (list.getAttribute("data-list-ready") === "1") return;
+    if (list.getAttribute("data-search-src")) {
+      bindServer(list);
+      return;
+    }
     var items = collectItems(list);
     if (!items.length) return;
     list.setAttribute("data-list-ready", "1");
@@ -250,5 +311,11 @@
     apply();
   }
 
-  document.querySelectorAll("[data-list]").forEach(bind);
+  function scan() {
+    document.querySelectorAll("[data-list]").forEach(bind);
+  }
+
+  window.refreshLists = scan;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", scan);
+  else scan();
 })();

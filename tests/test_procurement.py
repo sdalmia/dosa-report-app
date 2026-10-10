@@ -22,6 +22,7 @@ from app.procurement.numbers import (
 )
 from app.procurement.recipe import ideal_plaza_recipe_costs, recipe_costs
 from app.procurement.vendors import SHORT_DELIVERY_MESSAGE
+from tests.stitch import stitch
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "procurement"
@@ -56,7 +57,7 @@ class ProcurementTests(unittest.TestCase):
     def get(self, path):
         response = self.client.get(path)
         self.assertEqual(response.status_code, 200, response.data[:400])
-        return response.get_data(as_text=True)
+        return stitch(self.client, response.get_data(as_text=True))
 
     def test_blank_is_not_zero(self):
         self.assertIsNone(parse_number(""))

@@ -3,6 +3,8 @@
 import os
 import tempfile
 import unittest
+
+from tests.stitch import page
 from datetime import date
 from pathlib import Path
 
@@ -33,7 +35,7 @@ class PhoneUiTests(unittest.TestCase):
         self.assertIn("@media (max-width: 399px)", css)
         self.assertIn(".cc-hello { display: none; }", css)
         self.assertIn("52px + env(safe-area-inset-bottom)", css)
-        html = self.client.get("/dashboard").get_data(as_text=True)
+        html = page(self.client, "/dashboard")
         self.assertIn("cc-search-drawer", html)
         self.assertIn("cc-search-header", html)
         self.assertIn(">Today<", html)

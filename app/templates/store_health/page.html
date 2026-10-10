@@ -2,6 +2,7 @@
 
 {% block title %}{% if store %}Store Health · {{ store.label }}{% else %}Store Health{% endif %} - Dosa Coffee{% endblock %}
 
+{% from "_lazy.html" import lazy_section %}
 {% block content %}
 <style>
   .store-health { color: var(--text); }
@@ -355,63 +356,12 @@
       </div>
     </section>
 
-    <section id="menu-mix" class="health-box box-posist span-full" aria-labelledby="menu-mix-title">
-      <div class="box-head">
-        <div>
-          <h2 id="menu-mix-title">Menu mix</h2>
-          <p class="box-source">Posist Insights{% if menu_mix.period_label %} · <span data-field="menu_mix_period">{{ menu_mix.period_label }}</span>{% endif %}</p>
-        </div>
-      </div>
-      {% if menu_mix.has_items %}
-        {% if menu_mix.unallocated %}
-          <p class="box-source" data-field="unallocated">Unallocated charges {{ menu_mix.unallocated }}. Probably delivery packaging charges. Still unconfirmed. This is not a dish.{% if menu_mix.unallocated_flagged %} On the data gaps list.{% endif %}</p>
-        {% endif %}
-        <ol class="menu-mix-list" data-list>
-          {% for item in menu_mix.entries %}
-            <li class="menu-mix-row" data-field="menu_item">
-              <span class="name">{{ item.item }}</span>
-              <span class="num">{{ item.sales }}</span>
-              <span class="num">{{ item.orders }} orders</span>
-              <span class="num">{{ item.contribution }}</span>
-            </li>
-          {% endfor %}
-        </ol>
-      {% else %}
-        <p class="empty-state" data-field="menu_mix">{{ menu_mix.empty }}</p>
-      {% endif %}
-    </section>
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='menu', store_id=store.id if store else none)), height=280, title='Menu mix') }}
+
 
     {% if store %}
-    <section id="delivery-mix" class="health-box box-posist span-full" aria-labelledby="delivery-mix-title">
-      <div class="box-head">
-        <div>
-          <h2 id="delivery-mix-title">Delivery vs dine-in</h2>
-          <p class="box-source">Posist{% if delivery.period_label %} · <span data-field="delivery_period">{{ delivery.period_label }}</span>{% endif %}</p>
-        </div>
-      </div>
-      {% if delivery.has_rows %}
-        <div class="metric-grid">
-          <article class="metric">
-            <h3>Dine-in</h3>
-            <p class="value" data-field="dine-gross">{{ delivery.dine_gross }}</p>
-            {% if delivery.mall_bulk %}
-              <p class="note" data-note="mall-store">In-store bills include bulk mall-system entries. Bills and the average bill are not compared.</p>
-            {% else %}
-              <p class="note">Bills <span data-field="dine-orders">{{ delivery.dine_orders }}</span>{% if delivery.dine_apb %} · APB <span data-field="dine-apb">{{ delivery.dine_apb }}</span>{% endif %}</p>
-            {% endif %}
-          </article>
-          <article class="metric">
-            <h3>Delivery</h3>
-            <p class="value" data-field="delivery-gross">{{ delivery.delivery_gross }}</p>
-            <p class="note">Bills <span data-field="delivery-orders">{{ delivery.delivery_orders }}</span>{% if delivery.delivery_apb %} · APB <span data-field="delivery-apb">{{ delivery.delivery_apb }}</span>{% endif %}</p>
-          </article>
-        </div>
-            {% if delivery.not_shown %}<p class="note" data-status="not-shown">Not shown on {{ delivery.not_shown|join(', ') }}. Those days are not zero.</p>{% endif %}
-        {% if delivery.mall_note %}<p class="box-source" data-note="mall">{{ delivery.mall_note }}</p>{% endif %}
-      {% else %}
-        <p class="empty-state" data-field="delivery_mix">{{ delivery.empty }}</p>
-      {% endif %}
-    </section>
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='delivery', store_id=store.id if store else none)), height=220, title='Delivery mix') }}
+
     {% endif %}
 
     <section id="mystery-audit" class="health-box box-audit" aria-labelledby="audit-title">
@@ -727,70 +677,8 @@
       </div>
     </section>
 
-    <section id="sales-calendar" class="health-box box-calendar span-full" aria-labelledby="calendar-title">
-      <div class="box-head">
-        <span class="box-index">7</span>
-        <div>
-          <h2 id="calendar-title">Sales calendar</h2>
-          <p class="box-source">Predicted band versus Actual Gross</p>
-          {% if calendar_share_label %}
-            <p class="box-source" data-field="calendar_share_label">{{ calendar_share_label }}</p>
-          {% endif %}
-          {% if freshness.calendar.state == "ready" %}
-            <p class="box-source">File last saved {{ freshness.calendar.saved_at }}. Newest date in the file {{ freshness.calendar.newest_date }}.</p>
-          {% else %}
-            <p class="box-source">{{ freshness.calendar.detail }}</p>
-          {% endif %}
-        </div>
-      </div>
-      {% if not store %}
-        <p class="empty-state">Choose a store to see the predicted band and Actual Gross.</p>
-      {% elif calendar_absent_note %}
-        <p class="empty-state" data-field="calendar_absent_note">{{ calendar_absent_note }}</p>
-      {% elif day_count and not filled_actual_days and not filled_prediction_days %}
-        <p class="empty-state">No predicted band or Actual Gross for this store.</p>
-      {% elif posist_actual_days %}
-        <p class="range-note">Actual Gross is that day's Posist gross. Low, mid, and high come from the network band, which is a net figure, so Actual Gross is not like-for-like with them. Pred low, pred high, and pred mid stay blank unless the calendar file has them.</p>
-      {% endif %}
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='calendar', store_id=store.id if store else none)), height=420, title='Sales calendar', prefetch=true) }}
 
-      {% if weeks %}
-        <div class="cal-scroll mb-3">
-          <div class="dow-grid mb-1">
-            <div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div>
-          </div>
-          {% for week in weeks %}
-            <div class="cal-grid mb-1">
-              {% for cell in week %}
-                {% if cell %}
-                  {% if store %}
-                    {% set day_href = url_for('store_health.page', store=store.id, day=cell.iso) %}
-                  {% else %}
-                    {% set day_href = url_for('store_health.page', day=cell.iso) %}
-                  {% endif %}
-                  <div class="cal-cell{% if cell.tier_class %} {{ cell.tier_class }}{% endif %}{% if cell.iso == selection.day_input %} is-selected{% endif %}{% if cell.iso == today_iso %} is-today{% endif %}">
-                    <a class="day-num" href="{{ day_href }}">{{ cell.date.day }} {{ cell.chrome_weekday }}</a>
-                    <div class="cal-line"><span>Tier</span><b data-field="tier" data-date="{{ cell.iso }}">{{ cell.fields.tier }}</b></div>
-                    <div class="cal-line"><span>Low</span><b data-field="pred_low" data-date="{{ cell.iso }}">{{ cell.fields.pred_low }}</b></div>
-                    <div class="cal-line"><span>Mid</span><b data-field="pred_mid" data-date="{{ cell.iso }}">{{ cell.fields.pred_mid }}</b></div>
-                    <div class="cal-line"><span>High</span><b data-field="pred_high" data-date="{{ cell.iso }}">{{ cell.fields.pred_high }}</b></div>
-                    <div class="cal-line"><span>Actual Gross</span><b data-field="actual_gross" data-date="{{ cell.iso }}">{{ cell.fields.actual_gross }}</b></div>
-                    {% if cell.fields.actual_net %}<div class="cal-line"><span>Actual Net</span><b data-field="actual_net" data-date="{{ cell.iso }}">{{ cell.fields.actual_net }}</b></div>{% endif %}
-                    <div class="cal-line"><span>Driver</span><b data-field="drivers" data-date="{{ cell.iso }}">{{ cell.fields.drivers }}</b></div>
-                    <span hidden data-field="weekday" data-date="{{ cell.iso }}">{{ cell.fields.weekday }}</span>
-                    <span hidden data-field="variance_vs_mid" data-date="{{ cell.iso }}">{{ cell.fields.variance_vs_mid }}</span>
-                    <span hidden data-field="variance_pct" data-date="{{ cell.iso }}">{{ cell.fields.variance_pct }}</span>
-                    <span hidden data-field="status" data-date="{{ cell.iso }}">{{ cell.fields.status }}</span>
-                    <span hidden data-field="notes" data-date="{{ cell.iso }}">{{ cell.fields.notes }}</span>
-                  </div>
-                {% else %}
-                  <div class="cal-cell pad"></div>
-                {% endif %}
-              {% endfor %}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </section>
   </div>
 
   <details class="mt-4 contract">

@@ -2,6 +2,8 @@ import csv
 import os
 import tempfile
 import unittest
+
+from tests.stitch import page, stitch
 from pathlib import Path
 
 _DB = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
@@ -304,7 +306,7 @@ class OwnerFixtureTests(unittest.TestCase):
     def test_pages_render_the_fixture(self):
         brief = self.client.get("/brief")
         self.assertEqual(brief.status_code, 200)
-        html = brief.get_data(as_text=True)
+        html = stitch(self.client, brief.get_data(as_text=True))
         self.assertIn("total gross divided by total bills", html)
         self.assertIn("No procurement flags yet", html)
         self.assertNotIn("posist_daily.csv", html)
@@ -314,15 +316,16 @@ class OwnerFixtureTests(unittest.TestCase):
         self.assertIn("Emergency: gas leak", html)
         scorecard = self.client.get("/scorecard")
         self.assertEqual(scorecard.status_code, 200)
-        self.assertIn("Not scored as zero", scorecard.get_data(as_text=True))
-        self.assertIn("/store-health/alpha", scorecard.get_data(as_text=True))
+        scorecard_html = stitch(self.client, scorecard.get_data(as_text=True))
+        self.assertIn("Not scored as zero", scorecard_html)
+        self.assertIn("/store-health/alpha", scorecard_html)
         goals = self.client.get("/goals")
         self.assertEqual(goals.status_code, 200)
-        page = goals.get_data(as_text=True)
-        self.assertIn("Durga Puja peak band", page)
-        self.assertIn("No target for this month", page)
+        goals_html = stitch(self.client, goals.get_data(as_text=True))
+        self.assertIn("Durga Puja peak band", goals_html)
+        self.assertIn("No target for this month", goals_html)
         hidden = self.client.get("/goals?festive=0")
-        self.assertNotIn("Durga Puja peak band", hidden.get_data(as_text=True))
+        self.assertNotIn("Durga Puja peak band", stitch(self.client, hidden.get_data(as_text=True)))
         email = self.client.get("/brief/email")
         self.assertNotIn("Nothing is sent", email.get_data(as_text=True))
         self.assertIn("Gross sales", email.get_data(as_text=True))
@@ -390,19 +393,19 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertEqual(payload["procurement"], [])
         self.assertIn("No food-safety notes", payload["food_safety_empty"])
         self.assertIn("No procurement flags yet", payload["procurement_empty"])
-        page = self.client.get("/brief").get_data(as_text=True)
-        self.assertIn("Gross sales", page)
-        self.assertIn(">APB<", page)
-        self.assertNotIn("posist_daily.csv", page)
-        self.assertNotIn("Email HTML", page)
-        self.assertNotIn("Plain text", page)
-        self.assertNotIn('class="card"', page)
-        self.assertIn('content="#f7f6f3"', page)
-        self.assertIn('stored === "dark" ? "dark" : "light"', page)
-        self.assertNotIn("prefers-color-scheme", page)
-        self.assertNotIn('aria-label="Owner tools"', page)
-        self.assertEqual(page.count('aria-label="Primary"'), 1)
-        self.assertEqual(page.count("<header"), 1)
+        brief_html = stitch(self.client, self.client.get("/brief").get_data(as_text=True))
+        self.assertIn("Gross sales", brief_html)
+        self.assertIn(">APB<", brief_html)
+        self.assertNotIn("posist_daily.csv", brief_html)
+        self.assertNotIn("Email HTML", brief_html)
+        self.assertNotIn("Plain text", brief_html)
+        self.assertNotIn('class="card"', brief_html)
+        self.assertIn('content="#f7f6f3"', brief_html)
+        self.assertIn('stored === "dark" ? "dark" : "light"', brief_html)
+        self.assertNotIn("prefers-color-scheme", brief_html)
+        self.assertNotIn('aria-label="Owner tools"', brief_html)
+        self.assertEqual(brief_html.count('aria-label="Primary"'), 1)
+        self.assertEqual(brief_html.count("<header"), 1)
         text = self.client.get("/brief.txt")
         self.assertEqual(text.mimetype, "text/plain")
         self.assertIn("Sales are gross", text.get_data(as_text=True))
@@ -412,7 +415,7 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("Gross sales", email)
 
     def test_shipped_scorecard_labour_and_goals(self):
-        scorecard = self.client.get("/scorecard").get_data(as_text=True)
+        scorecard = page(self.client, "/scorecard")
         self.assertIn("No wastage figure yet", scorecard)
         self.assertIn("Not scored as zero", scorecard)
         self.assertIn("Sales vs forecast mid", scorecard)
@@ -423,20 +426,20 @@ class ShippedOwnerTests(unittest.TestCase):
         fame = shalimar.split('data-component="famepilot"', 1)[1].split('data-component=', 1)[0]
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
-        labour = self.client.get("/labour").get_data(as_text=True)
+        labour = page(self.client, "/labour")
         salt = labour.split('data-store="Dosa Coffee - Salt Lake (002)"', 1)[1].split("</article>", 1)[0]
         employees = salt.split('data-field="employees"', 1)[1].split("</div>", 1)[0]
         per_person = salt.split('data-field="day-gross-per"', 1)[1].split("</div>", 1)[0]
         self.assertIn("Blank", employees)
         self.assertIn("Blank", per_person)
         self.assertIn("Staff count is blank", salt)
-        goals = self.client.get("/goals").get_data(as_text=True)
+        goals = page(self.client, "/goals")
         self.assertIn("No targets yet", goals)
         self.assertIn("Durga Puja peak band", goals)
         self.assertIn("Diwali-prep", goals)
         self.assertIn("Sun 1 Nov 2026", goals)
         self.assertNotIn('role="progressbar"', goals)
-        hidden = self.client.get("/goals?festive=0").get_data(as_text=True)
+        hidden = page(self.client, "/goals?festive=0")
         self.assertNotIn("Durga Puja peak band", hidden)
         self.assertIn("Festive days are hidden", hidden)
 

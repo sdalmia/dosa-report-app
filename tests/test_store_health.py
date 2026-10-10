@@ -117,7 +117,8 @@ class StoreHealthTests(unittest.TestCase):
     def get(self, path):
         response = self.client.get(path)
         self.assertEqual(response.status_code, 200, response.data[:500])
-        return response.get_data(as_text=True)
+        from tests.stitch import stitch
+        return stitch(self.client, response.get_data(as_text=True))
 
     def write(self, name, text):
         Path(self.data.name, name).write_text(text, encoding="utf-8")

@@ -1,4 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, session
+
+from app.fragments import html_fragment, query_offset, slice_rows
+from app.page_cache import freeze, remember
 from functools import wraps
 from flask import redirect, url_for
 
@@ -72,7 +75,12 @@ def _dashboard_view():
     if filters.get("cc_city"):
         region = ""
     low_only = (request.args.get("low") or "").strip() == "1"
-    return build_owner_dashboard(region=region, low_only=low_only, view_filters=filters), region, low_only
+    key = ("dashboard", region, low_only, freeze(filters))
+    view = remember(
+        key,
+        lambda: build_owner_dashboard(region=region, low_only=low_only, view_filters=filters),
+    )
+    return view, region, low_only
 
 
 @main_bp.route('/dashboard')
@@ -92,6 +100,18 @@ def dashboard():
         filter_stores=filter_stores,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
+
+
+@main_bp.route("/dashboard/fragment/below")
+@login_required
+def dashboard_below():
+    view, _region, _low_only = _dashboard_view()
+    filters, _filter_stores = _filter_context()
+    body = render_template(
+        "dashboard_below.html",
+        **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
+    )
+    return html_fragment(body)
 
 
 @main_bp.route("/stores")

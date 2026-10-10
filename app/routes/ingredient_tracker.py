@@ -2,7 +2,9 @@ import pandas as pd
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime, date
 from flask import jsonify
+from sqlalchemy import func
 from app.extensions import db
+from app.page_cache import remember
 from app.models import IngredientPrice
 from statistics import mean
 from app.routes.main import login_required
@@ -376,23 +378,48 @@ def build_ingredient_chart_data(entries):
     return ingredient_data, ingredient_stats, all_ingredients, top_ingredients
 
 
+def ingredient_bundle():
+    """Chart series, cached until a price row is added or removed."""
+    count, max_id, price_sum, newest = db.session.query(
+        func.count(IngredientPrice.id),
+        func.max(IngredientPrice.id),
+        func.coalesce(func.sum(IngredientPrice.unit_price), 0),
+        func.max(IngredientPrice.date),
+    ).one()
+    token = (count or 0, max_id or 0, round(float(price_sum or 0), 2), str(newest or ""))
+
+    def build():
+        entries = IngredientPrice.query.order_by(
+            IngredientPrice.date.asc(),
+            IngredientPrice.id.asc(),
+        ).all()
+        ingredient_data, ingredient_stats, all_ingredients, top_ingredients = build_ingredient_chart_data(entries)
+        return {
+            "ingredient_data": ingredient_data,
+            "ingredient_stats": ingredient_stats,
+            "all_ingredients": all_ingredients,
+            "top_ingredients": top_ingredients,
+        }
+
+    return remember(("ingredient-charts", token), build)
+
+
 @ingredient_bp.route('/')
 @login_required
 def dashboard():
-    entries = IngredientPrice.query.order_by(
-        IngredientPrice.date.asc(),
-        IngredientPrice.id.asc(),
-    ).all()
-    ingredient_data, ingredient_stats, all_ingredients, top_ingredients = build_ingredient_chart_data(entries)
-
+    bundle = ingredient_bundle()
     return render_template(
         'ingredient_tracker/dashboard.html',
-        entries=entries,
-        ingredient_data=ingredient_data,
-        ingredient_stats=ingredient_stats,
-        all_ingredients=all_ingredients,
-        top_ingredients=top_ingredients
+        top_ingredients=bundle["top_ingredients"],
     )
+
+
+@ingredient_bp.route('/data.json')
+@login_required
+def chart_data():
+    response = jsonify(ingredient_bundle())
+    response.headers["Cache-Control"] = "private, max-age=60"
+    return response
 
 
 @ingredient_bp.route('/upload', methods=['GET', 'POST'])
