@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}{{ item or "Recipe" }} - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <p class="muted"><a href="{{ url_for('menu_costing.menu_page', city=city, store=store) }}">Menu</a></p>
+    <h1>{{ item or "Recipe" }}</h1>
+    <p class="muted">{{ city }}{% if store %} · {{ store }}{% endif %}</p>
+    <p class="muted">{{ city_note }}</p>
+  </header>
+  {{ menu_nav('menu') }}
+  {% include "_filters.html" %}
+
+  <section class="cc-section">
+    {% if median_text %}
+    <p>{{ city }} median <span class="mc-num" data-field="city-median" data-city="{{ city }}" data-item="{{ item }}">{{ median_text }}</span>{% if spread_text %} · spread {{ spread_text }} within {{ city }}{% endif %}</p>
+    {% if median_incomplete %}<p data-field="cost-incomplete" data-item="{{ item }}">Cost incomplete</p>{% endif %}
+    {% elif blank_median_note %}
+    <p data-field="baseline-note" data-item="{{ item }}"><span class="mc-tip" title="{{ blank_median_note }}">Why this % is blank</span></p>
+    <p class="muted mc-clip">{{ blank_median_note }}</p>
+    {% endif %}
+    {% if chosen %}
+    <p>This store <span class="mc-num" data-field="store-cost" data-store="{{ store }}" data-item="{{ item }}">{{ chosen_cost }}</span>{% if chosen_vs %} · {{ chosen_vs }}{% endif %}</p>
+    {% if not chosen_vs and chosen_baseline %}
+    <p data-field="baseline-note" data-item="{{ item }}" data-store="{{ store }}"><span class="mc-tip" title="{{ chosen_baseline }}">Why this % is blank</span></p>
+    <p class="muted mc-clip">{{ chosen_baseline }}</p>
+    {% endif %}
+    {% if chosen.cost_kind == 'incomplete' %}
+    <p data-field="cost-incomplete" data-item="{{ item }}" data-store="{{ store }}">Cost incomplete{% if chosen_unpriced %} · {{ chosen_unpriced }} {{ 'ingredient has' if chosen_unpriced == '1' else 'ingredients have' }} no price{% endif %}</p>
+    {% elif chosen.cost_kind == 'estimated' %}
+    <p data-field="cost-estimated" data-item="{{ item }}"><span class="mc-tip" title="{{ chosen.receipt_title }}">Estimated cost</span></p>
+    {% if chosen.receipt_title %}<p class="muted mc-clip">{{ chosen.receipt_title }}</p>{% endif %}
+    {% elif chosen.cost_kind == 'full' %}
+    <p data-field="cost-full" data-item="{{ item }}">Full cost</p>
+    {% endif %}
+    {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
+    {% elif store_cards %}
+    <p class="empty">{{ pick_store }}</p>
+    {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
+    <div class="mc-list">
+      {% for row in store_cards %}
+      <a class="tile" href="{{ url_for('menu_costing.item_page', city=city, store=row.outlet, item=item) }}">
+        <strong>{{ row.outlet }}</strong>
+        <p class="mc-num">{{ row.cost }}{% if row.vs %} · {{ row.vs }}{% endif %}</p>
+        {% if not row.vs and row.baseline_note %}<p class="muted mc-clip"><span class="mc-tip" title="{{ row.baseline_note }}">Why this % is blank</span></p>{% endif %}
+        {% if row.cost_kind == 'incomplete' %}<p>Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} {{ 'ingredient has' if row.unpriced_count == '1' else 'ingredients have' }} no price{% endif %}</p>
+        {% elif row.cost_kind == 'estimated' %}<p><span class="mc-tip" title="{{ row.receipt_title }}">Estimated cost</span></p>{% if row.receipt_title %}<p class="muted mc-clip">{{ row.receipt_title }}</p>{% endif %}
+        {% elif row.cost_kind == 'full' %}<p>Full cost</p>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">This item has no recipe cost on file for {{ city }}.</p>
+    {% endif %}
+  </section>
+
+  <section class="cc-section" id="cost-history">
+    <div class="section-head"><h2>Cost over time</h2></div>
+    {% if recipe_note %}<p data-field="recipe-history-note">{{ recipe_note }}</p>{% endif %}
+    {% if store %}
+    {% for point in recipe_points %}
+    <p data-field="recipe-cost" data-month="{{ point.key }}" data-item="{{ item }}" data-store="{{ store }}" data-value="{{ point.cost_attr }}">{{ point.label }} · <span class="mc-num">{{ point.cost }}</span></p>
+    {% endfor %}
+    {% for change in recipe_changes %}
+    <article data-field="recipe-change" data-from="{{ change.older }}" data-to="{{ change.newer }}">
+      <p>Cost per portion <span class="mc-num">{{ change.old_cost }} to {{ change.new_cost }}</span></p>
+      {% if change.lines_missing %}
+      <p class="empty">Ingredient lines are not on file for one of these months.</p>
+      {% else %}
+      {% for name in change.added %}
+      <p data-field="recipe-added" data-item="{{ name }}">Added {{ name }}</p>
+      {% endfor %}
+      {% for name in change.removed %}
+      <p data-field="recipe-removed" data-item="{{ name }}">Removed {{ name }}</p>
+      {% endfor %}
+      {% for row in change.qty_changed %}
+      <p data-field="recipe-qty" data-item="{{ row.ingredient }}">{{ row.ingredient }} {{ row.old_qty }} {{ row.old_unit }} to {{ row.new_qty }} {{ row.new_unit }}</p>
+      {% endfor %}
+      {% if not change.added and not change.removed and not change.qty_changed %}
+      <p class="empty">The ingredient list is the same.</p>
+      {% endif %}
+      {% endif %}
+    </article>
+    {% endfor %}
+    {% else %}
+    <p class="empty">Pick a store to see how this dish's recipe and cost changed.</p>
+    {% endif %}
+  </section>
+
+  {% if store %}
+  <section class="cc-section" id="bom">
+    <div class="section-head"><h2>Ingredients</h2></div>
+    {% if missing_lines %}
+    <p class="empty">{{ missing_lines }}</p>
+    {% else %}
+    {% if lines_total_text %}<p class="muted">Priced lines add to <span class="mc-num">{{ lines_total_text }}</span>. A blank line was left out.</p>{% endif %}
+    <div class="mc-list">
+      {% for line in line_rows %}
+      <article class="tile">
+        <strong>{{ line.ingredient }}</strong>
+        <p>{{ line.qty }} {{ line.unit }}{% if line.inactive %} · inactive{% endif %}{% if line.estimated %} · <span class="mc-tip" title="{{ line.receipt }}">estimated</span>{% elif line.unpriced %} · no price{% endif %}</p>
+        <div class="mc-pair">
+          <p>Unit cost <span class="mc-num">{{ line.unit_cost }}</span></p>
+          <p>Line cost <span class="mc-num" data-field="line-cost" data-ingredient="{{ line.ingredient }}" data-value="{{ line.line_attr }}">{{ line.line_cost }}</span></p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

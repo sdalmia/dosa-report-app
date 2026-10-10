@@ -160,7 +160,29 @@ This compares Stock Recipe cost with the Recipe Consumption cost for Ideal Plaza
 - The few residual gaps above 5% on shared ingredients are Ghee/Butter Idli pc, Iced Filter Coffee and some Uttapam/Rasam Vada lines, mostly banana leaf quantities.
 - **For food cost:** use Recipe Consumption for actual mix-weighted cost and Stock Recipe for menu-level base cost.
 
+### 5d. menu_item_cost.csv, menu_item_cost_summary.csv, menu_item_cost_lines.csv
+**menu_item_cost_summary.csv** is one row per item per city. `city_baseline_median_cost` is that city's own median.
+
+**menu_item_cost.csv** is one row per outlet, recipe tab, and item. `vs_city_baseline_pct` is that outlet versus its own city's median. A blank % stays blank. `baseline_note` says why, and `city_baseline_outlets` is how many outlets are in that baseline. A blank cost is not zero.
+
+**menu_item_cost_lines.csv** is the ingredient quantity, unit cost, and line cost for each recipe.
+
+Delhi NCR costs more than Kolkata because Delhi serves 3 chutneys with each dish and Kolkata serves 1. Compare each city with its own median. Do not label a Delhi or North margin as a recipe that needs checking. Selling prices are not in these files.
+
+`cost_status` of `partial_unpriced_ingredients` or `no_priced_ingredients`, or `unpriced_excl_ro_water_count` above zero, means the dish cost is incomplete. RO water alone does not. A city median is incomplete when `outlets_fully_priced` is below `outlets_compared`, or `common_unpriced_ingredients` names something other than RO water.
+
+### 5e. menu_item_cost_estimated.csv and menu_item_cost_lines_estimated.csv
+These sit beside the original cost files and do not replace them. A line with no Restroworks price is filled from that city's warehouse receipt rate for 9 Sep to 8 Oct when a receipt exists. `receipt_ref` names that receipt. A line with no receipt stays blank. A blank is not zero.
+
+`cost_status_estimated` is `fully_priced`, `estimated`, or `incomplete`. Menu & Costing shows those as full cost, estimated cost, and cost incomplete. The city median, the comparison %, `city_baseline_outlets_estimated`, and `baseline_note_estimated` come from this file. Menu & Costing does not recompute the median. A blank % is shown with `baseline_note_estimated`.
+
+### 5f. history/YYYY-MM/
+Procurement drops a dated monthly snapshot of `menu_item_cost.csv` and `menu_item_cost_lines.csv` into `data/procurement/history/YYYY-MM/`. October 2026 (`2026-10`) is the first folder. The files at the procurement root stay the current export.
+
+### 5g. Company P&L
+When the Accountant's Tally export arrives, put a CSV in `data/tally/YYYY-MM/`. Columns: `company`, `month`, `book_food_cost`, `recipe_cost`, `rent`, `salaries`, `aggregator_commissions`. Companies are Kolkata, Delhi, UP, and Haryana. A blank cell stays blank. Until a file is present, the owner P&L shows data coming.
+
 ## Missing / pending
 - **Short deliveries:** cannot be built, because PO quantities are blank in Restroworks.
-- **Recipe cost:** only Ideal Plaza and Connaught Place have Stock Recipe exports. The other outlets are not available.
+- **Older recipe export:** `recipe_cost_by_item.csv` covers Ideal Plaza and Connaught Place only. `menu_item_cost.csv` is the recipe cost for every outlet when it is on disk.
 - **Store consumption and wastage:** covers 1 to 8 Oct only. There is no September consumption file.

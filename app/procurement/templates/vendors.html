@@ -112,11 +112,11 @@
       <div class="heading-row">
         <h2>Paying above the cheapest supplier</h2>
         {% call info() %}
-        <p>Same item and unit, compared with the cheapest supplier. This is not a change over time. Shown when the gap is over 10%.</p>
+        <p>Same item and unit, compared with the cheapest supplier in that city. A Delhi price is not compared with Kolkata. This is not a change over time. Shown when the gap is over 10%.</p>
         {% endcall %}
       </div>
       {% if largest_gap %}
-      <p class="muted">Largest gap: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier (weighted average {{ largest_gap.wavg.text }}).</p>
+      <p class="muted">Largest gap: {{ largest_gap.item }}, {{ largest_gap.city }}, {{ largest_gap.supplier }} is {{ largest_gap.pct_vs_cheapest.text }} above the cheapest supplier in {{ largest_gap.city }} (weighted average {{ largest_gap.wavg.text }}).</p>
       {% endif %}
       {% if above_cheapest %}
       <div class="scroll stack">
@@ -129,7 +129,7 @@
         {% endfor %}
       </div>
       {% else %}
-      <p class="empty">No supplier is more than 10% above the cheapest supplier for the same item.</p>
+      <p class="empty">No supplier is more than 10% above the cheapest supplier in its own city.</p>
       {% endif %}
     </article>
   </section>

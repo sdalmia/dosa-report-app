@@ -154,13 +154,32 @@ def _time_moves(bundle):
 
 
 def _above_cheapest(bundle):
-    rows = []
+    """Gap versus the cheapest supplier in the same city.
+
+    The rate file also compares a city with the other city's cheapest supplier.
+    That cross-city gap is not shown.
+    """
+    groups = {}
     for row in bundle["supplier_rates"]:
-        gap = row.get("pct_vs_cheapest_supplier")
-        if gap is None or gap <= MOVE_THRESHOLD:
+        key = (row.get("item_name") or "", row.get("unit") or "", row.get("city") or "")
+        groups.setdefault(key, []).append(row)
+    rows = []
+    for group in groups.values():
+        rates = [row.get("wavg_rate") for row in group if row.get("wavg_rate") is not None]
+        if not rates:
             continue
-        record = _rate_record(row)
-        rows.append(record)
+        cheapest = min(rates)
+        for row in group:
+            rate = row.get("wavg_rate")
+            if rate is None or not cheapest:
+                continue
+            gap = percent(rate - cheapest, cheapest)
+            if gap is None or gap <= MOVE_THRESHOLD:
+                continue
+            record = _rate_record(row)
+            record["pct_vs_cheapest"] = pct_pair(gap)
+            record["n_suppliers"] = len(group)
+            rows.append(record)
     rows.sort(key=lambda row: -(row["pct_vs_cheapest"]["value"] or 0))
     return rows
 

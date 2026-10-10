@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% from "_nav.html" import menu_nav with context %}
+{% block title %}Menu history - Dosa Coffee{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
+<div class="mc">
+  <header class="mc-top">
+    <h1>Menu history</h1>
+    <p class="muted">Each upload is kept. An older menu is not replaced.</p>
+  </header>
+  {{ menu_nav('history') }}
+  {% include "_filters.html" %}
+
+  <div class="mc-split">
+    <section class="cc-section">
+      <div class="section-head"><h2>Menu versions</h2></div>
+      {% if not versions %}
+      <p class="empty">No menu versions yet.{% if is_owner() %} Load a menu with the date it took effect.{% endif %}</p>
+      {% else %}
+      <div class="mc-list">
+        {% for version in versions %}
+        <article class="tile" data-field="menu-version" data-id="{{ version.id }}">
+          <strong>{{ version.city }} · {{ version.channel }}</strong>
+          <p>{{ version.store_scope }}</p>
+          <p class="muted">{{ version.effective_from.strftime('%d %b %Y') }}{% if version.effective_to %} – {{ version.effective_to.strftime('%d %b %Y') }}{% else %} onwards{% endif %}</p>
+          <p class="muted">{{ version['items']|length }} items{% if version.source %} · {{ version.source }}{% endif %}</p>
+        </article>
+        {% endfor %}
+      </div>
+      <h3>Compare</h3>
+      <form class="mc-filters" method="get" action="{{ url_for('menu_costing.history_page') }}">
+        <input type="hidden" name="city" value="{{ city }}">
+        <input type="hidden" name="store" value="{{ store }}">
+        <input type="hidden" name="item" value="{{ item }}">
+        <label>First
+          <select name="left">
+            {% for version in versions %}
+            <option value="{{ version.id }}" {% if version.id == left_id %}selected{% endif %}>{{ version.effective_from.strftime('%d %b %Y') }} · {{ version.city }} · {{ version.channel }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Second
+          <select name="right">
+            {% for version in versions %}
+            <option value="{{ version.id }}" {% if version.id == right_id %}selected{% endif %}>{{ version.effective_from.strftime('%d %b %Y') }} · {{ version.city }} · {{ version.channel }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit">Show the difference</button>
+      </form>
+      {% if diff %}
+      <h3>Added</h3>
+      {% if diff.added %}
+      <ul class="mc-diff">
+        {% for row in diff.added %}
+        <li data-field="diff-added" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="empty">Nothing added.</p>{% endif %}
+      <h3>Removed</h3>
+      {% if diff.removed %}
+      <ul class="mc-diff">
+        {% for row in diff.removed %}
+        <li data-field="diff-removed" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="empty">Nothing removed.</p>{% endif %}
+      <h3>Repriced</h3>
+      {% if diff.repriced %}
+      <ul class="mc-diff">
+        {% for row in diff.repriced %}
+        <li data-field="diff-repriced" data-item="{{ row.item }}">{{ row.item }} · {{ row.old_text }} to {{ row.new_text }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="empty">No price changes.</p>{% endif %}
+      {% endif %}
+      {% endif %}
+    </section>
+
+    <section class="cc-section" id="recipe-history">
+      <div class="section-head"><h2>Recipe and cost</h2></div>
+      {% if recipe_note %}<p data-field="recipe-history-note">{{ recipe_note }}</p>{% endif %}
+      {% if recipe_months %}
+      <div class="mc-list">
+        {% for month in recipe_months %}
+        <article class="tile" data-field="recipe-month" data-month="{{ month.key }}">
+          <strong>{{ month.label }}</strong>
+        </article>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form class="mc-filters" method="get" action="{{ url_for('menu_costing.history_page') }}">
+        <input type="hidden" name="left" value="{{ left_id or '' }}">
+        <input type="hidden" name="right" value="{{ right_id or '' }}">
+        <label>City
+          <select name="city">
+            {% for name in cities %}
+            <option value="{{ name }}" {% if name == city %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Store
+          <select name="store">
+            <option value="">Choose a store</option>
+            {% for name in outlets %}
+            <option value="{{ name }}" {% if name == store %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Dish
+          <input type="search" name="item" value="{{ item }}" placeholder="Dish name">
+        </label>
+        <button type="submit">Show this dish</button>
+      </form>
+      {% if item and store %}
+      {% for point in recipe_points %}
+      <p data-field="recipe-cost" data-month="{{ point.key }}" data-item="{{ item }}" data-store="{{ store }}" data-value="{{ point.cost_attr }}">{{ point.label }} · <span class="mc-num">{{ point.cost }}</span></p>
+      {% endfor %}
+      {% for change in recipe_changes %}
+      <article data-field="recipe-change" data-from="{{ change.older }}" data-to="{{ change.newer }}">
+        <p>Cost per portion <span class="mc-num" data-field="recipe-cost-change" data-old="{{ change.old_attr }}" data-new="{{ change.new_attr }}">{{ change.old_cost }} to {{ change.new_cost }}</span></p>
+        {% if change.lines_missing %}
+        <p class="empty">Ingredient lines are not on file for one of these months.</p>
+        {% else %}
+        {% if change.added %}
+        <ul class="mc-diff">
+          {% for name in change.added %}
+          <li data-field="recipe-added" data-item="{{ name }}">Added {{ name }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if change.removed %}
+        <ul class="mc-diff">
+          {% for name in change.removed %}
+          <li data-field="recipe-removed" data-item="{{ name }}">Removed {{ name }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if change.qty_changed %}
+        <ul class="mc-diff">
+          {% for row in change.qty_changed %}
+          <li data-field="recipe-qty" data-item="{{ row.ingredient }}">{{ row.ingredient }} {{ row.old_qty }} {{ row.old_unit }} to {{ row.new_qty }} {{ row.new_unit }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if not change.added and not change.removed and not change.qty_changed %}
+        <p class="empty">The ingredient list is the same.</p>
+        {% endif %}
+        {% endif %}
+      </article>
+      {% endfor %}
+      {% elif item %}
+      <p class="empty">Pick a store to see how this dish's recipe and cost changed.</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

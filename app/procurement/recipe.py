@@ -29,6 +29,17 @@ from app.procurement.numbers import (
 RECIPE_LABEL = "recipe cost excl. packaging"
 
 
+def _vs_own_city(pct, city):
+    """Outlet versus its own city median. A higher Delhi cost is not a recipe check."""
+    place = (city or "").strip()
+    if pct is None or not place:
+        return ""
+    if pct == 0:
+        return f"Same as the {place} median"
+    direction = "above" if pct > 0 else "below"
+    return f"{format_pct(abs(pct))} {direction} the {place} median"
+
+
 def recipe_costs(
     directory=None,
     outlet=None,
@@ -40,7 +51,7 @@ def recipe_costs(
     """Recipe cost for the menu page. Reads whichever cost file is on disk.
 
     menu_item_cost*.csv wins when it is present. Otherwise recipe_cost_by_item.csv.
-    Summary and channel files are not the item file.
+    Summary, channel, and ingredient-line files are not the item file.
     `outlet` matches the outlet or deployment name.
     `recipe_tab` limits rows to base, table, takeout, or delivery. Omit it to keep every tab.
     Margin is always null: these files have no selling price.
@@ -128,7 +139,9 @@ def recipe_section(bundle):
     payload = recipe_costs(bundle["directory"])
     summary = payload.get("summary") or []
     menu_summary = [row for row in summary if row.get("is_menu_item")]
-    if menu_summary:
+    # The older summary file has one median per item. The city-median export
+    # uses different columns, so a blank median falls back to each outlet's cost.
+    if menu_summary and any(row.get("median_cost") is not None for row in menu_summary):
         payload["list_kind"] = "summary"
         payload["rows"] = [
             {
@@ -264,6 +277,7 @@ def _item_record(
         "as_of": as_of,
         "city_baseline_median": city_baseline,
         "vs_city_baseline_pct": vs_city_baseline,
+        "vs_own_city": _vs_own_city(vs_city_baseline, city),
     }
 
 
