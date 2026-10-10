@@ -376,6 +376,76 @@ class ApprovalPageTests(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertIsNone(latest_approved())
 
+    def test_healthz_db_is_public_and_omits_the_url(self):
+        response = self.client.get("/healthz/db")
+        self.assertEqual(response.status_code, 200)
+        body = response.get_json()
+        self.assertEqual(set(body), {"dialect", "persistent"})
+        self.assertEqual(body["dialect"], "sqlite")
+        self.assertIs(body["persistent"], True)
+        text = response.get_data(as_text=True)
+        self.assertNotIn("sqlite://", text)
+        self.assertNotIn(_DB.name, text)
+
+    def test_hosted_sqlite_hides_approve_and_refuses_the_write(self):
+        previous = {name: os.environ.get(name) for name in ("RENDER", "FLASK_ENV")}
+        try:
+            os.environ["RENDER"] = "true"
+            os.environ.pop("FLASK_ENV", None)
+            health = self.client.get("/healthz/db").get_json()
+            self.assertEqual(health, {"dialect": "sqlite", "persistent": False})
+            self._session(OWNER)
+            html = self.client.get("/location-model").get_data(as_text=True)
+            self.assertIn("Approvals can't be saved yet. The database isn't permanent.", html)
+            self.assertNotIn(">Approve</button>", html)
+            self.assertNotIn(">Undo approval</button>", html)
+            posted = self.client.post("/location-model", data={
+                "action": "approve",
+                "version": "v2026-10",
+                "confirm": "yes",
+            })
+            self.assertEqual(posted.status_code, 400)
+            self.assertIn(
+                "Approvals can't be saved yet. The database isn't permanent.",
+                posted.get_data(as_text=True),
+            )
+            self.assertIsNone(latest_approved())
+
+            os.environ.pop("RENDER", None)
+            os.environ["FLASK_ENV"] = "production"
+            health = self.client.get("/healthz/db").get_json()
+            self.assertEqual(health, {"dialect": "sqlite", "persistent": False})
+        finally:
+            for name, value in previous.items():
+                if value is None:
+                    os.environ.pop(name, None)
+                else:
+                    os.environ[name] = value
+
+    def test_postgres_on_render_stays_persistent(self):
+        from unittest.mock import patch
+
+        from app.extensions import db
+
+        previous = os.environ.get("RENDER")
+        os.environ["RENDER"] = "true"
+        try:
+            with self.app.app_context():
+                with patch.object(db.engine.dialect, "name", "postgresql"):
+                    body = self.client.get("/healthz/db").get_json()
+            self.assertEqual(body, {"dialect": "postgresql", "persistent": True})
+            self._session(OWNER)
+            with self.app.app_context():
+                with patch.object(db.engine.dialect, "name", "postgresql"):
+                    html = self.client.get("/location-model").get_data(as_text=True)
+            self.assertIn(">Approve</button>", html)
+            self.assertNotIn("Approvals can't be saved yet.", html)
+        finally:
+            if previous is None:
+                os.environ.pop("RENDER", None)
+            else:
+                os.environ["RENDER"] = previous
+
 
 class PageTests(unittest.TestCase):
     def setUp(self):

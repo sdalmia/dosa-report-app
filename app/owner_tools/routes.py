@@ -3,6 +3,7 @@
 from flask import jsonify, redirect, render_template, request, Response, session, url_for
 
 from app.access import is_owner, owner_required, signed_in_email
+from app.dbstatus import database_health
 from app.gaps import filter_gaps, gap_counts, group_gaps_by_owner, load_gap_board
 from app.routes.main import login_required
 from app.store_health.contract import load_feeds
@@ -127,16 +128,29 @@ def data_gaps():
     )
 
 
+def _location_model_page(message):
+    from app.location_model import model_page
+
+    payload = model_page()
+    payload["message"] = message
+    payload["approvals_persistent"] = database_health()["persistent"]
+    return render_template("owner/location_model.html", model=payload, active="location-model")
+
+
 @owner_bp.route("/location-model", methods=["GET", "POST"])
 def location_model():
-    from app.location_model import approve_model, model_page, revert_model
+    from app.location_model import approve_model, revert_model
 
     if request.method == "POST":
         if not is_owner():
             return ("Only an owner can change the live model.", 403)
         action = (request.form.get("action") or "approve").strip()
         confirmed = (request.form.get("confirm") or "").strip() == "yes"
-        if not confirmed:
+        if not database_health()["persistent"]:
+            # The page already shows this sentence. A blank message keeps it to one line.
+            message = ""
+            status = 400
+        elif not confirmed:
             message = "Tick the confirm box first."
             status = 400
         elif action == "revert":
@@ -155,17 +169,13 @@ def location_model():
             approved = approve_model(version, signed_in_email())
             message = "Approved." if approved else "That model is not on file."
             status = 200 if approved else 400
-        payload = model_page()
-        payload["message"] = message
-        return render_template("owner/location_model.html", model=payload, active="location-model"), status
+        return _location_model_page(message), status
 
     if "user" not in session and not session.get("user_email"):
         return redirect(url_for("google.login"))
     if not is_owner():
         return redirect(url_for("main.dashboard"))
-    payload = model_page()
-    payload["message"] = ""
-    return render_template("owner/location_model.html", model=payload, active="location-model")
+    return _location_model_page("")
 
 
 @owner_bp.route("/store-master")

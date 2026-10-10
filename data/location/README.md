@@ -2,7 +2,7 @@
 
 Blank cells stay blank. A missing file means that input is data coming and is left out of the score. Do not write a zero in its place.
 
-Months are `YYYY-MM`. The live score uses the latest model approved in the database. A refit is `proposed` until an owner approves it on the Location model page. Approving does not rewrite the JSON file. Render's disk is wiped on deploy, so the approval row has to live in the database.
+Months are `YYYY-MM`. The live score uses the latest model approved in the database. A refit is `proposed` until an owner approves it on the Location model page. Approving does not rewrite the JSON file. Render's disk is wiped on deploy, so the approval row has to live in the database. The default `sqlite:///app.db` file is wiped too. `GET /healthz/db` reports the dialect and whether that database is permanent, and never the URL. When the dialect is SQLite and `RENDER` is set, or `FLASK_ENV` is `production`, the Location model page hides Approve.
 
 ## store_features/YYYY-MM.csv
 

@@ -16,6 +16,9 @@
 </style>
 <h1>Location model</h1>
 <p class="subtitle">Live score uses model {{ model.live_label }}</p>
+{% if not model.approvals_persistent %}
+<p class="note">Approvals can't be saved yet. The database isn't permanent.</p>
+{% endif %}
 {% if model.message %}<p class="note">{{ model.message }}</p>{% endif %}
 
 <section class="ot-box">
@@ -92,6 +95,7 @@
   <div class="empty"><p>No trading store's score changes.</p></div>
   {% endif %}
 
+  {% if model.approvals_persistent %}
   <form method="post">
     <input type="hidden" name="action" value="approve">
     <input type="hidden" name="version" value="{{ model.proposed.version }}">
@@ -101,12 +105,13 @@
     </label>
     <button type="submit" class="tap">Approve</button>
   </form>
+  {% endif %}
   {% else %}
   <div class="empty"><p>No proposed model yet.</p></div>
   {% endif %}
 </section>
 
-{% if model.approved %}
+{% if model.approved and model.approvals_persistent %}
 <section class="ot-box">
   <h2>Undo approval</h2>
   <p>Go back to the previous model. Live scores will use {{ model.undo_target }}.</p>
