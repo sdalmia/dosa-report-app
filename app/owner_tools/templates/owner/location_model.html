@@ -7,7 +7,12 @@
 .owner-tools table { width: 100%; border-collapse: collapse; }
 .owner-tools th, .owner-tools td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .owner-tools .scroll { overflow-x: auto; }
-.owner-tools button.tap { min-height: 44px; }
+.owner-tools button.tap { min-height: 44px; width: 100%; }
+.lm-confirm { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0; }
+.lm-confirm input { width: 22px; height: 22px; margin-top: 2px; flex: none; }
+.lm-frozen { font-weight: 700; }
+.lm-delta-up { font-weight: 700; }
+.lm-delta-down { font-weight: 700; }
 </style>
 <h1>Location model</h1>
 <p class="subtitle">Live score uses model {{ model.live_label }}</p>
@@ -16,14 +21,116 @@
 <section class="ot-box">
   <h2>Proposed model</h2>
   {% if model.proposed %}
-  <p>Version {{ model.proposed.version }}. {{ model.proposed.n }} stores. Spearman {{ model.proposed.spearman }}. Leave-one-store-out error {{ model.proposed.loo_mae }}. Prior {{ model.proposed.prior_version }}.</p>
+  <p>Version {{ model.proposed.version }}. {{ model.proposed.n }} stores. Prior {{ model.proposed.prior_version }}.</p>
+  <p>{{ model.changes.spearman_words }}</p>
+  <p>{{ model.changes.error_words }}</p>
+  {% if model.changes.frozen_note %}<p class="note">{{ model.changes.frozen_note }}</p>{% endif %}
   <p class="note">A format with fewer than 8 stores keeps its prior weights. No weight moves more than 20% in one month.</p>
+
+  <h3 class="h6">What changes</h3>
+  {% for fmt in model.changes.formats %}
+  <h3 class="h6">{{ fmt.label }}{% if fmt.frozen %} <span class="lm-frozen">Frozen</span>{% endif %}</h3>
+  {% if fmt.frozen %}<p class="note">Frozen. Fewer than 8 stores, so these weights stay at the prior.</p>{% endif %}
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Weight</th><th>Before</th><th>After</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for row in fmt.rows %}
+        <tr>
+          <td>{{ row.label }}</td>
+          <td>{{ row.before }}</td>
+          <td>{{ row.after }}</td>
+          <td>{% if row.frozen %}Frozen{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <h3 class="h6">Stores whose score moves most</h3>
+  {% if model.changes.up or model.changes.down %}
+  {% if model.changes.up %}
+  <p>Up</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Store</th><th>Now</th><th>After</th><th></th></tr></thead>
+      <tbody>
+        {% for row in model.changes.up %}
+        <tr>
+          <td>{{ row.store }}</td>
+          <td>{{ row.old }}</td>
+          <td>{{ row.new }}</td>
+          <td class="lm-delta-up">{{ row.delta_label }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  {% if model.changes.down %}
+  <p>Down</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Store</th><th>Now</th><th>After</th><th></th></tr></thead>
+      <tbody>
+        {% for row in model.changes.down %}
+        <tr>
+          <td>{{ row.store }}</td>
+          <td>{{ row.old }}</td>
+          <td>{{ row.new }}</td>
+          <td class="lm-delta-down">{{ row.delta_label }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  {% else %}
+  <div class="empty"><p>No trading store's score changes.</p></div>
+  {% endif %}
+
   <form method="post">
+    <input type="hidden" name="action" value="approve">
     <input type="hidden" name="version" value="{{ model.proposed.version }}">
+    <label class="lm-confirm">
+      <input type="checkbox" name="confirm" value="yes" required>
+      <span>{{ model.changes.confirm }}</span>
+    </label>
     <button type="submit" class="tap">Approve</button>
   </form>
   {% else %}
   <div class="empty"><p>No proposed model yet.</p></div>
+  {% endif %}
+</section>
+
+{% if model.approved %}
+<section class="ot-box">
+  <h2>Undo approval</h2>
+  <p>Go back to the previous model. Live scores will use {{ model.undo_target }}.</p>
+  <form method="post">
+    <input type="hidden" name="action" value="revert">
+    <label class="lm-confirm">
+      <input type="checkbox" name="confirm" value="yes" required>
+      <span>Undo approval. Go back to the previous model.</span>
+    </label>
+    <button type="submit" class="tap">Undo approval</button>
+  </form>
+</section>
+{% endif %}
+
+<section class="ot-box">
+  <h2>Approval log</h2>
+  {% if model.log %}
+  <ul>
+    {% for event in model.log %}
+    <li>{{ event.action }} {{ event.version }} · {{ event.email }} · {{ event.when }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><p>No approval yet.</p></div>
   {% endif %}
 </section>
 

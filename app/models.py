@@ -1,5 +1,23 @@
 from app.extensions import db
 
+
+class LocationModelApproval(db.Model):
+    """Who approved a location model. The JSON files stay read-only."""
+
+    __tablename__ = "location_model_approval"
+
+    id = db.Column(db.Integer, primary_key=True)
+    version = db.Column(db.String(32), nullable=False)
+    status = db.Column(db.String(16), nullable=False)
+    approved_by = db.Column(db.String(255), nullable=False)
+    approved_at = db.Column(db.DateTime, nullable=False)
+    reverted_at = db.Column(db.DateTime, nullable=True)
+    reverted_by = db.Column(db.String(255), nullable=True)
+
+    def __repr__(self):
+        return f"<LocationModelApproval {self.version} {self.status}>"
+
+
 class IngredientPrice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_code = db.Column(db.String(50))

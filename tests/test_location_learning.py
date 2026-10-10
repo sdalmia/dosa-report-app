@@ -14,9 +14,11 @@ from app import create_app
 from app.location_model import (
     MIN_FORMAT_N,
     cap_bounds,
+    clear_approvals,
     delivery_signal,
     fit_pooled,
     input_index,
+    latest_approved,
     learning_rows,
     log_prediction,
     metro_signal,
@@ -289,12 +291,99 @@ class JarvisInputTests(unittest.TestCase):
         self.assertNotIn("401", html)
 
 
+class ApprovalPageTests(unittest.TestCase):
+    def setUp(self):
+        self.previous = os.environ.pop("LOCATION_DATA_DIR", None)
+        clear_cache()
+        clear_approvals()
+        self.app = create_app()
+        self.app.config["TESTING"] = True
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        clear_approvals()
+        clear_cache()
+        if self.previous is not None:
+            os.environ["LOCATION_DATA_DIR"] = self.previous
+
+    def _session(self, email):
+        with self.client.session_transaction() as sess:
+            if email:
+                sess["user"] = {"name": "Siddhant Dalmia", "email": email}
+            else:
+                sess.clear()
+
+    def test_v2026_10_explains_frozen_formats_before_approve(self):
+        self._session(OWNER)
+        html = self.client.get("/location-model").get_data(as_text=True)
+        self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-10.", html)
+        self.assertIn("Ideal Plaza, Pacific Mall and Rosedale are the big misses", html)
+        self.assertIn("aggregator-enabled, mall reviews and anchors", html)
+        self.assertIn("Spearman 0.41 means the model ranks stores moderately well.", html)
+        self.assertIn(
+            "Approve v2026-10? Live scores will change for high-street sites. You can undo this.",
+            html,
+        )
+        self.assertIn("Stores whose score moves most", html)
+        self.assertIn("Frozen", html)
+        self.assertNotIn(".csv", html)
+        self.assertNotIn(".json", html)
+
+    def test_revert_goes_back_to_the_previous_approved_version(self):
+        folder = tempfile.TemporaryDirectory()
+        previous = os.environ.get("LOCATION_DATA_DIR")
+        os.environ["LOCATION_DATA_DIR"] = folder.name
+        try:
+            models = Path(folder.name) / "models"
+            models.mkdir()
+            for name in ("v2026-09", "v2026-10"):
+                (models / f"{name}.json").write_text(
+                    json.dumps({"version": name, "status": "proposed", "weights": {"high_street": {"energy": 0.3}}}),
+                    encoding="utf-8",
+                )
+            self._session(OWNER)
+            first = self.client.post("/location-model", data={
+                "action": "approve", "version": "v2026-09", "confirm": "yes",
+            })
+            self.assertEqual(first.status_code, 200)
+            self.assertEqual(latest_approved()["version"], "v2026-09")
+            second = self.client.post("/location-model", data={
+                "action": "approve", "version": "v2026-10", "confirm": "yes",
+            })
+            self.assertEqual(second.status_code, 200)
+            self.assertEqual(latest_approved()["version"], "v2026-10")
+            undone = self.client.post("/location-model", data={"action": "revert", "confirm": "yes"})
+            self.assertEqual(undone.status_code, 200)
+            self.assertIn("Live scores use v2026-09.", undone.get_data(as_text=True))
+            self.assertEqual(latest_approved()["version"], "v2026-09")
+            saved = json.loads((models / "v2026-10.json").read_text(encoding="utf-8"))
+            self.assertEqual(saved["status"], "proposed")
+        finally:
+            if previous is None:
+                os.environ.pop("LOCATION_DATA_DIR", None)
+            else:
+                os.environ["LOCATION_DATA_DIR"] = previous
+            folder.cleanup()
+            clear_approvals()
+
+    def test_logged_out_post_is_forbidden(self):
+        self._session(None)
+        response = self.client.post("/location-model", data={
+            "action": "approve",
+            "version": "v2026-10",
+            "confirm": "yes",
+        })
+        self.assertEqual(response.status_code, 403)
+        self.assertIsNone(latest_approved())
+
+
 class PageTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.previous = os.environ.get("LOCATION_DATA_DIR")
         os.environ["LOCATION_DATA_DIR"] = self.tmp.name
         clear_cache()
+        clear_approvals()
         self.app = create_app()
         self.app.config["TESTING"] = True
         self.client = self.app.test_client()
@@ -305,6 +394,7 @@ class PageTests(unittest.TestCase):
         else:
             os.environ["LOCATION_DATA_DIR"] = self.previous
         self.tmp.cleanup()
+        clear_approvals()
         clear_cache()
 
     def _session(self, email):
@@ -342,13 +432,44 @@ class PageTests(unittest.TestCase):
         self.assertIn("Location model", page)
         self.assertIn("What are we missing", page)
         self.assertIn("Approve", page)
+        self.assertIn("You can undo this.", page)
+        self.assertIn("Stores whose score moves most", page)
         self.assertNotIn(".csv", page)
         self.assertIn('name="theme-color" content="#f7f6f3"', page)
-        approved = self.client.post("/location-model", data={"version": payload["version"]})
+        self._session(OTHER)
+        denied = self.client.post("/location-model", data={
+            "action": "approve",
+            "version": payload["version"],
+            "confirm": "yes",
+        })
+        self.assertEqual(denied.status_code, 403)
+        self._session(OWNER)
+        unconfirmed = self.client.post("/location-model", data={
+            "action": "approve",
+            "version": payload["version"],
+        })
+        self.assertEqual(unconfirmed.status_code, 400)
+        self.assertIsNone(latest_approved())
+        approved = self.client.post("/location-model", data={
+            "action": "approve",
+            "version": payload["version"],
+            "confirm": "yes",
+        })
         self.assertEqual(approved.status_code, 200)
-        self.assertIn("Approved.", approved.get_data(as_text=True))
+        approved_html = approved.get_data(as_text=True)
+        self.assertIn("Approved.", approved_html)
+        self.assertIn(OWNER, approved_html)
+        self.assertIn("Undo approval", approved_html)
         saved = json.loads(model_path.read_text(encoding="utf-8"))
-        self.assertEqual(saved["status"], "approved")
+        self.assertEqual(saved["status"], "proposed")
+        self.assertEqual(latest_approved()["version"], payload["version"])
+        reverted = self.client.post("/location-model", data={"action": "revert", "confirm": "yes"})
+        self.assertEqual(reverted.status_code, 200)
+        reverted_html = reverted.get_data(as_text=True)
+        self.assertIn("prior weights", reverted_html)
+        self.assertIn("Reverted", reverted_html)
+        self.assertIn(OWNER, reverted_html)
+        self.assertIsNone(latest_approved())
 
     def test_score_page_logs_the_prediction_and_shows_the_badge(self):
         from unittest.mock import patch

@@ -1,8 +1,8 @@
 """Owner pages. These routes never send mail."""
 
-from flask import jsonify, render_template, request, Response
+from flask import jsonify, redirect, render_template, request, Response, session, url_for
 
-from app.access import owner_required, signed_in_email
+from app.access import is_owner, owner_required, signed_in_email
 from app.gaps import filter_gaps, gap_counts, group_gaps_by_owner, load_gap_board
 from app.routes.main import login_required
 from app.store_health.contract import load_feeds
@@ -128,18 +128,43 @@ def data_gaps():
 
 
 @owner_bp.route("/location-model", methods=["GET", "POST"])
-@login_required
-@owner_required
 def location_model():
-    from app.location_model import approve_model, model_page
+    from app.location_model import approve_model, model_page, revert_model
 
-    message = ""
     if request.method == "POST":
-        version = (request.form.get("version") or "").strip()
-        approved = approve_model(version)
-        message = "Approved." if approved else "That model is not on file."
+        if not is_owner():
+            return ("Only an owner can change the live model.", 403)
+        action = (request.form.get("action") or "approve").strip()
+        confirmed = (request.form.get("confirm") or "").strip() == "yes"
+        if not confirmed:
+            message = "Tick the confirm box first."
+            status = 400
+        elif action == "revert":
+            result = revert_model(signed_in_email())
+            if result is None:
+                message = "There is no approved model to undo."
+                status = 400
+            elif result["live"] == "prior":
+                message = "Reverted. Live scores use the prior weights."
+                status = 200
+            else:
+                message = f"Reverted. Live scores use {result['live']}."
+                status = 200
+        else:
+            version = (request.form.get("version") or "").strip()
+            approved = approve_model(version, signed_in_email())
+            message = "Approved." if approved else "That model is not on file."
+            status = 200 if approved else 400
+        payload = model_page()
+        payload["message"] = message
+        return render_template("owner/location_model.html", model=payload, active="location-model"), status
+
+    if "user" not in session and not session.get("user_email"):
+        return redirect(url_for("google.login"))
+    if not is_owner():
+        return redirect(url_for("main.dashboard"))
     payload = model_page()
-    payload["message"] = message
+    payload["message"] = ""
     return render_template("owner/location_model.html", model=payload, active="location-model")
 
 

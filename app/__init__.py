@@ -39,7 +39,7 @@ def create_app():
 
      # ✅ Database setup
     db.init_app(app)
-    from app.models import IngredientPrice
+    from app.models import IngredientPrice, LocationModelApproval
     from app.menu_costing.models import MenuItemPrice, MenuVersion
     with app.app_context():
         db.create_all()

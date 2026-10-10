@@ -2,7 +2,7 @@
 
 Blank cells stay blank. A missing file means that input is data coming and is left out of the score. Do not write a zero in its place.
 
-Months are `YYYY-MM`. The live score uses the latest model whose status is `approved`. A refit is `proposed` until an owner approves it on the Location model page.
+Months are `YYYY-MM`. The live score uses the latest model approved in the database. A refit is `proposed` until an owner approves it on the Location model page. Approving does not rewrite the JSON file. Render's disk is wiped on deploy, so the approval row has to live in the database.
 
 ## store_features/YYYY-MM.csv
 
@@ -52,7 +52,7 @@ Joined to the snapshot. Manisquare and Forum leave `bills_per_trading_day` and `
 | Field | Meaning |
 |---|---|
 | version | `vYYYY-MM` |
-| status | `proposed` or `approved` |
+| status | `proposed` in the file. Approval is not written back into this file |
 | as_of | Month |
 | prior_version | The approved model this fit started from, or `prior` |
 | n | Stores with a within-market rank of gross per day |
@@ -64,7 +64,22 @@ Joined to the snapshot. Manisquare and Forum leave `bills_per_trading_day` and `
 | weights | Non-negative weights by format |
 | prior_weights | Weights the fit was pulled toward |
 | backtest | One leave-one-store-out row per fitted store |
-| approved_at | Date of approval, or null |
+| approved_at | Left null in the file. The database stores the real approval time |
+
+## Approval table `location_model_approval`
+
+One row each time an owner approves a version. Revert fills `reverted_at` and `reverted_by` on that row. `latest_approved()` reads the newest row whose status is still `approved`.
+
+| Column | Meaning |
+|---|---|
+| version | `vYYYY-MM`, matching the JSON file |
+| status | `approved` or `reverted` |
+| approved_by | Email of the owner who approved it |
+| approved_at | When they approved it |
+| reverted_at | When an owner undid it. Blank while it is still live |
+| reverted_by | Email of the owner who undid it. Blank while it is still live |
+
+Only an owner email can approve or revert. Undo returns to the previous approved version, or to the prior weights when there is no earlier approval. The Location model page lists every approve and revert.
 
 A weight moves at most 20% from its prior in one month, and never below zero. A prior of 0 may rise by at most 0.20. The fit is one pooled model with a pull toward the shared weights and toward the prior, not a separate model per format and city.
 
