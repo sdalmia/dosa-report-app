@@ -324,10 +324,49 @@ def recipe_stub_gaps():
     return records
 
 
+def batch_recipe_gaps():
+    """Batch items with no recipe, owned by Sailesh. One row per city and item."""
+    from app.menu_costing.batches import missing_recipe_rows
+    from app.store_master import get_index
+    from app.view_filters import CITY_REGION
+
+    records = []
+    master = list(get_index().rows)
+    for row in missing_recipe_rows():
+        city = row.get("city") or ""
+        item = row.get("item") or ""
+        region = CITY_REGION.get(city, "")
+        ids = []
+        for store in master:
+            if region and (store.get("region") or "") != region:
+                continue
+            store_id = store.get("store_id") or ""
+            if store_id and store_id not in ids:
+                ids.append(store_id)
+        record = _record(
+            gap_id=f"batch-recipe:{city}:{item.casefold()}",
+            area="procurement",
+            store=city,
+            title=f"No batch recipe: {item}",
+            why=f"{city}. Recipe coming from Sailesh.",
+            fix="Add the batch recipe",
+            owner="Sailesh",
+            status="open",
+            due=None,
+            as_of=None,
+            source="",
+            threat=True,
+        )
+        record["store_ids"] = ids
+        records.append(record)
+    return records
+
+
 def load_gap_board(master_rows, directory=None, email=None):
     rows = system_gap_records(master_rows) + load_gap_files(directory)
     if directory is None:
         rows.extend(recipe_stub_gaps())
+        rows.extend(batch_recipe_gaps())
     rows = visible_gaps(rows, email)
     return {
         "counts": gap_counts(rows),

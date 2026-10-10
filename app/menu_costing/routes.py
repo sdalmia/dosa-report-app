@@ -21,6 +21,7 @@ from app.menu_costing.catalog import (
 from app.menu_costing.history import dish_history, load_history, present_history
 from app.menu_costing.parse_menu import parse_upload
 from app.menu_costing.pnl import load_pnl
+from app.menu_costing.batches import batch_page_context
 from app.menu_costing.recipes import load_recipes
 from app.menu_costing.sales import load_sales, sales_for_filters
 from app.menu_costing.scope import filter_context, place_from_request
@@ -57,6 +58,15 @@ def menu_page():
         today=date.today(),
     )
     page.update(filter_context(filters))
+    page.update(
+        batch_page_context(
+            city=page["city"],
+            store=page["store"],
+            store_id=(filters.get("cc_store") or "").strip(),
+            query=page["query"],
+            filters=filters,
+        )
+    )
     return render_template("costing_menu.html", **page)
 
 

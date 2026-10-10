@@ -19,6 +19,7 @@ PAGES = (
     {"kind": "Page", "label": "Data gaps", "href": "/data-gaps"},
     {"kind": "Page", "label": "Menu engineering", "href": "/menu"},
     {"kind": "Page", "label": "Menu & Costing", "href": "/menu-costing"},
+    {"kind": "Page", "label": "Things we make", "href": "/menu-costing#things-we-make"},
     {"kind": "Page", "label": "Delivery vs dine-in", "href": "/channels"},
     {"kind": "Page", "label": "Tickets", "href": "/tickets"},
     {"kind": "Page", "label": "Red flags", "href": "/flags"},

@@ -36,6 +36,17 @@
 .mc-diff { margin: 0.2rem 0 0.6rem; padding-left: 1.1rem; }
 .mc-diff li { margin: 0.25rem 0; }
 .mc-scroll { max-height: 22rem; overflow: auto; display: grid; gap: 0.6rem; }
+.mc-badge {
+  display: inline-block;
+  margin: 0.2rem 0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.mc-ings { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+.mc-ings li { margin: 0.15rem 0; }
 .mc-tip { text-decoration: underline dotted; cursor: help; }
 .mc-clip { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mc-split { display: grid; gap: 0.8rem; }

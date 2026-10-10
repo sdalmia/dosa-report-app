@@ -7,6 +7,10 @@
   <header class="mc-top">
     <p class="muted"><a href="{{ url_for('menu_costing.menu_page', city=city, store=store) }}">Menu</a></p>
     <h1>{{ item or "Recipe" }}</h1>
+    {% if under_review %}
+    <p class="mc-badge" data-field="recipe-review" data-item="{{ item }}">{{ review_badge }}</p>
+    <p data-field="recipe-review-note">{{ review_note }}</p>
+    {% endif %}
     <p class="muted">{{ city }}{% if store %} · {{ store }}{% endif %}</p>
     <p class="muted">{{ city_note }}</p>
   </header>
@@ -92,6 +96,7 @@
   {% if store %}
   <section class="cc-section" id="bom">
     <div class="section-head"><h2>Ingredients</h2></div>
+    {% if under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ item }}">{{ review_badge }}</p>{% endif %}
     {% if missing_lines %}
     <p class="empty">{{ missing_lines }}</p>
     {% else %}
