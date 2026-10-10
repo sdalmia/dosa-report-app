@@ -37,6 +37,7 @@
     {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
     {% elif store_cards %}
     <p class="empty">{{ pick_store }}</p>
+    {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
     <div class="mc-list">
       {% for row in store_cards %}
       <a class="tile" href="{{ url_for('menu_costing.item_page', city=city, store=row.outlet, item=item) }}">

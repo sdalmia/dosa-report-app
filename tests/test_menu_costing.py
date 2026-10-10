@@ -423,6 +423,12 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn('data-field="recipe-stub" data-item="Regular Masala Dosa"', dish)
         self.assertIn("Coriander Leaves", dish)
         self.assertIn("Sailesh", dish)
+        city_dish = self.client.get(
+            "/menu/item?city=Delhi+NCR&item=Extra+Sambar+-+250ml"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="recipe-stub" data-item="Extra Sambar - 250ml"', city_dish)
+        self.assertIn("Glen Container", city_dish)
+        self.assertIn("Sailesh", city_dish)
 
     def test_recipe_snapshots_show_cost_and_ingredient_changes(self):
         with tempfile.TemporaryDirectory() as tmp:
