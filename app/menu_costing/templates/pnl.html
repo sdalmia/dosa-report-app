@@ -16,7 +16,7 @@
   {{ menu_nav('pl') }}
   {% include "_filters.html" %}
 
-  <div class="mc-list">
+  <div class="mc-list" data-list>
     {% for company in companies %}
     <article class="tile" data-field="company-pl" data-company="{{ company.name }}">
       <strong>{{ company.name }}</strong>

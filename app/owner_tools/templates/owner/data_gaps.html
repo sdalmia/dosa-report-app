@@ -26,11 +26,12 @@
 <div class="empty"><p>{% if filters.cc_store or filters.cc_city %}No gaps for this store or city.{% else %}No open gaps.{% endif %}</p></div>
 {% endif %}
 
+<div data-list>
 {% for group in groups %}
 <section class="owner-group" data-owner="{{ group.owner }}">
   <h2>{{ group.owner }}</h2>
   {% for gap in group.gaps %}
-  <article class="store" data-gap="{{ gap.gap_id }}" {% if gap.threat %}data-threat="1"{% endif %}>
+  <article class="store" data-gap="{{ gap.gap_id }}" data-list-item {% if gap.threat %}data-threat="1"{% endif %}>
     {% if gap.threat %}<p class="kicker threat">Threat</p>{% endif %}
     <h3>{{ gap.title }}</h3>
     {% if gap.store %}<p class="note">{{ gap.store }}</p>{% endif %}
@@ -40,4 +41,5 @@
   {% endfor %}
 </section>
 {% endfor %}
+</div>
 {% endblock %}

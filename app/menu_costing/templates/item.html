@@ -39,7 +39,7 @@
     {% elif store_cards %}
     <p class="empty">{{ pick_store }}</p>
     {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
-    <div class="mc-list">
+    <div class="mc-list" data-list>
       {% for row in store_cards %}
       <a class="tile" href="{{ url_for('menu_costing.item_page', city=city, store=row.outlet, item=item) }}">
         <strong>{{ row.outlet }}</strong>
@@ -96,7 +96,7 @@
     <p class="empty">{{ missing_lines }}</p>
     {% else %}
     {% if lines_total_text %}<p class="muted">Priced lines add to <span class="mc-num">{{ lines_total_text }}</span>. A blank line was left out.</p>{% endif %}
-    <div class="mc-list">
+    <div class="mc-list" data-list>
       {% for line in line_rows %}
       <article class="tile">
         <strong>{{ line.ingredient }}</strong>

@@ -142,7 +142,7 @@
 <section class="ot-box">
   <h2>What are we missing</h2>
   {% if model.misses %}
-  <ul>
+  <ul data-list>
     {% for row in model.misses %}
     <li>{{ row.store }} is off by {{ row.decile_gap }} rank-deciles.</li>
     {% endfor %}
@@ -157,7 +157,7 @@
   <p class="note">Leave-one-store-out predicted rank against the actual within-market rank. 0 is the lowest gross per day in that market, 1 is the highest.</p>
   {% if model.backtest %}
   <div class="scroll">
-    <table>
+    <table data-list>
       <thead>
         <tr><th>Store</th><th>Format</th><th>Actual</th><th>Predicted</th><th></th></tr>
       </thead>
@@ -183,7 +183,7 @@
   <h2>Opened sites, first 90 days</h2>
   <p class="note">{{ model.prediction_count }} scored sites are on the prediction log.</p>
   {% if model.openings %}
-  <ul>
+  <ul data-list>
     {% for row in model.openings %}
     <li>
       {{ row.site or row.site_id }}

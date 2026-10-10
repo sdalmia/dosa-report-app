@@ -70,6 +70,29 @@ def parse_int(value):
     return int(number)
 
 
+def format_whole(value):
+    """A count. Blank stays blank. 1.0 is shown as 1."""
+    if isinstance(value, bool) or value is None or value == "":
+        return ""
+    if isinstance(value, (int, float)):
+        number = float(value)
+    else:
+        number = parse_number(value)
+    if number is None:
+        return ""
+    return str(int(round(number)))
+
+
+def unpriced_phrase(value):
+    """How many ingredients have no price. Blank when the count is missing or zero."""
+    text = format_whole(value)
+    if text in {"", "0"}:
+        return ""
+    count = int(text)
+    word = "ingredient" if count == 1 else "ingredients"
+    return f"{count} {word} not priced"
+
+
 def sum_present(values):
     """Sum numbers. All-blank is None, not zero. Real zeros are included."""
     present = [value for value in values if value is not None]

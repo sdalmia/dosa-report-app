@@ -790,6 +790,106 @@ html .store-health .box-index {
   font-variant-numeric: tabular-nums;
 }
 
+.list-search {
+  display: block;
+  min-width: 0;
+  margin: 0 0 var(--s2);
+}
+.cc-filters .list-search,
+form.filters .list-search,
+form.mc-filters .list-search,
+form.pc-form .list-search,
+.filters .list-search {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.list-search-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  min-width: 0;
+  margin: 0;
+}
+.list-search-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.list-search-field {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+.list-search-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 48px 0 var(--s3);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.list-search-input::placeholder { color: var(--text-muted); }
+.list-search-input:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.list-search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.list-search-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0;
+}
+.list-search-count {
+  margin: 0 0 var(--s2);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+.list-search-empty { margin: 0 0 var(--s2); }
+
+@media (max-width: 767px) {
+  .cc-filters > .list-search,
+  form.filters > .list-search,
+  nav.filters > .list-search,
+  .filters > .list-search {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 24;
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--s2) var(--gutter);
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .list-search-spacer { height: 68px; }
+  .list-search.is-sticky {
+    position: sticky;
+    top: 56px;
+    z-index: 24;
+    background: var(--bg);
+    padding: var(--s2) 0;
+  }
+}
+
 @media (min-width: 768px) {
   .cc-search-desktop { display: block; flex: 1 1 180px; max-width: 280px; }
   .cc-filters { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }

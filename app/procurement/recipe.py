@@ -19,11 +19,13 @@ from app.procurement.numbers import (
     format_pct,
     format_period,
     format_qty,
+    format_whole,
     money_pair,
     parse_number,
     parse_period,
     pct_pair,
     percent,
+    unpriced_phrase,
 )
 
 RECIPE_LABEL = "recipe cost excl. packaging"
@@ -154,7 +156,7 @@ def recipe_section(bundle):
                 "outlet_min": row["outlet_min"],
                 "outlet_max": row["outlet_max"],
                 "spread": pct_pair(row["spread_pct"]),
-                "outlets": row["outlets_with_recipe"],
+                "outlets": format_whole(row["outlets_with_recipe"]),
             }
             for row in menu_summary
         ]
@@ -175,6 +177,7 @@ def recipe_section(bundle):
                     "last": money_pair(item["cost_per_unit_last_price"]),
                     "gap": pct_pair(item["last_vs_avg_pct"]),
                     "unpriced": item["unpriced_ingredient_count"] or 0,
+                    "unpriced_label": unpriced_phrase(item["unpriced_ingredient_count"]),
                     "partial": item.get("partial") or False,
                     "margin_text": "",
                 }
@@ -191,6 +194,7 @@ def recipe_section(bundle):
                 "cost": money_pair(item["theoretical_cost_per_unit"]),
                 "total": money_pair(item["ingredient_cost_total"]),
                 "missing_price": item["lines_missing_price"] or 0,
+                "missing_label": unpriced_phrase(item["lines_missing_price"]),
             }
         )
     cons_rows.sort(key=lambda row: -(row["total"]["value"] or 0))

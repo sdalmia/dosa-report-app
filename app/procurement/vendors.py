@@ -8,6 +8,7 @@ from app.procurement.loader import source_name
 from app.procurement.numbers import (
     format_period,
     format_qty,
+    format_whole,
     money_pair,
     pct_pair,
     percent,
@@ -121,7 +122,7 @@ def _rate_record(row):
         "unit": row.get("unit") or "",
         "city": row.get("city") or "",
         "supplier": row.get("supplier") or "",
-        "lines": row.get("lines"),
+        "lines": format_whole(row.get("lines")),
         "qty_text": format_qty(row.get("qty")),
         "wavg": money_pair(row.get("wavg_rate")),
         "min_rate": money_pair(row.get("min_rate")),
@@ -130,7 +131,7 @@ def _rate_record(row):
         "last_date": row["last_date"].isoformat() if row.get("last_date") else "",
         "pct_vs_wavg": pct_pair(row.get("pct_vs_item_wavg_all")),
         "pct_vs_cheapest": pct_pair(row.get("pct_vs_cheapest_supplier")),
-        "n_suppliers": row.get("n_suppliers_for_item"),
+        "n_suppliers": format_whole(row.get("n_suppliers_for_item")),
     }
 
 
@@ -178,7 +179,7 @@ def _above_cheapest(bundle):
                 continue
             record = _rate_record(row)
             record["pct_vs_cheapest"] = pct_pair(gap)
-            record["n_suppliers"] = len(group)
+            record["n_suppliers"] = format_whole(len(group))
             rows.append(record)
     rows.sort(key=lambda row: -(row["pct_vs_cheapest"]["value"] or 0))
     return rows
@@ -191,9 +192,9 @@ def _suppliers(bundle):
             {
                 "city": row.get("city") or "",
                 "supplier": row.get("supplier") or "",
-                "lines": row.get("lines"),
-                "items": row.get("distinct_items"),
-                "bills": row.get("bills"),
+                "lines": format_whole(row.get("lines")),
+                "items": format_whole(row.get("distinct_items")),
+                "bills": format_whole(row.get("bills")),
                 "total": money_pair(row.get("total_value")),
                 "share": pct_pair(row.get("share_of_city_spend_pct")),
                 "first_date": row["first_date"].isoformat() if row.get("first_date") else "",
@@ -266,8 +267,8 @@ def _reconciliation(bundle):
         cities.append(
             {
                 "city": row.get("city") or "",
-                "pd_lines": row.get("pd_lines"),
-                "grn_lines": row.get("grn_lines"),
+                "pd_lines": format_whole(row.get("pd_lines")),
+                "grn_lines": format_whole(row.get("grn_lines")),
                 "pd_total": money_pair(row.get("pd_total")),
                 "grn_total": money_pair(row.get("grn_total")),
                 "diff": money_pair(row.get("diff_pd_total_minus_grn")),

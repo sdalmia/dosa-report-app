@@ -26,7 +26,7 @@
   {% if missing_consumption %}<p class="empty">{{ missing_consumption }}</p>{% endif %}
   {% if missing_posist %}<p class="empty">{{ missing_posist }}</p>{% endif %}
 
-  <section id="cities" class="city-grid">
+  <section id="cities" class="city-grid" data-list>
     {% for city in cities %}
     <article class="tile" id="city-{{ city.slug }}">
       <div class="heading-row">
@@ -115,7 +115,7 @@
         <p>{{ variance_note }}</p>
         {% endcall %}
       </div>
-      <div class="stack">
+      <div class="stack" data-list>
         {% for store in stores %}
         <div class="row-card">
           <b>{{ store.name }}</b>
@@ -150,7 +150,7 @@
       {% elif not alerts.cover %}
       <p class="empty">No item has warehouse cover over 15 days.</p>
       {% else %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for row in alerts.cover %}
         <div class="alert">
           <b>{{ row.item }}</b>
@@ -171,7 +171,7 @@
         {% endcall %}
       </div>
       {% if alerts.available and alerts.beyond_10 %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for row in alerts.beyond_10 %}
         <div class="alert">
           <b>{{ row.item }}</b>
@@ -189,7 +189,7 @@
     <article class="tile">
       <h2>Used with no purchase, or negative stock</h2>
       {% if alerts.available and alerts.stock %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for row in alerts.stock %}
         <div class="alert" data-field="stock-alert" data-item="{{ row.item }}" data-city="{{ row.city }}">
           <b>{{ row.item }}</b>
@@ -218,7 +218,7 @@
       <p class="empty">{{ hershey.missing }}</p>
       {% else %}
       {% if hershey.missing %}<p class="empty">{{ hershey.missing }}</p>{% endif %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for line in hershey.lines %}
         <div class="alert" {% if line.is_error %}data-field="hershey-error"{% endif %}>
           <b>{{ line.reference }} · {{ line.item }}</b>
@@ -238,7 +238,7 @@
       {% if not wastage.available %}
       <p class="empty">{{ wastage.missing }}</p>
       {% else %}
-      <div class="stack">
+      <div class="stack" data-list>
         {% for row in wastage.rows %}
         <div class="row-card">
           <b>{{ row.item }}</b>
@@ -273,11 +273,11 @@
       {% if recipe.list_kind == 'summary' %}
       <details>
         <summary>Costs within each city</summary>
-        <div class="scroll stack">
+        <div class="scroll stack" data-list>
           {% for row in recipe.rows %}
           <div class="row-card">
             <b>{{ row.menu_item }}</b>
-            <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets %} · {{ row.outlets }} outlets{% endif %}</p>
+            <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets and row.outlets != '0' %} · {{ row.outlets }} {{ 'outlet' if row.outlets == '1' else 'outlets' }}{% endif %}</p>
             <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
               · city median <span data-field="city-median" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.typical.attr }}">{{ row.typical.text }}</span>
               · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
@@ -289,14 +289,14 @@
       {% else %}
       <details>
         <summary>All menu items</summary>
-        <div class="scroll stack">
+        <div class="scroll stack" data-list>
           {% for row in recipe.rows %}
           <div class="row-card">
             <b>{{ row.menu_item }}</b>
             <p class="muted">{{ row.deployment }} · {{ row.city }} · {{ row.unit }}{% if row.partial %} · partial{% endif %}</p>
             <p>Avg <span data-field="recipe-avg" data-outlet="{{ row.deployment }}" data-item="{{ row.menu_item }}" data-value="{{ row.avg.attr }}">{{ row.avg.text }}</span>
               · last {{ row.last.text }}{% if row.gap.text %} · last vs avg {{ row.gap.text }}{% endif %}
-              {% if row.unpriced %} · {{ row.unpriced }} unpriced{% endif %}</p>
+              {% if row.unpriced_label %} · {{ row.unpriced_label }}{% endif %}</p>
           </div>
           {% endfor %}
         </div>
@@ -318,11 +318,11 @@
       {% if not recipe.consumption or not recipe.consumption.available %}
       <p class="empty">What Ideal Plaza actually spent on recipes is not on file.</p>
       {% else %}
-      <div class="scroll stack">
+      <div class="scroll stack" data-list>
         {% for row in recipe.consumption_rows %}
         <div class="row-card">
           <b>{{ row.menu_item }}</b>
-          <p>Sold {{ row.qty_text }} · per unit <span data-field="consumed-cost" data-item="{{ row.menu_item }}" data-value="{{ row.cost.attr }}">{{ row.cost.text }}</span> · total {{ row.total.text }}{% if row.missing_price %} · {{ row.missing_price }} unpriced lines{% endif %}</p>
+          <p>Sold {{ row.qty_text }} · per unit <span data-field="consumed-cost" data-item="{{ row.menu_item }}" data-value="{{ row.cost.attr }}">{{ row.cost.text }}</span> · total {{ row.total.text }}{% if row.missing_label %} · {{ row.missing_label }}{% endif %}</p>
         </div>
         {% endfor %}
       </div>

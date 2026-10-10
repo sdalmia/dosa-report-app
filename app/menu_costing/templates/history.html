@@ -17,7 +17,7 @@
       {% if not versions %}
       <p class="empty">No menu versions yet.{% if is_owner() %} Load a menu with the date it took effect.{% endif %}</p>
       {% else %}
-      <div class="mc-list">
+      <div class="mc-list" data-list>
         {% for version in versions %}
         <article class="tile" data-field="menu-version" data-id="{{ version.id }}">
           <strong>{{ version.city }} · {{ version.channel }}</strong>
@@ -51,7 +51,7 @@
       {% if diff %}
       <h3>Added</h3>
       {% if diff.added %}
-      <ul class="mc-diff">
+      <ul class="mc-diff" data-list>
         {% for row in diff.added %}
         <li data-field="diff-added" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
         {% endfor %}
@@ -59,7 +59,7 @@
       {% else %}<p class="empty">Nothing added.</p>{% endif %}
       <h3>Removed</h3>
       {% if diff.removed %}
-      <ul class="mc-diff">
+      <ul class="mc-diff" data-list>
         {% for row in diff.removed %}
         <li data-field="diff-removed" data-item="{{ row.item }}">{{ row.item }}{% if row.price_text %} · {{ row.price_text }}{% endif %}</li>
         {% endfor %}
@@ -67,7 +67,7 @@
       {% else %}<p class="empty">Nothing removed.</p>{% endif %}
       <h3>Repriced</h3>
       {% if diff.repriced %}
-      <ul class="mc-diff">
+      <ul class="mc-diff" data-list>
         {% for row in diff.repriced %}
         <li data-field="diff-repriced" data-item="{{ row.item }}">{{ row.item }} · {{ row.old_text }} to {{ row.new_text }}</li>
         {% endfor %}
@@ -81,7 +81,7 @@
       <div class="section-head"><h2>Recipe and cost</h2></div>
       {% if recipe_note %}<p data-field="recipe-history-note">{{ recipe_note }}</p>{% endif %}
       {% if recipe_months %}
-      <div class="mc-list">
+      <div class="mc-list" data-list>
         {% for month in recipe_months %}
         <article class="tile" data-field="recipe-month" data-month="{{ month.key }}">
           <strong>{{ month.label }}</strong>
@@ -123,21 +123,21 @@
         <p class="empty">Ingredient lines are not on file for one of these months.</p>
         {% else %}
         {% if change.added %}
-        <ul class="mc-diff">
+        <ul class="mc-diff" data-list>
           {% for name in change.added %}
           <li data-field="recipe-added" data-item="{{ name }}">Added {{ name }}</li>
           {% endfor %}
         </ul>
         {% endif %}
         {% if change.removed %}
-        <ul class="mc-diff">
+        <ul class="mc-diff" data-list>
           {% for name in change.removed %}
           <li data-field="recipe-removed" data-item="{{ name }}">Removed {{ name }}</li>
           {% endfor %}
         </ul>
         {% endif %}
         {% if change.qty_changed %}
-        <ul class="mc-diff">
+        <ul class="mc-diff" data-list>
           {% for row in change.qty_changed %}
           <li data-field="recipe-qty" data-item="{{ row.ingredient }}">{{ row.ingredient }} {{ row.old_qty }} {{ row.old_unit }} to {{ row.new_qty }} {{ row.new_unit }}</li>
           {% endfor %}
