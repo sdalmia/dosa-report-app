@@ -227,6 +227,88 @@ class BatchUseTests(unittest.TestCase):
             self.assertEqual(hidden["batch_use_rows"], [])
 
 
+class BatchVerdictTests(unittest.TestCase):
+    def test_city_totals_follow_the_comparison_file(self):
+        from app.menu_costing.batches import batch_page_context
+
+        page = batch_page_context(city="", store="", store_id="", query="", filters={})
+        kinds = [row["kind"] for row in page["batch_alerts"]]
+        self.assertEqual(kinds[0], "physical")
+        self.assertEqual(kinds[1], "recipe")
+        self.assertIn("info", kinds)
+        physical = page["batch_alerts"][0]
+        figures = {pair["left_label"]: pair["left"] for pair in physical["pairs"]}
+        self.assertEqual(figures["Jain sambar sent"], "2,594 L")
+        self.assertEqual(figures["Dosa batter"], "900 kg short")
+        self.assertEqual(figures["Benne batter"], "308 kg short")
+        self.assertIn("Floor check by Sanjoy.", physical["action"])
+        recipe = page["batch_alerts"][1]
+        coconut = recipe["pairs"][0]
+        self.assertEqual(coconut["left"], "+2,660 kg")
+        self.assertEqual(coconut["right"], "₹5.9L")
+        sambar = recipe["pairs"][1]
+        self.assertEqual(sambar["left"], "+5,257 L")
+        self.assertEqual(sambar["right"], "+102 kg")
+        info = next(row for row in page["batch_alerts"] if row["kind"] == "info")
+        self.assertEqual(info["pairs"][0]["left"], "1,02,178")
+        self.assertEqual(info["pairs"][0]["right"], "20,436 L")
+        receive = next(row for row in page["batch_alerts"] if row["kind"] == "receive")
+        self.assertEqual(receive["pairs"][0]["left"], "₹43,547")
+        self.assertEqual(page["batch_kitchens"][0]["name"], "Kolkata kitchen")
+        self.assertEqual(page["batch_kitchens"][1]["name"], "Delhi kitchen")
+        self.assertEqual(page["batch_period"], "24 Sep–8 Oct 2026")
+        hidden = batch_page_context(
+            city="",
+            store="",
+            store_id="",
+            query="",
+            filters={"cc_range": "7"},
+        )
+        self.assertEqual(hidden["batch_alerts"], [])
+        self.assertIn("Data coming", hidden["batch_use_note"])
+        club = batch_page_context(
+            city="Kolkata",
+            store="Calcutta Swimming Club",
+            store_id="",
+            query="",
+            filters={},
+        )
+        coconut_row = next(row for row in club["batch_use_rows"] if row["item"] == "Coconut Shredded")
+        self.assertEqual(coconut_row["verdict"], "Recipe over-deducts")
+        self.assertNotIn("read", coconut_row)
+
+    def test_a_batch_that_contains_coconut_puts_the_dish_under_review(self):
+        from app.menu_costing.review import clear_review_cache, dish_under_review, highest_food_cost
+
+        clear_review_cache()
+        self.assertTrue(dish_under_review("Kolkata", "Masala Dosa"))
+        self.assertFalse(dish_under_review("Kolkata", "ABC Juice"))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "menu_item_cost_lines.csv",
+                "outlet,city,recipe_tab,item_name,is_menu_item,ingredient_name,is_inactive_ingredient\n"
+                "Ideal Plaza,Kolkata,base,Plain Dosa,True,Regular White Chutney Bucket Outlet,False\n"
+                "Ideal Plaza,Kolkata,base,Regular White Chutney Bucket Outlet,False,Coconut Shredded,False\n"
+                "Ideal Plaza,Kolkata,base,Onion Uttapam,True,Onion,False\n"
+                "Ideal Plaza,Kolkata,base,Chana Plate,True,Fried Chana Daal,False\n",
+            )
+            clear_review_cache()
+            self.assertTrue(dish_under_review("Kolkata", "Plain Dosa", root))
+            self.assertFalse(dish_under_review("Kolkata", "Onion Uttapam", root))
+            self.assertFalse(dish_under_review("Kolkata", "Chana Plate", root))
+            clear_review_cache()
+            self.assertFalse(dish_under_review("Kolkata", "Plain Dosa", root, names=()))
+        ranked = highest_food_cost(
+            [
+                {"item": "Masala Dosa", "food_pct": 80, "under_review": True},
+                {"item": "ABC Juice", "food_pct": 40, "under_review": False},
+                {"item": "Filter Coffee", "food_pct": 55, "under_review": False},
+            ]
+        )
+        self.assertEqual([row["item"] for row in ranked], ["Filter Coffee", "ABC Juice"])
+
+
 class BatchGapTests(unittest.TestCase):
     def test_missing_recipes_belong_to_sailesh_and_follow_the_city(self):
         index = get_index()
@@ -284,9 +366,43 @@ class BatchPageTests(unittest.TestCase):
         self.assertIn('data-field="batch-coming" data-city="Kolkata" data-item="Dosa Batter Mix"', html)
         self.assertIn("recipe coming from Sailesh", html)
         self.assertIn('data-field="batch-item" data-city="Kolkata" data-item="Imli Water" data-value=""', html)
-        self.assertIn('data-field="batch-use">Data coming', html)
+        self.assertIn('data-field="booked-note"', html)
+        self.assertIn("Booked to match what is sent out, not physically measured.", html)
+        self.assertIn("Booked output", html)
+        self.assertIn('data-field="batch-alert" data-kind="physical"', html)
+        self.assertIn("2,594 L", html)
+        self.assertIn("794 L", html)
+        self.assertIn("Recipe over-deducts", html)
+        self.assertIn("Food cost for these dishes is likely overstated. Recipe quantities are being corrected by Sailesh.", html)
+        self.assertNotIn("stores likely making extra", html)
+        self.assertNotIn("do not record", html.lower())
+        self.assertNotIn("+83%", html)
+        self.assertNotIn("+238%", html)
         self.assertNotIn('data-field="batch-variance"', html)
         self.assertNotIn('data-field="batch-item" data-city="Delhi NCR"', html)
+        masala = self.client.get("/menu-costing?city=Kolkata&store=Ideal+Plaza&q=Masala+Dosa").get_data(as_text=True)
+        self.assertIn('data-field="recipe-review" data-item="Masala Dosa"', masala)
+        self.assertIn('data-review="yes"', masala)
+        self.assertEqual(_cost_attr(masala), "23.82")
+        juice = self.client.get("/menu-costing?city=Kolkata&q=ABC+Juice").get_data(as_text=True)
+        self.assertIn('data-review="no"', juice)
+        self.assertNotIn('data-field="recipe-review" data-item="ABC Juice"', juice)
+        dish = self.client.get("/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa").get_data(as_text=True)
+        self.assertIn('data-field="recipe-review" data-item="Masala Dosa"', dish)
+        self.assertIn("Recipe quantities are being corrected by Sailesh.", dish)
+        self.assertIn('id="bom"', dish)
+        food = self.client.get("/food-cost").get_data(as_text=True)
+        self.assertIn('data-field="recipe-review" data-item="Masala Dosa" data-city="Kolkata"', food)
+        self.assertIn("Food cost for these dishes is likely overstated.", food)
         delhi = self.client.get("/menu-costing?cc_city=Delhi+NCR&cc_store=&cc_range=").get_data(as_text=True)
         self.assertIn('data-field="batch-item" data-city="Delhi NCR" data-item="Regular White Chutney Bucket Outlet" data-value="79.53"', delhi)
         self.assertNotIn('data-field="batch-item" data-city="Kolkata"', delhi)
+        self.assertIn("900 kg short", delhi)
+        self.assertIn("₹43,547", delhi)
+        self.assertNotIn("2,594 L", delhi)
+
+
+def _cost_attr(html):
+    marker = 'data-field="menu-cost" data-item="Masala Dosa" data-value="'
+    start = html.index(marker) + len(marker)
+    return html[start:html.index('"', start)]

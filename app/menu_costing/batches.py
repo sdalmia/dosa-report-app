@@ -165,6 +165,27 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
     cards.sort(key=lambda row: (1 if row["coming"] else 0, row["group_order"], row["item"].casefold()))
     use = load_batch_use(procurement, posist)
     use = use_for_filters(use, filters)
+    if use.get("mode") == "verdict" and use.get("available"):
+        from app.menu_costing.use_verdict import verdict_view
+
+        view = verdict_view(use, city=city, store=store, store_id=store_id, query=query_key)
+        rows = view["rows"]
+        note = "" if rows or view["alerts"] else "No batch use is on file for this view."
+        return {
+            "batch_cards": cards,
+            "batch_threats": [],
+            "batch_alerts": view["alerts"],
+            "batch_use_rows": rows[:USE_LIMIT],
+            "batch_use_note": note,
+            "batch_use_ready": bool(rows),
+            "batch_mode": "verdict",
+            "batch_kitchens": view["kitchens"],
+            "batch_period": view["period"],
+            "batch_booked_note": view["booked_note"],
+            "batch_store_note": (
+                "Recipes are for the city. The use lines are for this store." if store else ""
+            ),
+        }
     rows = _present_use(use, city=city, store=store, store_id=store_id, costs=board["costs"])
     note = ""
     ready = bool(use.get("available"))
@@ -176,9 +197,14 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
     return {
         "batch_cards": cards,
         "batch_threats": threats,
+        "batch_alerts": [],
         "batch_use_rows": rows[:USE_LIMIT],
         "batch_use_note": note,
         "batch_use_ready": ready and bool(rows),
+        "batch_mode": "",
+        "batch_kitchens": [],
+        "batch_period": "",
+        "batch_booked_note": "",
         "batch_store_note": (
             "Recipes are for the city. The use lines are for this store." if store else ""
         ),
@@ -188,6 +214,11 @@ def batch_page_context(*, city, store, store_id, query, filters, procurement=Non
 def load_batch_use(procurement=None, posist=None):
     procurement = Path(procurement) if procurement else procurement_dir()
     posist = Path(posist) if posist else posist_dir()
+    from app.menu_costing.use_verdict import try_verdict
+
+    verdict = try_verdict(procurement, posist)
+    if verdict is not None:
+        return verdict
     expected_path = posist / "batch_theoretical_use.csv"
     actual_path = procurement / "batch_actual_use.csv"
     if not expected_path.is_file() or not actual_path.is_file():
@@ -203,6 +234,10 @@ def load_batch_use(procurement=None, posist=None):
 def use_for_filters(bundle, filters):
     if not bundle or not bundle.get("available"):
         return bundle or {"available": False, "rows": [], "coming": COMING}
+    if bundle.get("mode") == "verdict":
+        from app.menu_costing.use_verdict import filter_verdict_dates
+
+        return filter_verdict_dates(bundle, filters)
     kind = (filters or {}).get("cc_range") or ""
     if not kind:
         return bundle

@@ -138,7 +138,10 @@ def ideal_plaza_recipe_costs(directory=None, menu_item=None, include_lines=False
 
 
 def recipe_section(bundle):
+    from app.menu_costing.review import BADGE, NOTE, dish_under_review
+
     payload = recipe_costs(bundle["directory"])
+    directory = bundle["directory"]
     summary = payload.get("summary") or []
     menu_summary = [row for row in summary if row.get("is_menu_item")]
     # The older summary file has one median per item. The city-median export
@@ -157,6 +160,7 @@ def recipe_section(bundle):
                 "outlet_max": row["outlet_max"],
                 "spread": pct_pair(row["spread_pct"]),
                 "outlets": format_whole(row["outlets_with_recipe"]),
+                "under_review": dish_under_review(row.get("city") or "", row["item_name"], directory),
             }
             for row in menu_summary
         ]
@@ -180,6 +184,7 @@ def recipe_section(bundle):
                     "unpriced_label": unpriced_phrase(item["unpriced_ingredient_count"]),
                     "partial": item.get("partial") or False,
                     "margin_text": "",
+                    "under_review": dish_under_review(item["city"], item["menu_item"], directory),
                 }
             )
         rows.sort(key=lambda row: (row["city"], row["menu_item"].casefold()))
@@ -195,10 +200,13 @@ def recipe_section(bundle):
                 "total": money_pair(item["ingredient_cost_total"]),
                 "missing_price": item["lines_missing_price"] or 0,
                 "missing_label": unpriced_phrase(item["lines_missing_price"]),
+                "under_review": dish_under_review("Kolkata", item["menu_item"], directory),
             }
         )
     cons_rows.sort(key=lambda row: -(row["total"]["value"] or 0))
     payload["consumption_rows"] = cons_rows
+    payload["review_badge"] = BADGE
+    payload["review_note"] = NOTE if any(row.get("under_review") for row in payload["rows"]) else ""
     return payload
 
 

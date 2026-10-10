@@ -13,7 +13,24 @@
 
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
-    {% if batch_threats %}
+    {% if batch_alerts %}
+    <div class="flag-row">
+      {% for alert in batch_alerts %}
+      <article class="flag-card {% if alert.severity == 'red' %}sev-red{% elif alert.severity == 'amber' %}sev-amber{% endif %}" data-field="batch-alert" data-kind="{{ alert.kind }}">
+        <span class="flag-kicker">{{ alert.kicker }}</span>
+        <strong>{{ alert.title }}</strong>
+        <p>{{ alert.detail }}</p>
+        {% for pair in alert.pairs %}
+        <div class="mc-pair">
+          <p>{{ pair.left_label }} {% if pair.left %}<span class="mc-num" data-field="batch-alert-figure" data-kind="{{ alert.kind }}" data-label="{{ pair.left_label }}" data-value="{{ pair.left_attr }}">{{ pair.left }}</span>{% endif %}</p>
+          <p>{% if pair.right_label %}{{ pair.right_label }} {% endif %}{% if pair.right %}<span class="mc-num" data-field="batch-alert-figure" data-kind="{{ alert.kind }}" data-label="{{ pair.right_label }}" data-value="{{ pair.right_attr }}">{{ pair.right }}</span>{% endif %}</p>
+        </div>
+        {% endfor %}
+        {% if alert.action %}<p>{{ alert.action }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% elif batch_threats %}
     <h3>Batch wastage and leakage</h3>
     <p class="muted">A gap of more than 5% between what the dishes should have used and what was made or issued.</p>
     <div class="flag-row">
@@ -80,6 +97,7 @@
       <article class="flag-card sev-red">
         <strong>{{ row.item }}</strong>
         <span class="mc-num" data-field="priced-below" data-item="{{ row.item }}">Price {{ row.price }} · cost {{ row.cost }}</span>
+        {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.item }}">{{ review_badge }}</p>{% endif %}
       </article>
       {% endfor %}
     </div>
@@ -134,9 +152,45 @@
     <p class="empty">No batch items for this view.</p>
     {% endif %}
 
-    <h3>Should have used and what was used</h3>
+    {% if batch_kitchens %}
+    <h3>Kitchen booked output</h3>
+    {% if batch_period %}<p class="muted">{{ batch_period }}</p>{% endif %}
+    <div class="mc-pair">
+      {% for kitchen in batch_kitchens %}
+      <article class="tile" data-field="kitchen-output" data-city="{{ kitchen.city }}">
+        <strong>{{ kitchen.name }}</strong>
+        <p>Booked output</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% if batch_booked_note %}<p class="muted" data-field="booked-note">{{ batch_booked_note }}</p>{% endif %}
+    {% endif %}
+
+    <h3>Expected use and what was booked</h3>
+    {% if batch_mode == 'verdict' %}
+    <p class="muted">Expected use is dish sales times the grams in the recipe. Deducted is what the store booked. Sent is what the kitchen dispatched. The verdict says whether the recipe over-deducts, the count is a physical loss, or the two are consistent.</p>
+    {% else %}
     <p class="muted">Expected use is dish sales times the quantity in each dish. Actual use is what was made or issued. The gap is wastage or leakage. More than 5% is a threat.</p>
-    {% if batch_use_ready %}
+    {% endif %}
+    {% if batch_mode == 'verdict' and batch_use_ready %}
+    <div class="mc-list">
+      {% for row in batch_use_rows %}
+      <article class="tile {% if row.threat %}sev-red{% endif %}" data-field="batch-use-row" data-store="{{ row.store }}" data-item="{{ row.item }}" data-verdict="{{ row.verdict }}" data-threat="{{ 'yes' if row.threat else 'no' }}">
+        <span class="flag-kicker">{{ row.store }}{% if row.period %} · {{ row.period }}{% endif %}</span>
+        <strong>{{ row.item }}</strong>
+        <p data-field="batch-verdict" data-item="{{ row.item }}" data-store="{{ row.store }}">{{ row.verdict }}</p>
+        <div class="mc-pair">
+          <p>Expected use {% if row.expected_missing %}Data coming{% else %}<span class="mc-num">{{ row.expected }}</span>{% endif %}</p>
+          <p>Deducted {% if row.used_missing %}Data coming{% else %}<span class="mc-num">{{ row.used }}</span>{% endif %}</p>
+        </div>
+        <div class="mc-pair">
+          <p>Sent {% if row.issued_missing %}Data coming{% else %}<span class="mc-num">{{ row.sent }}</span>{% endif %}</p>
+          <p>Stock-count gap {% if row.gain_missing %}Data coming{% else %}<span class="mc-num">{{ row.gain }}</span>{% endif %}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% elif batch_use_ready %}
     <div class="mc-list">
       {% for row in batch_use_rows %}
       <article class="tile {% if row.threat %}sev-red{% endif %}" data-field="batch-variance" data-store="{{ row.store }}" data-item="{{ row.item }}" data-threat="{{ 'yes' if row.threat else 'no' }}" data-value="{{ row.pct_attr }}">
@@ -220,6 +274,7 @@
 
   <section class="cc-section" id="current">
     <div class="section-head"><h2>{{ channel }} · {{ city }}{% if store %} · {{ store }}{% endif %}</h2></div>
+    {% if review_note %}<p data-field="recipe-review-note">{{ review_note }}</p>{% endif %}
     {% if price_gap %}<p class="empty" data-field="price-gap">{{ price_gap }}</p>{% endif %}
     {% if shown_count < row_count %}
     <p class="muted">Showing {{ shown_count }} of {{ row_count }}. Search to narrow.</p>
@@ -227,8 +282,9 @@
     {% if rows %}
     <div class="mc-list" data-list>
       {% for row in rows %}
-      <a class="tile mc-item" href="{{ url_for('menu_costing.item_page', city=city, store=store, item=row.item) }}">
+      <a class="tile mc-item" href="{{ url_for('menu_costing.item_page', city=city, store=store, item=row.item) }}" data-review="{{ 'yes' if row.under_review else 'no' }}">
         <strong>{{ row.item }}</strong>
+        {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.item }}">{{ review_badge }}</p>{% endif %}
         {% if row.category %}<p class="muted">{{ row.category }}</p>{% endif %}
         <div class="mc-pair">
           <p>{% if row.basis == 'median' %}City median{% else %}Cost{% endif %}

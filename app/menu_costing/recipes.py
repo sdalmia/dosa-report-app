@@ -52,8 +52,10 @@ def clear_caches():
     _LINE_CACHE.clear()
     _LINE_INDEX.clear()
     from app.menu_costing.batches import clear_batch_cache
+    from app.menu_costing.review import clear_review_cache
 
     clear_batch_cache()
+    clear_review_cache()
 
 
 def _read(directory):

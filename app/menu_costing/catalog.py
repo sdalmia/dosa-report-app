@@ -7,6 +7,7 @@ A missing price, cost, or sale stays blank.
 from collections import defaultdict
 
 from app.menu_costing.recipes import is_ro_water, recipe_lines
+from app.menu_costing.review import BADGE, NOTE, dish_under_review, highest_food_cost
 from app.menu_costing.sales import city_sale, lookup_sale
 from app.procurement.numbers import format_pct, format_qty, num_attr, percent
 from app.store_health.present import format_owner_rupee, group_indian
@@ -187,6 +188,9 @@ def build_page(recipes, sales, versions, *, city, channel, store, query, today):
         "sales_period": sales.get("period_label") or "",
         "sales_coming": sales.get("coming") or "Data coming.",
         "sellers": _sellers(recipes, sales, city, store, version),
+        "review_badge": BADGE,
+        "review_note": NOTE if any(row.get("under_review") for row in rows) else "",
+        "food_cost_threats": [_present_row(row) for row in highest_food_cost(rows)],
     }
 
 
@@ -208,6 +212,7 @@ def build_item(recipes, *, city, store, item):
     summary = recipes["by_city"].get((city, key))
     lines = recipe_lines(recipes, store, display) if store and display else []
     priced = [line["line_cost"] for line in lines if line["line_cost"] is not None]
+    under_review = dish_under_review(city, display, recipes.get("directory"))
     return {
         "city": city,
         "store": store,
@@ -218,6 +223,9 @@ def build_item(recipes, *, city, store, item):
         "stores": stores,
         "chosen": recipes["by_outlet"].get((city, store, key)) if store else None,
         "lines": lines,
+        "under_review": under_review,
+        "review_badge": BADGE if under_review else "",
+        "review_note": NOTE if under_review else "",
         "lines_total": sum(priced) if priced else None,
         "missing_lines": "Ingredient lines are not on file for this store." if store and not lines else "",
         "pick_store": "Pick a store to see this item's ingredients." if not store else "",
@@ -350,6 +358,7 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         "receipt_title": receipt_title,
         "baseline_text": baseline_text,
         "basis": "store" if store else "median",
+        "under_review": dish_under_review(city, item, recipes.get("directory")),
         "food_pct": None if incomplete else food_cost_pct(cost, price),
         "margin": None if incomplete else margin_amount(cost, price),
         "orders": orders,
@@ -598,6 +607,7 @@ def _present_row(row):
         ),
         "basis": row.get("basis") or "store",
         "city_vs": row["vs_pct"],
+        "under_review": bool(row.get("under_review")),
     }
 
 
@@ -643,6 +653,7 @@ def present_below(row):
         "price": owner_rupee(row["price"]),
         "cost": owner_rupee(row["cost"]),
         "gap": owner_rupee(row["price"] - row["cost"]),
+        "under_review": bool(row.get("under_review")),
     }
 
 
