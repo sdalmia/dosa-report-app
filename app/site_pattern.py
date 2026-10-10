@@ -362,7 +362,8 @@ def mall_parts(signals, delivery):
         _part("delivery", "Delivery potential", 0.25, None if delivery["score"] is None else delivery["score"] / 10, ""),
         _part("mall_reviews", "Mall's own reviews", 0.20, scale_log(signals.get("mall_reviews"), *signals.get("mall_review_band", (None, None))), signals.get("mall_reviews_detail") or ""),
         _part("anchors", "In-mall anchors", 0.15, signals.get("mall_anchors"), signals.get("mall_anchor_detail") or ""),
-        _part("transport", "Transport", 0.10, signals.get("transport"), signals.get("transport_detail") or ""),
+        _part("food_court", "Food court", 0.05, signals.get("food_court"), signals.get("food_court_detail") or ""),
+        _part("transport", "Transport", 0.05, signals.get("transport"), signals.get("transport_detail") or ""),
     ]
 
 
@@ -499,6 +500,14 @@ def _signals_from_row(row, stores, bands):
         "nearest_store_m": None if distance is None else round(distance),
     }
     signals.update(_optional_inputs(row.get("lat"), row.get("lon")))
+    from app.location_model import mall_about, mall_for_store, mall_signals
+
+    matched = mall_for_store(row["name"])
+    if matched:
+        signals.update(mall_signals(matched))
+        about = list(signals.get("about") or [])
+        about.append(mall_about())
+        signals["about"] = about
     return signals
 
 
@@ -541,7 +550,7 @@ def load_board(directory=None):
         stamps.append(path.stat().st_mtime if path.is_file() else None)
     from app.location_model import inputs_dir
 
-    for name in ("competitors.csv", "delivery_inputs.csv", "metro_ridership.csv"):
+    for name in ("competitors.csv", "delivery_inputs.csv", "metro_ridership.csv", "mall_inputs.csv"):
         path = inputs_dir() / name
         stamps.append(path.stat().st_mtime if path.is_file() else None)
     cached = _CACHE.get(key)
@@ -641,6 +650,64 @@ def match_ridership(station_name, rows):
         if station and station in text and row.get("daily") is not None:
             return row
     return None
+
+
+def _mall_markers(stores, bands):
+    """Candidate malls get a prior-weight score. Reference malls stay on the map only."""
+    from app.location_model import delivery_for_site, mall_about, mall_rows, mall_signals
+
+    scored = []
+    references = []
+    for row in mall_rows():
+        if row["role"] == "store":
+            continue
+        marker = {
+            "name": row["mall_name"] or row["site_id"],
+            "lat": row["lat"],
+            "lon": row["lng"],
+            "city": row["city"],
+            "reference": row["role"] == "reference",
+            "score": None,
+        }
+        if row["role"] == "reference":
+            references.append(marker)
+            continue
+        signals = {
+            "transport": None,
+            "aggregator_enabled": None,
+            "mall_reviews": None,
+            "mall_anchors": None,
+            "food_court": None,
+            "delivering_restaurants": None,
+            "residential": None,
+            "nearest_delivery_sales": None,
+            "restaurants_scaled": True,
+        }
+        signals.update(_optional_inputs(row["lat"], row["lng"]))
+        delivery = delivery_for_site(row.get("cluster_site_id"))
+        if delivery:
+            signals["delivering_restaurants"] = delivery["restaurants"]
+            signals["residential"] = delivery["residential"]
+            signals["restaurant_detail"] = delivery["restaurant_detail"]
+            signals["residential_detail"] = delivery["residential_detail"]
+            signals["restaurants_scaled"] = True
+        nearest, _distance = _nearest_store(
+            row["lat"], row["lng"], stores, max_metres=NEAR_STORE_METRES,
+        )
+        if nearest is not None:
+            signals["nearest_delivery_sales"] = nearest.get("delivery_gross_per_day")
+        signals.update(mall_signals(row))
+        about = list(signals.get("about") or [])
+        note = mall_about()
+        if note not in about:
+            about.append(note)
+        signals["about"] = about
+        bucket = "Kolkata" if "kolkata" in (row.get("city") or "").casefold() else "NCR"
+        marker["score"] = score_signals("mall", signals, bucket, bands)["pattern"]["score"]
+        scored.append(marker)
+    scored.sort(key=lambda item: (-(item["score"] if item["score"] is not None else -1), item["name"].casefold()))
+    references.sort(key=lambda item: item["name"].casefold())
+    return scored + references
 
 
 def _build_board(directory):
@@ -802,6 +869,7 @@ def _build_board(directory):
         "brands": brands,
         "bands": bands,
         "ridership": ridership_rows,
+        "malls": _mall_markers(stores, bands),
     }
 
 
@@ -877,6 +945,17 @@ def score_live_site(lat, lng, fmt, location_name, classic, places):
     }
     signals.update(_optional_inputs(lat, lng))
     chosen = fmt if fmt in FORMULA_FOR else "high_street"
+    if chosen == "mall":
+        from app.location_model import mall_about, mall_for_store, mall_signals, nearest_mall
+
+        row = mall_for_store(matched["name"]) if matched else None
+        if row is None:
+            row = nearest_mall(lat, lng)
+        if row:
+            signals.update(mall_signals(row))
+            about = list(signals.get("about") or [])
+            about.append(mall_about())
+            signals["about"] = about
     scored = score_signals(chosen, signals, bucket, board["bands"])
     other, other_m = _nearest_store(lat, lng, stores)
     pattern_score = scored["pattern"]["score"]

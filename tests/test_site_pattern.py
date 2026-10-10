@@ -133,6 +133,17 @@ class NcrAndMetroTests(unittest.TestCase):
         self.assertEqual(len(self.board["outlets"]), 1228)
         self.assertEqual(len(self.board["brands"]), 11)
         self.assertEqual(sum(1 for area in self.board["candidates"] if area["airport"]), 3)
+        self.assertIn("Reference mall. Not scored.", html)
+        for name in (
+            "DLF Mall of India",
+            "Ambience Mall Gurugram",
+            "Acropolis Mall",
+            "City Centre Salt Lake",
+            "City Centre New Town",
+        ):
+            self.assertIn(name, html)
+        self.assertIn("South City Mall", html)
+        self.assertNotIn("mall_inputs.csv", html)
 
 
 if __name__ == "__main__":
