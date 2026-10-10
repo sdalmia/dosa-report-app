@@ -1,8 +1,9 @@
-"""Procurement's first batch pass.
+"""Issued, used, and transfer price for a batch window that is on file.
 
-The files on hand are 1–8 Oct. A later file for 24 Sep–8 Oct becomes the
-default period as soon as those rows are present. A blank made quantity stays
-blank and is shown as Not recorded, never as zero.
+24 Sep–8 Oct is the page default, and it comes from batch_actual_use.csv.
+These detail files are shown only when they contain that window, or when the
+date filter is exactly their own window. A blank made quantity stays blank.
+It is never zero and never labelled when a booked quantity exists.
 """
 
 import csv
@@ -20,12 +21,7 @@ from app.procurement.numbers import (
 )
 
 PREFERRED = (date(2026, 9, 24), date(2026, 10, 8))
-NOT_RECORDED = "Not recorded"
 COMING = "Use for this date range is not on file. Data coming."
-UNRECORDED = (
-    "Kitchens don't record what they make, so yield and wastage can't be measured. "
-    "Fix: daily production entry in Restroworks (Sailesh, Kolkata; Shanker, Delhi)."
-)
 RATE_NOTE = (
     "Transfer prices differ by city. These are transfer prices, not recipe cost. "
     "Each city is compared with itself."
@@ -174,13 +170,20 @@ def _choose_period(detail, coverage, filters):
         if not matched:
             return "coming"
         return _prefer(matched)
-    return _prefer([(start, end, raw) for (start, end), raw in periods.items()])
+    # No date filter. Prefer 24 Sep–8 Oct when these files have it. Do not
+    # fall back to a shorter window: that window is not the page default.
+    return _prefer(
+        [(start, end, raw) for (start, end), raw in periods.items()],
+        allow_shorter=False,
+    )
 
 
-def _prefer(periods):
+def _prefer(periods, allow_shorter=True):
     for start, end, raw in periods:
         if (start, end) == PREFERRED:
             return start, end, raw
+    if not allow_shorter:
+        return None
     return max(periods, key=lambda row: row[1])
 
 
@@ -273,7 +276,7 @@ def _tiles(detail, coverage, city, narrowed):
             "used_attr": num_attr(used),
             "rate": _rate_text(rate, unit, owner_rupee),
             "rate_attr": num_attr(rate),
-            "made": _made_text(made, flag, unit, owner_count),
+            "made": _made_text(made, unit, owner_count),
             "made_attr": num_attr(made),
             "issued_flag": _yes_no(flag, "issued", issued),
             "used_flag": _yes_no(flag, "used", used),
@@ -298,12 +301,9 @@ def _rate(bucket, flag, narrowed):
     return None
 
 
-def _made_text(made, flag, unit, owner_count):
-    recorded = flag and flag.get("made") == "yes"
-    if made is None and not recorded:
-        return NOT_RECORDED
+def _made_text(made, unit, owner_count):
     if made is None:
-        return NOT_RECORDED
+        return ""
     return _qty(made, unit, owner_count)
 
 
@@ -353,15 +353,6 @@ def _alerts(detail, coverage, city, label, query):
     from app.menu_costing.catalog import owner_count, owner_rupee
 
     alerts = []
-    if _made_missing(detail, coverage):
-        alerts.append({
-            "kind": "unrecorded",
-            "severity": "amber",
-            "kicker": label,
-            "title": "Production is not recorded",
-            "detail": UNRECORDED,
-            "pairs": [],
-        })
     names = _name_alert(detail, city, owner_count)
     if names:
         alerts.append(names)
@@ -379,14 +370,6 @@ def _alerts(detail, coverage, city, label, query):
             " ".join(pair.get("left", "") + pair.get("right", "") for pair in row.get("pairs") or []),
         ]).casefold()]
     return alerts
-
-
-def _made_missing(detail, coverage):
-    if any(row["made"] is not None for row in detail):
-        return False
-    if any(row.get("made") == "yes" for row in coverage):
-        return False
-    return bool(detail or coverage)
 
 
 def _name_alert(detail, city, owner_count):

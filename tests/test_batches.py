@@ -254,6 +254,11 @@ class BatchVerdictTests(unittest.TestCase):
         self.assertEqual(info["pairs"][0]["right"], "20,436 L")
         receive = next(row for row in page["batch_alerts"] if row["kind"] == "receive")
         self.assertEqual(receive["pairs"][0]["left"], "₹43,547")
+        kolkata = batch_page_context(city="Kolkata", store="", store_id="", query="", filters={})
+        kolkata_physical = {pair["left_label"]: pair["left"] for pair in kolkata["batch_alerts"][0]["pairs"]}
+        self.assertEqual(kolkata_physical["Jain sambar sent"], "2,594 L")
+        self.assertNotIn("Dosa batter", kolkata_physical)
+        self.assertEqual(kolkata["batch_alerts"][1]["pairs"][0]["left"], "+2,660 kg")
         self.assertEqual(page["batch_kitchens"][0]["name"], "Kolkata kitchen")
         self.assertEqual(page["batch_kitchens"][1]["name"], "Delhi kitchen")
         self.assertEqual(page["batch_period"], "24 Sep–8 Oct 2026")
@@ -343,15 +348,29 @@ class BatchPassTests(unittest.TestCase):
         self.assertEqual(view["tiles"][0]["made"], "12 kg")
         self.assertNotIn("unrecorded", [row["kind"] for row in view["alerts"]])
 
-    def test_a_blank_made_quantity_is_not_recorded(self):
+    def test_the_shorter_window_is_not_the_default(self):
         from app.menu_costing.batch_pass import pass_view
 
         view = pass_view(ROOT / "data" / "procurement", city="Kolkata")
+        self.assertEqual(view["period"], "")
+        self.assertEqual(view["tiles"], [])
+        self.assertEqual(view["alerts"], [])
+
+    def test_a_blank_made_quantity_stays_blank_on_its_own_window(self):
+        from app.menu_costing.batch_pass import pass_view
+
+        view = pass_view(
+            ROOT / "data" / "procurement",
+            city="Kolkata",
+            filters={"cc_range": "custom", "cc_start": "2026-10-01", "cc_end": "2026-10-08"},
+        )
         self.assertEqual(view["period"], "1–8 Oct 2026")
-        self.assertTrue(all(row["made"] == "Not recorded" for row in view["tiles"]))
+        self.assertTrue(view["tiles"])
+        self.assertTrue(all(row["made"] == "" for row in view["tiles"]))
+        self.assertNotIn("Not recorded", [row["made"] for row in view["tiles"]])
         self.assertNotIn("0", [row["made"] for row in view["tiles"]])
         kinds = [row["kind"] for row in view["alerts"]]
-        self.assertEqual(kinds[0], "unrecorded")
+        self.assertNotIn("unrecorded", kinds)
         self.assertNotIn("tomato", kinds)
 
 
@@ -415,13 +434,23 @@ class BatchPageTests(unittest.TestCase):
         self.assertIn('data-field="booked-note"', html)
         self.assertIn("Booked to match what is sent out, not physically measured.", html)
         self.assertIn("Booked output", html)
+        self.assertIn("24 Sep–8 Oct 2026", html)
+        self.assertIn('data-field="kitchen-output" data-city="Kolkata"', html)
+        self.assertIn('data-field="kitchen-output" data-city="Delhi NCR"', html)
         self.assertIn('data-field="batch-alert" data-kind="physical"', html)
         self.assertIn("2,594 L", html)
         self.assertIn("794 L", html)
         self.assertIn("Recipe over-deducts", html)
+        self.assertIn("+2,660 kg", html)
+        self.assertIn("₹5.9L", html)
+        self.assertIn("+5,257 L", html)
+        self.assertIn("+102 kg", html)
+        self.assertIn("20,436 L", html)
         self.assertIn("Food cost for these dishes is likely overstated. Recipe quantities are being corrected by Sailesh.", html)
         self.assertNotIn("stores likely making extra", html)
         self.assertNotIn("do not record", html.lower())
+        self.assertNotIn("Not recorded", html)
+        self.assertNotIn("Production is not recorded", html)
         self.assertNotIn("+83%", html)
         self.assertNotIn("+238%", html)
         self.assertNotIn('data-field="batch-variance"', html)
@@ -444,26 +473,24 @@ class BatchPageTests(unittest.TestCase):
         self.assertIn('data-field="batch-item" data-city="Delhi NCR" data-item="Regular White Chutney Bucket Outlet" data-value="79.53"', delhi)
         self.assertNotIn('data-field="batch-item" data-city="Kolkata"', delhi)
         self.assertIn("900 kg short", delhi)
+        self.assertIn("308 kg short", delhi)
         self.assertIn("₹43,547", delhi)
+        self.assertIn("+2,660 kg", delhi)
         self.assertNotIn("2,594 L", delhi)
-        self.assertIn("Not recorded", html)
-        self.assertIn('data-field="batch-pass-alert" data-kind="unrecorded"', html)
-        self.assertIn("yield and wastage", html)
-        self.assertIn("Sailesh, Kolkata", html)
-        self.assertIn("Shanker, Delhi", html)
-        self.assertIn('data-field="batch-pass-issued" data-item="Sambar Bucket" data-value="3627"', html)
-        self.assertIn("3,627 L", html)
-        self.assertIn('data-field="batch-pass-rate" data-item="Coconut Shredded"', html)
-        self.assertIn("₹196/kg", html)
-        self.assertIn("not recipe cost", html)
+        self.assertNotIn("Not recorded", delhi)
         self.assertIn("data-list", html)
         self.assertIn("list-search.js", html)
         self.assertNotIn('data-kind="tomato"', html)
         self.assertNotIn("entp_consumption", html)
-        self.assertIn('data-field="batch-pass-alert" data-kind="tomato"', delhi)
-        self.assertIn("986 kg", delhi)
-        self.assertIn("₹1.2L", delhi)
-        self.assertIn("4,204 L", delhi)
+        self.assertNotIn('data-field="batch-pass"', html)
+        window = self.client.get(
+            "/menu-costing?city=Delhi+NCR&cc_city=Delhi+NCR&cc_store=&cc_range=custom"
+            "&cc_start=2026-10-01&cc_end=2026-10-08"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="batch-pass-alert" data-kind="tomato"', window)
+        self.assertIn("986 kg", window)
+        self.assertIn("₹1.2L", window)
+        self.assertNotIn("Not recorded", window)
         hidden = self.client.get("/menu-costing?city=Kolkata&cc_city=Kolkata&cc_store=&cc_range=7").get_data(as_text=True)
         self.assertIn('data-field="batch-pass-note"', hidden)
         self.assertNotIn('data-field="batch-pass" data-city=', hidden)

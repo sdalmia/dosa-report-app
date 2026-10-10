@@ -85,7 +85,7 @@ def verdict_view(bundle, *, city, store, store_id, query):
         if query and query not in (row.get("item") or "").casefold():
             continue
         rows.append(row)
-    alerts = _alerts(rows, city, owner_count, owner_rupee, query)
+    alerts = _alerts(rows, bundle.get("rows") or [], city, owner_count, owner_rupee, query)
     shown = [_present_row(row, owner_count, owner_rupee) for row in rows]
     shown.sort(key=_sort_key)
     kitchens = list(bundle.get("kitchens") or [])
@@ -98,12 +98,14 @@ def verdict_view(bundle, *, city, store, store_id, query):
     }
 
 
-def _alerts(rows, city, owner_count, owner_rupee, query):
+def _alerts(rows, all_rows, city, owner_count, owner_rupee, query):
     alerts = []
     physical = _physical_alert(rows, owner_count)
     if physical:
         alerts.append(physical)
-    recipe = _recipe_alert(rows, owner_count, owner_rupee)
+    # The surplus is booked back at stock count in both cities. The total is
+    # the accounting effect Sailesh is correcting, so a city filter does not split it.
+    recipe = _recipe_alert(all_rows, owner_count, owner_rupee)
     if recipe:
         alerts.append(recipe)
     info = _sambar_info(owner_count)
@@ -537,10 +539,22 @@ def _sales_path():
     return matches[-1] if matches else None
 
 
+_SAMBAR_LITRES = {}
+
+
 def _sambar_litres():
+    """Litres of sambar in one Regular Sambar portion.
+
+    The cost-line file is large. The result is cached by file identity so a
+    page view does not read it again.
+    """
     path = Path(__file__).resolve().parents[2] / "data" / "procurement" / "menu_item_cost_lines.csv"
     if not path.is_file():
         return None
+    st = path.stat()
+    token = (str(path.resolve()), st.st_mtime_ns, st.st_size)
+    if token in _SAMBAR_LITRES:
+        return _SAMBAR_LITRES[token]
     qtys = set()
     with path.open(newline="", encoding="utf-8-sig") as handle:
         for raw in csv.DictReader(handle):
@@ -557,9 +571,9 @@ def _sambar_litres():
             if qty is None or unit not in {"ltr", "l", "lt", "litre", "liter"}:
                 continue
             qtys.add(qty)
-    if len(qtys) != 1:
-        return None
-    return qtys.pop()
+    result = qtys.pop() if len(qtys) == 1 else None
+    _SAMBAR_LITRES[token] = result
+    return result
 
 
 def _unit_label(unit):

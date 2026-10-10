@@ -306,7 +306,12 @@ def convert_qty(qty, from_unit, to_unit):
 def _build(directory):
     catalog = dict(_CATALOG_BY_KEY)
     lines_path = _lines_path(directory)
-    usage, recipes, rates = _scan_lines(lines_path, set(catalog))
+    recipe_file = directory / "batch_recipes.csv"
+    usage, recipes, rates = _scan_lines(
+        lines_path,
+        set(catalog),
+        keep_rates=recipe_file.is_file(),
+    )
     summary = _summary_costs(directory)
     costs = {}
     cards = []
@@ -742,7 +747,12 @@ def _dish_fills(directory, costs):
     return {key: value for key, value in fills.items() if value["hit"]}
 
 
-def _scan_lines(path, catalog_keys):
+def _scan_lines(path, catalog_keys, keep_rates=False):
+    """Stream cost lines once. Only catalog recipes are kept.
+
+    Rates for every ingredient are kept only when a batch_recipes.csv file
+    needs them. The 75k-row file is not loaded into a list.
+    """
     usage = set()
     grouped = defaultdict(list)
     rates = defaultdict(list)
@@ -754,8 +764,10 @@ def _scan_lines(path, catalog_keys):
                 continue
             city = _canon_city(raw.get("city"))
             ingredient = (raw.get("ingredient_name") or "").strip()
-            if city and ingredient:
-                usage.add((city, ingredient.casefold()))
+            key = ingredient.casefold()
+            if city and key in catalog_keys:
+                usage.add((city, key))
+            if keep_rates and city and ingredient:
                 _keep_rate(rates, city, raw)
             item = (raw.get("item_name") or "").strip()
             if not city or not item or item.casefold() not in catalog_keys:

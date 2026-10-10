@@ -34,7 +34,9 @@ def review_dishes(directory=None, names=None):
     """Set of (city, item key) whose live base recipe is under review."""
     directory = Path(directory) if directory else _procurement_dir()
     chosen = tuple(names) if names is not None else UNDER_REVIEW
-    key = (str(directory), chosen)
+    lines_path = _lines_path(directory)
+    batch_path = directory / "batch_recipes.csv"
+    key = (str(directory), chosen, _file_token(lines_path), _file_token(batch_path))
     cached = _CACHE.get(key)
     if cached is not None:
         return cached
@@ -67,44 +69,76 @@ def _procurement_dir():
     return Path(__file__).resolve().parents[2] / "data" / "procurement"
 
 
+def _lines_path(directory):
+    path = directory / "menu_item_cost_lines.csv"
+    if path.is_file():
+        return path
+    estimated = directory / "menu_item_cost_lines_estimated.csv"
+    return estimated if estimated.is_file() else path
+
+
+def _file_token(path):
+    if path is None or not Path(path).is_file():
+        return None
+    st = Path(path).stat()
+    return (str(Path(path).resolve()), st.st_mtime_ns, st.st_size)
+
+
 def _scan(directory, names):
     hot_names = {_key(name) for name in names if _key(name)}
     if not hot_names:
         return set()
-    lines_path = directory / "menu_item_cost_lines.csv"
-    if not lines_path.is_file():
-        lines_path = directory / "menu_item_cost_lines_estimated.csv"
+    lines_path = _lines_path(directory)
     batches = {}
-    dishes = {}
     if lines_path.is_file():
-        _read_lines(lines_path, batches, dishes)
+        _read_batches(lines_path, batches)
     _read_batch_csv(directory / "batch_recipes.csv", batches)
-    hot_by_city = {}
-    for city in set(batches) | set(dishes):
-        hot_by_city[city] = _expand(hot_names, batches.get(city) or {})
+    hot_by_city = {city: _expand(hot_names, items) for city, items in batches.items()}
     found = set()
-    for city, items in dishes.items():
-        hot = hot_by_city.get(city) or hot_names
-        for item_key, ingredients in items.items():
-            if any(_matches(name, hot) for name in ingredients):
-                found.add((city, item_key))
+    if lines_path.is_file():
+        _read_dishes(lines_path, hot_names, hot_by_city, found)
     return found
 
 
-def _read_lines(path, batches, dishes):
+def _read_batches(path, batches):
+    """Non-menu recipes only. Menu dishes are matched on a second pass."""
     with path.open(newline="", encoding="utf-8-sig") as handle:
         for raw in csv.DictReader(handle):
-            if (raw.get("recipe_tab") or "base").strip().casefold() not in {"", "base"}:
+            if _truthy(raw.get("is_menu_item")):
                 continue
-            if _truthy(raw.get("is_inactive_ingredient")):
+            city, item, ingredient = _line_identity(raw)
+            if not city:
                 continue
-            city = (raw.get("city") or "").strip()
-            item = (raw.get("item_name") or raw.get("recipe_name") or "").strip()
-            ingredient = (raw.get("ingredient_name") or "").strip()
-            if not city or not item or not ingredient:
+            batches.setdefault(city, {}).setdefault(item, set()).add(ingredient)
+
+
+def _read_dishes(path, hot_names, hot_by_city, found):
+    """Record a dish key when one ingredient is under review. Do not keep the recipe."""
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            if not _truthy(raw.get("is_menu_item")):
                 continue
-            target = dishes if _truthy(raw.get("is_menu_item")) else batches
-            target.setdefault(city, {}).setdefault(item.casefold(), set()).add(ingredient)
+            city, item, ingredient = _line_identity(raw)
+            if not city:
+                continue
+            if (city, item) in found:
+                continue
+            hot = hot_by_city.get(city) or hot_names
+            if _matches(ingredient, hot):
+                found.add((city, item))
+
+
+def _line_identity(raw):
+    if (raw.get("recipe_tab") or "base").strip().casefold() not in {"", "base"}:
+        return "", "", ""
+    if _truthy(raw.get("is_inactive_ingredient")):
+        return "", "", ""
+    city = (raw.get("city") or "").strip()
+    item = (raw.get("item_name") or raw.get("recipe_name") or "").strip()
+    ingredient = (raw.get("ingredient_name") or "").strip()
+    if not city or not item or not ingredient:
+        return "", "", ""
+    return city, item.casefold(), ingredient
 
 
 def _read_batch_csv(path, batches):
