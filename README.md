@@ -19,7 +19,7 @@
 - **Backend**: Python, Flask
 - **Frontend**: HTML (Jinja templates), Bootstrap (light styling)
 - **Auth**: Google OAuth2
-- **Deployment**: Render
+- **Deployment**: Render. Start command: `gunicorn -c gunicorn.conf.py run:app` (2 threaded workers, recycle after 500 requests).
 - **Version Control**: GitHub
 
 ---

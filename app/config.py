@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
+    # Production stays off Flask debug. OAuth libraries log tokens at DEBUG.
+    DEBUG = False
     SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret")
     
     # File folders

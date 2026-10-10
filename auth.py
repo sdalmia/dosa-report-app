@@ -5,9 +5,9 @@ from flask_dance.consumer.storage.session import SessionStorage
 from dotenv import load_dotenv
 import logging
 
-# Logging and .env setup
-logging.basicConfig(level=logging.DEBUG)
 load_dotenv()
+
+log = logging.getLogger(__name__)
 
 # ✅ Flask-Dance Google Blueprint
 google_bp = make_google_blueprint(
@@ -27,30 +27,22 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/google/callback")
 def google_callback():
-    print("✅ Entered google_callback")
-
     if not google.authorized:
-        print("❌ Google not authorized")
         return redirect(url_for("google.login"))
 
     resp = google.get("/oauth2/v2/userinfo")
     if not resp.ok:
-        print("❌ Failed to fetch user info from Google")
+        log.info("Google userinfo request failed")
         return "Failed to fetch user info", 500
 
     user_info = resp.json()
-    print("✅ User Info:", user_info)
-
-    # ✅ Store user data in session
     session["user_email"] = user_info["email"]
     session["user_name"] = user_info.get("given_name", "User")
-
     session["user"] = {
         "email": user_info.get("email"),
         "name": user_info.get("name")
     }
-
-    print("✅ Session user set:", session["user"])
+    log.info("Google sign-in succeeded")
     return redirect(url_for("main.dashboard"))
 
 @auth_bp.route("/logout")
