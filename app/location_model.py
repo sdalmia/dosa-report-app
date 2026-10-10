@@ -32,6 +32,8 @@ SITE_MATCH_METRES = 150
 QUERY_CAP = 20
 RIDERSHIP_METRES = 1000
 RIDERSHIP_MIN_STORES = 8
+MALL_MATCH_METRES = 250
+ANCHOR_LIST_SIZE = 31
 MIN_FORMAT_N = 8
 MOVE_CAP = 0.20
 DECILE = 0.10
@@ -52,6 +54,7 @@ FEATURE_KEYS = (
     "aggregator_enabled",
     "mall_reviews",
     "anchors",
+    "food_court",
     "distance",
     "ridership",
     "south_indian",
@@ -80,6 +83,13 @@ SNAPSHOT_COLUMNS = (
     "n_anchor_brands_500m",
     "n_fnb_chains_500m",
     "neighbour_brands",
+    "aggregator_enabled",
+    "mall_reviews",
+    "anchors",
+    "food_court",
+    "restaurants",
+    "residential",
+    "aggregator",
     "competitor_count",
     "competitor_count_all",
     "south_indian_density",
@@ -140,7 +150,8 @@ def prior_weights():
         "aggregator": 0.05,
         "mall_reviews": 0.20,
         "anchors": 0.15,
-        "transport": 0.10,
+        "food_court": 0.05,
+        "transport": 0.05,
     })
     cloud = _zeros()
     cloud.update({"restaurants": 0.40, "residential": 0.40, "aggregator": 0.20})
@@ -255,11 +266,176 @@ def cap_bounds(prior):
 
 
 _INDEX = {"key": None, "value": None}
+_MALL = {"key": None, "value": None}
 
 
 def clear_input_cache():
     _INDEX["key"] = None
     _INDEX["value"] = None
+    _MALL["key"] = None
+    _MALL["value"] = None
+
+
+def _yes_no(value):
+    """1, 0, or unknown. yes/no and 1/0 both count. A blank stays unknown."""
+    text = str(value or "").strip().casefold()
+    if text in {"1", "1.0", "yes", "y", "true"}:
+        return 1.0
+    if text in {"0", "0.0", "no", "n", "false"}:
+        return 0.0
+    return None
+
+
+def _cluster_code(site_id):
+    token = str(site_id or "").split()[0]
+    if re.fullmatch(r"(?:NCR|KOL)-C\d+", token):
+        return token
+    return ""
+
+
+def _mall_role(site_id):
+    if str(site_id or "").startswith("REF-"):
+        return "reference"
+    if _cluster_code(site_id):
+        return "candidate"
+    return "store"
+
+
+def mall_about():
+    return (
+        "Mall reviews are the mall's Google review count, on a log scale. "
+        "A blank count is unknown, not zero. "
+        "Anchors are how many of 31 national brands are inside the mall. "
+        "Food court is yes or no only when a listing was found, and blank when it was not. "
+        "Reference malls are on the map and are not scored."
+    )
+
+
+def _build_malls(path):
+    if not path.is_file():
+        return {"file": False, "rows": [], "by_store": {}, "review_band": (None, None)}
+    from app.site_pattern import _log_band
+
+    sites = input_index().get("sites") or []
+    by_id = {site["site_id"]: site for site in sites}
+    rows = []
+    for raw in _read(path):
+        site_id = (raw.get("site_id") or "").strip()
+        if not site_id:
+            continue
+        role = _mall_role(site_id)
+        store = find_store(site_id) if role == "store" else None
+        cluster_id = _cluster_code(site_id) if role == "candidate" else ""
+        cluster_site = by_id.get(site_id) if role == "candidate" else None
+        rows.append({
+            "site_id": site_id,
+            "mall_name": (raw.get("mall_name") or "").strip(),
+            "lat": _float(raw.get("lat")),
+            "lng": _float(raw.get("lng")),
+            "city": (raw.get("city") or "").strip(),
+            "role": role,
+            "store_id": "" if store is None else (store.get("store_id") or ""),
+            "store_name": "" if store is None else (store.get("posist_name") or ""),
+            "cluster_id": cluster_id,
+            "cluster_site_id": "" if cluster_site is None else cluster_site["site_id"],
+            "matched": bool(store) if role == "store" else bool(cluster_site) if role == "candidate" else True,
+            "aggregator_enabled": _yes_no(raw.get("aggregator_enabled")),
+            "review_count": _float(raw.get("mall_google_reviews")),
+            "anchor_count": _float(raw.get("n_anchor_brands_inside")),
+            "food_court": _yes_no(raw.get("food_court")),
+            "rating": _float(raw.get("mall_google_rating")),
+        })
+    counts = [
+        row["review_count"]
+        for row in rows
+        if row["role"] != "reference" and row["review_count"] is not None and row["review_count"] > 0
+    ]
+    band = _log_band(counts)
+    for row in rows:
+        count = row["anchor_count"]
+        row["review_band"] = band
+        row["anchor_unit"] = None if count is None else max(0.0, min(1.0, count / ANCHOR_LIST_SIZE))
+    by_store = {}
+    for row in rows:
+        if row["role"] == "store" and row["store_name"]:
+            by_store[row["store_name"]] = row
+    return {"file": path.is_file(), "rows": rows, "by_store": by_store, "review_band": band}
+
+
+def _mall_index():
+    path = inputs_dir() / "mall_inputs.csv"
+    stamp = path.stat().st_mtime if path.is_file() else None
+    if _MALL.get("key") == stamp and _MALL.get("value") is not None:
+        return _MALL["value"]
+    value = _build_malls(path)
+    _MALL["key"] = stamp
+    _MALL["value"] = value
+    return value
+
+
+def mall_rows():
+    """Every mall row. Re-reads the file when it changes, so a later drop replaces this one."""
+    return list(_mall_index()["rows"])
+
+
+def mall_for_store(name):
+    return _mall_index()["by_store"].get(name or "")
+
+
+def nearest_mall(lat, lon, max_metres=MALL_MATCH_METRES):
+    """Nearest store or candidate mall. Reference malls are never a scoring match."""
+    if lat is None or lon is None:
+        return None
+    best = None
+    best_distance = None
+    for row in _mall_index()["rows"]:
+        if row["role"] == "reference" or row["lat"] is None or row["lng"] is None:
+            continue
+        distance = haversine_m(lat, lon, row["lat"], row["lng"])
+        if distance > max_metres:
+            continue
+        if best_distance is None or distance < best_distance:
+            best = row
+            best_distance = distance
+    return best
+
+
+def mall_signals(row):
+    """Feature values for one mall. Unknown stays missing, including a blank aggregator flag."""
+    if not row or row.get("role") == "reference":
+        return {}
+    aggregator = row.get("aggregator_enabled")
+    reviews = row.get("review_count")
+    anchors = row.get("anchor_count")
+    food = row.get("food_court")
+    if aggregator is None:
+        aggregator_detail = ""
+    elif aggregator >= 1:
+        aggregator_detail = "On Swiggy or Zomato"
+    else:
+        aggregator_detail = "POS only"
+    if anchors is None:
+        anchor_detail = ""
+    else:
+        anchor_detail = f"{int(anchors)} of {ANCHOR_LIST_SIZE} anchor brands"
+    if food is None:
+        food_detail = ""
+    elif food >= 1:
+        food_detail = "Yes"
+    else:
+        food_detail = "No"
+    return {
+        "aggregator_enabled": aggregator,
+        "aggregator_detail": aggregator_detail,
+        "mall_reviews": reviews,
+        "mall_reviews_detail": "" if reviews is None else f"{int(reviews):,} Google reviews",
+        "mall_review_band": row.get("review_band") or (None, None),
+        "mall_anchors": row.get("anchor_unit"),
+        "mall_anchor_detail": anchor_detail,
+        "food_court": food,
+        "food_court_detail": food_detail,
+        "mall_file": True,
+    }
 
 
 def _google_query(source):
@@ -645,22 +821,9 @@ def south_indian_signal(lat, lon):
     }
 
 
-def delivery_signal(lat, lon, name=""):
-    index = input_index()
-    empty = {
-        "file": False,
-        "restaurants": None,
-        "residential": None,
-        "restaurant_detail": "",
-        "residential_detail": "",
-        "about": "",
-        "raw_restaurants": None,
-    }
-    if not index["delivery_file"]:
-        return empty
-    row, _distance = _nearest(lat, lon, index["delivery"], SITE_MATCH_METRES)
+def _delivery_from_row(row):
     if row is None or row.get("restaurants") is None:
-        return {**empty, "file": True}
+        return None
     reasons = row.get("understated") or []
     residential = row.get("residential")
     residential_detail = ""
@@ -682,6 +845,35 @@ def delivery_signal(lat, lon, name=""):
         "raw_restaurants": raw,
         "understated": reasons,
     }
+
+
+def delivery_signal(lat, lon, name=""):
+    index = input_index()
+    empty = {
+        "file": False,
+        "restaurants": None,
+        "residential": None,
+        "restaurant_detail": "",
+        "residential_detail": "",
+        "about": "",
+        "raw_restaurants": None,
+    }
+    if not index["delivery_file"]:
+        return empty
+    row, _distance = _nearest(lat, lon, index["delivery"], SITE_MATCH_METRES)
+    built = _delivery_from_row(row)
+    if built is None:
+        return {**empty, "file": True}
+    return built
+
+
+def delivery_for_site(site_id):
+    if not site_id or not input_index()["delivery_file"]:
+        return None
+    for row in input_index()["delivery"]:
+        if row["site_id"] == site_id:
+            return _delivery_from_row(row)
+    return None
 
 
 def metro_signal(lat, lon):
@@ -836,6 +1028,13 @@ def snapshot_rows(month=None):
             "n_anchor_brands_500m": study.get("n_anchor_brands_500m"),
             "n_fnb_chains_500m": study.get("n_fnb_chains_500m"),
             "neighbour_brands": study.get("neighbour_brands") or "",
+            "aggregator_enabled": _part_value(pattern, "aggregator_enabled") if fmt == "mall" else None,
+            "mall_reviews": _part_value(pattern, "mall_reviews") if fmt == "mall" else None,
+            "anchors": _part_value(pattern, "anchors") if fmt == "mall" else None,
+            "food_court": _part_value(pattern, "food_court") if fmt == "mall" else None,
+            "restaurants": _part_value(study.get("delivery"), "restaurants") if fmt == "mall" else None,
+            "residential": _part_value(study.get("delivery"), "residential") if fmt == "mall" else None,
+            "aggregator": _part_value(study.get("delivery"), "aggregator") if fmt == "mall" else None,
             "competitor_count": south["count"],
             "competitor_count_all": south.get("all_count"),
             "south_indian_density": south["unit"],
@@ -1011,6 +1210,11 @@ def learning_rows(features, outcomes):
             elif key in {"quality", "anchor", "diversity"}:
                 raw = feature.get(key)
                 vector[key] = None if raw is None else max(0.0, min(1.0, float(raw)))
+            elif key in {
+                "aggregator_enabled", "mall_reviews", "anchors", "food_court",
+                "restaurants", "residential", "aggregator",
+            }:
+                vector[key] = feature.get(key)
             else:
                 vector[key] = None
         joined.append({
@@ -1138,8 +1342,15 @@ def leave_one_out(ranked, priors):
             groups.setdefault(row["format"], []).append(row)
         for fmt in prior_weights():
             groups.setdefault(fmt, [])
-        fitted, _frozen, keys = fit_pooled(groups, priors, steps=400)
-        predicted = _predict(held["x"], fitted.get(held["format"]) or {}, keys)
+        fitted, frozen, keys = fit_pooled(groups, priors, steps=400)
+        weights = fitted.get(held["format"]) or {}
+        # Mall stays on its prior until it has 8 stores. Score that prior on the
+        # mall inputs, which the pooled fit never sees.
+        if held["format"] == "mall" and held["format"] in frozen:
+            predict_keys = list(weights)
+        else:
+            predict_keys = keys
+        predicted = _predict(held["x"], weights, predict_keys)
         actual = held["rank"]
         gap = None if predicted is None else abs(predicted - actual)
         errors.append(gap)
@@ -1158,7 +1369,7 @@ def leave_one_out(ranked, priors):
     return backtest, mae
 
 
-def refit_model(features, outcomes, month=None, prior_version="prior", priors=None):
+def refit_model(features, outcomes, month=None, prior_version="prior", priors=None, version=None):
     month = month or (features[0]["as_of"] if features else latest_sales_month())
     priors = priors or prior_weights()
     ranked = [row for row in learning_rows(features, outcomes) if row.get("rank") is not None]
@@ -1177,7 +1388,7 @@ def refit_model(features, outcomes, month=None, prior_version="prior", priors=No
     backtest, mae = leave_one_out(ranked, priors)
     counts = {fmt: len(groups.get(fmt) or []) for fmt in priors}
     return {
-        "version": f"v{month}",
+        "version": version or f"v{month}",
         "status": "proposed",
         "as_of": month,
         "prior_version": prior_version,
@@ -1247,6 +1458,7 @@ WEIGHT_LABELS = {
     "aggregator_enabled": "Aggregator-enabled",
     "mall_reviews": "Mall reviews",
     "anchors": "In-mall anchors",
+    "food_court": "Food court",
     "distance": "Distance to the station",
     "ridership": "Station ridership",
     "south_indian": "South Indian density",
@@ -1539,13 +1751,14 @@ def _frozen_note(model):
                 names.append(label)
             if len(names) == 3:
                 break
+        note += (
+            " The mall score uses the prior weights, including aggregator-enabled, "
+            "mall reviews and anchors."
+        )
         if names:
             listed = _format_phrase_names(names)
             verb = "is" if len(names) == 1 else "are"
-            note += (
-                f" Mall predictions are weak. {listed} {verb} the big misses, until mall inputs "
-                "such as aggregator-enabled, mall reviews and anchors are filled."
-            )
+            note += f" {listed} {verb} the big misses."
     return note
 
 
@@ -1652,7 +1865,7 @@ def proposal_changes(model):
     }
 
 
-def write_refit(month=None):
+def write_refit(month=None, version=None):
     month = month or latest_sales_month()
     feature_path = location_root() / "store_features" / f"{month}.csv"
     outcome_path = location_root() / "outcomes" / f"{month}.csv"
@@ -1666,6 +1879,8 @@ def write_refit(month=None):
             "classic_score", "energy", "reviews", "premium", "cuisine_types",
             "n_anchor_brands_500m", "n_fnb_chains_500m", "competitor_count",
             "south_indian_density", "google_rating", "lat", "lng",
+            "aggregator_enabled", "mall_reviews", "anchors", "food_court",
+            "restaurants", "residential", "aggregator",
         ):
             if key in cleaned:
                 cleaned[key] = _float(cleaned.get(key))
@@ -1681,7 +1896,9 @@ def write_refit(month=None):
     if approved and approved.get("weights"):
         priors = approved["weights"]
         prior_version = approved.get("version") or "prior"
-    payload = refit_model(cleaned_features, cleaned_outcomes, month, prior_version, priors)
+    payload = refit_model(
+        cleaned_features, cleaned_outcomes, month, prior_version, priors, version=version,
+    )
     return save_model(payload)
 
 

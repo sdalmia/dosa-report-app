@@ -183,3 +183,21 @@ Optional. If this file is missing, station distance and ridership stay data comi
 | coord_source | Where the station pin came from |
 
 Footfall stays at its prior weight and is data coming until at least 8 stores have a station with a figure within 1 km. A store counts when any station with a figure is within 1 km, even if a closer station has no figure. Today that is 4 stores: CP, Ideal Plaza, Forum, and Swimming Club.
+
+## inputs/mall_inputs.csv
+
+Optional. One row per mall. Drop a newer file in place of this one and rebuild the snapshot: the loader reads the file again and does not keep the previous counts. If this file is missing, mall reviews, anchors, and food court stay data coming.
+
+| Column | Meaning |
+|---|---|
+| site_id | Store Posist name, a cluster id such as `NCR-C02` plus the area, or `REF-` for a reference mall |
+| mall_name | Mall name |
+| lat, lng | Mall pin |
+| city | `Delhi NCR` or `Kolkata` |
+| aggregator_enabled | `1` yes, `0` no, or blank. yes/no is read as 1/0. Blank is unknown and is left out, never scored as 0 |
+| mall_google_reviews | The mall's own Google review count. The score uses the log scale. Blank is unknown, never zero |
+| n_anchor_brands_inside | How many of 31 national anchor brands are inside the mall. Blank is unknown, never zero. The score is that count divided by 31 |
+| food_court | `yes` or `no`, stored as 1 or 0. Blank is unknown. It is an optional flag at 5% of the mall prior, taken from transport |
+| as_of | `YYYY-MM-DD` |
+
+A row whose `site_id` starts with `REF-` is a nearby reference mall. It can be shown on the map. It is not trained on and it is not scored. The 7 store rows join to Store Master on the Posist name. The candidate rows join to `sites.csv` on `site_id`, including a cluster that has more than one mall. Mall stays frozen while it has fewer than 8 stores. Those stores still show the prior-weight score with these inputs. `models/v2026-10b.json` is that proposed refit. It is not approved.

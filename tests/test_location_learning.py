@@ -16,6 +16,8 @@ from app.location_model import (
     cap_bounds,
     clear_approvals,
     delivery_signal,
+    load_model,
+    mall_rows,
     fit_pooled,
     input_index,
     latest_approved,
@@ -71,6 +73,125 @@ class StoreStatusTests(unittest.TestCase):
         self.assertIsNone(match["bar_pct"])
 
 
+class MallInputTests(unittest.TestCase):
+    def test_v2_matches_stores_and_clusters_and_leaves_blanks_unknown(self):
+        clear_cache()
+        rows = mall_rows()
+        self.assertEqual(len(rows), 43)
+        stores = [row for row in rows if row["role"] == "store"]
+        candidates = [row for row in rows if row["role"] == "candidate"]
+        references = [row for row in rows if row["role"] == "reference"]
+        self.assertEqual(len(stores), 7)
+        self.assertEqual(len(candidates), 31)
+        self.assertEqual(len(references), 5)
+        self.assertTrue(all(row["matched"] and row["store_id"] for row in stores))
+        self.assertEqual(
+            {row["store_id"] for row in stores},
+            {
+                "dosa-coffee-forum-0003",
+                "dosa-coffee-manisquare-0004",
+                "dosa-coffee-quest-mall-01-0016",
+                "dosa-coffee-rosedale-plaza-0006",
+                "dosa-coffee-ideal-plaza-01-0001",
+                "dosa-coffee-rangoli-mall-01-0010",
+                "pacific-mall-jasola-02-0011",
+            },
+        )
+        self.assertTrue(all(row["matched"] and row["cluster_site_id"] for row in candidates))
+        forum = next(row for row in stores if row["store_id"] == "dosa-coffee-forum-0003")
+        self.assertEqual(forum["aggregator_enabled"], 0.0)
+        self.assertEqual(forum["food_court"], 1.0)
+        ideal = next(row for row in stores if "Ideal" in row["mall_name"])
+        self.assertIsNone(ideal["anchor_count"])
+        self.assertIsNone(ideal["food_court"])
+        self.assertIsNotNone(ideal["review_count"])
+        shipra = next(row for row in candidates if row["mall_name"] == "Shipra Mall")
+        gaur = next(row for row in candidates if row["mall_name"] == "Gaur Central Mall")
+        rcube = next(row for row in candidates if "Rcube" in row["mall_name"])
+        self.assertIsNone(shipra["review_count"])
+        self.assertIsNone(gaur["review_count"])
+        self.assertIsNone(rcube["aggregator_enabled"])
+        self.assertEqual(rcube["food_court"], 1.0)
+
+    def test_reference_malls_are_not_scored_and_candidates_are(self):
+        clear_cache()
+        from app.site_pattern import load_board
+
+        markers = load_board()["malls"]
+        references = [row for row in markers if row["reference"]]
+        scored = [row for row in markers if not row["reference"]]
+        self.assertEqual(len(references), 5)
+        self.assertEqual(len(scored), 31)
+        self.assertTrue(all(row["score"] is None for row in references))
+        self.assertTrue(all(row["score"] is not None for row in scored))
+        self.assertIn("DLF Mall of India", {row["name"] for row in references})
+        self.assertNotIn("DLF Mall of India", {row["name"] for row in scored})
+
+    def test_a_replaced_file_is_reread(self):
+        from app.location_model import clear_input_cache
+
+        folder = tempfile.TemporaryDirectory()
+        previous = os.environ.get("LOCATION_DATA_DIR")
+        os.environ["LOCATION_DATA_DIR"] = folder.name
+        try:
+            inputs = Path(folder.name) / "inputs"
+            inputs.mkdir()
+            path = inputs / "mall_inputs.csv"
+            path.write_text(
+                "site_id,mall_name,lat,lng,city,aggregator_enabled,mall_google_reviews,n_anchor_brands_inside,food_court\n"
+                "Dosa Coffee - Forum (0003),Forum,22.5,88.3,Kolkata,yes,10,4,no\n",
+                encoding="utf-8",
+            )
+            clear_input_cache()
+            clear_cache()
+            first = mall_rows()[0]
+            self.assertEqual(first["aggregator_enabled"], 1.0)
+            self.assertEqual(first["food_court"], 0.0)
+            self.assertEqual(first["store_id"], "dosa-coffee-forum-0003")
+            path.write_text(
+                "site_id,mall_name,lat,lng,city,aggregator_enabled,mall_google_reviews,n_anchor_brands_inside,food_court\n"
+                "Dosa Coffee - Forum (0003),Forum,22.5,88.3,Kolkata,,20,4,\n",
+                encoding="utf-8",
+            )
+            stamp = path.stat().st_mtime
+            os.utime(path, (stamp + 10, stamp + 10))
+            second = mall_rows()[0]
+            self.assertIsNone(second["aggregator_enabled"])
+            self.assertIsNone(second["food_court"])
+            self.assertEqual(second["review_count"], 20.0)
+        finally:
+            if previous is None:
+                os.environ.pop("LOCATION_DATA_DIR", None)
+            else:
+                os.environ["LOCATION_DATA_DIR"] = previous
+            folder.cleanup()
+            clear_input_cache()
+            clear_cache()
+
+    def test_v2026_10b_is_proposed_and_the_named_mall_misses_shrink(self):
+        proposed = load_model("v2026-10b")
+        previous = load_model("v2026-10")
+        self.assertEqual(proposed["status"], "proposed")
+        self.assertIsNone(proposed["approved_at"])
+        self.assertIn("mall", proposed["frozen_formats"])
+        self.assertLess(proposed["format_counts"]["mall"], 8)
+        self.assertIsNone(latest_approved())
+        before = {row["store"]: row for row in previous["backtest"]}
+        after = {row["store"]: row for row in proposed["backtest"]}
+        improved = {
+            "Dosa Coffee - Ideal Plaza (01/0001)": 4.25,
+            "Pacific mall, Jasola (02/0011)": 2.66,
+            "Dosa Coffee - Rosedale Plaza(0006)": 2.0,
+            "Dosa Coffee - Manisquare (0004)": 2.23,
+        }
+        for name, gap in improved.items():
+            self.assertLess(after[name]["decile_gap"], before[name]["decile_gap"])
+            self.assertEqual(after[name]["decile_gap"], gap)
+            self.assertTrue(after[name]["miss"])
+        self.assertGreater(after["Dosa Coffee - Forum (0003)"]["decile_gap"], before["Dosa Coffee - Forum (0003)"]["decile_gap"])
+        self.assertGreater(after["Dosa Coffee - Quest Mall (01/0016)"]["decile_gap"], before["Dosa Coffee - Quest Mall (01/0016)"]["decile_gap"])
+
+
 class SnapshotTests(unittest.TestCase):
     def test_snapshot_uses_the_pin_and_leaves_missing_competitors_blank(self):
         clear_cache()
@@ -85,6 +206,16 @@ class SnapshotTests(unittest.TestCase):
         self.assertGreaterEqual(kalkaji["competitor_count_all"], kalkaji["competitor_count"])
         self.assertGreaterEqual(kalkaji["south_indian_density"], 0)
         self.assertLessEqual(kalkaji["south_indian_density"], 1)
+        self.assertIsNone(kalkaji["aggregator_enabled"])
+        self.assertIsNone(kalkaji["mall_reviews"])
+        ideal = rows["Dosa Coffee - Ideal Plaza (01/0001)"]
+        self.assertEqual(ideal["aggregator_enabled"], 1)
+        self.assertIsNotNone(ideal["mall_reviews"])
+        self.assertIsNone(ideal["anchors"])
+        self.assertIsNone(ideal["food_court"])
+        forum = rows["Dosa Coffee - Forum (0003)"]
+        self.assertEqual(forum["aggregator_enabled"], 0)
+        self.assertEqual(forum["food_court"], 1)
         self.assertEqual(rows["Shalimar Bagh (02/0015)"]["format"], "metro")
         shalimar = rows["Shalimar Bagh (02/0015)"]
         self.assertIsNotNone(shalimar["energy"])
@@ -316,12 +447,15 @@ class ApprovalPageTests(unittest.TestCase):
     def test_v2026_10_explains_frozen_formats_before_approve(self):
         self._session(OWNER)
         html = self.client.get("/location-model").get_data(as_text=True)
-        self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-10.", html)
-        self.assertIn("Ideal Plaza, Pacific Mall and Rosedale are the big misses", html)
-        self.assertIn("aggregator-enabled, mall reviews and anchors", html)
+        self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-10b.", html)
+        self.assertIn(
+            "The mall score uses the prior weights, including aggregator-enabled, mall reviews and anchors.",
+            html,
+        )
+        self.assertIn("Ideal Plaza, Forum and Rangoli Mall are the big misses.", html)
         self.assertIn("Spearman 0.41 means the model ranks stores moderately well.", html)
         self.assertIn(
-            "Approve v2026-10? Live scores will change for high-street sites. You can undo this.",
+            "Approve v2026-10b? Live scores will change for high-street sites. You can undo this.",
             html,
         )
         self.assertIn("Stores whose score moves most", html)

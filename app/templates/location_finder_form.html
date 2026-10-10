@@ -43,7 +43,24 @@
 
     <section class="lf-card">
         <h2>Candidate areas</h2>
-        <p class="lf-note">{{ board.candidates|length }} areas, ranked. Neighbour brands can be shown on the map.</p>
+        <p class="lf-note">{{ board.candidates|length }} areas, ranked. Neighbour brands can be shown on the map. Reference malls are context and are not scored.</p>
+        {% if board.malls %}
+        <h3>Malls</h3>
+        <ul class="lf-rank">
+            {% for mall in board.malls %}
+            <li>
+                <strong>{{ mall.name }}</strong>
+                <span>
+                    {% if mall.city %}{{ mall.city }}. {% endif %}
+                    {% if mall.reference %}Reference mall. Not scored.
+                    {% elif mall.score is not none %}Score {{ mall.score }}.
+                    {% else %}Score data coming.
+                    {% endif %}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         <label class="lf-toggle"><input type="checkbox" id="show-neighbours"> Show neighbour brands</label>
         <div id="candidate-map" class="lf-map" role="region" aria-label="Candidate areas"></div>
         <div class="lf-scroll">
@@ -234,7 +251,7 @@ document.getElementById("brand-form").addEventListener("submit", function () {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {
-    var payload = {{ {"candidates": board.candidates, "outlets": board.outlets}|tojson }};
+    var payload = {{ {"candidates": board.candidates, "outlets": board.outlets, "malls": board.malls}|tojson }};
     var mapEl = document.getElementById("candidate-map");
     if (!mapEl || !window.L || !payload.candidates.length) return;
     var map = L.map(mapEl);
@@ -254,6 +271,20 @@ document.getElementById("brand-form").addEventListener("submit", function () {
         }).addTo(map);
         marker.bindPopup("<strong>" + area.area + "</strong><br>" + (area.nearest || "") + (area.nearest_km != null ? " · " + area.nearest_km + " km" : ""));
         bounds.push([area.lat, area.lon]);
+    });
+    (payload.malls || []).forEach(function (mall) {
+        if (mall.lat == null || mall.lon == null) return;
+        var marker = L.circleMarker([mall.lat, mall.lon], {
+            radius: mall.reference ? 6 : 7,
+            color: mall.reference ? "#8a8175" : "#1f6b4a",
+            weight: 2,
+            fillOpacity: 0.9
+        }).addTo(map);
+        var label = "<strong>" + mall.name + "</strong>";
+        if (mall.reference) label += "<br>Reference mall. Not scored.";
+        else if (mall.score != null) label += "<br>Score " + mall.score;
+        marker.bindPopup(label);
+        bounds.push([mall.lat, mall.lon]);
     });
     var brands = L.layerGroup();
     payload.outlets.forEach(function (outlet) {
