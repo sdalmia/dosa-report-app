@@ -13,3 +13,5 @@ fpdf2==2.8.3
 pypdf==6.1.1
 psycopg2-binary
 psycopg[binary]
+flask-compress==1.17
+brotli==1.1.0

@@ -1,6 +1,8 @@
 import os
 import tempfile
 import unittest
+
+from tests.stitch import page
 from datetime import date
 from pathlib import Path
 
@@ -90,7 +92,7 @@ class FlagAccessTests(unittest.TestCase):
         self.assertIn("accounts", areas)
         self.assertNotIn("alfred.csv", {row["file"] for row in visible})
         self._login("dalmia.siddhant@gmail.com")
-        html = self.client.get("/flags").get_data(as_text=True)
+        html = page(self.client, "/flags")
         payload = self.client.get("/flags.json").get_json()
         blob = html + " ".join(item["title"] for item in payload["flags"])
         for bit in RESTRICTED_BITS:
@@ -200,7 +202,7 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertNotIn("Forum", bill_alerts)
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
-        html = self.client.get("/dashboard").get_data(as_text=True)
+        html = page(self.client, "/dashboard")
         self.assertEqual(view["window_subtitle"], "10 Sep – 9 Oct · vs last Friday")
         self.assertIn("Gross", html)
         self.assertIn("10 Sep – 9 Oct · vs last Friday", html)
@@ -230,9 +232,9 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertLessEqual(html.count('class="alert-row"'), 5)
         self.assertEqual(html.count('<article class="tile">'), min(3, len(view["procurement"])))
         self.assertIn('class="tile rep-compact"', html)
-        stores = self.client.get("/stores").get_data(as_text=True)
+        stores = page(self.client, "/stores")
         self.assertGreater(stores.count('class="league-row"'), html.count('class="league-row"'))
-        buying = self.client.get("/procurement").get_data(as_text=True)
+        buying = page(self.client, "/procurement")
         self.assertGreater(buying.count("<article class=\"tile\">"), 3)
         self.assertNotIn(".xlsx", buying)
         self.assertNotIn("Not in feed", html)

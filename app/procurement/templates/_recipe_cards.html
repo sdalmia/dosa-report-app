@@ -1,0 +1,30 @@
+{% macro recipe_cards(rows, recipe) %}
+{% for row in rows %}
+<div class="row-card" data-review="{{ 'yes' if row.under_review else 'no' }}" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">
+  <b>{{ row.menu_item }}</b>
+  {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">{{ recipe.review_badge }}</p>{% endif %}
+  {% if recipe.list_kind == 'summary' %}
+  <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets and row.outlets != '0' %} · {{ row.outlets }} {{ 'outlet' if row.outlets == '1' else 'outlets' }}{% endif %}</p>
+  <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
+    · city median <span data-field="city-median" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.typical.attr }}">{{ row.typical.text }}</span>
+    · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
+    {% if row.spread.text %} · spread <span data-field="city-spread" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.spread.attr }}">{{ row.spread.text }}</span>{% endif %}</p>
+  {% else %}
+  <p class="muted">{{ row.deployment }} · {{ row.city }} · {{ row.unit }}{% if row.partial %} · partial{% endif %}</p>
+  <p>Avg <span data-field="recipe-avg" data-outlet="{{ row.deployment }}" data-item="{{ row.menu_item }}" data-value="{{ row.avg.attr }}">{{ row.avg.text }}</span>
+    · last {{ row.last.text }}{% if row.gap.text %} · last vs avg {{ row.gap.text }}{% endif %}
+    {% if row.unpriced_label %} · {{ row.unpriced_label }}{% endif %}</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endmacro %}
+
+{% macro consumed_cards(rows, recipe) %}
+{% for row in rows %}
+<div class="row-card" data-review="{{ 'yes' if row.under_review else 'no' }}">
+  <b>{{ row.menu_item }}</b>
+  {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.menu_item }}">{{ recipe.review_badge }}</p>{% endif %}
+  <p>Sold {{ row.qty_text }} · per unit <span data-field="consumed-cost" data-item="{{ row.menu_item }}" data-value="{{ row.cost.attr }}">{{ row.cost.text }}</span> · total {{ row.total.text }}{% if row.missing_label %} · {{ row.missing_label }}{% endif %}</p>
+</div>
+{% endfor %}
+{% endmacro %}

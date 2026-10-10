@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request
 
+from app.fragments import html_fragment
+from app.page_cache import freeze, remember
 from app.menu_ops.channels import build_channels
 from app.menu_ops.engineering import NO_CATEGORY, NO_REGION, QUADRANT_LABELS, build_menu
 from app.menu_ops.tickets import build_tickets
@@ -19,7 +21,10 @@ menu_ops_bp = Blueprint(
 
 def _shared_filters():
     filters = remember_filters()
-    feeds = load_feeds()
+    from app.store_health.contract import data_directory
+
+    directory = str(data_directory())
+    feeds = remember(("feeds", directory), load_feeds)
     start, end = _window_bounds(feeds)
     window = resolve_bounds(filters, start, end)
     options = visible_stores(store_options(), filters)
@@ -42,12 +47,11 @@ def menu():
     filters, window, options = _shared_filters()
     region = request.args.get("region", "").strip() or city_region(filters)
     store = request.args.get("store", "").strip() or _filter_store(filters)
-    view = build_menu(
-        category=request.args.get("category", "").strip(),
-        region=region,
-        store=store,
-        quadrant=request.args.get("quadrant", "").strip(),
-        window=window,
+    category = request.args.get("category", "").strip()
+    quadrant = request.args.get("quadrant", "").strip()
+    view = remember(
+        ("menu-eng", category, region, store, quadrant, freeze(window), freeze(filters)),
+        lambda: build_menu(category=category, region=region, store=store, quadrant=quadrant, window=window),
     )
     return render_template(
         "menu.html",
@@ -65,7 +69,11 @@ def menu():
 def channels():
     filters, window, options = _shared_filters()
     store = request.args.get("store", "").strip() or _filter_store(filters)
-    view = build_channels(store=store, region=city_region(filters), window=window)
+    region = city_region(filters)
+    view = remember(
+        ("channels", store, region, freeze(window), freeze(filters)),
+        lambda: build_channels(store=store, region=region, window=window),
+    )
     return render_template(
         "channels.html",
         view=view,
@@ -74,11 +82,19 @@ def channels():
     )
 
 
+def _tickets_view():
+    store = request.args.get("store", "").strip()
+    keyword = request.args.get("keyword", "").strip()
+    return remember(("tickets", store, keyword), lambda: build_tickets(store=store, keyword=keyword))
+
+
 @menu_ops_bp.route("/tickets")
 @login_required
 def tickets():
-    view = build_tickets(
-        store=request.args.get("store", "").strip(),
-        keyword=request.args.get("keyword", "").strip(),
-    )
-    return render_template("tickets.html", view=view)
+    return render_template("tickets.html", view=_tickets_view())
+
+
+@menu_ops_bp.route("/tickets/fragment/stores")
+@login_required
+def tickets_rest():
+    return html_fragment(render_template("_ticket_stores.html", view=_tickets_view()))

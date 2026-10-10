@@ -3,6 +3,8 @@ import json
 import os
 import tempfile
 import unittest
+
+from tests.stitch import page, stitch
 from pathlib import Path
 
 os.environ.setdefault("GOOGLE_MAPS_API_KEY", "test-key")
@@ -446,7 +448,7 @@ class ApprovalPageTests(unittest.TestCase):
 
     def test_v2026_10_explains_frozen_formats_before_approve(self):
         self._session(OWNER)
-        html = self.client.get("/location-model").get_data(as_text=True)
+        html = page(self.client, "/location-model")
         self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-10b.", html)
         self.assertIn(
             "The mall score uses the prior weights, including aggregator-enabled, mall reviews and anchors.",
@@ -632,14 +634,14 @@ class PageTests(unittest.TestCase):
         blocked = self.client.get("/location-model")
         self.assertEqual(blocked.status_code, 302)
         self._session(OWNER)
-        page = self.client.get("/location-model").get_data(as_text=True)
-        self.assertIn("Location model", page)
-        self.assertIn("What are we missing", page)
-        self.assertIn("Approve", page)
-        self.assertIn("You can undo this.", page)
-        self.assertIn("Stores whose score moves most", page)
-        self.assertNotIn(".csv", page)
-        self.assertIn('name="theme-color" content="#f7f6f3"', page)
+        html = stitch(self.client, self.client.get("/location-model").get_data(as_text=True))
+        self.assertIn("Location model", html)
+        self.assertIn("What are we missing", html)
+        self.assertIn("Approve", html)
+        self.assertIn("You can undo this.", html)
+        self.assertIn("Stores whose score moves most", html)
+        self.assertNotIn(".csv", html)
+        self.assertIn('name="theme-color" content="#f7f6f3"', html)
         self._session(OTHER)
         denied = self.client.post("/location-model", data={
             "action": "approve",

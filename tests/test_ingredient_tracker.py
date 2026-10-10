@@ -1,7 +1,5 @@
 import io
-import json
 import os
-import re
 import tempfile
 import unittest
 from datetime import date
@@ -103,13 +101,15 @@ class UploadHistoryTests(unittest.TestCase):
 
     def _tomato_points(self):
         self._login()
-        response = self.client.get('/ingredient-tracker/')
+        page = self.client.get('/ingredient-tracker/')
+        self.assertEqual(page.status_code, 200)
+        html = page.get_data(as_text=True)
+        self.assertNotIn('const ingredientData', html)
+        self.assertIn('lazy-skeleton', html)
+        response = self.client.get('/ingredient-tracker/data.json')
         self.assertEqual(response.status_code, 200)
-        html = response.get_data(as_text=True)
-        match = re.search(r'const ingredientData = (\{.*?\});', html, re.S)
-        self.assertIsNotNone(match)
-        payload = json.loads(match.group(1))
-        return payload['Tomato']
+        payload = response.get_json()
+        return payload['ingredient_data']['Tomato']
 
     def test_new_report_appends_a_point_and_keeps_stored_values(self):
         self._upload(

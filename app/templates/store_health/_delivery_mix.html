@@ -1,0 +1,30 @@
+<section id="delivery-mix" class="health-box box-posist span-full" aria-labelledby="delivery-mix-title">
+      <div class="box-head">
+        <div>
+          <h2 id="delivery-mix-title">Delivery vs dine-in</h2>
+          <p class="box-source">Posist{% if delivery.period_label %} · <span data-field="delivery_period">{{ delivery.period_label }}</span>{% endif %}</p>
+        </div>
+      </div>
+      {% if delivery.has_rows %}
+        <div class="metric-grid">
+          <article class="metric">
+            <h3>Dine-in</h3>
+            <p class="value" data-field="dine-gross">{{ delivery.dine_gross }}</p>
+            {% if delivery.mall_bulk %}
+              <p class="note" data-note="mall-store">In-store bills include bulk mall-system entries. Bills and the average bill are not compared.</p>
+            {% else %}
+              <p class="note">Bills <span data-field="dine-orders">{{ delivery.dine_orders }}</span>{% if delivery.dine_apb %} · APB <span data-field="dine-apb">{{ delivery.dine_apb }}</span>{% endif %}</p>
+            {% endif %}
+          </article>
+          <article class="metric">
+            <h3>Delivery</h3>
+            <p class="value" data-field="delivery-gross">{{ delivery.delivery_gross }}</p>
+            <p class="note">Bills <span data-field="delivery-orders">{{ delivery.delivery_orders }}</span>{% if delivery.delivery_apb %} · APB <span data-field="delivery-apb">{{ delivery.delivery_apb }}</span>{% endif %}</p>
+          </article>
+        </div>
+            {% if delivery.not_shown %}<p class="note" data-status="not-shown">Not shown on {{ delivery.not_shown|join(', ') }}. Those days are not zero.</p>{% endif %}
+        {% if delivery.mall_note %}<p class="box-source" data-note="mall">{{ delivery.mall_note }}</p>{% endif %}
+      {% else %}
+        <p class="empty-state" data-field="delivery_mix">{{ delivery.empty }}</p>
+      {% endif %}
+    </section>

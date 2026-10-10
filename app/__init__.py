@@ -1,6 +1,7 @@
 import logging
 import os
-from flask import Flask
+from flask import Flask, request
+from flask_compress import Compress
 from flask_mail import Mail
 from flask_session import Session
 from dotenv import load_dotenv
@@ -50,7 +51,10 @@ def create_app():
     app.config["SECRET_KEY"] = app.config["SECRET_KEY"] or "fallback"
     app.config["SESSION_TYPE"] = "filesystem"
     app.config["SESSION_PERMANENT"] = False
+    app.config["COMPRESS_ALGORITHM"] = ["br", "gzip"]
+    app.config["COMPRESS_MIN_SIZE"] = 500
     Session(app)
+    Compress(app)
 
     # ✅ Ensure folders exist
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -75,8 +79,15 @@ def create_app():
     @app.context_processor
     def inject_access():
         from app.access import is_owner
+        from app.fragments import with_qs
 
-        return {"is_owner": is_owner}
+        return {"is_owner": is_owner, "with_qs": with_qs}
+
+    @app.after_request
+    def cache_static(response):
+        if request.path.startswith("/static/"):
+            response.headers["Cache-Control"] = "public, max-age=86400"
+        return response
 
     configure_logging(app)
     return app

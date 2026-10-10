@@ -1,0 +1,41 @@
+{% from "owner/_macros.html" import show, change %}
+<section data-list>
+  <h2>Procurement</h2>
+  {% if brief.procurement_empty %}
+  <div class="empty" data-empty="procurement"><p>{{ brief.procurement_empty }}</p></div>
+  {% else %}
+  {% for item in brief.procurement %}
+  <article class="store" data-field="procurement"><h3>{{ item.store or "Procurement" }}</h3><p>{{ item.text }}</p></article>
+  {% endfor %}
+  {% endif %}
+</section>
+
+{% if not brief.empty %}
+{% for region in brief.regions %}
+<section data-list>
+  <h2>{{ region.name }}</h2>
+  {% for store in region.stores %}
+  <article class="store" data-store="{{ store.label }}">
+    <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+    <p class="kicker">Gross</p>
+    <p class="figure-sm" data-field="gross">{{ show(store.gross) }}</p>
+    <div class="hero-split">
+      <div class="ot-stat">
+        <p class="kicker">Bills</p>
+        <p class="figure-sm" data-field="bills">{{ show(store.bills) }}</p>
+        {% if store.mall_bills %}<p class="note">Includes mall bulk entries</p>{% endif %}
+      </div>
+      <div class="ot-stat">
+        <p class="kicker">APB</p>
+        <p class="figure-sm" data-field="apb">{{ show(store.apb) }}</p>
+      </div>
+    </div>
+    <div class="wow">
+      <span class="wow-chip">Gross {{ change(store.gross_change_pct) }}</span>
+      <span class="wow-chip">Bills {{ change(store.bills_change_pct) }}</span>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endif %}

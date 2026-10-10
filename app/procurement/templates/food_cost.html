@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "_info.html" import info %}
+{% from "_lazy.html" import lazy_section %}
 {% macro money(pair, field, city, window='', hero=false) -%}
 <details class="exact">
   <summary class="figure{% if hero %} hero{% endif %}" data-field="{{ field }}" {% if window %}data-window="{{ window }}" {% endif %}data-city="{{ city }}" data-value="{{ pair.attr }}">{{ pair.compact }}</summary>
@@ -251,87 +252,6 @@
     </article>
   </section>
 
-  <section id="recipe">
-    <article class="tile">
-      <div class="heading-row">
-        <h2>Recipe cost excl. packaging</h2>
-        {% call info() %}
-        <p>{{ recipe.basis }}</p>
-        {% if recipe.other_outlets_missing %}<p>{{ recipe.other_outlets_missing }}</p>{% endif %}
-        <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero.</p>
-        <p>Each cost is compared with its own city median. Delhi recipes use three chutneys per dish and Kolkata uses one, so Delhi costs more by design. The two cities are not ranked against each other.</p>
-        {% endcall %}
-      </div>
-      {% if recipe.review_note %}<p data-field="recipe-review-note">{{ recipe.review_note }}</p>{% endif %}
-      {% if not recipe.available %}
-      <p class="empty">Recipe cost is not on file.</p>
-      {% else %}
-      {% if recipe.packaging_gap %}
-      <p data-field="packaging-gap">{{ recipe.packaging_gap.note }}</p>
-      {% endif %}
-      <p class="empty" data-field="recipe-margin">{{ recipe.margin_unavailable }}</p>
-      <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
-      {% if recipe.list_kind == 'summary' %}
-      <details>
-        <summary>Costs within each city</summary>
-        <div class="scroll stack" data-list>
-          {% for row in recipe.rows %}
-          <div class="row-card" data-review="{{ 'yes' if row.under_review else 'no' }}" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">
-            <b>{{ row.menu_item }}</b>
-            {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">{{ recipe.review_badge }}</p>{% endif %}
-            <p class="muted">{% if row.city %}{{ row.city }} · {% endif %}{{ row.unit }}{% if row.outlets and row.outlets != '0' %} · {{ row.outlets }} {{ 'outlet' if row.outlets == '1' else 'outlets' }}{% endif %}</p>
-            <p>Lowest {{ row.low.text }}{% if row.outlet_min %} at {{ row.outlet_min }}{% endif %}
-              · city median <span data-field="city-median" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.typical.attr }}">{{ row.typical.text }}</span>
-              · highest {{ row.high.text }}{% if row.outlet_max %} at {{ row.outlet_max }}{% endif %}
-              {% if row.spread.text %} · spread <span data-field="city-spread" data-city="{{ row.city }}" data-item="{{ row.menu_item }}" data-value="{{ row.spread.attr }}">{{ row.spread.text }}</span>{% endif %}</p>
-          </div>
-          {% endfor %}
-        </div>
-      </details>
-      {% else %}
-      <details>
-        <summary>All menu items</summary>
-        <div class="scroll stack" data-list>
-          {% for row in recipe.rows %}
-          <div class="row-card" data-review="{{ 'yes' if row.under_review else 'no' }}" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">
-            <b>{{ row.menu_item }}</b>
-            {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.menu_item }}" data-city="{{ row.city }}">{{ recipe.review_badge }}</p>{% endif %}
-            <p class="muted">{{ row.deployment }} · {{ row.city }} · {{ row.unit }}{% if row.partial %} · partial{% endif %}</p>
-            <p>Avg <span data-field="recipe-avg" data-outlet="{{ row.deployment }}" data-item="{{ row.menu_item }}" data-value="{{ row.avg.attr }}">{{ row.avg.text }}</span>
-              · last {{ row.last.text }}{% if row.gap.text %} · last vs avg {{ row.gap.text }}{% endif %}
-              {% if row.unpriced_label %} · {{ row.unpriced_label }}{% endif %}</p>
-          </div>
-          {% endfor %}
-        </div>
-      </details>
-      {% endif %}
-      {% endif %}
-    </article>
-
-    <article class="tile">
-      <div class="heading-row">
-        <h2>Consumed recipe cost · Ideal Plaza</h2>
-        {% if recipe.consumption and recipe.consumption.scope_note %}
-        {% call info() %}
-        <p>{{ recipe.consumption.scope_note }}</p>
-        {% if recipe.consumption.period_label %}<p>{{ recipe.consumption.period_label }}</p>{% endif %}
-        {% endcall %}
-        {% endif %}
-      </div>
-      {% if not recipe.consumption or not recipe.consumption.available %}
-      <p class="empty">What Ideal Plaza actually spent on recipes is not on file.</p>
-      {% else %}
-      <div class="scroll stack" data-list>
-        {% for row in recipe.consumption_rows %}
-        <div class="row-card" data-review="{{ 'yes' if row.under_review else 'no' }}">
-          <b>{{ row.menu_item }}</b>
-          {% if row.under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ row.menu_item }}">{{ recipe.review_badge }}</p>{% endif %}
-          <p>Sold {{ row.qty_text }} · per unit <span data-field="consumed-cost" data-item="{{ row.menu_item }}" data-value="{{ row.cost.attr }}">{{ row.cost.text }}</span> · total {{ row.total.text }}{% if row.missing_label %} · {{ row.missing_label }}{% endif %}</p>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </article>
-  </section>
+  {{ lazy_section(with_qs(url_for('procurement.food_cost_recipe')), height=360, title='Recipe cost', prefetch=true, id='recipe') }}
 </div>
 {% endblock %}

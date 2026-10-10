@@ -896,3 +896,35 @@ form.pc-form .list-search,
   .cc-filters.is-custom { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1fr) auto; }
   .cc-apply { width: auto; }
 }
+
+.lazy-section {
+  box-sizing: border-box;
+}
+.lazy-skeleton {
+  display: grid;
+  gap: 12px;
+  padding: var(--s3) 0;
+}
+.lazy-bar {
+  display: block;
+  height: 14px;
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.lazy-bar.short { width: 55%; }
+.lazy-more {
+  min-height: 44px;
+  margin: var(--s2) 0 var(--s3);
+  padding: 0 var(--s3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lazy-bar { animation: lazy-pulse 1.2s ease-in-out infinite; }
+}
+@keyframes lazy-pulse {
+  50% { opacity: 0.45; }
+}

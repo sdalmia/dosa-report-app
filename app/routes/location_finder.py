@@ -1,6 +1,9 @@
 # location_finder.py – Updated to accept Google Maps URL instead of lat/lng
 
-from flask import Blueprint, render_template, request, url_for
+from flask import Blueprint, jsonify, render_template, request, url_for
+
+from app.fragments import html_fragment, matches, query_offset, query_text, slice_rows
+from app.page_cache import remember
 import requests
 import os
 
@@ -443,7 +446,83 @@ def location_finder():
         )
 
     # GET request → show form
-    return _render_form(board=load_board())
+    return _render_form(board=remember(("location-board",), load_board))
+
+
+def _board():
+    return remember(("location-board",), load_board)
+
+
+def _candidate_page():
+    board = _board()
+    query = query_text()
+    rows = [row for row in board.get("candidates") or [] if matches(row, query, ("area", "city", "nearest"))]
+    chunk, nxt, total = slice_rows(rows, query_offset())
+    more = None
+    if nxt is not None:
+        more = url_for("location_finder.location_candidates", offset=nxt, q=query or None, rows=1)
+    return board, chunk, total, more
+
+
+@location_finder_bp.route("/location-finder/map.json")
+def location_map_json():
+    board = _board()
+    response = jsonify({
+        "candidates": board.get("candidates") or [],
+        "outlets": board.get("outlets") or [],
+        "malls": board.get("malls") or [],
+    })
+    response.headers["Cache-Control"] = "public, max-age=300"
+    return response
+
+
+@location_finder_bp.route("/location-finder/fragment/candidates")
+def location_candidates():
+    board, rows, total, more = _candidate_page()
+    if request.args.get("rows") == "1" or query_offset():
+        body = render_template(
+            "location_finder_candidate_rows.html",
+            rows=rows,
+            total=total,
+            more=more,
+        )
+    else:
+        body = render_template(
+            "location_finder_candidates.html",
+            rows=rows,
+            total=total,
+            more=more,
+            malls=board.get("malls") or [],
+            candidate_count=len(board.get("candidates") or []),
+        )
+    return html_fragment(body)
+
+
+@location_finder_bp.route("/location-finder/fragment/stores")
+def location_stores():
+    board = _board()
+    query = query_text()
+    rows = [row for row in board.get("stores") or [] if matches(row, query, ("name", "format_label"))]
+    chunk, nxt, total = slice_rows(rows, query_offset())
+    more = url_for("location_finder.location_stores", offset=nxt, q=query or None, rows=1) if nxt is not None else None
+    if request.args.get("rows") == "1" or query_offset():
+        body = render_template(
+            "location_finder_store_rows.html",
+            rows=chunk,
+            total=total,
+            more=more,
+            money=_money,
+        )
+    else:
+        body = render_template(
+            "location_finder_stores.html",
+            rows=chunk,
+            total=total,
+            more=more,
+            correlations=board.get("correlations") or {},
+            money=_money,
+        )
+    return html_fragment(body)
 
 
 @location_finder_bp.route("/location-finder/brand", methods=["POST"])

@@ -162,7 +162,7 @@
                 {% for brand in positioning.similar_brands %}
                 <li class="d-flex align-items-center gap-2 mb-2">
                     {% if brand.logo_url %}
-                    <img src="{{ brand.logo_url }}" alt="" width="32" height="32">
+                    <img src="{{ brand.logo_url }}" alt="" width="32" height="32" loading="lazy">
                     {% endif %}
                     <span>
                         <strong>{{ brand.name }}</strong>
@@ -189,7 +189,7 @@
                 That demand is what the site score is reading. Known brands are marked with their logo.
                 Every other place stays a plain marker. The blue marker is the site being scored.
             </p>
-            <div id="heatmap" style="height: 500px; width: 100%;"></div>
+            <div id="heatmap" data-boot="heatmap" style="height: 500px; width: 100%;"></div>
         </div>
     </div>
 
@@ -214,7 +214,7 @@
                     <td>{{ loop.index }}</td>
                     <td>
                         {% if p.logo_url %}
-                        <img src="{{ p.logo_url }}" alt="" width="24" height="24" class="me-1">
+                        <img src="{{ p.logo_url }}" alt="" width="24" height="24" class="me-1" loading="lazy">
                         {% endif %}
                         {{ p.name }}
                     </td>
@@ -297,7 +297,6 @@
 .score-label { font-size: 16px; font-weight: 500; opacity: 0.9; }
 .score-category { font-size: 22px; font-weight: 700; margin-top: 4px; }
 </style>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=visualization,places"></script>
 <script>
 function markerIcon(place) {
     if (place.logo_url) {
@@ -391,6 +390,13 @@ function initMap(map) {
     });
 }
 
-window.onload = initHeatmap;
+window.lazyBoots = window.lazyBoots || {};
+window.lazyBoots.heatmap = function () {
+  var src = "https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=visualization,places";
+  var tag = document.createElement("script");
+  tag.src = src;
+  tag.onload = initHeatmap;
+  document.head.appendChild(tag);
+};
 </script>
 {% endblock %}

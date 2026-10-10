@@ -1,0 +1,16 @@
+<div data-list>
+{% for group in groups %}
+<section class="owner-group" data-owner="{{ group.owner }}">
+  <h2>{{ group.owner }}</h2>
+  {% for gap in group.gaps %}
+  <article class="store" data-gap="{{ gap.gap_id }}" data-list-item {% if gap.threat %}data-threat="1"{% endif %}>
+    {% if gap.threat %}<p class="kicker threat">Threat</p>{% endif %}
+    <h3>{{ gap.title }}</h3>
+    {% if gap.store %}<p class="note">{{ gap.store }}</p>{% endif %}
+    {% if gap.why_it_matters %}<p>{{ gap.why_it_matters }}</p>{% endif %}
+    <p class="meta">{{ gap.status_label }}{% if gap.fix %} · {{ gap.fix }}{% endif %}{% if gap.due_label %} · Due {{ gap.due_label }}{% endif %}</p>
+  </article>
+  {% endfor %}
+</section>
+{% endfor %}
+</div>
