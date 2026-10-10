@@ -12,7 +12,11 @@ class Config:
     OUTPUT_FOLDER = 'outputs'
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///app.db")
+    _db_url = os.getenv("DATABASE_URL", "sqlite:///app.db")
+    if _db_url.startswith("postgres://"):
+        _db_url = "postgresql://" + _db_url[len("postgres://"):]
+    SQLALCHEMY_DATABASE_URI = _db_url
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True} if _db_url.startswith("postgresql") else {}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Mail Settings
