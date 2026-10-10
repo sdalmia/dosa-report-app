@@ -12,6 +12,24 @@
 
   <section class="cc-section" id="threats">
     <div class="section-head"><h2>Threats</h2></div>
+    <h3>Recipe looks incomplete</h3>
+    <p class="muted">{{ stub_note }}</p>
+    {% if recipe_stubs %}
+    <div class="flag-row">
+      {% for row in recipe_stubs %}
+      <a class="flag-card sev-red" href="{{ url_for('menu_costing.item_page', city=row.city, store=row.outlet, item=row.item) }}">
+        <span class="flag-kicker">{{ row.where }}</span>
+        <strong>{{ row.item }}</strong>
+        <span data-field="threat-stub" data-city="{{ row.city }}" data-store="{{ row.outlet }}" data-item="{{ row.item }}" data-value="{{ row.cost_attr }}"><span class="mc-num">{{ row.cost }}</span> · {{ row.reason }}</span>
+        <span>{{ row.detail }}</span>
+        {% if row.orders %}<span class="muted">Sold {{ row.orders }}{% if sales_period %} · {{ sales_period }}{% endif %}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No selling dish has a base recipe this small.</p>
+    {% endif %}
+
     <h3>Above the {{ city }} median</h3>
     <p class="muted">{{ median_note }}</p>
     {% if above_count %}
@@ -166,7 +184,12 @@
         {% elif row.cost_kind == 'full' %}
         <p data-field="cost-full" data-item="{{ row.item }}">Full cost</p>
         {% endif %}
-        {% if row.vs %}<p>{{ row.vs }}</p>{% endif %}
+        {% if row.vs %}
+        <p>{{ row.vs }}</p>
+        {% elif row.baseline_note %}
+        <p data-field="baseline-note" data-item="{{ row.item }}"><span class="mc-tip" title="{{ row.baseline_note }}">Why this % is blank</span></p>
+        <p class="muted mc-clip">{{ row.baseline_note }}</p>
+        {% endif %}
         {% if row.orders or row.sold %}
         <p class="muted">Sold <span data-field="orders" data-item="{{ row.item }}" data-value="{{ row.orders_attr }}">{{ row.orders }}</span>{% if sales_period %} · {{ sales_period }}{% endif %}{% if row.sold %} · <span class="mc-num">{{ row.sold }}</span>{% endif %}</p>
         {% elif not sales_available %}

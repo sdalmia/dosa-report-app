@@ -4,6 +4,8 @@ Prices come only from an uploaded menu. Recipe cost comes from the cost file.
 A missing price, cost, or sale stays blank.
 """
 
+from collections import defaultdict
+
 from app.menu_costing.recipes import is_ro_water, recipe_lines
 from app.menu_costing.sales import city_sale, lookup_sale
 from app.procurement.numbers import format_pct, format_qty, num_attr, percent
@@ -164,8 +166,15 @@ def build_page(recipes, sales, versions, *, city, channel, store, query, today):
             "and its food cost % stays blank."
         ),
         "median_note": (
-            "A city median uses full-cost dishes only, and only when at least 3 outlets have a full cost."
+            "The % compares an outlet with its own city's median from the cost file. "
+            "When the % is blank, the note says why."
         ),
+        "stub_note": (
+            "A base recipe under ₹1, or under 10% of its city median, while the dish sells. "
+            "A recipe that is only the container is listed too. "
+            "These are stock under-deduction risks for Sailesh."
+        ),
+        "recipe_stubs": present_stubs(_stub_recipes(recipes, sales, city, store)),
         "stale_prices": present_stale(recipes.get("price_gaps") or [], city),
         "stale_note": (
             f"Restroworks rate against the {city} warehouse receipt rate for 9 Sep to 8 Oct. "
@@ -284,6 +293,7 @@ def _cost_row(recipes, city, store, item):
         "unpriced_excl": None,
         "cost_kind": "",
         "receipt_title": "",
+        "baseline_text": summary.get("baseline_text") or "",
     }
 
 
@@ -296,6 +306,7 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
     unpriced_excl = None
     cost_kind = ""
     receipt_title = ""
+    baseline_text = ""
     if cost_row is not None:
         cost = cost_row.get("cost")
         median = cost_row.get("median")
@@ -305,10 +316,14 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         unpriced_excl = cost_row.get("unpriced_excl")
         cost_kind = cost_row.get("cost_kind") or ""
         receipt_title = cost_row.get("receipt_title") or ""
+        if vs_pct is None:
+            baseline_text = cost_row.get("baseline_text") or ""
     elif summary is not None:
         cost = summary.get("median")
         median = summary.get("median")
         incomplete = bool(summary.get("incomplete"))
+        if median is None:
+            baseline_text = summary.get("baseline_text") or ""
     price = None if price_row is None else price_row.get("price")
     category = "" if price_row is None else (price_row.get("category") or "")
     if store:
@@ -333,6 +348,7 @@ def _join(item, price_row, cost_row, sales, city, store, recipes, summary=None):
         "unpriced_excl": unpriced_excl,
         "cost_kind": cost_kind,
         "receipt_title": receipt_title,
+        "baseline_text": baseline_text,
         "basis": "store" if store else "median",
         "food_pct": None if incomplete else food_cost_pct(cost, price),
         "margin": None if incomplete else margin_amount(cost, price),
@@ -350,8 +366,6 @@ def _above(recipes, city, store, query_key):
             continue
         if query_key and query_key not in row["item"].casefold():
             continue
-        if row.get("cost_kind") not in (None, "", "full"):
-            continue
         if row["vs_pct"] is None or row["vs_pct"] <= 0 or row["cost"] is None:
             continue
         rows.append(row)
@@ -368,11 +382,99 @@ def _above_count(recipes, city, store, query_key):
             continue
         if query_key and query_key not in row["item"].casefold():
             continue
-        if row.get("cost_kind") not in (None, "", "full"):
-            continue
         if row["vs_pct"] is not None and row["vs_pct"] > 0 and row["cost"] is not None:
             count += 1
     return count
+
+
+def _stub_recipes(recipes, sales, city, store):
+    """Base recipes that look too small to deduct the real stock, and that sell.
+
+    A blank cost is left out. An incomplete cost is left out, because a missing
+    price is not treated as zero. A recipe that is only a container is listed
+    even when September has no sales under that name.
+    """
+    grouped = defaultdict(list)
+    for (row_city, outlet, _item_key), row in recipes["by_outlet"].items():
+        if row_city != city:
+            continue
+        if store and outlet != store:
+            continue
+        if row.get("cost_kind") == "incomplete":
+            continue
+        cost = row.get("cost")
+        if cost is None:
+            continue
+        median = row.get("median")
+        sale = lookup_sale(sales, outlet, row["item"])
+        orders = None if sale is None else sale.get("orders")
+        sells = orders is not None and orders > 0
+        low = cost < 1
+        thin = median not in (None, 0) and cost < median * 0.10
+        pack = bool(row.get("packaging_only"))
+        if not (low or thin or pack):
+            continue
+        grouped[row["key"]].append(
+            {
+                "row": row,
+                "orders": orders if sells else None,
+                "low": low,
+                "thin": thin,
+                "pack": pack,
+            }
+        )
+    found = []
+    for hits in grouped.values():
+        if not any(hit["pack"] or hit["orders"] for hit in hits):
+            continue
+        sample = hits[0]["row"]
+        orders = sum(hit["orders"] or 0 for hit in hits)
+        only = next((hit["row"].get("only_ingredient") for hit in hits if hit["row"].get("only_ingredient")), "")
+        if any(hit["pack"] for hit in hits):
+            reason = "Only " + (only or "the container")
+        elif all(hit["low"] for hit in hits):
+            reason = "Under ₹1"
+            if only:
+                reason += ". Only " + only
+        else:
+            reason = f"Under 10% of the {city} median"
+            if only:
+                reason += ". Only " + only
+        found.append(
+            {
+                "item": sample["item"],
+                "city": city,
+                "outlet": sample["outlet"] if store else "",
+                "outlets": len(hits),
+                "cost": sample["cost"],
+                "orders": orders or None,
+                "reason": reason,
+            }
+        )
+    found.sort(key=lambda row: (-(row["orders"] or 0), row["item"].casefold()))
+    return found
+
+
+def present_stubs(rows):
+    shown = []
+    for row in rows:
+        count = row["outlets"]
+        noun = "outlet" if count == 1 else "outlets"
+        shown.append(
+            {
+                "item": row["item"],
+                "city": row["city"],
+                "outlet": row["outlet"],
+                "where": row["outlet"] if row["outlet"] else f"{owner_count(count)} {noun}",
+                "cost": owner_rupee(row["cost"]),
+                "cost_attr": num_attr(row["cost"]),
+                "orders": owner_count(row["orders"]) if row["orders"] else "",
+                "orders_attr": num_attr(row["orders"]),
+                "reason": row["reason"],
+                "detail": f"Stock under-deduction risk for Sailesh. {row['reason']}.",
+            }
+        )
+    return shown
 
 
 def _priced_below(rows):
@@ -474,6 +576,7 @@ def _present_row(row):
         "incomplete": bool(row.get("incomplete")),
         "cost_kind": row.get("cost_kind") or "",
         "receipt_title": row.get("receipt_title") or "",
+        "baseline_note": row.get("baseline_text") or "",
         "unpriced_count": (
             owner_count(row.get("unpriced_excl"))
             if row.get("incomplete") and row.get("unpriced_excl")

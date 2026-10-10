@@ -11,7 +11,7 @@ os.environ["SECRET_KEY"] = "test-secret"
 
 from app import create_app
 from app.menu_costing.catalog import build_page, food_cost_pct, margin_amount
-from app.menu_costing.recipes import _apply_full_medians
+from app.menu_costing.recipes import clear_caches, explain_baseline, load_recipes
 from app.menu_costing.history import dish_history, load_history
 from app.menu_costing.models import MenuItemPrice, MenuVersion
 from app.menu_costing.parse_menu import parse_menu_text, parse_upload
@@ -355,36 +355,25 @@ class MenuCostingTests(unittest.TestCase):
         self.assertNotEqual(_attr(priced, "menu-cost", item="ABC Juice"), "")
         self.assertNotIn('data-field="priced-below" data-item="ABC Juice"', priced)
 
-    def test_full_cost_median_ignores_incomplete_and_needs_three_outlets(self):
-        def row(outlet, cost, kind):
-            return {
-                "outlet": outlet,
-                "city": "Kolkata",
-                "item": "Fanta",
-                "key": "fanta",
-                "cost": cost,
-                "cost_kind": kind,
-            }
-
-        two = {
-            ("Kolkata", "Forum", "fanta"): row("Forum", 19.04, "full"),
-            ("Kolkata", "Ideal", "fanta"): row("Ideal", 0.39, "incomplete"),
-            ("Kolkata", "Blank", "fanta"): row("Blank", None, "full"),
-        }
-        city = _apply_full_medians(two)
-        self.assertIsNone(city[("Kolkata", "fanta")]["median"])
-        self.assertIsNone(two[("Kolkata", "Forum", "fanta")]["vs_pct"])
-        self.assertEqual(city[("Kolkata", "fanta")]["full_outlets"], 1)
-        three = dict(two)
-        three[("Kolkata", "A", "fanta")] = row("A", 18, "full")
-        three[("Kolkata", "B", "fanta")] = row("B", 20, "full")
-        three[("Kolkata", "Low", "fanta")] = row("Low", 0.10, "estimated")
-        city = _apply_full_medians(three)
-        self.assertEqual(city[("Kolkata", "fanta")]["median"], 19.04)
-        self.assertEqual(city[("Kolkata", "fanta")]["full_outlets"], 3)
-        self.assertIsNone(three[("Kolkata", "Ideal", "fanta")]["vs_pct"])
-        self.assertIsNone(three[("Kolkata", "Low", "fanta")]["vs_pct"])
-        self.assertIsNotNone(three[("Kolkata", "Forum", "fanta")]["vs_pct"])
+    def test_city_median_comes_from_the_file_and_a_blank_percent_has_a_note(self):
+        self.assertEqual(explain_baseline("ok", 16), "")
+        self.assertIn("1 outlet", explain_baseline("fewer_than_3_fully_priced_outlets", 1))
+        self.assertIn("Fewer than 3 outlets", explain_baseline("fewer_than_3_fully_priced_outlets", 1))
+        clear_caches()
+        recipes = load_recipes()
+        ideal = recipes["by_outlet"][("Kolkata", "Ideal Plaza", "masala dosa")]
+        self.assertEqual(ideal["median"], 26.22)
+        self.assertEqual(ideal["vs_pct"], -9.2)
+        self.assertEqual(ideal["baseline_text"], "")
+        fanta = recipes["by_city"][("Kolkata", "fanta (regular)")]
+        self.assertIsNone(fanta["median"])
+        self.assertIn("Fewer than 3 outlets", fanta["baseline_text"])
+        self.assertIn("1 outlet", fanta["baseline_text"])
+        truck = self.client.get(
+            "/menu?city=Kolkata&channel=Dine-in&store=Food+Truck+-+1&q=Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertIn("The dish cost is incomplete, so it is left out of the city comparison.", truck)
+        self.assertIn("Why this % is blank", truck)
 
     def test_estimated_cost_names_the_receipt_and_skips_wild_medians(self):
         fanta = self.client.get(
@@ -412,7 +401,28 @@ class MenuCostingTests(unittest.TestCase):
         self.assertIn('data-field="stale-restroworks" data-item="Ghee">₹722', delhi)
         self.assertIn('data-field="stale-receipt" data-item="Ghee">₹841', delhi)
         self.assertIn("Recipe price out of date", delhi)
-        self.assertIn("at least 3 outlets have a full cost", delhi)
+        self.assertIn("Why this % is blank", forum)
+        self.assertIn("The baseline has 1 outlet", forum)
+
+    def test_recipe_looks_incomplete_flags_selling_stubs_and_the_container(self):
+        kolkata = self.client.get("/menu?city=Kolkata").get_data(as_text=True)
+        self.assertIn("Recipe looks incomplete", kolkata)
+        self.assertIn("Stock under-deduction risk for Sailesh", kolkata)
+        self.assertIn('data-field="threat-stub" data-city="Kolkata" data-store="" data-item="Regular Masala Dosa"', kolkata)
+        self.assertIn("Coriander Leaves", kolkata)
+        self.assertEqual(_attr(kolkata, "threat-stub", item="Regular Masala Dosa"), "0.1")
+        self.assertIn('data-field="threat-stub" data-city="Kolkata" data-store="" data-item="Extra Sambar - 250ml"', kolkata)
+        self.assertIn("Glen Container", kolkata)
+        self.assertNotIn("recipe needs checking", kolkata.lower())
+        delhi = self.client.get("/menu?city=Delhi+NCR").get_data(as_text=True)
+        self.assertIn('data-field="threat-stub" data-city="Delhi NCR" data-store="" data-item="Extra Sambar - 250ml"', delhi)
+        self.assertIn("only the container", delhi.lower())
+        dish = self.client.get(
+            "/menu/item?city=Kolkata&store=Ideal+Plaza&item=Regular+Masala+Dosa"
+        ).get_data(as_text=True)
+        self.assertIn('data-field="recipe-stub" data-item="Regular Masala Dosa"', dish)
+        self.assertIn("Coriander Leaves", dish)
+        self.assertIn("Sailesh", dish)
 
     def test_recipe_snapshots_show_cost_and_ingredient_changes(self):
         with tempfile.TemporaryDirectory() as tmp:

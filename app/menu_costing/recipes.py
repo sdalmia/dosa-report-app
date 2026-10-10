@@ -14,9 +14,20 @@ _CACHE = {}
 _LINE_CACHE = {}
 
 INCOMPLETE_STATUSES = frozenset({"partial_unpriced_ingredients", "no_priced_ingredients"})
-FULL_OUTLETS = 3
 STALE_GAP = 10
 _KIND = {"fully_priced": "full", "estimated": "estimated", "incomplete": "incomplete"}
+_PACKAGING = ("container", "glass", "bottle", "napkin", "straw", "stirrer", "cup", "lid")
+_BASELINE = {
+    "row_cost_incomplete": "The dish cost is incomplete, so it is left out of the city comparison.",
+    "no_cost": "This dish has no cost, so there is no comparison.",
+    "no_fully_priced_outlet_in_city": "No outlet in this city has a full cost, so there is no median.",
+    "fewer_than_3_fully_priced_outlets": "Fewer than 3 outlets have a full cost, so there is no city median.",
+    "median_implausibly_low_below_Rs1": "The city median is under ₹1, so the comparison is left blank.",
+    "median_below_Rs1_stub_recipe_or_addon": (
+        "The city median is under ₹1. The recipe looks like a stub or an add-on, so the comparison is left blank."
+    ),
+    "channel_tab_not_compared_to_base": "This tab is not compared with the base recipe.",
+}
 
 
 def procurement_dir():
@@ -48,8 +59,9 @@ def _read(directory):
         estimated_lines = directory / "menu_item_cost_lines_estimated.csv"
         if estimated_lines.is_file():
             lines_path = estimated_lines
-            receipts, rates, labels = _scan_estimated_lines(estimated_lines)
+            receipts, rates, labels, ingredients = _scan_estimated_lines(estimated_lines)
             _attach_receipts(items, receipts)
+            _attach_ingredients(items, ingredients)
             price_gaps = _price_gaps(directory / "supplier_item_rates.csv", rates, labels)
     else:
         items = _read_items(directory / "menu_item_cost.csv")
@@ -60,7 +72,7 @@ def _read(directory):
             continue
         by_outlet[(row["city"], row["outlet"], row["key"])] = row
         outlets.setdefault(row["city"], set()).add(row["outlet"])
-    by_city = _apply_full_medians(by_outlet)
+    by_city = _index_cities(by_outlet, _read_spreads(directory / "menu_item_cost_summary.csv"))
     cities = sorted(set(outlets) | {row["city"] for row in by_city.values()}, key=_city_rank)
     return {
         "directory": directory,
@@ -139,6 +151,12 @@ def _read_items(path):
                     "cost": parse_number(raw.get("cost_per_portion_avg")),
                     "median": parse_number(raw.get("city_baseline_median_cost")),
                     "vs_pct": parse_number(raw.get("vs_city_baseline_pct")),
+                    "baseline_outlets": parse_number(raw.get("city_baseline_outlets")),
+                    "baseline_text": explain_baseline(
+                        raw.get("baseline_note"), parse_number(raw.get("city_baseline_outlets"))
+                    ),
+                    "only_ingredient": "",
+                    "packaging_only": False,
                     "partial": _truthy(raw.get("has_unpriced_ingredient")),
                     "unpriced_excl": excl,
                     "cost_status": status,
@@ -172,8 +190,15 @@ def _read_estimated_items(path):
                     "tab": (raw.get("recipe_tab") or "base").strip() or "base",
                     "menu": _truthy(raw.get("is_menu_item")),
                     "cost": parse_number(raw.get("cost_per_portion_estimated")),
-                    "median": None,
-                    "vs_pct": None,
+                    "median": parse_number(raw.get("city_baseline_median_cost_estimated")),
+                    "vs_pct": parse_number(raw.get("vs_city_baseline_pct_estimated")),
+                    "baseline_outlets": parse_number(raw.get("city_baseline_outlets_estimated")),
+                    "baseline_text": explain_baseline(
+                        raw.get("baseline_note_estimated"),
+                        parse_number(raw.get("city_baseline_outlets_estimated")),
+                    ),
+                    "only_ingredient": "",
+                    "packaging_only": False,
                     "partial": kind != "full",
                     "unpriced_excl": excl,
                     "cost_status": status,
@@ -192,35 +217,65 @@ def _cost_kind(status, excl):
     return _KIND.get((status or "").strip(), "incomplete")
 
 
-def _apply_full_medians(by_outlet):
-    """City median from full-cost dishes only. Fewer than 3 outlets leaves it blank."""
+def explain_baseline(note, outlets):
+    """Owner sentence for a blank comparison. An ok note stays blank."""
+    key = (note or "").strip()
+    if not key or key == "ok":
+        return ""
+    text = _BASELINE.get(key) or key.replace("_", " ")
+    if outlets is None:
+        return text
+    count = int(round(float(outlets)))
+    noun = "outlet" if count == 1 else "outlets"
+    return f"{text} The baseline has {count} {noun}."
+
+
+def _first_present(rows, field):
+    for row in rows:
+        value = row.get(field)
+        if value is not None and value != "":
+            return value
+    return None
+
+
+def _index_cities(by_outlet, spreads):
+    """One city row per dish. The median and the blank-note come from the cost file."""
     groups = defaultdict(list)
     for row in by_outlet.values():
         groups[(row["city"], row["key"])].append(row)
     by_city = {}
     for (city, key), rows in groups.items():
-        full = [row["cost"] for row in rows if row.get("cost_kind") == "full" and row.get("cost") is not None]
-        median = statistics.median(full) if len(full) >= FULL_OUTLETS else None
-        spread = None
-        if median not in (None, 0) and full:
-            spread = percent(max(full) - min(full), median)
+        median = _first_present(rows, "median")
+        note = ""
+        if median is None:
+            note = next((row.get("baseline_text") or "" for row in rows if row.get("baseline_text")), "")
         by_city[(city, key)] = {
             "city": city,
             "item": rows[0]["item"],
             "key": key,
             "menu": True,
             "median": median,
-            "spread": spread,
-            "full_outlets": len(full),
+            "spread": spreads.get((city, key)),
+            "baseline_outlets": _first_present(rows, "baseline_outlets"),
+            "baseline_text": note,
             "incomplete": False,
+            "cost_kind": "",
         }
-        for row in rows:
-            row["median"] = median
-            if row.get("cost_kind") == "full" and median not in (None, 0) and row.get("cost") is not None:
-                row["vs_pct"] = percent(row["cost"] - median, median)
-            else:
-                row["vs_pct"] = None
     return by_city
+
+
+def _read_spreads(path):
+    if not path.is_file():
+        return {}
+    spreads = {}
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            name = (raw.get("item_name") or "").strip()
+            city = (raw.get("city") or "").strip()
+            if not name or not city:
+                continue
+            spreads[(city, name.casefold())] = parse_number(raw.get("spread_within_city_pct"))
+    return spreads
 
 
 def _attach_receipts(items, receipts):
@@ -234,6 +289,7 @@ def _scan_estimated_lines(path):
     seen = defaultdict(set)
     rates = defaultdict(lambda: defaultdict(list))
     labels = {}
+    ingredients = defaultdict(set)
     with path.open(newline="", encoding="utf-8-sig") as handle:
         for raw in csv.DictReader(handle):
             if (raw.get("recipe_tab") or "base").strip().casefold() not in {"", "base"}:
@@ -243,6 +299,8 @@ def _scan_estimated_lines(path):
             ingredient = (raw.get("ingredient_name") or "").strip()
             if not outlet or not ingredient:
                 continue
+            if item:
+                ingredients[(outlet.casefold(), item.casefold())].add(ingredient)
             source = (raw.get("price_source") or "").strip().casefold()
             if source == "grn_estimate" and item:
                 title = _receipt_title(raw.get("receipt_ref"), ingredient)
@@ -259,7 +317,26 @@ def _scan_estimated_lines(path):
                     rate_key = (city, ingredient.casefold(), unit.casefold())
                     labels[rate_key] = ingredient
                     rates[rate_key][outlet].append(cost / qty)
-    return receipts, rates, labels
+    return receipts, rates, labels, ingredients
+
+
+def _attach_ingredients(items, ingredients):
+    for row in items:
+        names = ingredients.get((row["outlet"].casefold(), row["key"])) or set()
+        if len(names) != 1:
+            continue
+        only = next(iter(names))
+        row["only_ingredient"] = only
+        row["packaging_only"] = _packaging_only(row["item"], only)
+
+
+def _packaging_only(item, ingredient):
+    """A food dish whose only line is a container, cup, or similar."""
+    text = (ingredient or "").casefold()
+    if not any(word in text for word in _PACKAGING):
+        return False
+    item_text = (item or "").casefold()
+    return not any(word in item_text for word in _PACKAGING)
 
 
 def _receipt_title(ref, ingredient):

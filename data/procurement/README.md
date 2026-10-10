@@ -163,7 +163,7 @@ This compares Stock Recipe cost with the Recipe Consumption cost for Ideal Plaza
 ### 5d. menu_item_cost.csv, menu_item_cost_summary.csv, menu_item_cost_lines.csv
 **menu_item_cost_summary.csv** is one row per item per city. `city_baseline_median_cost` is that city's own median.
 
-**menu_item_cost.csv** is one row per outlet, recipe tab, and item. `vs_city_baseline_pct` is that outlet versus its own city's median. A blank cost is not zero.
+**menu_item_cost.csv** is one row per outlet, recipe tab, and item. `vs_city_baseline_pct` is that outlet versus its own city's median. A blank % stays blank. `baseline_note` says why, and `city_baseline_outlets` is how many outlets are in that baseline. A blank cost is not zero.
 
 **menu_item_cost_lines.csv** is the ingredient quantity, unit cost, and line cost for each recipe.
 
@@ -174,7 +174,7 @@ Delhi NCR costs more than Kolkata because Delhi serves 3 chutneys with each dish
 ### 5e. menu_item_cost_estimated.csv and menu_item_cost_lines_estimated.csv
 These sit beside the original cost files and do not replace them. A line with no Restroworks price is filled from that city's warehouse receipt rate for 9 Sep to 8 Oct when a receipt exists. `receipt_ref` names that receipt. A line with no receipt stays blank. A blank is not zero.
 
-`cost_status_estimated` is `fully_priced`, `estimated`, or `incomplete`. Menu & Costing shows those as full cost, estimated cost, and cost incomplete. City medians use full-cost dishes only, and only when at least 3 outlets have a full cost.
+`cost_status_estimated` is `fully_priced`, `estimated`, or `incomplete`. Menu & Costing shows those as full cost, estimated cost, and cost incomplete. The city median, the comparison %, `city_baseline_outlets_estimated`, and `baseline_note_estimated` come from this file. Menu & Costing does not recompute the median. A blank % is shown with `baseline_note_estimated`.
 
 ### 5f. history/YYYY-MM/
 Procurement drops a dated monthly snapshot of `menu_item_cost.csv` and `menu_item_cost_lines.csv` into `data/procurement/history/YYYY-MM/`. October 2026 (`2026-10`) is the first folder. The files at the procurement root stay the current export.

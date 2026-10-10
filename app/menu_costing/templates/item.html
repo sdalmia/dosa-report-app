@@ -16,9 +16,16 @@
     {% if median_text %}
     <p>{{ city }} median <span class="mc-num" data-field="city-median" data-city="{{ city }}" data-item="{{ item }}">{{ median_text }}</span>{% if spread_text %} · spread {{ spread_text }} within {{ city }}{% endif %}</p>
     {% if median_incomplete %}<p data-field="cost-incomplete" data-item="{{ item }}">Cost incomplete</p>{% endif %}
+    {% elif blank_median_note %}
+    <p data-field="baseline-note" data-item="{{ item }}"><span class="mc-tip" title="{{ blank_median_note }}">Why this % is blank</span></p>
+    <p class="muted mc-clip">{{ blank_median_note }}</p>
     {% endif %}
     {% if chosen %}
     <p>This store <span class="mc-num" data-field="store-cost" data-store="{{ store }}" data-item="{{ item }}">{{ chosen_cost }}</span>{% if chosen_vs %} · {{ chosen_vs }}{% endif %}</p>
+    {% if not chosen_vs and chosen_baseline %}
+    <p data-field="baseline-note" data-item="{{ item }}" data-store="{{ store }}"><span class="mc-tip" title="{{ chosen_baseline }}">Why this % is blank</span></p>
+    <p class="muted mc-clip">{{ chosen_baseline }}</p>
+    {% endif %}
     {% if chosen.cost_kind == 'incomplete' %}
     <p data-field="cost-incomplete" data-item="{{ item }}" data-store="{{ store }}">Cost incomplete{% if chosen_unpriced %} · {{ chosen_unpriced }} {{ 'ingredient has' if chosen_unpriced == '1' else 'ingredients have' }} no price{% endif %}</p>
     {% elif chosen.cost_kind == 'estimated' %}
@@ -27,6 +34,7 @@
     {% elif chosen.cost_kind == 'full' %}
     <p data-field="cost-full" data-item="{{ item }}">Full cost</p>
     {% endif %}
+    {% if stub_detail %}<p data-field="recipe-stub" data-item="{{ item }}">{{ stub_detail }}</p>{% endif %}
     {% elif store_cards %}
     <p class="empty">{{ pick_store }}</p>
     <div class="mc-list">
@@ -34,6 +42,7 @@
       <a class="tile" href="{{ url_for('menu_costing.item_page', city=city, store=row.outlet, item=item) }}">
         <strong>{{ row.outlet }}</strong>
         <p class="mc-num">{{ row.cost }}{% if row.vs %} · {{ row.vs }}{% endif %}</p>
+        {% if not row.vs and row.baseline_note %}<p class="muted mc-clip"><span class="mc-tip" title="{{ row.baseline_note }}">Why this % is blank</span></p>{% endif %}
         {% if row.cost_kind == 'incomplete' %}<p>Cost incomplete{% if row.unpriced_count %} · {{ row.unpriced_count }} {{ 'ingredient has' if row.unpriced_count == '1' else 'ingredients have' }} no price{% endif %}</p>
         {% elif row.cost_kind == 'estimated' %}<p><span class="mc-tip" title="{{ row.receipt_title }}">Estimated cost</span></p>{% if row.receipt_title %}<p class="muted mc-clip">{{ row.receipt_title }}</p>{% endif %}
         {% elif row.cost_kind == 'full' %}<p>Full cost</p>{% endif %}

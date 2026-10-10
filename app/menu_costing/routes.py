@@ -10,6 +10,8 @@ from app.menu_costing.catalog import (
     build_item,
     build_page,
     diff_items,
+    present_stubs,
+    _stub_recipes,
     owner_count,
     owner_rupee,
     present_line,
@@ -66,13 +68,18 @@ def item_page():
     chosen = detail["chosen"]
     detail["chosen_cost"] = owner_rupee(chosen["cost"]) if chosen else ""
     detail["chosen_vs"] = vs_own_city(chosen["vs_pct"], detail["city"]) if chosen else ""
+    detail["chosen_baseline"] = (chosen.get("baseline_text") or "") if chosen and chosen.get("vs_pct") is None else ""
     detail["median_text"] = ""
     summary = detail["summary"]
     if summary and summary.get("median") is not None:
         detail["median_text"] = owner_rupee(summary["median"])
         detail["spread_text"] = format_pct(summary.get("spread"))
+        detail["blank_median_note"] = ""
     else:
         detail["spread_text"] = ""
+        detail["blank_median_note"] = (summary.get("baseline_text") or "") if summary else ""
+    stubs = present_stubs(_stub_recipes(recipes, load_sales(), detail["city"], detail["store"]))
+    detail["stub_detail"] = next((row["detail"] for row in stubs if row["item"].casefold() == (detail["item"] or "").casefold()), "")
     detail["store_cards"] = [
         {
             "outlet": row["outlet"],
@@ -81,6 +88,7 @@ def item_page():
             "incomplete": bool(row.get("incomplete")),
             "cost_kind": row.get("cost_kind") or "",
             "receipt_title": row.get("receipt_title") or "",
+            "baseline_note": row.get("baseline_text") or "" if row.get("vs_pct") is None else "",
             "unpriced_count": (
                 owner_count(row.get("unpriced_excl"))
                 if row.get("incomplete") and row.get("unpriced_excl")
