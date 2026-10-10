@@ -120,13 +120,15 @@ def _detail(parts):
 
 
 def _ops(feeds, store):
+    from app.store_master import allows_growth
+
     lines = []
     rows = _posist_rows(feeds, store)
     if rows:
         void = _void_line(rows)
         if void:
             lines.append(void)
-        bills = _bill_line(rows)
+        bills = _bill_line(rows, allow_growth=allows_growth(store.label))
         if bills:
             lines.append(bills)
     audit_line = _audit_line(present_audit(feeds, store))
@@ -149,7 +151,7 @@ def _void_line(rows):
     return f"Void bills are {shown}. Confirm a reason on each void bill before the next close."
 
 
-def _bill_line(rows):
+def _bill_line(rows, allow_growth=True):
     row = _newest(rows, "bills_wow_pct")
     if row is None:
         return ""
@@ -170,6 +172,8 @@ def _bill_line(rows):
             f"On {day}, bills were {pct} versus the last same weekday{bracket}. "
             "Find what cut that bill count before the next same weekday."
         )
+    if not allow_growth:
+        return ""
     return (
         f"On {day}, bills were {pct} versus the last same weekday{bracket}. "
         "Keep whatever added those bills."
@@ -238,9 +242,11 @@ def _audit_action(average, avg_n, week_n, end_n, note):
 
 
 def _crm(feeds, store):
+    from app.store_master import allows_growth
+
     lines = []
     lines.extend(_fame_lines(present_famepilot(feeds, store)))
-    lines.extend(_reelo_lines(present_reelo(feeds, store)))
+    lines.extend(_reelo_lines(present_reelo(feeds, store), allow_growth=allows_growth(store.label)))
     return lines
 
 
@@ -304,7 +310,7 @@ def _private_action(fields):
     return f"Private review count is {count}. Read those private reviews with the shift lead."
 
 
-def _reelo_lines(reelo):
+def _reelo_lines(reelo, allow_growth=True):
     if not reelo["has_row"] or reelo["not_in_reelo"]:
         return []
     fields = reelo["fields"]
@@ -312,7 +318,7 @@ def _reelo_lines(reelo):
     capture = _capture_line(fields)
     if capture:
         lines.append(capture)
-    redemption = _redemption_line(fields)
+    redemption = _redemption_line(fields, allow_growth=allow_growth)
     if redemption:
         lines.append(redemption)
     return lines
@@ -340,29 +346,29 @@ def _capture_line(fields):
     return ""
 
 
-def _redemption_line(fields):
+def _redemption_line(fields, allow_growth=True):
     rate = fields.get("redemption_rate") or ""
     times = fields.get("times_redeemed") or ""
+    ask = " Ask the next guest who has points to redeem." if allow_growth else ""
     if rate and times:
-        return (
-            f"Redemption rate is {rate} across {times} redemptions. "
-            "Ask the next guest who has points to redeem."
-        )
+        return f"Redemption rate is {rate} across {times} redemptions.{ask}"
     if rate:
-        return f"Redemption rate is {rate}. Ask the next guest who has points to redeem."
+        return f"Redemption rate is {rate}.{ask}"
     if times:
-        return f"Rewards were redeemed {times} times. Ask the next guest who has points to redeem."
+        return f"Rewards were redeemed {times} times.{ask}"
     return ""
 
 
 def _cost(feeds, store):
+    from app.store_master import allows_growth
+
     lines = []
     rows = _posist_rows(feeds, store)
     if rows:
         unsettled = _unsettled_line(rows)
         if unsettled:
             lines.append(unsettled)
-        lines.extend(_sales_lines(rows, feeds, store))
+        lines.extend(_sales_lines(rows, feeds, store, allow_growth=allows_growth(store.label)))
     calendar = _calendar_line(_calendar_rows(feeds, store))
     if calendar:
         lines.append(calendar)
@@ -393,22 +399,22 @@ def _unsettled_line(rows):
     return f"Clear the unsettled amount of {amount_txt} before the next close."
 
 
-def _sales_lines(rows, feeds, store):
+def _sales_lines(rows, feeds, store, allow_growth=True):
     lines = []
     net_move = _newest(rows, "net_wow_pct")
     if net_move is not None and net_move.get("net") is not None:
-        lines.append(_net_line(net_move))
+        lines.append(_net_line(net_move, allow_growth=allow_growth))
     else:
-        level = _level_line(rows)
+        level = _level_line(rows, allow_growth=allow_growth)
         if level:
             lines.append(level)
-    apb = _apb_line(feeds, store)
+    apb = _apb_line(feeds, store, allow_growth=allow_growth)
     if apb:
         lines.append(apb)
     return lines
 
 
-def _net_line(row):
+def _net_line(row, allow_growth=True):
     day = format_date(row["date"])
     pct_value = row.get("net_wow_pct")
     pct = format_pct(pct_value)
@@ -426,13 +432,15 @@ def _net_line(row):
             f"On {day}, net was {pct} versus the last same weekday{bracket}. "
             "Find what cut that net before the next same weekday."
         )
+    if not allow_growth:
+        return f"On {day}, net was {pct} versus the last same weekday{bracket}."
     return (
         f"On {day}, net was {pct} versus the last same weekday{bracket}. "
         "Keep that net on the next same weekday."
     )
 
 
-def _level_line(rows):
+def _level_line(rows, allow_growth=True):
     row = _newest_present(rows, ("net", "gross"))
     if row is None:
         return ""
@@ -445,13 +453,13 @@ def _level_line(rows):
     day = format_date(row["date"])
     bills = format_count(row.get("bills")) if row.get("bills") is not None else ""
     bill_bit = f" on {bills} bills" if bills else ""
-    return (
-        f"On {day}, {kind} was {money}{bill_bit}. "
-        f"Add one more item on the next bill to lift that {kind}."
-    )
+    fact = f"On {day}, {kind} was {money}{bill_bit}."
+    if not allow_growth:
+        return fact
+    return f"{fact} Add one more item on the next bill to lift that {kind}."
 
 
-def _apb_line(feeds, store):
+def _apb_line(feeds, store, allow_growth=True):
     """Use the same window APB the page shows: summed gross divided by summed bills.
 
     The daily apb cell is not that figure, so it is not quoted here.
@@ -459,7 +467,10 @@ def _apb_line(feeds, store):
     shown = posist_window(feeds, store)["fields"].get("apb") or ""
     if not shown:
         return ""
-    return f"APB is {shown}, calculated as gross divided by bills. Add one more item on the next bill to lift that APB."
+    fact = f"APB is {shown}, calculated as gross divided by bills."
+    if not allow_growth:
+        return fact
+    return f"{fact} Add one more item on the next bill to lift that APB."
 
 
 def _calendar_line(rows):

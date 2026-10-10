@@ -6,7 +6,7 @@ date,weekday,tier,pred_low_L,pred_high_L,pred_mid_L,actual_net_L,variance_vs_mid
 2026-10-06,Tuesday,Weather caution,10,12,11.0,13.06,2.06,18.7,actual,Working weekday less 15–25% weather caution,Closed historical Net: East ₹6.95159L + North ₹6.10590L = ₹13.06L. Above band (pred ₹10–12L). Source: Posist Insights cards pulled 9 Oct 2026 15:45 IST.
 2026-10-07,Wednesday,Weather caution,10,12,11.0,12.99,1.99,18.1,actual,Working weekday less 15–25% weather caution,Closed historical Net: East ₹6.95782L + North ₹6.02789L = ₹12.99L. Above band (pred ₹10–12L). Source: Posist Insights cards pulled 9 Oct 2026 15:45 IST.
 2026-10-08,Thursday,Weather caution,10,12,11.0,13.83,2.83,25.7,actual,Working weekday less 15–25% weather caution,Closed historical Net: East ₹7.45295L + North ₹6.37822L = ₹13.83L. Above band (pred ₹10–12L). Source: Posist Insights cards pulled 9 Oct 2026 15:45 IST.
-2026-10-09,Friday,Weather caution,10,12,11.0,,,,pending,Working Friday less 15–25% weather caution,Normal Friday reference is ~₹13.4L; rain caution applied
+2026-10-09,Friday,Weather caution,10,12,11.0,14.03,3.03,27.5,actual,Working Friday less 15–25% weather caution,Closed historical Net: East ₹7.31068L + North ₹6.72310L = ₹14.03L. Above band (pred ₹10–12L). Source: Posist Insights cards pulled 10 Oct 2026 07:49 IST.
 2026-10-10,Saturday,Puja / festive,15,18,16.5,,,,pending,Weekend tier with pre-festival build,Mahalaya; East/Puja demand may begin building
 2026-10-11,Sunday,Puja / festive,14,17,15.5,,,,pending,Sunday tier with pre-festival build,Sharad Navratri begins; East Puja >> NCR later in month
 2026-10-12,Monday,Puja / festive,14,16,15.0,,,,pending,Working weekday +10–20% pre-festival build,East Puja demand builds ahead of peak

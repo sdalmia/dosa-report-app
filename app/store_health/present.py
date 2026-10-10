@@ -335,6 +335,8 @@ def posist_for_day(feeds, store, day):
         display["source_label"] = "Live"
     elif source == "historical":
         display["source_label"] = "Historical"
+    elif source == "posist insights":
+        display["source_label"] = "Posist Insights"
     elif source:
         display["source_label"] = str(source)
     provisional = row.get("provisional")
