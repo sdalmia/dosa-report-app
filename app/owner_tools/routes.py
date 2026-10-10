@@ -127,6 +127,22 @@ def data_gaps():
     )
 
 
+@owner_bp.route("/location-model", methods=["GET", "POST"])
+@login_required
+@owner_required
+def location_model():
+    from app.location_model import approve_model, model_page
+
+    message = ""
+    if request.method == "POST":
+        version = (request.form.get("version") or "").strip()
+        approved = approve_model(version)
+        message = "Approved." if approved else "That model is not on file."
+    payload = model_page()
+    payload["message"] = message
+    return render_template("owner/location_model.html", model=payload, active="location-model")
+
+
 @owner_bp.route("/store-master")
 @login_required
 @owner_required

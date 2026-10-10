@@ -47,7 +47,8 @@ NOT_ON_REELO = "not on Reelo by choice"
 UNKNOWN_STATUS = "unknown, asked Sanjoy"
 
 # Posist Insights outlets that are not in the latest sales drop.
-# FRA, GK1, Chattarpur and Events stay unknown until Sanjoy answers.
+# FRA and Events stay unknown until Sanjoy answers.
+# GK1 Cloud Kitchen and Chattarpur are closed: out of rankings and not gaps.
 INSIGHTS_OUTLETS = (
     {
         "posist_name": "DEMO OUTLET",
@@ -72,9 +73,14 @@ INSIGHTS_OUTLETS = (
 )
 ASKED_SANJOY = {
     "Dosa Coffee - Events & Catering",
+    "Dosa Coffee, FRA (02/0017)",
+}
+CLOSED_OUTLETS = {
     "GK1 Cloud Kitchen (02/0002)",
     "Chattarpur (02/0005)",
-    "Dosa Coffee, FRA (02/0017)",
+}
+CLOSING_OUTLETS = {
+    "Sec 15 Faridabad (02/0007)": "closing 31 Oct",
 }
 
 _BRAND = re.compile(r"^dosa coffee\s*-\s*", re.IGNORECASE)
@@ -487,6 +493,10 @@ def build_rows(posist_path, gbp_path, places_path, store_health_dir):
             row["notes"] = "\n".join(part for part in (prefix, row["notes"]) if part)
         if row["posist_name"] in ASKED_SANJOY:
             row["status"] = UNKNOWN_STATUS
+        if row["posist_name"] in CLOSED_OUTLETS:
+            row["status"] = "closed"
+        if row["posist_name"] in CLOSING_OUTLETS:
+            row["status"] = CLOSING_OUTLETS[row["posist_name"]]
         if row.get("reelo_name"):
             row["reelo_status"] = ""
         else:
@@ -616,15 +626,40 @@ def find_store(label, path=None):
     return get_index(path).find(label)
 
 
-def is_trading(label, path=None):
-    """Rankings include a store when the master calls it trading.
+def store_status(row):
+    return (row.get("status") or "").strip()
 
-    A name the master does not list stays eligible, so a fixture store still ranks.
+
+def is_closed_status(status):
+    return str(status or "").strip().casefold() == "closed"
+
+
+def is_closing_status(status):
+    return str(status or "").strip().casefold().startswith("closing")
+
+
+def is_trading(label, path=None):
+    """Rankings include a store the master calls trading, or one that is closing.
+
+    A closed store stays out. A name the master does not list stays eligible,
+    so a fixture store still ranks.
     """
     row = find_store(label, path)
     if row is None:
         return True
-    return (row.get("status") or "").strip().casefold() == "trading"
+    status = store_status(row)
+    return status.casefold() == "trading" or is_closing_status(status)
+
+
+def allows_growth(label, path=None):
+    """Closed and closing stores get no growth actions."""
+    row = find_store(label, path)
+    if row is None:
+        return True
+    status = store_status(row)
+    if is_closed_status(status) or is_closing_status(status):
+        return False
+    return True
 
 
 def resolve_store_label(label, posist_labels, path=None):
@@ -644,7 +679,12 @@ def resolve_store_label(label, posist_labels, path=None):
 
 
 def store_gaps(row):
-    """Every listed system this outlet is missing, with an owner and a status."""
+    """Every listed system this outlet is missing, with an owner and a status.
+
+    A closed store is not a gap.
+    """
+    if is_closed_status(store_status(row)):
+        return []
     gaps = []
 
     def add(kind, label, status, detail):

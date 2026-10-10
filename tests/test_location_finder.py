@@ -328,6 +328,8 @@ class RouteTests(unittest.TestCase):
         self.assertIn("Starbucks", body)
         self.assertIn("Classic score", body)
         self.assertIn("data coming", body)
+        self.assertIn("About this data", body)
+        self.assertIn("Haldiram", body)
         self.assertIn("does not estimate rent", body)
         self.assertNotIn("INR", body)
         self.assertNotIn("Rs ", body)

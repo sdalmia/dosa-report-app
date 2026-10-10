@@ -77,9 +77,17 @@ class NcrAndMetroTests(unittest.TestCase):
         self.assertLess(METRO_WEIGHTS["energy"], 0.35)
         parts = {part["key"]: part for part in shalimar["pattern"]["parts"]}
         self.assertEqual(parts["ridership"]["status"], "data coming")
-        self.assertEqual(parts["distance"]["status"], "data coming")
+        self.assertEqual(parts["ridership"]["weight_pct"], 20)
+        self.assertEqual(parts["distance"]["status"], "in")
+        self.assertEqual(parts["distance"]["value"], 1)
+        self.assertIn("Shalimar Bagh", parts["distance"]["detail"])
         self.assertIsNone(parts["ridership"]["points"])
         self.assertEqual(parts["energy"]["weight_pct"], 15)
+        about = " ".join(shalimar["pattern"].get("about") or [])
+        self.assertIn("4 stores", about)
+        self.assertIn("Swimming Club", about)
+        self.assertIn("data coming", about)
+        self.assertNotIn(".csv", about)
         self.assertIsNotNone(shalimar["pattern_score"])
         self.assertGreater(shalimar["google_rating"], 4)
 

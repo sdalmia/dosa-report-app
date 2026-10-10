@@ -346,10 +346,14 @@ def _render_form(**extra):
         "brand": "",
         "region": "",
         "money": _money,
+        "model_label": "prior",
     }
     context.update(extra)
     if context.get("board") is None:
         context["board"] = load_board()
+    from app.location_model import current_model_label
+
+    context["model_label"] = current_model_label()
     return render_template("location_finder_form.html", **context)
 
 
@@ -407,6 +411,17 @@ def location_finder():
         if fmt not in {"high_street", "mall", "cloud_kitchen", "metro"}:
             fmt = "high_street"
         pattern = score_live_site(lat, lng, fmt, location_name, result, places)
+        from app.location_model import log_prediction
+
+        log_prediction(
+            location_name,
+            lat,
+            lng,
+            pattern.get("format"),
+            pattern.get("model_version"),
+            (pattern.get("pattern") or {}).get("score"),
+            (pattern.get("pattern") or {}).get("parts"),
+        )
         _with_logos(places)
         positioning = build_positioning(places)
         verdict = site_verdict(score, result)

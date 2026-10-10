@@ -46,6 +46,9 @@
   <h2>Tools</h2>
   <a href="{{ url_for('uploader.upload_index') }}">Zomato Settlement Uploader</a>
   <a href="{{ url_for('location_finder.location_finder') }}">Location Finder</a>
+  {% if is_owner() %}
+  <a href="{{ url_for('owner.location_model') }}" {% if request.endpoint == 'owner.location_model' %}class="is-current"{% endif %}>Location model</a>
+  {% endif %}
   <h2>Outside</h2>
   <a href="https://trello.com/" target="_blank" rel="noopener">Trello</a>
   <a href="https://www.buzzready.app/" target="_blank" rel="noopener">Buzzready</a>

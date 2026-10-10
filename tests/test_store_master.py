@@ -17,6 +17,7 @@ from app.store_master import (
     COLUMNS,
     NOT_ON_REELO,
     UNKNOWN_STATUS,
+    allows_growth,
     find_store,
     get_index,
     human_notes,
@@ -60,7 +61,7 @@ class StoreMasterTests(unittest.TestCase):
             self.assertEqual(tuple(reader.fieldnames), COLUMNS)
         self.assertEqual(len(self.rows), 36)
         self.assertEqual(len({row["store_id"] for row in self.rows}), 36)
-        self.assertEqual(sum(1 for row in self.rows if row["status"] == "trading"), 30)
+        self.assertEqual(sum(1 for row in self.rows if row["status"] == "trading"), 29)
         for row in self.rows:
             self.assertEqual(row["store_id"], store_from_label(row["posist_name"]).id)
             self.assertIn(row["format"], FORMATS)
@@ -93,9 +94,16 @@ class StoreMasterTests(unittest.TestCase):
         self.assertEqual(demo["status"], "test")
         closed = find_store("Salt Lake Sec-3 (Not In Use)")
         self.assertEqual(closed["status"], "closed")
+        for label in ("GK1 Cloud Kitchen (02/0002)", "Chattarpur (02/0005)"):
+            self.assertEqual(find_store(label)["status"], "closed", label)
+            self.assertFalse(is_trading(label), label)
+            self.assertFalse(allows_growth(label), label)
+            self.assertEqual(store_gaps(find_store(label)), [])
+        faridabad = find_store("Sec 15 Faridabad (02/0007)")
+        self.assertEqual(faridabad["status"], "closing 31 Oct")
+        self.assertTrue(is_trading(faridabad["posist_name"]))
+        self.assertFalse(allows_growth(faridabad["posist_name"]))
         for label in (
-            "GK1 Cloud Kitchen (02/0002)",
-            "Chattarpur (02/0005)",
             "Dosa Coffee - Events & Catering",
             "Dosa Coffee, FRA (02/0017)",
         ):
@@ -159,6 +167,9 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn("name", truck)
 
         for row in self.rows:
+            if row["status"] == "closed":
+                self.assertEqual(store_gaps(row), [])
+                continue
             kinds_for_row = {gap["kind"] for gap in store_gaps(row)}
             self.assertNotIn("reelo", kinds_for_row)
             delivery = {gap["kind"]: gap for gap in store_gaps(row)}["delivery"]

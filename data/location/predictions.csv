@@ -1,0 +1,3 @@
+scored_at,site_id,site,lat,lng,format,model_version,score,breakdown
+2026-10-10 05:31:30,cloud_kitchen-22.56189-88.49071,"New Town, Kolkata",22.5619,88.4907,cloud_kitchen,prior,2.5,Delivering restaurants within 3 km: 0.8; Residential density within 3 km: 0.1; Nearest store's delivery sales: 1.6; South Indian competitor density: not used
+2026-10-10 05:31:31,high_street-22.55000-88.35000,"Park Street, Kolkata",22.55,88.35,high_street,prior,6.3,Energy: 4.7; Review volume within 300 m: 0.9; Transport: 0.0; Premium-brand co-location: 0.2; Diversity: 0.0; Quality: 0.5; Anchor: not used; South Indian competitor density: not used

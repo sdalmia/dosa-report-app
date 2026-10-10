@@ -5,6 +5,7 @@
 {% block content %}
 <div class="lf-page">
     <h1>Location Finder</h1>
+    <p class="lf-model">Model {{ model_label }}</p>
     <p class="lf-answer">Best next sites are the brand clusters with no Dosa Coffee nearby. Delhi NCR is the stronger list. In Kolkata, score the area before treating it as a go.</p>
 
     {% if error %}
@@ -182,6 +183,16 @@
 .lf-page h2 { font-size: 1.25rem; margin: 0 0 var(--s2); }
 .lf-page h3 { font-size: 1rem; margin: var(--s3) 0 var(--s1); }
 .lf-answer { font-size: 1.2rem; font-weight: 650; margin: 0 0 var(--s3); }
+.lf-model {
+    display: inline-block;
+    margin: 0 0 var(--s2);
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    font-weight: 650;
+}
 .lf-card {
     background: var(--surface);
     border: 1px solid var(--line);
