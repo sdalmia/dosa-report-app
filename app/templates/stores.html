@@ -24,7 +24,7 @@
       {% for store in league %}
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>
-          <strong>{{ store.label }}</strong>
+          <strong>{{ store.label }}{% if store.day_badge %} <span class="day-badge" data-field="day_badge">{{ store.day_badge }}</span>{% endif %}</strong>
           <span class="league-meta">Gross {% if store.gross %}{{ store.gross }}{% else %}no data{% endif %} · Bills {% if store.bills_change %}{{ store.bills_change }}{% else %}no data{% endif %} · APB {% if store.apb %}{{ store.apb }}{% else %}no data{% endif %}</span>
         </a>
       {% endfor %}

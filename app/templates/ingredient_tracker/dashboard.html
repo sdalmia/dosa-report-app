@@ -137,14 +137,6 @@
 }
 </style>
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-  <!-- jQuery (required by Typeahead.js) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Typeahead.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <!-- Toast container -->
@@ -170,11 +162,7 @@
 <div class="mb-4">
   <label for="ingredient-search" class="form-label text-light">Search Ingredient:</label>
   <input type="text" class="form-control typeahead" id="ingredient-search" placeholder="Type to search...">
-  <datalist id="ingredients-list">
-    {% for name in all_ingredients %}
-      <option value="{{ name }}">
-    {% endfor %}
-  </datalist>
+  <datalist id="ingredients-list"></datalist>
 </div>
 
 <div class="ingredient-buttons" data-list data-list-input="#ingredient-search">
@@ -189,35 +177,98 @@
   {% endfor %}
 </div>
 
-<div id="charts-container">
-  <!-- This will hold the selected ingredient's chart -->
+<div id="charts-container" data-boot="ingredient-charts" style="min-height: 280px" aria-busy="true">
+  <div class="lazy-skeleton" aria-hidden="true">
+    <span class="lazy-bar"></span>
+    <span class="lazy-bar short"></span>
+    <span class="lazy-bar"></span>
+  </div>
 </div>
 
 
 
 
 <script>
-  const ingredientData = {{ ingredient_data | tojson }};
-  const allIngredients = {{ all_ingredients | tojson }};
-  const ingredientStats = {{ ingredient_stats | tojson }};
+  let ingredientData = {};
+  let allIngredients = [];
+  let ingredientStats = {};
+  let dataReady = null;
   const chartContainer = document.getElementById('charts-container');
+  let typeaheadReady = false;
 
-  // Bloodhound setup and Typeahead init
-  const ingredientEngine = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.whitespace,
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: allIngredients
-  });
+  function ensureData() {
+    if (dataReady) return dataReady;
+    dataReady = fetch("{{ url_for('ingredient_tracker.chart_data') }}", { credentials: "same-origin" })
+      .then(function (response) { return response.json(); })
+      .then(function (payload) {
+        ingredientData = payload.ingredient_data || {};
+        allIngredients = payload.all_ingredients || [];
+        ingredientStats = payload.ingredient_stats || {};
+        const list = document.getElementById("ingredients-list");
+        if (list && !list.children.length) {
+          allIngredients.forEach(function (name) {
+            const option = document.createElement("option");
+            option.value = name;
+            list.appendChild(option);
+          });
+        }
+        chartContainer.setAttribute("aria-busy", "false");
+      });
+    return dataReady;
+  }
 
-  $('#ingredient-search').typeahead(
-    { hint: true, highlight: true, minLength: 1 },
-    { name: 'ingredients', source: ingredientEngine }
-  );
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      const tag = document.createElement("script");
+      tag.src = src;
+      tag.onload = resolve;
+      tag.onerror = reject;
+      document.head.appendChild(tag);
+    });
+  }
 
-  $('#ingredient-search').bind('typeahead:select', function(ev, ingredient) {
-    renderChart(ingredient);
-    setActiveIngredient(ingredient);
-  });
+  function ensurePlotly() {
+    if (window.Plotly) return Promise.resolve();
+    return loadScript("https://cdn.plot.ly/plotly-latest.min.js");
+  }
+
+  function ensureTypeahead() {
+    if (typeaheadReady) return Promise.resolve();
+    return Promise.all([
+      ensureData(),
+      loadScript("https://code.jquery.com/jquery-3.6.0.min.js")
+        .then(function () { return loadScript("https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"); })
+    ]).then(function () {
+        const ingredientEngine = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.whitespace,
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: allIngredients
+        });
+        $('#ingredient-search').typeahead(
+          { hint: true, highlight: true, minLength: 1 },
+          { name: 'ingredients', source: ingredientEngine }
+        );
+        $('#ingredient-search').bind('typeahead:select', function(ev, ingredient) {
+          renderChart(ingredient);
+          setActiveIngredient(ingredient);
+        });
+        typeaheadReady = true;
+      });
+  }
+
+  window.lazyBoots = window.lazyBoots || {};
+  window.lazyBoots["ingredient-charts"] = function () {
+    Promise.all([ensurePlotly(), ensureData()]).then(function () {
+      if (window.topIngredients && window.topIngredients.length && window.showIngredientChart) {
+        window.showIngredientChart(window.topIngredients[0]);
+      }
+    });
+  };
+
+  const searchInputEarly = document.getElementById("ingredient-search");
+  if (searchInputEarly) {
+    searchInputEarly.addEventListener("focus", function () { ensureTypeahead(); }, { once: true });
+  }
 
   // One point per day, oldest first, so a new upload extends the line
   // instead of redrawing history backwards over duplicate rows.
@@ -323,23 +374,19 @@
 </script>
 
 <script>
-  const topIngredients = {{ top_ingredients | tojson }};
+  window.topIngredients = {{ top_ingredients | tojson }};
 
-  function showIngredientChart(ingredientName) {
-    renderChart(ingredientName);
-    setActiveIngredient(ingredientName);
-  }
-
-  document.querySelectorAll('.ingredient-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      showIngredientChart(btn.dataset.ingredient);
+  window.showIngredientChart = function (ingredientName) {
+    ensureData().then(function () {
+      renderChart(ingredientName);
+      setActiveIngredient(ingredientName);
     });
-  });
+  };
 
-  document.addEventListener("DOMContentLoaded", function () {
-    if (topIngredients.length > 0) {
-      showIngredientChart(topIngredients[0]);
-    }
+  document.querySelectorAll(".ingredient-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      ensurePlotly().then(function () { window.showIngredientChart(btn.dataset.ingredient); });
+    });
   });
 </script>
 

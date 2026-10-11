@@ -1,4 +1,5 @@
 {% extends "owner/layout.html" %}
+{% from "_lazy.html" import lazy_section %}
 
 {% block title %}Store Master - Dosa Coffee{% endblock %}
 
@@ -11,12 +12,5 @@
 <div class="empty"><p>No outlets for this store or city.</p></div>
 {% endif %}
 
-<div data-list>
-{% for store in stores %}
-<article class="store" data-store="{{ store.store_id }}" data-list-item>
-  <h2>{{ store.name }}</h2>
-  {% if store.line %}<p class="meta">{{ store.line }}</p>{% endif %}
-</article>
-{% endfor %}
-</div>
+{{ lazy_section(with_qs(url_for('owner.store_master_rest')), height=280, title='Outlets', prefetch=true) }}
 {% endblock %}

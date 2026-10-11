@@ -2,6 +2,8 @@ import os
 import tempfile
 import unittest
 
+from tests.stitch import page
+
 os.environ.setdefault("GOOGLE_MAPS_API_KEY", "test-key")
 _DB = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
 os.environ.setdefault("DATABASE_URL", "sqlite:///" + _DB.name)
@@ -120,7 +122,7 @@ class NcrAndMetroTests(unittest.TestCase):
     def test_page_lists_candidates_and_does_not_name_files(self):
         app = create_app()
         client = app.test_client()
-        html = client.get("/location-finder").get_data(as_text=True)
+        html = page(client, "/location-finder")
         self.assertEqual(html.count("<tr>"), 2 + 66 + 30)
         self.assertIn("Best next sites", html)
         self.assertIn("Show neighbour brands", html)

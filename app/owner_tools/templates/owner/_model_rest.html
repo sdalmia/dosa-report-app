@@ -1,0 +1,58 @@
+<section class="ot-box">
+  <h2>What are we missing</h2>
+  {% if model.misses %}
+  <ul data-list>
+    {% for row in model.misses %}
+    <li>{{ row.store }} is off by {{ row.decile_gap }} rank-deciles.</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><p>No leave-one-store-out miss beyond 1.5 rank-deciles.</p></div>
+  {% endif %}
+</section>
+
+<section class="ot-box">
+  <h2>Backtest</h2>
+  <p class="note">Leave-one-store-out predicted rank against the actual within-market rank. 0 is the lowest gross per day in that market, 1 is the highest.</p>
+  {% if model.backtest %}
+  <div class="scroll">
+    <table data-list>
+      <thead>
+        <tr><th>Store</th><th>Format</th><th>Actual</th><th>Predicted</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for row in model.backtest %}
+        <tr>
+          <td>{{ row.store }}</td>
+          <td>{{ row.format }}</td>
+          <td>{{ row.actual_rank }}</td>
+          <td>{{ row.predicted_rank }}</td>
+          <td>{% if row.miss %}Missing{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty"><p>No backtest yet.</p></div>
+  {% endif %}
+</section>
+
+<section class="ot-box">
+  <h2>Opened sites, first 90 days</h2>
+  <p class="note">{{ model.prediction_count }} scored sites are on the prediction log.</p>
+  {% if model.openings %}
+  <ul data-list>
+    {% for row in model.openings %}
+    <li>
+      {{ row.site or row.site_id }}
+      {% if row.days_tracked is not none %} · {{ row.days_tracked }} days{% endif %}
+      {% if row.predicted_score is not none %} · predicted {{ row.predicted_score }}{% endif %}
+      {% if row.gross_per_trading_day is not none %} · {{ row.gross_per_trading_day }} a day{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><p>No opened site is linked yet.</p></div>
+  {% endif %}
+</section>

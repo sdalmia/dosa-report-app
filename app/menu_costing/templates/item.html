@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "_nav.html" import menu_nav with context %}
+{% from "_lazy.html" import lazy_section %}
 {% block title %}{{ item or "Recipe" }} - Dosa Coffee{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('menu_costing.static', filename='menu.css') }}">
@@ -60,61 +61,6 @@
     {% endif %}
   </section>
 
-  <section class="cc-section" id="cost-history">
-    <div class="section-head"><h2>Cost over time</h2></div>
-    {% if recipe_note %}<p data-field="recipe-history-note">{{ recipe_note }}</p>{% endif %}
-    {% if store %}
-    {% for point in recipe_points %}
-    <p data-field="recipe-cost" data-month="{{ point.key }}" data-item="{{ item }}" data-store="{{ store }}" data-value="{{ point.cost_attr }}">{{ point.label }} · <span class="mc-num">{{ point.cost }}</span></p>
-    {% endfor %}
-    {% for change in recipe_changes %}
-    <article data-field="recipe-change" data-from="{{ change.older }}" data-to="{{ change.newer }}">
-      <p>Cost per portion <span class="mc-num">{{ change.old_cost }} to {{ change.new_cost }}</span></p>
-      {% if change.lines_missing %}
-      <p class="empty">Ingredient lines are not on file for one of these months.</p>
-      {% else %}
-      {% for name in change.added %}
-      <p data-field="recipe-added" data-item="{{ name }}">Added {{ name }}</p>
-      {% endfor %}
-      {% for name in change.removed %}
-      <p data-field="recipe-removed" data-item="{{ name }}">Removed {{ name }}</p>
-      {% endfor %}
-      {% for row in change.qty_changed %}
-      <p data-field="recipe-qty" data-item="{{ row.ingredient }}">{{ row.ingredient }} {{ row.old_qty }} {{ row.old_unit }} to {{ row.new_qty }} {{ row.new_unit }}</p>
-      {% endfor %}
-      {% if not change.added and not change.removed and not change.qty_changed %}
-      <p class="empty">The ingredient list is the same.</p>
-      {% endif %}
-      {% endif %}
-    </article>
-    {% endfor %}
-    {% else %}
-    <p class="empty">Pick a store to see how this dish's recipe and cost changed.</p>
-    {% endif %}
-  </section>
-
-  {% if store %}
-  <section class="cc-section" id="bom">
-    <div class="section-head"><h2>Ingredients</h2></div>
-    {% if under_review %}<p class="mc-badge" data-field="recipe-review" data-item="{{ item }}">{{ review_badge }}</p>{% endif %}
-    {% if missing_lines %}
-    <p class="empty">{{ missing_lines }}</p>
-    {% else %}
-    {% if lines_total_text %}<p class="muted">Priced lines add to <span class="mc-num">{{ lines_total_text }}</span>. A blank line was left out.</p>{% endif %}
-    <div class="mc-list" data-list>
-      {% for line in line_rows %}
-      <article class="tile">
-        <strong>{{ line.ingredient }}</strong>
-        <p>{{ line.qty }} {{ line.unit }}{% if line.inactive %} · inactive{% endif %}{% if line.estimated %} · <span class="mc-tip" title="{{ line.receipt }}">estimated</span>{% elif line.unpriced %} · no price{% endif %}</p>
-        <div class="mc-pair">
-          <p>Unit cost <span class="mc-num">{{ line.unit_cost }}</span></p>
-          <p>Line cost <span class="mc-num" data-field="line-cost" data-ingredient="{{ line.ingredient }}" data-value="{{ line.line_attr }}">{{ line.line_cost }}</span></p>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </section>
-  {% endif %}
+  {{ lazy_section(with_qs(url_for('menu_costing.item_rest')), height=280, title='Recipe lines', prefetch=true, id='cost-history') }}
 </div>
 {% endblock %}

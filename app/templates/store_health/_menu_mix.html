@@ -1,0 +1,25 @@
+<section id="menu-mix" class="health-box box-posist span-full" aria-labelledby="menu-mix-title">
+      <div class="box-head">
+        <div>
+          <h2 id="menu-mix-title">Menu mix</h2>
+          <p class="box-source">Posist Insights{% if menu_mix.period_label %} · <span data-field="menu_mix_period">{{ menu_mix.period_label }}</span>{% endif %}</p>
+        </div>
+      </div>
+      {% if menu_mix.has_items %}
+        {% if menu_mix.unallocated %}
+          <p class="box-source" data-field="unallocated">Unallocated charges {{ menu_mix.unallocated }}. Probably delivery packaging charges. Still unconfirmed. This is not a dish.{% if menu_mix.unallocated_flagged %} On the data gaps list.{% endif %}</p>
+        {% endif %}
+        <ol class="menu-mix-list" data-list>
+          {% for item in menu_mix.entries %}
+            <li class="menu-mix-row" data-field="menu_item">
+              <span class="name">{{ item.item }}</span>
+              <span class="num">{{ item.sales }}</span>
+              <span class="num">{{ item.orders }} orders</span>
+              <span class="num">{{ item.contribution }}</span>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="empty-state" data-field="menu_mix">{{ menu_mix.empty }}</p>
+      {% endif %}
+    </section>

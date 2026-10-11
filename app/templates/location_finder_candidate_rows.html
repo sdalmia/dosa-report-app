@@ -1,0 +1,14 @@
+{% for area in rows %}
+<tr>
+    <td{% if loop.first %} data-page-shown="{{ rows|length }}" data-page-total="{{ total }}"{% endif %}>{{ area.area }}</td>
+    <td>{{ area.city }}</td>
+    <td>{{ area.brand_count }}</td>
+    <td>{{ area.nearest }}{% if area.nearest_km is not none %}, {{ area.nearest_km }} km{% endif %}</td>
+    <td>{% if area.airport %}Airport, not a site to open{% endif %}</td>
+</tr>
+{% endfor %}
+{% if more %}
+<tr><td colspan="5"><button type="button" class="lazy-more" data-more="{{ more }}">Show more</button></td></tr>
+{% elif not rows %}
+<tr hidden><td colspan="5" data-page-shown="0" data-page-total="{{ total }}"></td></tr>
+{% endif %}

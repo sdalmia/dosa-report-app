@@ -1,4 +1,5 @@
 {% extends "owner/layout.html" %}
+{% from "_lazy.html" import lazy_section %}
 {% from "owner/_macros.html" import show %}
 
 {% block title %}Labour productivity - Dosa Coffee{% endblock %}
@@ -23,25 +24,6 @@
   </div>
 </section>
 
-<div data-list>
-{% for store in labour.stores %}
-<article class="store" data-store="{{ store.label }}" data-list-item>
-  <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
-  {% if store.employees.value is none %}
-  <p class="note">Staff count is blank</p>
-  {% endif %}
-  <div class="pair"><span>Active employees</span><span data-field="employees">{{ show(store.employees) }}</span></div>
-  <div class="pair"><span>Gross</span><span data-field="day-gross">{{ show(store.day_gross) }}</span></div>
-  <div class="pair"><span>Gross per person</span><span data-field="day-gross-per">{{ show(store.day_gross_per) }}</span></div>
-  <div class="pair"><span>Bills</span><span data-field="day-bills">{{ show(store.day_bills) }}</span></div>
-  {% if store.mall_note %}<p class="note">{{ store.mall_note }}</p>{% endif %}
-  <div class="pair"><span>Bills per person</span><span data-field="day-bills-per">{{ show(store.day_bills_per) }}</span></div>
-  <div class="pair"><span>{{ labour.month_label }} gross</span><span data-field="mtd-gross">{{ show(store.mtd_gross) }}</span></div>
-  <div class="pair"><span>Month gross per person</span><span data-field="mtd-gross-per">{{ show(store.mtd_gross_per) }}</span></div>
-  <div class="pair"><span>{{ labour.month_label }} bills</span><span>{{ show(store.mtd_bills) }}</span></div>
-  <div class="pair"><span>Month bills per person</span><span data-field="mtd-bills-per">{{ show(store.mtd_bills_per) }}</span></div>
-</article>
-{% endfor %}
-</div>
+{{ lazy_section(url_for('owner.labour_rest'), height=320, title='Stores', prefetch=true) }}
 {% endif %}
 {% endblock %}

@@ -1,0 +1,72 @@
+{% from "_info.html" import info %}
+{% from "_lazy.html" import show_more %}
+{% from "_recipe_cards.html" import recipe_cards, consumed_cards %}
+<section id="recipe">
+  <article class="tile">
+    <div class="heading-row">
+      <h2>Recipe cost excl. packaging</h2>
+      {% call info() %}
+      <p>{{ recipe.basis }}</p>
+      {% if recipe.other_outlets_missing %}<p>{{ recipe.other_outlets_missing }}</p>{% endif %}
+      <p>A cost is partial when an ingredient has no price. A blank cost means nothing was priced, not zero.</p>
+      <p>Each cost is compared with its own city median. Delhi recipes use three chutneys per dish and Kolkata uses one, so Delhi costs more by design. The two cities are not ranked against each other.</p>
+      {% endcall %}
+    </div>
+    {% if recipe.review_note %}<p data-field="recipe-review-note">{{ recipe.review_note }}</p>{% endif %}
+    {% if not recipe.available %}
+    <p class="empty">Recipe cost is not on file.</p>
+    {% else %}
+    {% if recipe.packaging_gap %}
+    <p data-field="packaging-gap">{{ recipe.packaging_gap.note }}</p>
+    {% endif %}
+    <p class="empty" data-field="recipe-margin">{{ recipe.margin_unavailable }}</p>
+    <p class="muted">{{ recipe.item_count }} menu items.{% if recipe.items_with_unpriced %} {{ recipe.items_with_unpriced }} have an unpriced ingredient.{% endif %}</p>
+    {% if recipe.list_kind == 'summary' %}
+    <details>
+      <summary>Costs within each city</summary>
+      <div class="scroll stack" data-list data-search-src="{{ url_for('procurement.food_cost_rows', kind='rows') }}">
+        <div data-list-body>
+          {{ recipe_cards(recipe_rows, recipe) }}
+          {{ show_more(recipe_more) }}
+          <span hidden data-page-shown="{{ recipe_rows|length }}" data-page-total="{{ recipe_total }}"></span>
+        </div>
+      </div>
+    </details>
+    {% else %}
+    <details>
+      <summary>All menu items</summary>
+      <div class="scroll stack" data-list data-search-src="{{ url_for('procurement.food_cost_rows', kind='rows') }}">
+        <div data-list-body>
+          {{ recipe_cards(recipe_rows, recipe) }}
+          {{ show_more(recipe_more) }}
+          <span hidden data-page-shown="{{ recipe_rows|length }}" data-page-total="{{ recipe_total }}"></span>
+        </div>
+      </div>
+    </details>
+    {% endif %}
+    {% endif %}
+  </article>
+
+  <article class="tile">
+    <div class="heading-row">
+      <h2>Consumed recipe cost · Ideal Plaza</h2>
+      {% if recipe.consumption and recipe.consumption.scope_note %}
+      {% call info() %}
+      <p>{{ recipe.consumption.scope_note }}</p>
+      {% if recipe.consumption.period_label %}<p>{{ recipe.consumption.period_label }}</p>{% endif %}
+      {% endcall %}
+      {% endif %}
+    </div>
+    {% if not recipe.consumption or not recipe.consumption.available %}
+    <p class="empty">What Ideal Plaza actually spent on recipes is not on file.</p>
+    {% else %}
+    <div class="scroll stack" data-list data-search-src="{{ url_for('procurement.food_cost_rows', kind='consumed') }}">
+      <div data-list-body>
+        {{ consumed_cards(consumption_rows, recipe) }}
+        {{ show_more(consumption_more) }}
+        <span hidden data-page-shown="{{ consumption_rows|length }}" data-page-total="{{ consumption_total }}"></span>
+      </div>
+    </div>
+    {% endif %}
+  </article>
+</section>

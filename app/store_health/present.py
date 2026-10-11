@@ -25,6 +25,7 @@ from app.store_health.contract import (
     describe_feeds,
     parse_number,
 )
+from app.store_health.day_notes import badge_for, notes_between, quality_note_for
 from app.store_health.stores import Store, extra_store_labels, store_from_label
 
 
@@ -415,6 +416,7 @@ def calendar_days(feeds, store, start, end):
                 "actual_source": actual_source,
                 "variance_negative": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] < 0),
                 "variance_positive": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] > 0),
+                "badge": badge_for(store, cursor) if store else "",
             }
         )
         cursor += timedelta(days=1)
@@ -1016,6 +1018,11 @@ def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=N
     predicted = sum(1 for day in days if day["fields"]["pred_mid"] or day["fields"]["pred_low"] or day["fields"]["pred_high"])
     story = calendar_story(feeds, store)
     described = describe_feeds(feeds["directory"])
+    window_start, window_end = posist_bounds if posist_bounds and posist_bounds[0] else _window_bounds(feeds)
+    day_badges = [
+        {"iso": day.isoformat(), "date_label": format_date(day), "badge": badge}
+        for day, badge in notes_between(store, window_start, window_end)
+    ]
     return {
         "posist": posist_window(feeds, store, posist_bounds),
         "days": days,
@@ -1046,4 +1053,6 @@ def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=N
             "reelo": present_freshness(described["reelo"]),
             "famepilot": present_freshness(described["famepilot"]),
         },
+        "quality_note": quality_note_for(feeds),
+        "day_badges": day_badges,
     }

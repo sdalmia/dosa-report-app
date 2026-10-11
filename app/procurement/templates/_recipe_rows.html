@@ -1,0 +1,9 @@
+{% from "_lazy.html" import show_more %}
+{% from "_recipe_cards.html" import recipe_cards, consumed_cards %}
+{% if kind == 'consumed' %}
+{{ consumed_cards(rows, recipe) }}
+{% else %}
+{{ recipe_cards(rows, recipe) }}
+{% endif %}
+{{ show_more(more) }}
+<span hidden data-page-shown="{{ rows|length }}" data-page-total="{{ total }}"></span>

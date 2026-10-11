@@ -1,0 +1,15 @@
+{% macro lazy_section(src, height=240, title='', prefetch=false, id='') %}
+<section class="lazy-section" {% if id %}id="{{ id }}" {% endif %}data-src="{{ src }}" {% if prefetch %}data-prefetch="1" {% endif %}style="min-height: {{ height }}px" aria-busy="true"{% if title %} aria-label="{{ title }}"{% endif %}>
+  <div class="lazy-skeleton" aria-hidden="true">
+    <span class="lazy-bar"></span>
+    <span class="lazy-bar short"></span>
+    <span class="lazy-bar"></span>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro show_more(src) %}
+{% if src %}
+<button type="button" class="lazy-more" data-more="{{ src }}">Show more</button>
+{% endif %}
+{% endmacro %}

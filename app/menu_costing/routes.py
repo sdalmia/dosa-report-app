@@ -2,6 +2,9 @@ from datetime import date
 from pathlib import Path
 
 from flask import Blueprint, redirect, render_template, request, url_for
+
+from app.fragments import html_fragment, query_offset, slice_rows
+from app.page_cache import freeze, remember
 from markupsafe import escape
 from werkzeug.utils import secure_filename
 
@@ -42,44 +45,102 @@ menu_bp = Blueprint(
 _UPLOAD_LIMIT = 15 * 1024 * 1024
 
 
+def _menu_context():
+    recipes = load_recipes()
+    filters, city, store = place_from_request(recipes)
+    channel = (request.args.get("channel") or "").strip()
+    query = (request.args.get("q") or "").strip()
+    today = date.today()
+    key = ("menu-page", city, store or "", channel, query, today.isoformat(), freeze(filters))
+
+    def build():
+        page = build_page(
+            recipes,
+            sales_for_filters(load_sales(), filters),
+            version_dicts(),
+            city=city,
+            channel=channel,
+            store=store,
+            query=query,
+            today=today,
+        )
+        page.update(filter_context(filters))
+        page.update(
+            batch_page_context(
+                city=page["city"],
+                store=page["store"],
+                store_id=(filters.get("cc_store") or "").strip(),
+                query=page["query"],
+                filters=filters,
+            )
+        )
+        return page
+
+    return remember(key, build)
+
+
+def _menu_rows_view(page, offset):
+    view = dict(page)
+    rows = list(page.get("rows") or [])
+    chunk, nxt, total = slice_rows(rows, offset)
+    view["rows"] = chunk
+    view["menu_total"] = total
+    view["menu_more"] = None
+    if nxt is not None:
+        view["menu_more"] = url_for(
+            "menu_costing.menu_rows",
+            city=page.get("city") or "",
+            channel=page.get("channel") or "",
+            store=page.get("store") or "",
+            q=page.get("query") or None,
+            offset=nxt,
+        )
+    return view
+
+
 @menu_bp.route("/", strict_slashes=False)
 @login_required
 def menu_page():
-    recipes = load_recipes()
-    filters, city, store = place_from_request(recipes)
-    page = build_page(
-        recipes,
-        sales_for_filters(load_sales(), filters),
-        version_dicts(),
-        city=city,
-        channel=(request.args.get("channel") or "").strip(),
-        store=store,
-        query=(request.args.get("q") or "").strip(),
-        today=date.today(),
-    )
-    page.update(filter_context(filters))
-    page.update(
-        batch_page_context(
-            city=page["city"],
-            store=page["store"],
-            store_id=(filters.get("cc_store") or "").strip(),
-            query=page["query"],
-            filters=filters,
-        )
-    )
+    page = _menu_context()
+    if page.get("query"):
+        page = _menu_rows_view(page, 0)
     return render_template("costing_menu.html", **page)
 
 
-@menu_bp.route("/item")
+@menu_bp.route("/fragment/rest")
 @login_required
-def item_page():
+def menu_rest():
+    page = _menu_rows_view(_menu_context(), query_offset())
+    return html_fragment(render_template("costing_rest.html", **page))
+
+
+@menu_bp.route("/fragment/rows")
+@login_required
+def menu_rows():
+    page = _menu_rows_view(_menu_context(), query_offset())
+    return html_fragment(render_template("_menu_rows.html", **page))
+
+
+def _item_detail():
+    recipes = load_recipes()
+    filters, city, store = place_from_request(recipes)
+    item = (request.args.get("item") or "").strip()
+    key = ("menu-item", city, store or "", item, freeze(filters))
+
+    def build():
+        return _build_item_detail(recipes, filters, city, store, item)
+
+    return remember(key, build)
+
+
+def _build_item_detail(recipes, filters, city, store, item):
     recipes = load_recipes()
     filters, city, store = place_from_request(recipes)
     detail = build_item(
         recipes,
         city=city,
         store=store,
-        item=(request.args.get("item") or "").strip(),
+        item=item,
     )
     chosen = detail["chosen"]
     detail["chosen_cost"] = owner_rupee(chosen["cost"]) if chosen else ""
@@ -127,7 +188,19 @@ def item_page():
     )
     detail.update(filter_context(filters))
     detail["filter_hidden"] = f'<input type="hidden" name="item" value="{escape(detail["item"])}">'
-    return render_template("item.html", **detail)
+    return detail
+
+
+@menu_bp.route("/item")
+@login_required
+def item_page():
+    return render_template("item.html", **_item_detail())
+
+
+@menu_bp.route("/item/fragment/rest")
+@login_required
+def item_rest():
+    return html_fragment(render_template("item_rest.html", **_item_detail()))
 
 
 @menu_bp.route("/history")

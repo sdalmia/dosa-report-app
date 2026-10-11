@@ -1,3 +1,4 @@
+from tests.stitch import stitch
 import csv
 import os
 import tempfile
@@ -198,7 +199,7 @@ class StoreMasterTests(unittest.TestCase):
         self._session(OWNER)
         page = self.client.get("/data-gaps?cc_store=&cc_city=&cc_range=")
         self.assertEqual(page.status_code, 200)
-        html = page.get_data(as_text=True)
+        html = stitch(self.client, page.get_data(as_text=True))
         self.assertIn("Data gaps", html)
         self.assertEqual(html.count("<header"), 1)
         self.assertIn('name="theme-color" content="#f7f6f3"', html)
@@ -327,7 +328,7 @@ class StoreMasterTests(unittest.TestCase):
         self._session(OWNER)
         page = self.client.get("/data-gaps?cc_city=Kolkata&cc_store=")
         self.assertEqual(page.status_code, 200)
-        html = page.get_data(as_text=True)
+        html = stitch(self.client, page.get_data(as_text=True))
         self.assertIn("Recipe looks incomplete", html)
         self.assertIn('data-owner="Sailesh"', html)
         self.assertIn("Coriander Leaves", html)
@@ -355,7 +356,7 @@ class StoreMasterTests(unittest.TestCase):
         self._session(OWNER)
         page = self.client.get("/store-master?cc_store=&cc_city=")
         self.assertEqual(page.status_code, 200)
-        html = page.get_data(as_text=True)
+        html = stitch(self.client, page.get_data(as_text=True))
         self.assertIn("Store Master", html)
         self.assertIn("Connaught place", html)
         self.assertIn('name="cc_store"', html)
@@ -363,7 +364,7 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn(".csv", html)
         self.assertNotIn(NOT_ON_REELO, html)
         city = self.client.get("/store-master?cc_city=Kolkata&cc_store=")
-        body = city.get_data(as_text=True)
+        body = stitch(self.client, city.get_data(as_text=True))
         self.assertIn("Quest Mall", body)
         self.assertNotIn("Connaught place", body)
         self.assertNotIn("Sec 15 Faridabad", body)

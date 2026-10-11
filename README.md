@@ -22,6 +22,25 @@
 - **Deployment**: Render. Start command: `gunicorn -c gunicorn.conf.py run:app` (2 threaded workers, recycle after 500 requests).
 - **Version Control**: GitHub
 
+## Phone pages
+
+Every page extends `base.html`, which defers `command.js`, `list-search.js`, and `lazy-section.js`, and compresses responses with Brotli or gzip. Static files are cached for a day.
+
+Put the threats and the key numbers in the first response. Put everything below that in a fragment:
+
+```jinja
+{% from "_lazy.html" import lazy_section %}
+{{ lazy_section(url_for('blueprint.section_fragment'), height=320, title='Stores', prefetch=true) }}
+```
+
+`height` is the skeleton's fixed min-height, so the numbers above it do not jump. `prefetch=true` fetches the next section when the phone is idle. The browser loads the fragment when it scrolls into view, or when a `<details class="lazy-section">` is opened. `static/js/lazy-section.js` does that, then calls `refreshLists()` so the shared search binds to the new markup.
+
+The fragment route must use the same `@login_required` or `@owner_required` check as the page. Location finder stays public. Return `html_fragment(render_template(...))` from `app.fragments` so the response has a private cache and an ETag. Long lists use `slice_rows` (20 at a time) and a Show more button (`data-more`). If the list is paginated, set `data-search-src` on the `[data-list]` so search still covers every row, not only the ones on screen.
+
+Cache the computed aggregate with `remember(key, builder)` in `app.page_cache`. The cache key should include the filters. It drops when a data file's mtime changes, including the directories named by `STORE_HEALTH_DATA_DIR` and `PROCUREMENT_DATA_DIR`. Do not mutate the cached object, and do not cache the raw 75,800-row cost-line files.
+
+Forms (uploads, menu history, the P&L, the home page) stay on the first response. A page that is itself the threat list, such as Red flags, stays on the first response too. The ingredient tracker keeps the search and the top ingredients on the first response, and loads the price series from `/ingredient-tracker/data.json` when the chart area appears.
+
 ---
 
 ## 📦 Setup Instructions (Local Development)

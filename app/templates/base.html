@@ -31,8 +31,9 @@
       This software is provided “as is” without warranty of any kind.
     </footer>
   </main>
-  <script src="{{ url_for('static', filename='js/command.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/list-search.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/command.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/list-search.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/lazy-section.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

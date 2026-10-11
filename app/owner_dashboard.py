@@ -12,6 +12,7 @@ from markupsafe import Markup
 from app.procurement import procurement_tiles
 from app.store_health.contract import data_directory, load_feeds, parse_number
 from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
+from app.store_health.day_notes import badge_for, badges_on, excluded_from_comparisons, quality_note_for
 from app.store_health.present import (
     POSIST_WINDOW_DAYS,
     _sum_present,
@@ -41,6 +42,17 @@ def _rows_on(feeds, day, region=None):
             continue
         found.append(row)
     return found
+
+
+def _wow_rows(pairs, end, compare_day, skip_mall=False):
+    rows = []
+    for name, row in pairs:
+        if skip_mall and is_mall_food_court(name):
+            continue
+        if excluded_from_comparisons(name, end) or excluded_from_comparisons(name, compare_day):
+            continue
+        rows.append(row)
+    return rows
 
 
 def _change(new, old):
@@ -78,24 +90,16 @@ def _region_block(feeds, region, start, end, compare_day, store=None, label=None
     apb = _window_apb(comparable_gross, bills)
     latest = _named_rows(feeds, end, end, region, store)
     prior = _named_rows(feeds, compare_day, compare_day, region, store)
-    latest_gross = _metric([row for _name, row in latest], "gross", "money")
-    prior_gross = _metric([row for _name, row in prior], "gross", "money")
-    latest_bills = _metric(
-        [row for name, row in latest if not is_mall_food_court(name)],
-        "bills",
-        "count",
-    )
-    prior_bills = _metric(
-        [row for name, row in prior if not is_mall_food_court(name)],
-        "bills",
-        "count",
-    )
+    latest_gross = _metric(_wow_rows(latest, end, compare_day), "gross", "money")
+    prior_gross = _metric(_wow_rows(prior, end, compare_day), "gross", "money")
+    latest_bills = _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "bills", "count")
+    prior_bills = _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "bills", "count")
     latest_apb = _window_apb(
-        _metric([row for name, row in latest if not is_mall_food_court(name)], "gross", "money"),
+        _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "gross", "money"),
         latest_bills,
     )
     prior_apb = _window_apb(
-        _metric([row for name, row in prior if not is_mall_food_court(name)], "gross", "money"),
+        _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "gross", "money"),
         prior_bills,
     )
     return {
@@ -150,11 +154,13 @@ def _league(feeds, stores, start, end, region, low_only):
         mall = is_mall_food_court(store.label)
         bills = None if mall else _metric(rows, "bills", "count")
         apb = None if mall else _window_apb(gross, bills)
+        compare = end - timedelta(days=7)
+        tagged = excluded_from_comparisons(store, end) or excluded_from_comparisons(store, compare)
         latest = _store_on(feeds, store, end)
-        prior = _store_on(feeds, store, end - timedelta(days=7))
+        prior = _store_on(feeds, store, compare)
         latest_bills = None if mall or latest is None else latest.get("bills")
         prior_bills = None if mall or prior is None else prior.get("bills")
-        bills_change = _change(latest_bills, prior_bills)
+        bills_change = None if tagged else _change(latest_bills, prior_bills)
         low = (not mall) and bills_change is not None and bills_change <= LOW_BILL_DROP
         if low_only and not low:
             continue
@@ -171,6 +177,7 @@ def _league(feeds, stores, start, end, region, low_only):
             "apb": format_owner_rupee(apb) if apb is not None else "",
             "mall_bills": mall,
             "low": low,
+            "day_badge": badge_for(store, end),
         })
     ranked.sort(
         key=lambda item: (
@@ -530,6 +537,8 @@ def _alerts(feeds, stores, end):
             break
         if is_mall_food_court(store.label):
             continue
+        if excluded_from_comparisons(store, end) or excluded_from_comparisons(store, compare):
+            continue
         latest = _store_on(feeds, store, end)
         prior = _store_on(feeds, store, compare)
         latest_bills = latest.get("bills") if latest else None
@@ -648,6 +657,8 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "reputation": _reputation(feeds, stores),
         "reelo": _reelo(feeds),
         "alerts": _alerts(feeds, stores, end),
+        "quality_note": quality_note_for(feeds),
+        "day_badges": badges_on(end) if end else [],
         "procurement": procurement_tiles(procurement_dir),
         "today": today,
     }

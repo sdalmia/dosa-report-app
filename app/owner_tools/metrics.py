@@ -7,6 +7,8 @@ A stored zero stays zero.
 import statistics
 from datetime import timedelta
 
+from app.store_health.day_notes import badge_for, excluded_from_comparisons
+
 from app.store_health.contract import parse_number
 from app.store_health.present import list_stores
 from app.store_health.stores import assign_rows
@@ -232,8 +234,9 @@ def _store_change(feeds, store, day):
     prior = _row(feeds, store.label, prior_day)
     gross = current.get("gross") if current else None
     bills = current.get("bills") if current else None
-    prior_gross = prior.get("gross") if prior else None
-    prior_bills = prior.get("bills") if prior else None
+    tagged = excluded_from_comparisons(store, day) or excluded_from_comparisons(store, prior_day)
+    prior_gross = None if tagged or prior is None else prior.get("gross")
+    prior_bills = None if tagged or prior is None else prior.get("bills")
     mall = is_mall_food_court(store.label)
     return {
         "id": store.id,
@@ -247,6 +250,7 @@ def _store_change(feeds, store, day):
         "prior_bills": count_fig(None if mall else prior_bills),
         "gross_change_pct": pct_fig(percent_change(gross, prior_gross)),
         "bills_change_pct": pct_fig(None if mall else percent_change(bills, prior_bills)),
+        "day_badge": badge_for(store, day),
     }
 
 
@@ -317,6 +321,8 @@ def build_brief(feeds, attention, procurement):
         if gross is not None and mid is not None and mid != 0:
             variance = (float(gross) - float(mid)) / float(mid) * 100.0
         if not is_trading(row["label"]):
+            continue
+        if excluded_from_comparisons(row["label"], day):
             continue
         if variance is not None:
             worst_mid.append(
@@ -395,7 +401,7 @@ def _sales_component(feeds, label, month):
         gross = row.get("gross")
         calendar = feeds["calendar"].get((label, day))
         mid = calendar.get("pred_mid") if calendar else None
-        if gross is None or mid is None:
+        if gross is None or mid is None or excluded_from_comparisons(store, day):
             continue
         gross_values.append(float(gross))
         mid_values.append(float(mid))
@@ -420,7 +426,11 @@ def _bills_component(feeds, label, month):
         return None, "No Posist row in this month."
     current = rows[-1]
     bills = current.get("bills")
-    prior = _row(feeds, label, current["date"] - timedelta(days=PRIOR_DAYS))
+    prior_day = current["date"] - timedelta(days=PRIOR_DAYS)
+    badge = badge_for(label, current["date"]) or badge_for(label, prior_day)
+    if badge:
+        return None, f"{date_label(current['date'])} is {badge}, so it is left out of the bill comparison."
+    prior = _row(feeds, label, prior_day)
     prior_bills = prior.get("bills") if prior else None
     score = bills_score(bills, prior_bills)
     if bills is None:
@@ -681,6 +691,7 @@ def build_labour(feeds):
                 "region": store.region,
                 "mall_bills": mall,
                 "mall_note": MALL_BILL_NOTE if mall else "",
+                "day_badge": badge_for(store, day),
                 "employees": count_fig(employees),
                 "match_status": status,
                 "day_gross": money_fig(gross),

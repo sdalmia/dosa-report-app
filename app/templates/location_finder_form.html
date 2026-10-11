@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from "_lazy.html" import lazy_section %}
 
 {% block title %}Location Finder – Where should we open?{% endblock %}
 
@@ -41,90 +42,8 @@
         </ol>
     </section>
 
-    <section class="lf-card">
-        <h2>Candidate areas</h2>
-        <p class="lf-note">{{ board.candidates|length }} areas, ranked. Neighbour brands can be shown on the map. Reference malls are context and are not scored.</p>
-        {% if board.malls %}
-        <h3>Malls</h3>
-        <ul class="lf-rank">
-            {% for mall in board.malls %}
-            <li>
-                <strong>{{ mall.name }}</strong>
-                <span>
-                    {% if mall.city %}{{ mall.city }}. {% endif %}
-                    {% if mall.reference %}Reference mall. Not scored.
-                    {% elif mall.score is not none %}Score {{ mall.score }}.
-                    {% else %}Score data coming.
-                    {% endif %}
-                </span>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <label class="lf-toggle"><input type="checkbox" id="show-neighbours"> Show neighbour brands</label>
-        <div id="candidate-map" class="lf-map" role="region" aria-label="Candidate areas"></div>
-        <div class="lf-scroll">
-            <table class="lf" data-list>
-                <thead>
-                    <tr><th>Area</th><th>City</th><th>Brands</th><th>Nearest store</th><th></th></tr>
-                </thead>
-                <tbody>
-                    {% for area in board.candidates %}
-                    <tr>
-                        <td>{{ area.area }}</td>
-                        <td>{{ area.city }}</td>
-                        <td>{{ area.brand_count }}</td>
-                        <td>{{ area.nearest }}{% if area.nearest_km is not none %}, {{ area.nearest_km }} km{% endif %}</td>
-                        <td>{% if area.airport %}Airport, not a site to open{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section class="lf-card" id="our-stores">
-        <h2>Our stores</h2>
-        <p class="lf-note">Trading stores, 9 Sep–8 Oct. The new score is format-aware. Classic score is the previous 0–10 score. A missing input is data coming, and it is left out. It is not scored as zero.</p>
-        <ul class="lf-corr">
-            <li>High street, classic score and sales: {{ board.correlations.high_street_classic.rho }} ({{ board.correlations.high_street_classic.n }} stores)</li>
-            <li>High street, classic score, without stores that still need a re-pin: {{ board.correlations.high_street_classic_pinned.rho }} ({{ board.correlations.high_street_classic_pinned.n }} stores)</li>
-            <li>High street, new score and sales: {{ board.correlations.high_street_new.rho }} ({{ board.correlations.high_street_new.n }} stores)</li>
-            <li>Mall food court, classic score and sales: {{ board.correlations.mall_classic.rho }} ({{ board.correlations.mall_classic.n }} stores)</li>
-            <li>Mall food court, new score and sales: {{ board.correlations.mall_new.rho }} ({{ board.correlations.mall_new.n }} stores)</li>
-        </ul>
-        <div class="lf-scroll">
-            <table class="lf" data-list>
-                <thead>
-                    <tr>
-                        <th>Store</th>
-                        <th>Format</th>
-                        <th>New score</th>
-                        <th>Classic score</th>
-                        <th>Sales, 9 Sep–8 Oct</th>
-                        <th>Google rating</th>
-                        <th>Pin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for store in board.stores %}
-                    <tr>
-                        <td>
-                            {{ store.name }}
-                            {% if store.score_note %}<span class="lf-note">{{ store.score_note }}</span>{% endif %}
-                        </td>
-                        <td>{{ store.format_label }}</td>
-                        <td>{% if store.pattern_score is not none %}{{ store.pattern_score }}{% endif %}</td>
-                        <td>{% if store.classic_score is not none %}{{ store.classic_score }}{% endif %}</td>
-                        <td>{{ money(store.gross_30d) }}</td>
-                        <td>{% if store.google_rating is not none %}{{ '%.1f'|format(store.google_rating) }}{% endif %}</td>
-                        <td>{% if store.repin %}<span class="lf-flag">Re-pin needed</span>{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+    {{ lazy_section(url_for('location_finder.location_candidates'), height=420, title='Candidate areas', prefetch=true, id='candidate-areas') }}
+    {{ lazy_section(url_for('location_finder.location_stores'), height=320, title='Our stores', id='our-stores') }}
     {% endif %}
 
     <div class="lf-card">
@@ -192,7 +111,6 @@
 {% endblock %}
 
 {% block scripts %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 .lf-page { color: var(--text); margin-bottom: var(--s4); }
 .lf-page h1, .lf-page h2, .lf-page h3, .lf-page p, .lf-page label, .lf-page td, .lf-page th, .lf-page li { color: var(--text); }
@@ -248,85 +166,103 @@ document.getElementById("brand-form").addEventListener("submit", function () {
     loader.style.display = "block";
 });
 </script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-(function () {
-    var payload = {{ {"candidates": board.candidates, "outlets": board.outlets, "malls": board.malls}|tojson }};
+function loadScript(src) {
+  return new Promise(function (resolve, reject) {
+    var existing = document.querySelector('script[src="' + src + '"]');
+    if (existing) { existing.addEventListener("load", resolve); resolve(); return; }
+    var tag = document.createElement("script");
+    tag.src = src;
+    tag.onload = resolve;
+    tag.onerror = reject;
+    document.head.appendChild(tag);
+  });
+}
+window.lazyBoots = window.lazyBoots || {};
+window.lazyBoots["candidate-map"] = function () {
+  var css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+  document.head.appendChild(css);
+  loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(function () {
+    return fetch("{{ url_for('location_finder.location_map_json') }}", { credentials: "same-origin" });
+  }).then(function (response) { return response.json(); }).then(function (payload) {
     var mapEl = document.getElementById("candidate-map");
-    if (!mapEl || !window.L || !payload.candidates.length) return;
+    if (!mapEl || !window.L || mapEl.getAttribute("data-map") === "1") return;
+    mapEl.setAttribute("data-map", "1");
     var map = L.map(mapEl);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap"
-    }).addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "&copy; OpenStreetMap" }).addTo(map);
     var bounds = [];
-    payload.candidates.forEach(function (area) {
-        if (area.lat == null || area.lon == null) return;
-        var style = getComputedStyle(document.documentElement);
-        var accent = style.getPropertyValue("--accent").trim();
-        var amber = style.getPropertyValue("--amber").trim();
-        var marker = L.circleMarker([area.lat, area.lon], {
-            radius: area.airport ? 5 : 8,
-            color: area.airport ? amber : accent,
-            fillOpacity: 0.85
-        }).addTo(map);
-        marker.bindPopup("<strong>" + area.area + "</strong><br>" + (area.nearest || "") + (area.nearest_km != null ? " · " + area.nearest_km + " km" : ""));
-        bounds.push([area.lat, area.lon]);
+    (payload.candidates || []).forEach(function (area) {
+      if (area.lat == null || area.lon == null) return;
+      var style = getComputedStyle(document.documentElement);
+      var marker = L.circleMarker([area.lat, area.lon], {
+        radius: area.airport ? 5 : 8,
+        color: area.airport ? style.getPropertyValue("--amber").trim() : style.getPropertyValue("--accent").trim(),
+        fillOpacity: 0.85
+      }).addTo(map);
+      marker.bindPopup("<strong>" + area.area + "</strong><br>" + (area.nearest || "") + (area.nearest_km != null ? " · " + area.nearest_km + " km" : ""));
+      bounds.push([area.lat, area.lon]);
     });
     (payload.malls || []).forEach(function (mall) {
-        if (mall.lat == null || mall.lon == null) return;
-        var marker = L.circleMarker([mall.lat, mall.lon], {
-            radius: mall.reference ? 6 : 7,
-            color: mall.reference ? "#8a8175" : "#1f6b4a",
-            weight: 2,
-            fillOpacity: 0.9
-        }).addTo(map);
-        var label = "<strong>" + mall.name + "</strong>";
-        if (mall.reference) label += "<br>Reference mall. Not scored.";
-        else if (mall.score != null) label += "<br>Score " + mall.score;
-        marker.bindPopup(label);
-        bounds.push([mall.lat, mall.lon]);
+      if (mall.lat == null || mall.lon == null) return;
+      var marker = L.circleMarker([mall.lat, mall.lon], {
+        radius: mall.reference ? 6 : 7,
+        color: mall.reference ? "#8a8175" : "#1f6b4a",
+        weight: 2,
+        fillOpacity: 0.9
+      }).addTo(map);
+      var label = "<strong>" + mall.name + "</strong>";
+      if (mall.reference) label += "<br>Reference mall. Not scored.";
+      else if (mall.score != null) label += "<br>Score " + mall.score;
+      marker.bindPopup(label);
+      bounds.push([mall.lat, mall.lon]);
     });
     var brands = L.layerGroup();
-    payload.outlets.forEach(function (outlet) {
-        var marker = L.circleMarker([outlet.lat, outlet.lon], {
-            radius: 4,
-            color: getComputedStyle(document.documentElement).getPropertyValue("--chart-gross").trim(),
-            weight: 1,
-            fillOpacity: 0.7
-        });
-        marker.bindPopup(outlet.brand + (outlet.name ? " · " + outlet.name : ""));
-        brands.addLayer(marker);
+    (payload.outlets || []).forEach(function (outlet) {
+      var marker = L.circleMarker([outlet.lat, outlet.lon], {
+        radius: 4,
+        color: getComputedStyle(document.documentElement).getPropertyValue("--chart-gross").trim(),
+        weight: 1,
+        fillOpacity: 0.7
+      });
+      marker.bindPopup(outlet.brand + (outlet.name ? " · " + outlet.name : ""));
+      brands.addLayer(marker);
     });
     var toggle = document.getElementById("show-neighbours");
     if (toggle) {
-        toggle.addEventListener("change", function () {
-            if (toggle.checked) brands.addTo(map);
-            else map.removeLayer(brands);
-        });
+      toggle.addEventListener("change", function () {
+        if (toggle.checked) brands.addTo(map);
+        else map.removeLayer(brands);
+      });
     }
     if (bounds.length) map.fitBounds(bounds, { padding: [24, 24] });
-})();
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places"></script>
-<script>
+    setTimeout(function () { map.invalidateSize(); }, 50);
+  });
+};
 function initAutocomplete() {
-    if (!window.google || !google.maps || !google.maps.places) return;
-    const autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("autocomplete"),
-        { types: ["geocode", "establishment"] }
-    );
-    autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place.geometry) {
-            alert("No details available for the selected location.");
-            return;
-        }
-        document.getElementById("latitude").value = place.geometry.location.lat();
-        document.getElementById("longitude").value = place.geometry.location.lng();
-        document.getElementById("location_name").value = place.formatted_address || place.name;
-        document.getElementById("place_id").value = place.place_id;
-    });
+  if (!window.google || !google.maps || !google.maps.places) return;
+  var field = document.getElementById("autocomplete");
+  if (!field || field.getAttribute("data-places") === "1") return;
+  field.setAttribute("data-places", "1");
+  var autocomplete = new google.maps.places.Autocomplete(field, { types: ["geocode", "establishment"] });
+  autocomplete.addListener("place_changed", function () {
+    var place = autocomplete.getPlace();
+    if (!place.geometry) {
+      alert("No details available for the selected location.");
+      return;
+    }
+    document.getElementById("latitude").value = place.geometry.location.lat();
+    document.getElementById("longitude").value = place.geometry.location.lng();
+    document.getElementById("location_name").value = place.formatted_address || place.name;
+    document.getElementById("place_id").value = place.place_id;
+  });
 }
-document.addEventListener("DOMContentLoaded", initAutocomplete);
+var siteField = document.getElementById("autocomplete");
+if (siteField) {
+  siteField.addEventListener("focus", function () {
+    loadScript("https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places").then(initAutocomplete);
+  }, { once: true });
+}
 </script>
 {% endblock %}

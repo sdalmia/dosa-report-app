@@ -3,6 +3,8 @@
 import os
 import tempfile
 import unittest
+
+from tests.stitch import page
 from pathlib import Path
 
 _DB = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
@@ -421,7 +423,7 @@ class BatchPageTests(unittest.TestCase):
                 sess.pop(key, None)
 
     def test_menu_page_shows_batch_cards_and_does_not_invent_use(self):
-        html = self.client.get("/menu-costing?city=Kolkata").get_data(as_text=True)
+        html = page(self.client, "/menu-costing?city=Kolkata")
         self.assertIn("Things we make", html)
         self.assertIn('id="things-we-make"', html)
         self.assertIn('data-field="batch-item" data-city="Kolkata" data-item="Potato Masala Bucket Outlet" data-value="42.98"', html)
@@ -455,21 +457,21 @@ class BatchPageTests(unittest.TestCase):
         self.assertNotIn("+238%", html)
         self.assertNotIn('data-field="batch-variance"', html)
         self.assertNotIn('data-field="batch-item" data-city="Delhi NCR"', html)
-        masala = self.client.get("/menu-costing?city=Kolkata&store=Ideal+Plaza&q=Masala+Dosa").get_data(as_text=True)
+        masala = page(self.client, "/menu-costing?city=Kolkata&store=Ideal+Plaza&q=Masala+Dosa")
         self.assertIn('data-field="recipe-review" data-item="Masala Dosa"', masala)
         self.assertIn('data-review="yes"', masala)
         self.assertEqual(_cost_attr(masala), "23.82")
-        juice = self.client.get("/menu-costing?city=Kolkata&q=ABC+Juice").get_data(as_text=True)
+        juice = page(self.client, "/menu-costing?city=Kolkata&q=ABC+Juice")
         self.assertIn('data-review="no"', juice)
         self.assertNotIn('data-field="recipe-review" data-item="ABC Juice"', juice)
-        dish = self.client.get("/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa").get_data(as_text=True)
+        dish = page(self.client, "/menu-costing/item?city=Kolkata&store=Ideal+Plaza&item=Masala+Dosa")
         self.assertIn('data-field="recipe-review" data-item="Masala Dosa"', dish)
         self.assertIn("Recipe quantities are being corrected by Sailesh.", dish)
         self.assertIn('id="bom"', dish)
-        food = self.client.get("/food-cost").get_data(as_text=True)
+        food = page(self.client, "/food-cost")
         self.assertIn('data-field="recipe-review" data-item="Masala Dosa" data-city="Kolkata"', food)
         self.assertIn("Food cost for these dishes is likely overstated.", food)
-        delhi = self.client.get("/menu-costing?cc_city=Delhi+NCR&cc_store=&cc_range=").get_data(as_text=True)
+        delhi = page(self.client, "/menu-costing?cc_city=Delhi+NCR&cc_store=&cc_range=")
         self.assertIn('data-field="batch-item" data-city="Delhi NCR" data-item="Regular White Chutney Bucket Outlet" data-value="79.53"', delhi)
         self.assertNotIn('data-field="batch-item" data-city="Kolkata"', delhi)
         self.assertIn("900 kg short", delhi)
@@ -483,15 +485,13 @@ class BatchPageTests(unittest.TestCase):
         self.assertNotIn('data-kind="tomato"', html)
         self.assertNotIn("entp_consumption", html)
         self.assertNotIn('data-field="batch-pass"', html)
-        window = self.client.get(
-            "/menu-costing?city=Delhi+NCR&cc_city=Delhi+NCR&cc_store=&cc_range=custom"
-            "&cc_start=2026-10-01&cc_end=2026-10-08"
-        ).get_data(as_text=True)
+        window = page(self.client, "/menu-costing?city=Delhi+NCR&cc_city=Delhi+NCR&cc_store=&cc_range=custom"
+            "&cc_start=2026-10-01&cc_end=2026-10-08")
         self.assertIn('data-field="batch-pass-alert" data-kind="tomato"', window)
         self.assertIn("986 kg", window)
         self.assertIn("₹1.2L", window)
         self.assertNotIn("Not recorded", window)
-        hidden = self.client.get("/menu-costing?city=Kolkata&cc_city=Kolkata&cc_store=&cc_range=7").get_data(as_text=True)
+        hidden = page(self.client, "/menu-costing?city=Kolkata&cc_city=Kolkata&cc_store=&cc_range=7")
         self.assertIn('data-field="batch-pass-note"', hidden)
         self.assertNotIn('data-field="batch-pass" data-city=', hidden)
 

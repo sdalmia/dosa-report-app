@@ -1,0 +1,30 @@
+  <section data-list>
+    <h2>By store</h2>
+    {% for group in view.stores %}
+      <article class="store-group" data-store="{{ group.store }}">
+        <h3>{{ group.store }} <span>{{ group.count }}</span></h3>
+        <p class="meta">{% for keyword in group.keywords %}{{ keyword.keyword or 'No keyword' }} {{ keyword.count }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+        {% for case in group.cases %}
+          <article class="case" data-over-24="{{ 'yes' if case.over_24 else ('no' if case.over_24 is not none else '') }}">
+            <header>
+              <span class="pill {{ 'over' if case.over_24 else 'open' }}">{{ case.tracker }}</span>
+              {% if case.keyword %}<span class="pill keyword">{{ case.keyword }}</span>{% endif %}
+              {% if case.type %}<span class="pill">{{ case.type }}</span>{% endif %}
+            </header>
+            <dl>
+              <div><dt>Age</dt><dd data-field="age">{% if case.age %}{{ case.age }} h {{ case.age_basis }}{% else %}Not on the report{% endif %}</dd></div>
+              <div><dt>Over 24 hours</dt><dd data-field="over-24">{{ case.over_24_label or 'Not on the report' }}</dd></div>
+              <div><dt>Alert</dt><dd>{{ case.alert or 'Not on the report' }}</dd></div>
+              <div><dt>Post</dt><dd>{{ case.post or 'Not on the report' }}</dd></div>
+              <div><dt>Platform</dt><dd>{{ case.platform or 'Not on the report' }}</dd></div>
+              <div><dt>Rating</dt><dd data-field="rating">{{ case.rating or 'Not on the report' }}</dd></div>
+              <div><dt>Customer</dt><dd>{{ case.customer or 'Not on the report' }}</dd></div>
+              <div><dt>Status</dt><dd data-field="status">{{ case.status }}</dd></div>
+              <div><dt>Owner</dt><dd data-field="owner">{{ case.owner }}</dd></div>
+              <div><dt>Resolved</dt><dd data-field="resolved-at">{{ case.resolved_at }}</dd></div>
+            </dl>
+          </article>
+        {% endfor %}
+      </article>
+    {% endfor %}
+  </section>

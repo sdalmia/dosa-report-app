@@ -1,0 +1,19 @@
+{% for store in rows %}
+<tr>
+    <td{% if loop.first %} data-page-shown="{{ rows|length }}" data-page-total="{{ total }}"{% endif %}>
+        {{ store.name }}
+        {% if store.score_note %}<span class="lf-note">{{ store.score_note }}</span>{% endif %}
+    </td>
+    <td>{{ store.format_label }}</td>
+    <td>{% if store.pattern_score is not none %}{{ store.pattern_score }}{% endif %}</td>
+    <td>{% if store.classic_score is not none %}{{ store.classic_score }}{% endif %}</td>
+    <td>{{ money(store.gross_30d) }}</td>
+    <td>{% if store.google_rating is not none %}{{ '%.1f'|format(store.google_rating) }}{% endif %}</td>
+    <td>{% if store.repin %}<span class="lf-flag">Re-pin needed</span>{% endif %}</td>
+</tr>
+{% endfor %}
+{% if more %}
+<tr><td colspan="7"><button type="button" class="lazy-more" data-more="{{ more }}">Show more</button></td></tr>
+{% elif not rows %}
+<tr hidden><td colspan="7" data-page-shown="0" data-page-total="{{ total }}"></td></tr>
+{% endif %}

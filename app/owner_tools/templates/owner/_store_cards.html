@@ -1,0 +1,8 @@
+<div data-list>
+{% for store in stores %}
+<article class="store" data-store="{{ store.store_id }}" data-list-item>
+  <h2>{{ store.name }}</h2>
+  {% if store.line %}<p class="meta">{{ store.line }}</p>{% endif %}
+</article>
+{% endfor %}
+</div>

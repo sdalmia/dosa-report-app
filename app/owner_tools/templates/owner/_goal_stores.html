@@ -1,0 +1,23 @@
+{% from "owner/_macros.html" import show %}
+{% if goals.empty %}
+<div class="empty"><p>{{ goals.empty }}</p></div>
+{% else %}
+<div data-list>
+{% for store in goals.stores %}
+<article class="store" data-store="{{ store.label }}" data-list-item>
+  <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+  <p class="kicker">{{ goals.month_label }} gross</p>
+  <p class="figure-sm" data-field="mtd-gross">{{ show(store.mtd_gross) }}</p>
+  {% if store.bar_pct is not none %}
+  <div class="pair"><span>Target</span><span data-field="target">{{ show(store.target) }}</span></div>
+  <div class="bar" role="progressbar" aria-valuenow="{{ store.bar_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Month-to-date gross versus target">
+    <span style="width: {{ store.bar_pct }}%;"></span>
+  </div>
+  <p data-field="progress">{{ store.progress_pct.text }} of target</p>
+  {% else %}
+  <div class="empty" data-empty="target"><p>{{ store.empty or store.note }}</p></div>
+  {% endif %}
+</article>
+{% endfor %}
+</div>
+{% endif %}

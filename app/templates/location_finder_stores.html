@@ -1,0 +1,29 @@
+<section class="lf-card" id="our-stores">
+    <h2>Our stores</h2>
+    <p class="lf-note">Trading stores, 9 Sep–8 Oct. The new score is format-aware. Classic score is the previous 0–10 score. A missing input is data coming, and it is left out. It is not scored as zero.</p>
+    <ul class="lf-corr">
+        <li>High street, classic score and sales: {{ correlations.high_street_classic.rho }} ({{ correlations.high_street_classic.n }} stores)</li>
+        <li>High street, classic score, without stores that still need a re-pin: {{ correlations.high_street_classic_pinned.rho }} ({{ correlations.high_street_classic_pinned.n }} stores)</li>
+        <li>High street, new score and sales: {{ correlations.high_street_new.rho }} ({{ correlations.high_street_new.n }} stores)</li>
+        <li>Mall food court, classic score and sales: {{ correlations.mall_classic.rho }} ({{ correlations.mall_classic.n }} stores)</li>
+        <li>Mall food court, new score and sales: {{ correlations.mall_new.rho }} ({{ correlations.mall_new.n }} stores)</li>
+    </ul>
+    <div class="lf-scroll">
+        <table class="lf" data-list data-search-src="{{ url_for('location_finder.location_stores', rows=1) }}">
+            <thead>
+                <tr>
+                    <th>Store</th>
+                    <th>Format</th>
+                    <th>New score</th>
+                    <th>Classic score</th>
+                    <th>Sales, 9 Sep–8 Oct</th>
+                    <th>Google rating</th>
+                    <th>Pin</th>
+                </tr>
+            </thead>
+            <tbody data-list-body>
+                {% include "location_finder_store_rows.html" %}
+            </tbody>
+        </table>
+    </div>
+</section>

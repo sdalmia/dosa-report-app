@@ -1,0 +1,33 @@
+<section class="lf-card" id="candidate-areas">
+    <h2>Candidate areas</h2>
+    <p class="lf-note">{{ candidate_count }} areas, ranked. Neighbour brands can be shown on the map. Reference malls are context and are not scored.</p>
+    {% if malls %}
+    <h3>Malls</h3>
+    <ul class="lf-rank">
+        {% for mall in malls %}
+        <li>
+            <strong>{{ mall.name }}</strong>
+            <span>
+                {% if mall.city %}{{ mall.city }}. {% endif %}
+                {% if mall.reference %}Reference mall. Not scored.
+                {% elif mall.score is not none %}Score {{ mall.score }}.
+                {% else %}Score data coming.
+                {% endif %}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <label class="lf-toggle"><input type="checkbox" id="show-neighbours"> Show neighbour brands</label>
+    <div id="candidate-map" class="lf-map" data-boot="candidate-map" role="region" aria-label="Candidate areas"></div>
+    <div class="lf-scroll">
+        <table class="lf" data-list data-search-src="{{ url_for('location_finder.location_candidates', rows=1) }}">
+            <thead>
+                <tr><th>Area</th><th>City</th><th>Brands</th><th>Nearest store</th><th></th></tr>
+            </thead>
+            <tbody data-list-body>
+                {% include "location_finder_candidate_rows.html" %}
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -379,6 +379,18 @@ body.nav-open { overflow: hidden; }
 .cc-home .chart-wrap { padding: 0.35rem 0.4rem 0.2rem; }
 
 .window-sub { margin: 0 0 0.35rem; color: var(--text-muted); font-size: 0.85rem; }
+.day-badge {
+  display: inline-block;
+  margin: 0.15rem 0.35rem 0.15rem 0;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
 
 .kpi-chips {
   display: grid;
@@ -895,4 +907,36 @@ form.pc-form .list-search,
   .cc-filters { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }
   .cc-filters.is-custom { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1fr) auto; }
   .cc-apply { width: auto; }
+}
+
+.lazy-section {
+  box-sizing: border-box;
+}
+.lazy-skeleton {
+  display: grid;
+  gap: 12px;
+  padding: var(--s3) 0;
+}
+.lazy-bar {
+  display: block;
+  height: 14px;
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.lazy-bar.short { width: 55%; }
+.lazy-more {
+  min-height: 44px;
+  margin: var(--s2) 0 var(--s3);
+  padding: 0 var(--s3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lazy-bar { animation: lazy-pulse 1.2s ease-in-out infinite; }
+}
+@keyframes lazy-pulse {
+  50% { opacity: 0.45; }
 }
