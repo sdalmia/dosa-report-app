@@ -319,6 +319,14 @@
         <div>
           <h2 id="posist-title">Posist Insights</h2>
           <p class="box-source">Last window{% if posist.window_label %} · <span data-field="posist_window">{{ posist.window_label }}</span>{% else %}<span data-field="posist_window"></span>{% endif %}</p>
+          {% if quality_note %}<p class="box-source" data-field="data_quality">{{ quality_note }}</p>{% endif %}
+          {% if day_badges %}
+            <p class="badges">
+              {% for item in day_badges %}
+                <span class="day-badge" data-field="day_badge" data-date="{{ item.iso }}">{{ item.date_label }} · {{ item.badge }}</span>
+              {% endfor %}
+            </p>
+          {% endif %}
           {% if freshness.posist.state == "ready" %}
             <p class="box-source">File last saved {{ freshness.posist.saved_at }}. Newest date in the file {{ freshness.posist.newest_date }}.</p>
           {% else %}

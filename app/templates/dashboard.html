@@ -38,6 +38,14 @@
     {% endif %}
   </div>
   {% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
+  {% if quality_note %}<p class="window-sub" data-field="data_quality">{{ quality_note }}</p>{% endif %}
+  {% if day_badges %}
+    <p class="window-sub" data-field="day_badges">
+      {% for item in day_badges %}
+        <span class="day-badge" data-field="day_badge">{{ item.label }} · {{ item.badge }}</span>
+      {% endfor %}
+    </p>
+  {% endif %}
   {% if not regions %}
     <p class="empty">No data</p>
   {% else %}

@@ -17,6 +17,7 @@
   {% for store in region.stores %}
   <article class="store" data-store="{{ store.label }}">
     <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+    {% if store.day_badge %}<p class="note" data-field="day_badge">{{ store.day_badge }}</p>{% endif %}
     <p class="kicker">Gross</p>
     <p class="figure-sm" data-field="gross">{{ show(store.gross) }}</p>
     <div class="hero-split">

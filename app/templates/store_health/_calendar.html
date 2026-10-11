@@ -40,6 +40,7 @@
                   {% endif %}
                   <div class="cal-cell{% if cell.tier_class %} {{ cell.tier_class }}{% endif %}{% if cell.iso == selection.day_input %} is-selected{% endif %}{% if cell.iso == today_iso %} is-today{% endif %}">
                     <a class="day-num" href="{{ day_href }}">{{ cell.date.day }} {{ cell.chrome_weekday }}</a>
+                    {% if cell.badge %}<span class="day-badge" data-field="day_badge" data-date="{{ cell.iso }}">{{ cell.badge }}</span>{% endif %}
                     <div class="cal-line"><span>Tier</span><b data-field="tier" data-date="{{ cell.iso }}">{{ cell.fields.tier }}</b></div>
                     <div class="cal-line"><span>Low</span><b data-field="pred_low" data-date="{{ cell.iso }}">{{ cell.fields.pred_low }}</b></div>
                     <div class="cal-line"><span>Mid</span><b data-field="pred_mid" data-date="{{ cell.iso }}">{{ cell.fields.pred_mid }}</b></div>

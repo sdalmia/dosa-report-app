@@ -24,7 +24,9 @@ from app.owner_tools.metrics import (
     rating_score,
     sales_score,
     wastage_score,
+    _sales_component,
 )
+from app.store_health.contract import load_feeds
 from app.owner_tools.sources import (
     clear_procurement_scan_cache,
     load_goals,
@@ -413,6 +415,28 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
+        self.assertEqual(payload["as_of"], "2026-10-10")
+        held = {
+            "Connaught place (02/0012)",
+            "Gurgaon DLF (02/0009)",
+            "Dosa Coffee - Food Truck - 1 (0008)",
+        }
+        for key in ("worst_vs_mid", "worst_vs_last_week"):
+            self.assertFalse(held.intersection(item["label"] for item in payload[key]))
+        tagged = {
+            store["label"]: store
+            for region in payload["regions"]
+            for store in region["stores"]
+            if store["label"] in held
+        }
+        self.assertEqual(tagged["Connaught place (02/0012)"]["day_badge"], "Protest-affected")
+        self.assertEqual(tagged["Gurgaon DLF (02/0009)"]["day_badge"], "Protest-affected")
+        self.assertEqual(tagged["Dosa Coffee - Food Truck - 1 (0008)"]["day_badge"], "Status unknown")
+        for store in tagged.values():
+            self.assertIsNone(store["gross_change_pct"]["value"])
+            self.assertIsNone(store["bills_change_pct"]["value"])
+        self.assertIn("Protest-affected", text.get_data(as_text=True))
+        self.assertIn("Status unknown", text.get_data(as_text=True))
 
     def test_shipped_scorecard_labour_and_goals(self):
         scorecard = page(self.client, "/scorecard")
@@ -426,6 +450,32 @@ class ShippedOwnerTests(unittest.TestCase):
         fame = shalimar.split('data-component="famepilot"', 1)[1].split('data-component=', 1)[0]
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
+        connaught = scorecard.split('data-store="Connaught place (02/0012)"', 1)[1].split("</article>", 1)[0]
+        self.assertIn("Protest-affected", connaught)
+        self.assertIn("left out of the bill comparison", connaught)
+        dlf = scorecard.split('data-store="Gurgaon DLF (02/0009)"', 1)[1].split("</article>", 1)[0]
+        self.assertIn("Protest-affected", dlf)
+        self.assertIn("left out of the bill comparison", dlf)
+        truck = scorecard.split('data-store="Dosa Coffee - Food Truck - 1 (0008)"', 1)[1].split("</article>", 1)[0]
+        self.assertIn("Status unknown", truck)
+        self.assertIn("left out of the bill comparison", truck)
+        feeds = load_feeds()
+        for label in (
+            "Gurgaon DLF (02/0009)",
+            "Connaught place (02/0012)",
+            "Dosa Coffee - Food Truck - 1 (0008)",
+        ):
+            _score, raw = _sales_component(feeds, label, "2026-10")
+            counted = 0
+            for (store, day), row in feeds["posist"].items():
+                if store != label or day.isoformat()[:7] != "2026-10" or day.isoformat() == "2026-10-10":
+                    continue
+                calendar = feeds["calendar"].get((store, day))
+                mid = calendar.get("pred_mid") if calendar else None
+                if row.get("gross") is None or mid is None:
+                    continue
+                counted += 1
+            self.assertIn(f"on {counted} days with both.", raw)
         labour = page(self.client, "/labour")
         salt = labour.split('data-store="Dosa Coffee - Salt Lake (002)"', 1)[1].split("</article>", 1)[0]
         employees = salt.split('data-field="employees"', 1)[1].split("</div>", 1)[0]

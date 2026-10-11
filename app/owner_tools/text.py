@@ -37,7 +37,8 @@ def render_brief_text(brief):
     for region in brief["regions"]:
         lines.append(region["name"])
         for store in region["stores"]:
-            lines.append(f"- {store['label']}")
+            badge = store.get("day_badge")
+            lines.append(f"- {store['label']}" if not badge else f"- {store['label']} ({badge})")
             lines.append(f"  Gross {_show(store['gross'])} ({_show(store['gross_change_pct'])} vs last week)")
             lines.append(f"  Bills {_show(store['bills'])} ({_show(store['bills_change_pct'])} vs last week)")
             lines.append(f"  APB: {_show(store['apb'])}")

@@ -68,7 +68,7 @@
       {% for store in league_top %}
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>
-          <strong>{{ store.label }}</strong>
+          <strong>{{ store.label }}{% if store.day_badge %} <span class="day-badge" data-field="day_badge">{{ store.day_badge }}</span>{% endif %}</strong>
           <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
         </a>
       {% endfor %}
@@ -77,7 +77,7 @@
         {% for store in league_bottom %}
           <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
             <span class="rank">{{ store.rank }}</span>
-            <strong>{{ store.label }}</strong>
+            <strong>{{ store.label }}{% if store.day_badge %} <span class="day-badge" data-field="day_badge">{{ store.day_badge }}</span>{% endif %}</strong>
             <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
           </a>
         {% endfor %}

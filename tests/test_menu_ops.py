@@ -585,7 +585,7 @@ class PageTests(unittest.TestCase):
         self.assertEqual(channels.status_code, 200)
         page = channels.get_data(as_text=True)
         self.assertIn("Delivery vs dine-in", page)
-        self.assertIn("10 Sep–9 Oct 2026", page)
+        self.assertIn("11 Sep–10 Oct 2026", page)
         self.assertIn("This window is not on file yet.", page)
         self.assertIn("Zomato Delivery", page)
         self.assertIn("not in yet", page)

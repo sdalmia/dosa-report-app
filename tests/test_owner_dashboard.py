@@ -1,6 +1,7 @@
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tests.stitch import page
 from datetime import date
@@ -92,8 +93,9 @@ class FlagAccessTests(unittest.TestCase):
         self.assertIn("accounts", areas)
         self.assertNotIn("alfred.csv", {row["file"] for row in visible})
         self._login("dalmia.siddhant@gmail.com")
-        html = page(self.client, "/flags")
-        payload = self.client.get("/flags.json").get_json()
+        with patch("app.flags.business_today", return_value=date(2026, 10, 9)):
+            html = page(self.client, "/flags")
+            payload = self.client.get("/flags.json").get_json()
         blob = html + " ".join(item["title"] for item in payload["flags"])
         for bit in RESTRICTED_BITS:
             self.assertIn(bit, blob)
@@ -203,9 +205,19 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = page(self.client, "/dashboard")
-        self.assertEqual(view["window_subtitle"], "10 Sep – 9 Oct · vs last Friday")
+        self.assertEqual(view["window_subtitle"], "11 Sep – 10 Oct · vs last Saturday")
         self.assertIn("Gross", html)
-        self.assertIn("10 Sep – 9 Oct · vs last Friday", html)
+        self.assertIn("11 Sep – 10 Oct · vs last Saturday", html)
+        self.assertIn("The report was likely pulled before close.", html)
+        self.assertIn("Connaught place (02/0012) · Protest-affected", html)
+        self.assertIn("Gurgaon DLF (02/0009) · Protest-affected", html)
+        self.assertIn("Food Truck - 1 (0008) · Status unknown", html)
+        self.assertNotIn("57907", html)
+        self.assertNotIn("39281", html)
+        bill_alerts = " ".join(alert["text"] for alert in view["alerts"] if alert["kind"] == "Bills")
+        self.assertNotIn("Connaught place", bill_alerts)
+        self.assertNotIn("Gurgaon DLF", bill_alerts)
+        self.assertNotIn("Food Truck", bill_alerts)
         self.assertIn("Calculated. Gross divided by bills.", html)
         self.assertNotIn("posist_daily", html)
         self.assertNotIn("days with a row", html)

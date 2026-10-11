@@ -379,6 +379,18 @@ body.nav-open { overflow: hidden; }
 .cc-home .chart-wrap { padding: 0.35rem 0.4rem 0.2rem; }
 
 .window-sub { margin: 0 0 0.35rem; color: var(--text-muted); font-size: 0.85rem; }
+.day-badge {
+  display: inline-block;
+  margin: 0.15rem 0.35rem 0.15rem 0;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
 
 .kpi-chips {
   display: grid;

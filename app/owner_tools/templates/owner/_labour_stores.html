@@ -3,6 +3,7 @@
 {% for store in labour.stores %}
 <article class="store" data-store="{{ store.label }}" data-list-item>
   <h3><a href="{{ url_for('store_health.page', store_id=store.id) }}">{{ store.label }}</a></h3>
+  {% if store.day_badge %}<p class="note" data-field="day_badge">{{ store.day_badge }}</p>{% endif %}
   {% if store.employees.value is none %}
   <p class="note">Staff count is blank</p>
   {% endif %}
