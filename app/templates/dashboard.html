@@ -4,15 +4,6 @@
 {% block content %}
 <div class="cc-home">
 {% include "_filters.html" %}
-{% if training %}
-<section class="cc-section" id="training" aria-labelledby="training-title">
-  <h2 id="training-title">Training</h2>
-  <p><strong>{{ training.headline }}</strong></p>
-  <p class="window-sub">{{ training.totals }}</p>
-  {% if training.outside %}<p class="window-sub">{{ training.outside }}</p>{% endif %}
-  {{ lazy_section(url_for('main.dashboard_training'), height=220, title='Training by city', prefetch=true) }}
-</section>
-{% endif %}
 <section class="cc-section" id="red-flags" aria-labelledby="flags-title">
   <div class="section-head">
     <h2 id="flags-title">Red flags</h2>

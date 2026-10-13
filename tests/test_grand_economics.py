@@ -89,7 +89,7 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
         self.assertIn("Loss-making stores", html)
-        self.assertIn("Closing 31 Oct", html)
+        self.assertIn("Closing 20 Oct", html)
         self.assertIn("Kolkata is in for Apr–Sep 2026. Later months are not yet in.", html)
         self.assertIn("NCR is in for Apr–Jul 2026. Later months are not yet in.", html)
         self.assertIn('data-src="/grand-economics/stores"', html)
@@ -120,7 +120,7 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertEqual(stores.status_code, 200)
         body = stores.get_data(as_text=True)
         self.assertIn("Forum Mall", body)
-        self.assertIn("Closing 31 Oct", body)
+        self.assertIn("Closing 20 Oct", body)
         self.assertIn("data-list", body)
         self.assertNotIn(".json", body)
 
@@ -165,20 +165,26 @@ class TrainingTests(unittest.TestCase):
         cls.app.config["TESTING"] = True
         cls.client = cls.app.test_client()
 
-    def test_owner_sees_the_threat_and_loads_cities_later(self):
+    def test_training_stays_off_home_and_on_its_own_page(self):
         with self.client.session_transaction() as sess:
             sess["user"] = {"name": "Siddhant", "email": OWNER}
             sess["user_email"] = OWNER
         home = self.client.get("/dashboard").get_data(as_text=True)
-        self.assertIn("307 of 379 active users (about 81%) did not log in from 30 Sep to 3 Oct.", home)
-        self.assertIn("718 users. 25 onboarding. 45 pending deactivation.", home)
-        self.assertIn("9 of these users are outside Kolkata and Delhi.", home)
+        self.assertNotIn("307 of 379 active users (about 81%) did not log in from 30 Sep to 3 Oct.", home)
+        self.assertNotIn("718 users. 25 onboarding. 45 pending deactivation.", home)
+        self.assertNotIn("9 of these users are outside Kolkata and Delhi.", home)
         self.assertNotIn("Central Kitchen Kolkata", home)
         self.assertNotIn("Course status", home)
-        self.assertIn('data-src="/dashboard/training"', home)
+        self.assertNotIn('data-src="/dashboard/training"', home)
+        self.assertNotIn('id="training"', home)
+        drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
+        bottom = home.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
+        self.assertIn("/dashboard/training", drawer)
+        self.assertNotIn("/dashboard/training", bottom)
         cities = self.client.get("/dashboard/training")
         self.assertEqual(cities.status_code, 200)
         body = cities.get_data(as_text=True)
+        self.assertIn("307 of 379 active users (about 81%) did not log in from 30 Sep to 3 Oct.", body)
         self.assertIn("Central Kitchen Kolkata", body)
         self.assertIn("Connaught Place Delhi", body)
         self.assertIn("Course status", body)

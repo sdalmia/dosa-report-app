@@ -101,7 +101,7 @@ class StoreMasterTests(unittest.TestCase):
             self.assertFalse(allows_growth(label), label)
             self.assertEqual(store_gaps(find_store(label)), [])
         faridabad = find_store("Sec 15 Faridabad (02/0007)")
-        self.assertEqual(faridabad["status"], "closing 31 Oct")
+        self.assertEqual(faridabad["status"], "closing 20 Oct")
         self.assertTrue(is_trading(faridabad["posist_name"]))
         self.assertFalse(allows_growth(faridabad["posist_name"]))
         for label in (

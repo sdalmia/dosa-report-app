@@ -39,7 +39,7 @@ SKIP_SHEETS = {
 
 # Sheet title, after letters and digits only, that is closing and gets no advice.
 CLOSING = {
-    "faridabadsec15": "Closing 31 Oct",
+    "faridabadsec15": "Closing 20 Oct",
 }
 
 MONTH_NAMES = (

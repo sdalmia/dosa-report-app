@@ -1,0 +1,13 @@
+{% extends "owner/layout.html" %}
+
+{% block title %}Training - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Training</h1>
+{% if training.headline %}
+  <p><strong>{{ training.headline }}</strong></p>
+{% endif %}
+{% if training.totals %}<p class="subtitle">{{ training.totals }}</p>{% endif %}
+{% if training.outside %}<p class="subtitle">{{ training.outside }}</p>{% endif %}
+{% include "_training.html" %}
+{% endblock %}
