@@ -1,0 +1,17 @@
+<section class="cc-section" id="training-cities" aria-label="Who did not log in">
+  {% for city in training.cities %}
+    <h2>{{ city.name }} · {{ city.count }}</h2>
+    <div data-list>
+      {% for store in city.stores %}
+        <p class="alert-row" data-list-item><strong>{{ store.name }}</strong> {{ store.count }}</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  {% if training.course %}
+    <h2>Course status</h2>
+    <p class="window-sub">This is a different list from the people who did not log in.</p>
+    {% for row in training.course %}
+      <p>{{ row.city }}: {{ row.people }} people. {{ row.finished }} finished every assigned course. {{ row.not_started }} have not started. {{ row.part_way }} are part way.</p>
+    {% endfor %}
+  {% endif %}
+</section>

@@ -1,0 +1,175 @@
+{
+  "headline": "307 of 379 active users (about 81%) did not log in from 30 Sep to 3 Oct.",
+  "totals": "718 users. 25 onboarding. 45 pending deactivation.",
+  "outside": "9 of these users are outside Kolkata and Delhi.",
+  "cities": [
+    {
+      "name": "Kolkata",
+      "count": 154,
+      "stores": [
+        {
+          "name": "Central Kitchen Kolkata",
+          "count": 22
+        },
+        {
+          "name": "Ideal Plaza",
+          "count": 17
+        },
+        {
+          "name": "Salt Lake Sec 1",
+          "count": 12
+        },
+        {
+          "name": "Lake Road",
+          "count": 11
+        },
+        {
+          "name": "Salt Lake Sec 3",
+          "count": 11
+        },
+        {
+          "name": "James Long Sarani",
+          "count": 10
+        },
+        {
+          "name": "Santoshpur",
+          "count": 10
+        },
+        {
+          "name": "Rosedale Plaza",
+          "count": 9
+        },
+        {
+          "name": "Kalikapur",
+          "count": 8
+        },
+        {
+          "name": "Lake Town",
+          "count": 8
+        },
+        {
+          "name": "Rangoli Mall",
+          "count": 8
+        },
+        {
+          "name": "Quest Mall",
+          "count": 7
+        },
+        {
+          "name": "Head Office_Kasba",
+          "count": 6
+        },
+        {
+          "name": "Forum Mall",
+          "count": 5
+        },
+        {
+          "name": "Cloud Kitchen New Town",
+          "count": 4
+        },
+        {
+          "name": "Mani Square Mall",
+          "count": 4
+        },
+        {
+          "name": "Calcutta Swimming Club",
+          "count": 1
+        },
+        {
+          "name": "Technopolis",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "Delhi",
+      "count": 144,
+      "stores": [
+        {
+          "name": "Connaught Place Delhi",
+          "count": 18
+        },
+        {
+          "name": "Central Kitchen Delhi",
+          "count": 12
+        },
+        {
+          "name": "Model Town",
+          "count": 12
+        },
+        {
+          "name": "Paschim Vihar",
+          "count": 12
+        },
+        {
+          "name": "Gurgaon - Sec 15",
+          "count": 11
+        },
+        {
+          "name": "Jasola Pacific Mall",
+          "count": 10
+        },
+        {
+          "name": "Noida Sec 18",
+          "count": 10
+        },
+        {
+          "name": "Rohini Sector 7",
+          "count": 10
+        },
+        {
+          "name": "Faridabad",
+          "count": 7
+        },
+        {
+          "name": "Gurgaon - DLF",
+          "count": 7
+        },
+        {
+          "name": "Noida Sec 143",
+          "count": 7
+        },
+        {
+          "name": "Shalimar Bagh",
+          "count": 7
+        },
+        {
+          "name": "Gurgaon sec 31",
+          "count": 6
+        },
+        {
+          "name": "GURUGRAM SEC 10A",
+          "count": 6
+        },
+        {
+          "name": "Delhi NCR HO",
+          "count": 5
+        },
+        {
+          "name": "Kalkaji",
+          "count": 3
+        },
+        {
+          "name": "Connaught Place",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "course": [
+    {
+      "city": "Kolkata",
+      "people": 266,
+      "finished": 113,
+      "not_started": 61,
+      "part_way": 92
+    },
+    {
+      "city": "Delhi",
+      "people": 293,
+      "finished": 97,
+      "not_started": 87,
+      "part_way": 109
+    }
+  ]
+}

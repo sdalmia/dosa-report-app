@@ -415,7 +415,7 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
-        self.assertEqual(payload["as_of"], "2026-10-10")
+        self.assertEqual(payload["as_of"], "2026-10-11")
         held = {
             "Connaught place (02/0012)",
             "Gurgaon DLF (02/0009)",

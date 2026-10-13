@@ -38,6 +38,9 @@ STATUS_LABELS = {
     "actual_provisional_eod": "Actual, provisional end of day",
     "share_of_network_band": "Share of the network band",
     "not_on_deployment_report": "Not on the deployment report",
+    "actual_gross_filled": "Gross is in",
+    "actual_gross_filled_provisional": "Gross is in, provisional",
+    "provisional": "Provisional",
 }
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."

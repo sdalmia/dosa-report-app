@@ -29,7 +29,7 @@ from app.menu_ops.loader import (
 
 NO_CATEGORY = "__none__"
 NO_REGION = "__none__"
-UNALLOCATED_NOTE = "Probably delivery packaging charges. Still unconfirmed. This is not a dish."
+UNALLOCATED_NOTE = "Zomato packaging is labelled at 10% of order value. This is not a dish."
 POPULARITY_OF_EQUAL = 0.70
 
 QUADRANT_LABELS = {

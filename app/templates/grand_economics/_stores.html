@@ -1,0 +1,23 @@
+<div class="ge-stores">
+  {% for city in stores.cities %}
+    <section>
+      <h2>{{ city.name }} · {{ city.month }}</h2>
+      <div data-list>
+        {% for store in city.stores %}
+          <article class="ge-store" data-list-item>
+            <h3>{{ store.name }}{% if store.tag %} <span class="note">{{ store.tag }}</span>{% endif %}</h3>
+            <div class="ge-figs">
+              {% for fig in store.figs %}
+                <button type="button" class="ge-card ge-fig" data-detail="{{ fig.id }}" aria-expanded="false">
+                  <span class="kicker">{{ fig.label }}</span>
+                  <strong>{{ fig.value }}</strong>
+                  {% if fig.note %}<span class="note">{{ fig.note }}</span>{% endif %}
+                </button>
+              {% endfor %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+</div>
