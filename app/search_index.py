@@ -11,6 +11,7 @@ PAGES = (
     {"kind": "Page", "label": "Scorecard", "href": "/scorecard"},
     {"kind": "Page", "label": "Labour", "href": "/labour"},
     {"kind": "Page", "label": "Goals", "href": "/goals"},
+    {"kind": "Page", "label": "Grand economics", "href": "/grand-economics"},
     {"kind": "Page", "label": "Procurement", "href": "/procurement"},
     {"kind": "Page", "label": "Food cost", "href": "/food-cost"},
     {"kind": "Page", "label": "Vendors", "href": "/vendors"},

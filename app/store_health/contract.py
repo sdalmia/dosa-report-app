@@ -56,6 +56,7 @@ POSIST_COLUMNS = (
     "source",
     "provisional",
     "region",
+    "notes",
 )
 
 # Network file shape. Store calendars use these columns plus store.
@@ -177,6 +178,9 @@ ALLOWED_STATUS = {
     "actual_provisional_eod",
     "share_of_network_band",
     "not_on_deployment_report",
+    "actual_gross_filled",
+    "actual_gross_filled_provisional",
+    "provisional",
 }
 
 
@@ -316,7 +320,7 @@ def load_posist(directory=None):
                             f"{POSIST_FILE} row {index} source is {text!r}. "
                             "Expected live, historical, historical-total-revenue, or posist insights.",
                         )
-            elif field == "region":
+            elif field in {"region", "notes"}:
                 parsed[field] = None if _blank(cell) else str(cell).strip()
             else:
                 value = parse_number(cell)
@@ -377,7 +381,8 @@ def load_calendar(directory=None):
                                 warnings,
                                 f"{CALENDAR_FILE} row {index} status is {text!r}. "
                                 "Expected pending, actual, actual_provisional_eod, "
-                                "share_of_network_band, or not_on_deployment_report.",
+                                "share_of_network_band, not_on_deployment_report, "
+                                "actual_gross_filled, actual_gross_filled_provisional, or provisional.",
                             )
                     else:
                         parsed[field] = text

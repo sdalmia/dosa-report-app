@@ -1,0 +1,308 @@
+S.No.,Employee Code,Employee Name,Store Name,Region,Designation,User Status,2026-09-30 00:00:00,2026-10-01 00:00:00,2026-10-02 00:00:00,2026-10-03 00:00:00
+1,DC0089,Puja Singh,Calcutta Swimming Club,East,SM,ACTIVE,No,No,No,No
+2,DC0889,Mahesh Kumar,Central Kitchen Delhi,North,TM,ACTIVE,No,No,No,No
+3,DC0943,Manish Kumar,Central Kitchen Delhi,North,Helper,ACTIVE,No,No,No,No
+4,DC0596,Nikhil Kumar,Central Kitchen Delhi,North,Helper,ACTIVE,No,No,No,No
+5,DC0928,Pavan Kumar,Central Kitchen Delhi,North,KTM,ACTIVE,No,No,No,No
+6,DC0893,Pushpendra .,Central Kitchen Delhi,North,Helper,ACTIVE,No,No,No,No
+7,DC0380,Rajib Chowdhury,Central Kitchen Delhi,North,Sr KTM,ACTIVE,No,No,No,No
+8,DC0128,Rana Ghosh,Central Kitchen Delhi,North,Helper,ACTIVE,No,No,No,No
+9,DC0702,Ranjan Kumar Ray,Central Kitchen Delhi,North,Housekeeping,ACTIVE,No,No,No,No
+10,DC0413,Ranjeet Kumar Singh,Central Kitchen Delhi,North,KTM,ACTIVE,No,No,No,No
+11,DC1152,Shiv Singh,Central Kitchen Delhi,North,Housekeeping,ACTIVE,No,No,No,No
+12,DC0877,Sonu Kumar Mishra,Central Kitchen Delhi,North,Helper,ACTIVE,No,No,No,No
+13,DC0892,Suraj .,Central Kitchen Delhi,North,Housekeeping,ACTIVE,No,No,No,No
+14,DC0020,Abdul Nizam,Central Kitchen Kolkata,East,Trainer Cook,ACTIVE,No,No,No,No
+15,DC0097,Animesh Bag,Central Kitchen Kolkata,East,KTM,ACTIVE,No,No,No,No
+16,DC0052,Bhagaban Jena,Central Kitchen Kolkata,East,KTM,ACTIVE,No,No,No,No
+17,DC0063,Bijay Sardar,Central Kitchen Kolkata,East,KTM,ACTIVE,No,No,No,No
+18,DC1138,Biplob Sardar,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+19,DC1127,Biswajit Das,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+20,DC0867,Bubai Das,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+21,DC1428,Debojit Rana,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+22,DC1106,Dibakar Mondal,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+23,DC0093,Dipu Haldar,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+24,DC0003,Dukhiram Haldar,Central Kitchen Kolkata,East,KTM,ACTIVE,No,No,No,No
+25,DC0481,Nabin Naskar,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+26,DC0207,Rahul Das,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+27,DC0912,Rahul Naskar,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+28,DC1355,Rahul Sharma,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+29,DC1305,Raj Sharma,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+30,DC0948,Rajesh Naskar,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+31,DC0134,Ranjan Adhikary,Central Kitchen Kolkata,East,Logistic Coordinator,ACTIVE,No,No,No,No
+32,DC0947,Ranjit Bijali,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+33,DC0678,Sanjoy Ghosh,Central Kitchen Kolkata,East,Helper,ACTIVE,No,No,No,No
+34,DC1386,Saurabh verma,Central Kitchen Kolkata,East,Dispatch Executive,ACTIVE,No,No,No,No
+35,DC0887,Soujit Naskar,Central Kitchen Kolkata,East,TM,ACTIVE,No,No,No,No
+36,DC0291,Pradip Nandi,Cloud Kitchen New Town,East,KTM,ACTIVE,No,No,No,No
+37,DC1090,Prashanta Ghosh,Cloud Kitchen New Town,East,KTM,ACTIVE,No,No,No,No
+38,DC0687,Prodip Kumar Ghosh,Cloud Kitchen New Town,East,SM,ACTIVE,No,No,No,No
+39,DC0658,Sahina Parveen,Cloud Kitchen New Town,East,TM,ACTIVE,No,No,No,No
+40,Ashwani Kumar,Ashwani Kumar,Connaught Place,North,Restaurant General Manager,ACTIVE,No,No,No,No
+41,DC1223,Amarjeet,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+42,DC0922,Aravind V,Connaught Place Delhi,North,KTM,ACTIVE,No,No,No,No
+43,DC1405,ARVIND YADAV,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+44,DC0304,Bhuwan chandra Pandey,Connaught Place Delhi,North,Sr KTM,ACTIVE,No,No,No,No
+45,DC0768,Chhotan Hembram,Connaught Place Delhi,North,KTM,ACTIVE,No,No,No,No
+46,DC0567,Dheeraj Singh Rana,Connaught Place Delhi,North,KTM,ACTIVE,No,No,No,No
+47,DC0808,Jyoti Shukla,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+48,DC0736,Kajal .,Connaught Place Delhi,North,Sr TM,ACTIVE,No,No,No,No
+49,DC1182,Omprakash Mandal,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+50,DC1150,Rahul Chauhan,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+51,DC1123,Sachin Sharma,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+52,DC1468,Sagar Giri,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+53,DC1129,Sandeep,Connaught Place Delhi,North,Sr TM,ACTIVE,No,No,No,No
+54,DC0825,Shani Maurya,Connaught Place Delhi,North,KTM,ACTIVE,No,No,No,No
+55,DC1477,Shivanya .,Connaught Place Delhi,North,TM,ACTIVE,No,No,No,No
+56,DC1503,Shrawan Kumar,Connaught Place Delhi,North,KTM,ACTIVE,No,No,No,No
+57,DC1282,SILAMBARASAN,Connaught Place Delhi,North,Helper,ACTIVE,No,No,No,No
+58,DC0508,Sumit Singh Singh,Connaught Place Delhi,North,RGM,ACTIVE,No,No,No,No
+59,Admin150,Admin150,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+60,1041976,Apple Test User,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+61,980904,Google Test User,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+62,MTU001,MTU User,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+63,PR001,Praveen Kumar,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+64,DC0011,Sambhu Das,Dalgreen Food Pvt Ltd Branch,South,KTM,ACTIVE,No,No,No,No
+65,siddhant@dalgreenfoods.com,Siddhant Dalmia,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+66,DC0010,Tapas Kumar Jena,Dalgreen Food Pvt Ltd Branch,South,Helper,ACTIVE,No,No,No,No
+67,Test001,Test User,Dalgreen Food Pvt Ltd Branch,South,Admin,ACTIVE,No,No,No,No
+68,DC0167,Abhishek Tyagi,Delhi NCR HO,North,Head of Development & Growth,ACTIVE,No,No,No,No
+69,DC0177,Bhuvan chandra Chandra,Delhi NCR HO,North,Sr KTM,ACTIVE,No,No,No,No
+70,DC0717,Ritika khosla,Delhi NCR HO,North,Admin,ACTIVE,No,No,No,No
+71,DC0316,Shanker singh Bishit,Delhi NCR HO,North,Coordinator,ACTIVE,No,No,No,No
+72,DC0403,Vikas Kumar Tejyan,Delhi NCR HO,North,Cluster Manager,ACTIVE,No,No,No,No
+73,DC1155,Ajeet Pandey,Faridabad,North,Sr TM,ACTIVE,No,No,No,No
+74,DC0932,Ajit Kumar,Faridabad,North,Housekeeping,ACTIVE,No,No,No,No
+75,DC0958,Amit .,Faridabad,North,Helper,ACTIVE,No,No,No,No
+76,DC0905,Danish .,Faridabad,North,TM,ACTIVE,No,No,No,No
+77,DC1411,JAIPAL,Faridabad,North,Sr TM,ACTIVE,No,No,No,No
+78,DC1348,KANHAIYA,Faridabad,North,KTM,ACTIVE,No,No,No,No
+79,DC0850,Vinod Singh,Faridabad,North,KTM,ACTIVE,No,No,No,No
+80,DC1556,Dhiraj Singh,Forum Mall,East,TM,ACTIVE,No,No,No,No
+81,DC1378,Md Shahabuddin,Forum Mall,East,TM,ACTIVE,No,No,No,No
+82,DC1436,Rahul Kumar Ravidas,Forum Mall,East,KTM,ACTIVE,No,No,No,No
+83,DC1114,Sudip Kumar Ghosh,Forum Mall,East,ARM,ACTIVE,No,No,No,No
+84,DC1462,Supriya Dutta,Forum Mall,East,Sr TM,ACTIVE,No,No,No,No
+85,DC0358,Abhishek Pandey,Gurgaon - DLF,North,RM,ACTIVE,No,No,No,No
+86,DC1467,Aniket Kumar,Gurgaon - DLF,North,TM,ACTIVE,No,No,No,No
+87,DC0427,Anuroop Singh Chauhan,Gurgaon - DLF,North,KTM,ACTIVE,No,No,No,No
+88,DC0179,Himanshu .,Gurgaon - DLF,North,KTM,ACTIVE,No,No,No,No
+89,DC1181,Rahul Chadhar,Gurgaon - DLF,North,TM,ACTIVE,No,No,No,No
+90,DC1257,Ranjeet Kumar,Gurgaon - DLF,North,KTM,ACTIVE,No,No,No,No
+91,DC0646,Sahadab .,Gurgaon - DLF,North,SM,ACTIVE,No,No,No,No
+92,DC1252,Ajeet,Gurgaon - Sec 15,North,KTM,ACTIVE,No,No,No,No
+93,DC1010,Dani Ram,Gurgaon - Sec 15,North,KTM,ACTIVE,No,No,No,No
+94,DC0920,Dinesh .,Gurgaon - Sec 15,North,KTM,ACTIVE,No,No,No,No
+95,DC1370,Naimsh fat,Gurgaon - Sec 15,North,Sr TM,ACTIVE,No,No,No,No
+96,DC1253,pawan,Gurgaon - Sec 15,North,KTM,ACTIVE,No,No,No,No
+97,DC0874,Poonam .,Gurgaon - Sec 15,North,SM,ACTIVE,No,No,No,No
+98,DC1475,Praveen Kumar Mukhiya,Gurgaon - Sec 15,North,Sr TM,ACTIVE,No,No,No,No
+99,DC1457,Ravi Mauwa,Gurgaon - Sec 15,North,Helper,ACTIVE,No,No,No,No
+100,DC1505,Sachin Kumar Sharma,Gurgaon - Sec 15,North,Sr TM,ACTIVE,No,No,No,No
+101,DC1325,Shankar,Gurgaon - Sec 15,North,Helper,ACTIVE,No,No,No,No
+102,DC0577,Yashveer .,Gurgaon - Sec 15,North,Sr KTM,ACTIVE,No,No,No,No
+103,DC1417,ARVIND KUMAR GUPTA,Gurgaon sec 31,North,Sr KTM,ACTIVE,No,No,No,No
+104,DC1431,DHIREN HARIJAN,Gurgaon sec 31,North,TM,ACTIVE,No,No,No,No
+105,DC1337,MD SAEED,Gurgaon sec 31,North,Housekeeping,ACTIVE,No,No,No,No
+106,DC1404,Mukesh Das,Gurgaon sec 31,North,KTM,ACTIVE,No,No,No,No
+107,DC1406,RANJEET,Gurgaon sec 31,North,TM,ACTIVE,No,No,No,No
+108,DC1495,Ravi Kumar,Gurgaon sec 31,North,TM,ACTIVE,No,No,No,No
+109,DC1536,Harsh .,GURUGRAM SEC 10A,North,TM,ACTIVE,No,No,No,No
+110,DC0925,Manoj Murmu,GURUGRAM SEC 10A,North,Helper,ACTIVE,No,No,No,No
+111,DC1439,Parvesh,GURUGRAM SEC 10A,North,TM,ACTIVE,No,No,No,No
+112,DC1268,Ravinder,GURUGRAM SEC 10A,North,TM,ACTIVE,No,No,No,No
+113,DC1333,Ruby,GURUGRAM SEC 10A,North,TM,ACTIVE,No,No,No,No
+114,DC1249,Vivek Kumar,GURUGRAM SEC 10A,North,RM,ACTIVE,No,No,No,No
+115,DC1347,Anup Kumar Ghosh,Head Office_Kasba,East,Multi Unit Manager,ACTIVE,No,No,No,No
+116,DC0394,Ayan Chowdhury Karmakar,Head Office_Kasba,East,Multi Unit Manager,ACTIVE,No,No,No,No
+117,DC1384,Indrajit Basu,Head Office_Kasba,East,Cluster Manager,ACTIVE,No,No,No,No
+118,DC0174,Kumar Sanu Dey,Head Office_Kasba,East,Multi Unit Manager,ACTIVE,No,No,No,No
+119,DC0043,Sailesh Sharma,Head Office_Kasba,East,Coordinator,ACTIVE,No,No,No,No
+120,DC0169,Sanjoy Roy,Head Office_Kasba,East,Admin,ACTIVE,No,No,No,No
+121,DC1472,Akram Sk,Ideal Plaza,East,Helper,ACTIVE,No,No,No,No
+122,DC1400,Bubai Halder,Ideal Plaza,East,Sr TM,ACTIVE,No,No,No,No
+123,DC1322,Dipankar Saha,Ideal Plaza,East,RGM,ACTIVE,No,No,No,No
+124,DC0483,Khokan Sardar,Ideal Plaza,East,Helper,ACTIVE,No,No,No,No
+125,DC0214,Mukesh Puri,Ideal Plaza,East,KTM,ACTIVE,No,No,No,No
+126,DC1490,Rahul Das,Ideal Plaza,East,KTM,ACTIVE,No,No,No,No
+127,DC1243,Rajib SK,Ideal Plaza,East,KTM,ACTIVE,No,No,No,No
+128,DC0044,Ranjit Mukherjee,Ideal Plaza,East,ARM,ACTIVE,No,No,No,No
+129,DC1313,Rinki Mondal,Ideal Plaza,East,TM,ACTIVE,No,No,No,No
+130,DC1385,Sangita Mondal,Ideal Plaza,East,SM,ACTIVE,No,No,No,No
+131,DC1319,Sathi Mondal,Ideal Plaza,East,Sr TM,ACTIVE,No,No,No,No
+132,DC1344,Shantanu Ghosh,Ideal Plaza,East,SM,ACTIVE,No,No,No,No
+133,DC0639,Sidhartha Das,Ideal Plaza,East,TM,ACTIVE,No,No,No,No
+134,DC0016,Subhajit Dolui,Ideal Plaza,East,TM,ACTIVE,No,No,No,No
+135,DC0288,Subhajit Jana,Ideal Plaza,East,TM,ACTIVE,No,No,No,No
+136,DC0748,Subrata Das,Ideal Plaza,East,Housekeeping,ACTIVE,No,No,No,No
+137,DC0668,Sujit Kumar Das,Ideal Plaza,East,KTM,ACTIVE,No,No,No,No
+138,DC1550,Akash Mondal,James Long Sarani,East,TM,ACTIVE,No,No,No,No
+139,DC1547,Chattu Das,James Long Sarani,East,KTM,ACTIVE,No,No,No,No
+140,DC0987,Chhotu Kumar Das,James Long Sarani,East,KTM,ACTIVE,No,No,No,No
+141,DC1444,Kuber Biswas,James Long Sarani,East,TM,ACTIVE,No,No,No,No
+142,DC1064,Manoj Kumar Mondal,James Long Sarani,East,SM,ACTIVE,No,No,No,No
+143,DC1292,Riya Dolui,James Long Sarani,East,KTM,ACTIVE,No,No,No,No
+144,DC0389,Saheb Das,James Long Sarani,East,SM,ACTIVE,No,No,No,No
+145,DC1437,Sneha Dey,James Long Sarani,East,TM,ACTIVE,No,No,No,No
+146,DC0072,Sunil Kumar Guria,James Long Sarani,East,KTM,ACTIVE,No,No,No,No
+147,DC0563,Tripto Mondal,James Long Sarani,East,TM,ACTIVE,No,No,No,No
+148,DC0660,Gaurav Rawat,Jasola Pacific Mall,North,RM,ACTIVE,No,No,No,No
+149,DC1164,Gokul Kumar,Jasola Pacific Mall,North,TM,ACTIVE,No,No,No,No
+150,DC1375,HARSH KUMAR,Jasola Pacific Mall,North,TM,ACTIVE,No,No,No,No
+151,DC1005,Hemant Singh Rawat,Jasola Pacific Mall,North,TM,ACTIVE,No,No,No,No
+152,DC1466,KARAN BISHT,Jasola Pacific Mall,North,TM,ACTIVE,No,No,No,No
+153,DC0630,MANJEET KAUR,Jasola Pacific Mall,North,SM,ACTIVE,No,No,No,No
+154,DC1217,NARAYAN PATGIRY,Jasola Pacific Mall,North,Helper,ACTIVE,No,No,No,No
+155,DC0902,Nitin Rana,Jasola Pacific Mall,North,TM,ACTIVE,No,No,No,No
+156,DC1539,Rohit Sunar,Jasola Pacific Mall,North,KTM,ACTIVE,No,No,No,No
+157,DC1153,Shivani,Jasola Pacific Mall,North,Sr TM,ACTIVE,No,No,No,No
+158,DC1320,Haridas Bar,Kalikapur,East,KTM,ACTIVE,No,No,No,No
+159,DC1057,Madhurima Das,Kalikapur,East,Housekeeping,ACTIVE,No,No,No,No
+160,DC1442,Rahul Danda,Kalikapur,East,Sr TM,ACTIVE,No,No,No,No
+161,DC0442,Ramesh Dhara,Kalikapur,East,TM,ACTIVE,No,No,No,No
+162,DC0365,Ranjan Sau,Kalikapur,East,KTM,ACTIVE,No,No,No,No
+163,DC0286,Ratan Sikari,Kalikapur,East,KTM,ACTIVE,No,No,No,No
+164,DC1388,Rizwanul Haque,Kalikapur,East,SM,ACTIVE,No,No,No,No
+165,DC1546,Samrat Roy,Kalikapur,East,RGM,ACTIVE,No,No,No,No
+166,DC0341,Anjali .,Kalkaji,North,Sr TM,ACTIVE,No,No,No,No
+167,DC0722,Deepak Nagar,Kalkaji,North,RM,ACTIVE,No,No,No,No
+168,DC0505,Rahul Kumar,Kalkaji,North,Sr TM,ACTIVE,No,No,No,No
+169,DC0683,Chandra Sekhar Halder,Lake Road,East,Sr TM,ACTIVE,No,No,No,No
+170,DC1377,Jayprakash Mondal,Lake Road,East,TM,ACTIVE,No,No,No,No
+171,DC1458,Mamudul Molla,Lake Road,East,Sr TM,ACTIVE,No,No,No,No
+172,DC1382,Mohan Duari,Lake Road,East,SM,ACTIVE,No,No,No,No
+173,DC0637,Priya Senko,Lake Road,East,GRE,ACTIVE,No,No,No,No
+174,DC1083,Priyanka Das,Lake Road,East,TM,ACTIVE,No,No,No,No
+175,DC1341,Roki Haldar,Lake Road,East,TM,ACTIVE,No,No,No,No
+176,DC0007,Samsujjaman Gazi,Lake Road,East,RM,ACTIVE,No,No,No,No
+177,DC1480,Sankar Das,Lake Road,East,Sr KTM,ACTIVE,No,No,No,No
+178,DC1424,Snehasish Dey,Lake Road,East,RGM,ACTIVE,No,No,No,No
+179,DC1135,Souvik Sardar,Lake Road,East,TM,ACTIVE,No,No,No,No
+180,DC1471,Adnan Hussain,Lake Town,East,KTM,ACTIVE,No,No,No,No
+181,DC1446,Jaydeb Ghosh,Lake Town,East,Sr KTM,ACTIVE,No,No,No,No
+182,DC0189,Ramen Das,Lake Town,East,SM,ACTIVE,No,No,No,No
+183,DC1133,Ranojit Mondal,Lake Town,East,Sr TM,ACTIVE,No,No,No,No
+184,DC1108,Sarmistha Biswas,Lake Town,East,TM,ACTIVE,No,No,No,No
+185,DC0976,Sayan Das,Lake Town,East,TM,ACTIVE,No,No,No,No
+186,DC0946,Sk Jamiruddin,Lake Town,East,RM,ACTIVE,No,No,No,No
+187,DC0990,Sukumar Das,Lake Town,East,KTM,ACTIVE,No,No,No,No
+188,DC1422,Manisha Dhar,Mani Square Mall,East,TM,ACTIVE,No,No,No,No
+189,DC1563,Raju Das,Mani Square Mall,East,Helper,ACTIVE,No,No,No,No
+190,DC1463,Santanu Mondal,Mani Square Mall,East,TM,ACTIVE,No,No,No,No
+191,DC1279,Shubha Debnath,Mani Square Mall,East,KTM,ACTIVE,No,No,No,No
+192,DC1416,Anil Kumar,Model Town,North,TM,ACTIVE,No,No,No,No
+193,DC1373,Bishal Kumar,Model Town,North,KTM,ACTIVE,No,No,No,No
+194,DC1453,Durba Tanti,Model Town,North,TM,ACTIVE,No,No,No,No
+195,DC1523,Lalit Kumar,Model Town,North,TM,ACTIVE,No,No,No,No
+196,DC1014,Mannu Prakash Rai,Model Town,North,Sr TM,ACTIVE,No,No,No,No
+197,DC1293,Pankaj Kumar,Model Town,North,Helper,ACTIVE,No,No,No,No
+198,DC1326,Pawan,Model Town,North,Helper,ACTIVE,No,No,No,No
+199,DC1159,Raushan Kumar,Model Town,North,ARM,ACTIVE,No,No,No,No
+200,DC0342,Sunil Kumar,Model Town,North,KTM,ACTIVE,No,No,No,No
+201,DC1534,Sunil Verma,Model Town,North,Sr TM,ACTIVE,No,No,No,No
+202,DC1334,Tushar Sharwan,Model Town,North,TM,ACTIVE,No,No,No,No
+203,DC0871,Vinay .,Model Town,North,TM,ACTIVE,No,No,No,No
+204,DC0960,Abhay Singh,Noida Sec 143,North,TM,ACTIVE,No,No,No,No
+205,DC0404,Banti Gautam,Noida Sec 143,North,TM,ACTIVE,No,No,No,No
+206,DC0399,Mahesh Chandra,Noida Sec 143,North,Helper,ACTIVE,No,No,No,No
+207,DC0512,Priyanka .,Noida Sec 143,North,TM,ACTIVE,No,No,No,No
+208,DC0548,Raj Kumar,Noida Sec 143,North,KTM,ACTIVE,No,No,No,No
+209,DC1107,Sundar Prakash,Noida Sec 143,North,Helper,ACTIVE,No,No,No,No
+210,DC1349,Tanay Saigal,Noida Sec 143,North,SM,ACTIVE,No,No,No,No
+211,DC0963,Ankit Kumar,Noida Sec 18,North,TM,ACTIVE,No,No,No,No
+212,DC0632,Gajanan Chaturvedi,Noida Sec 18,North,TM,ACTIVE,No,No,No,No
+213,DC0861,Harish Chandra,Noida Sec 18,North,Sr TM,ACTIVE,No,No,No,No
+214,DC1073,Harish Ram,Noida Sec 18,North,Helper,ACTIVE,No,No,No,No
+215,DC0303,Jagrup .,Noida Sec 18,North,KTM,ACTIVE,No,No,No,No
+216,DC0299,Kamalesh Arya,Noida Sec 18,North,KTM,ACTIVE,No,No,No,No
+217,DC0586,Md. Afroj,Noida Sec 18,North,KTM,ACTIVE,No,No,No,No
+218,DC1160,Omprakash,Noida Sec 18,North,SM,ACTIVE,No,No,No,No
+219,DC1540,Pradeep Singh Rawat,Noida Sec 18,North,KTM,ACTIVE,No,No,No,No
+220,DC1130,Raja,Noida Sec 18,North,TM,ACTIVE,No,No,No,No
+221,DC1514,Abhishek Raghav,Paschim Vihar,North,Sr KTM,ACTIVE,No,No,No,No
+222,DC1350,Amit kumar,Paschim Vihar,North,RGM,ACTIVE,No,No,No,No
+223,DC1089,Danish,Paschim Vihar,North,KTM,ACTIVE,No,No,No,No
+224,DC0864,Dheeraj Baghel,Paschim Vihar,North,KTM,ACTIVE,No,No,No,No
+225,DC0797,Md. Adil,Paschim Vihar,North,TM,ACTIVE,No,No,No,No
+226,DC1538,Naresh Kumar,Paschim Vihar,North,TM,ACTIVE,No,No,No,No
+227,DC0317,Nisha .,Paschim Vihar,North,Sr TM,ACTIVE,No,No,No,No
+228,DC0309,Poonam Devi,Paschim Vihar,North,RM,ACTIVE,No,No,No,No
+229,DC1508,Rekha Singh,Paschim Vihar,North,TM,ACTIVE,No,No,No,No
+230,DC1456,Rohan,Paschim Vihar,North,Helper,ACTIVE,No,No,No,No
+231,DC0738,Sahil Kumar,Paschim Vihar,North,Sr TM,ACTIVE,No,No,No,No
+232,DC1423,Sanjeev Charan,Paschim Vihar,North,TM,ACTIVE,No,No,No,No
+233,DC0880,Abhishek Khatick,Quest Mall,East,KTM,ACTIVE,No,No,No,No
+234,DC1086,Asif Ali,Quest Mall,East,RM,ACTIVE,No,No,No,No
+235,DC1525,DC1525,Quest Mall,East,KTM,ACTIVE,No,No,No,No
+236,DC1105,Dinesh Howly,Quest Mall,East,Sr TM,ACTIVE,No,No,No,No
+237,DC0050,Laltu Gharai,Quest Mall,East,KTM,ACTIVE,No,No,No,No
+238,DC0986,Manisha Patra,Quest Mall,East,TM,ACTIVE,No,No,No,No
+239,DC1092,Suman Biswas,Quest Mall,East,KTM,ACTIVE,No,No,No,No
+240,DC0482,Atanu Das,Rangoli Mall,East,TM,ACTIVE,No,No,No,No
+241,DC0550,Babai Ghosh,Rangoli Mall,East,TM,ACTIVE,No,No,No,No
+242,DC0474,Bijay Dhara,Rangoli Mall,East,Helper,ACTIVE,No,No,No,No
+243,DC1552,Mukesh Kumar Hela,Rangoli Mall,East,Housekeeping,ACTIVE,No,No,No,No
+244,DC1435,Neha Dhari,Rangoli Mall,East,TM,ACTIVE,No,No,No,No
+245,DC0258,Nikhil Gupta,Rangoli Mall,East,ARM,ACTIVE,No,No,No,No
+246,DC1561,Pammi Prasad,Rangoli Mall,East,TM,ACTIVE,No,No,No,No
+247,DC1251,Prabir Kumar Das,Rangoli Mall,East,KTM,ACTIVE,No,No,No,No
+248,DC0356,Ajit .,Rohini Sector 7,North,RGM,ACTIVE,No,No,No,No
+249,DC0569,Amit Kumar,Rohini Sector 7,North,Sr TM,ACTIVE,No,No,No,No
+250,DC0360,Munna Kumar Singh,Rohini Sector 7,North,KTM,ACTIVE,No,No,No,No
+251,DC0795,Navneet Singh,Rohini Sector 7,North,Sr TM,ACTIVE,No,No,No,No
+252,DC1524,Pawan .,Rohini Sector 7,North,TM,ACTIVE,No,No,No,No
+253,DC0694,Pooja .,Rohini Sector 7,North,TM,ACTIVE,No,No,No,No
+254,DC1143,Ravi Kumar,Rohini Sector 7,North,Sr TM,ACTIVE,No,No,No,No
+255,DC0583,Santosh Kumar,Rohini Sector 7,North,KTM,ACTIVE,No,No,No,No
+256,DC0594,Sunny .,Rohini Sector 7,North,SM,ACTIVE,No,No,No,No
+257,DC1075,Vikas .,Rohini Sector 7,North,Sr TM,ACTIVE,No,No,No,No
+258,DC1363,Chanchal Saha,Rosedale Plaza,East,KTM,ACTIVE,No,No,No,No
+259,DC0080,Akash Sardar,Rosedale Plaza,East,Sr TM,ACTIVE,No,No,No,No
+260,DC0967,Anita Jana,Rosedale Plaza,East,TM,ACTIVE,No,No,No,No
+261,DC0158,CHIRONJIT KUMAR GHOSH,Rosedale Plaza,East,ARM,ACTIVE,No,No,No,No
+262,DC1030,Nilay Mondal,Rosedale Plaza,East,TM,ACTIVE,No,No,No,No
+263,DC0196,Nilkamal Mahato,Rosedale Plaza,East,KTM,ACTIVE,No,No,No,No
+264,DC0386,Rajendra Mallick,Rosedale Plaza,East,KTM,ACTIVE,No,No,No,No
+265,DC1440,Sourav Dey,Rosedale Plaza,East,ARM,ACTIVE,No,No,No,No
+266,DC1517,Souvik Das,Rosedale Plaza,East,Sr TM,ACTIVE,No,No,No,No
+267,DC1116,Abhrajeet Surai,Salt Lake Sec 1,East,Sr TM,ACTIVE,No,No,No,No
+268,DC0185,Anajit Debbarma,Salt Lake Sec 1,East,Sr TM,ACTIVE,No,No,No,No
+269,DC0377,Anup Mondal,Salt Lake Sec 1,East,KTM,ACTIVE,No,No,No,No
+270,DC0218,Bibartan Saha,Salt Lake Sec 1,East,Sr TM,ACTIVE,No,No,No,No
+271,DC1318,Koyel Mazumder,Salt Lake Sec 1,East,GRE,ACTIVE,No,No,No,No
+272,DC0917,Lob Chakraborty,Salt Lake Sec 1,East,ARM,ACTIVE,No,No,No,No
+273,DC0262,Mohidul Islam,Salt Lake Sec 1,East,KTM,ACTIVE,No,No,No,No
+274,DC0199,Pallab Ghosh,Salt Lake Sec 1,East,RM,ACTIVE,No,No,No,No
+275,DC0293,Sandip Das,Salt Lake Sec 1,East,Sr TM,ACTIVE,No,No,No,No
+276,DC1549,Sarup Miya,Salt Lake Sec 1,East,KTM,ACTIVE,No,No,No,No
+277,DC1015,Shilpa Das,Salt Lake Sec 1,East,TM,ACTIVE,No,No,No,No
+278,DC0274,Somnath Sardar,Salt Lake Sec 1,East,TM,ACTIVE,No,No,No,No
+279,DC0155,Abhijit Dutta,Salt Lake Sec 3,East,RM,ACTIVE,No,No,No,No
+280,DC1441,Anjali Das,Salt Lake Sec 3,East,Sr TM,ACTIVE,No,No,No,No
+281,DC0521,Chandan Das,Salt Lake Sec 3,East,Housekeeping,ACTIVE,No,No,No,No
+282,DC0045,Dambarudhar Mallick,Salt Lake Sec 3,East,KTM,ACTIVE,No,No,No,No
+283,DC0453,Indrajit Mondal,Salt Lake Sec 3,East,ARM,ACTIVE,No,No,No,No
+284,DC1470,Kiran Bosnet,Salt Lake Sec 3,East,Sr TM,ACTIVE,No,No,No,No
+285,DC0290,Neha Khatoon,Salt Lake Sec 3,East,TM,ACTIVE,No,No,No,No
+286,DC0261,Saijan Alam,Salt Lake Sec 3,East,Sr TM,ACTIVE,No,No,No,No
+287,DC0046,Shibananda Das,Salt Lake Sec 3,East,KTM,ACTIVE,No,No,No,No
+288,DC0086,Subrata Barui,Salt Lake Sec 3,East,Sr TM,ACTIVE,No,No,No,No
+289,DC0602,Tanusree Samanta,Salt Lake Sec 3,East,TM,ACTIVE,No,No,No,No
+290,DC1211,Akash Halder,Santoshpur,East,KTM,ACTIVE,No,No,No,No
+291,DC1197,Akash Sardar,Santoshpur,East,Sr TM,ACTIVE,No,No,No,No
+292,DC0253,Apu Paik,Santoshpur,East,Sr TM,ACTIVE,No,No,No,No
+293,DC1190,Biplab Naska,Santoshpur,East,Sr TM,ACTIVE,No,No,No,No
+294,DC1509,Jaya Naskar,Santoshpur,East,Sr TM,ACTIVE,No,No,No,No
+295,DC1142,Md Saheb Shakil,Santoshpur,East,SM,ACTIVE,No,No,No,No
+296,DC0908,Sanjib Mondal,Santoshpur,East,TM,ACTIVE,No,No,No,No
+297,DC1163,Sk Merajuddin Ahmed,Santoshpur,East,RM,ACTIVE,No,No,No,No
+298,DC1199,Soumodeep Bairagi,Santoshpur,East,Helper,ACTIVE,No,No,No,No
+299,DC1166,Sourav Das,Santoshpur,East,Sr TM,ACTIVE,No,No,No,No
+300,DC1295,Anjali,Shalimar Bagh,North,TM,ACTIVE,No,No,No,No
+301,DC0869,Ankaj .,Shalimar Bagh,North,KTM,ACTIVE,No,No,No,No
+302,DC1500,Bablu Kumar,Shalimar Bagh,North,Sr TM,ACTIVE,No,No,No,No
+303,DC1501,Kundan Kumar,Shalimar Bagh,North,TM,ACTIVE,No,No,No,No
+304,DC1488,Prakash Kumar,Shalimar Bagh,North,Sr TM,ACTIVE,No,No,No,No
+305,DC1296,preeti,Shalimar Bagh,North,TM,ACTIVE,No,No,No,No
+306,DC1520,Sudhir Tiwari,Shalimar Bagh,North,TM,ACTIVE,No,No,No,No
+307,DC0106,Rulamin Middya,Technopolis,East,KTM,ACTIVE,No,No,No,No

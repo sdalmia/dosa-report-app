@@ -5,7 +5,8 @@ from app.page_cache import freeze, remember
 from functools import wraps
 from flask import redirect, url_for
 
-from app.access import signed_in_email
+from app.access import is_owner, owner_required, signed_in_email
+from app.frontlyne import headline, load_summary
 from app.dbstatus import database_health
 from app.flags import (
     flag_files_present,
@@ -90,6 +91,7 @@ def dashboard():
     view, _region, _low_only = _dashboard_view()
     filters, filter_stores = _filter_context()
     flags, flag_state = _flag_view()
+    training = headline() if is_owner() else None
     return render_template(
         'dashboard.html',
         user_name=user_info.get('name') or "",
@@ -98,6 +100,7 @@ def dashboard():
         flag_state=flag_state,
         filters=filters,
         filter_stores=filter_stores,
+        training=training,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
 
@@ -111,6 +114,15 @@ def dashboard_below():
         "dashboard_below.html",
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
+    return html_fragment(body)
+
+
+@main_bp.route("/dashboard/training")
+@login_required
+@owner_required
+def dashboard_training():
+    payload = load_summary() or {"cities": [], "course": []}
+    body = render_template("_training.html", training=payload)
     return html_fragment(body)
 
 
@@ -155,7 +167,10 @@ def flags_page():
 @main_bp.route("/search.json")
 @login_required
 def search_json():
-    return jsonify({"results": search_index()})
+    results = search_index()
+    if not is_owner():
+        results = [row for row in results if row.get("href") != "/grand-economics"]
+    return jsonify({"results": results})
 
 
 @main_bp.route("/flags.json")

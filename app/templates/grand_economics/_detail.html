@@ -1,0 +1,28 @@
+<article class="ge-detail ot-box" id="{{ detail.id }}">
+  <h2>{{ detail.title }}</h2>
+  <p class="kicker">{{ detail.line }} · {{ detail.month }}</p>
+  <p class="figure">{{ detail.value }}</p>
+  {% if detail.tag %}<p>{{ detail.tag }}</p>{% endif %}
+  <p>{{ detail.last_year_label }}: {{ detail.last_year }}</p>
+  <p>{{ detail.change }}</p>
+  {% if detail.spark %}
+    <div class="ge-spark">{{ detail.spark|safe }}</div>
+    <p class="note">{{ detail.trend_caption }}</p>
+  {% endif %}
+  {% if detail.peer_note %}<p class="note">{{ detail.peer_note }}</p>{% endif %}
+  {% if detail.peers %}
+    <ul class="ge-peers" data-list>
+      {% for peer in detail.peers %}
+        <li data-list-item{% if peer.current %} class="is-current"{% endif %}>{{ peer.name }} · {{ peer.value }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if ledger %}
+    <h3>Ledger detail</h3>
+    <ul>
+      {% for row in ledger %}
+        <li>{{ row.date }} · {{ row.ledger }}{% if row.voucher %} · {{ row.voucher }}{% endif %}{% if row.party %} · {{ row.party }}{% endif %} · {{ row.amount }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</article>

@@ -415,28 +415,14 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
-        self.assertEqual(payload["as_of"], "2026-10-10")
-        held = {
-            "Connaught place (02/0012)",
-            "Gurgaon DLF (02/0009)",
-            "Dosa Coffee - Food Truck - 1 (0008)",
-        }
-        for key in ("worst_vs_mid", "worst_vs_last_week"):
-            self.assertFalse(held.intersection(item["label"] for item in payload[key]))
-        tagged = {
-            store["label"]: store
-            for region in payload["regions"]
-            for store in region["stores"]
-            if store["label"] in held
-        }
-        self.assertEqual(tagged["Connaught place (02/0012)"]["day_badge"], "Protest-affected")
-        self.assertEqual(tagged["Gurgaon DLF (02/0009)"]["day_badge"], "Protest-affected")
-        self.assertEqual(tagged["Dosa Coffee - Food Truck - 1 (0008)"]["day_badge"], "Status unknown")
-        for store in tagged.values():
-            self.assertIsNone(store["gross_change_pct"]["value"])
-            self.assertIsNone(store["bills_change_pct"]["value"])
-        self.assertIn("Protest-affected", text.get_data(as_text=True))
-        self.assertIn("Status unknown", text.get_data(as_text=True))
+        self.assertEqual(payload["as_of"], "2026-10-11")
+        from datetime import date
+        from app.store_health.day_notes import badge_for
+
+        self.assertEqual(badge_for("Connaught place (02/0012)", date(2026, 10, 10)), "Protest-affected")
+        self.assertEqual(badge_for("Gurgaon DLF (02/0009)", date(2026, 10, 10)), "Protest-affected")
+        self.assertEqual(badge_for("Dosa Coffee - Food Truck - 1 (0008)", date(2026, 10, 10)), "Status unknown")
+        self.assertEqual(badge_for("Connaught place (02/0012)", date(2026, 10, 11)), "")
 
     def test_shipped_scorecard_labour_and_goals(self):
         scorecard = page(self.client, "/scorecard")
@@ -451,11 +437,11 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
         connaught = scorecard.split('data-store="Connaught place (02/0012)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("Protest-affected", connaught)
-        self.assertIn("left out of the bill comparison", connaught)
+        self.assertIn("Sun 11 Oct 2026", connaught)
+        self.assertNotIn("left out of the bill comparison", connaught)
         dlf = scorecard.split('data-store="Gurgaon DLF (02/0009)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("Protest-affected", dlf)
-        self.assertIn("left out of the bill comparison", dlf)
+        self.assertIn("Sun 11 Oct 2026", dlf)
+        self.assertNotIn("left out of the bill comparison", dlf)
         truck = scorecard.split('data-store="Dosa Coffee - Food Truck - 1 (0008)"', 1)[1].split("</article>", 1)[0]
         self.assertIn("Status unknown", truck)
         self.assertIn("left out of the bill comparison", truck)

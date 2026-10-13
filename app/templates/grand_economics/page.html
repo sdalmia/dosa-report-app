@@ -1,0 +1,110 @@
+{% extends "owner/layout.html" %}
+{% from "_lazy.html" import lazy_section %}
+
+{% block title %}Grand economics - Dosa Coffee{% endblock %}
+
+{% block owner_body %}
+<h1>Grand economics</h1>
+{% if not summary.ready %}
+  <p class="empty">Figures are not yet in.</p>
+{% else %}
+  {% for line in summary.coverage %}
+    <p class="subtitle">{{ line }}</p>
+  {% endfor %}
+
+  <section aria-labelledby="ge-threats">
+    <h2 id="ge-threats">Loss-making stores</h2>
+    {% if not summary.threats %}
+      <p class="empty">No loss-making store in the latest month.</p>
+    {% else %}
+      {% for threat in summary.threats %}
+        <button type="button" class="ge-card" data-detail="{{ threat.id }}" aria-expanded="false">
+          <span class="kicker">{{ threat.city }} · {{ threat.month }}{% if threat.tag %} · {{ threat.tag }}{% endif %}</span>
+          <strong>{{ threat.store }}</strong>
+          <span class="ge-value">{{ threat.value }}{% if threat.pct %} · {{ threat.pct }}{% endif %}</span>
+        </button>
+      {% endfor %}
+    {% endif %}
+  </section>
+
+  <div id="ge-open"></div>
+
+  <section aria-labelledby="ge-cards">
+    <h2 id="ge-cards">Key numbers</h2>
+    {% for card in summary.cards %}
+      <button type="button" class="ge-card" data-detail="{{ card.id }}" aria-expanded="false">
+        <span class="kicker">{{ card.kicker }}</span>
+        <strong>{{ card.value }}</strong>
+        <span>{{ card.label }}</span>
+        {% if card.note %}<span class="note">{{ card.note }}</span>{% endif %}
+      </button>
+    {% endfor %}
+  </section>
+
+  {{ lazy_section(url_for('grand_economics.stores_section'), height=280, title='Stores', prefetch=true, id='ge-stores') }}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var base = {{ url_for('grand_economics.detail_section', anchor='ANCHOR')|tojson }};
+
+  function slot() {
+    return document.getElementById("ge-open");
+  }
+
+  function setOpen(id) {
+    document.querySelectorAll("[data-detail]").forEach(function (button) {
+      button.setAttribute("aria-expanded", button.getAttribute("data-detail") === id ? "true" : "false");
+    });
+  }
+
+  function place(panel, button) {
+    if (button && button.parentNode) button.insertAdjacentElement("afterend", panel);
+    else if (slot()) slot().appendChild(panel);
+    setOpen(panel.id);
+    if (window.refreshLists) window.refreshLists();
+  }
+
+  function open(id, button) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) return;
+    var existing = document.getElementById(id);
+    if (existing && button && existing.previousElementSibling === button) {
+      existing.remove();
+      setOpen("");
+      if (location.hash === "#" + id) history.replaceState(null, "", location.pathname + location.search);
+      return;
+    }
+    if (existing) {
+      place(existing, button);
+      history.replaceState(null, "", "#" + id);
+      return;
+    }
+    document.querySelectorAll(".ge-detail").forEach(function (node) { node.remove(); });
+    var url = base.replace("ANCHOR", encodeURIComponent(id));
+    fetch(url, { credentials: "same-origin", headers: { Accept: "text/html" } })
+      .then(function (response) { return response.ok ? response.text() : ""; })
+      .then(function (html) {
+        if (!html) return;
+        var holder = document.createElement("div");
+        holder.innerHTML = html;
+        var panel = holder.firstElementChild;
+        if (!panel) return;
+        place(panel, button);
+        history.replaceState(null, "", "#" + id);
+      });
+  }
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-detail]");
+    if (!button) return;
+    event.preventDefault();
+    open(button.getAttribute("data-detail"), button);
+  });
+
+  var hash = (location.hash || "").slice(1);
+  if (hash) open(hash, document.querySelector('[data-detail="' + hash + '"]'));
+})();
+</script>
+{% endblock %}
