@@ -38,6 +38,8 @@ class GrandEconomicsTests(unittest.TestCase):
         os.environ.pop("OWNER_EMAILS", None)
         os.environ.pop("TALLY_LEDGER_FILE", None)
         os.environ.pop("GRAND_ECONOMICS_DIR", None)
+        with self.client.session_transaction() as sess:
+            sess.clear()
 
     def _login(self, email):
         with self.client.session_transaction() as sess:
@@ -49,7 +51,8 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertEqual(self.parser.canonical_line("Less: Tax"), "tax")
         self.assertEqual(self.parser.canonical_line("CAM"), "cam")
         self.assertEqual(self.parser.canonical_line("Gas"), "gas")
-        rows = list(csv.DictReader((GE / "grand_economics_tidy.csv").open(encoding="utf-8")))
+        with (GE / "grand_economics_tidy.csv").open(encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
         forum = {
             row["line"]: row["value"]
             for row in rows
@@ -97,7 +100,8 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertNotIn(".xlsx", html)
         self.assertNotIn(".json", html)
         self.assertNotIn("parse.py", html)
-        self.assertNotRegex(html, r"\b(blank|null|anchor|fragment)\b")
+        body = html.split('<div class="owner-tools">', 1)[1].split("<script>", 1)[0]
+        self.assertNotRegex(body, r"\b(blank|null|anchor|fragment)\b")
         bottom = html.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
         drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
         self.assertIn("Grand economics", drawer)

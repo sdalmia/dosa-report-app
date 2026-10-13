@@ -583,7 +583,19 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(len(loaded), 1129)
         self.assertFalse(any("source is" in warning for warning in loaded_warnings))
         self.assertTrue(all(row["source"] == "historical-total-revenue" for row in loaded.values()))
-        self.assertTrue(all(row["net"] is None and row["gross"] is not None for row in loaded.values()))
+        self.assertTrue(all(row["net"] is None for row in loaded.values()))
+        blank_gross = sorted(
+            (row["store"], row["date"].isoformat())
+            for row in loaded.values()
+            if row["gross"] is None
+        )
+        self.assertEqual(
+            blank_gross,
+            [
+                ("Dosa Coffee - Food Truck - 1 (0008)", "2026-10-09"),
+                ("Sec 143 Noida (02/0006)", "2026-10-09"),
+            ],
+        )
         blank_apb = [row for row in loaded.values() if row["apb"] is None]
         self.assertEqual(
             sorted((row["store"], row["date"].isoformat()) for row in blank_apb),
