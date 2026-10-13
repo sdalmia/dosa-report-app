@@ -6,7 +6,7 @@ from functools import wraps
 from flask import redirect, url_for
 
 from app.access import is_owner, owner_required, signed_in_email
-from app.frontlyne import headline, load_summary
+from app.frontlyne import load_summary
 from app.dbstatus import database_health
 from app.flags import (
     flag_files_present,
@@ -91,7 +91,6 @@ def dashboard():
     view, _region, _low_only = _dashboard_view()
     filters, filter_stores = _filter_context()
     flags, flag_state = _flag_view()
-    training = headline() if is_owner() else None
     return render_template(
         'dashboard.html',
         user_name=user_info.get('name') or "",
@@ -100,7 +99,6 @@ def dashboard():
         flag_state=flag_state,
         filters=filters,
         filter_stores=filter_stores,
-        training=training,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
 
@@ -122,8 +120,7 @@ def dashboard_below():
 @owner_required
 def dashboard_training():
     payload = load_summary() or {"cities": [], "course": []}
-    body = render_template("_training.html", training=payload)
-    return html_fragment(body)
+    return render_template("training.html", training=payload)
 
 
 @main_bp.route("/stores")

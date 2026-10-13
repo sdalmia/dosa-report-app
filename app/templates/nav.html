@@ -29,6 +29,7 @@
   <a href="{{ url_for('owner.goals') }}" {% if request.endpoint == 'owner.goals' %}class="is-current"{% endif %}>Goals</a>
   {% if is_owner() %}
   <a href="{{ url_for('grand_economics.page') }}" {% if request.endpoint == 'grand_economics.page' %}class="is-current"{% endif %}>Grand economics</a>
+  <a href="{{ url_for('main.dashboard_training') }}" {% if request.endpoint == 'main.dashboard_training' %}class="is-current"{% endif %}>Training</a>
   {% endif %}
   <h2>Stores</h2>
   <a href="{{ url_for('store_health.page') }}" {% if request.endpoint == 'store_health.page' %}class="is-current"{% endif %}>Store Health</a>

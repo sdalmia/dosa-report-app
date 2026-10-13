@@ -66,7 +66,7 @@ class StoreStatusTests(unittest.TestCase):
 
     def test_faridabad_is_closing_with_no_growth_actions(self):
         row = find_store("Sec 15 Faridabad (02/0007)")
-        self.assertEqual(row["status"], "closing 31 Oct")
+        self.assertEqual(row["status"], "closing 20 Oct")
         self.assertTrue(is_trading(row["posist_name"]))
         self.assertFalse(allows_growth(row["posist_name"]))
         payload = build_goals(load_feeds(), load_goals(), "2026-10", False)

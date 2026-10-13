@@ -80,7 +80,7 @@ CLOSED_OUTLETS = {
     "Chattarpur (02/0005)",
 }
 CLOSING_OUTLETS = {
-    "Sec 15 Faridabad (02/0007)": "closing 31 Oct",
+    "Sec 15 Faridabad (02/0007)": "closing 20 Oct",
 }
 
 _BRAND = re.compile(r"^dosa coffee\s*-\s*", re.IGNORECASE)

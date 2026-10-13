@@ -1065,7 +1065,7 @@ Model Town (02/0013),2026-10-09,,65132.26,127,512.85,,-14.19%,,,148,,,,,historic
 Paschim Vihar (02/0003),2026-10-09,,55838.72,96,581.65,,-21.95%,,,123,,,,,historical-total-revenue,false,North,
 Rohini Sec-7 (02/0008),2026-10-09,,75268.80,137,549.41,,-20.35%,,,172,,,,,historical-total-revenue,false,North,
 Sec 143 Noida (02/0006),2026-10-09,,,,,,,,,,,,,,historical-total-revenue,true,North,"Posist sync gap: Posist shows ₹0.00/0 bills; not filled, provisional (Ops says ~₹35K)"
-Sec 15 Faridabad (02/0007),2026-10-09,,23337.05,56,416.73,,-32.53%,,,83,,,,,historical-total-revenue,false,North,Store closes end of Oct 2026 (info only)
+Sec 15 Faridabad (02/0007),2026-10-09,,23337.05,56,416.73,,-32.53%,,,83,,,,,historical-total-revenue,false,North,Store closes 20 Oct 2026 (info only)
 Sec 18 Noida (02/0001),2026-10-09,,60292.43,124,486.23,,-15.07%,,,146,,,,,historical-total-revenue,false,North,
 Sec 31 - Gurgaon (02/0016),2026-10-09,,35894.72,75,478.60,,1.35%,,,74,,,,,historical-total-revenue,false,North,
 Shalimar Bagh (02/0015),2026-10-09,,51050.43,92,554.90,,3.37%,,,89,,,,,historical-total-revenue,false,North,
@@ -1095,7 +1095,7 @@ Model Town (02/0013),2026-10-10,,98014.35,174,563.30,,59.63%,,,109,,,,,historica
 Paschim Vihar (02/0003),2026-10-10,,75746.76,121,626.01,,75.36%,,,69,,,,,historical-total-revenue,false,North,
 Rohini Sec-7 (02/0008),2026-10-10,,96191.92,197,488.28,,15.20%,,,171,,,,,historical-total-revenue,false,North,
 Sec 143 Noida (02/0006),2026-10-10,,76246.93,178,428.35,,157.97%,,,69,,,,,historical-total-revenue,false,North,May include unsynced 9 Oct bills
-Sec 15 Faridabad (02/0007),2026-10-10,,47479.11,107,443.73,,46.58%,,,73,,,,,historical-total-revenue,false,North,Store closes end of Oct 2026 (info only)
+Sec 15 Faridabad (02/0007),2026-10-10,,47479.11,107,443.73,,46.58%,,,73,,,,,historical-total-revenue,false,North,Store closes 20 Oct 2026 (info only)
 Sec 18 Noida (02/0001),2026-10-10,,88966.61,171,520.27,,37.90%,,,124,,,,,historical-total-revenue,false,North,
 Sec 31 - Gurgaon (02/0016),2026-10-10,,53321.07,111,480.37,,60.87%,,,69,,,,,historical-total-revenue,false,North,
 Shalimar Bagh (02/0015),2026-10-10,,75739.01,125,605.91,,47.06%,,,85,,,,,historical-total-revenue,false,North,
@@ -1124,7 +1124,7 @@ Model Town (02/0013),2026-10-11,,100983.94,166,608.34,,20.29%,,,138,,,,,historic
 Paschim Vihar (02/0003),2026-10-11,,52293.47,102,512.68,,2.00%,,,100,,,,,historical-total-revenue,false,North,
 Rohini Sec-7 (02/0008),2026-10-11,,101474.56,219,463.35,,17.74%,,,186,,,,,historical-total-revenue,false,North,
 Sec 143 Noida (02/0006),2026-10-11,,70251.02,144,487.85,,69.41%,,,85,,,,,historical-total-revenue,false,North,
-Sec 15 Faridabad (02/0007),2026-10-11,,47280.51,99,477.58,,25.32%,,,79,,,,,historical-total-revenue,false,North,Store closes end of Oct 2026 (info only)
+Sec 15 Faridabad (02/0007),2026-10-11,,47280.51,99,477.58,,25.32%,,,79,,,,,historical-total-revenue,false,North,Store closes 20 Oct 2026 (info only)
 Sec 18 Noida (02/0001),2026-10-11,,77741.32,171,454.63,,26.67%,,,135,,,,,historical-total-revenue,false,North,
 Sec 31 - Gurgaon (02/0016),2026-10-11,,59054.26,119,496.25,,63.01%,,,73,,,,,historical-total-revenue,false,North,
 Shalimar Bagh (02/0015),2026-10-11,,59571.21,117,509.16,,13.59%,,,103,,,,,historical-total-revenue,false,North,

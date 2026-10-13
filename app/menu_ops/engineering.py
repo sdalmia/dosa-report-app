@@ -95,19 +95,7 @@ def build_menu(
     directory = directory or menu_directory()
     regions, region_warnings = load_regions(posist)
     rows, warnings, sources = load_sales(directory, posist_labels=list(regions))
-    window_miss = False
-    if window and window[0] and window[1] and rows:
-        start, end = window
-        fitting = [
-            row for row in rows
-            if row.get("period_start") and row.get("period_end")
-            and row["period_start"] >= start and row["period_end"] <= end
-        ]
-        if fitting:
-            rows = fitting
-        else:
-            window_miss = True
-            rows = []
+    rows, window_miss, fell_back = _rows_for_window(rows, window)
     catalogue = load_categories(directory)
     costs = load_menu_costs(procurement or procurement_directory())
     warnings = list(warnings) + list(region_warnings)
@@ -190,6 +178,7 @@ def build_menu(
         "sources": sources,
         "warnings": warnings,
         "period_label": format_period(window[0], window[1]) if window and window[0] and window[1] and window_miss else _period_label(rows),
+        "period_note": _fallback_note(rows) if fell_back else "",
         "window_miss": window_miss,
         "category_source": catalogue,
         "recipe": costs,
@@ -595,6 +584,39 @@ def _coverage_label(coverage):
         return ""
     hit, total = coverage
     return f"{hit} of {total} stores loaded"
+
+
+def _rows_for_window(rows, window):
+    """Keep a period that sits inside the window.
+
+    When none does, use the latest period already on file and say so.
+    A window with no dated rows stays empty.
+    """
+    if not window or not window[0] or not window[1] or not rows:
+        return rows, False, False
+    start, end = window
+    fitting = [
+        row for row in rows
+        if row.get("period_start") and row.get("period_end")
+        and row["period_start"] >= start and row["period_end"] <= end
+    ]
+    if fitting:
+        return fitting, False, False
+    dated = [row for row in rows if row.get("period_end") and row.get("period_start")]
+    if not dated:
+        return [], True, False
+    latest_end = max(row["period_end"] for row in dated)
+    latest = [row for row in dated if row["period_end"] == latest_end]
+    latest_start = max(row["period_start"] for row in latest)
+    latest = [row for row in latest if row["period_start"] == latest_start]
+    return latest, False, True
+
+
+def _fallback_note(rows):
+    label = _period_label(rows)
+    if label:
+        return f"{label} is the latest period on file. The current window is not in yet."
+    return "This is the latest period on file. The current window is not in yet."
 
 
 def _period_label(rows):

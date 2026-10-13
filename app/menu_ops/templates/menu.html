@@ -56,6 +56,7 @@
   </section>
 {% else %}
   <p class="meta"><strong>Gross</strong>{% if view.period_label %}, {{ view.period_label }}{% endif %}{% if view.coverage_label %}. {{ view.coverage_label }}{% endif %}.</p>
+  {% if view.period_note %}<p class="meta" data-note="period">{{ view.period_note }}</p>{% endif %}
   {% if view.coming_stores %}
     <p class="meta" data-coming="{{ view.coming_stores|length }}">Data coming for {{ view.coming_stores|length }} {{ 'store' if view.coming_stores|length == 1 else 'stores' }}.</p>
     <details class="info">
