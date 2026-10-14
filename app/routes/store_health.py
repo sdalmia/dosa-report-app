@@ -21,6 +21,7 @@ from app.store_health.present import (
     parse_range,
     resolve_store,
 )
+from app.targets import build_board
 from app.view_filters import city_region, remember_filters, resolve_bounds, store_options, visible_stores
 
 store_health_bp = Blueprint("store_health", __name__)
@@ -128,11 +129,33 @@ _FRAGMENTS = {
 @store_health_bp.route("/store-health/<store_id>/fragment/<name>")
 @login_required
 def fragment(name, store_id=None):
+    if name == "target":
+        return _target_fragment(store_id)
     template = _FRAGMENTS.get(name)
     if template is None:
         return ("Unknown section", 404)
     filters = remember_filters()
     body = render_template(template, **_view_context(store_id, filters))
+    return html_fragment(body)
+
+
+def _target_fragment(store_id):
+    filters = remember_filters()
+    today = business_today()
+    feeds = _cached_feeds()
+    token = (store_id or request.args.get("store") or filters.get("cc_store") or "").strip()
+    store = resolve_store(list_stores(feeds), token)
+    directory = str(feeds.get("directory") or "")
+    board = remember(
+        ("store-target", directory, today.isoformat(), token, filters.get("cc_city") or ""),
+        lambda: build_board(
+            feeds["posist"],
+            today,
+            store_label=store.label if store else "",
+            city="" if store else (filters.get("cc_city") or "").strip(),
+        ),
+    )
+    body = render_template("store_health/_target.html", board=board)
     return html_fragment(body)
 
 

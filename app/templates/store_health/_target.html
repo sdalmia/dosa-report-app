@@ -1,0 +1,23 @@
+<section id="target" class="health-box span-full" aria-labelledby="target-title">
+  <div class="box-head">
+    <div>
+      <h2 id="target-title">{{ board.title }}</h2>
+      {% if board.period %}<p class="box-source">{{ board.period }}</p>{% endif %}
+      {% if board.network %}<p class="box-source" data-field="network-pace">{{ board.network }}</p>{% endif %}
+      {% if board.pace %}<p class="box-source" data-field="gross-pace">{{ board.pace }}</p>{% endif %}
+      {% if board.note %}<p class="box-source" data-note="target">{{ board.note }}</p>{% endif %}
+    </div>
+  </div>
+  {% if board.empty %}
+    <p class="empty-state">{{ board.empty }}</p>
+  {% elif board.rows|length == 1 %}
+    {% set row = board.rows[0] %}
+    <p data-store="{{ row.store }}">{% if row.tag %}<span class="day-badge">{{ row.tag }}</span> {% endif %}<span data-field="target-line">{{ row.line }}</span></p>
+  {% else %}
+    <div data-list>
+      {% for row in board.rows %}
+        <p class="box-source" data-store="{{ row.store }}"><strong>{{ row.name }}</strong>{% if row.tag %} · {{ row.tag }}{% endif %} · <span data-field="target-line">{{ row.line }}</span></p>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>

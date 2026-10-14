@@ -209,6 +209,93 @@ def match_menu_store(file_label, posist_labels):
     return None
 
 
+# Names on the Retailcomply pack that are not the Posist label.
+# Behala is James Long Sarani. Belur is Rangoli Mall. Salt Lake Sector 3 is
+# the trading outlet 002, not the closed Sec-3 shell.
+_AUDIT_ALIASES = {
+    "behala": "James long Sarani",
+    "belur": "Rangoli Mall",
+    "jasola mall": "Jasola",
+    "salt lake sector 1": "Salt Lake Sec-1",
+    "salt lake sector 3": "Salt Lake (002)",
+    "gurugram sec-15": "Gurgaon Sec-15",
+    "gurugram sec 15": "Gurgaon Sec-15",
+}
+
+_PERIOD_MONTHS = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
+
+
+def period_sort_key(text):
+    parts = str(text or "").split()
+    if len(parts) == 2 and parts[0].casefold() in _PERIOD_MONTHS:
+        try:
+            return (int(parts[1]), _PERIOD_MONTHS[parts[0].casefold()])
+        except ValueError:
+            return (0, 0)
+    return (0, 0)
+
+
+def period_label(key):
+    names = {number: name.title() for name, number in _PERIOD_MONTHS.items()}
+    year, month = key
+    name = names.get(month)
+    if not name:
+        return ""
+    return f"{name} {year}"
+
+
+def match_audit_store(file_label, posist_labels):
+    """The Posist label for one mystery-audit store name."""
+    from app.store_master import normalise_key, resolve_store_label
+
+    alias = _AUDIT_ALIASES.get(normalise_key(file_label))
+    candidate = alias or file_label
+    label = resolve_store_label(candidate, posist_labels)
+    if label is None:
+        label = unique_store_label(candidate, posist_labels)
+    return label
+
+
+def assign_audit_periods(rows, posist_labels):
+    """Latest period per store, plus the period before it.
+
+    Two periods for one store stay together. A name that matches no store
+    is left unmatched.
+    """
+    buckets = {}
+    unmatched = []
+    for row in rows:
+        label = match_audit_store(row.get("store"), posist_labels)
+        if label is None:
+            unmatched.append(row)
+            continue
+        buckets.setdefault(label, []).append(row)
+    latest = {}
+    prior = {}
+    for label, group in buckets.items():
+        ordered = sorted(group, key=lambda row: period_sort_key(row.get("period")))
+        current = ordered[-1]
+        latest[label] = current
+        current_key = period_sort_key(current.get("period"))
+        earlier = [row for row in ordered[:-1] if period_sort_key(row.get("period")) < current_key]
+        if earlier:
+            prior[label] = earlier[-1]
+    return latest, prior, unmatched
+
+
 def assign_rows(rows, label_key, posist_labels):
     """Map Posist labels to the one file row that names them.
 

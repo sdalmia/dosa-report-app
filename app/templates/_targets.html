@@ -1,0 +1,21 @@
+<section class="cc-section" id="targets" aria-labelledby="targets-title">
+  <div class="section-head">
+    <h2 id="targets-title">{{ board.title }}</h2>
+  </div>
+  {% if board.period %}<p class="window-sub">{{ board.period }}</p>{% endif %}
+  {% if board.network %}<p class="window-sub" data-field="network-pace">{{ board.network }}</p>{% endif %}
+  {% if board.pace %}<p class="window-sub" data-field="gross-pace">{{ board.pace }}</p>{% endif %}
+  {% if board.note %}<p class="window-sub" data-note="target">{{ board.note }}</p>{% endif %}
+  {% if board.empty %}
+    <p class="empty">{{ board.empty }}</p>
+  {% else %}
+    <div data-list>
+      {% for row in board.rows %}
+        <a class="target-row" href="{{ row.href }}" data-store="{{ row.store }}">
+          <strong>{{ row.name }}</strong>{% if row.tag %} <span class="day-badge">{{ row.tag }}</span>{% endif %}
+          <span class="league-meta" data-field="target-line">{{ row.line }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>

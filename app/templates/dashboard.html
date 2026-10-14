@@ -83,6 +83,7 @@
   {% endif %}
 </section>
 
+{{ lazy_section(with_qs(url_for('main.dashboard_targets')), height=280, title='Against target') }}
 {{ lazy_section(with_qs(url_for('main.dashboard_below')), height=320, title='Stores and the week', prefetch=true) }}
 </div>
 {% endblock %}

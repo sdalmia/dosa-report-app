@@ -586,7 +586,7 @@ def load_item_sales(directory=None):
 
 
 def load_feeds(directory=None):
-    from app.store_health.stores import assign_rows, extra_store_labels, match_menu_store
+    from app.store_health.stores import assign_audit_periods, assign_rows, extra_store_labels, match_menu_store
     from app.store_master import resolve_store_label
 
     directory = Path(directory) if directory else data_directory()
@@ -608,7 +608,7 @@ def load_feeds(directory=None):
     keka_active_by_store, keka_active_unmatched = assign_rows(keka_active, "posist_store", join_labels)
     audit_stores = [row for row in audit if not is_brand_audit(row)]
     brand_rows = [row for row in audit if is_brand_audit(row)]
-    audit_by_store, audit_unmatched = assign_rows(audit_stores, "store", labels)
+    audit_by_store, audit_prior_by_store, audit_unmatched = assign_audit_periods(audit_stores, labels)
     reelo_by_store, reelo_unmatched = assign_rows(reelo, "posist_store", join_labels)
     famepilot_by_store, famepilot_unmatched = assign_rows(famepilot, "posist_store", join_labels)
     menu_mix_by_store = {}
@@ -684,6 +684,7 @@ def load_feeds(directory=None):
         "keka_active_by_store": keka_active_by_store,
         "audit": audit,
         "audit_by_store": audit_by_store,
+        "audit_prior_by_store": audit_prior_by_store,
         "audit_brand": brand_rows[-1] if brand_rows else None,
         "reelo": reelo,
         "reelo_by_store": reelo_by_store,

@@ -659,20 +659,128 @@ def _audit_display(row, prefix):
         ("note", "note"),
         ("status", "status"),
     )
-    return {f"{prefix}_{name}": _text(row, source) for source, name in mapping}
+    shown = {f"{prefix}_{name}": _text(row, source) for source, name in mapping}
+    if row and prefix == "audit":
+        shown["audit_status"] = audit_status_label(row)
+    return shown
+
+
+def audit_status_label(row):
+    """Status text for the page. Scores stay as written in the file."""
+    if not row:
+        return ""
+    status = (row.get("status") or "").strip()
+    folded = status.casefold()
+    weekend = (row.get("weekend_score") or "").strip().casefold()
+    if folded == "not in cycle":
+        return "not in cycle"
+    if folded == "missing":
+        return "missing this month"
+    if weekend == "not provided":
+        return "weekend not provided"
+    return status
+
+
+def _audit_number(row):
+    text = (row.get("avg_score") or "").strip().replace("%", "").replace(",", "")
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _prior_text(prior):
+    if not prior:
+        return ""
+    period = (prior.get("period") or "").strip()
+    average = (prior.get("avg_score") or "").strip()
+    if average:
+        return f"{period} · {average}" if period else average
+    status = audit_status_label(prior)
+    if period and status:
+        return f"{period} · {status}"
+    return period or status
+
+
+def _rank_line(current, prior):
+    status = audit_status_label(current)
+    average = (current.get("avg_score") or "").strip()
+    parts = []
+    if _audit_number(current) is not None:
+        parts.append(average)
+        if status.casefold() != "scored":
+            parts.append(status)
+    else:
+        parts.append(status or average)
+    prior_text = _prior_text(prior)
+    if prior_text:
+        parts.append(prior_text)
+    return " · ".join(part for part in parts if part)
+
+
+def _audit_ranking(feeds):
+    from app.store_health.stores import period_sort_key, store_from_label
+    from app.store_master import find_store
+
+    latest = feeds.get("audit_by_store") or {}
+    prior = feeds.get("audit_prior_by_store") or {}
+    rows = []
+    latest_key = (0, 0)
+    prior_key = (0, 0)
+    for label, row in latest.items():
+        master = find_store(label)
+        name = (master or {}).get("display_name") or row.get("store") or label
+        key = period_sort_key(row.get("period"))
+        if key > latest_key:
+            latest_key = key
+        previous = prior.get(label)
+        if previous:
+            prior_key = max(prior_key, period_sort_key(previous.get("period")))
+        rows.append({
+            "name": name,
+            "store": label,
+            "href": "/store-health/" + store_from_label(label).id,
+            "line": _rank_line(row, previous),
+            "score": _audit_number(row),
+        })
+    rows.sort(key=lambda row: (
+        0 if row["score"] is not None else 1,
+        row["score"] if row["score"] is not None else 0,
+        row["name"].casefold(),
+    ))
+    note = ""
+    if rows and latest_key > (0, 0):
+        note = _period_note(latest_key, prior_key)
+    return rows, note
+
+
+def _period_note(latest_key, prior_key):
+    from app.store_health.stores import period_label
+
+    text = f"{period_label(latest_key)}, lowest first."
+    if prior_key > (0, 0):
+        text = f"{text} {period_label(prior_key)} is the prior period."
+    return text
 
 
 def present_audit(feeds, store):
     row = feeds["audit_by_store"].get(store.label) if store else None
+    prior = (feeds.get("audit_prior_by_store") or {}).get(store.label) if store else None
     brand = feeds.get("audit_brand")
     fields = {}
     fields.update(_audit_display(row, "audit"))
     fields.update(_audit_display(brand, "brand"))
+    fields["audit_prior"] = _prior_text(prior)
+    ranking, ranking_note = _audit_ranking(feeds)
     return {
         "state": _file_state(feeds["directory"], AUDIT_FILE, feeds["audit"]),
         "has_row": row is not None,
         "has_brand": brand is not None,
         "fields": fields,
+        "ranking": ranking,
+        "ranking_note": ranking_note,
     }
 
 
