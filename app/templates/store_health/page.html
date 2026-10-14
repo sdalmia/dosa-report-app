@@ -364,6 +364,8 @@
       </div>
     </section>
 
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='target', store_id=store.id if store else none)), height=220, title='Against target') }}
+
 {{ lazy_section(with_qs(url_for('store_health.fragment', name='menu', store_id=store.id if store else none)), height=280, title='Menu mix') }}
 
 

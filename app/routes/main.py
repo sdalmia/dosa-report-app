@@ -17,6 +17,9 @@ from app.flags import (
 )
 from app.owner_dashboard import build_owner_dashboard
 from app.search_index import search_index
+from app.store_health.contract import data_directory, load_feeds
+from app.store_health.present import business_today, list_stores
+from app.targets import build_board
 from app.view_filters import narrow_tiles, remember_filters, store_options, visible_stores
 
 main_bp = Blueprint('main', __name__)
@@ -101,6 +104,32 @@ def dashboard():
         filter_stores=filter_stores,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
+
+
+@main_bp.route("/dashboard/targets")
+@login_required
+def dashboard_targets():
+    filters = remember_filters()
+    directory = str(data_directory())
+    today = business_today()
+    feeds = remember(("feeds", directory), load_feeds)
+    store_label = ""
+    wanted = (filters.get("cc_store") or "").strip()
+    if wanted:
+        for store in list_stores(feeds):
+            if store.id == wanted:
+                store_label = store.label
+                break
+    board = remember(
+        ("targets", directory, today.isoformat(), freeze(filters)),
+        lambda: build_board(
+            feeds["posist"],
+            today,
+            store_label=store_label,
+            city=(filters.get("cc_city") or "").strip(),
+        ),
+    )
+    return html_fragment(render_template("_targets.html", board=board, frame="home"))
 
 
 @main_bp.route("/dashboard/fragment/below")
