@@ -800,7 +800,7 @@ class StoreHealthTests(unittest.TestCase):
             audit_rows = list(csv.DictReader(handle))
         self.assertEqual(len(keka_rows), 33)
         self.assertEqual(tuple(keka_rows[0].keys()), KEKA_COLUMNS)
-        self.assertEqual(len(audit_rows), 13)
+        self.assertEqual(len(audit_rows), 40)
         self.assertEqual(tuple(audit_rows[0].keys()), AUDIT_COLUMNS)
         self.assertEqual(sum(1 for row in audit_rows if row["status"] == "brand aggregate"), 1)
         self.assertEqual(sum(1 for row in keka_rows if row["match_status"] == "no keka match"), 4)
@@ -833,6 +833,22 @@ class StoreHealthTests(unittest.TestCase):
         self.assertNotIn('data-field="famepilot_newest_date"', index)
         self.assertEqual(cell(index, "posist_newest_date"), "13 Oct 2026")
         self.assertEqual(cell(index, "calendar_newest_date"), "15 Nov 2026")
+        audit_list = index.split('id="mystery-audit"', 1)[1].split('id="staff"', 1)[0]
+        self.assertIn("September 2026, lowest first. August 2026 is the prior period.", audit_list)
+        ranked = re.findall(r'data-store="([^"]+)"', audit_list)
+        self.assertEqual(
+            ranked[:5],
+            [
+                "Dosa Coffee - Forum (0003)",
+                "Gurgaon Sec 10 (02/0014)",
+                "Connaught place (02/0012)",
+                "Rohini Sec-7 (02/0008)",
+                "Pacific mall, Jasola (02/0011)",
+            ],
+        )
+        self.assertIn("missing this month", audit_list)
+        self.assertIn("weekend not provided", audit_list)
+        self.assertIn("not in cycle", audit_list)
 
         def open_store(label):
             slug = self._option_slug(index, label)
@@ -846,9 +862,10 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(ideal, "match_status"), "matched")
         self.assertNotIn("Registered employees", ideal)
         self.assertNotIn("registered employees", ideal)
-        self.assertEqual(cell(ideal, "audit_avg"), "not in cycle")
-        self.assertEqual(cell(ideal, "audit_status"), "not in cycle")
-        self.assertEqual(cell(ideal, "audit_period"), "August 2026")
+        self.assertEqual(cell(ideal, "audit_avg"), "94.8%")
+        self.assertEqual(cell(ideal, "audit_status"), "scored")
+        self.assertEqual(cell(ideal, "audit_period"), "September 2026")
+        self.assertEqual(cell(ideal, "audit_prior"), "August 2026 · not in cycle")
         self.assertEqual(cell(ideal, "brand_avg"), "88.3%")
         self.assertNotEqual(cell(ideal, "audit_avg"), cell(ideal, "brand_avg"))
 
@@ -884,25 +901,29 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(new_town, "active_employees"), "5")
         self.assertEqual(cell(new_town, "primary_lead"), "Prodip Kumar Ghosh (ARM)")
         self.assertEqual(cell(new_town, "audit_avg"), "not in cycle")
-        self.assertEqual(cell(new_town, "audit_note"), "Not in August 2026 audit cycle")
+        self.assertEqual(cell(new_town, "audit_status"), "not in cycle")
+        self.assertEqual(cell(new_town, "audit_note"), "Not in September 2026 audit cycle (no report in Retailcomply pack)")
+        self.assertEqual(cell(new_town, "audit_prior"), "August 2026 · not in cycle")
 
         jasola = open_store("Pacific mall, Jasola (02/0011)")
         self.assertEqual(cell(jasola, "keka_location"), "Jasola Pacific Mall")
         self.assertEqual(cell(jasola, "active_employees"), "16")
-        self.assertEqual(cell(jasola, "audit_avg"), "84.0%")
-        self.assertEqual(cell(jasola, "audit_weekend"), "73.3%")
-        self.assertEqual(cell(jasola, "audit_note"), "Weekend crash")
+        self.assertEqual(cell(jasola, "audit_avg"), "88.1%")
+        self.assertEqual(cell(jasola, "audit_weekend"), "83.3% (50/60)")
+        self.assertEqual(cell(jasola, "audit_note"), "Weekday visit 4th Sep 2026, NC 3; Weekend visit 4th Sep 2026, NC 7")
+        self.assertEqual(cell(jasola, "audit_prior"), "August 2026 · 84.0%")
 
         sec31 = open_store("Sec 31 - Gurgaon (02/0016)")
         self.assertEqual(cell(sec31, "keka_location"), "Gurgaon Sec 31")
         self.assertEqual(cell(sec31, "match_status"), "matched")
 
         forum = open_store("Dosa Coffee - Forum (0003)")
-        self.assertEqual(cell(forum, "audit_avg"), "64.7%")
-        self.assertEqual(cell(forum, "audit_weekday"), "40.9% (1-10)")
-        self.assertEqual(cell(forum, "audit_weekend"), "recovered (score not provided in one-pager)")
-        self.assertEqual(cell(forum, "audit_note"), "Weekday POS outage; weekend recovered")
+        self.assertEqual(cell(forum, "audit_avg"), "84.8%")
+        self.assertEqual(cell(forum, "audit_weekday"), "84.6% (33/39)")
+        self.assertEqual(cell(forum, "audit_weekend"), "85% (34/40)")
+        self.assertEqual(cell(forum, "audit_note"), "Weekday visit 19th Sep 2026, NC 3; Weekend visit 4th Sep 2026, NC 3")
         self.assertEqual(cell(forum, "audit_status"), "scored")
+        self.assertEqual(cell(forum, "audit_prior"), "August 2026 · 64.7%")
         self.assertEqual(cell(forum, "other_leads"), "none")
 
         connaught = open_store("Connaught place (02/0012)")
@@ -912,10 +933,11 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(connaught, "active_employees"), "25")
         self.assertEqual(cell(connaught, "primary_lead"), "Ashwani Kumar (RGM)")
         self.assertEqual(cell(connaught, "match_status"), "matched")
-        self.assertEqual(cell(connaught, "audit_avg"), "79.9%")
-        self.assertEqual(cell(connaught, "audit_weekday"), "not provided in one-pager")
-        self.assertEqual(cell(connaught, "audit_weekend"), "74.4% (4-10)")
-        self.assertEqual(cell(connaught, "audit_period"), "August 2026")
+        self.assertEqual(cell(connaught, "audit_avg"), "86.5%")
+        self.assertEqual(cell(connaught, "audit_weekday"), "88.5% (69/78)")
+        self.assertEqual(cell(connaught, "audit_weekend"), "84.6% (66/78)")
+        self.assertEqual(cell(connaught, "audit_period"), "September 2026")
+        self.assertEqual(cell(connaught, "audit_prior"), "August 2026 · 79.9%")
         self.assertEqual(cell(connaught, "brand_avg"), "88.3%")
         self.assertEqual(cell(connaught, "rating"), "4.82")
         self.assertEqual(cell(connaught, "review_count"), "349")
@@ -923,11 +945,11 @@ class StoreHealthTests(unittest.TestCase):
         self.assertEqual(cell(connaught, "reelo_match_status"), "matched")
 
         kalkaji = open_store("Kalkaji (02/0004)")
-        self.assertEqual(cell(kalkaji, "audit_avg"), "")
-        self.assertEqual(cell(kalkaji, "audit_weekday"), "")
-        self.assertEqual(cell(kalkaji, "audit_weekend"), "")
-        self.assertEqual(cell(kalkaji, "audit_status"), "")
-        self.assertIn("No mystery audit is on file for this store.", kalkaji)
+        self.assertEqual(cell(kalkaji, "audit_avg"), "93.4%")
+        self.assertEqual(cell(kalkaji, "audit_weekday"), "93.4% (57/61)")
+        self.assertEqual(cell(kalkaji, "audit_weekend"), "93.4% (57/61)")
+        self.assertEqual(cell(kalkaji, "audit_status"), "scored")
+        self.assertEqual(cell(kalkaji, "audit_period"), "September 2026")
         self.assertEqual(cell(kalkaji, "brand_avg"), "88.3%")
         self.assertEqual(cell(kalkaji, "active_employees"), "13")
         self.assertEqual(cell(kalkaji, "primary_lead"), "Deepak Nagar (RGM)")

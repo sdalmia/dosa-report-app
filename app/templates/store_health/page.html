@@ -379,7 +379,11 @@
         <span class="box-index">2</span>
         <div>
           <h2 id="audit-title">Mystery Audit</h2>
-          <p class="box-source">For this store{% if audit.fields.audit_period %} · {{ audit.fields.audit_period }}{% endif %}</p>
+          {% if not store and audit.ranking_note %}
+            <p class="box-source">{{ audit.ranking_note }}</p>
+          {% else %}
+            <p class="box-source">For this store{% if audit.fields.audit_period %} · {{ audit.fields.audit_period }}{% endif %}</p>
+          {% endif %}
         </div>
       </div>
       {% if audit.state == "missing" %}
@@ -387,7 +391,16 @@
       {% elif audit.state == "empty" %}
         <p class="empty-state">mystery_audit.csv is empty.</p>
       {% endif %}
-      {% if not store %}
+      {% if not store and audit.ranking %}
+        <div data-list>
+          {% for row in audit.ranking %}
+            <a class="target-row" href="{{ row.href }}" data-store="{{ row.store }}">
+              <strong>{{ row.name }}</strong>
+              <span class="league-meta" data-field="audit-rank">{{ row.line }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% elif not store %}
         <p class="empty-state">Choose a store to see its mystery audit.</p>
       {% elif not audit.has_row %}
         <p class="empty-state">No mystery audit is on file for this store.</p>
@@ -409,6 +422,9 @@
       <p class="sub"><span class="sub-label">Status</span> <span data-field="audit_status">{{ audit.fields.audit_status }}</span></p>
       <p class="sub"><span class="sub-label">Note</span> <span data-field="audit_note">{{ audit.fields.audit_note }}</span></p>
       <p class="sub"><span class="sub-label">Period</span> <span data-field="audit_period">{{ audit.fields.audit_period }}</span></p>
+      {% if audit.fields.audit_prior %}
+        <p class="sub"><span class="sub-label">Prior period</span> <span data-field="audit_prior">{{ audit.fields.audit_prior }}</span></p>
+      {% endif %}
       {% if audit.has_brand %}
         <div class="insight-col brand-audit" id="brand-audit">
           <h3>Brand aggregate</h3>

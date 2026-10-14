@@ -69,6 +69,7 @@ _LABELS = {
     "audit_status": "Status",
     "audit_note": "Note",
     "audit_period": "Period",
+    "audit_prior": "Prior period",
     "brand_avg": "Brand average",
     "brand_weekday": "Brand weekday",
     "brand_weekend": "Brand weekend",
@@ -468,7 +469,7 @@ def _audit_lines(view):
         lines.extend(
             _pairs(
                 audit.get("fields") or {},
-                ["audit_period", "audit_avg", "audit_weekday", "audit_weekend", "audit_status", "audit_note"],
+                ["audit_period", "audit_avg", "audit_weekday", "audit_weekend", "audit_status", "audit_note", "audit_prior"],
             )
         )
     if audit.get("has_brand"):
