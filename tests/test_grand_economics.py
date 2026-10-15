@@ -67,7 +67,8 @@ class GrandEconomicsTests(unittest.TestCase):
         ]
         self.assertEqual(ads[0]["value"], "1066072.11")
         self.assertFalse(any(row["city"] == "Kolkata" and row["month"] == "2026-10" for row in rows))
-        self.assertFalse(any(row["city"] == "NCR" and row["month"] == "2026-08" and row["fy"] == "FY26-27" for row in rows))
+        self.assertTrue(any(row["city"] == "NCR" and row["month"] == "2026-09" and row["fy"] == "FY26-27" for row in rows))
+        self.assertFalse(any(row["city"] == "NCR" and row["month"] == "2026-10" for row in rows))
 
     def test_owner_gate_and_light_first_paint(self):
         anon = self.client.get("/grand-economics")
@@ -91,7 +92,10 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertIn("Loss-making stores", html)
         self.assertIn("Closing 20 Oct", html)
         self.assertIn("Kolkata is in for Apr–Sep 2026. Later months are not yet in.", html)
-        self.assertIn("NCR is in for Apr–Jul 2026. Later months are not yet in.", html)
+        self.assertIn("NCR is in for Apr–Sep 2026. Later months are not yet in.", html)
+        self.assertIn("Gurgaon Sector 31", html)
+        self.assertIn("Gurgaon Sec - 10", html)
+        self.assertIn("Paschim Vihar", html)
         self.assertIn('data-src="/grand-economics/stores"', html)
         self.assertNotIn("Forum Mall", html)
         self.assertNotIn("Last year is not in.", html)
@@ -124,10 +128,10 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertIn("data-list", body)
         self.assertNotIn(".json", body)
 
-        detail = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-07")
+        detail = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-09")
         self.assertEqual(detail.status_code, 200)
         panel = detail.get_data(as_text=True)
-        self.assertIn('id="gurgaon-sector-31-ebitda-2026-07"', panel)
+        self.assertIn('id="gurgaon-sector-31-ebitda-2026-09"', panel)
         self.assertIn("Last year is not in.", panel)
         self.assertNotIn("Ledger detail", panel)
         self.assertIn("<svg", panel)
@@ -140,13 +144,13 @@ class GrandEconomicsTests(unittest.TestCase):
         self._login(OWNER)
         with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False, encoding="utf-8") as handle:
             handle.write("date,city,store,ledger,voucher,party,amount\n")
-            handle.write("2026-07-04,NCR,Gurgaon Sector 31,Rent,JV,Landlord,1200\n")
-            handle.write("2026-07-04,NCR,Other Store,Rent,JV,Landlord,99\n")
+            handle.write("2026-09-04,NCR,Gurgaon Sector 31,Rent,JV,Landlord,1200\n")
+            handle.write("2026-09-04,NCR,Other Store,Rent,JV,Landlord,99\n")
             handle.write("2026-09-01,Kolkata,,Ads,JV,Agency,500\n")
             path = handle.name
         os.environ["TALLY_LEDGER_FILE"] = path
         try:
-            panel = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-07").get_data(as_text=True)
+            panel = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-09").get_data(as_text=True)
             self.assertIn("Ledger detail", panel)
             self.assertIn("Landlord", panel)
             self.assertNotIn("Other Store", panel)
