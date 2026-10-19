@@ -31,6 +31,7 @@ from app.store_health.contract import (
     parse_number,
 )
 from app.store_health.stores import store_from_label, unique_store_label
+from app.store_master import find_store, store_gaps
 from app.store_health.context_slots import (
     HOLIDAY_DISCONNECTED,
     NEWS_DISCONNECTED,
@@ -187,15 +188,20 @@ class StoreHealthTests(unittest.TestCase):
             reader = csv.DictReader(handle)
             self.assertEqual(tuple(reader.fieldnames), SHIPPED_CALENDAR_COLUMNS)
             calendar_rows = list(reader)
-            self.assertEqual(len(calendar_rows), 1452)
-            self.assertEqual(len({row["store"] for row in calendar_rows}), 33)
+            self.assertEqual(len(calendar_rows), 1364)
+            stores = {row["store"] for row in calendar_rows}
+            self.assertEqual(len(stores), 31)
+            self.assertNotIn("GK1 Cloud Kitchen (02/0002)", stores)
+            self.assertNotIn("Chattarpur (02/0005)", stores)
             self.assertEqual(min(row["date"] for row in calendar_rows), "2026-10-03")
             self.assertEqual(max(row["date"] for row in calendar_rows), "2026-11-15")
             self.assertTrue(all(row["actual_net"] == "" for row in calendar_rows))
             self.assertTrue(all(row["variance_vs_mid"] == "" for row in calendar_rows))
             self.assertTrue(all(row["variance_pct"] == "" for row in calendar_rows))
             self.assertEqual(sum(1 for row in calendar_rows if row["pred_mid"]), 1320)
-            self.assertEqual(sum(1 for row in calendar_rows if row["status"] == "not_on_deployment_report"), 132)
+            absent = [row for row in calendar_rows if row["status"] == "not_on_deployment_report"]
+            self.assertEqual(len(absent), 44)
+            self.assertEqual({row["store"] for row in absent}, {"Dosa Coffee - Events & Catering"})
         with (root.parent / "posist" / "sales_pred_vs_actual.csv").open(encoding="utf-8-sig", newline="") as handle:
             network = {row["date"]: row for row in csv.DictReader(handle)}
         october = network["2026-10-10"]
@@ -543,24 +549,41 @@ class StoreHealthTests(unittest.TestCase):
             self.assertEqual(calendar_cell_class(ideal, day).split()[1], css_class)
             self.assertIn(css_class, calendar_cell_class(salt, day))
 
+        events = self.get(f"/store-health/{self._option_slug(index, 'Dosa Coffee - Events & Catering')}")
+        for day, (_name, css_class, _colour) in tier_borders.items():
+            self.assertIn(css_class, calendar_cell_class(events, day))
+            self.assertEqual(cell(events, "pred_mid", day), "")
+            self.assertEqual(cell(events, "actual_gross", day), "")
+        self.assertEqual(cell(events, "pred_low", "2026-10-03"), "")
+        self.assertEqual(cell(events, "pred_mid", "2026-10-03"), "")
+        self.assertEqual(cell(events, "pred_high", "2026-10-03"), "")
+        self.assertEqual(cell(events, "actual_gross", "2026-10-03"), "")
+        self.assertEqual(cell(events, "status", "2026-10-03"), "Not on the deployment report")
+        self.assertIn("Blank is not zero.", cell(events, "notes", "2026-10-03"))
+        self.assertIn("Not on the Posist historical deployment report", cell(events, "calendar_absent_note"))
+        self.assertNotIn("₹0", events[events.index('id="sales-calendar"'):])
+
         for label in (
             "GK1 Cloud Kitchen (02/0002)",
             "Chattarpur (02/0005)",
-            "Dosa Coffee - Events & Catering",
         ):
             page = self.get(f"/store-health/{self._option_slug(index, label)}")
+            row = find_store(label)
+            self.assertEqual(row["status"], "closed", label)
+            self.assertEqual(store_gaps(row), [], label)
             for day, (_name, css_class, _colour) in tier_borders.items():
-                self.assertIn(css_class, calendar_cell_class(page, day), label)
+                self.assertTrue(calendar_cell_class(page, day).startswith("cal-cell"), label)
+                self.assertNotIn(css_class, calendar_cell_class(page, day), label)
                 self.assertEqual(cell(page, "pred_mid", day), "", label)
                 self.assertEqual(cell(page, "actual_gross", day), "", label)
-            self.assertEqual(cell(page, "pred_low", "2026-10-03"), "", label)
-            self.assertEqual(cell(page, "pred_mid", "2026-10-03"), "", label)
-            self.assertEqual(cell(page, "pred_high", "2026-10-03"), "", label)
-            self.assertEqual(cell(page, "actual_gross", "2026-10-03"), "", label)
-            self.assertEqual(cell(page, "status", "2026-10-03"), "Not on the deployment report", label)
-            self.assertIn("Blank is not zero.", cell(page, "notes", "2026-10-03"))
-            self.assertIn("Not on the Posist historical deployment report", cell(page, "calendar_absent_note"))
-            self.assertNotIn("₹0", page[page.index('id="sales-calendar"'):])
+                self.assertEqual(cell(page, "status", day), "", label)
+                self.assertEqual(cell(page, "notes", day), "", label)
+                self.assertEqual(cell(page, "tier", day), "", label)
+            self.assertNotIn('data-field="calendar_absent_note"', page, label)
+            self.assertNotIn("Blank is not zero.", page, label)
+            self.assertNotIn("Not on the Posist historical deployment report", page, label)
+            self.assertIn("Not on the Posist deployment report.", page, label)
+            self.assertNotIn("₹0", page[page.index('id="sales-calendar"'):], label)
 
     def test_calendar_only_name_stays_out_of_the_picker(self):
         self.write("posist_daily.csv", POSIST_HEADER + "\n" + SAMPLE_POSIST + "\n")
@@ -1548,17 +1571,28 @@ class StoreHealthTests(unittest.TestCase):
             self.assertEqual(TIER_PRINT_COLOUR[tier], colour)
         self.assertNotEqual(TIER_PRINT_COLOUR["Working weekday"], TIER_PRINT_COLOUR["Weekend"])
 
+        events_pdf = self._pdf_text(
+            f"/store-health/{self._option_slug(index, 'Dosa Coffee - Events & Catering')}/print"
+        )
+        self.assertIn("Not on the Posist deployment report.", events_pdf)
+        self.assertIn("Not on the Posist historical deployment report", events_pdf)
+        self.assertIn("Blank is not zero.", events_pdf)
+        self.assertNotIn("₹0", events_pdf)
+        self.assertIn("Weather caution", events_pdf)
+
         for label in (
             "GK1 Cloud Kitchen (02/0002)",
             "Chattarpur (02/0005)",
-            "Dosa Coffee - Events & Catering",
         ):
             page = self._pdf_text(f"/store-health/{self._option_slug(index, label)}/print")
+            row = find_store(label)
+            self.assertEqual(row["status"], "closed", label)
+            self.assertEqual(store_gaps(row), [], label)
             self.assertIn("Not on the Posist deployment report.", page, label)
-            self.assertIn("Not on the Posist historical deployment report", page, label)
-            self.assertIn("Blank is not zero.", page, label)
+            self.assertNotIn("Not on the Posist historical deployment report", page, label)
+            self.assertNotIn("Blank is not zero.", page, label)
             self.assertNotIn("₹0", page, label)
-            self.assertIn("Weather caution", page, label)
+            self.assertNotIn("Weather caution", page, label)
 
     def test_committed_headers_round_trip_with_csv(self):
         root = Path(__file__).resolve().parents[1] / "data" / "store_health"
