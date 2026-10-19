@@ -289,6 +289,9 @@ def _calendar_section(pdf, view):
 def _card_lines(day):
     fields = day.get("fields") or {}
     lines = [(f"{day.get('label') or ''}  {day.get('chrome_weekday') or ''}".strip(), 9, True)]
+    badge = day.get("badge") or ""
+    if badge:
+        lines.append((badge, 8, True))
     tier = fields.get("tier") or ""
     if tier:
         lines.append((tier, 8, True))

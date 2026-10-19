@@ -25,7 +25,7 @@ from app.store_health.contract import (
     describe_feeds,
     parse_number,
 )
-from app.store_health.day_notes import badge_for, notes_between, quality_note_for
+from app.store_health.day_notes import badge_for, is_closed_sales_row, notes_between, quality_note_for
 from app.store_health.stores import Store, extra_store_labels, store_from_label
 
 
@@ -41,6 +41,10 @@ STATUS_LABELS = {
     "actual_gross_filled": "Gross is in",
     "actual_gross_filled_provisional": "Gross is in, provisional",
     "provisional": "Provisional",
+    "closed": "Closed",
+}
+SALES_DATA_LINE = {
+    date(2026, 10, 18): "Sales data last updated 19 Oct 2026, 10:44 am IST (sales through 18 Oct)",
 }
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."
@@ -86,12 +90,14 @@ def format_ist(value):
 
 
 def present_freshness(status):
+    sales_line = SALES_DATA_LINE.get(status.get("newest_date"), "")
     if status["state"] == "saved":
         return {
             "state": "saved",
             "detail": "",
             "saved_at": format_ist(status["saved_at"]),
             "newest_date": "",
+            "sales_line": "",
         }
     if status["state"] != "ready":
         return {
@@ -99,12 +105,14 @@ def present_freshness(status):
             "detail": status["detail"],
             "saved_at": "",
             "newest_date": "",
+            "sales_line": "",
         }
     return {
         "state": "ready",
         "detail": "",
         "saved_at": format_ist(status["saved_at"]),
         "newest_date": format_date(status["newest_date"]),
+        "sales_line": sales_line,
     }
 
 
@@ -300,21 +308,26 @@ def posist_window(feeds, store, bounds=None):
         return result
     rows = [row for row in all_rows if start <= row["date"] <= end]
     result["has_row"] = True
+    # A closed day is on the file. It is not a missing day and not a trading day
+    # in the window total, so a ₹0 close does not pull the average down.
+    closed_days = {row["date"] for row in rows if is_closed_sales_row(row)}
+    trading = [row for row in rows if row["date"] not in closed_days]
     summed = {
-        "net": _sum_present(rows, "net", "money"),
-        "gross": _sum_present(rows, "gross", "money"),
-        "bills": _sum_present(rows, "bills", "count"),
-        "unsettled_bills": _sum_present(rows, "unsettled_bills", "count"),
-        "unsettled_amount": _sum_present(rows, "unsettled_amount", "money"),
-        "void_bills": _sum_present(rows, "void_bills", "count"),
+        "net": _sum_present(trading, "net", "money"),
+        "gross": _sum_present(trading, "gross", "money"),
+        "bills": _sum_present(trading, "bills", "count"),
+        "unsettled_bills": _sum_present(trading, "unsettled_bills", "count"),
+        "unsettled_amount": _sum_present(trading, "unsettled_amount", "money"),
+        "void_bills": _sum_present(trading, "void_bills", "count"),
     }
     for field, value in summed.items():
         display[field] = _posist_field({field: value}, field)
     display["apb"] = _posist_field({"apb": _window_apb(summed["gross"], summed["bills"])}, "apb")
-    store_days = sorted({row["date"] for row in rows})
+    store_days = sorted({row["date"] for row in trading})
     result["days_summed"] = str(len(store_days))
     if start is not None and end is not None:
-        missing = [day for day in _dates_in_window(start, end) if day not in set(store_days)]
+        covered = set(store_days) | closed_days
+        missing = [day for day in _dates_in_window(start, end) if day not in covered]
         if missing:
             listed = ", ".join(format_date(day) for day in missing)
             result["missing_label"] = f"Not a full window. Missing {listed}."
@@ -403,10 +416,17 @@ def calendar_days(feeds, store, start, end):
         fields = {field: _calendar_field(row, field) for field in CALENDAR_VALUE_COLUMNS if field != "date"}
         posist_row = _row_for_store(feeds["posist"], store, cursor) if store else None
         amount, actual_source = _posist_daily_gross(posist_row)
-        fields["actual_gross"] = format_money(amount, "gross") if actual_source else ""
+        closed = is_closed_sales_row(posist_row) or is_closed_sales_row(row)
+        if closed:
+            fields["actual_gross"] = ""
+            fields["status"] = "Closed"
+            actual_source = ""
+        else:
+            fields["actual_gross"] = format_money(amount, "gross") if actual_source else ""
         figure_fields = ("pred_low", "pred_high", "pred_mid", "actual_gross", "actual_net")
         has_figure = any(fields[name] for name in figure_fields)
         tier = row.get("tier") if row else ""
+        badge = "Closed" if closed else (badge_for(store, cursor) if store else "")
         days.append(
             {
                 "date": cursor,
@@ -415,11 +435,11 @@ def calendar_days(feeds, store, start, end):
                 "chrome_weekday": cursor.strftime("%a"),
                 "tier_class": TIER_BORDER_CLASS.get(tier or "", ""),
                 "fields": fields,
-                "has_figure": has_figure,
+                "has_figure": has_figure or closed,
                 "actual_source": actual_source,
-                "variance_negative": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] < 0),
-                "variance_positive": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] > 0),
-                "badge": badge_for(store, cursor) if store else "",
+                "variance_negative": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] < 0 and not closed),
+                "variance_positive": bool(row and row.get("variance_vs_mid") is not None and row["variance_vs_mid"] > 0 and not closed),
+                "badge": badge,
             }
         )
         cursor += timedelta(days=1)

@@ -1,9 +1,18 @@
 """Read the Kolkata and NCR workbooks into one tidy table, then the page files.
 
-A month is kept only when gross revenue is a real number other than zero.
-A blank cell stays out of the table. It is not written as zero.
-Staff salary, CAM, gas, and ads accept the row names the sheets actually use.
-Ads are the city total, not split across stores.
+Tidy columns: fy, city, store, month, line, value, level
+  level "city"    store ""                   taken straight from the city Summary sheet
+  level "store"   store = sheet name          one row per store sheet
+  level "events"  store "Event Sales"         Kolkata event sales sheet, not a store
+  level "central" store CENTRAL               city total minus stores and events, per line
+                                              (ads, kitchen food not charged to a store)
+stores + events + central = city for every line and month; the build stops if not.
+
+A city month is kept when its Summary gross revenue is a real number other than zero.
+A store month is kept inside those months when the store has revenue or EBITDA.
+A blank cell stays out of the table. It is not written as zero (a real 0 in the sheet is kept).
+Every row name in every sheet read is either mapped or listed in IGNORED_ROWS;
+anything else is printed as "row not read" so a new sheet row is never lost quietly.
 """
 
 import csv
@@ -32,7 +41,6 @@ SKIP_SHEETS = {
     "CK",
     "Central Kitchen - Kolkata",
     "Salary Reco",
-    "Event Sales",
     "Chattarpur",
     "GK1 Cloud Kitchen",
 }
@@ -41,6 +49,10 @@ SKIP_SHEETS = {
 CLOSING = {
     "faridabadsec15": "Closing 20 Oct",
 }
+
+CENTRAL = "Kitchen & central"
+EVENTS = "Event Sales"
+NOT_STORES = {"", CENTRAL, EVENTS}
 
 MONTH_NAMES = (
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -54,14 +66,55 @@ LINE_LABELS = {
     "rent-pct": "Rent of net",
     "salary-pct": "Salary of net",
     "ads": "Ads",
+    "city-ebitda": "EBITDA after ads and kitchen",
+}
+
+# Row names that are headings, ratios, or repeats of another row. Not read on purpose.
+IGNORED_ROWS = {
+    "food cost calculation", "commission %", "ebitda margin %", "ebidta margin %",
+    "food cost", "department", "p/l", "depriciation (2%) + interest (1%)",
+}
+
+# Plain names for the city bridge (city total minus stores), per tidy line.
+BRIDGE_NAMES = {
+    "ads": "Ads (city total, not split by store)",
+    "fnb_cost": "Kitchen food not charged to any store",
+    "net_revenue": "Revenue not in any store sheet",
+}
+
+# Ads Account rows, both years' layouts, used only to check the sheet's own total.
+ADS_PARTS = {
+    "team", "social media/digital media", "print media", "radio", "public relations",
+    "influencers", "pop materials", "photo and video shoot", "website",
+    "competitions and give aways", "reelo campaign", "misc. & others", "zomato", "swiggy",
+    "social media & marketing expenses", "photo and video shoot expenses",
+    "facebook expenses", "klarus tech", "reelo technologies", "others",
 }
 
 
 def canonical_line(label):
     """Map a sheet row name to a tidy line. Unknown rows are ignored."""
-    text = str(label or "").replace(":", " ").replace("&", " and ")
+    text = str(label or "").replace(":", " ").replace("&", " and ").replace("+", " and ")
     text = " ".join(text.split()).lower()
     exact = {
+        "opening stock": "opening_stock",
+        "purchases food (less purchase return)": "purchases",
+        "transferred out": "transferred_out",
+        "wastage and date expired": "wastage",
+        "closing stock": "closing_stock",
+        "catering and fairs": "catering",
+        "telephone/internet": "telephone",
+        "software": "software",
+        "amc": "amc",
+        "subscription": "subscription",
+        "insurance": "insurance",
+        "insurance premium": "insurance",
+        "repairs and maintenance": "repairs",
+        "miscellaneous expenses": "misc",
+        "staff incentives": "staff_incentives",
+        "advertisement expenses": "ads",
+        "ads account": "ads",
+        "operating expenses": "opex_total",
         "gross revenue": "gross_revenue",
         "less tax": "tax",
         "less commission": "commission",
@@ -139,15 +192,39 @@ def _months(header):
     return found
 
 
-def _line_values(rows):
+def _line_values(rows, first=1, unread=None, where=""):
     data = {}
+    for row in rows:
+        if not row or not isinstance(row[0], str) or not row[0].strip():
+            continue
+        key = canonical_line(row[0])
+        if key is None:
+            text = " ".join(row[0].replace(":", " ").split()).lower()
+            if text not in IGNORED_ROWS and not text.startswith("dosa coffee") and text != "f" and unread is not None:
+                unread.append(f"row not read: {row[0]!r} in {where}")
+            continue
+        if key not in data:
+            data[key] = list(row[first:first + 12])
+    return data
+
+
+def _ads_parts(rows, unread, where):
+    """Sum of the Ads Account rows under the heading, per month (None where all blank)."""
+    parts = [None] * 12
     for row in rows:
         if not row or not isinstance(row[0], str):
             continue
-        key = canonical_line(row[0])
-        if key and key not in data:
-            data[key] = list(row[1:13])
-    return data
+        text = " ".join(row[0].split()).lower().lstrip("- ").strip()
+        if text in ("total", "advertisement & promotion") or text.startswith("dosa coffee"):
+            continue
+        if text not in ADS_PARTS:
+            unread.append(f"row not read: {row[0]!r} in {where}")
+            continue
+        for index, cell in enumerate(row[1:13]):
+            value = as_number(cell)
+            if value is not None:
+                parts[index] = (parts[index] or 0.0) + value
+    return parts
 
 
 def _ads_total(rows):
@@ -161,68 +238,110 @@ def read_workbook(path, city, fy):
     import openpyxl
 
     book = openpyxl.load_workbook(path, data_only=True, read_only=True)
-    store_rows = []
-    ads_values = None
-    ads_months = None
     notes = []
-    for sheet in book.worksheets:
-        rows = list(sheet.iter_rows(max_row=80, max_col=14, values_only=True))
-        if sheet.title == "Ads Account":
-            header = _month_header(rows)
-            if header is None:
-                notes.append(f"{path.name}:{sheet.title}: no month header")
+    where = lambda title: f"{city} {fy} {title}"
+
+    # 1. City Summary sheet: label in A, department in B, months from C.
+    summary = list(book["Summary"].iter_rows(max_row=80, max_col=16, values_only=True))
+    header = next((row for row in summary if len(row) > 2 and isinstance(row[2], datetime.datetime)), None)
+    city_months = _months(header[1:]) if header else []
+    city_lines = _line_values(summary, first=2, unread=notes, where=where("Summary"))
+    gross = city_lines.get("gross_revenue") or [None] * 12
+    filled = set()
+    city_rows = []
+    for index, month in enumerate(city_months):
+        amount = as_number(gross[index] if index < len(gross) else None)
+        if not month or amount is None or amount == 0:
+            continue
+        filled.add(month)
+        for line, cells in city_lines.items():
+            value = as_number(cells[index] if index < len(cells) else None)
+            if value is None:
                 continue
-            ads_months = _months(header)
-            ads_values = _ads_total(rows)
+            city_rows.append((fy, city, "", month, line, round(value, 2), "city"))
+
+    store_rows = []
+    ads_check = {}
+    for sheet in book.worksheets:
+        title = sheet.title.strip()
+        if sheet.title == "Summary" or sheet.title in SKIP_SHEETS:
             continue
-        if sheet.title in SKIP_SHEETS:
-            continue
+        rows = list(sheet.iter_rows(max_row=80, max_col=14, values_only=True))
         header = _month_header(rows)
         if header is None:
             notes.append(f"{path.name}:{sheet.title}: no month header")
             continue
         months = _months(header)
-        lines = _line_values(rows)
+        if sheet.title == "Ads Account":
+            parts = _ads_parts(rows, notes, where(title))
+            for index, month in enumerate(months):
+                if month in filled and parts[index] is not None:
+                    ads_check[month] = round(parts[index], 2)
+            continue
+        lines = _line_values(rows, unread=notes, where=where(title))
         gross = lines.get("gross_revenue") or [None] * 12
-        store = sheet.title.strip()
+        ebitda = lines.get("ebitda") or [None] * 12
+        level = "events" if title == EVENTS else "store"
         for index, month in enumerate(months):
-            if not month:
+            if not month or month not in filled:
                 continue
             amount = as_number(gross[index] if index < len(gross) else None)
-            if amount is None or amount == 0:
+            profit = as_number(ebitda[index] if index < len(ebitda) else None)
+            if not amount and not profit:
                 continue
             for line, cells in lines.items():
                 value = as_number(cells[index] if index < len(cells) else None)
                 if value is None:
                     continue
-                store_rows.append((fy, city, store, month, line, round(value, 2)))
-    return store_rows, ads_months, ads_values, notes
+                store_rows.append((fy, city, title, month, line, round(value, 2), level))
+
+    # 2. Kitchen & central = city total minus stores and events, per line and month.
+    city_value = {(r[3], r[4]): r[5] for r in city_rows}
+    below = defaultdict(float)
+    for r in store_rows:
+        below[(r[3], r[4])] += r[5]
+    central_rows = []
+    for key in sorted(set(city_value) | set(below)):
+        month, line = key
+        if line in ("opening_stock", "closing_stock"):
+            continue  # stock on hand, not a monthly flow
+        gap = round(city_value.get(key, 0.0) - below.get(key, 0.0), 2)
+        if abs(gap) >= 1:
+            central_rows.append((fy, city, CENTRAL, month, line, gap, "central"))
+
+    # 3. Checks: EBITDA = net revenue minus costs on every row group; ads rows vs total.
+    cost_lines = ("fnb_cost", "electricity", "telephone", "gas", "rent", "software", "salary",
+                  "staff_incentives", "amc", "subscription", "insurance", "repairs", "misc",
+                  "cam", "ads", "ho_ck_cost")
+    groups = defaultdict(dict)
+    for r in city_rows + store_rows + central_rows:
+        groups[(r[2], r[3])][r[4]] = r[5]
+    for (store, month), cells in groups.items():
+        if "ebitda" not in cells:
+            continue
+        worked = cells.get("net_revenue", 0.0) - sum(cells.get(line, 0.0) for line in cost_lines)
+        if abs(worked - cells["ebitda"]) > 5:
+            raise ValueError(f"{city} {fy} {store or 'city'} {month}: EBITDA does not add up "
+                             f"({worked:.0f} vs {cells['ebitda']:.0f})")
+    checks = []
+    for month, parts in sorted(ads_check.items()):
+        total = city_value.get((month, "ads"))
+        if total is not None and abs(parts - total) >= 1:
+            checks.append({"fy": fy, "city": city, "month": month, "line": "ads",
+                           "sheet_total": total, "rows_total": parts})
+    return city_rows + store_rows + central_rows, checks, notes
 
 
 def tidy_rows(source):
-    """Every kept cell from the four workbooks, including city ads."""
+    """Every kept cell from the four workbooks: city totals, stores, events, kitchen & central."""
     source = Path(source)
-    rows = []
-    notes = []
-    filled = defaultdict(set)
+    rows, checks, notes = [], [], []
     for filename, city, fy in SOURCES:
-        path = source / filename
-        store_rows, ads_months, ads_values, sheet_notes = read_workbook(path, city, fy)
+        found, found_checks, sheet_notes = read_workbook(source / filename, city, fy)
+        rows.extend(found)
+        checks.extend(found_checks)
         notes.extend(sheet_notes)
-        rows.extend(store_rows)
-        for fy_name, row_city, _store, month, line, _value in store_rows:
-            if line == "gross_revenue":
-                filled[(fy_name, row_city)].add(month)
-        if not ads_months or not ads_values:
-            continue
-        for index, month in enumerate(ads_months):
-            if not month or month not in filled[(fy, city)]:
-                continue
-            value = as_number(ads_values[index] if index < len(ads_values) else None)
-            if value is None:
-                continue
-            rows.append((fy, city, "", month, "ads", round(value, 2)))
-    return rows, notes
+    return rows, checks, notes
 
 
 def _month_label(month):
@@ -360,7 +479,7 @@ def _spark(points):
 
 def _index_rows(rows):
     table = defaultdict(dict)
-    for fy, city, store, month, line, value in rows:
+    for fy, city, store, month, line, value, _level in rows:
         table[(fy, city, store, month)][line] = value
     return table
 
@@ -384,27 +503,41 @@ def _store_metric(cells, kind):
 def _format_metric(kind, value):
     if value is None:
         return "not yet in"
-    if kind in {"ebitda", "ads"}:
+    if kind in {"ebitda", "ads", "city-ebitda"}:
         return _fmt_rupee(value)
     return _fmt_pct(value)
 
 
+def _rupee_gap(current, previous, previous_label):
+    if current is None:
+        return "not yet in"
+    if previous is None:
+        return "Last year is not in."
+    delta = current - previous
+    if abs(delta) < 1:
+        return f"Same as {previous_label}"
+    word = "better" if delta > 0 else "worse"
+    return f"{_fmt_rupee(abs(delta))} {word} than {previous_label}"
+
+
 def _change(kind, current, previous, previous_label):
+    if kind == "city-ebitda":
+        return _rupee_gap(current, previous, previous_label)
     if kind in {"ebitda", "ads"}:
         return _rupee_change(current, previous, previous_label)
     return _points_change(current, previous, previous_label)
 
 
-def build_views(rows):
+def build_views(rows, checks=()):
     """Threats, cards, the store list, and one record per clickable figure."""
     table = _index_rows(rows)
     stores = defaultdict(set)
     months_by_city = defaultdict(set)
     for (fy, city, store, month), cells in table.items():
-        if store and "gross_revenue" in cells:
+        if store not in NOT_STORES and "gross_revenue" in cells:
             stores[(fy, city)].add(store)
-            if fy == "FY26-27":
-                months_by_city[city].add(month)
+        if store == "" and "gross_revenue" in cells and fy == "FY26-27":
+            months_by_city[city].add(month)
     latest = {city: max(months) for city, months in months_by_city.items()}
     coverage = []
     for city in ("Kolkata", "NCR"):
@@ -417,7 +550,7 @@ def build_views(rows):
         )
 
     store_names = sorted(
-        {store for (_fy, _city, store, _month) in table if store},
+        {store for (_fy, _city, store, _month) in table if store not in NOT_STORES},
         key=str.casefold,
     )
     city_of = {}
@@ -431,45 +564,41 @@ def build_views(rows):
         fy = "FY26-27" if month >= "2026-04" else "FY25-26"
         return table.get((fy, city, store, month), {})
 
-    def city_cells(city, month):
-        names = stores.get(("FY26-27" if month >= "2026-04" else "FY25-26", city), ())
-        if month < "2026-04":
-            names = stores.get(("FY25-26", city), names)
-        totals = defaultdict(float)
-        counts = defaultdict(int)
-        for store in names:
-            cells = cells_for(city, store, month)
-            for line in ("ebitda", "net_revenue", "fnb_cost", "rent", "salary"):
-                value = cells.get(line)
-                if value is None:
-                    continue
-                if line != "net_revenue" and cells.get("net_revenue") is None:
-                    continue
-                if line == "net_revenue" or cells.get("net_revenue") is not None:
-                    totals[line] += value
-                    counts[line] += 1
-        ads = table.get(
-            ("FY26-27" if month >= "2026-04" else "FY25-26", city, "", month),
-            {},
-        ).get("ads")
-        return totals, counts, ads
+    def city_row(city, month):
+        fy = "FY26-27" if month >= "2026-04" else "FY25-26"
+        return table.get((fy, city, "", month), {})
 
     def city_metric(city, month, kind):
-        if kind == "ads":
-            _totals, _counts, ads = city_cells(city, month)
-            return ads
-        totals, counts, _ads = city_cells(city, month)
-        if kind == "ebitda":
-            return totals.get("ebitda") if counts.get("ebitda") else None
-        pair = {
-            "ebitda-pct": "ebitda",
-            "food-cost-pct": "fnb_cost",
-            "rent-pct": "rent",
-            "salary-pct": "salary",
-        }[kind]
-        if not counts.get(pair) or not totals.get("net_revenue"):
-            return None
-        return _pct(totals.get(pair), totals.get("net_revenue"))
+        """City figures come from the city Summary sheet, so they include ads and kitchen costs."""
+        cells = city_row(city, month)
+        if kind == "city-ebitda":
+            return cells.get("ebitda")
+        return _store_metric(cells, kind)
+
+    def bridge(city, month):
+        """Stores, then each city-level item, then the city total. Real sheet figures only."""
+        fy = "FY26-27" if month >= "2026-04" else "FY25-26"
+        names = stores.get((fy, city), ())
+        in_stores = [table.get((fy, city, name, month), {}).get("ebitda") for name in names]
+        in_stores = [value for value in in_stores if value is not None]
+        steps = []
+        if in_stores:
+            steps.append({"name": f"All {len(in_stores)} stores", "value": _fmt_rupee(sum(in_stores)), "current": False})
+        events = table.get((fy, city, EVENTS, month), {}).get("ebitda")
+        if events is not None:
+            steps.append({"name": "Event sales", "value": _fmt_rupee(events), "current": False})
+        central = table.get((fy, city, CENTRAL, month), {})
+        for line in ("net_revenue", "ads", "fnb_cost"):
+            if line in central:
+                sign = 1 if line == "net_revenue" else -1
+                steps.append({"name": BRIDGE_NAMES[line], "value": _fmt_rupee(sign * central[line]), "current": False})
+        known = central.get("net_revenue", 0.0) - central.get("ads", 0.0) - central.get("fnb_cost", 0.0)
+        rest = central.get("ebitda", 0.0) - known
+        if abs(rest) >= 1:
+            steps.append({"name": "Other city costs not in any store sheet", "value": _fmt_rupee(rest), "current": False})
+        total = city_row(city, month).get("ebitda")
+        steps.append({"name": f"{city} total", "value": _fmt_rupee(total), "current": True})
+        return steps
 
     all_months = sorted({month for (_fy, _city, _store, month) in table})
     details = {}
@@ -546,11 +675,11 @@ def build_views(rows):
                     note = f"Food cost is compared within {city} only."
                 add_detail(anchor, store, city, store, kind, month, series[kind], peers, note)
 
-        city_series = {kind: {} for kind in kinds + ("ads",)}
+        city_series = {kind: {} for kind in kinds + ("ads", "city-ebitda")}
         for item in all_months:
             for kind in city_series:
                 city_series[kind][item] = city_metric(city, item, kind)
-        card_kinds = ("ebitda-pct", "food-cost-pct", "rent-pct", "salary-pct", "ads")
+        card_kinds = ("city-ebitda", "ebitda-pct", "food-cost-pct", "rent-pct", "salary-pct", "ads")
         for kind in card_kinds:
             anchor = f"{_slug(city)}-{kind}-{month}"
             current = city_series[kind].get(month)
@@ -560,6 +689,8 @@ def build_views(rows):
                 note = f"Within {city} only. {note}"
             if kind == "ads":
                 note = "City total. " + note
+            if kind == "city-ebitda":
+                note = "From the city summary. " + note
             cards.append({
                 "id": anchor,
                 "kicker": f"{city} · {month_label}",
@@ -576,6 +707,9 @@ def build_views(rows):
                         "current": other == city,
                     })
                 peer_note = "City total, not a store."
+            elif kind == "city-ebitda":
+                peers = bridge(city, month)
+                peer_note = "How the stores add up to the city figure."
             else:
                 peers = []
                 for store in sorted(stores.get(("FY26-27", city), ()), key=str.casefold):
@@ -623,19 +757,30 @@ def build_views(rows):
             })
         grouped.append({"name": city, "month": _month_label(month), "stores": entries})
 
-    summary = {"coverage": coverage, "threats": threats, "cards": cards}
+    to_check = []
+    for item in checks:
+        if item["fy"] != "FY26-27" or item["line"] != "ads":
+            continue
+        gap = item["rows_total"] - item["sheet_total"]
+        to_check.append(
+            f"{item['city']} ads, {_month_label(item['month'])}: the sheet total is "
+            f"{_fmt_rupee(item['sheet_total'])} but its rows add up to {_fmt_rupee(item['rows_total'])}. "
+            f"If the {_fmt_rupee(abs(gap))} left out is a real cost, {item['city']} EBITDA is "
+            f"{_fmt_rupee(abs(gap))} {'lower' if gap > 0 else 'higher'}. To check with Shilajit."
+        )
+    summary = {"coverage": coverage, "threats": threats, "cards": cards, "checks": to_check}
     store_view = {"cities": grouped}
     return summary, store_view, details
 
 
-def write_outputs(rows, dest):
+def write_outputs(rows, dest, checks=()):
     dest = Path(dest)
     dest.mkdir(parents=True, exist_ok=True)
     with (dest / "grand_economics_tidy.csv").open("w", newline="") as handle:
         writer = csv.writer(handle)
-        writer.writerow(["fy", "city", "store", "month", "line", "value"])
+        writer.writerow(["fy", "city", "store", "month", "line", "value", "level"])
         writer.writerows(rows)
-    summary, store_view, details = build_views(rows)
+    summary, store_view, details = build_views(rows, checks)
     for name, payload in (
         ("summary.json", summary),
         ("stores.json", store_view),
@@ -649,8 +794,8 @@ def write_outputs(rows, dest):
 def main(source=None, dest=None):
     source = Path(source or HERE)
     dest = Path(dest or source)
-    rows, notes = tidy_rows(source)
-    summary = write_outputs(rows, dest)
+    rows, checks, notes = tidy_rows(source)
+    summary = write_outputs(rows, dest, checks)
     print(len(rows))
     if notes:
         print("\n".join(notes))
@@ -658,6 +803,8 @@ def main(source=None, dest=None):
         print(line)
     print("threats", len(summary["threats"]))
     print("cards", len(summary["cards"]))
+    for line in summary["checks"]:
+        print("check:", line)
     return rows
 
 

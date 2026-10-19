@@ -415,7 +415,7 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
-        self.assertEqual(payload["as_of"], "2026-10-13")
+        self.assertEqual(payload["as_of"], "2026-10-18")
         from datetime import date
         from app.store_health.day_notes import badge_for
 
@@ -437,24 +437,25 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
         connaught = scorecard.split('data-store="Connaught place (02/0012)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("Tue 13 Oct 2026", connaught)
+        self.assertIn("161 bills on Sun 18 Oct 2026 vs 113 on Sun 11 Oct 2026.", connaught)
         self.assertNotIn("left out of the bill comparison", connaught)
         dlf = scorecard.split('data-store="Gurgaon DLF (02/0009)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("Tue 13 Oct 2026", dlf)
+        self.assertIn("107 bills on Sun 18 Oct 2026 vs 149 on Sun 11 Oct 2026.", dlf)
         self.assertNotIn("left out of the bill comparison", dlf)
         truck = scorecard.split('data-store="Dosa Coffee - Food Truck - 1 (0008)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("29 bills on Tue 13 Oct 2026 vs 37 on Tue 6 Oct 2026.", truck)
-        self.assertNotIn("left out of the bill comparison", truck)
+        self.assertIn("Sun 18 Oct 2026 is Closed, so it is left out of the bill comparison.", truck)
         feeds = load_feeds()
         for label in (
             "Gurgaon DLF (02/0009)",
             "Connaught place (02/0012)",
             "Dosa Coffee - Food Truck - 1 (0008)",
         ):
+            from app.store_health.day_notes import excluded_from_comparisons
+
             _score, raw = _sales_component(feeds, label, "2026-10")
             counted = 0
             for (store, day), row in feeds["posist"].items():
-                if store != label or day.isoformat()[:7] != "2026-10" or day.isoformat() == "2026-10-10":
+                if store != label or day.isoformat()[:7] != "2026-10" or excluded_from_comparisons(store, day):
                     continue
                 calendar = feeds["calendar"].get((store, day))
                 mid = calendar.get("pred_mid") if calendar else None

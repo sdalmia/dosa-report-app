@@ -9,12 +9,18 @@ from datetime import date
 
 PROTEST = "Protest-affected"
 UNKNOWN = "Status unknown"
+CLOSED = "Closed"
 NOTE_DAY = date(2026, 10, 10)
+FOOD_TRUCK = "Dosa Coffee - Food Truck - 1 (0008)"
 
 NOTES = {
     ("Connaught place (02/0012)", NOTE_DAY): PROTEST,
     ("Gurgaon DLF (02/0009)", NOTE_DAY): PROTEST,
-    ("Dosa Coffee - Food Truck - 1 (0008)", NOTE_DAY): UNKNOWN,
+    (FOOD_TRUCK, NOTE_DAY): UNKNOWN,
+    (FOOD_TRUCK, date(2026, 10, 11)): CLOSED,
+    (FOOD_TRUCK, date(2026, 10, 16)): CLOSED,
+    (FOOD_TRUCK, date(2026, 10, 17)): CLOSED,
+    (FOOD_TRUCK, date(2026, 10, 18)): CLOSED,
 }
 
 QUALITY_NOTE = (
@@ -36,6 +42,21 @@ def badge_for(store, day):
 
 def excluded_from_comparisons(store, day):
     return bool(badge_for(store, day))
+
+
+def is_closed_sales_row(row):
+    """A closed trading day stays on the file and stays out of averages.
+
+    A note that merely mentions an earlier closure, such as "closed till 9",
+    is not a closed day. Tony's closed rows start with "Closed:" or use status closed.
+    """
+    if not row:
+        return False
+    status = str(row.get("status") or "").strip().casefold()
+    if status == "closed":
+        return True
+    notes = str(row.get("notes") or "").strip().casefold()
+    return notes.startswith("closed:")
 
 
 def notes_between(store, start, end):

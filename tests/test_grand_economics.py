@@ -69,6 +69,24 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertFalse(any(row["city"] == "Kolkata" and row["month"] == "2026-10" for row in rows))
         self.assertTrue(any(row["city"] == "NCR" and row["month"] == "2026-09" and row["fy"] == "FY26-27" for row in rows))
         self.assertFalse(any(row["city"] == "NCR" and row["month"] == "2026-10" for row in rows))
+        self.assertEqual(self.parser.canonical_line("HO+CK Cost"), "ho_ck_cost")
+        self.assertEqual(self.parser.canonical_line("Advertisement Expenses"), "ads")
+
+    def test_city_totals_come_from_summary_and_reconcile(self):
+        with (GE / "grand_economics_tidy.csv").open(encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        def value(city, store, line, month="2026-09"):
+            return sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
+                       and r["store"] == store and r["line"] == line and r["month"] == month)
+        self.assertEqual(round(value("Kolkata", "", "ebitda")), 1501233)
+        self.assertEqual(round(value("NCR", "", "ebitda")), -881941)
+        self.assertEqual(round(value("NCR", "Kitchen & central", "fnb_cost")), 761680)
+        for city in ("Kolkata", "NCR"):
+            for month in ("2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"):
+                below = sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
+                            and r["month"] == month and r["line"] == "ebitda" and r["level"] != "city")
+                self.assertAlmostEqual(below, value(city, "", "ebitda", month), delta=1)
+        self.assertFalse(any(r["store"] == "Event Sales" and r["level"] == "store" for r in rows))
 
     def test_owner_gate_and_light_first_paint(self):
         anon = self.client.get("/grand-economics")
@@ -96,6 +114,11 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertIn("Gurgaon Sector 31", html)
         self.assertIn("Gurgaon Sec - 10", html)
         self.assertIn("Paschim Vihar", html)
+        self.assertIn("EBITDA after ads and kitchen", html)
+        self.assertIn("₹15L", html)
+        self.assertIn("-₹8.8L", html)
+        self.assertIn("To check with Shilajit", html)
+        self.assertNotIn("Kitchen &amp; central", html.split("ge-threats", 1)[1].split("ge-cards", 1)[0])
         self.assertIn('data-src="/grand-economics/stores"', html)
         self.assertNotIn("Forum Mall", html)
         self.assertNotIn("Last year is not in.", html)
@@ -136,6 +159,11 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertNotIn("Ledger detail", panel)
         self.assertIn("<svg", panel)
         self.assertNotIn("chart", panel.lower())
+
+        city = self.client.get("/grand-economics/detail/ncr-city-ebitda-2026-09").get_data(as_text=True)
+        self.assertIn("Kitchen food not charged to any store", city)
+        self.assertIn("-₹7.6L", city)
+        self.assertIn("NCR total", city)
 
         missing = self.client.get("/grand-economics/detail/no-such-figure")
         self.assertEqual(missing.status_code, 404)

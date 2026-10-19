@@ -18,6 +18,7 @@ from pathlib import Path
 import numpy as np
 
 from app.food_courts import is_mall_food_court
+from app.store_health.day_notes import is_closed_sales_row
 from app.site_pattern import (
     DATA_COMING,
     FORMULA_FOR,
@@ -1103,6 +1104,8 @@ def outcome_rows(features):
         name = feature["store"]
         days = []
         for row in by_store.get(name, []):
+            if is_closed_sales_row(row):
+                continue
             day = _parse_day(row.get("date"))
             gross = _float(row.get("gross"))
             bills = _float(row.get("bills"))
@@ -1972,7 +1975,7 @@ def opening_tracks():
             name = (master or {}).get("posist_name") or ""
             grosses = []
             for row in daily:
-                if _store_key(row.get("store")) != name:
+                if _store_key(row.get("store")) != name or is_closed_sales_row(row):
                     continue
                 day = _parse_day(row.get("date"))
                 gross = _float(row.get("gross"))
