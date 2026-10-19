@@ -51,7 +51,11 @@
                     <span hidden data-field="weekday" data-date="{{ cell.iso }}">{{ cell.fields.weekday }}</span>
                     <span hidden data-field="variance_vs_mid" data-date="{{ cell.iso }}">{{ cell.fields.variance_vs_mid }}</span>
                     <span hidden data-field="variance_pct" data-date="{{ cell.iso }}">{{ cell.fields.variance_pct }}</span>
+                    {% if cell.fields.status == "Closed" %}
+                    <div class="cal-line"><span>Status</span><b data-field="status" data-date="{{ cell.iso }}">Closed</b></div>
+                    {% else %}
                     <span hidden data-field="status" data-date="{{ cell.iso }}">{{ cell.fields.status }}</span>
+                    {% endif %}
                     <span hidden data-field="notes" data-date="{{ cell.iso }}">{{ cell.fields.notes }}</span>
                   </div>
                 {% else %}

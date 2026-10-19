@@ -8,6 +8,7 @@ blank into zero, and does not compute a variance the file left empty.
 
 import re
 
+from app.store_health.day_notes import is_closed_sales_row
 from app.store_health.present import (
     FAMEPILOT_WINDOW,
     format_count,
@@ -119,11 +120,15 @@ def _detail(parts):
     return " (" + "; ".join(filled) + ")"
 
 
+def _open_rows(rows):
+    return [row for row in rows if not is_closed_sales_row(row)]
+
+
 def _ops(feeds, store):
     from app.store_master import allows_growth
 
     lines = []
-    rows = _posist_rows(feeds, store)
+    rows = _open_rows(_posist_rows(feeds, store))
     if rows:
         void = _void_line(rows)
         if void:
@@ -363,7 +368,7 @@ def _cost(feeds, store):
     from app.store_master import allows_growth
 
     lines = []
-    rows = _posist_rows(feeds, store)
+    rows = _open_rows(_posist_rows(feeds, store))
     if rows:
         unsettled = _unsettled_line(rows)
         if unsettled:
@@ -474,7 +479,10 @@ def _apb_line(feeds, store, allow_growth=True):
 
 
 def _calendar_line(rows):
-    varied = [row for row in rows if row.get("variance_vs_mid") is not None]
+    varied = [
+        row for row in rows
+        if row.get("variance_vs_mid") is not None and not is_closed_sales_row(row)
+    ]
     if not varied:
         return ""
     row = _newest(varied)

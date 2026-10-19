@@ -251,7 +251,10 @@
     <div class="feed-times">
       <article class="feed-time">
         <h3>Posist daily</h3>
-        {% if freshness.posist.state == "ready" %}
+        {% if freshness.posist.sales_line %}
+          <p data-field="posist_saved_at">{{ freshness.posist.sales_line }}</p>
+          <p>Newest date in the file: <span data-field="posist_newest_date">{{ freshness.posist.newest_date }}</span></p>
+        {% elif freshness.posist.state == "ready" %}
           <p>File last saved: <time data-field="posist_saved_at">{{ freshness.posist.saved_at }}</time></p>
           <p>Newest date in the file: <span data-field="posist_newest_date">{{ freshness.posist.newest_date }}</span></p>
         {% else %}
@@ -327,7 +330,9 @@
               {% endfor %}
             </p>
           {% endif %}
-          {% if freshness.posist.state == "ready" %}
+          {% if freshness.posist.sales_line %}
+            <p class="box-source">{{ freshness.posist.sales_line }}</p>
+          {% elif freshness.posist.state == "ready" %}
             <p class="box-source">File last saved {{ freshness.posist.saved_at }}. Newest date in the file {{ freshness.posist.newest_date }}.</p>
           {% else %}
             <p class="box-source">{{ freshness.posist.detail }}</p>

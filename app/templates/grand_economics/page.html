@@ -41,6 +41,15 @@
     {% endfor %}
   </section>
 
+  {% if summary.checks %}
+    <section aria-labelledby="ge-checks">
+      <h2 id="ge-checks">To check with Shilajit</h2>
+      <ul>
+        {% for line in summary.checks %}<li>{{ line }}</li>{% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
   {{ lazy_section(url_for('grand_economics.stores_section'), height=280, title='Stores', prefetch=true, id='ge-stores') }}
 {% endif %}
 {% endblock %}

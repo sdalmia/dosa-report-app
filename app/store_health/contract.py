@@ -171,7 +171,13 @@ CALENDAR_MONEY = {
 CALENDAR_PERCENTS = {"variance_pct"}
 CALENDAR_TEXT = {"weekday", "tier", "status", "drivers", "notes"}
 
-ALLOWED_SOURCE = {"live", "historical", "historical-total-revenue", "posist insights"}
+ALLOWED_SOURCE = {
+    "live",
+    "historical",
+    "historical-total-revenue",
+    "posist insights",
+    "insights-deployments-list",
+}
 ALLOWED_STATUS = {
     "pending",
     "actual",
@@ -181,6 +187,7 @@ ALLOWED_STATUS = {
     "actual_gross_filled",
     "actual_gross_filled_provisional",
     "provisional",
+    "closed",
 }
 
 
@@ -318,7 +325,8 @@ def load_posist(directory=None):
                         _warn(
                             warnings,
                             f"{POSIST_FILE} row {index} source is {text!r}. "
-                            "Expected live, historical, historical-total-revenue, or posist insights.",
+                            "Expected live, historical, historical-total-revenue, posist insights, "
+                            "or insights-deployments-list.",
                         )
             elif field in {"region", "notes"}:
                 parsed[field] = None if _blank(cell) else str(cell).strip()
@@ -382,7 +390,7 @@ def load_calendar(directory=None):
                                 f"{CALENDAR_FILE} row {index} status is {text!r}. "
                                 "Expected pending, actual, actual_provisional_eod, "
                                 "share_of_network_band, not_on_deployment_report, "
-                                "actual_gross_filled, actual_gross_filled_provisional, or provisional.",
+                                "actual_gross_filled, actual_gross_filled_provisional, provisional, or closed.",
                             )
                     else:
                         parsed[field] = text
