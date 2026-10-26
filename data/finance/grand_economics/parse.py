@@ -362,6 +362,23 @@ def _span_label(months):
     return f"{start} {fy}–{end} {ly}"
 
 
+def _fmt_rupee_full(value):
+    """Rupees with paise rounded off, grouped the Indian way. Not shortened to lakhs."""
+    amount = int(round(abs(float(value))))
+    digits = str(amount)
+    if len(digits) <= 3:
+        grouped = digits
+    else:
+        head, tail = digits[:-3], digits[-3:]
+        parts = []
+        while head:
+            parts.append(head[-2:])
+            head = head[:-2]
+        grouped = ",".join(reversed(parts)) + "," + tail
+    sign = "-" if float(value) < 0 else ""
+    return f"{sign}₹{grouped}"
+
+
 def _fmt_rupee(value):
     if value is None:
         return "not yet in"
@@ -757,18 +774,26 @@ def build_views(rows, checks=()):
             })
         grouped.append({"name": city, "month": _month_label(month), "stores": entries})
 
+    # These two Kolkata ads differences are invoices the owner booked in October.
+    booked_in_oct = {("Kolkata", "2026-08"), ("Kolkata", "2026-09")}
     to_check = []
+    booked = []
     for item in checks:
         if item["fy"] != "FY26-27" or item["line"] != "ads":
             continue
         gap = item["rows_total"] - item["sheet_total"]
+        if (item["city"], item["month"]) in booked_in_oct:
+            booked.append(
+                f"{item['city']} ads, {_month_label(item['month'])}: {_fmt_rupee_full(abs(gap))}. Booked in Oct."
+            )
+            continue
         to_check.append(
             f"{item['city']} ads, {_month_label(item['month'])}: the sheet total is "
             f"{_fmt_rupee(item['sheet_total'])} but its rows add up to {_fmt_rupee(item['rows_total'])}. "
             f"If the {_fmt_rupee(abs(gap))} left out is a real cost, {item['city']} EBITDA is "
             f"{_fmt_rupee(abs(gap))} {'lower' if gap > 0 else 'higher'}. To check with Shilajit."
         )
-    summary = {"coverage": coverage, "threats": threats, "cards": cards, "checks": to_check}
+    summary = {"coverage": coverage, "threats": threats, "cards": cards, "checks": to_check, "booked": booked}
     store_view = {"cities": grouped}
     return summary, store_view, details
 

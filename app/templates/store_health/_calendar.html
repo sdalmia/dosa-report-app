@@ -18,6 +18,8 @@
         <p class="empty-state">Choose a store to see the predicted band and Actual Gross.</p>
       {% elif calendar_absent_note %}
         <p class="empty-state" data-field="calendar_absent_note">{{ calendar_absent_note }}</p>
+      {% elif day_count and calendar_closed_days == day_count %}
+        <p class="empty-state" data-field="calendar_closed">Closed.</p>
       {% elif day_count and not filled_actual_days and not filled_prediction_days %}
         <p class="empty-state">No predicted band or Actual Gross for this store.</p>
       {% elif posist_actual_days %}
