@@ -265,9 +265,18 @@ details.info p { margin: 0.35rem 0 0.6rem; }
   font-weight: 600;
 }
 
+.ops-head { margin: 0 0 0.25rem; }
+.ops-head h1 { font-size: 1.15rem; margin: 0; }
+.ops-head .lede { font-size: 13px; margin: 0; }
+.ops-nav { margin-bottom: 0.3rem; gap: 0.25rem; }
+.ops-nav a { min-height: 28px; padding: 0.15rem; font-size: 13px; }
+.quads { gap: 0.3rem; }
+.item-card, .plot-card, .source-card { padding: 0.35rem 0.45rem; border-radius: 0.4rem; }
+.meta { font-size: 13px; margin: 0.15rem 0; }
+
 @media (min-width: 720px) {
   .filters { grid-template-columns: repeat(4, 1fr); align-items: end; }
   .quads { grid-template-columns: repeat(5, 1fr); }
-  .item-list { display: grid; grid-template-columns: 1fr 1fr; gap: var(--mo-gap); }
+  .item-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; }
   .item-card { margin: 0; }
 }

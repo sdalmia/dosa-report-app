@@ -942,6 +942,160 @@ form.pc-form .list-search,
 @media (prefers-reduced-motion: no-preference) {
   .lazy-bar { animation: lazy-pulse 1.2s ease-in-out infinite; }
 }
+
+/* Denser pages: threats and key numbers should fit a phone screen. */
+:root {
+  --header-h: 44px;
+  --gutter: 8px;
+  --section-gap: 8px;
+}
+.cc-header { min-height: var(--header-h); padding: 2px 8px; }
+.cc-brand { min-height: 36px; }
+.cc-brand img { height: 24px; }
+.cc-main { padding: 4px 8px 8px; }
+.cc-footer { font-size: 13px; padding: 0.35rem 0.4rem; }
+.cc-section { margin: 0 0 0.35rem; }
+.section-head { margin-bottom: 0.15rem; }
+.section-head a { min-height: 28px; }
+h1, .owner-tools h1, .store-health h1, .menu-ops h1 { font-size: 1.15rem; margin: 0 0 0.15rem; line-height: 1.2; }
+h2 { font-size: 13px; }
+.cc-section h2, .cc-kicker, .flag-kicker, th, td, .window-sub, caption, summary { font-size: 13px; }
+.btn, button, .cc-tap, .lazy-more { min-height: 32px; }
+.cc-bottom a { min-height: 46px; font-size: 11px; }
+body:has(.cc-bottom) { padding-bottom: calc(3.1rem + env(safe-area-inset-bottom)); }
+
+.cc-filters {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 25;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  margin: 0 -8px 6px;
+  padding: 4px 8px;
+  background: var(--header);
+  border-bottom: 1px solid var(--line);
+}
+.cc-filters label {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+.cc-filters select,
+.cc-filters input {
+  width: auto;
+  min-height: 32px;
+  font-size: 13px;
+  padding: 0 6px;
+  border-radius: 8px;
+}
+.cc-apply { width: auto; padding: 0 8px; }
+
+.kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.kpi-card, .tile, .panel, .day-card, .league-row, .alert-row, .target-row {
+  padding: 0.3rem 0.4rem;
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+.kpi-card h3 { font-size: 13px; margin: 0; }
+.kpi-value { font-size: 1.05rem; }
+.cc-home .kpi-card { padding: 0.3rem 0.4rem; }
+.cc-home .kpi-value { font-size: 1.05rem; }
+
+.flag-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  overflow: visible;
+  padding: 0;
+  scroll-snap-type: none;
+}
+.flag-card {
+  flex: none;
+  width: auto;
+  min-height: 0;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0;
+  box-shadow: none;
+  border-width: 0 0 0 3px;
+  scroll-snap-align: none;
+}
+.flag-card strong { font-size: 13px; }
+
+.num-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 0.25rem;
+}
+.num-table caption {
+  caption-side: bottom;
+  text-align: left;
+  color: var(--text-muted);
+  padding: 0.15rem 0 0;
+}
+.num-table th, .num-table td {
+  padding: 0.12rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.num-table th:first-child, .num-table td:first-child, .num-table thead th:first-child {
+  text-align: left;
+  white-space: normal;
+}
+.num-table thead th { color: var(--text-muted); font-weight: 650; }
+.num-table .is-total th, .num-table .is-total td { font-weight: 750; }
+.num-table button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 650;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+#finance { margin-bottom: 0; }
+.finance-flags { list-style: none; margin: 0.1rem 0 0; padding: 0; }
+.finance-flags li { border-left: 3px solid var(--amber); padding: 0.05rem 0.35rem; }
+.finance-flags li.sev-red { border-left-color: var(--red); }
+.finance-flags a { color: var(--text); text-decoration: none; font-size: 13px; }
+
+.fold { margin: 0 0 0.25rem; }
+.fold > summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+  padding: 0.2rem 0;
+  color: var(--text);
+}
+.fold > summary a { margin-left: 0.4rem; }
+
+.py-4, .py-5 { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
+.mb-4, .mb-5 { margin-bottom: 0.35rem !important; }
+.card { box-shadow: none; }
+.card-body { padding: 0.45rem 0.55rem; }
+
+@media (min-width: 720px) {
+  .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  :root { --gutter: 12px; }
+}
+@media (min-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
 @keyframes lazy-pulse {
   50% { opacity: 0.45; }
 }

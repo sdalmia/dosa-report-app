@@ -65,13 +65,42 @@
   {% endif %}
 </section>
 
-<section class="cc-section" id="alerts" aria-labelledby="alerts-title">
+{% if finance %}
+<section class="cc-section" id="finance" aria-labelledby="finance-title">
   <div class="section-head">
-    <h2 id="alerts-title">Needs attention</h2>
-    {% if alerts|length > 5 %}
-      <a href="{{ url_for('main.attention_page') }}">See all</a>
-    {% endif %}
+    <h2 id="finance-title">Finance</h2>
+    <a href="{{ url_for('grand_economics.page') }}">Full figures</a>
   </div>
+  <table class="num-table">
+    <caption>{{ finance.month }} net revenue. Total is Kolkata plus NCR. <a href="{{ url_for('menu_costing.pnl_page') }}">Company P&amp;L</a></caption>
+    <thead>
+      <tr><th>City</th><th>Revenue</th><th>EBITDA</th><th>Margin</th></tr>
+    </thead>
+    <tbody>
+      {% for row in finance.rows %}
+        <tr{% if row.city == 'Total' %} class="is-total"{% endif %}>
+          <th scope="row">{{ row.city }}</th>
+          <td>{{ row.revenue }}</td>
+          <td>{{ row.ebitda }}</td>
+          <td>{{ row.margin }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if finance.flags %}
+  <ul class="finance-flags">
+    {% for flag in finance.flags %}
+      <li class="sev-{{ flag.tone }}">
+        <a href="{{ url_for('grand_economics.page') }}#ge-threats">{{ flag.store }} <b>{{ flag.value }}</b>{% if flag.pct %} {{ flag.pct }}{% endif %}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endif %}
+
+<details class="fold">
+  <summary id="alerts-title">Needs attention{% if alerts|length > 5 %} <a href="{{ url_for('main.attention_page') }}">See all</a>{% endif %}</summary>
   {% if not alerts %}
     <p class="empty">Nothing needs attention</p>
   {% else %}
@@ -81,9 +110,12 @@
       {% endfor %}
     </div>
   {% endif %}
-</section>
+</details>
 
-{{ lazy_section(with_qs(url_for('main.dashboard_targets')), height=280, title='Against target') }}
-{{ lazy_section(with_qs(url_for('main.dashboard_below')), height=320, title='Stores and the week', prefetch=true) }}
+<details class="fold">
+  <summary>Against target and the week</summary>
+  {{ lazy_section(with_qs(url_for('main.dashboard_targets')), height=80, title='Against target') }}
+  {{ lazy_section(with_qs(url_for('main.dashboard_below')), height=80, title='Stores and the week') }}
+</details>
 </div>
 {% endblock %}

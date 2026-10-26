@@ -86,7 +86,7 @@ def create_app():
     @app.after_request
     def cache_static(response):
         if request.path.startswith("/static/"):
-            response.headers["Cache-Control"] = "public, max-age=86400"
+            response.headers["Cache-Control"] = "public, max-age=2592000"
         return response
 
     configure_logging(app)

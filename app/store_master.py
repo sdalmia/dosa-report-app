@@ -89,11 +89,17 @@ _BARE_CODE = re.compile(r"\((\d{3,4})\)\s*$")
 _CACHE = {}
 
 
+_DEFAULT_MASTER = None
+
+
 def master_path():
     override = os.environ.get("STORE_MASTER_FILE", "").strip()
     if override:
         return Path(override)
-    return Path(__file__).resolve().parents[1] / "data" / "store_master.csv"
+    global _DEFAULT_MASTER
+    if _DEFAULT_MASTER is None:
+        _DEFAULT_MASTER = Path(__file__).resolve().parents[1] / "data" / "store_master.csv"
+    return _DEFAULT_MASTER
 
 
 def clear_cache():
@@ -613,12 +619,28 @@ class StoreIndex:
 def get_index(path=None):
     path = Path(path) if path else master_path()
     key = str(path)
-    stamp = path.stat().st_mtime if path.is_file() else None
+    try:
+        from flask import g, has_request_context
+    except ImportError:
+        g = None
+        has_request_context = lambda: False
+    if has_request_context():
+        found = getattr(g, "_store_indexes", {}).get(key)
+        if found is not None:
+            return found
+    stamp = path.stat().st_mtime_ns if path.is_file() else None
     cached = _CACHE.get(key)
     if cached and cached[0] == stamp:
-        return cached[1]
-    index = StoreIndex(load_rows(path) if path.is_file() else [])
-    _CACHE[key] = (stamp, index)
+        index = cached[1]
+    else:
+        index = StoreIndex(load_rows(path) if path.is_file() else [])
+        _CACHE[key] = (stamp, index)
+    if has_request_context():
+        bag = getattr(g, "_store_indexes", None)
+        if bag is None:
+            bag = {}
+            g._store_indexes = bag
+        bag[key] = index
     return index
 
 

@@ -363,9 +363,32 @@ def _posist_rows(path, warnings):
     return rows
 
 
+_PROCUREMENT_CACHE = {}
+
+
+def _procurement_stamp(directory):
+    parts = []
+    if directory.is_dir():
+        for path in sorted(directory.iterdir()):
+            if path.is_file() and path.suffix.lower() in {".csv", ".xlsx", ".xls", ".md"}:
+                stat = path.stat()
+                parts.append((path.name, stat.st_mtime_ns, stat.st_size))
+    return tuple(parts)
+
+
 def load_procurement(directory=None):
     """Read every procurement feed the pages need. Missing files stay missing."""
     directory = Path(directory) if directory else procurement_dir()
+    posist_file = posist_daily_path()
+    extra = ()
+    if posist_file.is_file():
+        stat = posist_file.stat()
+        extra = ((str(posist_file), stat.st_mtime_ns, stat.st_size),)
+    stamp = _procurement_stamp(directory) + extra
+    key = str(directory)
+    cached = _PROCUREMENT_CACHE.get(key)
+    if cached and cached[0] == stamp:
+        return cached[1]
     warnings = []
     files = {
         "grn_lines": newest_file(directory, "grn_lines_warehouses*.csv"),
@@ -434,7 +457,7 @@ def load_procurement(directory=None):
         start, end = dates_in_filename(files["workbook"].name)
         period_start, period_end = start, end
 
-    return {
+    result = {
         "directory": directory,
         "files": files,
         "warnings": warnings,
@@ -454,6 +477,10 @@ def load_procurement(directory=None):
         "period_start": period_start,
         "period_end": period_end,
     }
+    if len(_PROCUREMENT_CACHE) > 4:
+        _PROCUREMENT_CACHE.pop(next(iter(_PROCUREMENT_CACHE)))
+    _PROCUREMENT_CACHE[key] = (stamp, result)
+    return result
 
 
 def _period_from_consumption(rows):
