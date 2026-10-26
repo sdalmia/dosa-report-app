@@ -14,7 +14,7 @@
     color: var(--text-muted);
     margin-bottom: 0.25rem;
   }
-  .store-health h1 { font-size: 1.8rem; font-weight: 650; color: var(--text); }
+  .store-health h1 { font-size: 1.15rem; font-weight: 650; color: var(--text); margin: 0; }
   .identity { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 0 0 0.75rem; list-style: none; }
   .identity li {
     border: 1px solid var(--line);
@@ -38,7 +38,7 @@
     border-color: var(--accent);
     box-shadow: none;
   }
-  .health-stack { display: grid; gap: 1rem; min-width: 0; }
+  .health-stack { display: grid; gap: 0.35rem; min-width: 0; }
   @media (min-width: 992px) {
     .health-stack { grid-template-columns: 1fr 1fr; }
     .span-full { grid-column: 1 / -1; }
@@ -47,9 +47,9 @@
     background: var(--surface);
     color: var(--text);
     border: 1px solid var(--line);
-    border-top: 8px solid var(--accent);
-    border-radius: 0.85rem;
-    padding: 1.05rem 1.1rem 1.15rem;
+    border-top: 3px solid var(--accent);
+    border-radius: 0.45rem;
+    padding: 0.45rem 0.5rem;
     box-shadow: var(--shadow);
     min-width: 0;
     max-width: 100%;
@@ -243,11 +243,11 @@
     </ul>
     <p class="match-hint">Rows match this store when the store column is {{ store.label }}.</p>
   {% else %}
-    <p class="match-hint mb-3">Pick a Posist deployment label. The list is the store column in posist_daily.csv, written exactly as it appears there.</p>
+    <p class="match-hint mb-3">Choose a store.</p>
   {% endif %}
 
-  <section id="last-updated" class="last-updated" aria-label="Last updated" data-posist-state="{{ freshness.posist.state }}" data-calendar-state="{{ freshness.calendar.state }}" data-reelo-state="{{ freshness.reelo.state }}" data-famepilot-state="{{ freshness.famepilot.state }}">
-    <h2>Last updated</h2>
+  <details id="last-updated" class="fold last-updated" data-posist-state="{{ freshness.posist.state }}" data-calendar-state="{{ freshness.calendar.state }}" data-reelo-state="{{ freshness.reelo.state }}" data-famepilot-state="{{ freshness.famepilot.state }}">
+    <summary>Last updated</summary>
     <div class="feed-times">
       <article class="feed-time">
         <h3>Posist daily</h3>
@@ -289,7 +289,7 @@
         {% endif %}
       </article>
     </div>
-  </section>
+  </details>
 
   {% if unknown_store %}
     <p class="empty-state">No store matches “{{ unknown_token }}”. Choose one from the list.</p>
@@ -369,13 +369,15 @@
       </div>
     </section>
 
-{{ lazy_section(with_qs(url_for('store_health.fragment', name='target', store_id=store.id if store else none)), height=220, title='Against target') }}
+<details class="fold span-full">
+  <summary>Rest of this store</summary>
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='target', store_id=store.id if store else none)), height=80, title='Against target') }}
 
-{{ lazy_section(with_qs(url_for('store_health.fragment', name='menu', store_id=store.id if store else none)), height=280, title='Menu mix') }}
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='menu', store_id=store.id if store else none)), height=80, title='Menu mix') }}
 
 
     {% if store %}
-{{ lazy_section(with_qs(url_for('store_health.fragment', name='delivery', store_id=store.id if store else none)), height=220, title='Delivery mix') }}
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='delivery', store_id=store.id if store else none)), height=80, title='Delivery mix') }}
 
     {% endif %}
 
@@ -708,26 +710,12 @@
       </div>
     </section>
 
-{{ lazy_section(with_qs(url_for('store_health.fragment', name='calendar', store_id=store.id if store else none)), height=420, title='Sales calendar', prefetch=true) }}
+{{ lazy_section(with_qs(url_for('store_health.fragment', name='calendar', store_id=store.id if store else none)), height=80, title='Sales calendar') }}
+</details>
 
   </div>
 
-  <details class="mt-4 contract">
-    <summary>Where these figures come from</summary>
-    <p class="mt-3 mb-2">Posist reads <code>data/store_health/posist_daily.csv</code>. One row per store per date. The store column is the Posist deployment label. Money is rupees, including values written with thousands separators. A blank cell stays blank.</p>
-    <p><code>{{ posist_columns|join(", ") }}</code></p>
-    <p class="mb-2">Menu mix reads <code>data/store_health/menu_mix.csv</code> from Posist Insights Menu Analysis. Columns are store, item, total sales, total orders, contribution percent, period start, and period end. The box lists the top items for the dates present in that file. When the file covers more than 30 days, only the latest 30 days present are listed. A store with no matching rows says menu mix is not on file for this store.</p>
-    <p class="mb-2">The calendar reads <code>data/store_health/sales_pred_vs_actual.csv</code> and shows the next 30 days from today in Asia/Kolkata. A network file uses the same columns without store. A store calendar adds store. Low, mid, and high on this drop are that store's share of the network judgment band, not a separate model. Actual Gross is that same day's Posist gross, including a real zero. It is never replaced by net. If the calendar file has a real Actual Net for a day, it is shown on its own line labelled Actual Net. Low, mid, and high come from the network band, which is a net figure, so Actual Gross is not like-for-like with them. A day with no Posist row stays blank. A later day does not reuse an earlier day's gross. Predictions and variance stay blank unless the calendar file has them. A blank is not zero. Status may be share_of_network_band, not_on_deployment_report, actual_gross_filled, actual_gross_filled_provisional, or provisional, as well as pending, actual, or actual_provisional_eod.</p>
-    <p><code>{{ calendar_columns|join(", ") }}</code></p>
-    <p class="mb-2">Active employees read <code>data/store_health/keka_active.csv</code>. Keka has no Active flag. The count is the Org Locations employee count minus people on the Relieved Employees report, as of 3 Oct 2026. People still in notice stay in the count. A blank is unmatched, not zero. The old <code>keka.csv</code> headcount is not used. Primary lead still comes from <code>keka.csv</code> and is the largest reporting line, not a confirmed single store manager. <code>posist_store</code> joins a Posist label only when it matches one store.</p>
-    <p><code>{{ keka_active_columns|join(", ") }}</code></p>
-    <p class="mb-2">Mystery audit reads <code>data/store_health/mystery_audit.csv</code>. Scores stay as written. A store with no row stays empty. The Brand row is the brand aggregate, not that store's score.</p>
-    <p><code>{{ audit_columns|join(", ") }}</code></p>
-    <p class="mb-2">Reelo reads <code>data/store_health/reelo.csv</code>. The window on this drop is Last 30 Days, 03 Sep 2026 to 03 Oct 2026. Phone capture is valid visits / (valid + blocked) x 100. A shorter posist_store label joins only when it matches one store. Match status <code>not in Reelo</code> is shown as those words. <code>inferred</code> is not a confirmed address match.</p>
-    <p><code>{{ reelo_columns|join(", ") }}</code></p>
-    <p class="mb-2">Famepilot reads <code>data/store_health/famepilot.csv</code>. Public rating and public review count are one pair. Private rating, private review count, and overall reviews are shown when the cell has a value. A tie in main threat is shown in full. The capture used the Past 30 days preset; the dates printed on screen were 26 Sep 26 - 02 Oct 26 (7 days), which is not a verified 30-day range. A blank location is no Famepilot location, and the rating stays blank.</p>
-    <p class="mb-0"><code>{{ famepilot_columns|join(", ") }}</code></p>
-  </details>
+  <p class="match-hint">A blank figure is not zero.</p>
 </div>
 <div id="cal-sheet" class="cal-sheet" hidden></div>
 {% endblock %}

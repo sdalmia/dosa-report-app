@@ -593,11 +593,30 @@ def load_item_sales(directory=None):
     return rows, warnings
 
 
+_FEEDS_CACHE = {}
+
+
+def _feeds_stamp(directory):
+    """Name, mtime, and size of every CSV in this folder. A new save changes it."""
+    parts = []
+    if directory.is_dir():
+        for path in sorted(directory.iterdir()):
+            if path.is_file() and path.suffix.lower() == ".csv":
+                stat = path.stat()
+                parts.append((path.name, stat.st_mtime_ns, stat.st_size))
+    return tuple(parts)
+
+
 def load_feeds(directory=None):
     from app.store_health.stores import assign_audit_periods, assign_rows, extra_store_labels, match_menu_store
     from app.store_master import resolve_store_label
 
     directory = Path(directory) if directory else data_directory()
+    stamp = _feeds_stamp(directory)
+    key = str(directory)
+    cached = _FEEDS_CACHE.get(key)
+    if cached and cached[0] == stamp:
+        return cached[1]
     posist, posist_warnings = load_posist(directory)
     calendar, calendar_warnings = load_calendar(directory)
     keka, keka_warnings = load_keka(directory)
@@ -683,7 +702,7 @@ def load_feeds(directory=None):
                 famepilot_warnings,
                 f"{FAMEPILOT_FILE} row {row.get('posist_store')!r} does not match one Posist store, so it was not applied.",
             )
-    return {
+    result = {
         "posist": posist,
         "calendar": calendar,
         "keka": keka,
@@ -705,6 +724,10 @@ def load_feeds(directory=None):
         "warnings": posist_warnings + calendar_warnings + keka_warnings + keka_active_warnings + audit_warnings + reelo_warnings + famepilot_warnings + menu_mix_warnings + item_sales_warnings,
         "directory": directory,
     }
+    if len(_FEEDS_CACHE) > 6:
+        _FEEDS_CACHE.pop(next(iter(_FEEDS_CACHE)))
+    _FEEDS_CACHE[key] = (stamp, result)
+    return result
 
 
 def describe_feed_file(path):

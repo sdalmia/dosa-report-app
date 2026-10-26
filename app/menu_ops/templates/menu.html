@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "_lazy.html" import lazy_section %}
 
 {% block title %}Menu engineering{% endblock %}
 
@@ -126,6 +127,8 @@
     </a>
   </section>
 
+  <details class="fold">
+    <summary>Charts</summary>
   {% for plot in view.plots %}
     <section class="plot-card">
       <h2>{{ plot.title }}</h2>
@@ -133,6 +136,7 @@
       <p class="meta">Each dot is an item in this {% if plot.city %}city{% else %}filter{% endif %}. The lines are that ranking's cutoffs.</p>
     </section>
   {% endfor %}
+  </details>
 
   <p class="meta">Classified items {{ view.classified }}. Gross of those items {{ view.gross_total or 'Not on the report' }}. Orders {{ view.orders_total or 'Not on the report' }}.</p>
   {% for cutoff in view.cutoffs %}
@@ -146,53 +150,9 @@
     {% endif %}
   {% endfor %}
 
-  <section class="item-list" data-list>
-    {% for item in view['items'] %}
-      <article class="item-card {{ item.quadrant or 'unclassified' }}" data-item="{{ item.item }}" {% if item.city %}data-city="{{ item.city }}"{% endif %}>
-        <header>
-          <h2>{{ item.item }}</h2>
-          {% if item.quadrant_label %}<span class="pill {{ item.quadrant }}">{{ item.quadrant_label }}</span>{% else %}<span class="pill unclassified">Not classified</span>{% endif %}
-          {% if item.partial %}<span class="pill partial">Partial</span>{% endif %}
-        </header>
-        <dl>
-          <div><dt>Gross</dt><dd data-field="gross">{{ item.gross or 'Not on the report' }}</dd></div>
-          <div><dt>Orders</dt><dd data-field="orders">{{ item.orders or 'Not on the report' }}</dd></div>
-          <div><dt>Popularity</dt><dd data-field="popularity">{{ item.popularity or 'Not on the report' }}</dd></div>
-          <div><dt>{% if view.margin_mode %}Margin per order{% else %}Revenue contribution{% endif %}</dt><dd data-field="contribution">{{ item.contribution or 'Not on the report' }}</dd></div>
-          {% if view.margin_mode %}
-            {% if item.city %}<div><dt>City</dt><dd data-field="city">{{ item.city }}</dd></div>{% endif %}
-            <div><dt>Cost, excl. packaging</dt><dd data-field="cost">{{ item.recipe_cost or 'Not on the report' }}</dd></div>
-            <div><dt>Margin</dt><dd data-field="margin">{{ item.margin or 'Not on the report' }}</dd></div>
-            {% if item.city_median %}<div><dt>City median</dt><dd data-field="city-median">{{ item.city_median }}</dd></div>{% endif %}
-            {% if item.vs_city %}<div><dt>Vs city median</dt><dd data-field="vs-city">{{ item.vs_city }}</dd></div>{% endif %}
-            {% if item.cost_coverage %}<div><dt>Recipe coverage</dt><dd data-field="coverage">{{ item.cost_coverage }}</dd></div>{% endif %}
-            {% if item.cost_min or item.cost_median or item.cost_max %}
-              <div><dt>Within the city</dt><dd data-field="spread">{{ item.cost_min or '—' }} / {{ item.cost_median or '—' }} / {{ item.cost_max or '—' }}</dd></div>
-            {% endif %}
-            {% if item.aggregator_margin %}
-              <div><dt>Aggregator margin</dt><dd data-field="aggregator-margin">{{ item.aggregator_margin }}</dd></div>
-            {% endif %}
-            {% if item.channel_costs %}
-              {% if item.channel_costs.same %}
-                <div><dt>Takeout and delivery</dt><dd data-field="packaging">{{ item.channel_costs.packaging }}</dd></div>
-              {% else %}
-                {% if item.channel_costs.takeout %}<div><dt>Takeout</dt><dd data-field="takeout">{{ item.channel_costs.takeout }}</dd></div>{% endif %}
-                {% if item.channel_costs.delivery %}<div><dt>Delivery</dt><dd data-field="delivery">{{ item.channel_costs.delivery }}</dd></div>{% endif %}
-              {% endif %}
-            {% endif %}
-          {% else %}
-            <div><dt>True margin</dt><dd data-field="margin">Not on the report</dd></div>
-          {% endif %}
-          {% if view.show_category %}<div><dt>Category</dt><dd>{{ item.category or 'Not listed' }}</dd></div>{% endif %}
-          <div><dt>Region</dt><dd>{{ item.regions or 'Not listed' }}</dd></div>
-          <div><dt>Stores</dt><dd>{{ item.store_count }}</dd></div>
-        </dl>
-        {% if item.coverage_note %}<p class="reason">{{ item.coverage_note }}</p>{% endif %}
-        {% if item.reason %}<p class="reason">{{ item.reason }}</p>{% endif %}
-      </article>
-    {% else %}
-      <p class="empty">No items in this filter.</p>
-    {% endfor %}
-  </section>
+  <details class="fold">
+    <summary>Items</summary>
+    {{ lazy_section(item_src, height=80, title='Items') }}
+  </details>
 {% endif %}
 {% endblock %}

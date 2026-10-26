@@ -567,7 +567,10 @@ class PageTests(unittest.TestCase):
     def test_pages_render_real_data_and_empty_states(self):
         menu = self.client.get("/menu")
         self.assertEqual(menu.status_code, 200)
-        html = menu.get_data(as_text=True)
+        first = menu.get_data(as_text=True)
+        self.assertIn('data-src="/menu/fragment/items"', first)
+        self.assertNotIn('data-item="Masala Dosa"', first)
+        html = stitch(self.client, first)
         self.assertIn("9 Sep–8 Oct 2026", html)
         self.assertIn("9 Sep–8 Oct 2026 is the latest period on file. The current window is not in yet.", html)
         self.assertNotIn("Item sales for this window are not on file yet.", html)

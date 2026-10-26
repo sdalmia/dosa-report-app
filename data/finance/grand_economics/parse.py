@@ -520,7 +520,9 @@ def _store_metric(cells, kind):
 def _format_metric(kind, value):
     if value is None:
         return "not yet in"
-    if kind in {"ebitda", "ads", "city-ebitda"}:
+    if kind == "city-ebitda":
+        return _fmt_rupee_full(value)
+    if kind in {"ebitda", "ads"}:
         return _fmt_rupee(value)
     return _fmt_pct(value)
 
@@ -600,7 +602,11 @@ def build_views(rows, checks=()):
         in_stores = [value for value in in_stores if value is not None]
         steps = []
         if in_stores:
-            steps.append({"name": f"All {len(in_stores)} stores", "value": _fmt_rupee(sum(in_stores)), "current": False})
+            steps.append({
+                "name": f"Stores before ads and kitchen ({len(in_stores)})",
+                "value": _fmt_rupee_full(sum(in_stores)),
+                "current": False,
+            })
         events = table.get((fy, city, EVENTS, month), {}).get("ebitda")
         if events is not None:
             steps.append({"name": "Event sales", "value": _fmt_rupee(events), "current": False})
@@ -614,7 +620,7 @@ def build_views(rows, checks=()):
         if abs(rest) >= 1:
             steps.append({"name": "Other city costs not in any store sheet", "value": _fmt_rupee(rest), "current": False})
         total = city_row(city, month).get("ebitda")
-        steps.append({"name": f"{city} total", "value": _fmt_rupee(total), "current": True})
+        steps.append({"name": f"{city} total", "value": _fmt_rupee_full(total) if total is not None else "not yet in", "current": True})
         return steps
 
     all_months = sorted({month for (_fy, _city, _store, month) in table})
@@ -793,7 +799,44 @@ def build_views(rows, checks=()):
             f"If the {_fmt_rupee(abs(gap))} left out is a real cost, {item['city']} EBITDA is "
             f"{_fmt_rupee(abs(gap))} {'lower' if gap > 0 else 'higher'}. To check with Shilajit."
         )
-    summary = {"coverage": coverage, "threats": threats, "cards": cards, "checks": to_check, "booked": booked}
+    home_rows = []
+    revenue_sum = 0.0
+    ebitda_sum = 0.0
+    home_complete = True
+    home_month = ""
+    for city in ("Kolkata", "NCR"):
+        month = latest.get(city)
+        cells = city_row(city, month) if month else {}
+        revenue = cells.get("net_revenue")
+        ebitda = cells.get("ebitda")
+        if month and not home_month:
+            home_month = _month_label(month)
+        if revenue is None or ebitda is None:
+            home_complete = False
+        else:
+            revenue_sum += revenue
+            ebitda_sum += ebitda
+        home_rows.append({
+            "city": city,
+            "revenue": _fmt_rupee_full(revenue) if revenue is not None else "not yet in",
+            "ebitda": _fmt_rupee_full(ebitda) if ebitda is not None else "not yet in",
+            "margin": _fmt_pct(_pct(ebitda, revenue)),
+        })
+    if home_complete and home_rows:
+        home_rows.append({
+            "city": "Total",
+            "revenue": _fmt_rupee_full(revenue_sum),
+            "ebitda": _fmt_rupee_full(ebitda_sum),
+            "margin": _fmt_pct(_pct(ebitda_sum, revenue_sum)),
+        })
+    summary = {
+        "coverage": coverage,
+        "threats": threats,
+        "cards": cards,
+        "checks": to_check,
+        "booked": booked,
+        "home": {"month": home_month, "rows": home_rows},
+    }
     store_view = {"cities": grouped}
     return summary, store_view, details
 
