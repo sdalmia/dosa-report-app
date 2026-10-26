@@ -5,13 +5,16 @@ visible, with a badge, and they are left out of week-over-week comparisons,
 forecast accuracy, and low-sales alerts.
 """
 
-from datetime import date
+from datetime import date, timedelta
 
 PROTEST = "Protest-affected"
 UNKNOWN = "Status unknown"
 CLOSED = "Closed"
 NOTE_DAY = date(2026, 10, 10)
 FOOD_TRUCK = "Dosa Coffee - Food Truck - 1 (0008)"
+FARIDABAD = "Sec 15 Faridabad (02/0007)"
+# Last Posist row is 22 Oct. From the next morning the outlet is closed.
+FARIDABAD_CLOSED_FROM = date(2026, 10, 23)
 
 NOTES = {
     ("Connaught place (02/0012)", NOTE_DAY): PROTEST,
@@ -40,8 +43,25 @@ def badge_for(store, day):
     return ""
 
 
+def store_closed_on(store, day):
+    """The outlet did not trade this day, even when the file has no sales row.
+
+    Faridabad Sec-15 stopped on the night of 22 Oct 2026. Later days are closed
+    the way Chattarpur and GK1 Cloud Kitchen are closed: shown as Closed, and
+    left out of gaps, averages, and low-sales flags.
+    """
+    if day is None:
+        return False
+    if badge_for(store, day) == CLOSED:
+        return True
+    for label in _labels(store):
+        if label == FARIDABAD and day >= FARIDABAD_CLOSED_FROM:
+            return True
+    return False
+
+
 def excluded_from_comparisons(store, day):
-    return bool(badge_for(store, day))
+    return bool(badge_for(store, day)) or store_closed_on(store, day)
 
 
 def is_closed_sales_row(row):
@@ -63,12 +83,16 @@ def notes_between(store, start, end):
     if start is None or end is None:
         return []
     labels = set(_labels(store))
-    found = []
+    found = {}
     for (label, day), badge in NOTES.items():
         if label in labels and start <= day <= end:
-            found.append((day, badge))
-    found.sort()
-    return found
+            found[day] = badge
+    if FARIDABAD in labels:
+        cursor = start if start > FARIDABAD_CLOSED_FROM else FARIDABAD_CLOSED_FROM
+        while cursor <= end:
+            found.setdefault(cursor, CLOSED)
+            cursor += timedelta(days=1)
+    return sorted(found.items())
 
 
 def quality_note_for(feeds):

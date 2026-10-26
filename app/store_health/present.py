@@ -25,7 +25,13 @@ from app.store_health.contract import (
     describe_feeds,
     parse_number,
 )
-from app.store_health.day_notes import badge_for, is_closed_sales_row, notes_between, quality_note_for
+from app.store_health.day_notes import (
+    badge_for,
+    is_closed_sales_row,
+    notes_between,
+    quality_note_for,
+    store_closed_on,
+)
 from app.store_health.stores import Store, extra_store_labels, store_from_label
 
 
@@ -44,7 +50,7 @@ STATUS_LABELS = {
     "closed": "Closed",
 }
 SALES_DATA_LINE = {
-    date(2026, 10, 18): "Sales data last updated 19 Oct 2026, 10:44 am IST (sales through 18 Oct)",
+    date(2026, 10, 25): "26 Oct 2026, 10:25 am IST (sales through 25 Oct)",
 }
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."
@@ -311,6 +317,13 @@ def posist_window(feeds, store, bounds=None):
     # A closed day is on the file. It is not a missing day and not a trading day
     # in the window total, so a ₹0 close does not pull the average down.
     closed_days = {row["date"] for row in rows if is_closed_sales_row(row)}
+    if start is not None and end is not None:
+        cursor = start
+        while cursor <= end:
+            calendar_row = _row_for_store(feeds["calendar"], store, cursor)
+            if store_closed_on(store, cursor) or is_closed_sales_row(calendar_row):
+                closed_days.add(cursor)
+            cursor += timedelta(days=1)
     trading = [row for row in rows if row["date"] not in closed_days]
     summed = {
         "net": _sum_present(trading, "net", "money"),
@@ -416,7 +429,7 @@ def calendar_days(feeds, store, start, end):
         fields = {field: _calendar_field(row, field) for field in CALENDAR_VALUE_COLUMNS if field != "date"}
         posist_row = _row_for_store(feeds["posist"], store, cursor) if store else None
         amount, actual_source = _posist_daily_gross(posist_row)
-        closed = is_closed_sales_row(posist_row) or is_closed_sales_row(row)
+        closed = is_closed_sales_row(posist_row) or is_closed_sales_row(row) or store_closed_on(store, cursor)
         if closed:
             fields["actual_gross"] = ""
             fields["status"] = "Closed"
@@ -1138,6 +1151,24 @@ def _present_delivery(store, window):
     return store_delivery(store.label, window)
 
 
+def _day_badges(feeds, store, start, end):
+    """Closed and noted days in the Posist window, including a close with no sales row."""
+    found = dict(notes_between(store, start, end))
+    if store is not None and start is not None and end is not None:
+        cursor = start
+        while cursor <= end:
+            if cursor not in found:
+                posist_row = _row_for_store(feeds["posist"], store, cursor)
+                calendar_row = _row_for_store(feeds["calendar"], store, cursor)
+                if is_closed_sales_row(posist_row) or is_closed_sales_row(calendar_row) or store_closed_on(store, cursor):
+                    found[cursor] = "Closed"
+            cursor += timedelta(days=1)
+    return [
+        {"iso": day.isoformat(), "date_label": format_date(day), "badge": found[day]}
+        for day in sorted(found)
+    ]
+
+
 def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=None):
     # The calendar is the next 30 days from today, not the dates in the file.
     span = forward_calendar_bounds(today) if store else None
@@ -1150,16 +1181,14 @@ def build_view(feeds, store, selection, today, menu_window=None, posist_bounds=N
     story = calendar_story(feeds, store)
     described = describe_feeds(feeds["directory"])
     window_start, window_end = posist_bounds if posist_bounds and posist_bounds[0] else _window_bounds(feeds)
-    day_badges = [
-        {"iso": day.isoformat(), "date_label": format_date(day), "badge": badge}
-        for day, badge in notes_between(store, window_start, window_end)
-    ]
+    day_badges = _day_badges(feeds, store, window_start, window_end)
     return {
         "posist": posist_window(feeds, store, posist_bounds),
         "days": days,
         "weeks": calendar_weeks(days),
         "filled_actual_days": filled,
         "filled_prediction_days": predicted,
+        "calendar_closed_days": sum(1 for day in days if day["fields"].get("status") == "Closed"),
         "calendar_share_label": story["share_label"],
         "calendar_absent_note": story["absent_note"],
         "posist_actual_days": sum(1 for day in days if str(day.get("actual_source", "")).startswith("posist")),

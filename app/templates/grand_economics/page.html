@@ -49,6 +49,14 @@
       </ul>
     </section>
   {% endif %}
+  {% if summary.booked %}
+    <section aria-labelledby="ge-booked">
+      <h2 id="ge-booked">Booked in Oct</h2>
+      <ul>
+        {% for line in summary.booked %}<li>{{ line }}</li>{% endfor %}
+      </ul>
+    </section>
+  {% endif %}
 
   {{ lazy_section(url_for('grand_economics.stores_section'), height=280, title='Stores', prefetch=true, id='ge-stores') }}
 {% endif %}

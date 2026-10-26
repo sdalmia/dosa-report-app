@@ -7,7 +7,7 @@ A stored zero stays zero.
 import statistics
 from datetime import timedelta
 
-from app.store_health.day_notes import badge_for, excluded_from_comparisons
+from app.store_health.day_notes import badge_for, excluded_from_comparisons, is_closed_sales_row, store_closed_on
 
 from app.store_health.contract import parse_number
 from app.store_health.present import list_stores
@@ -401,7 +401,7 @@ def _sales_component(feeds, label, month):
         gross = row.get("gross")
         calendar = feeds["calendar"].get((label, day))
         mid = calendar.get("pred_mid") if calendar else None
-        if gross is None or mid is None or excluded_from_comparisons(store, day):
+        if gross is None or mid is None or excluded_from_comparisons(store, day) or is_closed_sales_row(row):
             continue
         gross_values.append(float(gross))
         mid_values.append(float(mid))
@@ -427,6 +427,8 @@ def _bills_component(feeds, label, month):
     current = rows[-1]
     bills = current.get("bills")
     prior_day = current["date"] - timedelta(days=PRIOR_DAYS)
+    if is_closed_sales_row(current) or store_closed_on(label, current["date"]):
+        return None, f"{date_label(current['date'])} is Closed, so it is left out of the bill comparison."
     badge = badge_for(label, current["date"]) or badge_for(label, prior_day)
     if badge:
         return None, f"{date_label(current['date'])} is {badge}, so it is left out of the bill comparison."

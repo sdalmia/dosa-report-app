@@ -12,7 +12,14 @@ from markupsafe import Markup
 from app.procurement import procurement_tiles
 from app.store_health.contract import data_directory, load_feeds, parse_number
 from app.food_courts import MALL_BILL_NOTE, is_mall_food_court
-from app.store_health.day_notes import badge_for, badges_on, excluded_from_comparisons, quality_note_for
+from app.store_health.day_notes import (
+    badge_for,
+    badges_on,
+    excluded_from_comparisons,
+    is_closed_sales_row,
+    quality_note_for,
+    store_closed_on,
+)
 from app.store_health.present import (
     POSIST_WINDOW_DAYS,
     _sum_present,
@@ -48,6 +55,8 @@ def _wow_rows(pairs, end, compare_day, skip_mall=False):
     rows = []
     for name, row in pairs:
         if skip_mall and is_mall_food_court(name):
+            continue
+        if is_closed_sales_row(row) or store_closed_on(name, row.get("date")):
             continue
         if excluded_from_comparisons(name, end) or excluded_from_comparisons(name, compare_day):
             continue
@@ -155,9 +164,16 @@ def _league(feeds, stores, start, end, region, low_only):
         bills = None if mall else _metric(rows, "bills", "count")
         apb = None if mall else _window_apb(gross, bills)
         compare = end - timedelta(days=7)
-        tagged = excluded_from_comparisons(store, end) or excluded_from_comparisons(store, compare)
         latest = _store_on(feeds, store, end)
         prior = _store_on(feeds, store, compare)
+        tagged = (
+            excluded_from_comparisons(store, end)
+            or excluded_from_comparisons(store, compare)
+            or store_closed_on(store, end)
+            or store_closed_on(store, compare)
+            or is_closed_sales_row(latest)
+            or is_closed_sales_row(prior)
+        )
         latest_bills = None if mall or latest is None else latest.get("bills")
         prior_bills = None if mall or prior is None else prior.get("bills")
         bills_change = None if tagged else _change(latest_bills, prior_bills)
@@ -529,6 +545,30 @@ def _reelo(feeds):
     }
 
 
+def _day_badges(feeds, end):
+    """Notes for the latest day, plus a close the file marks with no separate note."""
+    if end is None:
+        return []
+    found = badges_on(end)
+    labels = {item["label"] for item in found}
+    for (name, day), row in (feeds.get("posist") or {}).items():
+        if day == end and name not in labels and is_closed_sales_row(row):
+            found.append({"label": name, "badge": "Closed", "iso": end.isoformat()})
+            labels.add(name)
+    for (name, day), row in (feeds.get("calendar") or {}).items():
+        if day == end and name not in labels and (is_closed_sales_row(row) or store_closed_on(name, end)):
+            found.append({"label": name, "badge": "Closed", "iso": end.isoformat()})
+            labels.add(name)
+    if store_closed_on("Sec 15 Faridabad (02/0007)", end) and "Sec 15 Faridabad (02/0007)" not in labels:
+        found.append({
+            "label": "Sec 15 Faridabad (02/0007)",
+            "badge": "Closed",
+            "iso": end.isoformat(),
+        })
+    found.sort(key=lambda item: item["label"].casefold())
+    return found
+
+
 def _alerts(feeds, stores, end):
     alerts = []
     compare = end - timedelta(days=7) if end else None
@@ -537,10 +577,17 @@ def _alerts(feeds, stores, end):
             break
         if is_mall_food_court(store.label):
             continue
-        if excluded_from_comparisons(store, end) or excluded_from_comparisons(store, compare):
-            continue
         latest = _store_on(feeds, store, end)
         prior = _store_on(feeds, store, compare)
+        if (
+            excluded_from_comparisons(store, end)
+            or excluded_from_comparisons(store, compare)
+            or store_closed_on(store, end)
+            or store_closed_on(store, compare)
+            or is_closed_sales_row(latest)
+            or is_closed_sales_row(prior)
+        ):
+            continue
         latest_bills = latest.get("bills") if latest else None
         prior_bills = prior.get("bills") if prior else None
         change = _change(latest_bills, prior_bills)
@@ -658,7 +705,7 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "reelo": _reelo(feeds),
         "alerts": _alerts(feeds, stores, end),
         "quality_note": quality_note_for(feeds),
-        "day_badges": badges_on(end) if end else [],
+        "day_badges": _day_badges(feeds, end),
         "procurement": procurement_tiles(procurement_dir),
         "today": today,
     }
