@@ -177,6 +177,7 @@ ALLOWED_SOURCE = {
     "historical-total-revenue",
     "posist insights",
     "insights-deployments-list",
+    "alfred-daily-sales",
 }
 ALLOWED_STATUS = {
     "pending",
@@ -188,6 +189,7 @@ ALLOWED_STATUS = {
     "actual_gross_filled_provisional",
     "provisional",
     "closed",
+    "awaiting_alfred_drop",
 }
 
 
@@ -326,7 +328,7 @@ def load_posist(directory=None):
                             warnings,
                             f"{POSIST_FILE} row {index} source is {text!r}. "
                             "Expected live, historical, historical-total-revenue, posist insights, "
-                            "or insights-deployments-list.",
+                            "insights-deployments-list, or alfred-daily-sales.",
                         )
             elif field in {"region", "notes"}:
                 parsed[field] = None if _blank(cell) else str(cell).strip()
@@ -390,7 +392,8 @@ def load_calendar(directory=None):
                                 f"{CALENDAR_FILE} row {index} status is {text!r}. "
                                 "Expected pending, actual, actual_provisional_eod, "
                                 "share_of_network_band, not_on_deployment_report, "
-                                "actual_gross_filled, actual_gross_filled_provisional, provisional, or closed.",
+                                "actual_gross_filled, actual_gross_filled_provisional, provisional, closed, "
+                                "or awaiting_alfred_drop.",
                             )
                     else:
                         parsed[field] = text

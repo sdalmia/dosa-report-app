@@ -48,9 +48,11 @@ STATUS_LABELS = {
     "actual_gross_filled_provisional": "Gross is in, provisional",
     "provisional": "Provisional",
     "closed": "Closed",
+    "awaiting_alfred_drop": "Not in yet",
 }
 SALES_DATA_LINE = {
     date(2026, 10, 25): "26 Oct 2026, 10:25 am IST (sales through 25 Oct)",
+    date(2026, 10, 29): "2 Nov 2026, 11:40 am IST (sales through 29 Oct)",
 }
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."
