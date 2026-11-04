@@ -53,6 +53,7 @@ STATUS_LABELS = {
 SALES_DATA_LINE = {
     date(2026, 10, 25): "26 Oct 2026, 10:25 am IST (sales through 25 Oct)",
     date(2026, 10, 29): "2 Nov 2026, 11:40 am IST (sales through 29 Oct)",
+    date(2026, 11, 3): "4 Nov 2026, 3:58 pm IST (sales through 3 Nov)",
 }
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."

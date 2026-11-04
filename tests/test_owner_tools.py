@@ -415,7 +415,7 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
-        self.assertEqual(payload["as_of"], "2026-10-29")
+        self.assertEqual(payload["as_of"], "2026-11-03")
         from datetime import date
         from app.store_health.day_notes import badge_for
 
@@ -437,13 +437,13 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
         connaught = scorecard.split('data-store="Connaught place (02/0012)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("152 bills on Thu 29 Oct 2026 vs 140 on Thu 22 Oct 2026.", connaught)
+        self.assertIn("176 bills on Tue 3 Nov 2026 vs 171 on Tue 27 Oct 2026.", connaught)
         self.assertNotIn("left out of the bill comparison", connaught)
         dlf = scorecard.split('data-store="Gurgaon DLF (02/0009)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("173 bills on Thu 29 Oct 2026 vs 145 on Thu 22 Oct 2026.", dlf)
+        self.assertIn("185 bills on Tue 3 Nov 2026 vs 167 on Tue 27 Oct 2026.", dlf)
         self.assertNotIn("left out of the bill comparison", dlf)
         truck = scorecard.split('data-store="Dosa Coffee - Food Truck - 1 (0008)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("52 bills on Thu 29 Oct 2026 vs 33 on Thu 22 Oct 2026.", truck)
+        self.assertIn("43 bills on Tue 3 Nov 2026 vs 35 on Tue 27 Oct 2026.", truck)
         feeds = load_feeds()
         for label in (
             "Gurgaon DLF (02/0009)",
