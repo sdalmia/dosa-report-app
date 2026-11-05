@@ -49,6 +49,35 @@ def summary():
     return payload
 
 
+def home_finance():
+    """One row per city, plus a handful of loss flags. Not the full tables."""
+    payload = summary()
+    if not payload.get("ready"):
+        return None
+    home = payload.get("home") if isinstance(payload.get("home"), dict) else {}
+    rows = [row for row in (home.get("rows") or []) if isinstance(row, dict)]
+    if not rows:
+        return None
+    flags = []
+    for threat in payload.get("threats") or []:
+        pct = str(threat.get("pct") or "").replace("%", "").strip()
+        try:
+            number = float(pct)
+        except ValueError:
+            number = None
+        red = (number is not None and number <= -10) or "L" in str(threat.get("value") or "")
+        flags.append({
+            "store": threat.get("store") or "",
+            "city": threat.get("city") or "",
+            "month": threat.get("month") or "",
+            "value": threat.get("value") or "",
+            "pct": threat.get("pct") or "",
+            "tone": "red" if red else "amber",
+        })
+    flags.sort(key=lambda item: (0 if item["tone"] == "red" else 1, item["city"], item["store"]))
+    return {"month": home.get("month") or "", "rows": rows, "flags": flags[:5]}
+
+
 def stores():
     payload = _read_json("stores.json")
     if not isinstance(payload, dict):

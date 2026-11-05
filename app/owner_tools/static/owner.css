@@ -349,6 +349,15 @@
   font-weight: 700;
 }
 
+.owner-tools h1 { font-size: 1.15rem; margin: 0 0 0.15rem; }
+.owner-tools .subtitle { font-size: 13px; margin: 0; }
+.owner-tools button.ge-card {
+  padding: 0.3rem 0.45rem;
+  margin: 0;
+  border-radius: 0.4rem;
+  min-height: 0;
+}
+.owner-tools button.ge-card strong { font-size: 13px; }
 @media (min-width: 768px) {
-  .owner-tools { max-width: 42rem; }
+  .owner-tools { max-width: 1080px; }
 }
