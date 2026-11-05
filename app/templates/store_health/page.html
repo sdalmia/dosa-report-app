@@ -385,9 +385,9 @@
         <div>
           <h2 id="audit-title">Mystery Audit</h2>
           {% if not store and audit.ranking_note %}
-            <p class="box-source">{{ audit.ranking_note }}</p>
+            <p class="box-source">{{ audit.ranking_note }}{% if audit.updated %} Last updated {{ audit.updated }}.{% endif %}</p>
           {% else %}
-            <p class="box-source">For this store{% if audit.fields.audit_period %} · {{ audit.fields.audit_period }}{% endif %}</p>
+            <p class="box-source">For this store{% if audit.fields.audit_period %} · {{ audit.fields.audit_period }}{% endif %}{% if audit.updated %} · Last updated {{ audit.updated }}{% endif %}</p>
           {% endif %}
         </div>
       </div>
@@ -433,7 +433,7 @@
       {% if audit.has_brand %}
         <div class="insight-col brand-audit" id="brand-audit">
           <h3>Brand aggregate</h3>
-          <p class="box-source">Not a store score. Period {{ audit.fields.brand_period }}.</p>
+          <p class="box-source">Not a store score. Period <span data-field="brand_period">{{ audit.fields.brand_period }}</span>.</p>
           <div class="metric-grid">
             <article class="metric">
               <h3>Average</h3>

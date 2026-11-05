@@ -55,6 +55,8 @@ SALES_DATA_LINE = {
     date(2026, 10, 29): "2 Nov 2026, 11:40 am IST (sales through 29 Oct)",
     date(2026, 11, 3): "4 Nov 2026, 3:58 pm IST (sales through 3 Nov)",
 }
+# File arrived 5 Nov 2026, 05:12 UTC. October has no one-pager brand row.
+AUDIT_UPDATED = {(2026, 10): "5 Nov 2026, 10:42 am IST"}
 CALENDAR_SHARE_LABEL = (
     "Low, mid, and high are this store's share of the network judgment band, not a separate model."
 )
@@ -686,6 +688,14 @@ def present_keka(feeds, store):
     }
 
 
+def _audit_score_text(value):
+    """A closed visit is Closed. It is not zero and not a fail."""
+    text = (value or "").strip()
+    if text.casefold() == "closed":
+        return "Closed"
+    return text
+
+
 def _audit_display(row, prefix):
     mapping = (
         ("period", "period"),
@@ -696,6 +706,9 @@ def _audit_display(row, prefix):
         ("status", "status"),
     )
     shown = {f"{prefix}_{name}": _text(row, source) for source, name in mapping}
+    for side in ("weekday", "weekend"):
+        key = f"{prefix}_{side}"
+        shown[key] = _audit_score_text(shown.get(key))
     if row and prefix == "audit":
         shown["audit_status"] = audit_status_label(row)
     return shown
@@ -801,19 +814,64 @@ def _period_note(latest_key, prior_key):
     return text
 
 
+def _latest_brand(feeds):
+    """The brand figure for the latest store period.
+
+    A one-pager Brand row is used when it is that period. October 2026 has no
+    one-pager row, so the figure is the mean of the store averages in the file.
+    """
+    from app.store_health.stores import period_label, period_sort_key
+
+    latest = feeds.get("audit_by_store") or {}
+    keys = [period_sort_key(row.get("period")) for row in latest.values()]
+    latest_key = max(keys) if keys else (0, 0)
+    brand = feeds.get("audit_brand")
+    brand_key = period_sort_key((brand or {}).get("period")) if brand else (0, 0)
+    if brand and brand_key >= latest_key and latest_key > (0, 0):
+        return brand
+    if latest_key <= (0, 0):
+        return brand
+    numbers = []
+    for row in latest.values():
+        if period_sort_key(row.get("period")) != latest_key:
+            continue
+        number = _audit_number(row)
+        if number is None:
+            continue
+        numbers.append(number)
+    if not numbers:
+        return brand
+    mean = round(sum(numbers) / len(numbers), 1)
+    return {
+        "store": "Brand",
+        "period": period_label(latest_key),
+        "avg_score": f"{mean:.1f}%",
+        "weekday_score": "",
+        "weekend_score": "",
+        "note": f"Mean of {len(numbers)} store averages.",
+        "status": "brand aggregate",
+    }
+
+
 def present_audit(feeds, store):
     row = feeds["audit_by_store"].get(store.label) if store else None
     prior = (feeds.get("audit_prior_by_store") or {}).get(store.label) if store else None
-    brand = feeds.get("audit_brand")
+    brand = _latest_brand(feeds)
     fields = {}
     fields.update(_audit_display(row, "audit"))
     fields.update(_audit_display(brand, "brand"))
     fields["audit_prior"] = _prior_text(prior)
     ranking, ranking_note = _audit_ranking(feeds)
+    from app.store_health.stores import period_sort_key
+
+    latest_key = (0, 0)
+    for item in (feeds.get("audit_by_store") or {}).values():
+        latest_key = max(latest_key, period_sort_key(item.get("period")))
     return {
         "state": _file_state(feeds["directory"], AUDIT_FILE, feeds["audit"]),
         "has_row": row is not None,
         "has_brand": brand is not None,
+        "updated": AUDIT_UPDATED.get(latest_key, ""),
         "fields": fields,
         "ranking": ranking,
         "ranking_note": ranking_note,

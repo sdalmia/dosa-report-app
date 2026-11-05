@@ -466,6 +466,8 @@ def _audit_lines(view):
         lines.append("mystery_audit.csv is missing.")
     elif state == "empty":
         lines.append("mystery_audit.csv is empty.")
+    if audit.get("updated"):
+        lines.append(f"Last updated {audit['updated']}.")
     if not audit.get("has_row"):
         lines.append("No mystery audit is on file for this store.")
     else:

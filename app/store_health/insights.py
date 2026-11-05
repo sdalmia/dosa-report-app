@@ -101,6 +101,8 @@ def _leading_number(text):
 
 
 def _score_text(raw):
+    if str(raw or "").strip().casefold() == "closed":
+        return "Closed"
     number = _leading_number(raw)
     if number is None:
         return ""
