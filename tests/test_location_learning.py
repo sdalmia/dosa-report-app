@@ -200,6 +200,7 @@ class SnapshotTests(unittest.TestCase):
         rows = {row["store"]: row for row in snapshot_rows("2026-10")}
         self.assertNotIn("Chattarpur (02/0005)", rows)
         self.assertNotIn("GK1 Cloud Kitchen (02/0002)", rows)
+        self.assertNotIn("Sec 15 Faridabad (02/0007)", rows)
         kalkaji = rows["Kalkaji (02/0004)"]
         self.assertEqual(kalkaji["classic_score"], 9.2)
         self.assertAlmostEqual(kalkaji["lat"], 28.540608)
@@ -324,8 +325,8 @@ class FitTests(unittest.TestCase):
 class JarvisInputTests(unittest.TestCase):
     def test_sites_cover_stores_and_clusters(self):
         sites = input_index()["sites"]
-        self.assertEqual(len(sites), 95)
-        self.assertEqual(sum(1 for site in sites if site["site_type"] == "store"), 29)
+        self.assertEqual(len(sites), 94)
+        self.assertEqual(sum(1 for site in sites if site["site_type"] == "store"), 28)
         clusters = [site["site_id"] for site in sites if site["site_type"] == "candidate_cluster"]
         self.assertEqual(len(clusters), 66)
         self.assertTrue(any(site_id.startswith("NCR-C01") for site_id in clusters))
@@ -335,7 +336,7 @@ class JarvisInputTests(unittest.TestCase):
 
     def test_haldiram_is_out_of_strict_density_and_blank_reviews_stay_blank(self):
         stats = review_stats()
-        self.assertEqual(stats["known"], 625)
+        self.assertEqual(stats["known"], 620)
         self.assertEqual(stats["blank"], 768)
         self.assertGreater(stats["mean_known"], stats["mean_if_blank_were_zero"])
         cp = next(site for site in input_index()["sites"] if site["site_id"].startswith("Connaught"))
@@ -449,15 +450,15 @@ class ApprovalPageTests(unittest.TestCase):
     def test_v2026_10_explains_frozen_formats_before_approve(self):
         self._session(OWNER)
         html = page(self.client, "/location-model")
-        self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-10b.", html)
+        self.assertIn("Mall, metro and cloud kitchen are frozen in v2026-11.", html)
         self.assertIn(
             "The mall score uses the prior weights, including aggregator-enabled, mall reviews and anchors.",
             html,
         )
         self.assertIn("Ideal Plaza, Forum and Rangoli Mall are the big misses.", html)
-        self.assertIn("Spearman 0.41 means the model ranks stores moderately well.", html)
+        self.assertIn("Spearman 0.40 means the model ranks stores moderately well.", html)
         self.assertIn(
-            "Approve v2026-10b? Live scores will change for high-street sites. You can undo this.",
+            "Approve v2026-11? Live scores will change for high-street sites. You can undo this.",
             html,
         )
         self.assertIn("Stores whose score moves most", html)
