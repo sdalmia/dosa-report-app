@@ -104,29 +104,45 @@ class FlagAccessTests(unittest.TestCase):
         self.assertNotIn("WhatsApp", html)
 
     def test_non_owner_does_not_receive_accounts_or_people(self):
+        # Shipped rows are 3 Oct and 9 Oct 2026 and drop after 7 days.
+        # Freeze the same day as the owner check so the result does not follow the clock.
         self._login("asha@dosacoffee.com")
-        page = self.client.get("/dashboard")
-        flags = self.client.get("/flags")
-        payload = self.client.get("/flags.json")
-        self.assertEqual(page.status_code, 200)
-        self.assertEqual(flags.status_code, 200)
-        html = page.get_data(as_text=True) + flags.get_data(as_text=True)
-        body = payload.get_json()
-        areas = {item["area"] for item in body["flags"]}
-        titles = " ".join(item["title"] for item in body["flags"])
-        for bit in RESTRICTED_BITS:
-            self.assertNotIn(bit, html)
-            self.assertNotIn(bit, titles)
-        self.assertIn("North ticket size slipping", html)
-        self.assertIn("North ticket size slipping", titles)
-        self.assertNotIn("WhatsApp", html)
-        self.assertNotIn("Batcave", html)
-        self.assertNotIn("Restroworks login", html)
-        self.assertNotIn("accounts", areas)
-        self.assertNotIn("people", areas)
-        self.assertIn("sales", areas)
-        self.assertEqual(page.get_data(as_text=True).count('class="flag-card'), 5)
-        self.assertIn("See all", page.get_data(as_text=True))
+        with patch("app.flags.business_today", return_value=date(2026, 10, 9)):
+            page = self.client.get("/dashboard")
+            flags = self.client.get("/flags")
+            payload = self.client.get("/flags.json")
+            self.assertEqual(page.status_code, 200)
+            self.assertEqual(flags.status_code, 200)
+            html = page.get_data(as_text=True) + flags.get_data(as_text=True)
+            body = payload.get_json()
+            areas = {item["area"] for item in body["flags"]}
+            titles = " ".join(item["title"] for item in body["flags"])
+            for bit in RESTRICTED_BITS:
+                self.assertNotIn(bit, html)
+                self.assertNotIn(bit, titles)
+            self.assertIn("North ticket size slipping", html)
+            self.assertIn("North ticket size slipping", titles)
+            self.assertNotIn("WhatsApp", html)
+            self.assertNotIn("Batcave", html)
+            self.assertNotIn("Restroworks login", html)
+            self.assertNotIn("accounts", areas)
+            self.assertNotIn("people", areas)
+            self.assertEqual(areas, {"sales", "procurement"})
+            self.assertEqual(page.get_data(as_text=True).count('class="flag-card'), 5)
+            self.assertIn("See all", page.get_data(as_text=True))
+
+            self._login("siddhant@dalgreenfoods.com")
+            owner_flags = self.client.get("/flags")
+            owner_body = self.client.get("/flags.json").get_json()
+            owner_titles = " ".join(item["title"] for item in owner_body["flags"])
+            owner_blob = owner_flags.get_data(as_text=True) + owner_titles
+            owner_areas = {item["area"] for item in owner_body["flags"]}
+            for bit in RESTRICTED_BITS:
+                self.assertIn(bit, owner_blob)
+            self.assertIn("accounts", owner_areas)
+            self.assertIn("people", owner_areas)
+            self.assertIn("sales", owner_areas)
+            self.assertIn("North ticket size slipping", owner_titles)
 
     def test_bad_row_is_skipped_and_training_is_kept(self):
         folder = tempfile.TemporaryDirectory()
