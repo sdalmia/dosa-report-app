@@ -463,9 +463,9 @@ def _audit_lines(view):
     lines = []
     state = audit.get("state")
     if state == "missing":
-        lines.append("mystery_audit.csv is missing.")
+        lines.append("Mystery audit is not available.")
     elif state == "empty":
-        lines.append("mystery_audit.csv is empty.")
+        lines.append("Mystery audit has nothing to show yet.")
     if audit.get("updated"):
         lines.append(f"Last updated {audit['updated']}.")
     if not audit.get("has_row"):
@@ -494,13 +494,13 @@ def _keka_lines(view):
     if keka.get("caveat"):
         lines.append(keka["caveat"])
     if keka.get("active_state") == "missing":
-        lines.append("keka_active.csv is missing.")
+        lines.append("Active staff numbers are not available.")
     elif keka.get("active_state") == "empty":
-        lines.append("keka_active.csv is empty.")
+        lines.append("Active staff numbers have nothing to show yet.")
     if keka.get("lead_state") == "missing":
-        lines.append("keka.csv is missing.")
+        lines.append("Staff leads are not available.")
     elif keka.get("lead_state") == "empty":
-        lines.append("keka.csv is empty.")
+        lines.append("Staff leads have nothing to show yet.")
     if not keka.get("has_row"):
         lines.append("No Keka row matches this store.")
     else:
@@ -525,9 +525,9 @@ def _fame_lines(view):
         lines.append(freshness["detail"])
     state = fame.get("state")
     if state == "missing":
-        lines.append("famepilot.csv is missing.")
+        lines.append("Famepilot reviews are not available.")
     elif state == "empty":
-        lines.append("famepilot.csv is empty.")
+        lines.append("Famepilot reviews have nothing to show yet.")
     if not fame.get("has_row"):
         lines.append("No Famepilot row matches this store.")
     elif fame.get("no_location"):
@@ -563,9 +563,9 @@ def _reelo_lines(view):
         lines.append(freshness["detail"])
     state = reelo.get("state")
     if state == "missing":
-        lines.append("reelo.csv is missing.")
+        lines.append("Reelo figures are not available.")
     elif state == "empty":
-        lines.append("reelo.csv is empty.")
+        lines.append("Reelo figures have nothing to show yet.")
     if not reelo.get("has_row"):
         lines.append("No Reelo row matches this store.")
     elif reelo.get("not_in_reelo"):

@@ -248,7 +248,14 @@ body.nav-open { overflow: hidden; }
 
 .cc-bottom i { font-size: 1.15rem; }
 
-.cc-section { margin: 0 0 1.1rem; }
+.cc-section {
+  margin: 0 0 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem 1.05rem 1.1rem;
+  box-shadow: var(--shadow);
+}
 
 .cc-section h2, .cc-kicker {
   font-size: 0.78rem;
@@ -368,11 +375,21 @@ body.nav-open { overflow: hidden; }
 .league-row .rank { font-weight: 700; color: var(--muted); }
 .league-meta { grid-column: 2; color: var(--text-muted); font-size: 0.82rem; }
 
-.cc-home .cc-section { margin-bottom: 0.55rem; }
-.cc-home .section-head { margin-bottom: 0.2rem; }
-.cc-home .kpi-card { padding: 0.45rem 0.5rem; }
-.cc-home .kpi-value { font-size: 1.05rem; }
-.cc-home .kpi-grid { gap: 0.4rem; }
+.cc-home .cc-section { margin-bottom: 1rem; }
+.cc-home .section-head { margin-bottom: 0.7rem; }
+.cc-home .kpi-card { padding: 0.9rem 1rem; }
+.cc-home .kpi-value { font-size: 1.55rem; letter-spacing: -0.03em; }
+.cc-home .kpi-grid { gap: 0.75rem; }
+.cc-section .kpi-card,
+.cc-section .alert-row,
+.cc-section .target-row,
+.cc-section .tile,
+.cc-section .league-row,
+.cc-section .day-card,
+.cc-section .flag-card {
+  background: var(--surface-2);
+  box-shadow: none;
+}
 .cc-home .league-row {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
@@ -758,10 +775,15 @@ html .store-health .box-index {
 
 .cc-filters {
   display: grid;
-  gap: var(--s2);
-  margin: 0 0 var(--section-gap);
+  gap: 10px;
+  margin: 0 0 1rem;
   width: 100%;
   min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.85rem 0.95rem 0.95rem;
+  box-shadow: var(--shadow);
 }
 .cc-filters > * { min-width: 0; }
 .cc-filters label {
@@ -783,7 +805,7 @@ html .store-health .box-index {
   min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--surface);
+  background: var(--surface-2);
   color: var(--text);
   padding: 0 var(--s3);
   font-size: 16px;
@@ -849,7 +871,7 @@ form.pc-form .list-search,
   min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--surface);
+  background: var(--surface-2);
   color: var(--text);
   padding: 0 48px 0 var(--s3);
   font-size: 16px;
@@ -887,22 +909,26 @@ form.pc-form .list-search,
 .list-search-empty { margin: 0 0 var(--s2); }
 
 @media (max-width: 767px) {
+  .cc-filters {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    padding: 0.7rem 0.75rem 0.8rem;
+  }
+  .cc-filters > .list-search { order: -1; }
   .cc-filters > .list-search,
   form.filters > .list-search,
   nav.filters > .list-search,
   .filters > .list-search {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    z-index: 24;
-    box-sizing: border-box;
+    position: static;
+    top: auto;
     margin: 0;
-    padding: var(--s2) var(--gutter);
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    padding: 0;
+    background: transparent;
+    border: 0;
   }
-  .list-search-spacer { height: 68px; }
+  .list-search-spacer { display: none; }
   .list-search.is-sticky {
     position: sticky;
     top: 56px;
@@ -910,6 +936,9 @@ form.pc-form .list-search,
     background: var(--bg);
     padding: var(--s2) 0;
   }
+  .cc-main { padding-top: 12px; }
+  .cc-section { padding: 0.8rem 0.85rem 0.9rem; margin-bottom: 0.75rem; }
+  .cc-home .kpi-value { font-size: 1.35rem; }
 }
 
 @media (min-width: 768px) {

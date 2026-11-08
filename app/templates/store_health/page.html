@@ -391,9 +391,9 @@
         </div>
       </div>
       {% if audit.state == "missing" %}
-        <p class="empty-state">mystery_audit.csv is missing.</p>
+        <p class="empty-state">Mystery audit is not available.</p>
       {% elif audit.state == "empty" %}
-        <p class="empty-state">mystery_audit.csv is empty.</p>
+        <p class="empty-state">Mystery audit has nothing to show yet.</p>
       {% endif %}
       {% if not store and audit.ranking %}
         <div data-list>
@@ -463,14 +463,14 @@
       </div>
       <p class="caveat" id="keka-caveat">{{ keka.caveat }}</p>
       {% if keka.active_state == "missing" %}
-        <p class="empty-state">keka_active.csv is missing.</p>
+        <p class="empty-state">Active staff numbers are not available.</p>
       {% elif keka.active_state == "empty" %}
-        <p class="empty-state">keka_active.csv is empty.</p>
+        <p class="empty-state">Active staff numbers have nothing to show yet.</p>
       {% endif %}
       {% if keka.lead_state == "missing" %}
-        <p class="empty-state">keka.csv is missing.</p>
+        <p class="empty-state">Staff leads are not available.</p>
       {% elif keka.lead_state == "empty" %}
-        <p class="empty-state">keka.csv is empty.</p>
+        <p class="empty-state">Staff leads have nothing to show yet.</p>
       {% endif %}
       {% if not store %}
         <p class="empty-state">Choose a store to see its Keka row.</p>
@@ -515,9 +515,9 @@
         </div>
       </div>
       {% if fame.state == "missing" %}
-        <p class="empty-state">famepilot.csv is missing.</p>
+        <p class="empty-state">Famepilot reviews are not available.</p>
       {% elif fame.state == "empty" %}
-        <p class="empty-state">famepilot.csv is empty.</p>
+        <p class="empty-state">Famepilot reviews have nothing to show yet.</p>
       {% elif not store %}
         <p class="empty-state">Choose a store to see its Famepilot row.</p>
       {% elif not fame.has_row %}
@@ -565,9 +565,9 @@
       </div>
       <p class="caveat" id="reelo-caveat">{{ reelo.phone_caveat }}</p>
       {% if reelo.state == "missing" %}
-        <p class="empty-state">reelo.csv is missing.</p>
+        <p class="empty-state">Reelo figures are not available.</p>
       {% elif reelo.state == "empty" %}
-        <p class="empty-state">reelo.csv is empty.</p>
+        <p class="empty-state">Reelo figures have nothing to show yet.</p>
       {% elif not store %}
         <p class="empty-state">Choose a store to see its Reelo row.</p>
       {% elif not reelo.has_row %}

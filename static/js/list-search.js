@@ -160,13 +160,7 @@
       if (adopted) return adopted;
       if (!host.querySelector(".list-search-input")) {
         var bar = buildBar();
-        host.appendChild(bar);
-        if (window.matchMedia("(max-width: 767px)").matches && host.matches("form, nav, .filters, .cc-filters")) {
-          var spacer = document.createElement("div");
-          spacer.className = "list-search-spacer";
-          spacer.setAttribute("aria-hidden", "true");
-          bar.after(spacer);
-        }
+        host.insertBefore(bar, host.firstChild);
       }
       return host.querySelector(".list-search-input");
     }
