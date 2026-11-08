@@ -1,29 +1,30 @@
 /* Command Centre design system.
    Light is the default. Dark is used only when data-theme="dark"
-   (the toggle writes that choice to localStorage). */
+   (the toggle writes that choice to localStorage).
+   Accent is indigo. Page canvas tokens stay the light default. */
 
 :root {
   color-scheme: light;
   --bg: #f7f6f3;
   --surface: #ffffff;
-  --surface-2: #f3f1ec;
+  --surface-2: #eef0f6;
   --text: #141414;
   --text-muted: #3f3a33;
   --muted: #3f3a33;
-  --line: rgba(20, 20, 20, 0.14);
-  --accent: #7a4e0d;
+  --line: rgba(20, 23, 40, 0.12);
+  --accent: #3730a3;
   --accent-ink: #ffffff;
-  --header: rgba(247, 246, 243, 0.96);
+  --header: rgba(247, 246, 243, 0.94);
   --red: #9f1239;
   --amber: #8a5a10;
   --up: #166534;
   --down: #9f1239;
-  --shadow: 0 8px 22px rgba(40, 30, 10, 0.08);
-  --chart-band: rgba(122, 78, 13, 0.16);
-  --chart-mid: #7a4e0d;
-  --chart-gross: #0b5f8a;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 10px 24px rgba(15, 23, 42, 0.06);
+  --chart-band: rgba(55, 48, 163, 0.14);
+  --chart-mid: #4338ca;
+  --chart-gross: #0f6e8a;
   --danger: #9f1239;
-  --focus: #7a4e0d;
+  --focus: #3730a3;
   --s1: 4px;
   --s2: 8px;
   --s3: 16px;
@@ -38,26 +39,26 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #12110e;
-  --surface: #1c1b17;
-  --surface-2: #2a2822;
-  --text: #f7f4ee;
-  --text-muted: #d2cdc3;
-  --muted: #d2cdc3;
-  --line: rgba(247, 244, 238, 0.16);
-  --accent: #e4b15a;
-  --accent-ink: #1a140c;
-  --header: rgba(18, 17, 14, 0.94);
-  --red: #ff8b8b;
-  --amber: #e4b15a;
-  --up: #7ddea6;
-  --down: #ff8b8b;
-  --shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-  --chart-band: rgba(228, 177, 90, 0.22);
-  --chart-mid: #e4b15a;
-  --chart-gross: #8fd0ff;
-  --danger: #ff8b8b;
-  --focus: #e4b15a;
+  --bg: #0e1117;
+  --surface: #171b24;
+  --surface-2: #222836;
+  --text: #f5f7fb;
+  --text-muted: #c5cddb;
+  --muted: #c5cddb;
+  --line: rgba(245, 247, 251, 0.16);
+  --accent: #c7d2fe;
+  --accent-ink: #1e1b4b;
+  --header: rgba(14, 17, 23, 0.94);
+  --red: #ffb4b4;
+  --amber: #f6c56b;
+  --up: #8ee4b0;
+  --down: #ffb4b4;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  --chart-band: rgba(199, 210, 254, 0.22);
+  --chart-mid: #c7d2fe;
+  --chart-gross: #7dd3fc;
+  --danger: #ffb4b4;
+  --focus: #c7d2fe;
 }
 
 * { box-sizing: border-box; }
@@ -68,8 +69,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  line-height: 1.4;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  line-height: 1.45;
+  letter-spacing: -0.011em;
   overflow-x: hidden;
 }
 
@@ -239,7 +241,10 @@ body.nav-open { overflow: hidden; }
   padding: 0.3rem 0.05rem;
 }
 
-.cc-bottom a.is-current, .cc-bottom a:hover { color: var(--text); }
+.cc-bottom a:hover { color: var(--text); }
+.cc-bottom a.is-current { color: var(--accent); }
+.cc-drawer a.is-current,
+.cc-drawer a[aria-current="page"] { color: var(--accent); font-weight: 650; }
 
 .cc-bottom i { font-size: 1.15rem; }
 
@@ -281,12 +286,12 @@ body.nav-open { overflow: hidden; }
   gap: 0.2rem;
   min-height: 44px;
   padding: 0.7rem 0.75rem;
-  border-radius: 0.85rem;
+  border-radius: 12px;
   background: var(--surface);
   color: var(--text);
   text-decoration: none;
   border: 1px solid var(--line);
-  border-left: 4px solid var(--amber);
+  border-left: 3px solid var(--amber);
   box-shadow: var(--shadow);
 }
 
@@ -303,8 +308,8 @@ body.nav-open { overflow: hidden; }
 .kpi-card, .tile, .panel, .day-card, .league-row, .alert-row, .target-row {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 0.85rem;
-  padding: 0.75rem 0.8rem;
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem;
 }
 
 .kpi-card h3 {
@@ -493,10 +498,10 @@ a.target-row {
   display: block;
   padding: 0.75rem 0.8rem;
   margin: 0 0 0.45rem;
-  border-radius: 0.85rem;
+  border-radius: 12px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--amber);
+  border-left: 3px solid var(--amber);
   color: var(--text);
 }
 .flag-full.sev-red { border-left-color: var(--red); }
@@ -788,7 +793,7 @@ html .store-health .box-index {
 }
 .cc-range-custom { display: none; gap: var(--s2); }
 .cc-filters.is-custom .cc-range-custom { display: grid; }
-.cc-apply { width: 100%; }
+.cc-apply { width: 100%; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
 .stat-block { display: block; }
 .stat-name { display: block; font-weight: 400; margin-bottom: var(--s1); }
@@ -944,4 +949,60 @@ form.pc-form .list-search,
 }
 @keyframes lazy-pulse {
   50% { opacity: 0.45; }
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--text);
+}
+
+.btn-primary,
+.btn-warning {
+  --bs-btn-bg: var(--accent);
+  --bs-btn-border-color: var(--accent);
+  --bs-btn-color: var(--accent-ink);
+  --bs-btn-hover-bg: var(--accent);
+  --bs-btn-hover-border-color: var(--accent);
+  --bs-btn-hover-color: var(--accent-ink);
+  --bs-btn-active-bg: var(--accent);
+  --bs-btn-active-border-color: var(--accent);
+  --bs-btn-active-color: var(--accent-ink);
+}
+
+.text-warning { color: var(--amber) !important; }
+
+.badge.bg-warning,
+.bg-warning.text-dark {
+  background: color-mix(in srgb, var(--amber) 22%, var(--surface)) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--line);
+}
+
+html[data-theme="dark"] .btn-outline-light {
+  color: var(--text);
+  border-color: var(--line);
+  background: transparent;
+}
+
+html[data-theme="dark"] .btn-outline-light:hover {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
