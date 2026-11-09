@@ -545,6 +545,11 @@ def _reelo(feeds):
     }
 
 
+def _partially_operational(row):
+    """Tony's note, not a guessed status. Keep the day out of softness alerts."""
+    return "partially operational" in str((row or {}).get("notes") or "").casefold()
+
+
 def _day_badges(feeds, end):
     """Notes for the latest day, plus a close the file marks with no separate note."""
     if end is None:
@@ -554,6 +559,9 @@ def _day_badges(feeds, end):
     for (name, day), row in (feeds.get("posist") or {}).items():
         if day == end and name not in labels and is_closed_sales_row(row):
             found.append({"label": name, "badge": "Closed", "iso": end.isoformat()})
+            labels.add(name)
+        elif day == end and name not in labels and _partially_operational(row):
+            found.append({"label": name, "badge": "Partially operational", "iso": end.isoformat()})
             labels.add(name)
     for (name, day), row in (feeds.get("calendar") or {}).items():
         if day == end and name not in labels and (is_closed_sales_row(row) or store_closed_on(name, end)):
@@ -586,6 +594,7 @@ def _alerts(feeds, stores, end):
             or store_closed_on(store, compare)
             or is_closed_sales_row(latest)
             or is_closed_sales_row(prior)
+            or _partially_operational(latest)
         ):
             continue
         latest_bills = latest.get("bills") if latest else None
