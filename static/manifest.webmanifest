@@ -1,6 +1,6 @@
 {
   "name": "Dosa Coffee Command Centre",
-  "short_name": "Command",
+  "short_name": "Command Centre",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#f7f6f3",
