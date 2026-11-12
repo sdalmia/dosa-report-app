@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}What the chat is learning{% endblock %}
+{% block content %}
+<div class="cc-insights">
+  {% if sample %}
+    <p class="cc-sample">Sample figures for this review. Not live feedback.</p>
+  {% endif %}
+  <h1>What the chat is learning</h1>
+  <p class="cc-insights-lead">Questions people and bots asked, and the ones the files could not answer.</p>
+  <div class="cc-insight-counts">
+    <article>
+      <p class="kicker">Last 7 days</p>
+      <p>{{ week.counts.questions }} questions</p>
+      <p>{{ week.counts.up }} helpful · {{ week.counts.down }} not helpful · {{ week.counts.gaps }} unanswered</p>
+    </article>
+    <article>
+      <p class="kicker">Last 30 days</p>
+      <p>{{ month.counts.questions }} questions</p>
+      <p>{{ month.counts.up }} helpful · {{ month.counts.down }} not helpful · {{ month.counts.gaps }} unanswered</p>
+    </article>
+  </div>
+
+  <section>
+    <h2>Most asked</h2>
+    {% if month.most_asked %}
+      <ul>
+        {% for row in month.most_asked %}
+          <li>{{ row.question }} <span>{{ row.count }} asked · {{ row.up }} helpful</span></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="cc-insights-empty">No questions in the last 30 days.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Not helpful</h2>
+    {% if month.thumbs_down %}
+      <ul>
+        {% for row in month.thumbs_down %}
+          <li>
+            {{ row.question }}
+            {% if row.note %}<span>{{ row.note }}</span>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="cc-insights-empty">No thumbs-down notes in the last 30 days.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Couldn't answer</h2>
+    {% if month.gaps %}
+      <ul>
+        {% for row in month.gaps %}
+          <li>{{ row.question }} <span>{{ row.reason }}</span></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="cc-insights-empty">No gaps in the last 30 days.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

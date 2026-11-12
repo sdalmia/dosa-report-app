@@ -99,6 +99,10 @@ def _pace(data, question, owner):
         bits[0] = f"November pace is {_pct(pace).replace('-', '')} on {_lakh(actual)} net."
     if east is not None and north is not None:
         bits.append(f"East {_pct(east).replace('-', '')}. North {_pct(north).replace('-', '')}.")
+    if north is not None and float(north) < 90:
+        bits.append("Next: look at the North stores behind pace.")
+    elif float(pace) < 90:
+        bits.append("Next: look at the stores behind this month's pace.")
     series = []
     if east is not None:
         series.append({"label": "East", "value": float(east)})
@@ -281,6 +285,10 @@ def _store_view(question, data, owner):
         source_rows.append({"pct": food["pct"]})
     else:
         bits.append("Food cost has no row for this store.")
+    if sales and sales.get("pct") is not None and float(sales["pct"]) <= -10:
+        bits.append("Next: check this store before the next rush.")
+    elif review and review.get("rating") is not None and float(review["rating"]) < 4:
+        bits.append("Next: read the latest public reviews.")
     if data.get("role") in {"owner", "hr"} and store.get("hr"):
         lead = store["hr"].get("lead") or "no lead on file"
         bits.append(f"Staff lead {lead}.")
@@ -401,7 +409,8 @@ def _buying(data, question, owner):
         text = (
             f"{lead.get('city')} {lead.get('item')} was {_pct(lead['pct_above']).replace('-', '')} "
             f"above its own baseline (₹{float(lead['price']):.2f} vs ₹{float(lead['baseline_avg']):.2f}"
-            f" on {_as_of(lead.get('date'))})."
+            f" on {_as_of(lead.get('date'))}). "
+            "Next: check that buy before the next order."
         )
         table_rows = []
         for row in above[:8]:

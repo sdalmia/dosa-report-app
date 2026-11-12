@@ -89,6 +89,39 @@
       + body + "</tbody></table></div>" + more + "</figure>";
   }
 
+  function thumb(rating, label, turned) {
+    return '<button type="button" class="cc-thumb' + (turned ? " is-down" : "") + '" data-rating="' + rating + '" aria-label="' + label + '">'
+      + '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3L7 11v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></button>';
+  }
+
+  function rateControls(question, topic, asOf, askId) {
+    var box = document.createElement("div");
+    box.className = "cc-rate";
+    box.dataset.question = question || "";
+    box.dataset.topic = topic || "";
+    box.dataset.asof = asOf || "";
+    box.dataset.askId = askId || "";
+    box.innerHTML = thumb("up", "Helpful", false) + thumb("down", "Not helpful", true)
+      + '<form class="cc-note" hidden><input maxlength="160" placeholder="What was off?" aria-label="Note"><button type="submit">Send</button></form>';
+    return box;
+  }
+
+  function sendRating(box, rating, note) {
+    fetch("/dashboard/feedback", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ask_id: box.dataset.askId,
+        question: box.dataset.question,
+        topic: box.dataset.topic,
+        data_as_of: box.dataset.asof,
+        rating: rating,
+        note: note || ""
+      })
+    }).catch(function () {});
+  }
+
   function followups(items) {
     if (!items || !items.length) return "";
     return '<div class="cc-follow">' + items.map(function (item) {
@@ -97,6 +130,23 @@
   }
 
   log.addEventListener("click", function (event) {
+    var thumb = event.target.closest(".cc-thumb");
+    if (thumb) {
+      var box = thumb.closest(".cc-rate");
+      var rating = thumb.getAttribute("data-rating");
+      box.querySelectorAll(".cc-thumb").forEach(function (node) { node.classList.remove("is-on"); });
+      thumb.classList.add("is-on");
+      var form = box.querySelector(".cc-note");
+      if (rating === "down") {
+        form.hidden = false;
+        var field = form.querySelector("input");
+        if (field) field.focus();
+      } else {
+        form.hidden = true;
+        sendRating(box, "up", "");
+      }
+      return;
+    }
     var button = event.target.closest(".cc-show-all");
     if (!button) return;
     var wrap = button.closest(".cc-table-wrap");
@@ -114,6 +164,7 @@
     if (note) note.remove();
     addUser(text);
     var bot = addBot();
+    bot.dataset.question = text;
     var answer = bot.querySelector(".cc-answer");
     var body = bot.querySelector(".cc-turn-body");
     input.value = "";
@@ -150,6 +201,12 @@
               if (payload.table) extra += table(payload.table);
               extra += followups(payload.followups);
               if (extra) body.insertAdjacentHTML("beforeend", extra);
+              body.appendChild(rateControls(
+                bot.dataset.question || "",
+                payload.topic || "",
+                payload.as_of || "",
+                payload.ask_id || ""
+              ));
               settle(bot);
             }
           });
@@ -162,6 +219,16 @@
       answer.textContent = "That didn't go through. Try again.";
     });
   }
+
+  log.addEventListener("submit", function (event) {
+    var noteForm = event.target.closest(".cc-note");
+    if (!noteForm) return;
+    event.preventDefault();
+    var box = noteForm.closest(".cc-rate");
+    var field = noteForm.querySelector("input");
+    sendRating(box, "down", field ? field.value : "");
+    noteForm.hidden = true;
+  });
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();

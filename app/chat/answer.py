@@ -7,6 +7,8 @@ import urllib.error
 import urllib.request
 
 from app.chat.facts import answer_from_data
+from app.chat.house import house_notes
+from app.chat.memory import record_ask, record_gap
 from app.chat.snapshot import view_for
 from app.chat.visuals import verify_block, allowed_numbers
 
@@ -54,7 +56,11 @@ def _model_json(question, grounded):
             },
             {
                 "role": "user",
-                "content": "Question: " + question + "\nContext:\n" + grounded["text"],
+                "content": (
+                    "Question: " + question
+                    + "\nHouse notes:\n" + house_notes()
+                    + "\nContext:\n" + grounded["text"]
+                ),
             },
         ],
     }
@@ -107,6 +113,9 @@ def iter_answer(question, email):
         return
     data = view_for(email)
     grounded = answer_from_data(question, data, _owner(email))
+    role = data.get("role") or "ops"
+    ask_id = record_ask(question, grounded.get("topic") or "", grounded.get("as_of") or "", role, "person", "")
+    record_gap(question, grounded.get("topic") or "", grounded.get("text") or "", grounded.get("as_of") or "", role, "person", "")
     mock = _mock_on()
     if not configured() and not mock:
         yield _event({"text": NOT_CONNECTED, "done": True, "followups": []})
@@ -131,6 +140,8 @@ def iter_answer(question, email):
         "table": table,
         "chart": chart,
         "followups": grounded.get("followups") or [],
+        "topic": grounded.get("topic") or "",
+        "ask_id": ask_id,
         "mock": mock,
     })
 

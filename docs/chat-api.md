@@ -41,3 +41,23 @@ curl -s -X POST https://command.dosacoffee.com/api/ask \
 `action_plan` returns up to five actions. Each has `what`, `why`, `owner`, and `urgency`. The why line uses a figure already in the data.
 
 A missing or wrong key is `401`. Too many calls from one bot is `429`.
+
+## Feedback and review
+
+A bot can rate an answer. The note is kept only for a thumbs down. The key is not stored.
+
+```bash
+curl -s -X POST https://command.dosacoffee.com/api/chat/feedback \
+  -H "Authorization: Bearer the-secret" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How are we tracking against this month'\''s target?", "topic": "sales", "data_as_of": "11 Nov 2026", "rating": "down", "note": "Need the store, not only the city."}'
+```
+
+Owner and ops bots can pull the weekly review. Finance and HR keys are refused.
+
+```bash
+curl -s "https://command.dosacoffee.com/api/chat/insights?days=7" \
+  -H "Authorization: Bearer the-secret"
+```
+
+House rules for every model answer live in `data/chat/house_notes.md`. Edit that file to change them. No code change is required. The file is not a new environment variable. The learning tables are created on startup if they are missing, in the existing `DATABASE_URL`.
