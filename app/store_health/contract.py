@@ -710,6 +710,31 @@ def load_feeds(directory=None):
     }
 
 
+_FEED_COPY = {
+    "posist_daily.csv": ("Posist sales", "are", "have"),
+    "sales_pred_vs_actual.csv": ("The sales calendar", "is", "has"),
+    "mystery_audit.csv": ("Mystery audit", "is", "has"),
+    "keka_active.csv": ("Active staff numbers", "are", "have"),
+    "keka.csv": ("Staff leads", "are", "have"),
+    "famepilot.csv": ("Famepilot reviews", "are", "have"),
+    "reelo.csv": ("Reelo figures", "are", "have"),
+}
+
+
+def owner_feed_message(filename, state):
+    """Owner-facing line when a Store Health feed cannot be shown."""
+    label, be, have = _FEED_COPY.get(filename, ("This update", "is", "has"))
+    if state == "missing":
+        return f"{label} {be} not available."
+    if state == "empty":
+        return f"{label} {have} nothing to show yet."
+    if state == "unreadable":
+        return f"{label} could not be read."
+    if state == "undated":
+        return f"{label} {have} no dates yet."
+    return ""
+
+
 def describe_feed_file(path):
     """Say whether a feed file is missing, empty, or has a real last-updated time.
 
@@ -720,15 +745,15 @@ def describe_feed_file(path):
     path = Path(path)
     name = path.name
     if not path.exists():
-        return {"state": "missing", "detail": f"{name} is missing.", "saved_at": None, "newest_date": None}
+        return {"state": "missing", "detail": owner_feed_message(name, "missing"), "saved_at": None, "newest_date": None}
     try:
         saved_at = datetime.fromtimestamp(path.stat().st_mtime, IST)
     except OSError:
-        return {"state": "unreadable", "detail": f"{name} could not be read.", "saved_at": None, "newest_date": None}
+        return {"state": "unreadable", "detail": owner_feed_message(name, "unreadable"), "saved_at": None, "newest_date": None}
     warnings = []
     table = _read_dicts(path, warnings)
     if any("not UTF-8" in warning or "could not be read" in warning or "not valid CSV" in warning or "no header" in warning for warning in warnings):
-        return {"state": "unreadable", "detail": warnings[0], "saved_at": None, "newest_date": None}
+        return {"state": "unreadable", "detail": owner_feed_message(name, "unreadable"), "saved_at": None, "newest_date": None}
     dates = []
     data_rows = 0
     for raw in table or []:
@@ -737,9 +762,9 @@ def describe_feed_file(path):
         if day is not None:
             dates.append(day)
     if data_rows == 0:
-        return {"state": "empty", "detail": f"{name} is empty.", "saved_at": None, "newest_date": None}
+        return {"state": "empty", "detail": owner_feed_message(name, "empty"), "saved_at": None, "newest_date": None}
     if not dates:
-        return {"state": "undated", "detail": f"{name} has no dated rows.", "saved_at": None, "newest_date": None}
+        return {"state": "undated", "detail": owner_feed_message(name, "undated"), "saved_at": None, "newest_date": None}
     return {"state": "ready", "detail": "", "saved_at": saved_at, "newest_date": max(dates)}
 
 
@@ -751,17 +776,17 @@ def describe_saved_file(path):
     path = Path(path)
     name = path.name
     if not path.exists():
-        return {"state": "missing", "detail": f"{name} is missing.", "saved_at": None, "newest_date": None}
+        return {"state": "missing", "detail": owner_feed_message(name, "missing"), "saved_at": None, "newest_date": None}
     try:
         saved_at = datetime.fromtimestamp(path.stat().st_mtime, IST)
     except OSError:
-        return {"state": "unreadable", "detail": f"{name} could not be read.", "saved_at": None, "newest_date": None}
+        return {"state": "unreadable", "detail": owner_feed_message(name, "unreadable"), "saved_at": None, "newest_date": None}
     warnings = []
     table = _read_dicts(path, warnings)
     if any("not UTF-8" in warning or "could not be read" in warning or "not valid CSV" in warning or "no header" in warning for warning in warnings):
-        return {"state": "unreadable", "detail": warnings[0], "saved_at": None, "newest_date": None}
+        return {"state": "unreadable", "detail": owner_feed_message(name, "unreadable"), "saved_at": None, "newest_date": None}
     if not table:
-        return {"state": "empty", "detail": f"{name} is empty.", "saved_at": None, "newest_date": None}
+        return {"state": "empty", "detail": owner_feed_message(name, "empty"), "saved_at": None, "newest_date": None}
     return {"state": "saved", "detail": "", "saved_at": saved_at, "newest_date": None}
 
 

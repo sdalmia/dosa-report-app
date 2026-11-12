@@ -17,7 +17,7 @@
     }
     toggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", dark ? "#12110e" : "#f7f6f3");
+    if (meta) meta.setAttribute("content", dark ? "#0e1117" : "#f7f6f3");
   }
 
   if (toggle) {
