@@ -985,6 +985,20 @@ def _part_value(pattern, key):
     return None
 
 
+# Chattarpur and GK1 are closed in the master, so is_trading already drops them.
+# Faridabad stopped on 22 Oct 2026 but the master still says "closing", which
+# is_trading treats as in. The November model leaves all three out.
+_OUT_OF_LOCATION_MODEL = {
+    "chattarpur (02/0005)",
+    "gk1 cloud kitchen (02/0002)",
+    "sec 15 faridabad (02/0007)",
+}
+
+
+def _out_of_location_model(name):
+    return str(name or "").strip().casefold() in _OUT_OF_LOCATION_MODEL
+
+
 def snapshot_rows(month=None):
     from app.site_pattern import load_board
 
@@ -993,7 +1007,7 @@ def snapshot_rows(month=None):
     rows = []
     for master in load_rows():
         name = (master.get("posist_name") or "").strip()
-        if not name or not is_trading(name):
+        if not name or not is_trading(name) or _out_of_location_model(name):
             continue
         study = board.get(name) or {}
         lat = study.get("lat")
@@ -1102,6 +1116,8 @@ def outcome_rows(features):
     built = []
     for feature in features:
         name = feature["store"]
+        if _out_of_location_model(name):
+            continue
         days = []
         for row in by_store.get(name, []):
             if is_closed_sales_row(row):
