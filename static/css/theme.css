@@ -945,3 +945,70 @@ form.pc-form .list-search,
 @keyframes lazy-pulse {
   50% { opacity: 0.45; }
 }
+
+.cc-main:has(.cc-chat) .cc-footer { display: none; }
+.cc-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: calc(100dvh - 72px);
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+.cc-chat-log { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.cc-chat-hello, .cc-chat-note { margin: 0; color: var(--text-muted); }
+.cc-bubble {
+  max-width: min(40rem, 100%);
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  line-height: 1.4;
+}
+.cc-bubble.user { align-self: flex-end; background: #3730a3; color: #fff; }
+html[data-theme="dark"] .cc-bubble.user { background: #c7d2fe; color: #1e1b4b; }
+.cc-bubble.bot {
+  align-self: flex-start;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+.cc-asof { margin: 8px 0 0; color: var(--text-muted); font-size: 13px; }
+.cc-chat-chips, .cc-follow { display: flex; flex-wrap: wrap; gap: 8px; }
+.cc-chip, .cc-chat-form button, .cc-show-all {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 12px;
+}
+.cc-chat-form { display: flex; gap: 8px; }
+.cc-chat-form input {
+  flex: 1;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 12px;
+  font: inherit;
+}
+.cc-chat-form button { background: #3730a3; color: #fff; border-color: #3730a3; }
+html[data-theme="dark"] .cc-chat-form button { background: #c7d2fe; color: #1e1b4b; border-color: #c7d2fe; }
+.cc-table-scroll { overflow-x: auto; }
+.cc-mini { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cc-mini th, .cc-mini td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  white-space: nowrap;
+}
+.cc-mini th { color: var(--text-muted); font-weight: 650; }
+.cc-extra { display: none; }
+.cc-table-wrap.is-open .cc-extra { display: table-row; }
+.cc-chart { margin: 8px 0 0; color: var(--text); }
+.cc-chart svg { width: 100%; height: auto; }
+.cc-bar { fill: #3730a3; }
+html[data-theme="dark"] .cc-bar { fill: #c7d2fe; }
+.cc-chart-label, .cc-chart-value { fill: currentColor; font-size: 12px; }
+.cc-follow { margin-top: 8px; }

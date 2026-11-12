@@ -1,0 +1,32 @@
+{
+  "as_of_date": "2026-11-11",
+  "current_month": "2026-11",
+  "completed_actual_days": 11,
+  "mtd_actual_L": 161.27,
+  "mtd_pred_mid_L": 158.5,
+  "mom_net_pct": -11.0,
+  "mom_note": "MoM -11.0% on daily average: Nov 1\u201311 net \u20b9161.26L / 11 vs observed Oct 2\u201331 \u20b9494.04L / 30. Not full-calendar October: 1 Oct net missing.",
+  "actuals_through": "2026-11-11",
+  "mtd_actual_rupees": "16126295.61",
+  "mtd_source_note": "Exact network CSV rupees; daily calendar cells rounded to \u20b9L.",
+  "target_pace_pct": 85.8,
+  "target_pace_note": "Nov 1\u201311 target pace: net \u20b9161.26L / pro-rata \u20b9187.92L. November target \u20b9512.5L.",
+  "regional_mtd": {
+    "East": {
+      "net_rupees": "8653470.16",
+      "net_L": 86.53,
+      "target_L": 257.5,
+      "pro_rata_L": 94.42,
+      "pace_pct": 91.6
+    },
+    "North": {
+      "net_rupees": "7472825.46",
+      "net_L": 74.73,
+      "target_L": 255.0,
+      "pro_rata_L": 93.5,
+      "pace_pct": 79.9
+    }
+  },
+  "october_observed_2_to_31_net_L": 494.04,
+  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-11.csv (_DONE present) for 11 Nov; earlier days per prior provenance."
+}

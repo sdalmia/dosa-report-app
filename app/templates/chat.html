@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Command Centre{% endblock %}
+{% block content %}
+<div class="cc-chat" id="chat">
+  <div class="cc-chat-log" id="chat-log" aria-live="polite">
+    <p class="cc-chat-hello">Ask about sales, stores, buying, or reviews.</p>
+    {% if not connected %}
+      <p class="cc-chat-note" id="chat-note">Answers aren't connected yet.</p>
+    {% endif %}
+  </div>
+  {% if chips %}
+  <div class="cc-chat-chips" id="chat-chips">
+    {% for chip in chips %}
+      <button type="button" class="cc-chip">{{ chip }}</button>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form class="cc-chat-form" id="chat-form">
+    <label class="visually-hidden" for="chat-input">Question</label>
+    <input id="chat-input" name="question" maxlength="500" autocomplete="off" placeholder="Ask a question" enterkeyhint="send">
+    <button type="submit">Send</button>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

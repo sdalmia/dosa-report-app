@@ -416,9 +416,9 @@ class MenuCostingTests(unittest.TestCase):
     def test_shared_filters_choose_city_and_store_and_hide_other_dates(self):
         home = page(self.client, "/dashboard")
         drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
-        self.assertIn("Menu &amp; Costing", drawer)
-        self.assertIn("/menu-costing", drawer)
-        self.assertIn("Menu engineering", drawer)
+        self.assertNotIn("Menu &amp; Costing", drawer)
+        self.assertNotIn("/menu-costing", drawer)
+        self.assertNotIn("Menu engineering", drawer)
         delhi = page(self.client, "/menu-costing?cc_city=Delhi+NCR&cc_store=&cc_range=")
         self.assertIn("Above the Delhi NCR median", delhi)
         self.assertIn('data-item="Onion"', delhi)

@@ -71,7 +71,7 @@ class TargetBoardTests(unittest.TestCase):
         client = app.test_client()
         with client.session_transaction() as sess:
             sess["user"] = {"name": "Asha Rao", "email": "asha@dosacoffee.com"}
-        home = client.get("/dashboard")
+        home = client.get("/board")
         self.assertEqual(home.status_code, 200)
         html = home.get_data(as_text=True)
         self.assertIn('data-src="/dashboard/targets"', html)

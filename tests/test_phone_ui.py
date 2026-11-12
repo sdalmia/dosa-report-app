@@ -36,14 +36,13 @@ class PhoneUiTests(unittest.TestCase):
         self.assertIn(".cc-hello { display: none; }", css)
         self.assertIn("52px + env(safe-area-inset-bottom)", css)
         html = page(self.client, "/dashboard")
-        self.assertIn("cc-search-drawer", html)
-        self.assertIn("cc-search-header", html)
-        self.assertIn(">Today<", html)
-        self.assertIn(">Outside<", html)
-        self.assertIn("Fame Pilot", html)
-        self.assertIn('name="cc_store"', html)
-        self.assertIn("Delhi NCR", html)
-        self.assertIn("Last 7 days", html)
+        self.assertIn("Ask about sales", html)
+        self.assertIn("Upload prices", html)
+        self.assertIn("theme-toggle", html)
+        self.assertNotIn("Fame Pilot", html)
+        self.assertNotIn("Scorecard", html)
+        self.assertNotIn("Store Health", html)
+        self.assertNotIn('name="cc_store"', html)
 
     def test_owner_rupee_has_no_paise(self):
         self.assertEqual(format_owner_rupee(490578.11), "₹4.9L")
@@ -55,7 +54,7 @@ class PhoneUiTests(unittest.TestCase):
         self.assertFalse(is_mall_food_court("Dosa Coffee - Ideal Plaza (01/0001)"))
 
     def test_filter_is_remembered_for_the_session(self):
-        first = self.client.get("/dashboard?cc_city=Kolkata&cc_range=7")
+        first = self.client.get("/board?cc_city=Kolkata&cc_range=7")
         self.assertEqual(first.status_code, 200)
         page = first.get_data(as_text=True)
         self.assertIn("Kolkata", page)

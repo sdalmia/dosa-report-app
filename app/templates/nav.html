@@ -3,11 +3,6 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Dosa Coffee">
     <span>Command</span>
   </a>
-  <form class="cc-search cc-search-desktop" role="search">
-    <label class="visually-hidden" for="cc-search-header">Search</label>
-    <input id="cc-search-header" class="cc-search-input" type="search" placeholder="Search" autocomplete="off" enterkeyhint="search">
-    <div class="cc-search-results" hidden></div>
-  </form>
   <span class="cc-header-spacer"></span>
   {% if session.get('user') %}
     <span class="cc-hello">Hi, {{ session['user']['name'].split(' ')[0] }}</span>
@@ -15,73 +10,12 @@
   <button type="button" class="cc-icon-btn" id="theme-toggle" aria-label="Switch theme"><i class="bi bi-moon" aria-hidden="true"></i></button>
   <button type="button" class="cc-icon-btn" id="nav-menu" aria-expanded="false" aria-controls="nav-drawer" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 </header>
-<nav class="cc-drawer" id="nav-drawer" aria-label="More">
-  <form class="cc-search" role="search">
-    <label class="visually-hidden" for="cc-search-drawer">Search</label>
-    <input id="cc-search-drawer" class="cc-search-input" type="search" placeholder="Search pages, stores, menu" autocomplete="off" enterkeyhint="search">
-    <div class="cc-search-results" hidden></div>
-  </form>
-  <h2>Today</h2>
-  <a href="{{ url_for('main.dashboard') }}">Home</a>
-  <a href="/brief" {% if request.endpoint == 'owner.brief' %}class="is-current"{% endif %}>Brief</a>
-  <a href="/scorecard" {% if request.endpoint == 'owner.scorecard' %}class="is-current"{% endif %}>Scorecard</a>
-  <a href="{{ url_for('owner.labour') }}" {% if request.endpoint == 'owner.labour' %}class="is-current"{% endif %}>Labour</a>
-  <a href="{{ url_for('owner.goals') }}" {% if request.endpoint == 'owner.goals' %}class="is-current"{% endif %}>Goals</a>
-  {% if is_owner() %}
-  <a href="{{ url_for('grand_economics.page') }}" {% if request.endpoint == 'grand_economics.page' %}class="is-current"{% endif %}>Grand economics</a>
-  <a href="{{ url_for('main.dashboard_training') }}" {% if request.endpoint == 'main.dashboard_training' %}class="is-current"{% endif %}>Training</a>
-  {% endif %}
-  <h2>Stores</h2>
-  <a href="{{ url_for('store_health.page') }}" {% if request.endpoint == 'store_health.page' %}class="is-current"{% endif %}>Store Health</a>
-  {% if is_owner() %}
-  <a href="{{ url_for('owner.store_master') }}" {% if request.endpoint == 'owner.store_master' %}class="is-current"{% endif %}>Store Master</a>
-  <a href="{{ url_for('owner.data_gaps') }}" {% if request.endpoint == 'owner.data_gaps' %}class="is-current"{% endif %}>Data gaps</a>
-  {% endif %}
-  <a href="{{ url_for('main.flags_page') }}">Red flags</a>
-  <h2>Menu</h2>
-  <a href="{{ url_for('menu_ops.menu') }}" {% if request.endpoint == 'menu_ops.menu' %}aria-current="page"{% endif %}>Menu engineering</a>
-  <a href="{{ url_for('menu_costing.menu_page') }}" {% if request.endpoint and request.endpoint.startswith('menu_costing.') %}class="is-current"{% endif %}>Menu &amp; Costing</a>
-  <a href="{{ url_for('menu_ops.channels') }}" {% if request.endpoint == 'menu_ops.channels' %}aria-current="page"{% endif %}>Channels</a>
-  <a href="{{ url_for('menu_ops.tickets') }}" {% if request.endpoint == 'menu_ops.tickets' %}aria-current="page"{% endif %}>Tickets</a>
-  <h2>Buying</h2>
-  <a href="{{ url_for('main.procurement_page') }}">Procurement</a>
-  <a href="{{ url_for('procurement.food_cost') }}">Food cost</a>
-  <a href="{{ url_for('ingredient_tracker.dashboard') }}">Ingredient Price Tracker</a>
-  <h2>Tools</h2>
-  <a href="{{ url_for('uploader.upload_index') }}">Zomato Settlement Uploader</a>
-  <a href="{{ url_for('location_finder.location_finder') }}">Location Finder</a>
-  {% if is_owner() %}
-  <a href="{{ url_for('owner.location_model') }}" {% if request.endpoint == 'owner.location_model' %}class="is-current"{% endif %}>Location model</a>
-  {% endif %}
-  <h2>Outside</h2>
-  <a href="https://trello.com/" target="_blank" rel="noopener">Trello</a>
-  <a href="https://www.buzzready.app/" target="_blank" rel="noopener">Buzzready</a>
-  <a href="https://www.keka.com/" target="_blank" rel="noopener">Keka</a>
-  <a href="https://insights.posist.co/login" target="_blank" rel="noopener">Insights</a>
-  <a href="https://dosacoffee.posist.biz/login" target="_blank" rel="noopener">Posist</a>
-  <a href="https://famepilot.com/" target="_blank" rel="noopener">Fame Pilot</a>
-  <a href="https://app.reelo.io/" target="_blank" rel="noopener">Reelo</a>
+<nav class="cc-drawer" id="nav-drawer" aria-label="Account">
   <h2>Account</h2>
+  <a href="{{ url_for('ingredient_tracker.upload') }}">Upload prices</a>
   {% if session.get('user') %}
     <a href="{{ url_for('auth.logout') }}">Logout</a>
   {% else %}
     <a href="{{ url_for('google.login') }}">Login</a>
   {% endif %}
-</nav>
-<nav class="cc-bottom" aria-label="Primary">
-  <a href="{{ url_for('main.dashboard') }}" {% if request.endpoint == 'main.dashboard' %}class="is-current"{% endif %}>
-    <i class="bi bi-house"></i><span>Home</span>
-  </a>
-  <a href="/brief" {% if request.endpoint == 'owner.brief' %}class="is-current"{% endif %}>
-    <i class="bi bi-sunrise"></i><span>Brief</span>
-  </a>
-  <a href="/scorecard" {% if request.endpoint == 'owner.scorecard' %}class="is-current"{% endif %}>
-    <i class="bi bi-clipboard-data"></i><span>Scorecard</span>
-  </a>
-  <a href="{{ url_for('main.procurement_page') }}" {% if request.endpoint == 'main.procurement_page' %}class="is-current"{% endif %}>
-    <i class="bi bi-box-seam"></i><span>Procurement</span>
-  </a>
-  <a href="{{ url_for('store_health.page') }}" {% if request.endpoint == 'store_health.page' %}class="is-current"{% endif %}>
-    <i class="bi bi-shop"></i><span>Store Health</span>
-  </a>
 </nav>
