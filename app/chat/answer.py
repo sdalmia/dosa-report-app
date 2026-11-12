@@ -6,8 +6,8 @@ import os
 import urllib.error
 import urllib.request
 
+from app.chat.context import build_context
 from app.chat.facts import answer_from_data
-from app.chat.house import house_notes
 from app.chat.memory import record_ask, record_gap
 from app.chat.snapshot import view_for
 from app.chat.visuals import verify_block, allowed_numbers
@@ -15,8 +15,20 @@ from app.chat.visuals import verify_block, allowed_numbers
 log = logging.getLogger(__name__)
 
 NOT_CONNECTED = "Answers aren't connected yet."
+AI_UNAVAILABLE = "AI unavailable."
 _DEFAULT_URL = "https://api.openai.com/v1/chat/completions"
-_DEFAULT_MODEL = "gpt-4o-mini"
+_DEFAULT_MODEL = "gpt-4.1"
+_SYSTEM = (
+    "You are Dosa Coffee's sharp analyst for the Command Centre. "
+    "Use only the data packet and the house notes. Never invent a number, a store, or a date. "
+    "If the packet does not cover the question, say that in one plain sentence and then answer the closest question the packet does cover. "
+    "Lead with the direct answer. Then give a short breakdown with the key numbers, rupees in Indian grouping, and the dates covered. "
+    "When you compare stores or days, include a markdown table. "
+    "When a trend helps, add one fenced block exactly like ```chart {\"type\":\"bar\",\"title\":\"\",\"unit\":\"\",\"series\":[{\"label\":\"\",\"value\":0}]} ``` "
+    "and use only values that appear in the packet. "
+    "End with 1 to 3 concrete next actions, each tied to a figure in the packet. "
+    "Follow the house notes on closed stores, mall bulk bills, Navratri, and city costs."
+)
 
 
 def configured():
@@ -32,37 +44,54 @@ def _mock_on():
     return os.environ.get("CHAT_MOCK", "").strip() == "1"
 
 
-def _model_json(question, grounded):
-    """One HTTPS call. The key and the prompt are not logged."""
+def model_name():
+    return os.environ.get("CHAT_MODEL", _DEFAULT_MODEL).strip() or _DEFAULT_MODEL
+
+
+def messages_for(question, context):
+    return [
+        {"role": "system", "content": _SYSTEM},
+        {"role": "user", "content": "Question: " + (question or "").strip() + "\n\n" + context},
+    ]
+
+
+def _log_ask(model, fallback):
+    """One line. The key and the prompt are never written."""
+    log.info("chat ask model_used=%s fallback=%s", model or "none", fallback or "none")
+
+
+def _pull_chart(text, context):
+    """Lift one chart spec out of the reply. Drop it if a number is not in the packet."""
+    if not text or "```chart" not in text:
+        return text, None
+    start = text.find("```chart")
+    after = text.find("\n", start)
+    end = text.find("```", after if after > start else start + 8)
+    if after < 0 or end < 0:
+        return text, None
+    raw = text[after + 1:end].strip()
+    kept = text[:start].rstrip() + text[end + 3:]
+    try:
+        spec = json.loads(raw)
+    except json.JSONDecodeError:
+        return kept.strip(), None
+    allowed = allowed_numbers(context)
+    chart = verify_block(spec, allowed)
+    return kept.strip(), chart
+
+
+def complete_chat(messages, model=None):
+    """Call the hosted model. Returns (text, error). Error is None on success."""
     key = os.environ.get("CHAT_API_KEY", "").strip()
     if not key:
-        return None
+        return None, "no_key"
     url = os.environ.get("CHAT_API_URL", _DEFAULT_URL).strip() or _DEFAULT_URL
-    model = os.environ.get("CHAT_MODEL", _DEFAULT_MODEL).strip() or _DEFAULT_MODEL
+    chosen = model or model_name()
     body = {
-        "model": model,
+        "model": chosen,
         "temperature": 0,
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "Reply with JSON only: {\"text\": \"...\", \"table\": null, \"chart\": null}. "
-                    "text is one or two short sentences and starts with the number. "
-                    "Use only numbers from the context. If a figure is missing, say that in one line. "
-                    "table is {\"title\",\"columns\",\"rows\"} or null. "
-                    "chart is {\"type\":\"bar\",\"title\",\"unit\",\"series\":[{\"label\",\"value\"}]} or null. "
-                    "Add a table or chart only when it compares several figures. Do not invent."
-                ),
-            },
-            {
-                "role": "user",
-                "content": (
-                    "Question: " + question
-                    + "\nHouse notes:\n" + house_notes()
-                    + "\nContext:\n" + grounded["text"]
-                ),
-            },
-        ],
+        "max_tokens": 2000,
+        "messages": messages,
     }
     request = urllib.request.Request(
         url,
@@ -71,78 +100,107 @@ def _model_json(question, grounded):
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=20) as response:
+        with urllib.request.urlopen(request, timeout=45) as response:
             raw = response.read().decode("utf-8")
-        log.info("chat complete status=200")
     except urllib.error.HTTPError as exc:
-        log.info("chat complete status=%s", exc.code)
-        return None
+        return None, "http_" + str(exc.code)
     except Exception:
-        log.info("chat complete status=error")
-        return None
+        return None, "request_error"
     try:
         payload = json.loads(raw)
         content = payload["choices"][0]["message"]["content"]
-        start = content.find("{")
-        end = content.rfind("}")
-        if start < 0 or end <= start:
-            return None
-        return json.loads(content[start:end + 1])
     except (KeyError, TypeError, ValueError, json.JSONDecodeError):
-        return None
+        return None, "bad_response"
+    text = str(content or "").strip()
+    if not text:
+        return None, "empty_response"
+    return text, None
 
 
-def _checked(model, grounded):
-    allowed = allowed_numbers(grounded.get("source") or {"text": grounded["text"]})
-    text = str((model or {}).get("text") or "").strip() or grounded["text"]
-    table = verify_block((model or {}).get("table"), allowed) or grounded.get("table")
-    chart = verify_block((model or {}).get("chart"), allowed) or grounded.get("chart")
-    # A model sentence that introduces a new number is discarded.
-    extra = allowed_numbers({"text": text})
-    if any(not any(abs(number - item) <= 0.51 for item in allowed) for number in extra):
-        text = grounded["text"]
-    return text, table, chart
+def produce_answer(question, data, owner, client=None, when_offline="notice"):
+    """Ask the model with the data packet. Fall back only when that call fails."""
+    context = build_context(question, data)
+    local = answer_from_data(question, data, owner)
+    messages = messages_for(question, context)
+    result = {
+        "text": local.get("text") or "",
+        "as_of": local.get("as_of") or "",
+        "table": local.get("table"),
+        "chart": local.get("chart"),
+        "followups": local.get("followups") or [],
+        "topic": local.get("topic") or "",
+        "actions": local.get("actions") or [],
+        "context": context,
+        "messages": messages,
+        "model": None,
+        "fallback": None,
+    }
+    if _mock_on():
+        result["text"] = "Mock answer. " + result["text"]
+        result["fallback"] = "mock"
+        _log_ask(None, "mock")
+        return result
+    if not os.environ.get("CHAT_API_KEY", "").strip() and client is None:
+        result["fallback"] = "no_key"
+        _log_ask(None, "no_key")
+        if when_offline == "notice":
+            result["text"] = NOT_CONNECTED
+            result["table"] = None
+            result["chart"] = None
+        return result
+    chosen = model_name()
+    if client is not None:
+        text, error = client(messages, chosen)
+    else:
+        text, error = complete_chat(messages, chosen)
+    if error or not text:
+        result["text"] = AI_UNAVAILABLE + " " + (local.get("text") or "")
+        result["fallback"] = error or "empty_response"
+        _log_ask(None, result["fallback"])
+        return result
+    prose, chart = _pull_chart(text, context)
+    result["text"] = prose
+    result["chart"] = chart
+    result["table"] = None
+    result["model"] = chosen
+    result["fallback"] = None
+    _log_ask(chosen, None)
+    return result
 
 
-def iter_answer(question, email):
-    """SSE events. Text first, then the checked table or chart and follow-ups."""
+def iter_answer(question, email, client=None):
+    """SSE events. The model writes the answer when a key is set."""
     from app.chat.limit import allow
 
     if not allow(email or "anonymous"):
+        _log_ask(None, "rate_limit")
         yield _event({"text": "Too many questions just now. Wait a few minutes and try again.", "done": True})
         return
     data = view_for(email)
-    grounded = answer_from_data(question, data, _owner(email))
+    owner = _owner(email)
+    produced = produce_answer(question, data, owner, client=client)
     role = data.get("role") or "ops"
-    ask_id = record_ask(question, grounded.get("topic") or "", grounded.get("as_of") or "", role, "person", "")
-    record_gap(question, grounded.get("topic") or "", grounded.get("text") or "", grounded.get("as_of") or "", role, "person", "")
-    mock = _mock_on()
-    if not configured() and not mock:
-        yield _event({"text": NOT_CONNECTED, "done": True, "followups": []})
-        return
-    text, table, chart = grounded["text"], grounded.get("table"), grounded.get("chart")
-    if configured() and not mock:
-        model = _model_json(question, grounded)
-        text, table, chart = _checked(model, grounded)
-    if mock:
-        text = "Mock answer. " + text
+    ask_id = record_ask(question, produced.get("topic") or "", produced.get("as_of") or "", role, "person", "")
+    record_gap(question, produced.get("topic") or "", produced.get("text") or "", produced.get("as_of") or "", role, "person", "")
+    text = produced.get("text") or ""
     chunk = ""
     for word in text.split(" "):
         chunk = (chunk + " " + word).strip()
-        if len(chunk) >= 48:
+        if len(chunk) >= 80:
             yield _event({"text": chunk + " "})
             chunk = ""
     if chunk:
         yield _event({"text": chunk})
     yield _event({
         "done": True,
-        "as_of": grounded.get("as_of") or "",
-        "table": table,
-        "chart": chart,
-        "followups": grounded.get("followups") or [],
-        "topic": grounded.get("topic") or "",
+        "as_of": produced.get("as_of") or "",
+        "table": produced.get("table"),
+        "chart": produced.get("chart"),
+        "followups": produced.get("followups") or [],
+        "topic": produced.get("topic") or "",
         "ask_id": ask_id,
-        "mock": mock,
+        "mock": _mock_on(),
+        "fallback": produced.get("fallback"),
     })
 
 

@@ -21,7 +21,7 @@ python -c "import hashlib; print(hashlib.sha256(b'the-secret').hexdigest())"
 {"tony": {"hash": "<sha256 hex>", "role": "ops"}, "accountant": {"hash": "<sha256 hex>", "role": "finance"}}
 ```
 
-The web chat still uses `CHAT_API_KEY`, `CHAT_MODEL` (default `gpt-4o-mini`), and optional `CHAT_API_URL`.
+The web chat still uses `CHAT_API_KEY`, `CHAT_MODEL` (default `gpt-4.1`), and optional `CHAT_API_URL`.
 
 ## Call
 
