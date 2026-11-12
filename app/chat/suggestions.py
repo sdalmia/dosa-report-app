@@ -18,13 +18,18 @@ REELO = (
     "Which stores are capturing the fewest customer phone numbers?",
     "Which stores have the lowest repeat-customer share this month?",
 )
+AUDIT = (
+    "Which stores scored lowest in the October mystery audit?",
+)
 
 
-def chips(owner, sales=False, finance=False, procurement=False, ingredients=False, reelo=False, limit=4):
+def chips(owner, sales=False, finance=False, procurement=False, ingredients=False, reelo=False, audit=False, limit=4):
     """A handful of questions this person can ask with the data that is loaded."""
     from app.chat.memory import learned_questions
 
     pool = []
+    if audit:
+        pool.append(AUDIT[0])
     for item in learned_questions("owner" if owner else "ops"):
         pool.append(item)
     if sales:

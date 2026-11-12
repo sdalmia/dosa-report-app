@@ -121,12 +121,16 @@ def dashboard():
         finance=bool(data.get("finance")),
         procurement=bool(pack.get("above_average") or pack.get("monthly_prices")),
         reelo=bool(data.get("reelo_loaded")),
+        audit=bool(data.get("october_audit")),
     )
     summary = data.get("summary") or {}
     north = ((summary.get("regional_mtd") or {}).get("North") or {}).get("pace_pct")
     if north is not None:
         shown = [f"Why is North pace at {north}%?"] + [item for item in shown if "North pace" not in item]
-        shown = shown[:4]
+    audit_q = "Which stores scored lowest in the October mystery audit?"
+    if data.get("october_audit") and audit_q not in shown[:2]:
+        shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
+    shown = shown[:4]
     return render_template("chat.html", chips=shown, connected=configured())
 
 

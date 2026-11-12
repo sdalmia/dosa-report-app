@@ -552,6 +552,117 @@ def _tracker_line(folded):
     }
 
 
+def _audit_low(data, question, owner):
+    rows = [row for row in (data.get("october_audit") or []) if isinstance(row, dict) and row.get("score") is not None]
+    if not rows:
+        return _pack("October mystery audit isn't loaded yet.", "", "sales", question, owner)
+    rows = sorted(rows, key=lambda row: float(row["score"]))
+    lead = rows[0]
+    period = lead.get("period") or "October"
+    text = (
+        f"{lead['store']} scored lowest in the {period} mystery audit, {_pct(lead['score'])}. "
+        "Next: walk that store before the next audit visit."
+    )
+    shown = rows[:5]
+    table = table_block(
+        ["Store", "Score"],
+        [[row["store"], _pct(row["score"])] for row in shown],
+        f"Lowest scores, {period}",
+    )
+    return _pack(text, period, "sales", question, owner, table=table, source={"rows": shown})
+
+
+def _attention(data, question, owner):
+    audit = _audit_low(data, question, owner)
+    if audit and "isn't loaded" not in audit["text"]:
+        return audit
+    return _pace(data, question, owner) or _pack("Nothing that needs attention is loaded.", "", "sales", question, owner)
+
+
+def _readable_ticket_store(name):
+    text = " ".join(str(name or "").replace("_", " ").replace("/", " ").replace("-", " ").split())
+    marker = "dosa coffee"
+    folded = text.casefold()
+    if marker in folded:
+        text = text[folded.find(marker) + len(marker):]
+    return " ".join(text.replace("-", " ").split()) or str(name or "")
+
+
+def _ticket_match(question, tickets):
+    folded = " ".join((question or "").casefold().split())
+    best = None
+    for row in tickets.get("stores") or []:
+        raw = str(row.get("store") or "")
+        token = " ".join(raw.casefold().replace("_", " ").replace("/", " ").replace("-", " ").split())
+        token = " ".join(token.replace("dosa coffee", " ").split())
+        parts = token.split()
+        while parts and parts[0].isdigit():
+            parts = parts[1:]
+        token = " ".join(parts)
+        if len(token) < 4 or token not in folded:
+            continue
+        if best is None or len(token) > best[0]:
+            best = (len(token), row)
+    return best[1] if best else None
+
+
+def _channel_rows(pack):
+    channels = pack.get("channels") if isinstance(pack.get("channels"), dict) else {}
+    order = ["zomato", "swiggy", "google", "other"]
+    names = list(order) + [name for name in channels if name not in order]
+    rows = []
+    for name in names:
+        bucket = channels.get(name)
+        if not bucket or not bucket.get("tickets"):
+            continue
+        share = round(bucket["stale"] / bucket["tickets"] * 100, 1) if bucket["tickets"] else None
+        rows.append({
+            "channel": name.title(),
+            "tickets": bucket["tickets"],
+            "stale": bucket["stale"],
+            "share": share,
+        })
+    return rows
+
+
+def _tickets(data, question, owner):
+    tickets = data.get("tickets") if isinstance(data.get("tickets"), dict) else {}
+    if not tickets or not tickets.get("all"):
+        return _pack("Famepilot tickets aren't loaded yet.", "", "sales", question, owner)
+    chosen = _ticket_match(question, tickets) or tickets["all"]
+    label = _readable_ticket_store(chosen.get("store")) if chosen.get("store") else "All stores"
+    share = chosen.get("stale_share")
+    channels = _channel_rows(chosen)
+    zomato = next((row["tickets"] for row in channels if row["channel"] == "Zomato"), 0)
+    swiggy = next((row["tickets"] for row in channels if row["channel"] == "Swiggy"), 0)
+    text = (
+        f"{label}: {chosen.get('count')} tickets, stale share {_pct(share) if share is not None else 'not loaded'}. "
+        f"Zomato {zomato}, Swiggy {swiggy}."
+    )
+    if tickets.get("older_than_7"):
+        text += f" The newest ticket is {_as_of(tickets.get('as_of'))}, more than 7 days ago."
+    text += " Next: clear the stale tickets before the next rush."
+    table = table_block(
+        ["Channel", "Tickets", "Stale", "Stale share"],
+        [[
+            row["channel"],
+            str(row["tickets"]),
+            str(row["stale"]),
+            _pct(row["share"]) if row["share"] is not None else "",
+        ] for row in channels],
+        "Zomato and Swiggy",
+    )
+    return _pack(
+        text,
+        _as_of(tickets.get("as_of")),
+        "sales",
+        question,
+        owner,
+        table=table,
+        source={"rows": channels, "count": chosen.get("count"), "stale_share": share},
+    )
+
+
 def answer_from_data(question, data, owner):
     """One short answer. A table or chart is added only when it shows the comparison."""
     text = (question or "").strip()
@@ -567,7 +678,17 @@ def answer_from_data(question, data, owner):
         packed["actions"] = actions
         packed["followups"] = [item["what"] for item in actions[1:4]]
         return packed
+    if any(word in folded for word in ("ticket", "famepilot", "zomato", "swiggy")):
+        return _tickets(data, text, owner)
     store_answer = _store_view(text, data, owner)
+    if any(word in folded for word in ("mystery", "audit")) and (
+        "lowest" in folded or "october" in folded or store_answer is None
+    ):
+        return _audit_low(data, text, owner)
+    if "attention" in folded and store_answer is None:
+        answered = _attention(data, text, owner)
+        if answered is not None:
+            return answered
     if store_answer is not None:
         return store_answer
     see_finance = (data.get("role") in {"owner", "finance"}) or (data.get("role") is None and owner)

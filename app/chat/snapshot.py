@@ -39,6 +39,8 @@ def _stamp():
         _ROOT / "data" / "store_health" / "sales_pred_vs_actual.csv",
         _ROOT / "data" / "store_health" / "famepilot.csv",
         _ROOT / "data" / "store_health" / "mystery_audit.csv",
+        _ROOT / "data" / "famepilot" / "tickets.csv",
+        _ROOT / "data" / "famepilot" / "tickets_source_detail.csv",
         _ROOT / "data" / "store_health" / "keka.csv",
         _ROOT / "data" / "reelo" / "reelo_storewise_latest.csv",
         _ROOT / "data" / "finance" / "grand_economics" / "summary.json",
@@ -193,6 +195,92 @@ def _famepilot(feeds):
         })
     rows.sort(key=lambda row: row["rating"])
     return rows[:8]
+
+
+def _october_audit(feeds):
+    """Scored October mystery-audit rows, lowest first. Names come from the store list."""
+    from app.store_health.contract import is_brand_audit
+    from app.store_health.stores import match_audit_store, period_sort_key
+
+    labels = sorted({store for store, _day in (feeds.get("posist") or {})})
+    october = [
+        row for row in (feeds.get("audit") or [])
+        if not is_brand_audit(row) and "october" in str(row.get("period") or "").casefold()
+    ]
+    if not october:
+        return []
+    latest_key = max(period_sort_key(row.get("period")) for row in october)
+    rows = []
+    for raw in october:
+        if period_sort_key(raw.get("period")) != latest_key:
+            continue
+        score = _num(str(raw.get("avg_score") or "").replace("%", ""))
+        if score is None:
+            continue
+        label = match_audit_store(raw.get("store"), labels) or (raw.get("store") or "")
+        rows.append({
+            "store": str(label).split("(")[0].strip() or raw.get("store"),
+            "period": (raw.get("period") or "").strip(),
+            "score": score,
+        })
+    rows.sort(key=lambda row: (row["score"], row["store"].casefold()))
+    return rows
+
+
+def _tickets():
+    """Famepilot ticket totals. Stale is the keyword, not the age of the alert."""
+    from datetime import datetime
+
+    from app.menu_ops.loader import famepilot_directory
+    from app.menu_ops.tickets import IST, load_cases
+    from app.store_health.present import business_today
+
+    try:
+        loaded = load_cases(famepilot_directory(), datetime.now(IST))
+    except Exception:
+        return {}
+    cases = loaded.get("cases") or []
+    if not cases:
+        return {}
+
+    def pack(group):
+        count = len(group)
+        stale = sum(1 for case in group if str(case.get("keyword") or "").casefold() == "stale")
+        channels = {}
+        for case in group:
+            name = str(case.get("platform") or "").strip().casefold() or "other"
+            bucket = channels.setdefault(name, {"tickets": 0, "stale": 0})
+            bucket["tickets"] += 1
+            if str(case.get("keyword") or "").casefold() == "stale":
+                bucket["stale"] += 1
+        return {
+            "count": count,
+            "stale": stale,
+            "stale_share": round(stale / count * 100, 1) if count else None,
+            "channels": channels,
+        }
+
+    dated = [case.get("date_time") or case.get("post_time") for case in cases]
+    dated = [stamp for stamp in dated if stamp is not None]
+    newest = max(dated) if dated else None
+    newest_day = newest.date() if newest is not None else None
+    age_days = (business_today() - newest_day).days if newest_day is not None else None
+    by_store = {}
+    for case in cases:
+        by_store.setdefault(case.get("store") or "", []).append(case)
+    stores = []
+    for name, group in by_store.items():
+        if not name:
+            continue
+        stores.append({"store": name, **pack(group)})
+    stores.sort(key=lambda row: row["store"].casefold())
+    return {
+        "as_of": newest_day.isoformat() if newest_day else "",
+        "age_days": age_days,
+        "older_than_7": age_days is not None and age_days > 7,
+        "all": pack(cases),
+        "stores": stores,
+    }
 
 
 def _audit(feeds):
@@ -370,6 +458,7 @@ def _build():
     forecast = _forecast_gaps(feeds, summary)
     reviews = _famepilot(feeds)
     audit = _audit(feeds)
+    october_audit = _october_audit(feeds)
     joined = _dossiers(feeds, movers, forecast, reviews, audit, reelo)
     return {
         "summary": summary,
@@ -377,6 +466,9 @@ def _build():
         "forecast": forecast,
         "reviews": reviews,
         "audit": audit,
+        "october_audit": october_audit,
+        "attention": {"october_audit": october_audit[:3]},
+        "tickets": _tickets(),
         "finance": _finance(),
         "reelo": reelo,
         "reelo_period": REELO_PERIOD,
