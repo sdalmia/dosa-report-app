@@ -133,13 +133,12 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertNotIn("parse.py", html)
         body = html.split('<div class="owner-tools">', 1)[1].split("<script>", 1)[0]
         self.assertNotRegex(body, r"\b(blank|null|anchor|fragment)\b")
-        bottom = html.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
         drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
-        self.assertIn("Grand economics", drawer)
-        self.assertNotIn("Grand economics", bottom)
+        self.assertNotIn("Grand economics", drawer)
+        self.assertNotIn('class="cc-bottom"', html)
         self.assertLess(len(gzip.compress(response.data)), 100_000)
         found = self.client.get("/search.json").get_json()
-        self.assertIn("/grand-economics", [row["href"] for row in found["results"]])
+        self.assertNotIn("/grand-economics", [row["href"] for row in found["results"]])
 
         encoded = self.client.get("/grand-economics", headers={"Accept-Encoding": "gzip"})
         if encoded.headers.get("Content-Encoding") == "gzip":
@@ -214,9 +213,8 @@ class TrainingTests(unittest.TestCase):
         self.assertNotIn('data-src="/dashboard/training"', home)
         self.assertNotIn('id="training"', home)
         drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
-        bottom = home.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
-        self.assertIn("/dashboard/training", drawer)
-        self.assertNotIn("/dashboard/training", bottom)
+        self.assertNotIn("/dashboard/training", drawer)
+        self.assertNotIn("Training", drawer)
         cities = self.client.get("/dashboard/training")
         self.assertEqual(cities.status_code, 200)
         body = cities.get_data(as_text=True)

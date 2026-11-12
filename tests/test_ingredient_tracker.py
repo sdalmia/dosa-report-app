@@ -143,6 +143,26 @@ class UploadHistoryTests(unittest.TestCase):
             ).count()
             self.assertEqual(july_rows, 1)
 
+    def test_upload_page_stays_open_when_buying_tabs_are_hidden(self):
+        self._login()
+        home = self.client.get("/dashboard")
+        self.assertEqual(home.status_code, 200)
+        html = home.get_data(as_text=True)
+        self.assertNotIn(">Procurement<", html)
+        self.assertNotIn(">Food cost<", html)
+        self.assertIn("/ingredient-tracker/upload", html)
+        upload = self.client.get("/ingredient-tracker/upload")
+        self.assertEqual(upload.status_code, 200)
+        rows = [[141, "Tomato", 12, "Kg", 55, 660, 0, 0, 0, 0, 0, 660]]
+        rows = rows + rows
+        self._upload(rows, "2025-07-01", filename="july-dupes.xlsx")
+        with self.app.app_context():
+            count = IngredientPrice.query.filter_by(
+                ingredient_name="Tomato",
+                date=date(2025, 7, 1),
+            ).count()
+            self.assertEqual(count, 1)
+
     def test_failed_upload_does_not_wipe_existing_points(self):
         self._upload(
             [[141, 'Tomato', 12, 'Kg', 55]],

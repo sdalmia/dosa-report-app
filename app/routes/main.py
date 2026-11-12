@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, request, session
+from flask import Blueprint, Response, jsonify, render_template, request, session, stream_with_context
 
 from app.fragments import html_fragment, query_offset, slice_rows
 from app.page_cache import freeze, remember
@@ -87,9 +87,7 @@ def _dashboard_view():
     return view, region, low_only
 
 
-@main_bp.route('/dashboard')
-@login_required
-def dashboard():
+def _board_response():
     user_info = session.get('user') or {}
     view, _region, _low_only = _dashboard_view()
     filters, filter_stores = _filter_context()
@@ -104,6 +102,204 @@ def dashboard():
         filter_stores=filter_stores,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
+
+
+@main_bp.route('/dashboard')
+@login_required
+def dashboard():
+    from app.chat.answer import configured
+    from app.chat.snapshot import view_for
+    from app.chat.suggestions import chips
+
+    email = signed_in_email()
+    data = view_for(email)
+    owner = is_owner(email)
+    pack = data.get("procurement") or {}
+    shown = chips(
+        owner,
+        sales=bool(data.get("sales_loaded")),
+        finance=bool(data.get("finance")),
+        procurement=bool(pack.get("above_average") or pack.get("monthly_prices")),
+        reelo=bool(data.get("reelo_loaded")),
+        audit=bool(data.get("october_audit")),
+    )
+    summary = data.get("summary") or {}
+    north = ((summary.get("regional_mtd") or {}).get("North") or {}).get("pace_pct")
+    if north is not None:
+        shown = [f"Why is North pace at {north}%?"] + [item for item in shown if "North pace" not in item]
+    audit_q = "Which stores scored lowest in the October mystery audit?"
+    if data.get("october_audit") and audit_q not in shown[:2]:
+        shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
+    shown = shown[:4]
+    return render_template("chat.html", chips=shown, connected=configured())
+
+
+@main_bp.route("/board")
+@login_required
+def board():
+    """Previous home figures. Not linked from the nav."""
+    return _board_response()
+
+
+@main_bp.route("/dashboard/ask", methods=["POST"])
+@login_required
+def dashboard_ask():
+    from app.chat.answer import iter_answer
+
+    payload = request.get_json(silent=True) or {}
+    question = payload.get("question") or ""
+    return Response(
+        stream_with_context(iter_answer(question, signed_in_email())),
+        mimetype="text/event-stream",
+    )
+
+
+@main_bp.route("/api/ask", methods=["POST"])
+def api_ask():
+    import logging
+
+    from app.chat.bots import authenticate
+    from app.chat.facts import actions_from_data, answer_from_data
+    from app.chat.limit import allow
+    from app.chat.snapshot import view_for
+
+    bot = authenticate(request.headers.get("Authorization", ""))
+    if bot is None:
+        return jsonify({"error": "Unauthorised"}), 401
+    if not allow("bot:" + bot["name"]):
+        return jsonify({"error": "Too many questions just now."}), 429
+    payload = request.get_json(silent=True) or {}
+    question = str(payload.get("question") or "")
+    mode = str(payload.get("mode") or "answer")
+    logging.getLogger(__name__).info(
+        "bot ask name=%s role=%s mode=%s question_chars=%s",
+        bot["name"],
+        bot["role"],
+        mode,
+        len(question),
+    )
+    data = view_for(role=bot["role"])
+    owner = bot["role"] in {"owner", "finance"}
+    result = answer_from_data(question, data, owner)
+    from app.chat.memory import record_ask, record_gap
+
+    ask_id = record_ask(
+        question,
+        result.get("topic") or "",
+        result.get("as_of") or "",
+        bot["role"],
+        "bot",
+        bot["name"],
+    )
+    record_gap(
+        question,
+        result.get("topic") or "",
+        result.get("text") or "",
+        result.get("as_of") or "",
+        bot["role"],
+        "bot",
+        bot["name"],
+    )
+    actions = result.get("actions") or []
+    if mode == "action_plan":
+        actions = actions_from_data(data, owner)
+        if actions and not result.get("actions"):
+            result = dict(result)
+            result["text"] = f"{actions[0]['what']} {actions[0]['why']}"
+    return jsonify({
+        "answer": result.get("text") or "",
+        "data_as_of": result.get("as_of") or "",
+        "table": result.get("table"),
+        "chart": result.get("chart"),
+        "actions": actions,
+        "ask_id": ask_id,
+        "topic": result.get("topic") or "",
+    })
+
+
+@main_bp.route("/dashboard/feedback", methods=["POST"])
+@login_required
+def dashboard_feedback():
+    from app.chat.memory import record_rating
+
+    payload = request.get_json(silent=True) or {}
+    role = "owner" if is_owner(signed_in_email()) else "ops"
+    record_rating(
+        payload.get("ask_id"),
+        payload.get("question"),
+        payload.get("topic"),
+        payload.get("data_as_of"),
+        payload.get("rating"),
+        payload.get("note"),
+        role,
+        "person",
+        "",
+    )
+    return jsonify({"ok": True})
+
+
+@main_bp.route("/api/chat/feedback", methods=["POST"])
+def api_chat_feedback():
+    import logging
+
+    from app.chat.bots import authenticate
+    from app.chat.memory import record_rating
+
+    bot = authenticate(request.headers.get("Authorization", ""))
+    if bot is None:
+        return jsonify({"error": "Unauthorised"}), 401
+    payload = request.get_json(silent=True) or {}
+    logging.getLogger(__name__).info(
+        "bot feedback name=%s role=%s rating=%s",
+        bot["name"],
+        bot["role"],
+        str(payload.get("rating") or "")[:8],
+    )
+    record_rating(
+        payload.get("ask_id"),
+        payload.get("question"),
+        payload.get("topic"),
+        payload.get("data_as_of"),
+        payload.get("rating"),
+        payload.get("note"),
+        bot["role"],
+        "bot",
+        bot["name"],
+    )
+    return jsonify({"ok": True})
+
+
+@main_bp.route("/chat/insights")
+@owner_required
+def chat_insights():
+    from app.chat.memory import window_summary
+
+    return render_template(
+        "chat_insights.html",
+        week=window_summary(7),
+        month=window_summary(30),
+        sample=request.args.get("sample") == "1",
+    )
+
+
+@main_bp.route("/api/chat/insights")
+def api_chat_insights():
+    import logging
+
+    from app.chat.bots import authenticate
+    from app.chat.memory import window_summary
+
+    bot = authenticate(request.headers.get("Authorization", ""))
+    if bot is None:
+        return jsonify({"error": "Unauthorised"}), 401
+    if bot["role"] not in {"owner", "ops"}:
+        return jsonify({"error": "Unauthorised"}), 403
+    try:
+        days = int(request.args.get("days") or 7)
+    except (TypeError, ValueError):
+        days = 7
+    logging.getLogger(__name__).info("chat insights role=%s days=%s", bot["role"], days)
+    return jsonify(window_summary(days))
 
 
 @main_bp.route("/dashboard/targets")

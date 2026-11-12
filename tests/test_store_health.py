@@ -480,16 +480,13 @@ class StoreHealthTests(unittest.TestCase):
 
     def test_existing_tools_still_open(self):
         html = self.get("/dashboard")
-        self.assertIn("Store Health", html)
-        self.assertIn("Zomato Settlement Uploader", html)
-        self.assertIn("Ingredient Price Tracker", html)
-        self.assertIn("Location Finder", html)
-        self.assertIn("/upload", html)
-        self.assertIn("/ingredient-tracker/", html)
-        self.assertIn("/location-finder", html)
-        self.assertIn("/store-health", html)
+        self.assertNotIn(">Store Health<", html)
+        self.assertNotIn("Scorecard", html)
+        self.assertNotIn("Procurement", html)
         self.get("/upload")
         self.get("/ingredient-tracker/")
+        self.get("/ingredient-tracker/upload")
+        self.get("/store-health")
         self.get("/location-finder")
 
     def test_empty_files_do_not_invent_a_timestamp(self):

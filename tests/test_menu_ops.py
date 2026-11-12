@@ -610,14 +610,10 @@ class PageTests(unittest.TestCase):
         dashboard = self.client.get("/dashboard")
         home = dashboard.get_data(as_text=True)
         drawer = home.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
-        bottom = home.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
-        self.assertIn("/menu", drawer)
-        self.assertIn("/channels", drawer)
-        self.assertIn("/tickets", drawer)
-        self.assertIn("Menu engineering", drawer)
-        self.assertNotIn("/menu", bottom)
-        self.assertNotIn("/channels", bottom)
-        self.assertNotIn("/tickets", bottom)
+        self.assertNotIn("/menu", drawer)
+        self.assertNotIn("/channels", drawer)
+        self.assertNotIn("/tickets", drawer)
+        self.assertNotIn("Menu engineering", drawer)
 
     def test_theme_does_not_follow_the_operating_system(self):
         css = (ROOT / "app" / "menu_ops" / "static" / "menu_ops.css").read_text()

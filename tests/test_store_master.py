@@ -215,11 +215,10 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn(NOT_ON_REELO, html)
         self.assertIn("Store Master", html)
         self.assertIn('name="cc_store"', html)
-        self.assertIn('class="cc-bottom"', html)
-        bottom = html.split('class="cc-bottom"', 1)[1].split("</nav>", 1)[0]
-        self.assertNotIn("Data gaps", bottom)
-        self.assertNotIn("Store Master", bottom)
-        self.assertEqual(bottom.count("<a "), 5)
+        self.assertNotIn('class="cc-bottom"', html)
+        drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
+        self.assertNotIn('href="/store-master"', drawer)
+        self.assertNotIn('href="/data-gaps"', drawer)
         section = html.split('data-owner="Sanjoy / Subhra"', 1)[1]
         self.assertLess(section.find('data-threat="1"'), section.find("No Swiggy or Zomato id"))
 
@@ -338,8 +337,8 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn("Recipe looks incomplete: Onion", html)
         self.assertNotIn("No single store list", html)
         self.assertIn('value="Kolkata" selected', html)
-        self.assertIn(">Today<", html)
-        self.assertIn(">Outside<", html)
+        self.assertNotIn(">Today<", html)
+        self.assertNotIn(">Outside<", html)
 
     def test_store_master_page_is_owner_only(self):
         self._session(None)

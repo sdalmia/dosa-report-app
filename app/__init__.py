@@ -69,8 +69,10 @@ def create_app():
     db.init_app(app)
     from app.models import IngredientPrice, LocationModelApproval
     from app.menu_costing.models import MenuItemPrice, MenuVersion
+    from app.chat.memory import ensure_chat_tables
     with app.app_context():
         db.create_all()
+        ensure_chat_tables()
 
     # ✅ Register blueprints last
     from .routes import register_routes

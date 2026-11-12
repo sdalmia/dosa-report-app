@@ -406,7 +406,7 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn('stored === "dark" ? "dark" : "light"', brief_html)
         self.assertNotIn("prefers-color-scheme", brief_html)
         self.assertNotIn('aria-label="Owner tools"', brief_html)
-        self.assertEqual(brief_html.count('aria-label="Primary"'), 1)
+        self.assertEqual(brief_html.count('aria-label="Primary"'), 0)
         self.assertEqual(brief_html.count("<header"), 1)
         text = self.client.get("/brief.txt")
         self.assertEqual(text.mimetype, "text/plain")
