@@ -195,7 +195,8 @@
             }
             if (payload.done) {
               bot.classList.remove("is-streaming");
-              if (window.renderMarkdown) answer.innerHTML = window.renderMarkdown(spoken);
+              var source = payload.markdown || spoken;
+              if (window.renderMarkdown) answer.innerHTML = window.renderMarkdown(source);
               var extra = "";
               if (payload.as_of) extra += '<p class="cc-asof">Data as of ' + escape(payload.as_of) + "</p>";
               if (payload.chart) extra += chart(payload.chart);

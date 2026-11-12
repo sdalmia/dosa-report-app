@@ -22,11 +22,16 @@ _SYSTEM = (
     "You are Dosa Coffee's sharp analyst for the Command Centre. "
     "Use only the data packet and the house notes. Never invent a number, a store, or a date. "
     "If the packet does not cover the question, say that in one plain sentence and then answer the closest question the packet does cover. "
-    "Lead with the direct answer. Then give a short breakdown with the key numbers, rupees in Indian grouping, and the dates covered. "
-    "When you compare stores or days, include a markdown table. "
+    "Write scannable markdown, under about 150 words unless the user asks for detail. "
+    "Start with one bold sentence that is the direct answer. "
+    "Then at most 3 to 5 short bullets with the key numbers. "
+    "Add a compact markdown table only when comparing 3 or more items: at most 6 rows and 4 columns, short headers, units in the header, rupees as ₹1.61 Cr or ₹9.85 L. "
+    "Do not repeat a number in both the bullets and the table. "
+    "Do not leave an empty heading. Do not write filler such as 'performing moderately well'. "
+    "Then a 'Next steps' heading with at most 3 numbered actions, one line each, each tied to a figure in the packet. "
+    "End with one small line, 'Data: ...', stating the dates once, for example 'Data: sales to 8 Nov, pace to 11 Nov'. "
     "When a trend helps, add one fenced block exactly like ```chart {\"type\":\"bar\",\"title\":\"\",\"unit\":\"\",\"series\":[{\"label\":\"\",\"value\":0}]} ``` "
     "and use only values that appear in the packet. "
-    "End with 1 to 3 concrete next actions, each tied to a figure in the packet. "
     "Follow the house notes on closed stores, mall bulk bills, Navratri, and city costs."
 )
 
@@ -168,6 +173,22 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
     return result
 
 
+def stream_pieces(text):
+    """Split a reply for streaming without eating newlines or markdown."""
+    if not text:
+        return
+    size = 80
+    start = 0
+    while start < len(text):
+        end = min(len(text), start + size)
+        if end < len(text):
+            cut = text.rfind(" ", start + 20, end)
+            if cut > start:
+                end = cut + 1
+        yield text[start:end]
+        start = end
+
+
 def iter_answer(question, email, client=None):
     """SSE events. The model writes the answer when a key is set."""
     from app.chat.limit import allow
@@ -183,16 +204,11 @@ def iter_answer(question, email, client=None):
     ask_id = record_ask(question, produced.get("topic") or "", produced.get("as_of") or "", role, "person", "")
     record_gap(question, produced.get("topic") or "", produced.get("text") or "", produced.get("as_of") or "", role, "person", "")
     text = produced.get("text") or ""
-    chunk = ""
-    for word in text.split(" "):
-        chunk = (chunk + " " + word).strip()
-        if len(chunk) >= 80:
-            yield _event({"text": chunk + " "})
-            chunk = ""
-    if chunk:
-        yield _event({"text": chunk})
+    for piece in stream_pieces(text):
+        yield _event({"text": piece})
     yield _event({
         "done": True,
+        "markdown": text,
         "as_of": produced.get("as_of") or "",
         "table": produced.get("table"),
         "chart": produced.get("chart"),
