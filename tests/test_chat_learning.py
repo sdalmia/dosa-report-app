@@ -165,14 +165,20 @@ class InsightsAccessTests(unittest.TestCase):
 
 class ModelLogTests(unittest.TestCase):
     def test_the_model_call_does_not_log_the_key_or_the_prompt(self):
-        from app.chat.answer import _model_json
+        from app.chat.answer import produce_answer
 
         os.environ["CHAT_API_KEY"] = "super-secret-key"
         os.environ["CHAT_API_URL"] = "http://127.0.0.1:9/nope"
+        os.environ.pop("CHAT_MOCK", None)
+        data = {"role": "ops", "sales_windows": {}, "summary": {}, "dossiers": {}}
         try:
             with self.assertLogs("app.chat.answer", level="INFO") as captured:
-                _model_json("How is North?", {"text": "North pace is 79.9%."})
+                result = produce_answer("How is North?", data, False)
             blob = " ".join(captured.output)
+            self.assertEqual(result["fallback"], "request_error")
+            self.assertTrue(result["text"].startswith("AI unavailable"))
+            self.assertIn("model_used=none", blob)
+            self.assertIn("fallback=request_error", blob)
             self.assertNotIn("super-secret-key", blob)
             self.assertNotIn("House notes", blob)
             self.assertNotIn("79.9", blob)

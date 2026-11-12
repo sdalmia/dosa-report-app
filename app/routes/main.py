@@ -158,8 +158,9 @@ def dashboard_ask():
 def api_ask():
     import logging
 
+    from app.chat.answer import produce_answer
     from app.chat.bots import authenticate
-    from app.chat.facts import actions_from_data, answer_from_data
+    from app.chat.facts import actions_from_data
     from app.chat.limit import allow
     from app.chat.snapshot import view_for
 
@@ -180,7 +181,7 @@ def api_ask():
     )
     data = view_for(role=bot["role"])
     owner = bot["role"] in {"owner", "finance"}
-    result = answer_from_data(question, data, owner)
+    result = produce_answer(question, data, owner, when_offline="local")
     from app.chat.memory import record_ask, record_gap
 
     ask_id = record_ask(

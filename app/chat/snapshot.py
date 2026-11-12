@@ -176,6 +176,77 @@ def _forecast_gaps(feeds, summary):
     return built
 
 
+def _inr_row(store, region, gross, bills, apb, mall):
+    return {
+        "store": store,
+        "region": region or "",
+        "gross": None if gross is None else round(float(gross), 2),
+        "bills": None if bills is None else round(float(bills), 2),
+        "apb": None if mall or apb is None else round(float(apb), 2),
+        "mall_bulk": bool(mall),
+    }
+
+
+def _store_windows(feeds):
+    """Latest day, last 7 days, and month-to-date for each open store."""
+    from app.food_courts import is_mall_food_court
+
+    grouped = {}
+    regions = {}
+    for (store, day), row in (feeds.get("posist") or {}).items():
+        if _out_of_base(store, day):
+            continue
+        if row.get("gross") is None:
+            continue
+        grouped.setdefault(store, []).append((day, row))
+        if row.get("region"):
+            regions[store] = row.get("region")
+    if not grouped:
+        return {"latest": "", "week_start": "", "month_start": "", "latest_rows": [], "week_rows": [], "mtd_rows": []}
+    latest = max(day for series in grouped.values() for day, _row in series)
+    week_start = latest - timedelta(days=6)
+    month_start = latest.replace(day=1)
+    latest_rows = []
+    week_rows = []
+    mtd_rows = []
+    for store, series in grouped.items():
+        mall = is_mall_food_court(store)
+        region = regions.get(store) or ""
+        last = next((row for day, row in series if day == latest), None)
+        if last is not None:
+            apb = last.get("apb")
+            if apb is None and last.get("bills"):
+                apb = float(last["gross"]) / float(last["bills"])
+            latest_rows.append(_inr_row(store, region, last.get("gross"), last.get("bills"), apb, mall))
+        def total(start):
+            gross = bills = 0.0
+            bill_n = 0
+            for day, row in series:
+                if day < start or day > latest:
+                    continue
+                gross += float(row.get("gross") or 0)
+                if row.get("bills"):
+                    bills += float(row["bills"])
+                    bill_n += 1
+            apb = (gross / bills) if bill_n and bills and not mall else None
+            return gross, bills if bill_n else None, apb
+        week_gross, week_bills, week_apb = total(week_start)
+        mtd_gross, mtd_bills, mtd_apb = total(month_start)
+        week_rows.append(_inr_row(store, region, week_gross, week_bills, week_apb, mall))
+        mtd_rows.append(_inr_row(store, region, mtd_gross, mtd_bills, mtd_apb, mall))
+    latest_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
+    week_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
+    mtd_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
+    return {
+        "latest": latest.isoformat(),
+        "week_start": week_start.isoformat(),
+        "month_start": month_start.isoformat(),
+        "latest_rows": latest_rows,
+        "week_rows": week_rows,
+        "mtd_rows": mtd_rows,
+    }
+
+
 def _famepilot(feeds):
     rows = []
     for store, group in (feeds.get("famepilot_by_store") or {}).items():
@@ -459,6 +530,7 @@ def _build():
     reviews = _famepilot(feeds)
     audit = _audit(feeds)
     october_audit = _october_audit(feeds)
+    windows = _store_windows(feeds)
     joined = _dossiers(feeds, movers, forecast, reviews, audit, reelo)
     return {
         "summary": summary,
@@ -474,6 +546,7 @@ def _build():
         "reelo_period": REELO_PERIOD,
         "reelo_loaded": bool(reelo),
         "sales_loaded": bool(summary) or bool(feeds.get("posist")),
+        "sales_windows": windows,
         "procurement": _load_procurement(),
         "dossiers": joined["by_code"],
         "aliases": joined["aliases"],
