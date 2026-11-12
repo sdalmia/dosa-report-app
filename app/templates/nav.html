@@ -8,7 +8,8 @@
     <span class="cc-hello">Hi, {{ session['user']['name'].split(' ')[0] }}</span>
   {% endif %}
   <button type="button" class="cc-icon-btn" id="theme-toggle" aria-label="Switch theme"><i class="bi bi-moon" aria-hidden="true"></i></button>
-  <button type="button" class="cc-icon-btn" id="nav-menu" aria-expanded="false" aria-controls="nav-drawer" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+  <a class="cc-icon-btn" href="{{ url_for('ingredient_tracker.upload') }}" aria-label="Upload prices"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i></a>
+  <button type="button" class="cc-icon-btn" id="nav-menu" aria-expanded="false" aria-controls="nav-drawer" aria-label="Account menu"><i class="bi bi-person" aria-hidden="true"></i></button>
 </header>
 <nav class="cc-drawer" id="nav-drawer" aria-label="Account">
   <h2>Account</h2>
