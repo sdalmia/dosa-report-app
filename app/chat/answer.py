@@ -159,6 +159,12 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
         result["fallback"] = "mock"
         _log_ask(None, "mock")
         return result
+    from app.chat.month_sales import use_file_answer
+
+    if use_file_answer(question, local):
+        # File-backed calendar-month totals. The model does not get to rewrite them.
+        _log_ask("file", None)
+        return result
     if not os.environ.get("CHAT_API_KEY", "").strip() and client is None:
         result["fallback"] = "no_key"
         _log_ask(None, "no_key")

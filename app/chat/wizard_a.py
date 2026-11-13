@@ -683,6 +683,11 @@ def domain_text(question, role):
 
 def try_answer(question, data, owner):
     role = data.get("role") or ("owner" if owner else "ops")
+    from app.chat.month_sales import relevant as _asks_month_sales
+    from app.chat.month_sales import answer as month_sales_answer
+
+    if _asks_month_sales(question):
+        return month_sales_answer(question, data, owner)
     if _asks_fixes(question):
         return _pack(posist_fixes_text(), "13 Nov 2026", "procurement", question, owner)
     if _asks_growth(question):

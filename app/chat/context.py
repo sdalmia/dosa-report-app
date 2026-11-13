@@ -51,6 +51,11 @@ def _sales_table(rows):
     return _lines(shaped, ["store", "region", "gross", "bills", "apb"])
 
 
+def _month_sales_block(question):
+    from app.chat.month_sales import packet
+    return packet(question)
+
+
 def build_context(question, data):
     """Text the model reads. Finance and HR stay off unless this role may see them."""
     role = data.get("role") or "ops"
@@ -68,10 +73,13 @@ def build_context(question, data):
         f"Sales summary as_of_date: {summary.get('as_of_date') or 'not loaded'}.",
         f"Reelo period: {data.get('reelo_period') or 'not loaded'}.",
         "If the question asks about a date after the latest sales day, say the file does not cover that date and use the latest day instead.",
-        "Manisquare and Forum are mall bulk stores. Their APB and bills are left out of comparisons. Their gross is still listed.",
+        "Month-to-date is the current incomplete month only. It is not a completed calendar month. For October, use the October 1–31 calendar-month table, not month-to-date and not a window that ends in November.",
+        "Manisquare and Forum are mall bulk stores. Their APB and bills are left out of comparisons. Their gross is still listed and is part of the city total.",
         "",
         "Network sales summary:",
         _summary_line(summary),
+        "",
+        _month_sales_block(question),
         "",
         f"Each store on the latest sales day ({latest or 'unknown'}). Gross and APB are rupees.",
         _sales_table(windows.get("latest_rows") or []),
@@ -79,7 +87,7 @@ def build_context(question, data):
         "Each store, sum of the last 7 sales days:",
         _sales_table(windows.get("week_rows") or []),
         "",
-        "Each store, month-to-date:",
+        "Each store, month-to-date (current month only, not a completed month such as October):",
         _sales_table(windows.get("mtd_rows") or []),
         "",
         "Week-on-week gross change (latest day versus 7 days earlier):",
