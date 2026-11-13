@@ -353,6 +353,9 @@ def growth_text():
         month = row["gap"] * 30 / 7
         lines.append(f"{row['store']} | {_inr(row['gap'])} | {_inr(month)}")
     lines.append("One action each: check the largest drop before adding a discount or a new site. No rent or volume elasticity was assumed.")
+    from app.chat.reelo_deep import winback_line
+
+    lines.append(winback_line())
     return "\n".join(lines)
 
 
@@ -385,6 +388,16 @@ def trends_text():
         "Top sales trends by rupee impact of the latest 7 days versus the previous 7. Correlation only, not a cause.",
         "Closed stores, Faridabad from 23 Oct, and Rosedale from 10 Nov are excluded. Bills at Manisquare and Forum are not used.",
     ]
+    from app.chat.reelo_deep import monthly_customers
+
+    months = monthly_customers()
+    if len(months) >= 2:
+        last, prior = months[-1], months[-2]
+        lines.append(
+            f"All-store Reelo repeat share {last.get('repeat_customers_percentage')}% in {last.get('period')} "
+            f"versus {prior.get('repeat_customers_percentage')}% in {prior.get('period')}. "
+            "That is every Reelo store together, not one store's baseline. NPS is not in the file."
+        )
     for row in rows:
         lines.append(
             f"{row['store']} {row['direction']} {_inr(row['impact'])} across {row['label']}. "

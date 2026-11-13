@@ -29,6 +29,9 @@ class WizardGroupBTests(unittest.TestCase):
         answer = answer_from_data("Which stores are not on Reelo?", self.ops, False)
         self.assertIn("Manisquare", answer["text"])
         self.assertIn("not shown as zero", answer["text"])
+        self.assertIn("366540", answer["text"].replace(",", ""))
+        self.assertIn("NPS is not in Reelo", answer["text"])
+        self.assertNotIn("Faridabad", answer["text"])
 
     def test_paneer_price_move_stays_on_each_city(self):
         answer = answer_from_data("How has paneer moved?", self.ops, False)

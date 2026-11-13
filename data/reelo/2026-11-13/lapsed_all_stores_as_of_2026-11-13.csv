@@ -1,0 +1,4 @@
+store,has_not_visited_in_last_days,customers,basis
+All Stores,30,366540,Live filter count; all 24 stores selected; no customer export
+All Stores,90,312068,Live Last 90 Days filter; all 24 stores selected
+All Stores,60,338430,Custom not-visited interval 14 Sep 2026 to 13 Nov 2026; UI count

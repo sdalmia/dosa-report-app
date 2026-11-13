@@ -261,13 +261,14 @@ def _asks_training(question):
 
 
 def reelo_text():
+    from app.chat.reelo_deep import summary_text
     from app.chat.reelo_storewise import PERIOD, load_storewise
 
     rows = load_storewise()
     lines = [
-        f"Reelo store file, period {PERIOD}.",
+        summary_text(),
+        f"Monday storewise file, period {PERIOD}. That file still refreshes on its own.",
         "These stores are not on Reelo, so they are not shown as zero: " + ", ".join(_NOT_ON_REELO) + ".",
-        "Lapsed 30/60/90, segments, campaign ROI, NPS themes, and loyalty-point burn are not columns in the current file.",
         "store | orders | new | repeat | repeat share % | phone capture %",
     ]
     for row in rows[:20]:

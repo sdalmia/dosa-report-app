@@ -1,0 +1,66 @@
+Reelo Dosa Coffee READ-ONLY pull, 13 Nov 2026
+Requested range: 2026-01-01 through 2026-11-12 inclusive.
+Status: PARTIAL (campaign detail fields and automated-campaign list incomplete).
+All output files are aggregates or anonymized themes. No customer-list export was requested/downloaded. No campaign/segment was created, edited, saved, sent or launched; no purchases. No sign-in page appeared.
+User computer offline: browsing used the box network, not the user computer.
+
+Coverage / limitations:
+- Customer insights: full-range native exports across 24 stores for customer base/new/repeat/visits-covers, orders, and AOV. Used fallback of full-range storewise plus monthly all-store Jan-Oct and daily all-store Nov1-12. Monthly customer/order/AOV per-store exports not completed due interaction/time budget.
+- Feedback and loyalty: full range AND each month Jan-Oct plus Nov1-12, storewise. Loyalty export includes additional inactive/legacy stores/status rows (27), while feedback/customer selectors show 24 active stores. Preserved native values, did not reconcile differing bases.
+- Lapsed: live filter counts only, all stores. No per-store lapsed counts; not quick enough. 60-day filter has no preset: used not-visited custom 14 Sep-13 Nov 2026. These are as-of-pull counts, not historical Nov12 counts.
+- Segments: all-store recommended segments show counts but no aggregate spend. Group overview has no lifecycle Segmentation tab; store-level Ideal Plaza lifecycle table captured with spend. No extrapolation to all stores.
+- Campaigns: 169 one-time cards transcribed from all 17 pages. Metrics use campaign attribution windows, not strictly Jan1-Nov12; ongoing Diwali includes Nov13, and December-2025 starts overlapping January were returned by filter. Most stores/sent/redeemed/credits fields were not shown in list and are blank; only Diwali detail was inspected. Auto-campaign list remained loading/empty in both Active and Inactive views. Full-range summary date label changed but values stayed identical to Oct14-Nov13; therefore only the unambiguous Oct14-Nov13 summary is saved, not claimed as Jan-Nov.
+- Credits: balance by four channels and all invoice rows within Jan1-Nov12 (56 rows), including offline zero-value items and subscription rows. Invoices were transcribed; individual invoice files not downloaded (may contain billing identifiers).
+- Feedback: NPS not shown. Themes are from recent on-screen comments, not a complete quantified Jan-Nov complaint analysis. Category-wise counts initially seen were on the default last-12-month window and were not mislabelled as the requested period.
+- One supplemental customer monthly export includes Aug1-Nov13 because selecting Monthly reset range to Last 3 Months. Kept with its ACTUAL date range; correct Jan-Oct and Nov1-12 files were then exported.
+- Initial dashboard/account requests returned HTTP401 and were reported; dashboard subsequently loaded without login. Several UI operations returned stale data while fetching. Rechecked changed views / awaited response and metric text before recording. Python binary unavailable; used python3. No terminal browser control or credential inspection.
+
+File inventory (date ranges appear in filenames; as_of files are current snapshots):
+auto_campaigns_summary_2026-10-14_to_2026-11-13.csv | 2026-10-14 to 2026-11-13 | Only all-store automated-campaign summary for displayed Oct14-Nov13 range; list did not load; 1 rows
+average_spend_daily_all_stores_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | Aggregate AOV/APC, new/repeat and/or channel average order spend; native export; 12 rows
+average_spend_monthly_all_stores_2026-01-01_to_2026-10-31.csv | 2026-01-01 to 2026-10-31 | Aggregate AOV/APC, new/repeat and/or channel average order spend; native export; 10 rows
+average_spend_storewise_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | Aggregate AOV/APC, new/repeat and/or channel average order spend; native export; 24 rows
+campaigns_manual.csv | 2026-01-01 to 2026-11-12 | 169 one-time campaign aggregate cards, unknown fields blank; manual transcription; 169 rows
+campaigns_manual_filter_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | 169 one-time campaign aggregate cards, unknown fields blank; manual transcription; 169 rows
+campaigns_notes_2026-01-01_to_2026-11-12.txt | 2026-01-01 to 2026-11-12 | Campaign date-window and metric caveats
+credits_balance_as_of_2026-11-13.csv | 2026-11-13 | Current credit balances by channel; on-screen transcription; 4 rows
+credits_manual.csv | 2026-01-01 to 2026-11-12 | 56 invoice rows dated Jan 1-Nov 12, 2026, item/amount/payment method; on-screen transcription; 56 rows
+credits_manual_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | 56 invoice rows dated Jan 1-Nov 12, 2026, item/amount/payment method; on-screen transcription; 56 rows
+customer_insights_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | Two Customer Insights overview snapshots: All Stores and Ideal Plaza; manual transcription; 2 rows
+customer_lifetime_all_stores_as_of_2026-11-13.csv | 2026-11-13 | All-store lifetime counts and displayed spend/visit averages; manual transcription; 7 rows
+customers_daily_all_stores_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | Daily all-store customer aggregates; native export; 12 rows
+customers_monthly_all_stores_2026-01-01_to_2026-10-31.csv | 2026-01-01 to 2026-10-31 | Monthly all-store customer aggregates; native export; 10 rows
+customers_monthly_all_stores_2026-08-01_to_2026-11-13.csv | 2026-08-01 to 2026-11-13 | Monthly all-store customer aggregates; native export; 4 rows
+customers_storewise_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | 24-store customer visits, new/repeat customers, covers, >2 visits and total customer base; native export; 24 rows
+feedback_storewise_2026-01-01_to_2026-01-31.csv | 2026-01-01 to 2026-01-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-02-01_to_2026-02-28.csv | 2026-02-01 to 2026-02-28 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-03-01_to_2026-03-31.csv | 2026-03-01 to 2026-03-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-04-01_to_2026-04-30.csv | 2026-04-01 to 2026-04-30 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-05-01_to_2026-05-31.csv | 2026-05-01 to 2026-05-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-06-01_to_2026-06-30.csv | 2026-06-01 to 2026-06-30 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-07-01_to_2026-07-31.csv | 2026-07-01 to 2026-07-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-08-01_to_2026-08-31.csv | 2026-08-01 to 2026-08-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-09-01_to_2026-09-30.csv | 2026-09-01 to 2026-09-30 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-10-01_to_2026-10-31.csv | 2026-10-01 to 2026-10-31 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_storewise_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | 24-store aggregate ratings, feedback counts, positive/negative, actions, rewards and online reviews; native export; 24 rows
+feedback_themes_as_of_2026-11-13.txt | 2026-11-13 | Anonymized qualitative themes/tags shown on screen; no customer identifiers
+lapsed_all_stores_as_of_2026-11-13.csv | 2026-11-13 | All-store live filter counts: 30=366540; 60 custom Sep14-Nov13=338430; 90=312068; no customer export; 3 rows
+loyalty_storewise_2026-01-01_to_2026-01-31.csv | 2026-01-01 to 2026-01-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-02-01_to_2026-02-28.csv | 2026-02-01 to 2026-02-28 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-03-01_to_2026-03-31.csv | 2026-03-01 to 2026-03-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-04-01_to_2026-04-30.csv | 2026-04-01 to 2026-04-30 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-05-01_to_2026-05-31.csv | 2026-05-01 to 2026-05-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-06-01_to_2026-06-30.csv | 2026-06-01 to 2026-06-30 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-07-01_to_2026-07-31.csv | 2026-07-01 to 2026-07-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-08-01_to_2026-08-31.csv | 2026-08-01 to 2026-08-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-09-01_to_2026-09-30.csv | 2026-09-01 to 2026-09-30 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-10-01_to_2026-10-31.csv | 2026-10-01 to 2026-10-31 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+loyalty_storewise_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | 27-store/status rows: points issued/redeemed, reward redemptions, revenue, customers; native export; 27 rows
+november_partial_summary_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | Displayed all-store Nov1-12 customer/order/AOV summary; 3 rows
+orders_daily_all_stores_2026-11-01_to_2026-11-12.csv | 2026-11-01 to 2026-11-12 | Aggregate order counts, new/repeat and/or channels; native export; 12 rows
+orders_monthly_all_stores_2026-01-01_to_2026-10-31.csv | 2026-01-01 to 2026-10-31 | Aggregate order counts, new/repeat and/or channels; native export; 10 rows
+orders_storewise_2026-01-01_to_2026-11-12.csv | 2026-01-01 to 2026-11-12 | Aggregate order counts, new/repeat and/or channels; native export; 24 rows
+segments_Ideal_Plaza_as_of_2026-11-13.csv | 2026-11-13 | Ideal Plaza six lifecycle segments, counts/visits/AOV/sales, current snapshot; 6 rows
+segments_all_stores_last_year_as_of_2026-11-13.csv | 2026-11-13 | Nine all-store recommended segments, counts; last-year basis; spend not shown; 9 rows
