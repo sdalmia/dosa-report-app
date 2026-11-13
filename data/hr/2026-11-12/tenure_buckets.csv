@@ -1,0 +1,7 @@
+bucket,on_roll,as_of,note
+under_30_days,39,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."
+30_to_89_days,74,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."
+90_to_179_days,68,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."
+180_to_364_days,99,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."
+1_to_2_years,105,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."
+2_years_plus,201,2026-11-12,"On roll (active + notice). Tenure uses current or last location, not a transfer history."

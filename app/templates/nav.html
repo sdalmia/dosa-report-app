@@ -1,7 +1,12 @@
 <header class="cc-header">
   <a class="cc-brand" href="{{ url_for('main.dashboard') }}">
+    {% if request.endpoint == 'main.dashboard' %}
+    <img src="{{ url_for('static', filename='icons/icon-192.png') }}" alt="">
+    <span>Dosa Coffee Wizard</span>
+    {% else %}
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Dosa Coffee">
     <span>Command</span>
+    {% endif %}
   </a>
   <span class="cc-header-spacer"></span>
   {% if session.get('user') %}

@@ -61,3 +61,24 @@ curl -s "https://command.dosacoffee.com/api/chat/insights?days=7" \
 ```
 
 House rules for every model answer live in `data/chat/house_notes.md`. Edit that file to change them. No code change is required. The file is not a new environment variable. The learning tables are created on startup if they are missing, in the existing `DATABASE_URL`.
+
+## Inbox digest
+
+`POST /api/chat/inbox-digest` with `Authorization: Bearer <token>`. The token is `CHAT_INGEST_KEY` (or `CHAT_INGEST_TOKEN`, the same secret). If neither is set the route returns 503. Siddhant needs to add `CHAT_INGEST_KEY` on Render. Bodies over 200 KB are rejected. HTML is stripped. The latest digest is kept in Postgres for 14 days. `data/chat/inbox_digest.json` is only a fallback. Full email bodies are not stored.
+
+```bash
+curl -s -X POST https://command.dosacoffee.com/api/chat/inbox-digest \
+  -H "Authorization: Bearer $CHAT_INGEST_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"generated_at":"2026-11-13T08:00:00+05:30","items":[{"date":"2026-11-13","from":"landlord@example.com","subject":"Rent","category":"landlord","summary":"Ask for the November invoice.","action_needed":"Reply","urgency":"amber","status":"open"}]}'
+```
+
+Chief of Staff clicks post to `WIZARD_WEBHOOK_URL` with the header named by `WIZARD_WEBHOOK_KEY_HEADER` (default `X-Webhook-Key`). Nothing is sent until the owner clicks.
+
+## Delivery commission
+
+Swiggy and Zomato: `AGGREGATOR_COMMISSION_PCT` is 21 and `GST_ON_COMMISSION_PCT` is 18, in `app/commercial.py`. Effective drag is 24.78% of net. It is not applied to dine-in or takeaway. A payout or ads file under `data/` is preferred when one is present. Channel gross is not treated as net.
+
+## Licences
+
+`data/compliance/<YYYY-MM-DD>/licences.csv` is the newest drop. Columns: `store`, `city`, `licence_type`, `licence_no`, `issued`, `expiry`, `status`, `source_file`, `source_modified`, `notes`. Answers recompute status from `expiry` versus the day of the question. Licence numbers stay in the file and are omitted from answers unless the question asks for a number. Owner and ops can see this. Finance and HR cannot. NCR dates come from certificates; a dated NCR tracker is still pending.

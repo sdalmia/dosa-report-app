@@ -1,3 +1,6 @@
+import json
+from datetime import datetime, timedelta
+
 from flask import Blueprint, Response, jsonify, render_template, request, session, stream_with_context
 
 from app.fragments import html_fragment, query_offset, slice_rows
@@ -131,7 +134,21 @@ def dashboard():
     if data.get("october_audit") and audit_q not in shown[:2]:
         shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
     shown = shown[:4]
-    return render_template("chat.html", chips=shown, connected=configured())
+    if owner:
+        from app.chat.suggestions import TALLY
+        for item in TALLY:
+            if item not in shown:
+                shown.append(item)
+    from app.chat.licences import home_card
+    from app.chat.wizard_a import persist_trends, trend_cards
+
+    role = data.get("role") or ("owner" if owner else "ops")
+    persist_trends()
+    insights = trend_cards()
+    card = home_card(role)
+    if card:
+        insights.append(card)
+    return render_template("chat.html", chips=shown, connected=configured(), insights=insights)
 
 
 @main_bp.route("/board")
@@ -216,6 +233,162 @@ def api_ask():
         "ask_id": ask_id,
         "topic": result.get("topic") or "",
     })
+
+
+@main_bp.route("/api/chat/export", methods=["POST"])
+@login_required
+def chat_export():
+    from app.chat.extras import pdf_bytes, png_bytes, workbook_bytes
+
+    payload = request.get_json(silent=True) or {}
+    kind = str(payload.get("format") or "pdf")
+    title = str(payload.get("title") or "Dosa Coffee Wizard")[:120]
+    columns = payload.get("columns") or ["Line"]
+    rows = payload.get("rows") or [[str(payload.get("text") or "")[:2000]]]
+    notes = payload.get("notes") or []
+    if kind == "xlsx":
+        body = workbook_bytes(title, columns, rows, notes)
+        mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        name = "wizard.xlsx"
+    elif kind == "png":
+        body = png_bytes(title, payload.get("series") or [])
+        mime = "image/png"
+        name = "wizard.png"
+    else:
+        lines = [title]
+        for row in rows:
+            lines.append(" | ".join(str(cell) for cell in row))
+        body = pdf_bytes(title, lines)
+        mime = "application/pdf"
+        name = "wizard.pdf"
+    return Response(body, mimetype=mime, headers={"Content-Disposition": f"attachment; filename={name}"})
+
+
+@main_bp.route("/api/chat/share", methods=["POST"])
+@login_required
+def chat_share():
+    from app.chat.extras import is_restricted, save_snapshot
+
+    payload = request.get_json(silent=True) or {}
+    try:
+        days = int(payload.get("days") or 7)
+    except (TypeError, ValueError):
+        days = 7
+    if days not in {1, 7, 30}:
+        days = 7
+    public = bool(payload.get("public")) and is_owner(signed_in_email())
+    row = save_snapshot(
+        payload.get("question") or "",
+        payload.get("answer") or "",
+        payload.get("as_of") or "",
+        days,
+        public,
+        signed_in_email(),
+    )
+    return jsonify({
+        "url": "/chat/s/" + row.token,
+        "restricted": row.restricted,
+        "audience": row.audience,
+        "expires": row.expires_at.isoformat() + "Z",
+    })
+
+
+@main_bp.route("/chat/s/<token>")
+def chat_share_view(token):
+    from app.chat.extras import ChatShareEvent, ChatSnapshot
+
+    row = ChatSnapshot.query.filter_by(token=token).first()
+    if row is None or row.revoked_at is not None or row.expires_at < datetime.utcnow():
+        return jsonify({"error": "This link is no longer available."}), 410
+    if row.audience != "public":
+        if "user" not in session and not session.get("user_email"):
+            return jsonify({"error": "Sign in to Command Centre to open this answer."}), 401
+        if row.restricted and not is_owner(signed_in_email()):
+            return jsonify({"error": "This answer is limited to the owner login."}), 403
+    db_event = ChatShareEvent(token=token, event="view", actor=signed_in_email())
+    from app.extensions import db
+    db.session.add(db_event)
+    db.session.commit()
+    note = "Owner login required." if row.restricted else ""
+    return render_template("chat_share.html", answer=row.answer, question=row.question, as_of=row.as_of, note=note)
+
+
+@main_bp.route("/api/chat/share/<token>/revoke", methods=["POST"])
+@owner_required
+def chat_share_revoke(token):
+    from app.chat.extras import ChatShareEvent, ChatSnapshot
+    from app.extensions import db
+
+    row = ChatSnapshot.query.filter_by(token=token).first()
+    if row is None:
+        return jsonify({"error": "Not found"}), 404
+    row.revoked_at = datetime.utcnow()
+    db.session.add(ChatShareEvent(token=token, event="revoke", actor=signed_in_email()))
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@main_bp.route("/api/chat/cos", methods=["POST"])
+@login_required
+def chat_cos():
+    from app.chat.extras import send_to_chief, webhook_connected
+
+    if not is_owner(signed_in_email()):
+        return jsonify({"error": "Owner only"}), 403
+    payload = request.get_json(silent=True) or {}
+    row = send_to_chief(payload.get("request") or "", payload.get("excerpt") or "", signed_in_email())
+    return jsonify({
+        "request_id": row.id,
+        "status": row.status,
+        "connected": webhook_connected(),
+    })
+
+
+@main_bp.route("/api/chat/cos/<request_id>/status", methods=["POST"])
+def chat_cos_status(request_id):
+    from app.chat.extras import ChiefRequest, ingest_status
+    from app.extensions import db
+
+    state = ingest_status(request.headers.get("Authorization", ""))
+    if state == "unset":
+        return jsonify({"error": "Ingest token is not set."}), 503
+    if state != "ok":
+        return jsonify({"error": "Unauthorised"}), 401
+    row = db.session.get(ChiefRequest, request_id)
+    if row is None:
+        return jsonify({"error": "Not found"}), 404
+    payload = request.get_json(silent=True) or {}
+    status = str(payload.get("status") or "")
+    if status not in {"sent", "waiting for approval", "done", "failed"}:
+        return jsonify({"error": "Unknown status"}), 400
+    row.status = status
+    db.session.commit()
+    return jsonify({"ok": True, "status": row.status})
+
+
+@main_bp.route("/api/chat/inbox-digest", methods=["POST"])
+def chat_inbox_digest():
+    from app.chat.extras import ChatIngest, ingest_status, strip_html
+    from app.extensions import db
+
+    state = ingest_status(request.headers.get("Authorization", ""))
+    if state == "unset":
+        return jsonify({"error": "Set CHAT_INGEST_KEY on Render. CHAT_INGEST_TOKEN is accepted as the same secret."}), 503
+    if state != "ok":
+        return jsonify({"error": "Unauthorised"}), 401
+    raw = request.get_data(cache=True) or b""
+    if len(raw) > 200 * 1024:
+        return jsonify({"error": "Digest is over 200 KB."}), 413
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return jsonify({"error": "JSON required"}), 400
+    cleaned = strip_html(payload)
+    db.session.add(ChatIngest(feed="inbox", payload=json.dumps(cleaned)))
+    cutoff = datetime.utcnow() - timedelta(days=14)
+    ChatIngest.query.filter(ChatIngest.created_at < cutoff).delete()
+    db.session.commit()
+    return jsonify({"ok": True})
 
 
 @main_bp.route("/dashboard/feedback", methods=["POST"])

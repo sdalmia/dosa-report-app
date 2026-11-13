@@ -1,0 +1,185 @@
+{
+  "period_key": "rolling/2026-10-14_2026-11-12",
+  "period_label": "14 Oct to 12 Nov 2026 (two Posist fortnight exports, 14-28 Oct and 29 Oct-12 Nov, no overlap)",
+  "period_date_from": "2026-10-14",
+  "period_date_to": "2026-11-12",
+  "date_inferred": false,
+  "row_count": 2214,
+  "stores_included": [
+    {
+      "store_code": "01-0001",
+      "store": "Ideal Plaza",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0002",
+      "store": "Salt Lake Sec-3",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0003",
+      "store": "Forum",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0004",
+      "store": "Manisquare",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0005",
+      "store": "Lake Town",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0006",
+      "store": "Rosedale Plaza",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0007",
+      "store": "Calcutta Swimming Club",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0008",
+      "store": "Food Truck - 1",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0009",
+      "store": "Salt Lake Sec-1",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0010",
+      "store": "Rangoli Mall",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0011",
+      "store": "James Long Sarani",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0012",
+      "store": "Santoshpur",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0013",
+      "store": "New Town Cloud Kitchen",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0014",
+      "store": "Kalikapur",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0015",
+      "store": "Lake Road",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0016",
+      "store": "Quest Mall",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "02-0001",
+      "store": "Sec 18 Noida",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0003",
+      "store": "Paschim Vihar",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0004",
+      "store": "Kalkaji",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0006",
+      "store": "Sec 143 Noida",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0008",
+      "store": "Rohini Sec-7",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0009",
+      "store": "Gurgaon DLF",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0010",
+      "store": "Gurgaon Sec-15",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0011",
+      "store": "Pacific Mall Jasola",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0012",
+      "store": "Connaught Place",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0013",
+      "store": "Model Town",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0014",
+      "store": "Gurgaon Sec 10",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0015",
+      "store": "Shalimar Bagh",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0016",
+      "store": "Sec 31 Gurgaon",
+      "city": "NCR"
+    },
+    {
+      "store_code": "EVENTS",
+      "store": "Events & Catering",
+      "city": "Kolkata"
+    }
+  ],
+  "stores_missing": [],
+  "always_excluded": [
+    "02-0005",
+    "GK1",
+    "02-0007"
+  ],
+  "faridabad_policy": "exclude",
+  "faridabad_skipped": true,
+  "channel_filled": false,
+  "category_filled": false,
+  "net_sales_filled": false,
+  "gross_total": 50029466.69,
+  "qty_total": 503137.0,
+  "notes": [
+    "Total Sales is Posist gross, not net.",
+    "Posist Insights cannot export item sales by source, so no item-level channel split; use store-level channel totals.",
+    "Rosedale rows include its partly-open and closed November days.",
+    "Refreshed every Friday ~8:30 IST for the 30 days through the previous Thursday."
+  ],
+  "as_of": "2026-11-12",
+  "requested_from": "2026-10-14",
+  "requested_to": "2026-11-12",
+  "overlap_days_with_request": 30,
+  "output_csv": "menu_mix/menu_mix_2026-11-12.csv",
+  "latest_csv": "menu_mix/menu_mix_latest.csv"
+}

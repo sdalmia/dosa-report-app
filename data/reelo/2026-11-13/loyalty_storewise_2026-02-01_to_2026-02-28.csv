@@ -1,0 +1,27 @@
+store_name,status,points_issued,points_redeemed,times_reward_redeemed,redemption_rate_in_percentage,attributed_revenue,avg_revenue_redemption,customer_count
+Dosa Coffee Kalikapur,active,50572,14412,140,28.5,79905,570.75,126
+Dosa Coffee RosedalePlaza,active,64503,22584,215,35.01,85292,396.71,189
+Dosa Coffee Kalkaji,active,49748,13854,118,27.85,61367,520.06,101
+Dosa Coffee Santoshpur,active,34069,16446,239,48.27,119675,500.73,201
+Dosa Coffee Ideal Plaza,active,81838,27640,242,33.77,120430,497.64,209
+Dosa Coffee Rohini,active,105861,12612,101,11.91,71029,703.26,95
+Dosa Coffee Saltlake BD25,active,95044,26361,200,27.74,108457,542.28,174
+Dosa Coffee Pacific,active,93094,12062,99,12.96,45834,462.97,94
+Dosa Coffee Shalimar bagh,active,0,0,0,0,0,0,0
+Dosa Coffee Gurgaon sec10,active,39811,7312,46,18.37,19136,416,39
+Dosa Coffee Gurgaon Sec15,active,98839,19705,156,19.94,100840,646.41,139
+Dosa Coffee Quest Mall,active,62420,3280,36,5.25,9137,253.81,32
+Dosa Coffee DLF Building5,active,78537,10524,79,13.4,44574,564.23,68
+Inactive,inactive,0,0,0,0,0,0,0
+Dosa Coffee Rangoli Mall,active,57356,14155,142,24.68,77815,547.99,128
+Dosa Coffee Saltlake JC21,active,151236,18347,151,12.13,79316,525.27,135
+Dosa Coffee Noida Sec18,active,70236,14655,104,20.87,73987,711.41,93
+Dosa Coffee Paschim Vihar,active,59322,12031,103,20.28,62237,604.24,99
+Dosa Coffee CP,active,318334,14141,93,4.44,64960,698.49,83
+Dosa Coffee Jameslong,active,58188,23806,242,40.91,148478,613.55,203
+In Active,inactive,0,0,0,0,0,0,0
+Dosa Coffee Noida Sec143,active,39336,7814,60,19.86,33121,552.02,53
+Dosa Coffee Lake Road,active,71640,29755,280,41.53,175645,627.3,220
+Dosa Coffee Gurgaon 31,active,0,0,0,0,0,0,0
+Dosa Coffee Laketown,active,45536,7298,88,16.03,38179,433.85,76
+Dosa Coffee Model Town,active,139031,24888,184,17.9,126420,687.07,148

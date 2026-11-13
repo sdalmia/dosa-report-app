@@ -40,6 +40,22 @@
     return node;
   }
 
+  function calendar(spec) {
+    var days = (spec && spec.days) || [];
+    if (!days.length) return "";
+    var cells = days.map(function (day) {
+      var gap = day.gap;
+      var tone = gap == null ? "" : (gap < -10 ? " is-down" : (gap > 10 ? " is-up" : ""));
+      var gapText = gap == null ? "no actual" : (gap > 0 ? "+" : "") + gap + "%";
+      return '<div class="cc-day' + tone + '"><b>' + escape(String(day.date || "").slice(8)) + " " + escape(day.weekday || "") + "</b>"
+        + "<span>pred " + escape(day.pred == null ? "" : String(day.pred)) + "</span>"
+        + "<span>" + escape(gapText) + "</span>"
+        + (day.tier ? "<i>" + escape(day.tier) + "</i>" : "")
+        + "</div>";
+    }).join("");
+    return '<figure class="cc-cal"><figcaption>' + escape(spec.title || "Sales calendar") + "</figcaption><div class=\"cc-cal-grid\">" + cells + "</div></figure>";
+  }
+
   function chart(spec) {
     var series = (spec && spec.series) || [];
     if (!series.length) return "";
@@ -122,6 +138,93 @@
     }).catch(function () {});
   }
 
+  function actions(payload, source) {
+    var row = '<div class="cc-actions">'
+      + '<button type="button" class="cc-act" data-act="pdf">Download PDF</button>';
+    if (payload.table) row += '<button type="button" class="cc-act" data-act="xlsx">Download Excel</button>';
+    if (payload.chart || payload.calendar) row += '<button type="button" class="cc-act" data-act="png">Download image</button>';
+    row += '<button type="button" class="cc-act" data-act="share">Share</button>';
+    row += '<button type="button" class="cc-act" data-act="thread">Download conversation</button>';
+    if (payload.cos) {
+      var label = payload.cos.connected ? "Send to Chief of Staff" : "Send to Chief of Staff isn't connected yet";
+      row += '<button type="button" class="cc-act" data-act="cos">' + label + "</button>";
+    }
+    row += "</div>";
+    return row;
+  }
+
+  function postFile(kind, question, answer, table, chart) {
+    var columns = (table && table.columns) || ["Answer"];
+    var rows = (table && table.rows) || [[answer]];
+    fetch("/api/chat/export", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        format: kind,
+        title: question || "Dosa Coffee Wizard",
+        columns: columns,
+        rows: rows,
+        series: chart && chart.series,
+        notes: ["Copied from the Wizard answer."]
+      })
+    }).then(function (response) { return response.blob(); }).then(function (blob) {
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = kind === "xlsx" ? "wizard.xlsx" : (kind === "png" ? "wizard.png" : "wizard.pdf");
+      link.click();
+    }).catch(function () {});
+  }
+
+  log.addEventListener("click", function (event) {
+    var act = event.target.closest(".cc-act");
+    if (!act) return;
+    var turn = act.closest(".cc-turn");
+    var question = turn ? turn.dataset.question || "" : "";
+    var answer = turn ? (turn.querySelector(".cc-answer") || {}).textContent || "" : "";
+    var kind = act.getAttribute("data-act");
+    if (kind === "share") {
+      var days = window.prompt("Link expires in how many days? 1, 7, or 30", "7");
+      fetch("/api/chat/share", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: question, answer: answer, days: Number(days || 7), public: false })
+      }).then(function (response) { return response.json(); }).then(function (body) {
+        var url = location.origin + (body.url || "");
+        if (navigator.share) {
+          navigator.share({ title: "Dosa Coffee Wizard", text: question, url: url }).catch(function () {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url);
+        }
+      }).catch(function () {});
+      return;
+    }
+    if (kind === "thread") {
+      var turns = [];
+      log.querySelectorAll(".cc-turn").forEach(function (node) {
+        var body = node.querySelector(".cc-answer, p");
+        turns.push([(node.classList.contains("user") ? "You" : "Wizard"), body ? body.textContent : ""]);
+      });
+      postFile("pdf", "Conversation", "", { columns: ["Who", "Text"], rows: turns }, null);
+      return;
+    }
+    if (kind === "cos") {
+      var requestText = window.prompt("Request for Chief of Staff", question);
+      if (!requestText) return;
+      fetch("/api/chat/cos", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request: requestText, excerpt: answer.slice(0, 400) })
+      }).then(function (response) { return response.json(); }).then(function (body) {
+        act.textContent = body.connected ? ("Sent: " + (body.status || "")) : "Send to Chief of Staff isn't connected yet";
+      }).catch(function () {});
+      return;
+    }
+    postFile(kind, question, answer, null, null);
+  });
+
   function followups(items) {
     if (!items || !items.length) return "";
     return '<div class="cc-follow">' + items.map(function (item) {
@@ -200,8 +303,10 @@
               var extra = "";
               if (payload.as_of) extra += '<p class="cc-asof">Data as of ' + escape(payload.as_of) + "</p>";
               if (payload.chart) extra += chart(payload.chart);
+              if (payload.calendar) extra += calendar(payload.calendar);
               if (payload.table) extra += table(payload.table);
               extra += followups(payload.followups);
+              extra += actions(payload, source);
               if (extra) body.insertAdjacentHTML("beforeend", extra);
               body.appendChild(rateControls(
                 bot.dataset.question || "",
@@ -236,9 +341,11 @@
     event.preventDefault();
     ask(input.value);
   });
+  var preset = new URLSearchParams(window.location.search).get("ask");
+  if (preset) ask(preset);
   document.addEventListener("click", function (event) {
-    var chip = event.target.closest(".cc-chip");
+    var chip = event.target.closest(".cc-chip, .cc-insight");
     if (!chip) return;
-    ask(chip.textContent);
+    ask(chip.getAttribute("data-q") || chip.textContent);
   });
 })();

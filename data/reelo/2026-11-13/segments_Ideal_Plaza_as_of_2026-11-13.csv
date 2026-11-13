@@ -1,0 +1,7 @@
+segment,customers,visits,avg_visits_per_customer,AOV,total_sales
+One-Time Visitor,15919,15919,1.00,₹728.06,₹11589950
+Lost,3706,12607,3.40,₹614.56,₹7747704
+New – First Timer,1162,1162,1.00,₹796.89,₹925991
+At Risk,1052,5777,5.49,₹656.36,₹3791777
+Promising,528,1286,2.44,₹771.77,₹992493
+Loyal,450,14691,32.65,₹579.94,₹8519957

@@ -294,12 +294,13 @@ def sniff_menu_kind(path):
     has_sales = "total sales" in names or "gross" in names or "sales" in names
     if path.name.lower().startswith("menu_analysis_") and has_item and has_sales:
         return "analysis"
-    # Tony's processed item file. It wins over a menu mix built from raw folders.
+    # A dated menu mix stays a mix. Item-sales files, which have qty and gross
+    # and no "total sales" column, are the ones that replace an older mix.
+    if path.name.lower().startswith("menu_mix") and has_item and has_sales:
+        return "network"
     if "store" in names and has_item and "qty" in names and "gross" in names and "total sales" not in names:
         return "items"
     if "store" in names and has_item and has_sales and has_orders:
-        return "network"
-    if path.name.lower().startswith("menu_mix") and has_item and has_sales:
         return "network"
     return ""
 

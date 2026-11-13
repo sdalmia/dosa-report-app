@@ -37,7 +37,26 @@ RATING_FIELDS = (
 )
 CHANNEL_ORDER = {"POS": 0, "Swiggy": 1, "Zomato": 2}
 DELIVERY_CHANNELS = {"Swiggy", "Zomato"}
-PAYOUT_NOTE = "What is left after commission is not in yet."
+def _payout_note():
+    from app.commercial import basis_sentence, payout_files
+
+    files = payout_files()
+    if files:
+        names = ", ".join(path.name for path in files[:4])
+        return (
+            "Payouts after commission use the loaded file"
+            + ("" if len(files) == 1 else "s")
+            + f" ({names}). Compare that actual with the 24.78% of net rule. "
+            + basis_sentence()
+        )
+    return (
+        "Payouts after commission are not in yet. No Swiggy or Zomato payout or ads file is loaded, "
+        "so the rule stands in their place and there is no gap to show. "
+        + basis_sentence()
+    )
+
+
+PAYOUT_NOTE = _payout_note()
 MALL_NOTE = (
     "In-store bills at Forum and Manisquare include bulk mall-system entries. "
     "Those bills and the average bill are not in the comparison."

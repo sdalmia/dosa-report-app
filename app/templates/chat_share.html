@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Shared answer{% endblock %}
+{% block content %}
+<article class="cc-share">
+  <p class="kicker">Dosa Coffee Wizard</p>
+  <h1>{{ question }}</h1>
+  {% if note %}<p>{{ note }}</p>{% endif %}
+  <div class="cc-answer">{{ answer }}</div>
+  {% if as_of %}<p class="cc-asof">Data as of {{ as_of }}</p>{% endif %}
+</article>
+{% endblock %}

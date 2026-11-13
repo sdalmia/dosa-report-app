@@ -1,0 +1,31 @@
+department,status,count,as_of
+Accounts,active,6,2026-11-12
+Accounts,relieved,2,2026-11-12
+Audit & MIS,active,1,2026-11-12
+CS Team,active,1,2026-11-12
+CS Team,relieved,1,2026-11-12
+Cafe,active,25,2026-11-12
+Cafe,notice,1,2026-11-12
+Cafe,relieved,6,2026-11-12
+Core Operations > Operations,relieved,1,2026-11-12
+Core Team > Operations,active,496,2026-11-12
+Core Team > Operations,notice,8,2026-11-12
+Core Team > Operations,relieved,294,2026-11-12
+Fresh Aisle - Bakery,active,12,2026-11-12
+Fresh Aisle - Bakery,relieved,2,2026-11-12
+Fresh Aisle - HO,active,6,2026-11-12
+Fresh Aisle - HO,relieved,2,2026-11-12
+HO Support,active,3,2026-11-12
+HO Support,relieved,1,2026-11-12
+HR,active,2,2026-11-12
+Management,active,2,2026-11-12
+Marketing,active,1,2026-11-12
+Mart,active,8,2026-11-12
+Mart,relieved,2,2026-11-12
+Operations,relieved,2,2026-11-12
+Operations Support,active,8,2026-11-12
+Operations Support,relieved,3,2026-11-12
+Project,active,1,2026-11-12
+Purchase And Sorting,active,3,2026-11-12
+Purchase And Sorting,relieved,1,2026-11-12
+Training,active,2,2026-11-12

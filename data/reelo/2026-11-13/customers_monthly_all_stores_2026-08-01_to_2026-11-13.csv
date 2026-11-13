@@ -1,0 +1,5 @@
+period,date,customers,covers,new_customers,new_customers_percentage,repeat_customers,repeat_customers_percentage,total_customers_so_far
+August,Aug 01 2026 - Aug 31 2026,35083,82846,20448,58.28,14635,41.72,331627
+September,Sep 01 2026 - Sep 30 2026,32344,73720,18231,56.37,14113,43.63,349858
+October,Oct 01 2026 - Oct 31 2026,32448,80212,17919,55.22,14529,44.78,367777
+November,Nov 01 2026 - Nov 13 2026,11301,26335,5615,49.69,5686,50.31,373392

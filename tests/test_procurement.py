@@ -158,6 +158,12 @@ class ProcurementTests(unittest.TestCase):
         self.assertIn("Warehouse and central-kitchen variance is not shown", html)
         self.assertNotIn('data-key="central warehouse"', html)
         self.assertNotIn('data-key="central kitchen"', html)
+        self.assertEqual(_attr(html, "store-pct", key="ideal plaza"), "18.1165")
+        self.assertEqual(_attr(html, "store-semi", key="ideal plaza"), "94936.88")
+        self.assertEqual(_attr(html, "store-packaging", key="ideal plaza"), "64241.18")
+        self.assertEqual(_attr(html, "store-total-pct", key="ideal plaza"), "24.2759")
+        self.assertIn("raw + semi", html)
+        self.assertIn("not food cost", html.casefold())
 
     def test_alerts_and_hershey(self):
         html = self.get("/food-cost")
