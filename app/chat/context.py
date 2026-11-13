@@ -167,8 +167,9 @@ def build_context(question, data):
         parts.extend(["", people])
     parts.append("")
     from app.chat.wizard_a import domain_text
+    from app.chat.wizard_b import domain_text as more_text
 
-    extra = domain_text(question, role)
+    extra = "\n\n".join(part for part in (domain_text(question, role), more_text(question, role)) if part)
     if extra:
         parts.extend(["", extra])
     parts.append("")

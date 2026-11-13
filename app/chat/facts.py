@@ -754,9 +754,10 @@ def answer_from_data(question, data, owner):
             return _pack("Licences are not included for this role.", "", "sales", text, owner)
         body = _licence_packet(text, role)
         return _pack(body, "13 Nov 2026", "sales", text, owner, source={"text": body})
+    from app.chat.wizard_b import try_answer as _wizard_b
     from app.chat.wizard_a import try_answer as _wizard_answer
 
-    wizard = _wizard_answer(text, data, owner)
+    wizard = _wizard_b(text, data, owner) or _wizard_answer(text, data, owner)
     if wizard is not None:
         return wizard
     if "action plan" in folded:

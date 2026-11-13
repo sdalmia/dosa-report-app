@@ -6,6 +6,15 @@ can call a domain by name. The role gate is applied again inside dispatch.
 
 import json
 
+from app.chat.wizard_b import (
+    brands_text,
+    frontlyne_text,
+    gaps_text,
+    location_text,
+    posist_text,
+    price_answer,
+    reelo_text,
+)
 from app.chat.wizard_a import (
     _asks_finance,
     _asks_fixes,
@@ -29,6 +38,13 @@ _TOOLS = (
     ("growth", "Where a sales gap is large enough to act on, with the assumption stated.", {"owner", "finance", "hr", "ops"}),
     ("trends", "Largest week-versus-week sales moves.", {"owner", "finance", "hr", "ops"}),
     ("forecast", "Predicted sales calendar and forecast accuracy.", {"owner", "finance", "hr", "ops"}),
+    ("location", "Where to open next, with saved finder scores out of 10 for existing stores.", {"owner", "finance", "hr", "ops"}),
+    ("brands", "Brand outlets saved by the Location Finder for an area.", {"owner", "finance", "hr", "ops"}),
+    ("prices", "Ingredient unit price, this month versus last month, by city.", {"owner", "finance", "hr", "ops"}),
+    ("gaps", "Data we are still missing, and who owns the chase.", {"owner", "finance", "hr", "ops"}),
+    ("training", "Frontlyne completion counts. No staff names.", {"owner", "hr", "ops"}),
+    ("reelo_deep", "Reelo new versus repeat. Stores that are not on Reelo are not zero.", {"owner", "finance", "hr", "ops"}),
+    ("posist", "Posist channel gross and voids. Missing slices are named, not filled in.", {"owner", "finance", "hr", "ops"}),
 )
 
 
@@ -72,6 +88,21 @@ def dispatch(name, arguments, role):
     if name == "forecast":
         answer = forecast_answer(question, role in {"owner", "finance"})
         return {"text": answer.get("text") or "", "calendar": answer.get("calendar")}
+    if name == "location":
+        return {"text": location_text(question)}
+    if name == "brands":
+        return {"text": brands_text(question)}
+    if name == "prices":
+        answer = price_answer(question, role in {"owner", "finance"})
+        return {"text": answer.get("text") or "", "chart": answer.get("chart")}
+    if name == "gaps":
+        return {"text": gaps_text(question, role)}
+    if name == "training":
+        return {"text": frontlyne_text(role)}
+    if name == "reelo_deep":
+        return {"text": reelo_text()}
+    if name == "posist":
+        return {"text": posist_text(question)}
     return {"error": "Unknown tool."}
 
 
