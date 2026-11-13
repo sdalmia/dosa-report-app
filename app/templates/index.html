@@ -4,17 +4,17 @@
 
 {% block content %}
 <div class="container py-5">
-  <h2 class="mb-4 text-light">About this Tool</h2>
-  <p class="text-light">
+  <h2 class="mb-4">About this Tool</h2>
+  <p>
     This tool allows you to upload multiple Zomato Settlement Report Excel files and generates a consolidated master payout report for Dosa Coffee.
   </p>
-  <ul class="text-light">
+  <ul>
     <li>Upload one or more <code>.xlsx</code> settlement files exported from Zomato.</li>
     <li>Each report must contain sheets named <strong>Order Level</strong>, <strong>Addition Deductions Details</strong>, and <strong>Summary</strong>.</li>
     <li>The tool extracts relevant payout and tax columns, sums data across files, and outputs a master Excel file.</li>
     <li>Processing time may vary based on file size and number.</li>
   </ul>
-  <a href="{{ url_for('static', filename='template.xlsx') }}" class="btn btn-sm btn-outline-light mb-5">📥 Download Template File</a>
+  <a href="{{ url_for('static', filename='template.xlsx') }}" class="btn btn-sm btn-outline-secondary mb-5">Download Template File</a>
 
   <div class="row">
     <!-- Left column: Form + Spinner -->

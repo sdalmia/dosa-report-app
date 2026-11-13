@@ -92,6 +92,11 @@ def _board_response():
     view, _region, _low_only = _dashboard_view()
     filters, filter_stores = _filter_context()
     flags, flag_state = _flag_view()
+    finance = None
+    if is_owner():
+        from app.grand_economics.loader import home_finance
+
+        finance = home_finance()
     return render_template(
         'dashboard.html',
         user_name=user_info.get('name') or "",
@@ -100,6 +105,7 @@ def _board_response():
         flag_state=flag_state,
         filters=filters,
         filter_stores=filter_stores,
+        finance=finance,
         **{**view, "procurement": narrow_tiles(view.get("procurement"), filters)},
     )
 

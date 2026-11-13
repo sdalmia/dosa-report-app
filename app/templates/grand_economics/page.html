@@ -17,13 +17,18 @@
     {% if not summary.threats %}
       <p class="empty">No loss-making store in the latest month.</p>
     {% else %}
-      {% for threat in summary.threats %}
-        <button type="button" class="ge-card" data-detail="{{ threat.id }}" aria-expanded="false">
-          <span class="kicker">{{ threat.city }} · {{ threat.month }}{% if threat.tag %} · {{ threat.tag }}{% endif %}</span>
-          <strong>{{ threat.store }}</strong>
-          <span class="ge-value">{{ threat.value }}{% if threat.pct %} · {{ threat.pct }}{% endif %}</span>
-        </button>
-      {% endfor %}
+      <table class="num-table">
+        <tbody>
+          {% for threat in summary.threats %}
+            <tr>
+              <th scope="row"><button type="button" data-detail="{{ threat.id }}" aria-expanded="false">{{ threat.store }}{% if threat.tag %} · {{ threat.tag }}{% endif %}</button></th>
+              <td>{{ threat.city }}</td>
+              <td class="ge-value">{{ threat.value }}</td>
+              <td>{{ threat.pct }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     {% endif %}
   </section>
 
@@ -31,34 +36,46 @@
 
   <section aria-labelledby="ge-cards">
     <h2 id="ge-cards">Key numbers</h2>
-    {% for card in summary.cards %}
-      <button type="button" class="ge-card" data-detail="{{ card.id }}" aria-expanded="false">
-        <span class="kicker">{{ card.kicker }}</span>
-        <strong>{{ card.value }}</strong>
-        <span>{{ card.label }}</span>
-        {% if card.note %}<span class="note">{{ card.note }}</span>{% endif %}
-      </button>
-    {% endfor %}
+    <table class="num-table">
+      <thead>
+        <tr><th></th><th>Kolkata</th><th>NCR</th></tr>
+      </thead>
+      <tbody>
+        {% for left in summary.cards if left.id.startswith('kolkata-') %}
+          {% set right_id = 'ncr-' + left.id[8:] %}
+          {% for right in summary.cards if right.id == right_id %}
+            <tr>
+              <th scope="row">{{ left.label }}</th>
+              <td><button type="button" data-detail="{{ left.id }}" aria-expanded="false">{{ left.value }}</button></td>
+              <td><button type="button" data-detail="{{ right.id }}" aria-expanded="false">{{ right.value }}</button></td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 
   {% if summary.checks %}
-    <section aria-labelledby="ge-checks">
-      <h2 id="ge-checks">To check with Shilajit</h2>
+    <details class="fold">
+      <summary id="ge-checks">To check with Shilajit</summary>
       <ul>
         {% for line in summary.checks %}<li>{{ line }}</li>{% endfor %}
       </ul>
-    </section>
+    </details>
   {% endif %}
   {% if summary.booked %}
-    <section aria-labelledby="ge-booked">
-      <h2 id="ge-booked">Booked in Oct</h2>
+    <details class="fold">
+      <summary id="ge-booked">Booked in Oct</summary>
       <ul>
         {% for line in summary.booked %}<li>{{ line }}</li>{% endfor %}
       </ul>
-    </section>
+    </details>
   {% endif %}
 
-  {{ lazy_section(url_for('grand_economics.stores_section'), height=280, title='Stores', prefetch=true, id='ge-stores') }}
+  <details class="fold">
+    <summary>Stores</summary>
+    {{ lazy_section(url_for('grand_economics.stores_section'), height=80, title='Stores', id='ge-stores') }}
+  </details>
 {% endif %}
 {% endblock %}
 
@@ -78,8 +95,8 @@
   }
 
   function place(panel, button) {
-    if (button && button.parentNode) button.insertAdjacentElement("afterend", panel);
-    else if (slot()) slot().appendChild(panel);
+    if (slot()) slot().appendChild(panel);
+    else if (button && button.parentNode) button.insertAdjacentElement("afterend", panel);
     setOpen(panel.id);
     if (window.refreshLists) window.refreshLists();
   }

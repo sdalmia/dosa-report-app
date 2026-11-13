@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request
+from urllib.parse import urlencode
+
+from flask import Blueprint, render_template, request, url_for
 
 from app.fragments import html_fragment
 from app.page_cache import freeze, remember
@@ -41,9 +43,7 @@ def _filter_store(filters):
     return ""
 
 
-@menu_ops_bp.route("/menu")
-@login_required
-def menu():
+def _menu_view():
     filters, window, options = _shared_filters()
     region = request.args.get("region", "").strip() or city_region(filters)
     store = request.args.get("store", "").strip() or _filter_store(filters)
@@ -53,6 +53,17 @@ def menu():
         ("menu-eng", category, region, store, quadrant, freeze(window), freeze(filters)),
         lambda: build_menu(category=category, region=region, store=store, quadrant=quadrant, window=window),
     )
+    return view, filters, options
+
+
+@menu_ops_bp.route("/menu")
+@login_required
+def menu():
+    view, filters, options = _menu_view()
+    item_src = url_for("menu_ops.menu_items")
+    query = urlencode(request.args)
+    if query:
+        item_src = f"{item_src}?{query}"
     return render_template(
         "menu.html",
         view=view,
@@ -61,7 +72,15 @@ def menu():
         no_region=NO_REGION,
         filters=filters,
         filter_stores=options,
+        item_src=item_src,
     )
+
+
+@menu_ops_bp.route("/menu/fragment/items")
+@login_required
+def menu_items():
+    view, _filters, _options = _menu_view()
+    return html_fragment(render_template("_items.html", view=view))
 
 
 @menu_ops_bp.route("/channels")
