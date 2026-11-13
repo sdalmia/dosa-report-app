@@ -105,9 +105,12 @@ class FlagAccessTests(unittest.TestCase):
 
     def test_non_owner_does_not_receive_accounts_or_people(self):
         self._login("asha@dosacoffee.com")
-        page = self.client.get("/board")
-        flags = self.client.get("/flags")
-        payload = self.client.get("/flags.json")
+        # The shipped tony.csv row is dated 9 Oct. The board hides a flag after 7 days,
+        # so the check uses that file date rather than the wall clock.
+        with patch("app.flags.business_today", return_value=date(2026, 10, 9)):
+            page = self.client.get("/board")
+            flags = self.client.get("/flags")
+            payload = self.client.get("/flags.json")
         self.assertEqual(page.status_code, 200)
         self.assertEqual(flags.status_code, 200)
         html = page.get_data(as_text=True) + flags.get_data(as_text=True)

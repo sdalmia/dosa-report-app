@@ -375,10 +375,30 @@ def _north(store, region):
     return bool(re.search(r"\(02/", store or ""))
 
 
+def _store_key(name):
+    """Join 'Connaught place (02/0012)' with 'Dosa Coffee - Connaught place (02/0012)'."""
+    return _display_store(name).casefold()
+
+
 def _sales_by_store():
-    """Store gross by day. Dated daily_sales files override the cumulative file."""
-    by_store = {}
-    regions = {}
+    """Store gross by day. Dated sales_*.csv files override the cumulative file.
+
+    A sales file counts even when its _DONE marker is absent. 9 Nov is that case.
+    """
+    grouped = {}
+    latest = None
+
+    def put(store, day, gross, region=""):
+        key = _store_key(store)
+        if not key:
+            return
+        bucket = grouped.setdefault(key, {"name": store, "region": "", "days": {}})
+        if "(" in store and "(" not in bucket["name"]:
+            bucket["name"] = store
+        if region and not bucket["region"]:
+            bucket["region"] = region
+        bucket["days"][day] = gross
+
     daily = _ROOT / "data" / "store_health" / "posist_daily.csv"
     if daily.is_file():
         with daily.open(newline="", encoding="utf-8-sig") as handle:
@@ -388,12 +408,10 @@ def _sales_by_store():
                 gross = _num(raw.get("gross"))
                 if day is None or not store or gross is None:
                     continue
-                by_store.setdefault(store, {})[day] = gross
-                regions[store] = raw.get("region") or ""
+                put(store, day, gross, raw.get("region") or "")
     folder = _ROOT / "data" / "posist" / "daily_sales"
-    latest = None
     if folder.is_dir():
-        for path in folder.glob("sales_*.csv"):
+        for path in sorted(folder.glob("sales_*.csv")):
             stamp = _day(path.stem.replace("sales_", ""))
             if stamp and (latest is None or stamp > latest):
                 latest = stamp
@@ -404,13 +422,13 @@ def _sales_by_store():
                     gross = _num(raw.get("gross"))
                     if day is None or not store or gross is None:
                         continue
-                    by_store.setdefault(store, {})[day] = gross
-    return by_store, regions, latest
+                    put(store, day, gross)
+    return grouped, latest
 
 
 def _weekly_gaps():
-    by_store, regions, latest = _sales_by_store()
-    if not by_store or latest is None:
+    grouped, latest = _sales_by_store()
+    if not grouped or latest is None:
         return [], ""
     end = latest
     recent_start = end - timedelta(days=6)
@@ -418,15 +436,17 @@ def _weekly_gaps():
     prior_start = prior_end - timedelta(days=6)
     festive = _navratri_days()
     present = set()
-    for points in by_store.values():
-        present.update(points)
+    for bucket in grouped.values():
+        present.update(bucket["days"])
     missing = [
         day for offset in range(7)
         if (day := recent_start + timedelta(days=offset)) not in present
     ]
     gaps = []
-    for store, points in by_store.items():
-        region = regions.get(store) or ""
+    for bucket in grouped.values():
+        store = bucket["name"]
+        region = bucket["region"]
+        points = bucket["days"]
         recent_sum = 0.0
         prior_sum = 0.0
         pairs = 0
@@ -442,7 +462,7 @@ def _weekly_gaps():
             recent_sum += points[recent_day]
             prior_sum += points[prior_day]
             pairs += 1
-        if pairs < 3:
+        if pairs != 7:
             continue
         gaps.append({
             "store": store,
