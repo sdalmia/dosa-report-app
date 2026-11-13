@@ -1,10 +1,10 @@
 {
-  "period_key": "monthly_menu/2026-10",
-  "period_label": "October 2026 calendar month (dates inferred; no period header in the workbooks)",
-  "period_date_from": "2026-10-01",
-  "period_date_to": "2026-10-31",
-  "date_inferred": true,
-  "row_count": 2866,
+  "period_key": "rolling/2026-10-14_2026-11-12",
+  "period_label": "14 Oct to 12 Nov 2026 (two Posist fortnight exports, 14-28 Oct and 29 Oct-12 Nov, no overlap)",
+  "period_date_from": "2026-10-14",
+  "period_date_to": "2026-11-12",
+  "date_inferred": false,
+  "row_count": 2214,
   "stores_included": [
     {
       "store_code": "01-0001",
@@ -107,11 +107,6 @@
       "city": "NCR"
     },
     {
-      "store_code": "02-0007",
-      "store": "Sec 15 Faridabad",
-      "city": "NCR"
-    },
-    {
       "store_code": "02-0008",
       "store": "Rohini Sec-7",
       "city": "NCR"
@@ -165,23 +160,26 @@
   "stores_missing": [],
   "always_excluded": [
     "02-0005",
-    "GK1"
+    "GK1",
+    "02-0007"
   ],
-  "faridabad_policy": "include",
-  "faridabad_skipped": false,
+  "faridabad_policy": "exclude",
+  "faridabad_skipped": true,
   "channel_filled": false,
   "category_filled": false,
   "net_sales_filled": false,
-  "gross_total": 54280784.00399999,
-  "qty_total": 547765.0,
+  "gross_total": 50029466.69,
+  "qty_total": 503137.0,
   "notes": [
-    "Workbook sheets have columns Item Name, Total Sales, Total Orders, % Contribution only.",
-    "Total Sales is Posist gross, not net."
+    "Total Sales is Posist gross, not net.",
+    "Posist Insights cannot export item sales by source, so no item-level channel split; use store-level channel totals.",
+    "Rosedale rows include its partly-open and closed November days.",
+    "Refreshed every Friday ~8:30 IST for the 30 days through the previous Thursday."
   ],
   "as_of": "2026-11-12",
   "requested_from": "2026-10-14",
   "requested_to": "2026-11-12",
-  "overlap_days_with_request": 18,
+  "overlap_days_with_request": 30,
   "output_csv": "menu_mix/menu_mix_2026-11-12.csv",
   "latest_csv": "menu_mix/menu_mix_latest.csv"
 }
