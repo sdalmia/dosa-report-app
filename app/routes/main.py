@@ -132,9 +132,15 @@ def dashboard():
         shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
     shown = shown[:4]
     from app.chat.licences import home_card
+    from app.chat.wizard_a import persist_trends, trend_cards
 
-    card = home_card(data.get("role") or ("owner" if owner else "ops"))
-    return render_template("chat.html", chips=shown, connected=configured(), insights=[card] if card else [])
+    role = data.get("role") or ("owner" if owner else "ops")
+    persist_trends()
+    insights = trend_cards()
+    card = home_card(role)
+    if card:
+        insights.append(card)
+    return render_template("chat.html", chips=shown, connected=configured(), insights=insights)
 
 
 @main_bp.route("/board")

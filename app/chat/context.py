@@ -166,10 +166,24 @@ def build_context(question, data):
     if people:
         parts.extend(["", people])
     parts.append("")
+    from app.chat.wizard_a import domain_text
+
+    extra = domain_text(question, role)
+    if extra:
+        parts.extend(["", extra])
+    parts.append("")
     parts.append(
         "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support."
     )
-    return "\n".join(parts)
+    return _fit("\n".join(parts))
+
+
+def _fit(text, limit_tokens=12000):
+    """Keep the prompt near 12k tokens. The sales rows sit at the front and stay."""
+    limit = limit_tokens * 4
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "\n[truncated to stay within the prompt budget]"
 
 
 def _delivery_note(question):

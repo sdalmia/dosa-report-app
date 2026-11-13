@@ -40,6 +40,22 @@
     return node;
   }
 
+  function calendar(spec) {
+    var days = (spec && spec.days) || [];
+    if (!days.length) return "";
+    var cells = days.map(function (day) {
+      var gap = day.gap;
+      var tone = gap == null ? "" : (gap < -10 ? " is-down" : (gap > 10 ? " is-up" : ""));
+      var gapText = gap == null ? "no actual" : (gap > 0 ? "+" : "") + gap + "%";
+      return '<div class="cc-day' + tone + '"><b>' + escape(String(day.date || "").slice(8)) + " " + escape(day.weekday || "") + "</b>"
+        + "<span>pred " + escape(day.pred == null ? "" : String(day.pred)) + "</span>"
+        + "<span>" + escape(gapText) + "</span>"
+        + (day.tier ? "<i>" + escape(day.tier) + "</i>" : "")
+        + "</div>";
+    }).join("");
+    return '<figure class="cc-cal"><figcaption>' + escape(spec.title || "Sales calendar") + "</figcaption><div class=\"cc-cal-grid\">" + cells + "</div></figure>";
+  }
+
   function chart(spec) {
     var series = (spec && spec.series) || [];
     if (!series.length) return "";
@@ -200,6 +216,7 @@
               var extra = "";
               if (payload.as_of) extra += '<p class="cc-asof">Data as of ' + escape(payload.as_of) + "</p>";
               if (payload.chart) extra += chart(payload.chart);
+              if (payload.calendar) extra += calendar(payload.calendar);
               if (payload.table) extra += table(payload.table);
               extra += followups(payload.followups);
               if (extra) body.insertAdjacentHTML("beforeend", extra);

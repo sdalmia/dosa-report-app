@@ -85,8 +85,8 @@ def _pull_chart(text, context):
     return kept.strip(), chart
 
 
-def complete_chat(messages, model=None):
-    """Call the hosted model. Returns (text, error). Error is None on success."""
+def complete_message(messages, model=None, tools=None):
+    """Call the hosted model. Returns (message dict, error)."""
     key = os.environ.get("CHAT_API_KEY", "").strip()
     if not key:
         return None, "no_key"
@@ -98,6 +98,9 @@ def complete_chat(messages, model=None):
         "max_tokens": 2000,
         "messages": messages,
     }
+    if tools:
+        body["tools"] = tools
+        body["tool_choice"] = "auto"
     request = urllib.request.Request(
         url,
         data=json.dumps(body).encode("utf-8"),
@@ -113,10 +116,20 @@ def complete_chat(messages, model=None):
         return None, "request_error"
     try:
         payload = json.loads(raw)
-        content = payload["choices"][0]["message"]["content"]
+        message = payload["choices"][0]["message"]
     except (KeyError, TypeError, ValueError, json.JSONDecodeError):
         return None, "bad_response"
-    text = str(content or "").strip()
+    if not isinstance(message, dict):
+        return None, "bad_response"
+    return message, None
+
+
+def complete_chat(messages, model=None):
+    """Call the hosted model. Returns (text, error). Error is None on success."""
+    message, error = complete_message(messages, model)
+    if error:
+        return None, error
+    text = str((message or {}).get("content") or "").strip()
     if not text:
         return None, "empty_response"
     return text, None
@@ -135,6 +148,7 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
         "followups": local.get("followups") or [],
         "topic": local.get("topic") or "",
         "actions": local.get("actions") or [],
+        "calendar": local.get("calendar"),
         "context": context,
         "messages": messages,
         "model": None,
@@ -148,16 +162,26 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
     if not os.environ.get("CHAT_API_KEY", "").strip() and client is None:
         result["fallback"] = "no_key"
         _log_ask(None, "no_key")
-        if when_offline == "notice":
+        if when_offline == "notice" and os.environ.get("CHAT_SHOW_LOCAL", "").strip() != "1":
             result["text"] = NOT_CONNECTED
             result["table"] = None
             result["chart"] = None
+            result["calendar"] = None
         return result
     chosen = model_name()
     if client is not None:
         text, error = client(messages, chosen)
     else:
-        text, error = complete_chat(messages, chosen)
+        from app.chat.router import run_tool_loop
+
+        text, error = run_tool_loop(
+            messages,
+            data.get("role") or "ops",
+            complete_message,
+            chosen,
+        )
+        if error:
+            text, error = complete_chat(messages, chosen)
     if error or not text:
         result["text"] = AI_UNAVAILABLE + " " + (local.get("text") or "")
         result["fallback"] = error or "empty_response"
@@ -212,6 +236,7 @@ def iter_answer(question, email, client=None):
         "as_of": produced.get("as_of") or "",
         "table": produced.get("table"),
         "chart": produced.get("chart"),
+        "calendar": produced.get("calendar"),
         "followups": produced.get("followups") or [],
         "topic": produced.get("topic") or "",
         "ask_id": ask_id,
