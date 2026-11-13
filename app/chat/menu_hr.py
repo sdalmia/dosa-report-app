@@ -1,10 +1,13 @@
-"""October menu mix and the 12 Nov Keka counts.
+"""Newest menu mix and the 12 Nov Keka counts.
 
-Menu answers use gross when net is blank and keep each row's own dates.
-People counts are owner and HR only. Names and employee numbers are not in these files.
+The menu file refreshes on Fridays. The newest menu_mix_*.csv wins, and its
+meta names the window. Net, channel, and category stay blank when the source
+has them blank. People counts are owner and HR only.
 """
 
 import csv
+import json
+import re
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parents[2]
@@ -35,17 +38,39 @@ def _read(path):
         return list(csv.DictReader(handle))
 
 
+def _file_stamp(path):
+    days = re.findall(r"\d{4}-\d{2}-\d{2}", path.name)
+    if days:
+        return max(days)
+    months = re.findall(r"\d{4}-\d{2}", path.name)
+    if months:
+        return max(months) + "-01"
+    return ""
+
+
+def _meta_for(path):
+    meta_path = path.with_name(path.stem + ".meta.json")
+    if not meta_path.is_file():
+        return {}
+    try:
+        payload = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
 def newest_menu():
-    """The mix with the latest date_to. Older files stay available for category."""
+    """Newest Friday drop, by the date in the filename, with its meta."""
     best = None
-    best_end = ""
+    best_stamp = ""
     for path in _menu_files():
-        rows = _read(path)
-        end = max((row.get("date_to") or row.get("period_end") or "") for row in rows) if rows else ""
-        if best is None or end > best_end:
-            best = (path, rows)
-            best_end = end
-    return best
+        stamp = _file_stamp(path)
+        if best is None or stamp > best_stamp:
+            best = path
+            best_stamp = stamp
+    if best is None:
+        return None
+    return best, _read(best), _meta_for(best)
 
 
 def menu_packet(question):
@@ -55,7 +80,7 @@ def menu_packet(question):
     picked = newest_menu()
     if not picked:
         return "Menu mix: no menu_mix file is loaded."
-    path, rows = picked
+    path, rows, meta = picked
     usable = []
     for row in rows:
         gross = _num(row.get("gross") if "gross" in row else row.get("total_sales"))
@@ -78,13 +103,26 @@ def menu_packet(question):
         pool = sorted(pool, key=lambda row: row["gross"] or 0, reverse=True)[:12]
     else:
         pool = pool[:12]
-    net_blank = all(row["net"] is None for row in pool)
+    net_blank = all(row["net"] is None for row in pool) or meta.get("net_sales_filled") is False
+    window = meta.get("period_label") or ""
+    start = meta.get("period_date_from") or ""
+    end = meta.get("period_date_to") or ""
     lines = [
         f"Menu mix from {path.name}.",
+        f"Window: {window}" if window else f"Window: {start} to {end}.",
         "Net sales are blank, so these figures are Posist gross." if net_blank else "Net is used where the row has it. Otherwise the figure is gross.",
-        "Each row keeps its own period. Category on this file is blank where the source had none.",
-        "store | item | gross | qty | from | to | basis",
+        "Category and channel are blank on this file." if meta.get("category_filled") is False or meta.get("channel_filled") is False else "Each row keeps its own category and channel when the file has them.",
     ]
+    for note in meta.get("notes") or []:
+        if "Rosedale" in note or "cannot export" in note:
+            lines.append(note)
+    if any(token in folded for token in ("channel", "source", "swiggy", "zomato")) and "ticket" not in folded:
+        lines.append(
+            "Posist Insights cannot export item sales by source, so there is no item-level channel split. "
+            "The fallback is store-level channel totals."
+        )
+        lines.append(_channel_fallback(named or pool))
+    lines.append("store | item | gross | qty | from | to | basis")
     for row in pool:
         lines.append(
             " | ".join([
@@ -97,6 +135,33 @@ def menu_packet(question):
                 row["basis"],
             ])
         )
+    return "\n".join(line for line in lines if line)
+
+
+def _channel_fallback(item_rows):
+    folder = _ROOT / "data" / "posist" / "daily_sales"
+    files = sorted(folder.glob("channel_*.csv")) if folder.is_dir() else []
+    if not files:
+        return "No store-level channel file is loaded."
+    wanted = {row["store"].casefold() for row in item_rows if row.get("store")}
+    lines = [f"Store-level channel gross from {files[-1].name}."]
+    shown = 0
+    with files[-1].open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            store = (raw.get("store") or "").strip()
+            if wanted and not any(name in store.casefold() or store.casefold() in name for name in wanted):
+                continue
+            lines.append(" | ".join([
+                store,
+                raw.get("source") or "",
+                raw.get("sales") or "",
+                raw.get("orders") or "",
+            ]))
+            shown += 1
+            if shown >= 8:
+                break
+    if shown == 0:
+        lines.append("No channel row matched that store.")
     return "\n".join(lines)
 
 

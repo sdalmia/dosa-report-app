@@ -18,14 +18,20 @@ from app.commercial import (
 class MenuHrTests(unittest.TestCase):
     def test_october_mix_uses_gross_and_states_the_period(self):
         from app.chat.context import build_context
+        from app.chat.menu_hr import menu_packet
 
         reset_snapshot()
         text = build_context("What are the top menu items at Ideal Plaza?", view_for(role="ops"))
-        self.assertIn("2026-10-01", text)
-        self.assertIn("2026-10-31", text)
+        self.assertIn("14 Oct to 12 Nov 2026", text)
+        self.assertIn("2026-10-14", text)
+        self.assertIn("2026-11-12", text)
         self.assertIn("Posist gross", text)
         self.assertIn("Ideal Plaza", text)
+        self.assertIn("Rosedale", text)
         self.assertNotIn("employee", text.casefold())
+        channel = menu_packet("Item sales by channel at Ideal Plaza")
+        self.assertIn("cannot export item sales by source", channel)
+        self.assertIn("store-level channel", channel.casefold())
 
     def test_ops_does_not_receive_keka_counts(self):
         from app.chat.context import build_context
