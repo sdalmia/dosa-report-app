@@ -170,6 +170,15 @@ def build_context(question, data):
     from app.chat.wizard_b import domain_text as more_text
 
     extra = "\n\n".join(part for part in (domain_text(question, role), more_text(question, role)) if part)
+    if role == "owner":
+        from app.chat.extras import active_notes
+
+        notes = active_notes()
+        if notes:
+            parts.append("")
+            parts.append("Owner notes:")
+            for note in notes:
+                parts.append(f"- {note.body}")
     if extra:
         parts.extend(["", extra])
     parts.append("")

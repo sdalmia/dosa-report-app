@@ -238,11 +238,17 @@ def iter_answer(question, email, client=None):
         "chart": produced.get("chart"),
         "calendar": produced.get("calendar"),
         "followups": produced.get("followups") or [],
+        "cos": {"connected": _cos_connected()} if role == "owner" else None,
         "topic": produced.get("topic") or "",
         "ask_id": ask_id,
         "mock": _mock_on(),
         "fallback": produced.get("fallback"),
     })
+
+
+def _cos_connected():
+    import os
+    return bool(os.environ.get("WIZARD_WEBHOOK_URL", "").strip() and os.environ.get("WIZARD_WEBHOOK_KEY", "").strip())
 
 
 def _owner(email):

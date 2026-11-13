@@ -138,6 +138,83 @@
     }).catch(function () {});
   }
 
+  function actions(payload, source) {
+    var row = '<div class="cc-actions">'
+      + '<button type="button" class="cc-act" data-act="pdf">Download PDF</button>';
+    if (payload.table) row += '<button type="button" class="cc-act" data-act="xlsx">Download Excel</button>';
+    if (payload.chart || payload.calendar) row += '<button type="button" class="cc-act" data-act="png">Download image</button>';
+    row += '<button type="button" class="cc-act" data-act="share">Share</button>';
+    if (payload.cos) {
+      var label = payload.cos.connected ? "Send to Chief of Staff" : "Send to Chief of Staff isn't connected yet";
+      row += '<button type="button" class="cc-act" data-act="cos">' + label + "</button>";
+    }
+    row += "</div>";
+    return row;
+  }
+
+  function postFile(kind, question, answer, table, chart) {
+    var columns = (table && table.columns) || ["Answer"];
+    var rows = (table && table.rows) || [[answer]];
+    fetch("/api/chat/export", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        format: kind,
+        title: question || "Dosa Coffee Wizard",
+        columns: columns,
+        rows: rows,
+        series: chart && chart.series,
+        notes: ["Copied from the Wizard answer."]
+      })
+    }).then(function (response) { return response.blob(); }).then(function (blob) {
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = kind === "xlsx" ? "wizard.xlsx" : (kind === "png" ? "wizard.png" : "wizard.pdf");
+      link.click();
+    }).catch(function () {});
+  }
+
+  log.addEventListener("click", function (event) {
+    var act = event.target.closest(".cc-act");
+    if (!act) return;
+    var turn = act.closest(".cc-turn");
+    var question = turn ? turn.dataset.question || "" : "";
+    var answer = turn ? (turn.querySelector(".cc-answer") || {}).textContent || "" : "";
+    var kind = act.getAttribute("data-act");
+    if (kind === "share") {
+      var days = window.prompt("Link expires in how many days? 1, 7, or 30", "7");
+      fetch("/api/chat/share", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: question, answer: answer, days: Number(days || 7), public: false })
+      }).then(function (response) { return response.json(); }).then(function (body) {
+        var url = location.origin + (body.url || "");
+        if (navigator.share) {
+          navigator.share({ title: "Dosa Coffee Wizard", text: question, url: url }).catch(function () {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url);
+        }
+      }).catch(function () {});
+      return;
+    }
+    if (kind === "cos") {
+      var requestText = window.prompt("Request for Chief of Staff", question);
+      if (!requestText) return;
+      fetch("/api/chat/cos", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request: requestText, excerpt: answer.slice(0, 400) })
+      }).then(function (response) { return response.json(); }).then(function (body) {
+        act.textContent = body.connected ? ("Sent: " + (body.status || "")) : "Send to Chief of Staff isn't connected yet";
+      }).catch(function () {});
+      return;
+    }
+    postFile(kind, question, answer, null, null);
+  });
+
   function followups(items) {
     if (!items || !items.length) return "";
     return '<div class="cc-follow">' + items.map(function (item) {
@@ -219,6 +296,7 @@
               if (payload.calendar) extra += calendar(payload.calendar);
               if (payload.table) extra += table(payload.table);
               extra += followups(payload.followups);
+              extra += actions(payload, source);
               if (extra) body.insertAdjacentHTML("beforeend", extra);
               body.appendChild(rateControls(
                 bot.dataset.question || "",
@@ -253,6 +331,8 @@
     event.preventDefault();
     ask(input.value);
   });
+  var preset = new URLSearchParams(window.location.search).get("ask");
+  if (preset) ask(preset);
   document.addEventListener("click", function (event) {
     var chip = event.target.closest(".cc-chip, .cc-insight");
     if (!chip) return;

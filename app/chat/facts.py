@@ -754,6 +754,23 @@ def answer_from_data(question, data, owner):
             return _pack("Licences are not included for this role.", "", "sales", text, owner)
         body = _licence_packet(text, role)
         return _pack(body, "13 Nov 2026", "sales", text, owner, source={"text": body})
+    from app.chat.extras import inbox_text, save_note, what_if_text
+
+    role = data.get("role") or ("owner" if owner else "ops")
+    if text.casefold().startswith("remember"):
+        if role != "owner":
+            return _pack("Saved notes are not included for this role.", "", "sales", text, owner)
+        try:
+            from flask import has_app_context
+            if has_app_context():
+                save_note(text, "")
+        except Exception:
+            pass
+        return _pack("Saved. This note is added to later owner prompts.", "", "sales", text, owner)
+    if any(token in folded for token in ("important email", "inbox", "any important")):
+        return _pack(inbox_text(role), "", "finance", text, owner)
+    if "if i raise" in folded or "what if i raise" in folded:
+        return _pack(what_if_text(text), "", "procurement", text, owner)
     from app.chat.wizard_b import try_answer as _wizard_b
     from app.chat.wizard_a import try_answer as _wizard_answer
 
