@@ -516,7 +516,7 @@ def answer(question, data, owner):
     if (year, month) not in available:
         label = f"{_MONTH_LABEL[month]} {year}"
         return _pack(
-            f"{label} sales are not in the loaded daily files. No figure is invented.",
+            f"{label} sales are not in the loaded daily files. That month would come from Alfred, who pulls Posist Insights daily sales. No figure is invented.",
             "",
             "sales",
             question,
@@ -533,7 +533,7 @@ def answer(question, data, owner):
         city = cities.get(city_key)
         if not city:
             return _pack(
-                f"{_city_label(city_key)} {label} sales are not in the loaded daily files. No figure is invented.",
+                f"{_city_label(city_key)} {label} sales are not in the loaded daily files. That month would come from Alfred, who pulls Posist Insights daily sales. No figure is invented.",
                 as_of,
                 "sales",
                 question,

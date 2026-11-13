@@ -1,0 +1,293 @@
+{
+  "issues": [],
+  "checks": [
+    {
+      "file": "entry_report_delhi_warehouse_2026-04.xlsx",
+      "month": "2026-04",
+      "city": "Delhi",
+      "item_lines": 1000,
+      "item_sum": 6155843.94,
+      "store_total": 6163338.0,
+      "charge_sum": 3217.5,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-04.xlsx",
+      "month": "2026-04",
+      "city": "Kolkata",
+      "item_lines": 926,
+      "item_sum": 5916913.9,
+      "store_total": 5919207.0,
+      "charge_sum": 1677.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-04.xls",
+      "month": "2026-04",
+      "city": "Delhi",
+      "summary_items": 143,
+      "summary_subtotal": 6155843.93,
+      "entry_subtotal": 6155843.94,
+      "gap": 0.01,
+      "footer": {
+        "grand_total": 6163329.83,
+        "total_charge": 3217.5
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-04.xls",
+      "month": "2026-04",
+      "city": "Kolkata",
+      "summary_items": 152,
+      "summary_subtotal": 5916913.89,
+      "entry_subtotal": 5916913.9,
+      "gap": 0.01,
+      "footer": {
+        "grand_total": 5919204.79,
+        "total_charge": 1677.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "entry_report_delhi_warehouse_2026-05.xlsx",
+      "month": "2026-05",
+      "city": "Delhi",
+      "item_lines": 932,
+      "item_sum": 6591827.42,
+      "store_total": 6612096.0,
+      "charge_sum": 15900.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-05.xlsx",
+      "month": "2026-05",
+      "city": "Kolkata",
+      "item_lines": 1008,
+      "item_sum": 5769637.11,
+      "store_total": 5771451.0,
+      "charge_sum": 1805.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-05.xls",
+      "month": "2026-05",
+      "city": "Delhi",
+      "summary_items": 142,
+      "summary_subtotal": 6591827.44,
+      "entry_subtotal": 6591827.42,
+      "gap": 0.02,
+      "footer": {
+        "grand_total": 6612092.24,
+        "total_charge": 15900.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-05.xls",
+      "month": "2026-05",
+      "city": "Kolkata",
+      "summary_items": 148,
+      "summary_subtotal": 5769637.11,
+      "entry_subtotal": 5769637.11,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 5771447.08,
+        "total_charge": 1805.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "entry_report_delhi_warehouse_2026-06.xlsx",
+      "month": "2026-06",
+      "city": "Delhi",
+      "item_lines": 1014,
+      "item_sum": 7111888.31,
+      "store_total": 7137411.0,
+      "charge_sum": 21814.5,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-06.xlsx",
+      "month": "2026-06",
+      "city": "Kolkata",
+      "item_lines": 1012,
+      "item_sum": 6296704.11,
+      "store_total": 6301492.0,
+      "charge_sum": 4156.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-06.xls",
+      "month": "2026-06",
+      "city": "Delhi",
+      "summary_items": 143,
+      "summary_subtotal": 7111888.31,
+      "entry_subtotal": 7111888.31,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 7137405.4,
+        "total_charge": 21814.5
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-06.xls",
+      "month": "2026-06",
+      "city": "Kolkata",
+      "summary_items": 158,
+      "summary_subtotal": 6296704.11,
+      "entry_subtotal": 6296704.11,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 6301487.35,
+        "total_charge": 4156.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "entry_report_delhi_warehouse_2026-07.xlsx",
+      "month": "2026-07",
+      "city": "Delhi",
+      "item_lines": 989,
+      "item_sum": 6012801.47,
+      "store_total": 6032338.0,
+      "charge_sum": 16316.5,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-07.xlsx",
+      "month": "2026-07",
+      "city": "Kolkata",
+      "item_lines": 1000,
+      "item_sum": 6301213.39,
+      "store_total": 6306082.0,
+      "charge_sum": 323.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-07.xls",
+      "month": "2026-07",
+      "city": "Delhi",
+      "summary_items": 141,
+      "summary_subtotal": 6012801.47,
+      "entry_subtotal": 6012801.47,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 6032336.78,
+        "total_charge": 16316.5
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-07.xls",
+      "month": "2026-07",
+      "city": "Kolkata",
+      "summary_items": 165,
+      "summary_subtotal": 6301213.39,
+      "entry_subtotal": 6301213.39,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 6306080.18,
+        "total_charge": 323.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "entry_report_delhi_warehouse_2026-08.xlsx",
+      "month": "2026-08",
+      "city": "Delhi",
+      "item_lines": 1053,
+      "item_sum": 6871216.96,
+      "store_total": 6884288.0,
+      "charge_sum": 9930.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-08.xlsx",
+      "month": "2026-08",
+      "city": "Kolkata",
+      "item_lines": 1058,
+      "item_sum": 6809714.22,
+      "store_total": 6809581.0,
+      "charge_sum": 620.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-08.xls",
+      "month": "2026-08",
+      "city": "Delhi",
+      "summary_items": 140,
+      "summary_subtotal": 6862105.31,
+      "entry_subtotal": 6862105.32,
+      "gap": 0.01,
+      "footer": {
+        "grand_total": 6884281.35,
+        "total_charge": 9930.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-08.xls",
+      "month": "2026-08",
+      "city": "Kolkata",
+      "summary_items": 155,
+      "summary_subtotal": 6809714.22,
+      "entry_subtotal": 6809714.22,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 6809577.72,
+        "total_charge": 620.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "entry_report_delhi_warehouse_2026-09-01to08.xlsx",
+      "month": "2026-09",
+      "city": "Delhi",
+      "item_lines": 240,
+      "item_sum": 2207161.83,
+      "store_total": 2195661.0,
+      "charge_sum": 5575.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "entry_report_kolkata_warehouse_2026-09-01to08.xlsx",
+      "month": "2026-09",
+      "city": "Kolkata",
+      "item_lines": 298,
+      "item_sum": 2591552.86,
+      "store_total": 2594593.0,
+      "charge_sum": 3390.0,
+      "note": "Store Total includes charges; item_sum is item lines only and is the purchase figure used."
+    },
+    {
+      "file": "purchase_summary_itemwise_delhi_2026-09-01to08.xls",
+      "month": "2026-09",
+      "city": "Delhi",
+      "summary_items": 106,
+      "summary_subtotal": 2207161.83,
+      "entry_subtotal": 2207161.83,
+      "gap": 0.0,
+      "footer": {
+        "grand_total": 2195660.23,
+        "total_charge": 5575.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    },
+    {
+      "file": "purchase_summary_itemwise_kolkata_2026-09-01to08.xls",
+      "month": "2026-09",
+      "city": "Kolkata",
+      "summary_items": 113,
+      "summary_subtotal": 2591552.84,
+      "entry_subtotal": 2591552.86,
+      "gap": 0.02,
+      "footer": {
+        "grand_total": 2594592.1,
+        "total_charge": 3390.0
+      },
+      "note": "Summary item subtotal matches the entry-report item subtotal (within rounding)."
+    }
+  ]
+}

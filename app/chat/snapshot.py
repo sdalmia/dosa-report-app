@@ -94,9 +94,36 @@ def _num(value):
         return None
 
 
+def _posist_with_overlays(feeds):
+    """Daily sales overlays so Wizard store tables match the network summary.
+
+    load_feeds() still reads only posist_daily.csv (Store Health is unchanged).
+    This merge is Wizard-only: latest, last 7 days, month-to-date, and movers.
+    """
+    from app.chat.month_sales import _sales_by_store
+
+    grouped = _sales_by_store()
+    if not grouped:
+        return feeds.get("posist") or {}
+    out = {}
+    for rec in grouped.values():
+        name = rec["name"]
+        region = rec.get("region") or ""
+        for day, vals in rec["days"].items():
+            if vals.get("gross") is None:
+                continue
+            out[(name, day)] = {
+                "gross": vals.get("gross"),
+                "bills": vals.get("bills"),
+                "net": vals.get("net"),
+                "region": region or ((feeds.get("posist") or {}).get((name, day)) or {}).get("region"),
+            }
+    return out
+
+
 def _movers(feeds):
     grouped = {}
-    for (store, day), row in (feeds.get("posist") or {}).items():
+    for (store, day), row in _posist_with_overlays(feeds).items():
         if _out_of_base(store, day):
             continue
         gross = row.get("gross")
@@ -193,7 +220,7 @@ def _store_windows(feeds):
 
     grouped = {}
     regions = {}
-    for (store, day), row in (feeds.get("posist") or {}).items():
+    for (store, day), row in _posist_with_overlays(feeds).items():
         if _out_of_base(store, day):
             continue
         if row.get("gross") is None:

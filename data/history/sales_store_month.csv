@@ -1,0 +1,92 @@
+month,store,region,city,gross,bills,net,days_present,days_in_month,complete,mall_bulk,first_day,last_day
+2026-09,Dosa Coffee - Calcutta Swiming Club (0007),East,Kolkata,120673.32,183.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Food Truck - 1 (0008),East,Kolkata,80419.77,636.00,,20,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Forum (0003),East,Kolkata,716278.40,,,27,30,no,yes,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Ideal Plaza (01/0001),East,Kolkata,3284952.41,6955.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - James long Sarani (01/0011),East,Kolkata,1635118.69,3427.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Kalikapur (01/0014),East,Kolkata,1367229.55,2849.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Lake Town (0005),East,Kolkata,1363797.68,3157.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Lake road 01/0015,East,Kolkata,2437729.07,4423.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Manisquare (0004),East,Kolkata,1594811.03,,,27,30,no,yes,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - New Town - Cloud Kitchen (01/0013),East,Kolkata,715126.38,1935.00,,26,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Quest Mall (01/0016),East,Kolkata,989419.75,2783.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Rangoli Mall (01/0010),East,Kolkata,1257876.37,2459.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Rosedale Plaza(0006),East,Kolkata,1997938.97,5101.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Salt Lake (002),East,Kolkata,2463318.21,4793.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Salt Lake Sec-1 (0009),East,Kolkata,2395738.32,4211.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Dosa Coffee - Santoshpur (01/0012),East,Kolkata,1224383.36,2682.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Connaught place (02/0012),North,NCR,3627634.23,5112.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Gurgaon DLF (02/0009),North,NCR,1819635.83,4670.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Gurgaon Sec 10 (02/0014),North,NCR,581580.94,1417.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Gurgaon Sec-15 (02/0010),North,NCR,1595116.07,3038.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Kalkaji (02/0004),North,NCR,1680601.20,3952.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Model Town (02/0013),North,NCR,1892229.78,3482.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,"Pacific mall, Jasola (02/0011)",North,NCR,2274489.41,3905.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Paschim Vihar (02/0003),North,NCR,1141498.20,2321.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Rohini Sec-7 (02/0008),North,NCR,2232802.24,4351.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Sec 143 Noida (02/0006),North,NCR,1005646.13,2186.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Sec 15 Faridabad (02/0007),North,NCR,909944.46,2062.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Sec 18 Noida (02/0001),North,NCR,1776606.92,3951.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Sec 31 - Gurgaon (02/0016),North,NCR,945528.14,1928.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-09,Shalimar Bagh (02/0015),North,NCR,1388401.37,2470.00,,27,30,no,no,2026-09-04,2026-09-30
+2026-10,Dosa Coffee - Events & Catering,Events,Events,108538.59,2.00,,2,31,no,no,2026-10-11,2026-10-13
+2026-10,Dosa Coffee - Calcutta Swiming Club (0007),East,Kolkata,130366.69,206.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Food Truck - 1 (0008),East,Kolkata,70354.90,582.00,,27,31,no,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Forum (0003),East,Kolkata,832077.64,,,31,31,yes,yes,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Ideal Plaza (01/0001),East,Kolkata,3966173.93,8695.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - James long Sarani (01/0011),East,Kolkata,2630564.08,5284.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Kalikapur (01/0014),East,Kolkata,1870835.63,3855.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Lake Town (0005),East,Kolkata,1858218.53,4482.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Lake road 01/0015,East,Kolkata,3192940.83,5907.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Manisquare (0004),East,Kolkata,1848675.68,,,31,31,yes,yes,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - New Town - Cloud Kitchen (01/0013),East,Kolkata,1084833.19,2926.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Quest Mall (01/0016),East,Kolkata,1261096.92,3624.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Rangoli Mall (01/0010),East,Kolkata,1744888.21,3491.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Rosedale Plaza(0006),East,Kolkata,2592962.60,6568.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Salt Lake (002),East,Kolkata,3316918.74,6026.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Salt Lake Sec-1 (0009),East,Kolkata,3501648.00,5742.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Dosa Coffee - Santoshpur (01/0012),East,Kolkata,1750048.49,3751.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Connaught place (02/0012),North,NCR,3249659.60,4850.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Gurgaon DLF (02/0009),North,NCR,1766382.25,4366.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Gurgaon Sec 10 (02/0014),North,NCR,645202.95,1476.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Gurgaon Sec-15 (02/0010),North,NCR,1795796.19,3474.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Kalkaji (02/0004),North,NCR,1802803.64,4251.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Model Town (02/0013),North,NCR,2072196.61,3774.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,"Pacific mall, Jasola (02/0011)",North,NCR,2497038.96,4364.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Paschim Vihar (02/0003),North,NCR,1333333.04,2567.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Rohini Sec-7 (02/0008),North,NCR,2347889.70,4714.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Sec 143 Noida (02/0006),North,NCR,1030560.77,2310.00,,30,31,no,no,2026-10-01,2026-10-31
+2026-10,Sec 15 Faridabad (02/0007),North,NCR,598958.56,1307.00,,22,31,no,no,2026-10-01,2026-10-22
+2026-10,Sec 18 Noida (02/0001),North,NCR,1920590.84,4134.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Sec 31 - Gurgaon (02/0016),North,NCR,1039505.62,2178.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-10,Shalimar Bagh (02/0015),North,NCR,1417206.19,2593.00,,31,31,yes,no,2026-10-01,2026-10-31
+2026-11,Dosa Coffee - Events & Catering,Events,Events,29999.71,1.00,,1,30,no,no,2026-11-08,2026-11-08
+2026-11,Dosa Coffee - Calcutta Swiming Club (0007),East,Kolkata,47241.57,81.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Food Truck - 1 (0008),East,Kolkata,44875.17,267.00,,11,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Forum (0003),East,Kolkata,248031.69,,,12,30,no,yes,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Ideal Plaza (01/0001),East,Kolkata,1464562.91,3324.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - James long Sarani (01/0011),East,Kolkata,826960.42,1808.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Kalikapur (01/0014),East,Kolkata,646239.98,1356.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Lake Town (0005),East,Kolkata,693280.27,1652.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Lake road 01/0015,East,Kolkata,928833.24,1780.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Manisquare (0004),East,Kolkata,554244.13,,,12,30,no,yes,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - New Town - Cloud Kitchen (01/0013),East,Kolkata,481416.00,1284.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Quest Mall (01/0016),East,Kolkata,456145.13,1374.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Rangoli Mall (01/0010),East,Kolkata,623675.03,1264.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Rosedale Plaza(0006),East,Kolkata,407648.04,1089.00,,10,30,no,no,2026-11-01,2026-11-10
+2026-11,Dosa Coffee - Salt Lake (002),East,Kolkata,1095589.30,2142.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Salt Lake Sec-1 (0009),East,Kolkata,1088390.15,1905.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Dosa Coffee - Santoshpur (01/0012),East,Kolkata,554563.47,1258.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Connaught place (02/0012),North,NCR,1230932.35,1856.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Gurgaon DLF (02/0009),North,NCR,576110.73,1449.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Gurgaon Sec 10 (02/0014),North,NCR,278723.15,625.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Gurgaon Sec-15 (02/0010),North,NCR,677031.66,1330.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Kalkaji (02/0004),North,NCR,684723.20,1631.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Model Town (02/0013),North,NCR,860484.15,1633.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,"Pacific mall, Jasola (02/0011)",North,NCR,949090.63,1639.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Paschim Vihar (02/0003),North,NCR,548278.66,1169.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Rohini Sec-7 (02/0008),North,NCR,1012209.88,2073.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Sec 143 Noida (02/0006),North,NCR,330204.12,765.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Sec 18 Noida (02/0001),North,NCR,724457.48,1535.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Sec 31 - Gurgaon (02/0016),North,NCR,323445.02,687.00,,12,30,no,no,2026-11-01,2026-11-12
+2026-11,Shalimar Bagh (02/0015),North,NCR,537142.91,1036.00,,12,30,no,no,2026-11-01,2026-11-12

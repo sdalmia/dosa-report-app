@@ -1,0 +1,8 @@
+{
+  "period_start": "2026-10-01",
+  "period_end": "2026-10-31",
+  "source": "Posist monthly menu extracts, data/menu/monthly/2026-10",
+  "stores": 31,
+  "rows": 2866,
+  "note": "Calendar October. Faridabad (02-0007) is in the extract as received; the store closed 22 Oct. Figures are not adjusted."
+}

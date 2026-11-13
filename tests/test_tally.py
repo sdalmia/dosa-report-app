@@ -33,7 +33,9 @@ class TallyTests(unittest.TestCase):
         self.assertEqual(len(answer["table"]["rows"]), 10)
 
     def test_a_missing_day_is_not_filled_with_zero(self):
-        answer = answer_from_data("What did we pay in Delhi on 6 Nov?", view_for(role="owner"), True)
+        # 6 Nov 2026 now has a Delhi Receipt from the Accountant's 6-11 Nov pack,
+        # so it is no longer a missing day. 7 Nov and 10 Nov are still absent.
+        answer = answer_from_data("What did we pay in Delhi on 7 Nov?", view_for(role="owner"), True)
         self.assertIn("no day book rows", answer["text"].casefold())
         self.assertNotIn("₹0", answer["text"])
 

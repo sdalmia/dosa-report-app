@@ -1,0 +1,27 @@
+outlet_key,region,zomato_name,swiggy_name,store,match_status,match_note
+DC-01,Delhi NCR,Connaught Place,Connaught Place,Connaught Place,mapped,store_master name
+DC-02,Delhi NCR,DLF Cyber Greens,DLF Cyber Greens,Gurgaon DLF,mapped,DLF Cyber Greens is Gurgaon DLF in store_master
+DC-03,Delhi NCR,Jasola,Jasola,Pacific Mall Jasola,mapped,Jasola is Pacific Mall Jasola in store_master
+DC-04,Delhi NCR,Kalkaji,Kalkaji,Kalkaji,mapped,store_master name
+DC-05,Delhi NCR,Model Town 2,Model Town 2,Model Town,mapped,Model Town 2 is Model Town in store_master
+DC-06,Delhi NCR,Paschim Vihar,Paschim Vihar,Paschim Vihar,mapped,store_master name
+DC-07,Delhi NCR,Rohini,Rohini,Rohini Sec-7,mapped,Rohini is Rohini Sec-7 in store_master
+DC-08,Delhi NCR,Sector 10A,Sector 10A,Gurgaon Sec 10,mapped,Sector 10A is Gurgaon Sec 10 in store_master
+DC-09,Delhi NCR,Sector 15 (ref. 21079780),Sector 15 (Faridabad),Sec 15 Faridabad,excluded,Faridabad is left out of aggregator totals
+DC-10,Delhi NCR,Sector 15 (ref. 21233908),Sector 15 (Gurgaon),Gurgaon Sec-15,mapped,same outlet key as Swiggy Sector 15 (Gurgaon)
+DC-11,Delhi NCR,Sector 18,Noida Sector 18,Sec 18 Noida,mapped,Sector 18 / Noida Sector 18 is Sec 18 Noida in store_master
+DC-12,Delhi NCR,Sector 31,Gurgaon Sector 31,Sec 31 Gurgaon,mapped,Sector 31 / Gurgaon Sector 31 is Sec 31 Gurgaon in store_master
+DC-13,Delhi NCR,Shahdara,Noida Sector 143,Sec 143 Noida,mapped,same outlet key DC-13 as Swiggy Noida Sector 143; Zomato label is Shahdara
+DC-14,Delhi NCR,Shalimar Bagh,Shalimar Bagh,Shalimar Bagh,mapped,store_master name
+DC-15,Kolkata,Behala,Behala,James Long Sarani,mapped,store_master famepilot name is Jameslong Behala
+DC-16,Kolkata,Belur,Belur,Belur,unmapped,no confident store_master match; original name kept
+DC-17,Kolkata,Elgin,Elgin,Elgin,unmapped,no confident store_master match; original name kept
+DC-18,Kolkata,Kalikapur,Kalikapur,Kalikapur,mapped,store_master name
+DC-19,Kolkata,Kankurgachi,Kankurgachi,Kankurgachi,unmapped,no confident store_master match; original name kept
+DC-20,Kolkata,Lake Market Area,Lake Market Area,Lake Market Area,unmapped,no confident store_master match; original name kept
+DC-21,Kolkata,Lake Town,Lake Town,Lake Town,mapped,store_master name
+DC-22,Kolkata,New Town (ref. 20471482),New Town (Rosedale Plaza),Rosedale Plaza,mapped,same outlet key as Swiggy New Town (Rosedale Plaza)
+DC-23,Kolkata,New Town (ref. 20997591),New Town (Cloud Kitchen),New Town Cloud Kitchen,mapped,same outlet key as Swiggy New Town (Cloud Kitchen)
+DC-24,Kolkata,Santoshpur,Santoshpur,Santoshpur,mapped,store_master name
+DC-25,Kolkata,"Sector 1, Salt Lake","Sector 1, Salt Lake",Salt Lake Sec-1,mapped,"Sector 1, Salt Lake is Salt Lake Sec-1 in store_master"
+DC-26,Kolkata,"Sector 3, Salt Lake","Sector 3, Salt Lake",Salt Lake Sec-3,mapped,"Sector 3, Salt Lake is Salt Lake Sec-3 in store_master"

@@ -46,6 +46,7 @@ _TOOLS = (
     ("reelo_deep", "Reelo new versus repeat. Stores that are not on Reelo are not zero.", {"owner", "finance", "hr", "ops"}),
     ("posist", "Posist channel gross and voids. Missing slices are named, not filled in.", {"owner", "finance", "hr", "ops"}),
     ("tally", "Tally day book vouchers and spend by P&L line. Owner and finance only.", {"owner", "finance"}),
+    ("month_lookup", "Figures for one calendar month and one domain (sales, channel, procurement, menu mix, Reelo, aggregator, finance, Tally, HR, Famepilot). If that month is not loaded, the tool says so and names who the data would come from. It never estimates.", {"owner", "finance", "hr", "ops"}),
 )
 
 
@@ -107,6 +108,9 @@ def dispatch(name, arguments, role):
     if name == "tally":
         from app.chat.tally import answer as tally_answer
         return {"text": (tally_answer(question, role).get("text") or "")}
+    if name == "month_lookup":
+        from app.chat.history import tool_result
+        return tool_result(arguments if isinstance(arguments, dict) else {"question": question}, role)
     return {"error": "Unknown tool."}
 
 
@@ -125,6 +129,9 @@ def select_names(question, role):
         names.append("trends")
     if _asks_forecast(question):
         names.append("forecast")
+    from app.chat.history import relevant as _asks_history
+    if _asks_history(question, role):
+        names.append("month_lookup")
     return [name for name in names if role in {row[0]: row[2] for row in _TOOLS}[name]]
 
 

@@ -1,0 +1,52 @@
+month,store,platform,tickets,stale,complete,note
+2026-09,01/0001/ Dosa Coffee - Ideal Plaza,swiggy,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0001/ Dosa Coffee - Ideal Plaza,zomato,4,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0002 / Dosa Coffee- Saltlake Sec-3,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0002 / Dosa Coffee- Saltlake Sec-3,zomato,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0004 / Dosa Coffee- Manisquare Mall,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0005 / Dosa Coffee - Laketown,zomato,1,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0006 / Dosa Coffee - Rosedale Plaza,swiggy,3,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0006 / Dosa Coffee - Rosedale Plaza,zomato,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0009 / Dosa Coffee - Saltlake - Sec1,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0009 / Dosa Coffee - Saltlake - Sec1,zomato,2,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0010 / Dosa Coffee - Rangoli Mall,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0010 / Dosa Coffee - Rangoli Mall,zomato,1,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0011_Dosa Coffee_Jameslong Behala,swiggy,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0011_Dosa Coffee_Jameslong Behala,zomato,3,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0013 / Dosa Coffee-New Town Cloud Kitchen,zomato,3,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0014_Dosa Coffee_Kalikapur,zomato,1,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/0015_Dosa Coffee - Lake Road,zomato,2,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,01/2012_Dosa Coffee- Santoshpur,zomato,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0001 / Dosa Coffee-Noida Sec18,zomato,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0009_Dosa Coffee - Gurgaon DLF,swiggy,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0009_Dosa Coffee - Gurgaon DLF,zomato,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0010/Dosa Coffee- Gurgaon Sec-15,zomato,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0011_Dosa Coffee - Pacific Jasola,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0011_Dosa Coffee - Pacific Jasola,zomato,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0012_Dosa Coffee - Connaught Place,google,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0012_Dosa Coffee - Connaught Place,swiggy,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/0013_Dosa Coffee - Model Town,zomato,1,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2003_Dosa Coffee_Paschim Vihar,swiggy,3,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2003_Dosa Coffee_Paschim Vihar,zomato,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2004 / Dosa coffee_Kalkaji,swiggy,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2004 / Dosa coffee_Kalkaji,zomato,1,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2006 / Dosa Coffee-Noida 143,swiggy,1,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2006 / Dosa Coffee-Noida 143,zomato,2,1,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2007_Dosa Coffee_Faridabad sec-15,zomato,2,0,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2008/ Dosa Coffee_Rohini Sec-7,swiggy,5,5,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-09,02/2014_Dosa Coffee - Gurgaon Sec-10,zomato,2,2,yes,Counts only; customer names are not stored. Tickets on file start 1 Sep.
+2026-10,01/0006 / Dosa Coffee - Rosedale Plaza,zomato,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,01/0009 / Dosa Coffee - Saltlake - Sec1,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,01/0011_Dosa Coffee_Jameslong Behala,swiggy,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,01/0013 / Dosa Coffee-New Town Cloud Kitchen,zomato,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,01/0014_Dosa Coffee_Kalikapur,zomato,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0009_Dosa Coffee - Gurgaon DLF,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0010/Dosa Coffee- Gurgaon Sec-15,zomato,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0011_Dosa Coffee - Pacific Jasola,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0012_Dosa Coffee - Connaught Place,google,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0013_Dosa Coffee - Model Town,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/0013_Dosa Coffee - Model Town,zomato,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/2003_Dosa Coffee_Paschim Vihar,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/2006 / Dosa Coffee-Noida 143,zomato,1,0,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/2007_Dosa Coffee_Faridabad sec-15,swiggy,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.
+2026-10,02/2007_Dosa Coffee_Faridabad sec-15,zomato,1,1,no,Counts only; customer names are not stored. October tickets run through 9 Oct only.

@@ -56,6 +56,16 @@ def _month_sales_block(question):
     return packet(question)
 
 
+def _coverage_block(role):
+    from app.chat.history import coverage_line
+    return coverage_line(role)
+
+
+def _history_block(question, role):
+    from app.chat.history import packet
+    return packet(question, role)
+
+
 def build_context(question, data):
     """Text the model reads. Finance and HR stay off unless this role may see them."""
     role = data.get("role") or "ops"
@@ -76,10 +86,14 @@ def build_context(question, data):
         "Month-to-date is the current incomplete month only. It is not a completed calendar month. For October, use the October 1–31 calendar-month table, not month-to-date and not a window that ends in November.",
         "Manisquare and Forum are mall bulk stores. Their APB and bills are left out of comparisons. Their gross is still listed and is part of the city total.",
         "",
+        _coverage_block(role),
+        "",
         "Network sales summary:",
         _summary_line(summary),
         "",
         _month_sales_block(question),
+        "",
+        _history_block(question, role),
         "",
         f"Each store on the latest sales day ({latest or 'unknown'}). Gross and APB are rupees.",
         _sales_table(windows.get("latest_rows") or []),
@@ -196,7 +210,7 @@ def build_context(question, data):
         parts.extend(["", extra])
     parts.append("")
     parts.append(
-        "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support."
+        "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support. If a month is not loaded, say it is not loaded yet and name who the data would come from. Never estimate a missing month."
     )
     return _fit("\n".join(parts))
 
