@@ -87,6 +87,16 @@ def create_app():
 
         return {"is_owner": is_owner, "with_qs": with_qs}
 
+    @app.url_defaults
+    def static_version(endpoint, values):
+        # Add the file's modified time so browsers fetch new JS/CSS right after a deploy.
+        if endpoint == "static" and "filename" in values and "v" not in values:
+            path = os.path.join(app.static_folder, values["filename"])
+            try:
+                values["v"] = int(os.stat(path).st_mtime)
+            except OSError:
+                pass
+
     @app.after_request
     def cache_static(response):
         if request.path.startswith("/static/"):
