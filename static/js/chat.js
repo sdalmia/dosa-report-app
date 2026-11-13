@@ -144,6 +144,7 @@
     if (payload.table) row += '<button type="button" class="cc-act" data-act="xlsx">Download Excel</button>';
     if (payload.chart || payload.calendar) row += '<button type="button" class="cc-act" data-act="png">Download image</button>';
     row += '<button type="button" class="cc-act" data-act="share">Share</button>';
+    row += '<button type="button" class="cc-act" data-act="thread">Download conversation</button>';
     if (payload.cos) {
       var label = payload.cos.connected ? "Send to Chief of Staff" : "Send to Chief of Staff isn't connected yet";
       row += '<button type="button" class="cc-act" data-act="cos">' + label + "</button>";
@@ -197,6 +198,15 @@
           navigator.clipboard.writeText(url);
         }
       }).catch(function () {});
+      return;
+    }
+    if (kind === "thread") {
+      var turns = [];
+      log.querySelectorAll(".cc-turn").forEach(function (node) {
+        var body = node.querySelector(".cc-answer, p");
+        turns.push([(node.classList.contains("user") ? "You" : "Wizard"), body ? body.textContent : ""]);
+      });
+      postFile("pdf", "Conversation", "", { columns: ["Who", "Text"], rows: turns }, null);
       return;
     }
     if (kind === "cos") {

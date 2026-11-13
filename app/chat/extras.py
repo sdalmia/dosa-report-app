@@ -299,7 +299,7 @@ def what_if_text(question):
     item = ""
     period = ""
     if picked:
-        _path, rows = picked
+        _path, rows, _meta = picked
         words = [word for word in re.findall(r"[a-z]{4,}", folded) if word not in {"raise", "what", "price", "dosa", "coffee"}]
         for row in rows:
             name = (row.get("item") or "").casefold()

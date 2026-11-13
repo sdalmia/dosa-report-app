@@ -251,7 +251,65 @@ def frontlyne_text(role):
         lines.append("Active users with no login, by store:")
         for row in rows[:12]:
             lines.append(f"{row.get('store')} | {row.get('active_no_login')}")
-    lines.append("Week-over-week course completion is not in the summary file, so it is not stated. A link to sales or reviews would be a correlation only, and this answer does not invent one.")
+    lines.append(_course_completion())
+    lines.append("Week-over-week change needs two weekly files. Only one drop is loaded, so the change is not stated. Any link to sales or reviews would be a correlation, and none is invented here.")
+    return "\n".join(lines)
+
+
+def _course_completion():
+    """Mean course completion by store. Names and employee numbers are not written out."""
+    try:
+        return _course_completion_rows()
+    except Exception:
+        return "Course completion could not be read from the weekly workbook."
+
+
+def _course_completion_rows():
+    from openpyxl import load_workbook
+    folder = _ROOT / "data" / "frontlyne" / "weekly"
+    if not folder.is_dir():
+        return "No Frontlyne weekly workbook is loaded."
+    by_store = {}
+    for path in sorted(folder.glob("Course_Status_*.xlsx")):
+        book = load_workbook(path, read_only=True, data_only=True)
+        sheet = book.active
+        header = None
+        store_at = course_at = pct_at = None
+        seen = set()
+        for raw in sheet.iter_rows(values_only=True):
+            cells = [str(cell or "").strip() for cell in raw]
+            if header is None:
+                header = [cell.casefold() for cell in cells]
+                for index, name in enumerate(header):
+                    if "store name" in name:
+                        store_at = index
+                    elif name == "course title":
+                        course_at = index
+                    elif "completion" in name:
+                        pct_at = index
+                continue
+            if store_at is None or pct_at is None:
+                break
+            store = cells[store_at] if store_at < len(cells) else ""
+            course = cells[course_at] if course_at is not None and course_at < len(cells) else ""
+            if not store:
+                continue
+            try:
+                pct = float(str(cells[pct_at]).replace("%", ""))
+            except (TypeError, ValueError):
+                continue
+            key = (store, course)
+            if key in seen:
+                continue
+            seen.add(key)
+            by_store.setdefault(store, []).append(pct)
+        book.close()
+    if not by_store:
+        return "Course completion by store is not in the weekly file."
+    ranked = sorted(by_store.items(), key=lambda item: sum(item[1]) / len(item[1]))
+    lines = ["Mean course completion by store, from the weekly workbooks. Names are not listed."]
+    for store, values in ranked[:8]:
+        lines.append(f"{store} | {sum(values) / len(values):.1f}%")
     return "\n".join(lines)
 
 
@@ -349,8 +407,107 @@ def domain_text(question, role):
     return "\n\n".join(part for part in parts if part)
 
 
+def _asks_productivity(question):
+    folded = (question or "").casefold()
+    return any(token in folded for token in ("per employee", "understaff", "overstaff", "productivity", "sales per active"))
+
+
+def productivity_text(role):
+    if role not in {"owner", "hr"}:
+        return "Staff productivity uses headcount, so it is not included for this role."
+    hr = _ROOT / "data" / "hr"
+    dated = sorted(path for path in hr.iterdir() if path.is_dir()) if hr.is_dir() else []
+    if not dated:
+        return "No Keka headcount file is loaded, so sales per employee is not stated."
+    head = {}
+    with (dated[-1] / "location_headcount.csv").open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            store = (raw.get("posist_store") or "").strip()
+            if not store or (raw.get("match_status") or "") != "matched":
+                continue
+            try:
+                active = int(float(raw.get("active") or ""))
+            except ValueError:
+                continue
+            if active:
+                head[store.casefold()] = (store, active)
+    sales = {}
+    path = _ROOT / "data" / "store_health" / "posist_daily.csv"
+    if path.is_file():
+        days = {}
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            for raw in csv.DictReader(handle):
+                gross = _num(raw.get("gross"))
+                store = raw.get("store") or ""
+                day = raw.get("date") or ""
+                if gross is None or not day:
+                    continue
+                days.setdefault(store, []).append((day, gross))
+        for store, points in days.items():
+            points.sort()
+            recent = points[-7:]
+            if len(recent) < 5:
+                continue
+            sales[store.casefold()] = (store, sum(gross for _day, gross in recent), len(recent))
+    lines = [
+        f"Sales per active employee from Keka counts as of {dated[-1].name} and the latest Posist days. Gross is used. Mall bill counts are not.",
+        "store | active | 7-day gross | per active employee",
+    ]
+    ratios = []
+    for key, (label, active) in head.items():
+        found = None
+        for sale_key, value in sales.items():
+            if key in sale_key or sale_key in key:
+                found = value
+                break
+        if not found:
+            continue
+        _store, gross, count = found
+        per = gross / active
+        ratios.append(per)
+        lines.append(f"{label} | {active} | {gross:.0f} over {count} days | {per:.0f}")
+    if len(ratios) >= 4:
+        ordered = sorted(ratios)
+        mid = ordered[len(ordered) // 2]
+        lines.append(f"Median sales per active employee across these stores is {mid:.0f} for that same window. A store far from this median is the flag. This is not a staffing recommendation by itself.")
+    else:
+        lines.append("Too few stores matched both files, so a median is not stated.")
+    return "\n".join(lines)
+
+
+def _asks_new_store(question):
+    folded = (question or "").casefold()
+    if _asks_location(question):
+        return False
+    return any(token in folded for token in ("payback", "capex", "break-even", "breakeven", "new store p"))
+
+
+def new_store_text(question):
+    import re
+    numbers = [float(item.replace(",", "")) for item in re.findall(r"₹\s*([0-9][0-9,]*)", question or "")]
+    rent = numbers[0] if numbers else None
+    capex = numbers[1] if len(numbers) > 1 else None
+    lines = [
+        "New-store sketch. Closed stores, Faridabad from 23 Oct, and Rosedale from 1 Nov (partly open; closed 10 Nov) are not used as comparables.",
+    ]
+    if rent is None:
+        lines.append("Rent was not given, so rent, EBITDA, and payback are not calculated. No rent is invented.")
+    else:
+        lines.append(f"Rent used is the figure you gave, ₹{rent:,.0f} a month.")
+    if capex is None:
+        lines.append("Capex was not given, so payback in months is not calculated.")
+    else:
+        lines.append(f"Capex used is the figure you gave, ₹{capex:,.0f}.")
+    lines.append("A sales range needs the city's own recent gross. This answer does not turn a candidate area into a forecast.")
+    return "\n".join(lines)
+
+
 def try_answer(question, data, owner):
     role = data.get("role") or ("owner" if owner else "ops")
+    if _asks_productivity(question):
+        return _pack(productivity_text(role), "", "sales", question, owner)
+    if _asks_new_store(question):
+        return _pack(new_store_text(question), "", "finance", question, owner)
     if _asks_location(question):
         return _pack(location_text(question), "2026-10-10", "sales", question, owner)
     if _asks_brands(question):

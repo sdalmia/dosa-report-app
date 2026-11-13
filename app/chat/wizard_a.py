@@ -17,7 +17,7 @@ _FINANCE_LINES = (
 )
 _CLOSED = ("chattarpur", "gk1", "gk 1")
 _FARIDABAD_OUT = date(2026, 10, 23)
-_ROSEDALE_OUT = date(2026, 11, 10)
+_ROSEDALE_OUT = date(2026, 11, 1)
 
 
 def _num(value):
@@ -286,7 +286,41 @@ def posist_fixes_text():
             row.get("fix") or "",
             row.get("owner") or "",
         ]))
-    lines.append("Automated checks sit beside this list and are labelled when they are added. This pass leads with the 12 Nov file.")
+    lines.append(_automated_menu_gaps())
+    return "\n".join(lines)
+
+
+def _automated_menu_gaps():
+    """Items with sales and no recipe-cost name. Labelled so they are not the 12 Nov list."""
+    menu = _ROOT / "data" / "menu"
+    mixes = sorted(menu.glob("menu_mix_*.csv")) if menu.is_dir() else []
+    recipe = _ROOT / "data" / "procurement" / "recipe_cost_by_item.csv"
+    if not mixes or not recipe.is_file():
+        return "Automated check: recipe-cost file or menu mix is not both loaded, so no extra gap is stated."
+    names = set()
+    with recipe.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            item = (raw.get("menu_item") or raw.get("item_name") or "").strip().casefold()
+            if item:
+                names.add(item)
+    dated = [path for path in mixes if "2026-11-12" in path.name] or mixes
+    path = dated[-1]
+    missing = []
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            item = (raw.get("item") or "").strip()
+            gross = _num(raw.get("gross") or raw.get("total_sales"))
+            if not item or gross is None:
+                continue
+            if item.casefold() in names:
+                continue
+            missing.append((gross, item, raw.get("store") or ""))
+    missing.sort(reverse=True)
+    if not missing:
+        return "Automated check: every menu-mix item name is on the recipe-cost file."
+    lines = ["Automated check, not the 12 Nov issues file: menu-mix items with no recipe-cost name, largest gross first."]
+    for gross, item, store in missing[:5]:
+        lines.append(f"{store} | {item} | gross {_inr(gross)}")
     return "\n".join(lines)
 
 
@@ -345,7 +379,7 @@ def growth_text():
     lines = [
         "Growth plan from Posist daily gross. Mall bill counts are not used.",
         f"Window: {label}.",
-        "Assumption, stated as an illustration and not a forecast: the 7-day gap times 30/7 is the monthly rupee if that same gap repeated. Navratri is not removed store by store because the daily file has no festive flag. Rosedale from 10 Nov, Faridabad from 23 Oct, and closed stores are excluded.",
+        "Assumption, stated as an illustration and not a forecast: the 7-day gap times 30/7 is the monthly rupee if that same gap repeated. Navratri is not removed store by store because the daily file has no festive flag. Rosedale from 1 Nov (partly open; closed 10 Nov), Faridabad from 23 Oct, and closed stores are excluded.",
         "Delivery versus dine-in is not given a rupee here: channel files are gross, and the 24.78% rule needs net.",
         "store | 7-day gap | illustrated month",
     ]
@@ -386,7 +420,7 @@ def trends_text():
         return "Trends: the daily file does not have two comparable weeks, so no trend is stated."
     lines = [
         "Top sales trends by rupee impact of the latest 7 days versus the previous 7. Correlation only, not a cause.",
-        "Closed stores, Faridabad from 23 Oct, and Rosedale from 10 Nov are excluded. Bills at Manisquare and Forum are not used.",
+        "Closed stores, Faridabad from 23 Oct, and Rosedale from 1 Nov (partly open; closed 10 Nov) are excluded. Bills at Manisquare and Forum are not used.",
     ]
     from app.chat.reelo_deep import monthly_customers
 
@@ -484,7 +518,7 @@ def forecast_answer(question, owner):
     title = named or "Network sample"
     lines = [
         f"Sales calendar for {title}. Predicted is pred_mid. Actual is Posist gross. Basis is the store calendar file through {end.isoformat()}.",
-        "Faridabad from 23 Oct, Rosedale from 10 Nov, Chattarpur, and GK1 are excluded.",
+        "Faridabad from 23 Oct, Rosedale from 1 Nov (partly open; closed 10 Nov), Chattarpur, and GK1 are excluded.",
     ]
     if mape is None:
         lines.append("Forecast accuracy: fewer than 4 days have both an actual and a prediction in the last 28 days, so MAPE is not stated.")
