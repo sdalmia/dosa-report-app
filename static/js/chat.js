@@ -361,32 +361,38 @@
   }
 
   function salesSheet(detail) {
-    var notes = (detail.notes || []).map(function (line) {
+    var facts = (detail.facts || []).map(function (line) {
       return "<li>" + escape(line) + "</li>";
     }).join("");
     var dayRows = (detail.days || []).map(function (day) {
-      return "<tr><th>" + escape(day.this_label) + "</th><td>" + escape(day.this_gross) + "</td><td>" + escape(day.this_bills) + "</td><td>" + escape(day.this_apb) + "</td></tr>"
-        + "<tr class=\"is-prior\"><th>" + escape(day.prior_label) + "</th><td>" + escape(day.prior_gross) + "</td><td>" + escape(day.prior_bills) + "</td><td>" + escape(day.prior_apb) + "</td></tr>"
-        + "<tr class=\"is-move\"><td colspan=\"4\">" + escape(day.move) + "</td></tr>";
+      return "<tr><th>" + escape(day.day) + "</th><td>" + escape(day.this_gross) + "</td><td>" + escape(day.prior_gross) + "</td><td>" + escape(day.change) + "</td></tr>";
+    }).join("");
+    var total = detail.total || {};
+    var billRows = (detail.days || []).map(function (day) {
+      return "<tr><th>" + escape(day.day) + "</th><td>" + escape(day.this_bills) + "</td><td>" + escape(day.prior_bills) + "</td><td>" + escape(day.this_apb) + "</td><td>" + escape(day.prior_apb) + "</td></tr>";
     }).join("");
     var channelRows = ((detail.channels && detail.channels.rows) || []).map(function (row) {
       return "<tr><th>" + escape(row.name) + "</th><td>" + escape(row.this) + "</td><td>" + escape(row.prior) + "</td><td>" + escape(row.change) + "</td></tr>";
     }).join("");
-    return "<p class=\"cc-sheet-kicker\">" + escape(detail.window || "") + "</p>"
-      + "<p class=\"cc-sheet-lead\">" + escape(detail.headline || "") + "</p>"
-      + "<ul class=\"cc-sheet-notes\">" + notes + "</ul>"
+    return "<p class=\"cc-sheet-lead\">" + escape(detail.headline || "") + "</p>"
+      + "<ul class=\"cc-sheet-facts\">" + facts + "</ul>"
       + "<h3>Daily gross</h3>"
       + "<p class=\"cc-sheet-legend\"><span><i class=\"is-now\"></i>This week</span><span><i class=\"is-then\"></i>Week before</span></p>"
       + chartSvg(detail.chart)
       + "<h3>By day</h3>"
-      + "<table class=\"cc-sheet-table\"><thead><tr><th>Day</th><th>Gross</th><th>Bills</th><th>APB</th></tr></thead><tbody>"
-      + dayRows + "</tbody></table>"
+      + "<table class=\"cc-sheet-table\"><thead><tr><th>Day</th><th>This week</th><th>Week before</th><th>Change</th></tr></thead><tbody>"
+      + dayRows
+      + "<tr class=\"is-total\"><th>" + escape(total.day || "Total") + "</th><td>" + escape(total.this_gross || "") + "</td><td>" + escape(total.prior_gross || "") + "</td><td>" + escape(total.change || "") + "</td></tr>"
+      + "</tbody></table>"
+      + "<details class=\"cc-sheet-more\"><summary>Bills and average bill</summary>"
+      + "<table class=\"cc-sheet-table\"><thead><tr><th>Day</th><th>Bills</th><th>Bills before</th><th>Avg bill</th><th>Before</th></tr></thead><tbody>"
+      + billRows
+      + "<tr class=\"is-total\"><th>Total</th><td>" + escape(total.this_bills || "") + "</td><td>" + escape(total.prior_bills || "") + "</td><td>" + escape(total.this_apb || "") + "</td><td>" + escape(total.prior_apb || "") + "</td></tr>"
+      + "</tbody></table></details>"
       + "<h3>By channel</h3>"
       + "<table class=\"cc-sheet-table\"><thead><tr><th></th><th>This week</th><th>Week before</th><th>Change</th></tr></thead><tbody>"
       + channelRows + "</tbody></table>"
-      + "<h3>What moved it</h3><p class=\"cc-sheet-lead\">" + escape(detail.driver || "") + "</p>"
-      + "<h3>" + escape((detail.city && detail.city.name) || "City") + "</h3>"
-      + "<p class=\"cc-sheet-lead\">" + escape((detail.city && detail.city.line) || "") + "</p>";
+      + "<details class=\"cc-sheet-more\"><summary>About this data</summary><p>" + escape(detail.about || "") + "</p></details>";
   }
 
   function licenceSheet(detail) {

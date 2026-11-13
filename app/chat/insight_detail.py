@@ -6,7 +6,6 @@ A missing channel day is named, not treated as zero.
 
 import csv
 import re
-import statistics
 from datetime import date, timedelta
 
 from app.chat.licences import allowed, red_flags
@@ -155,26 +154,30 @@ def sales_detail(token):
             "prior_apb": _shown(prior.get("apb")),
             "this_value": recent.get("gross"),
             "prior_value": prior.get("gross"),
+            "this_bills_value": recent.get("bills"),
+            "prior_bills_value": prior.get("bills"),
             "move": None if recent.get("gross") is None or prior.get("gross") is None else recent["gross"] - prior["gross"],
         })
-    channels, channel_note, used_pos = _channels(chosen["store"], recent_start, prior_start)
-    driver = _driver(chosen, days, channels)
+    channels, channel_note, _used_pos = _channels(chosen["store"], recent_start, prior_start)
     city = _city_line(chosen, gaps)
-    notes = [
-        "Net is blank in the file, so the chart and the change use gross.",
-        "APB is gross divided by bills.",
-    ]
-    if any(day in festive for day in _window_days(recent_start)):
-        notes.append("NCR Navratri days are left out of this store and of the city figure.")
-    else:
-        notes.append("NCR Navratri days are left out. None of these days are Navratri.")
-    notes.append("Rosedale from 1 Nov and Faridabad from 23 Oct are left out of the city figure. Closed stores are left out.")
-    if used_pos:
-        notes.append("Till sales are counted with dine-in and takeaway.")
-    notes.append(channel_note)
+    facts = _facts(chosen, days, channels, city)
+    about = _about(channel_note, festive, recent_start)
     direction = "down" if chosen["gap"] < 0 else "up"
     headline = f"Sales {direction} {_lakh(chosen['gap'])} vs the week before ({label})"
-    share_lines = [chosen["display"], headline, driver, city["line"], channel_note]
+    public_days = []
+    for day in days:
+        public_days.append({
+            "day": day["this_label"],
+            "this_gross": day["this_gross"],
+            "prior_gross": day["prior_gross"],
+            "change": _move(day["move"]),
+            "this_bills": day["this_bills"],
+            "prior_bills": day["prior_bills"],
+            "this_apb": day["this_apb"],
+            "prior_apb": day["prior_apb"],
+        })
+    total = _total(days, chosen["gap"])
+    share_lines = [chosen["display"], headline, *facts, about]
     return {
         "id": token,
         "kind": "sales",
@@ -182,20 +185,17 @@ def sales_detail(token):
         "question": f"Why are {chosen['display']} sales {direction} versus the week before?",
         "headline": headline,
         "window": label,
-        "notes": notes,
+        "facts": facts,
+        "about": about,
         "chart": {
             "basis": "Gross",
             "this_week": [{"label": day["this_label"], "value": day["this_value"]} for day in days],
             "prior_week": [{"label": day["prior_label"], "value": day["prior_value"]} for day in days],
         },
-        "days": [
-            {key: value for key, value in day.items() if key not in {"this_value", "prior_value", "move"}}
-            | {"move": _move(day["move"])}
-            for day in days
-        ],
+        "days": public_days,
+        "total": total,
         "channels": channels,
         "channel_note": channel_note,
-        "driver": driver,
         "city": city,
         "share_text": "\n".join(share_lines),
         "download": {
@@ -339,6 +339,95 @@ def _channel_note(missing_recent, missing_prior, present_recent, present_prior):
     return " ".join(parts)
 
 
+def _facts(chosen, days, channels, city):
+    facts = []
+    this_bills = _sum(day.get("this_bills_value") for day in days)
+    prior_bills = _sum(day.get("prior_bills_value") for day in days)
+    this_gross = _sum(day.get("this_value") for day in days)
+    prior_gross = _sum(day.get("prior_value") for day in days)
+    bill_move = _pct_word(this_bills, prior_bills)
+    this_apb = this_gross / this_bills if this_bills else None
+    prior_apb = prior_gross / prior_bills if prior_bills else None
+    apb_move = _pct_word(this_apb, prior_apb)
+    if bill_move and apb_move:
+        apb_text = "the average bill was about the same" if apb_move == "about the same" else f"the average bill was {apb_move}"
+        facts.append(f"Bills {bill_move}, and {apb_text}.")
+    elif bill_move:
+        facts.append(f"Bills {bill_move}.")
+    moves = [day for day in days if day["move"] is not None]
+    if moves:
+        pick = min(moves, key=lambda day: day["move"]) if chosen["gap"] < 0 else max(moves, key=lambda day: day["move"])
+        word = "drop" if pick["move"] < 0 else "gain"
+        facts.append(f"Biggest {word}: {pick['this_label']}, {_move(pick['move'])}.")
+    if city.get("percent") is not None:
+        word = "up" if city["percent"] >= 0 else "down"
+        facts.append(f"City: other {city['name']} stores were {word} {abs(city['percent']):.0f}%.")
+    elif city.get("line"):
+        facts.append(city["line"])
+    lead = _largest_channel(channels)
+    if lead:
+        facts.append(f"Largest channel this week: {lead['name']}, {lead['this']}.")
+    return facts[:4]
+
+
+def _about(channel_note, festive, recent_start):
+    first = "Sales here are gross, because net is blank in the file, and the average bill is gross divided by bills."
+    note = channel_note or ""
+    no_prior = "week before" in note.casefold() and "no store channel file" in note.casefold()
+    if no_prior and "9 Nov" in note:
+        channel = "the week before has no store channel file and 9 Nov has none either"
+    elif no_prior:
+        channel = "the week before has no store channel file"
+    else:
+        channel = "days with no channel file are left out, not treated as zero"
+    navratri = "Navratri days in this window are left out" if any(day in festive for day in _window_days(recent_start)) else "these two weeks are not Navratri"
+    second = f"{channel[0].upper()}{channel[1:]}, while Rosedale, Faridabad, and closed stores are left out of the city figure and {navratri}."
+    return f"{first} {second}"
+
+
+def _largest_channel(channels):
+    rows = [row for row in channels.get("values") or [] if row.get("this_value")]
+    if not rows:
+        return None
+    return max(rows, key=lambda row: row["this_value"])
+
+
+def _sum(values):
+    numbers = [value for value in values if isinstance(value, (int, float))]
+    if len(numbers) != 7:
+        return None
+    return sum(numbers)
+
+
+def _pct_word(now, then):
+    if now is None or then in (None, 0):
+        return None
+    pct = (now - then) / abs(then) * 100
+    if abs(pct) < 0.5:
+        return "about the same"
+    word = "down" if pct < 0 else "up"
+    shown = abs(pct)
+    text = f"{shown:.0f}%" if shown >= 10 else f"{shown:.1f}%"
+    return f"{word} {text}"
+
+
+def _total(days, gap):
+    this_gross = _sum(day.get("this_value") for day in days)
+    prior_gross = _sum(day.get("prior_value") for day in days)
+    this_bills = _sum(day.get("this_bills_value") for day in days)
+    prior_bills = _sum(day.get("prior_bills_value") for day in days)
+    return {
+        "day": "Total",
+        "this_gross": _shown(this_gross),
+        "prior_gross": _shown(prior_gross),
+        "change": _move(gap),
+        "this_bills": _count(this_bills),
+        "prior_bills": _count(prior_bills),
+        "this_apb": _shown(this_gross / this_bills) if this_gross is not None and this_bills else _MISSING,
+        "prior_apb": _shown(prior_gross / prior_bills) if prior_gross is not None and prior_bills else _MISSING,
+    }
+
+
 def _driver(chosen, days, channels):
     moves = [day for day in days if day["move"] is not None]
     if not moves:
@@ -372,25 +461,11 @@ def _city_line(chosen, gaps):
     ]
     names = [row["display"] for row in peers]
     if not peers:
-        line = f"{chosen['display']} is in {city}. No other {city} store has a full week in the file."
-        return {"name": city, "line": line, "peers": names}
-    total = sum(row["gap"] for row in peers)
-    typical = statistics.median(row["gap"] for row in peers)
-    store_word = "down" if chosen["gap"] < 0 else "up"
-    city_word = "down" if total < 0 else "up"
-    typical_word = "down" if typical < 0 else "up"
-    if abs(chosen["gap"]) > abs(typical) and (chosen["gap"] < 0) == (typical <= 0):
-        compared = f"That is a larger move than the typical {city} store, which is {typical_word} {_lakh(typical)}."
-    elif (chosen["gap"] < 0) != (typical < 0):
-        compared = f"The typical {city} store is {typical_word} {_lakh(typical)}."
-    else:
-        compared = f"That is a smaller move than the typical {city} store, which is {typical_word} {_lakh(typical)}."
-    line = (
-        f"{chosen['display']} is {store_word} {_lakh(chosen['gap'])}. "
-        f"The other {city} stores together are {city_word} {_lakh(total)}. "
-        + compared
-    )
-    return {"name": city, "line": line, "peers": names}
+        return {"name": city, "line": f"No other {city} store has a full week in the file.", "peers": names, "percent": None}
+    recent = sum(row["recent"] for row in peers)
+    prior = sum(row["prior"] for row in peers)
+    percent = None if not prior else (recent - prior) / abs(prior) * 100
+    return {"name": city, "line": "", "peers": names, "percent": percent}
 
 
 def _window_days(start):
