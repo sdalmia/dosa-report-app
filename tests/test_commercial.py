@@ -15,6 +15,31 @@ from app.commercial import (
 )
 
 
+class MenuHrTests(unittest.TestCase):
+    def test_october_mix_uses_gross_and_states_the_period(self):
+        from app.chat.context import build_context
+
+        reset_snapshot()
+        text = build_context("What are the top menu items at Ideal Plaza?", view_for(role="ops"))
+        self.assertIn("2026-10-01", text)
+        self.assertIn("2026-10-31", text)
+        self.assertIn("Posist gross", text)
+        self.assertIn("Ideal Plaza", text)
+        self.assertNotIn("employee", text.casefold())
+
+    def test_ops_does_not_receive_keka_counts(self):
+        from app.chat.context import build_context
+
+        reset_snapshot()
+        ops = build_context("What is headcount and attrition?", view_for(role="ops"))
+        self.assertIn("People: not included", ops)
+        self.assertNotIn("relieved_ytd", ops)
+        owner = build_context("What is headcount and attrition?", view_for(role="owner"))
+        self.assertIn("Keka counts as of 2026-11-12", owner)
+        self.assertIn("unmatched", owner.casefold())
+        self.assertNotIn("DC", owner)
+
+
 class FoodContextTests(unittest.TestCase):
     def test_ideal_plaza_context_uses_raw_plus_semi(self):
         from app.chat.context import build_context

@@ -157,6 +157,14 @@ def build_context(question, data):
     parts.append("")
     parts.extend(_delivery_note(question))
     parts.extend(_licence_note(question, role))
+    from app.chat.menu_hr import hr_packet, menu_packet
+
+    menu = menu_packet(question)
+    if menu:
+        parts.extend(["", menu])
+    people = hr_packet(question, role)
+    if people:
+        parts.extend(["", people])
     parts.append("")
     parts.append(
         "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support."
