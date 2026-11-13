@@ -1,0 +1,12 @@
+month,joiners,exits,exits_absconded,exits_resigned,exits_company_action,note
+2026-01,36,24,14,9,1,full month; 0 is a real count
+2026-02,31,34,22,10,2,full month; 0 is a real count
+2026-03,42,37,25,10,2,full month; 0 is a real count
+2026-04,43,28,17,10,1,full month; 0 is a real count
+2026-05,37,22,15,7,0,full month; 0 is a real count
+2026-06,30,24,16,6,2,full month; 0 is a real count
+2026-07,38,35,24,9,2,full month; 0 is a real count
+2026-08,38,38,26,8,4,full month; 0 is a real count
+2026-09,32,35,23,9,3,full month; 0 is a real count
+2026-10,66,31,17,10,4,full month; 0 is a real count
+2026-11,19,9,6,3,0,1-12 Nov only

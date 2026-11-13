@@ -1,0 +1,187 @@
+{
+  "period_key": "monthly_menu/2026-10",
+  "period_label": "October 2026 calendar month (dates inferred; no period header in the workbooks)",
+  "period_date_from": "2026-10-01",
+  "period_date_to": "2026-10-31",
+  "date_inferred": true,
+  "row_count": 2866,
+  "stores_included": [
+    {
+      "store_code": "01-0001",
+      "store": "Ideal Plaza",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0002",
+      "store": "Salt Lake Sec-3",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0003",
+      "store": "Forum",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0004",
+      "store": "Manisquare",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0005",
+      "store": "Lake Town",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0006",
+      "store": "Rosedale Plaza",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0007",
+      "store": "Calcutta Swimming Club",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0008",
+      "store": "Food Truck - 1",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0009",
+      "store": "Salt Lake Sec-1",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0010",
+      "store": "Rangoli Mall",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0011",
+      "store": "James Long Sarani",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0012",
+      "store": "Santoshpur",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0013",
+      "store": "New Town Cloud Kitchen",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0014",
+      "store": "Kalikapur",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0015",
+      "store": "Lake Road",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "01-0016",
+      "store": "Quest Mall",
+      "city": "Kolkata"
+    },
+    {
+      "store_code": "02-0001",
+      "store": "Sec 18 Noida",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0003",
+      "store": "Paschim Vihar",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0004",
+      "store": "Kalkaji",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0006",
+      "store": "Sec 143 Noida",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0007",
+      "store": "Sec 15 Faridabad",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0008",
+      "store": "Rohini Sec-7",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0009",
+      "store": "Gurgaon DLF",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0010",
+      "store": "Gurgaon Sec-15",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0011",
+      "store": "Pacific Mall Jasola",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0012",
+      "store": "Connaught Place",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0013",
+      "store": "Model Town",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0014",
+      "store": "Gurgaon Sec 10",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0015",
+      "store": "Shalimar Bagh",
+      "city": "NCR"
+    },
+    {
+      "store_code": "02-0016",
+      "store": "Sec 31 Gurgaon",
+      "city": "NCR"
+    },
+    {
+      "store_code": "EVENTS",
+      "store": "Events & Catering",
+      "city": "Kolkata"
+    }
+  ],
+  "stores_missing": [],
+  "always_excluded": [
+    "02-0005",
+    "GK1"
+  ],
+  "faridabad_policy": "include",
+  "faridabad_skipped": false,
+  "channel_filled": false,
+  "category_filled": false,
+  "net_sales_filled": false,
+  "gross_total": 54280784.00399999,
+  "qty_total": 547765.0,
+  "notes": [
+    "Workbook sheets have columns Item Name, Total Sales, Total Orders, % Contribution only.",
+    "Total Sales is Posist gross, not net."
+  ],
+  "as_of": "2026-11-12",
+  "requested_from": "2026-10-14",
+  "requested_to": "2026-11-12",
+  "overlap_days_with_request": 18,
+  "output_csv": "menu_mix/menu_mix_2026-11-12.csv",
+  "latest_csv": "menu_mix/menu_mix_latest.csv"
+}

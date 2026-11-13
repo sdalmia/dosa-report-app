@@ -1,0 +1,3 @@
+window,start,end,exits,base_on_roll_plus_exits,attrition_pct,as_of,note
+30_day,2026-10-14,2026-11-12,21,607,3.5,2026-11-12,Exits divided by on-roll at 12 Nov plus exits in the window. This is not a daily average headcount.
+90_day,2026-08-15,2026-11-12,89,675,13.2,2026-11-12,Same method as the 30-day row. November exits run only through 12 Nov.
