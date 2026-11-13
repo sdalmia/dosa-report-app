@@ -147,7 +147,8 @@ def dashboard():
     insights = trend_cards()
     card = home_card(role)
     if card:
-        insights.append(card)
+        insights = insights[:2] + [card]
+    insights = insights[:3]
     return render_template("chat.html", chips=shown, connected=configured(), insights=insights)
 
 

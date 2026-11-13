@@ -7,11 +7,22 @@
       <h1>What should we look at?</h1>
       <p class="cc-chat-hello">Ask about sales, stores, buying, or reviews.</p>
       {% if insights %}
-      <div class="cc-today">
-        {% for card in insights %}
+      <div class="cc-today" aria-label="Today's insights">
+        {% for card in insights[:3] %}
         <button type="button" class="cc-insight" data-q="{{ card.question }}">
-          <span class="kicker">{{ card.kicker }}</span>
-          <span>{{ card.title }}</span>
+          <span class="cc-chip-icon" aria-hidden="true">
+            {% if card.kind == "licences" %}
+            <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>
+            {% elif "up" in (card.line or "") %}
+            <svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 3 7-8"></path></svg>
+            {% else %}
+            <svg viewBox="0 0 24 24"><path d="M4 8l5 5 4-3 7 8"></path></svg>
+            {% endif %}
+          </span>
+          <span class="cc-insight-copy">
+            <strong>{{ card.title }}</strong>
+            <span>{{ card.line }}</span>
+          </span>
         </button>
         {% endfor %}
       </div>

@@ -158,6 +158,8 @@ def _kind(question):
 
 def relevant(question):
     folded = (question or "").casefold()
+    if "what did we pay for" in folded:
+        return False
     return any(token in folded for token in (
         "tally", "day book", "daybook", "voucher", "what did we pay", "payments in", "paid to",
     ))

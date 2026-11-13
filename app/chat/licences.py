@@ -213,7 +213,8 @@ def home_card(role, as_of=None):
     if counts["expired"] == 0 and counts["expiring_30d"] == 0:
         return None
     return {
-        "kicker": "Licences",
-        "title": f"{counts['expired']} expired, {counts['expiring_30d']} expiring within 30 days",
+        "kind": "licences",
+        "title": "Licences",
+        "line": f"{counts['expired']} licences expired, {counts['expiring_30d']} expire in 30 days",
         "question": "Which licences expire in the next 30 days?",
     }

@@ -1048,25 +1048,40 @@ body:has(.cc-chat) .cc-drawer a:hover { background: var(--surface-2); }
 .cc-day i { color: var(--text-muted); font-style: normal; }
 .cc-today {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin: 18px auto 0;
-  max-width: 720px;
+  max-width: 880px;
   text-align: left;
 }
 .cc-insight {
+  appearance: none;
+  -webkit-appearance: none;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 16px;
+  min-height: 72px;
+  border: 0;
+  border-radius: 16px;
   background: var(--surface);
   color: var(--text);
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 8px 24px rgba(40, 30, 10, 0.05);
+  text-align: left;
+  line-height: 1.35;
   font: inherit;
+  font-size: 0.95rem;
   cursor: pointer;
 }
-.cc-insight .kicker { color: var(--accent); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.cc-insight:hover { background: var(--surface-2); }
+.cc-insight:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.cc-insight-copy { min-width: 0; }
+.cc-insight-copy strong { display: block; font-weight: 600; }
+.cc-insight-copy span { display: block; margin-top: 4px; color: var(--text-muted); font-size: 0.88rem; }
+@media (max-width: 720px) {
+  .cc-today { grid-template-columns: 1fr; }
+}
 .cc-empty { text-align: center; margin-bottom: 22px; }
 .cc-empty h1 {
   margin: 0 0 8px;
