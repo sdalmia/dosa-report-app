@@ -155,10 +155,40 @@ def build_context(question, data):
     else:
         parts.extend(["", "People: not included for this role."])
     parts.append("")
+    parts.extend(_delivery_note(question))
+    parts.extend(_licence_note(question, role))
+    parts.append("")
     parts.append(
         "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support."
     )
     return "\n".join(parts)
+
+
+def _delivery_note(question):
+    from app.chat.facts import _asks_delivery_economics
+    from app.commercial import basis_sentence, payout_files
+
+    if not _asks_delivery_economics(question):
+        return []
+    files = payout_files()
+    loaded = ", ".join(path.name for path in files[:4]) if files else "none loaded"
+    return [
+        "",
+        "Delivery economics:",
+        basis_sentence(),
+        f"Payout or ads files: {loaded}. Prefer an actual payout over the 24.78% rule and show the gap. Do not apply the rule to dine-in, takeaway, or to gross.",
+    ]
+
+
+def _licence_note(question, role):
+    from app.chat.licences import packet, relevant
+
+    if not relevant(question):
+        return []
+    body = packet(question, role)
+    if not body:
+        return ["", "Licences: not included for this role."]
+    return ["", body]
 
 
 def _summary_line(summary):
@@ -255,11 +285,36 @@ def _food_block(data):
     period = ""
     for row in (data.get("dossiers") or {}).values():
         food = row.get("food") or {}
-        if food.get("pct") is None and not food.get("text"):
+        if food.get("pct") is None and not food.get("text") and not food.get("sanity") and not food.get("total_pct"):
             continue
         period = period or food.get("period") or ""
-        rows.append({"store": row.get("name") or food.get("name"), "food_cost_pct": food.get("pct"), "text": food.get("text") or ""})
+        rows.append({
+            "store": row.get("name") or food.get("name"),
+            "food_cost_pct": "" if food.get("sanity") else (food.get("text") or food.get("pct") or ""),
+            "packaging_pct": food.get("packaging_pct") or "",
+            "total_incl_packaging_pct": food.get("total_pct") or "",
+            "raw": food.get("raw") or "",
+            "semi": food.get("semi") or "",
+            "packaging": food.get("other") or "",
+            "gross": food.get("gross") or "",
+            "city_median": "" if food.get("exclude_compare") else (food.get("city_median") or ""),
+            "note": food.get("sanity") or food.get("basis") or "",
+        })
     if not rows:
         return "Food cost: no store food-cost percent is loaded. Do not invent one. The closest figures are the procurement prices above."
-    rows.sort(key=lambda row: (row.get("food_cost_pct") is None, -(row.get("food_cost_pct") or 0)))
-    return "Food cost percent by store" + (f" ({period})" if period else "") + ":\n" + _lines(rows, ["store", "food_cost_pct", "text"])
+    rows.sort(key=lambda row: row.get("store") or "")
+    return (
+        "Food cost percent by store"
+        + (f" ({period})" if period else "")
+        + ". Food cost is (raw + semi-processed consumption) / Posist gross. "
+        "Packaging/other is separate. Total includes packaging. Raw-only is not food cost. "
+        "Under 15% or over 45% is not stated as fact. Faridabad is out of comparisons. "
+        "Each city is compared with its own median. NCR is higher by design (3 chutneys).\n"
+        + _lines(
+            rows,
+            [
+                "store", "food_cost_pct", "packaging_pct", "total_incl_packaging_pct",
+                "raw", "semi", "packaging", "gross", "city_median", "note",
+            ],
+        )
+    )

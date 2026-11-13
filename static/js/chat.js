@@ -237,8 +237,8 @@
     ask(input.value);
   });
   document.addEventListener("click", function (event) {
-    var chip = event.target.closest(".cc-chip");
+    var chip = event.target.closest(".cc-chip, .cc-insight");
     if (!chip) return;
-    ask(chip.textContent);
+    ask(chip.getAttribute("data-q") || chip.textContent);
   });
 })();

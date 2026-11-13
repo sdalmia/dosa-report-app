@@ -61,3 +61,11 @@ curl -s "https://command.dosacoffee.com/api/chat/insights?days=7" \
 ```
 
 House rules for every model answer live in `data/chat/house_notes.md`. Edit that file to change them. No code change is required. The file is not a new environment variable. The learning tables are created on startup if they are missing, in the existing `DATABASE_URL`.
+
+## Delivery commission
+
+Swiggy and Zomato: `AGGREGATOR_COMMISSION_PCT` is 21 and `GST_ON_COMMISSION_PCT` is 18, in `app/commercial.py`. Effective drag is 24.78% of net. It is not applied to dine-in or takeaway. A payout or ads file under `data/` is preferred when one is present. Channel gross is not treated as net.
+
+## Licences
+
+`data/compliance/<YYYY-MM-DD>/licences.csv` is the newest drop. Columns: `store`, `city`, `licence_type`, `licence_no`, `issued`, `expiry`, `status`, `source_file`, `source_modified`, `notes`. Answers recompute status from `expiry` versus the day of the question. Licence numbers stay in the file and are omitted from answers unless the question asks for a number. Owner and ops can see this. Finance and HR cannot. NCR dates come from certificates; a dated NCR tracker is still pending.

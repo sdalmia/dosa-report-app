@@ -280,9 +280,18 @@ def _store_view(question, data, owner):
     else:
         bits.append("Mystery audit has no row for this store.")
     food = store.get("food")
-    if food and food.get("pct") is not None:
-        bits.append(f"Food cost {food.get('text') or _pct(food['pct'])} ({food.get('period') or 'loaded period'}).")
-        source_rows.append({"pct": food["pct"]})
+    if food and (food.get("pct") is not None or food.get("sanity") or food.get("total_pct")):
+        if food.get("sanity"):
+            bits.append(food["sanity"])
+        else:
+            bits.append(
+                f"Food cost {food.get('text') or _pct(food['pct'])} of Posist gross "
+                f"({food.get('period') or 'loaded period'}), raw plus semi. "
+                f"Packaging {food.get('packaging_pct') or 'blank'}. "
+                f"Total including packaging {food.get('total_pct') or 'blank'}."
+            )
+        if food.get("pct") is not None:
+            source_rows.append({"pct": food["pct"]})
     else:
         bits.append("Food cost has no row for this store.")
     if sales and sales.get("pct") is not None and float(sales["pct"]) <= -10:
@@ -663,12 +672,88 @@ def _tickets(data, question, owner):
     )
 
 
+def _asks_delivery_economics(question):
+    folded = (question or "").casefold()
+    if any(token in folded for token in ("ticket", "famepilot", "stale", "complaint")):
+        return False
+    if any(token in folded for token in (
+        "commission", "realisation", "realization", "aggregator", "payout",
+        "24.78", "delivery margin",
+    )):
+        return True
+    return "delivery" in folded and any(
+        token in folded for token in ("margin", "contribution", "price", "dine", "what if", "what-if", "trade")
+    )
+
+
+def _delivery_answer(question, data, owner):
+    import re
+
+    from app.commercial import basis_sentence, channel_contribution, payout_files, split_delivery_net
+
+    lines = [basis_sentence()]
+    files = payout_files()
+    if files:
+        lines.append(
+            "Actual payout or ads files are loaded ("
+            + ", ".join(path.name for path in files[:4])
+            + "). Prefer those rupees, and show the gap versus 24.78% of net."
+        )
+    else:
+        lines.append(
+            "No Swiggy or Zomato payout or ads file is loaded, so there is no actual to compare with 24.78% of net."
+        )
+    lines.append("Channel files in this packet are gross, not net. The 24.78% rule is not applied to gross, and not to dine-in or takeaway.")
+    match = re.search(r"₹\s*([0-9][0-9,]*(?:\.\d+)?)\s*net", question or "", re.IGNORECASE)
+    if not match:
+        match = re.search(r"net(?: bill)?(?: of)?\s*₹?\s*([0-9][0-9,]*(?:\.\d+)?)", question or "", re.IGNORECASE)
+    if match:
+        net = float(match.group(1).replace(",", ""))
+        take = split_delivery_net(net)
+        food = None
+        packaging = None
+        result = channel_contribution(net, food, packaging)
+        lines.append(
+            f"On ₹{net:.2f} net, commission is ₹{take['commission']:.2f}, "
+            f"GST on that commission is ₹{take['gst_on_commission']:.2f}, "
+            f"and realisation is ₹{take['realisation']:.2f}. "
+            "Food cost and packaging were not given, so they are not subtracted and are not treated as zero."
+        )
+        if result and result["missing"]:
+            lines.append("Still missing for contribution: " + ", ".join(result["missing"]) + ".")
+    else:
+        lines.append(
+            "On ₹100 of net, the rule takes ₹24.78 and leaves ₹75.22. "
+            "That illustration is the rule, not a store bill. "
+            "Contribution is that realisation minus food cost (raw + semi) minus packaging."
+        )
+    if (data.get("role") in {"owner", "finance"} or owner) and "margin" in (question or "").casefold():
+        lines.append(
+            "Grand Economics has a booked commission line for some months. "
+            "That is not a Swiggy or Zomato payout file, so it is not used as the gap versus 24.78%."
+        )
+    text = " ".join(lines)
+    return _pack(text, "", "procurement", question, owner, source={"text": text})
+
+
 def answer_from_data(question, data, owner):
     """One short answer. A table or chart is added only when it shows the comparison."""
     text = (question or "").strip()
     folded = text.casefold()
     if not text:
         return _pack("Ask a question.", "", "sales", text, owner)
+    if _asks_delivery_economics(text):
+        return _delivery_answer(text, data, owner)
+    from app.chat.licences import allowed as _licence_role
+    from app.chat.licences import packet as _licence_packet
+    from app.chat.licences import relevant as _licence_question
+
+    if _licence_question(text):
+        role = data.get("role") or ("owner" if owner else "ops")
+        if not _licence_role(role):
+            return _pack("Licences are not included for this role.", "", "sales", text, owner)
+        body = _licence_packet(text, role)
+        return _pack(body, "13 Nov 2026", "sales", text, owner, source={"text": body})
     if "action plan" in folded:
         actions = actions_from_data(data, owner)
         if not actions:

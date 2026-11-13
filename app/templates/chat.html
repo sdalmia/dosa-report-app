@@ -6,6 +6,16 @@
     <div class="cc-empty" id="chat-empty">
       <h1>What should we look at?</h1>
       <p class="cc-chat-hello">Ask about sales, stores, buying, or reviews.</p>
+      {% if insights %}
+      <div class="cc-today">
+        {% for card in insights %}
+        <button type="button" class="cc-insight" data-q="{{ card.question }}">
+          <span class="kicker">{{ card.kicker }}</span>
+          <span>{{ card.title }}</span>
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
       {% if not connected %}
         <p class="cc-chat-note" id="chat-note">Answers aren't connected yet.</p>
       {% endif %}

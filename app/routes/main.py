@@ -131,7 +131,10 @@ def dashboard():
     if data.get("october_audit") and audit_q not in shown[:2]:
         shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
     shown = shown[:4]
-    return render_template("chat.html", chips=shown, connected=configured())
+    from app.chat.licences import home_card
+
+    card = home_card(data.get("role") or ("owner" if owner else "ops"))
+    return render_template("chat.html", chips=shown, connected=configured(), insights=[card] if card else [])
 
 
 @main_bp.route("/board")
