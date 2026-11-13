@@ -1082,6 +1082,119 @@ body:has(.cc-chat) .cc-drawer a:hover { background: var(--surface-2); }
 @media (max-width: 720px) {
   .cc-today { grid-template-columns: 1fr; }
 }
+.cc-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+.cc-sheet[hidden] { display: none; }
+.cc-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 16, 10, 0.42);
+}
+.cc-sheet-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 20px 20px 0 0;
+  box-shadow: var(--shadow);
+  padding: 8px 16px 16px;
+}
+.cc-sheet-body { overflow: auto; min-height: 0; }
+.cc-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0 8px;
+  background: var(--bg);
+}
+.cc-sheet-head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: left;
+}
+.cc-sheet-x {
+  margin-left: auto;
+  appearance: none;
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 8px 24px rgba(40, 30, 10, 0.05);
+}
+.cc-sheet-kicker { margin: 0 0 8px; color: var(--text-muted); font-size: 0.9rem; text-align: left; }
+.cc-sheet-lead { margin: 0 0 12px; font-size: 1.05rem; text-align: left; }
+.cc-sheet-notes { margin: 0 0 16px; padding: 0; list-style: none; text-align: left; }
+.cc-sheet-notes li { margin: 0 0 6px; color: var(--text-muted); font-size: 0.85rem; }
+.cc-sheet-facts { margin: 0 0 14px; padding-left: 18px; text-align: left; }
+.cc-sheet-facts li { margin: 0 0 6px; }
+.cc-sheet-more { margin: 14px 0; text-align: left; }
+.cc-sheet-more summary { cursor: pointer; color: var(--text-muted); }
+.cc-sheet-more p { margin: 8px 0 0; color: var(--text-muted); font-size: 0.88rem; }
+.cc-sheet-table .is-total th, .cc-sheet-table .is-total td { font-weight: 650; }
+.cc-sheet h3 { margin: 18px 0 8px; font-size: 0.95rem; text-align: left; }
+.cc-sheet-legend { display: flex; gap: 14px; margin: 0 0 8px; color: var(--text-muted); font-size: 0.8rem; }
+.cc-sheet-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; }
+.cc-sheet-legend .is-now { background: var(--accent); }
+.cc-sheet-legend .is-then { background: var(--chart-band); }
+.cc-sheet-chart { width: 100%; height: 140px; margin-bottom: 4px; }
+.cc-sheet-chart .is-now { fill: var(--accent); }
+.cc-sheet-chart .is-then { fill: var(--chart-band); }
+.cc-sheet-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left; }
+.cc-sheet-table th, .cc-sheet-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cc-sheet-table th { font-weight: 560; }
+.cc-sheet-table .is-prior th, .cc-sheet-table .is-prior td { color: var(--text-muted); }
+.cc-sheet-table .is-move td { color: var(--text-muted); font-size: 0.82rem; border-bottom-width: 8px; border-bottom-color: transparent; }
+.cc-sheet-list { list-style: none; margin: 0; padding: 0; text-align: left; }
+.cc-sheet-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.cc-sheet-list strong { display: block; }
+.cc-sheet-list span { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.88rem; }
+.cc-sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0 4px;
+  background: var(--bg);
+}
+.cc-sheet-actions button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.04), 0 8px 24px rgba(40, 30, 10, 0.05);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+.cc-sheet-actions .is-primary { background: var(--accent); color: var(--accent-ink); }
+body.cc-sheet-open { overflow: hidden; }
+@media (min-width: 900px) {
+  .cc-sheet-panel {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    width: min(460px, 100%);
+    max-height: none;
+    border-radius: 0;
+    padding: 12px 20px 16px;
+  }
+}
 .cc-empty { text-align: center; margin-bottom: 22px; }
 .cc-empty h1 {
   margin: 0 0 8px;

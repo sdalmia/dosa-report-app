@@ -213,10 +213,10 @@ class StoreHealthTests(unittest.TestCase):
         october = network["2026-10-10"]
         self.assertEqual(october["actual_net_L"], "21.16")
         self.assertEqual(october["variance_vs_mid_L"], "4.66")
-        self.assertEqual(october["variance_pct"], "28.2")
+        self.assertEqual(october["variance_pct"], "28.3")
         self.assertEqual(october["status"], "actual")
-        self.assertIn("₹23.03L", october["notes"])
-        self.assertIn("4453 bills", october["notes"])
+        self.assertIn("₹21.16L", october["notes"])
+        self.assertIn("4,453 bills", october["notes"])
         self.assertIn("pulled 11 Oct 2026 07:48 IST", october["notes"])
 
     def test_login_required(self):

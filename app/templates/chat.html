@@ -9,7 +9,7 @@
       {% if insights %}
       <div class="cc-today" aria-label="Today's insights">
         {% for card in insights[:3] %}
-        <button type="button" class="cc-insight" data-q="{{ card.question }}">
+        <button type="button" class="cc-insight" data-id="{{ card.id }}" data-q="{{ card.question }}">
           <span class="cc-chip-icon" aria-hidden="true">
             {% if card.kind == "licences" %}
             <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>
@@ -69,6 +69,20 @@
   </div>
   {% endif %}
 </div>
+<div class="cc-sheet" id="insight-sheet" hidden>
+  <div class="cc-sheet-backdrop" data-close="1"></div>
+  <section class="cc-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="insight-sheet-title">
+    <header class="cc-sheet-head">
+      <h2 id="insight-sheet-title"></h2>
+      <button type="button" class="cc-sheet-x" data-close="1" aria-label="Close">×</button>
+    </header>
+    <div class="cc-sheet-body" id="insight-sheet-body"></div>
+    <div class="cc-sheet-actions" id="insight-sheet-actions"></div>
+  </section>
+</div>
+{% if opened %}
+<script>window.INSIGHT_OPEN = {{ opened|tojson }};</script>
+{% endif %}
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/markdown.js') }}"></script>

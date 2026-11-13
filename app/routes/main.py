@@ -139,6 +139,7 @@ def dashboard():
         for item in TALLY:
             if item not in shown:
                 shown.append(item)
+    from app.chat.insight_detail import build_detail, card_id
     from app.chat.licences import home_card
     from app.chat.wizard_a import persist_trends, trend_cards
 
@@ -149,7 +150,19 @@ def dashboard():
     if card:
         insights = insights[:2] + [card]
     insights = insights[:3]
-    return render_template("chat.html", chips=shown, connected=configured(), insights=insights)
+    for item in insights:
+        item["id"] = card_id(item.get("title"))
+    asked = (request.args.get("insight") or "").strip()
+    opened = build_detail(asked, role) if asked else None
+    if not opened or opened.get("error"):
+        opened = None
+    return render_template(
+        "chat.html",
+        chips=shown,
+        connected=configured(),
+        insights=insights,
+        opened=opened,
+    )
 
 
 @main_bp.route("/board")
@@ -442,6 +455,23 @@ def api_chat_feedback():
         bot["name"],
     )
     return jsonify({"ok": True})
+
+
+@main_bp.route("/api/chat/insights/<card_id>/details")
+@login_required
+def api_insight_detail(card_id):
+    from app.chat.insight_detail import build_detail
+    from app.chat.snapshot import view_for
+
+    email = signed_in_email()
+    data = view_for(email)
+    role = data.get("role") or ("owner" if is_owner(email) else "ops")
+    detail = build_detail(card_id, role)
+    if detail is None:
+        return jsonify({"error": "That insight is not on file."}), 404
+    if detail.get("error") == "forbidden":
+        return jsonify({"error": "This insight is not available for this login."}), 403
+    return jsonify(detail)
 
 
 @main_bp.route("/chat/insights")

@@ -343,9 +343,208 @@
   });
   var preset = new URLSearchParams(window.location.search).get("ask");
   if (preset) ask(preset);
+
+  var sheet = document.getElementById("insight-sheet");
+  var sheetBody = document.getElementById("insight-sheet-body");
+  var sheetTitle = document.getElementById("insight-sheet-title");
+  var sheetOpen = false;
+  var sheetPushed = false;
+  var sheetDetail = null;
+
+  function paintSheet(detail) {
+    sheetDetail = detail;
+    if (sheetTitle) sheetTitle.textContent = detail.title || "";
+    if (!sheetBody) return;
+    sheetBody.innerHTML = detail.kind === "licences" ? licenceSheet(detail) : salesSheet(detail);
+    var actions = document.getElementById("insight-sheet-actions");
+    if (actions) actions.innerHTML = sheetActions(detail);
+  }
+
+  function salesSheet(detail) {
+    var facts = (detail.facts || []).map(function (line) {
+      return "<li>" + escape(line) + "</li>";
+    }).join("");
+    var dayRows = (detail.days || []).map(function (day) {
+      return "<tr><th>" + escape(day.day) + "</th><td>" + escape(day.this_gross) + "</td><td>" + escape(day.prior_gross) + "</td><td>" + escape(day.change) + "</td></tr>";
+    }).join("");
+    var total = detail.total || {};
+    var billRows = (detail.days || []).map(function (day) {
+      return "<tr><th>" + escape(day.day) + "</th><td>" + escape(day.this_bills) + "</td><td>" + escape(day.prior_bills) + "</td><td>" + escape(day.this_apb) + "</td><td>" + escape(day.prior_apb) + "</td></tr>";
+    }).join("");
+    var channelRows = ((detail.channels && detail.channels.rows) || []).map(function (row) {
+      return "<tr><th>" + escape(row.name) + "</th><td>" + escape(row.this) + "</td><td>" + escape(row.prior) + "</td><td>" + escape(row.change) + "</td></tr>";
+    }).join("");
+    return "<p class=\"cc-sheet-lead\">" + escape(detail.headline || "") + "</p>"
+      + "<ul class=\"cc-sheet-facts\">" + facts + "</ul>"
+      + "<h3>Daily gross</h3>"
+      + "<p class=\"cc-sheet-legend\"><span><i class=\"is-now\"></i>This week</span><span><i class=\"is-then\"></i>Week before</span></p>"
+      + chartSvg(detail.chart)
+      + "<h3>By day</h3>"
+      + "<table class=\"cc-sheet-table\"><thead><tr><th>Day</th><th>This week</th><th>Week before</th><th>Change</th></tr></thead><tbody>"
+      + dayRows
+      + "<tr class=\"is-total\"><th>" + escape(total.day || "Total") + "</th><td>" + escape(total.this_gross || "") + "</td><td>" + escape(total.prior_gross || "") + "</td><td>" + escape(total.change || "") + "</td></tr>"
+      + "</tbody></table>"
+      + "<details class=\"cc-sheet-more\"><summary>Bills and average bill</summary>"
+      + "<table class=\"cc-sheet-table\"><thead><tr><th>Day</th><th>Bills</th><th>Bills before</th><th>Avg bill</th><th>Before</th></tr></thead><tbody>"
+      + billRows
+      + "<tr class=\"is-total\"><th>Total</th><td>" + escape(total.this_bills || "") + "</td><td>" + escape(total.prior_bills || "") + "</td><td>" + escape(total.this_apb || "") + "</td><td>" + escape(total.prior_apb || "") + "</td></tr>"
+      + "</tbody></table></details>"
+      + "<h3>By channel</h3>"
+      + "<table class=\"cc-sheet-table\"><thead><tr><th></th><th>This week</th><th>Week before</th><th>Change</th></tr></thead><tbody>"
+      + channelRows + "</tbody></table>"
+      + "<details class=\"cc-sheet-more\"><summary>About this data</summary><p>" + escape(detail.about || "") + "</p></details>";
+  }
+
+  function licenceSheet(detail) {
+    var notes = (detail.notes || []).map(function (line) {
+      return "<li>" + escape(line) + "</li>";
+    }).join("");
+    var items = (detail.rows || []).map(function (row) {
+      return "<li><strong>" + escape(row.store) + "</strong><span>"
+        + escape(row.type) + " · " + escape(row.expiry) + " · " + escape(row.when) + "</span></li>";
+    }).join("");
+    return "<p class=\"cc-sheet-kicker\">" + escape(detail.window || "") + "</p>"
+      + "<p class=\"cc-sheet-lead\">" + escape(detail.headline || "") + "</p>"
+      + "<ul class=\"cc-sheet-notes\">" + notes + "</ul>"
+      + "<ul class=\"cc-sheet-list\">" + items + "</ul>";
+  }
+
+  function sheetActions(detail) {
+    var image = detail.download && detail.download.series
+      ? "<button type=\"button\" data-sheet-act=\"png\">Image</button>" : "";
+    return "<button type=\"button\" class=\"is-primary\" data-ask=\"" + escape(detail.question || "") + "\">Ask the Wizard why</button>"
+      + "<button type=\"button\" data-sheet-act=\"pdf\">PDF</button>"
+      + "<button type=\"button\" data-sheet-act=\"xlsx\">Excel</button>"
+      + image
+      + "<button type=\"button\" data-sheet-act=\"share\">Share</button>";
+  }
+
+  function chartSvg(chart) {
+    var now = (chart && chart.this_week) || [];
+    var prior = (chart && chart.prior_week) || [];
+    if (!now.length) return "";
+    var max = 1;
+    now.concat(prior).forEach(function (item) {
+      max = Math.max(max, Math.abs(Number(item && item.value) || 0));
+    });
+    var width = 320;
+    var height = 128;
+    var pad = 16;
+    var group = (width - pad) / now.length;
+    var bars = now.map(function (item, index) {
+      var then = prior[index] || {};
+      var nowH = ((Number(item.value) || 0) / max) * 96;
+      var thenH = ((Number(then.value) || 0) / max) * 96;
+      var x = pad / 2 + index * group;
+      var label = String(item.label || "").split(" ")[1] || "";
+      return "<rect class=\"is-then\" x=\"" + x.toFixed(1) + "\" y=\"" + (104 - thenH).toFixed(1) + "\" width=\"8\" height=\"" + Math.max(thenH, 1).toFixed(1) + "\"></rect>"
+        + "<rect class=\"is-now\" x=\"" + (x + 10).toFixed(1) + "\" y=\"" + (104 - nowH).toFixed(1) + "\" width=\"8\" height=\"" + Math.max(nowH, 1).toFixed(1) + "\"></rect>"
+        + "<text x=\"" + (x + 8).toFixed(1) + "\" y=\"122\" text-anchor=\"middle\" fill=\"currentColor\" font-size=\"10\">" + escape(label) + "</text>";
+    }).join("");
+    return "<svg class=\"cc-sheet-chart\" viewBox=\"0 0 " + width + " " + height + "\" role=\"img\" aria-label=\"Daily gross, this week and the week before\">" + bars + "</svg>";
+  }
+
+  function showSheet(detail, pushed) {
+    paintSheet(detail);
+    if (!sheet) return;
+    sheet.hidden = false;
+    sheetOpen = true;
+    document.body.classList.add("cc-sheet-open");
+    var close = sheet.querySelector(".cc-sheet-x");
+    if (close) close.focus();
+    if (pushed) {
+      var url = new URL(window.location.href);
+      url.searchParams.set("insight", detail.id || "");
+      history.pushState({ insight: detail.id }, "", url);
+      sheetPushed = true;
+    }
+  }
+
+  function closeSheet(fromPop) {
+    if (!sheetOpen) return;
+    sheetOpen = false;
+    if (sheet) sheet.hidden = true;
+    document.body.classList.remove("cc-sheet-open");
+    if (!fromPop && sheetPushed) {
+      sheetPushed = false;
+      history.back();
+    }
+  }
+
+  function openInsight(id) {
+    if (!id) return;
+    showSheet({ title: "Opening…", kind: "sales", notes: [], days: [], channels: { rows: [] }, download: {} }, false);
+    fetch("/api/chat/insights/" + encodeURIComponent(id) + "/details", { credentials: "same-origin" })
+      .then(function (response) {
+        if (!response.ok) throw new Error("missing");
+        return response.json();
+      })
+      .then(function (detail) { showSheet(detail, true); })
+      .catch(function () {
+        if (sheetBody) sheetBody.innerHTML = "<p class=\"cc-sheet-lead\">That detail is not in the file.</p>";
+      });
+  }
+
+  if (window.INSIGHT_OPEN) showSheet(window.INSIGHT_OPEN, false);
+
   document.addEventListener("click", function (event) {
-    var chip = event.target.closest(".cc-chip, .cc-insight");
+    var closer = event.target.closest("[data-close]");
+    if (closer && sheet && sheet.contains(closer)) {
+      closeSheet(false);
+      return;
+    }
+    var act = event.target.closest("[data-sheet-act]");
+    if (act && sheetDetail) {
+      var kind = act.getAttribute("data-sheet-act");
+      var file = sheetDetail.download || {};
+      if (kind === "share") {
+        var days = window.prompt("Link expires in how many days? 1, 7, or 30", "7");
+        fetch("/api/chat/share", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: sheetDetail.question || "",
+            answer: sheetDetail.share_text || "",
+            days: Number(days || 7),
+            public: false
+          })
+        }).then(function (response) { return response.json(); }).then(function (body) {
+          var url = location.origin + (body.url || "");
+          if (navigator.share) {
+            navigator.share({ title: sheetDetail.title || "Dosa Coffee Wizard", text: sheetDetail.headline || "", url: url }).catch(function () {});
+          } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+          }
+        }).catch(function () {});
+        return;
+      }
+      postFile(kind, sheetDetail.title || "Dosa Coffee Wizard", sheetDetail.share_text || "", {
+        columns: file.columns,
+        rows: file.rows
+      }, kind === "png" ? { series: file.series || [] } : null);
+      return;
+    }
+    var askBtn = event.target.closest("[data-ask]");
+    if (askBtn) {
+      closeSheet(false);
+      ask(askBtn.getAttribute("data-ask"));
+      return;
+    }
+    var insight = event.target.closest(".cc-insight");
+    if (insight) {
+      openInsight(insight.getAttribute("data-id"));
+      return;
+    }
+    var chip = event.target.closest(".cc-chip");
     if (!chip) return;
     ask(chip.getAttribute("data-q") || chip.textContent);
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closeSheet(false);
+  });
+  window.addEventListener("popstate", function () {
+    if (sheetOpen) closeSheet(true);
+    sheetPushed = false;
   });
 })();
