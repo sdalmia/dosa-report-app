@@ -14,7 +14,10 @@ from pathlib import Path
 from app.extensions import db
 
 _TAG = re.compile(r"<[^>]+>")
-_RESTRICTED = ("grand economics", "ebitda", "keka", "headcount", "inbox", "important email", "red flag", "abscond")
+_RESTRICTED = (
+    "grand economics", "ebitda", "keka", "headcount", "inbox", "important email",
+    "red flag", "abscond", "tally", "day book", "daybook", "what did we pay", "payments in",
+)
 
 
 class ChatSnapshot(db.Model):

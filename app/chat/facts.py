@@ -769,6 +769,20 @@ def answer_from_data(question, data, owner):
         return _pack("Saved. This note is added to later owner prompts.", "", "sales", text, owner)
     if any(token in folded for token in ("important email", "inbox", "any important")):
         return _pack(inbox_text(role), "", "finance", text, owner)
+    from app.chat.tally import answer as _tally_answer
+    from app.chat.tally import relevant as _tally_question
+
+    if _tally_question(text):
+        tally = _tally_answer(text, role)
+        return _pack(
+            tally.get("text") or "",
+            tally.get("as_of") or "",
+            "finance",
+            text,
+            owner,
+            table=tally.get("table"),
+            source={"text": tally.get("text") or "", "amounts": tally.get("amounts") or []},
+        )
     if "if i raise" in folded or "what if i raise" in folded:
         return _pack(what_if_text(text), "", "procurement", text, owner)
     from app.chat.wizard_b import try_answer as _wizard_b

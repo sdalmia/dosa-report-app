@@ -21,6 +21,10 @@ REELO = (
 AUDIT = (
     "Which stores scored lowest in the October mystery audit?",
 )
+TALLY = (
+    "What did we pay in Delhi on 2 Nov?",
+    "Top 10 payments in Kolkata in October",
+)
 
 
 def chips(owner, sales=False, finance=False, procurement=False, ingredients=False, reelo=False, audit=False, limit=4):

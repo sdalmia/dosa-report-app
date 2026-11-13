@@ -45,6 +45,7 @@ _TOOLS = (
     ("training", "Frontlyne completion counts. No staff names.", {"owner", "hr", "ops"}),
     ("reelo_deep", "Reelo new versus repeat. Stores that are not on Reelo are not zero.", {"owner", "finance", "hr", "ops"}),
     ("posist", "Posist channel gross and voids. Missing slices are named, not filled in.", {"owner", "finance", "hr", "ops"}),
+    ("tally", "Tally day book vouchers and spend by P&L line. Owner and finance only.", {"owner", "finance"}),
 )
 
 
@@ -103,6 +104,9 @@ def dispatch(name, arguments, role):
         return {"text": reelo_text()}
     if name == "posist":
         return {"text": posist_text(question)}
+    if name == "tally":
+        from app.chat.tally import answer as tally_answer
+        return {"text": (tally_answer(question, role).get("text") or "")}
     return {"error": "Unknown tool."}
 
 

@@ -166,6 +166,11 @@ def build_context(question, data):
     if people:
         parts.extend(["", people])
     parts.append("")
+    from app.chat.tally import answer as tally_answer
+    from app.chat.tally import relevant as tally_question
+
+    if tally_question(question):
+        parts.extend(["", tally_answer(question, role).get("text") or ""])
     from app.chat.wizard_a import domain_text
     from app.chat.wizard_b import domain_text as more_text
 

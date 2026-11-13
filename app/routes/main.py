@@ -134,6 +134,11 @@ def dashboard():
     if data.get("october_audit") and audit_q not in shown[:2]:
         shown = shown[:1] + [audit_q] + [item for item in shown if item != audit_q]
     shown = shown[:4]
+    if owner:
+        from app.chat.suggestions import TALLY
+        for item in TALLY:
+            if item not in shown:
+                shown.append(item)
     from app.chat.licences import home_card
     from app.chat.wizard_a import persist_trends, trend_cards
 
