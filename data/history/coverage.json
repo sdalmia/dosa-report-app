@@ -8,21 +8,21 @@
       "label": "Sales by city and store",
       "owner": "Alfred",
       "owner_how": "who pulls Posist Insights daily sales",
-      "from": "2026-09-04",
+      "from": "2026-04-01",
       "to": "2026-11-12",
       "months_loaded": [
+        "2026-04",
+        "2026-05",
         "2026-09",
         "2026-10",
         "2026-11"
       ],
       "months_missing": [
-        "2026-04",
-        "2026-05",
         "2026-06",
         "2026-07",
         "2026-08"
       ],
-      "notes": "Daily store sales start 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
+      "notes": "April (and any later month in the same sales_YYYY-MM.csv format) is a full calendar month from Alfred's Posist Insights monthly extract: net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. Months not yet in a monthly extract or a daily file would come from Alfred. Daily store sales resume 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
       "roles": [
         "owner",
         "ops",
@@ -35,21 +35,21 @@
       "label": "Sales by channel (Swiggy, Zomato, and others)",
       "owner": "Alfred",
       "owner_how": "who pulls Posist Insights channel sales",
-      "from": "2026-10-02",
+      "from": "2026-04-01",
       "to": "2026-11-12",
       "months_loaded": [
+        "2026-04",
+        "2026-05",
         "2026-10",
         "2026-11"
       ],
       "months_missing": [
-        "2026-04",
-        "2026-05",
         "2026-06",
         "2026-07",
         "2026-08",
         "2026-09"
       ],
-      "notes": "Store-level channel files cover 2\u201315 Oct and 1\u201312 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16\u201331 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep\u20138 Oct 30-day range file is in data/posist; it is not a calendar month. Calendar September is not loaded.",
+      "notes": "April (and any later month in the same channel_YYYY-MM.csv format) is a full calendar month from Alfred's Posist channel extract (source names as in the file; Faridabad included). Months not yet in a monthly extract or a daily file, and calendar September, would come from Alfred. Store-level channel files then cover 2\u201315 Oct and 1\u201312 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16\u201331 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep\u20138 Oct 30-day range file is in data/posist; it is not a calendar month.",
       "roles": [
         "owner",
         "ops",
@@ -60,8 +60,8 @@
     {
       "id": "procurement",
       "label": "Procurement purchases and ingredient prices",
-      "owner": "Logan",
-      "owner_how": "who pulls the procurement (PurchaseEasy) reports",
+      "owner": "Procurement",
+      "owner_how": "who pulls the PurchaseEasy reports",
       "from": "2026-04-01",
       "to": "2026-11-12",
       "months_loaded": [
@@ -113,7 +113,7 @@
     {
       "id": "reelo",
       "label": "Reelo monthly customers, orders and spend",
-      "owner": "Jarvis",
+      "owner": "Logan",
       "owner_how": "who pulls the Reelo dashboard exports",
       "from": "2026-04",
       "to": "2026-11",
@@ -234,6 +234,33 @@
       "notes": "April\u2013November 2026 location-level joiner and exit counts. November is 1\u201312 only. No employee names. Owner only.",
       "roles": [
         "owner"
+      ]
+    },
+    {
+      "id": "wastage",
+      "label": "Procurement wastage by store and item",
+      "owner": "Procurement",
+      "owner_how": "who pulls the PurchaseEasy wastage reports",
+      "from": "2026-04-01",
+      "to": "2026-09-08",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09"
+      ],
+      "months_missing": [
+        "2026-10",
+        "2026-11"
+      ],
+      "notes": "1 Apr\u20138 Sep 2026, item-level by deployment, east (Kolkata) and north (NCR). April\u2013August are calendar months. September is 1\u20138 Sep only. Stock, billing and total wastage are from the wastage extract. Consumption quantities on those rows are kept for wastage %; the official consumption reports are still being pulled and are not loaded. Base Kitchen (Kolkata) and Warehouse (Delhi) are kept under those names.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
       ]
     },
     {

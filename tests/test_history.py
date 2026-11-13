@@ -11,7 +11,7 @@ from app.chat.answer import produce_answer
 from app.chat.context import build_context
 from app.chat.facts import answer_from_data
 from app.chat.history import coverage_line, lookup, missing_text, month_loaded, use_file_answer
-from app.chat.month_sales import _lakh
+from app.chat.month_sales import _lakh, answer as month_sales_answer
 from app.chat.router import dispatch, tool_specs
 from app.chat.snapshot import reset_snapshot, view_for
 
@@ -256,6 +256,92 @@ class CoverageAndRoleTests(unittest.TestCase):
         self.assertTrue(notes_path.is_file())
         notes = json.loads(notes_path.read_text(encoding="utf-8"))
         self.assertEqual(notes.get("issues") or notes.get("parse_issues") or [], [])
+
+    def test_april_sales_match_alfred_and_june_is_still_missing(self):
+        # Alfred: 866 store-days, 30 stores, gross 4,81,10,428.87, bills 92,784. Net blank.
+        reset_snapshot()
+        calendar = month_sales_answer("total april sales", view_for(role="ops"), False)
+        text = calendar["text"]
+        self.assertIn("₹481.10L", text)
+        self.assertIn("92,784", text)
+        self.assertIn("Kolkata ₹234.85L", text)
+        self.assertIn("NCR ₹245.73L", text)
+        self.assertIn("Events & Catering ₹0.52L", text)
+        self.assertIn("outside store comparisons", text)
+        self.assertIn("Faridabad is included", text)
+        self.assertIn("net is not loaded", text.casefold())
+        self.assertNotIn("Network net was ₹0", text)
+        # City calendar answer, Food Truck gaps, mall bills as em dash, Events out of Kolkata.
+        kol = month_sales_answer("Kolkata sales in April 2026", view_for(role="ops"), False)["text"]
+        self.assertIn("₹234.85L", kol)
+        self.assertIn("44,403", kol)
+        self.assertIn("Manisquare ₹12.43L", kol)
+        self.assertIn("Forum ₹6.79L", kol)
+        self.assertIn("missing 11, 12, 13, 14, 25, 26 Apr", kol)
+        self.assertIn("Food Truck", kol)
+        self.assertNotIn("Events", kol)
+        self.assertIn("| —", kol)  # mall bills
+        ncr = month_sales_answer("NCR sales in April 2026", view_for(role="ops"), False)["text"]
+        self.assertIn("₹245.73L", ncr)
+        self.assertIn("Faridabad", ncr)
+        self.assertIn("46,253", ncr)
+        # Channel split and month lookup.
+        channel = lookup("channel split in April 2026", "ops")
+        self.assertIn("DINEIN: ₹301.27L", channel)
+        self.assertIn("ZOMATOONLINE: ₹106.43L", channel)
+        self.assertIn("SWIGGYONLINE: ₹60.69L", channel)
+        self.assertIn("TAKEOUT: ₹12.71L", channel)
+        self.assertIn("ONDC: ₹0.01L", channel)
+        # Net cells stay blank: no invented zero net in the store file.
+        with (_ROOT / "data" / "history" / "sales_store_month.csv").open(newline="", encoding="utf-8-sig") as handle:
+            april = [row for row in csv.DictReader(handle) if row["month"] == "2026-04"]
+        self.assertTrue(all(row.get("net") == "" for row in april), "net must stay blank")
+        self.assertEqual(len(april), 30)
+        gross = sum(Decimal(row["gross"]) for row in april)
+        bills = sum(Decimal(row["bills"] or 0) for row in april)
+        self.assertEqual(gross, Decimal("48110428.87"))
+        self.assertEqual(bills, Decimal("92784"))
+        # June is still not loaded.
+        june = lookup("Kolkata sales in June 2026", "ops")
+        self.assertIn("not in the loaded daily files", june)
+        self.assertIn("Alfred", june)
+        self.assertNotIn("₹", june)
+        self.assertTrue(use_file_answer("Kolkata sales in June 2026", "ops"))
+        # October Kolkata is unchanged.
+        october = month_sales_answer("total october sales in Kolkata", view_for(role="ops"), False)["text"]
+        self.assertIn("₹316.53L", october)
+        self.assertIn("1–31 Oct 2026", october)
+        # Coverage owners.
+        cov = coverage_line("ops")
+        self.assertIn("Procurement purchases and ingredient prices (Procurement)", cov)
+        self.assertIn("Reelo monthly customers, orders and spend (Logan)", cov)
+        self.assertNotIn("purchases and ingredient prices (Logan)", cov)
+        self.assertNotIn("Reelo monthly customers, orders and spend (Jarvis)", cov)
+
+    def test_april_wastage_is_loaded_and_september_is_partial(self):
+        text = lookup("wastage in April 2026", "ops")
+        self.assertIsNotNone(text)
+        self.assertNotIn("not loaded", text.casefold())
+        self.assertIn("April 2026 wastage", text)
+        self.assertIn("Total wastage:", text)
+        self.assertIn("Warehouse", text)
+        self.assertIn("Base Kitchen", text)
+        # Pacific mall comma-split rows were joined.
+        self.assertIn("Pacific mall, Jasola", text)
+        self.assertTrue(month_loaded("wastage", 2026, 4, "ops"))
+        self.assertTrue(month_loaded("wastage", 2026, 9, "ops"))
+        sep = lookup("wastage in September 2026", "ops")
+        self.assertIn("2026-09-01 to 2026-09-08", sep)
+        self.assertIn("not a full calendar month", sep)
+        self.assertIn("incomplete", sep.casefold())
+        # October wastage is not loaded; it would come from Procurement.
+        oct_w = lookup("wastage in October 2026", "ops")
+        self.assertIn("not loaded", oct_w.casefold())
+        self.assertIn("Procurement", oct_w)
+        self.assertNotIn("Logan", oct_w)
+        self.assertNotIn("₹", oct_w)
+        # Consumption reports were not loaded as a domain.
+        self.assertFalse(month_loaded("consumption", 2026, 4, "ops"))
 
 
 if __name__ == "__main__":

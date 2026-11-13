@@ -18,3 +18,10 @@ Item Wise `.xls` files (those are HTML). The loader copies them to
 Tally Day Book packs can be dropped as `/workspace/backfill/tally/<company>/<YYYY-MM>/`.
 Menu mix (Jarvis) and Posist sales (Alfred) are still pending; the same loader
 will pick them up when they land.
+
+Monthly Posist files (`posist_sales/sales_YYYY-MM.csv` and
+`posist_channel/channel_YYYY-MM.csv`) are Alfred's calendar-month format;
+May–August will arrive the same way. Net is left blank when the cell is blank.
+
+Wastage CSVs live at `/workspace/backfill/procurement/wastage/`. Consumption
+reports in `procurement/consumption/` are still being pulled and are not loaded.

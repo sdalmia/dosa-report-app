@@ -142,13 +142,22 @@ def _region(store, region=""):
     if folded in {"north", "ncr", "delhi", "delhi ncr"}:
         return "North"
     name = (store or "").casefold()
+    raw = store or ""
     if "event" in name or "cater" in name:
         return "Events"
-    if re.search(r"\(02/", store or "") or any(
-        token in name for token in ("noida", "gurgaon", "faridabad", "connaught", "kalkaji", "rohini", "paschim", "shalimar", "model town", "jasola", "pacific")
+    if (
+        re.search(r"\(02/", raw) or re.search(r"(?<!\d)02/", raw)
+        or any(token in name for token in (
+            "noida", "gurgaon", "faridabad", "connaught", "kalkaji",
+            "rohini", "paschim", "shalimar", "model town", "jasola", "pacific",
+        ))
     ):
         return "North"
-    if re.search(r"\(01/", store or "") or re.search(r"\(\d{3,4}\)", store or ""):
+    if (
+        re.search(r"\(01/", raw) or re.search(r"(?<!\d)01/", raw)
+        or re.search(r"\(\d{3,4}\)", raw)
+        or "lake road" in name
+    ):
         return "East"
     return text or ""
 
@@ -439,7 +448,7 @@ def build_sales():
                 "region": region,
                 "city": _city_label(region),
                 "gross": f"{bucket['gross']:.2f}",
-                "bills": "" if is_mall else f"{bucket['bills']:.2f}",
+                "bills": f"{bucket['bills']:.2f}",
                 "net": f"{bucket['net']:.2f}" if bucket["net_n"] else "",
                 "days_present": len(bucket["days"]),
                 "days_in_month": days_in,
@@ -468,7 +477,22 @@ def build_sales():
             year, mon = int(month[:4]), int(month[5:7])
             days_in = monthrange(year, mon)[1]
             note = ""
-            if month == "2026-09":
+            monthly = _ROOT / "data" / "posist" / "daily_sales" / f"sales_{month}.csv"
+            if monthly.is_file():
+                note = (
+                    f"Calendar {month} from Alfred's Posist Insights monthly extract "
+                    f"(sales_{month}.csv). Net is blank (Insights gave only store gross), "
+                    "left blank not treated as zero. Faridabad is included. "
+                    "Events & Catering is its own row, outside store comparisons, "
+                    "and is counted in the network total. Missing days are left out, not treated as zero."
+                )
+                if month == "2026-04":
+                    note += (
+                        " Events & Catering is 27–28 Apr (28 Apr is zero in the file). "
+                        "Food Truck is missing 11–14 and 25–26 Apr; "
+                        "4, 5, 18, 19 and 29 Apr are zero in the file."
+                    )
+            elif month == "2026-09":
                 note = "Daily file starts 4 Sep; 1–3 Sep are not on file."
             elif month == "2026-11":
                 note = "Through 12 Nov; the month is not complete."
@@ -519,7 +543,21 @@ def build_channel():
         year, mon = int(month[:4]), int(month[5:7])
         days_in = monthrange(year, mon)[1]
         note = ""
-        if month == "2026-11":
+        monthly = _ROOT / "data" / "posist" / "daily_sales" / f"channel_{month}.csv"
+        if monthly.is_file():
+            note = (
+                f"Calendar {month} from Alfred's Posist channel extract (channel_{month}.csv). "
+                "Sources are named as in the file (DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, ONDC, "
+                "and any other source the file has). Faridabad is included. "
+                "Events & Catering is its own row, outside store comparisons."
+            )
+            if month == "2026-04":
+                note += (
+                    " Channel sales sum to ₹4,81,10,428.75 against store gross ₹4,81,10,428.87 "
+                    "(12 paisa of per-day rounding); both figures are left as in the files. "
+                    "Events & Catering is DINEIN on 27–28 Apr only."
+                )
+        elif month == "2026-11":
             note = "9 Nov channel file is not on disk; that day is left out, not treated as zero. Through 12 Nov."
         elif month == "2026-10":
             note = "Store-level channel days are 2–15 Oct (2–8 from a daily extract; 9–15 from dated files). 16–31 Oct files are network totals only (ALL (network) / ALL DEPLOYMENTS). 1 Oct is not on file."
@@ -545,6 +583,61 @@ def build_channel():
         rows,
     )
 
+
+
+
+def copy_monthly_posist():
+    """Copy Alfred's monthly Posist extracts (sales_YYYY-MM.csv, channel_YYYY-MM.csv).
+
+    May–August will arrive in the same shape. Files go to data/posist/daily_sales/
+    (so month_sales and the channel builder read the date column) and a
+    data/posist/monthly/ copy is kept for provenance. Daily sales_YYYY-MM-DD
+    files are left untouched.
+    """
+    dest = _ROOT / "data" / "posist" / "daily_sales"
+    monthly = _ROOT / "data" / "posist" / "monthly"
+    dest.mkdir(parents=True, exist_ok=True)
+    monthly.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    sources = [
+        Path("/workspace/backfill/posist_sales"),
+        Path("/workspace/backfill/posist_channel"),
+        monthly,
+    ]
+    for src in sources:
+        if not src.is_dir():
+            continue
+        for path in sorted(src.glob("*.csv")):
+            if not re.search(r"(?i)^(sales|channel)_\d{4}-\d{2}\.csv$", path.name):
+                continue
+            for target_dir in (dest, monthly):
+                if path.resolve().parent == target_dir.resolve():
+                    continue
+                target = target_dir / path.name
+                if target.is_file() and target.stat().st_size == path.stat().st_size:
+                    continue
+                shutil.copy2(path, target)
+                copied += 1
+    print(f"  monthly posist files copied: {copied}")
+
+
+def copy_wastage():
+    """Copy 1 Apr–8 Sep wastage CSVs. Consumption reports are left for later."""
+    src = Path("/workspace/backfill/procurement/wastage")
+    dest = _ROOT / "data" / "procurement" / "backfill" / "wastage"
+    if not src.is_dir():
+        print("  wastage backfill not present; skipping copy")
+        return dest
+    dest.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    for path in sorted(src.glob("wastage_*.csv")):
+        target = dest / path.name
+        if target.is_file() and target.stat().st_size == path.stat().st_size:
+            continue
+        shutil.copy2(path, target)
+        copied += 1
+    print(f"  wastage files copied: {copied}")
+    return dest
 
 
 def copy_procurement_backfill():
@@ -1303,6 +1396,212 @@ def _loaded_months(path, column="month"):
     return sorted(found)
 
 
+
+def _parse_wastage_row(cells, issues, source):
+    """Positional parse. Amt is a repeated header, so DictReader cannot be used.
+
+    North files split 'Dosa Coffee - Pacific mall, Jasola' on the comma into
+    two cells, making an 18-column row. Those are joined back.
+    """
+    cells = list(cells)
+    if len(cells) == 18:
+        # "Dosa Coffee - Pacific mall" + " Jasola"
+        cells = [f"{cells[0].rstrip()},{cells[1]}".replace(", ", ", ").replace(",,", ",") ] + cells[2:]
+        # tidy: "Dosa Coffee - Pacific mall," + " Jasola" -> "Dosa Coffee - Pacific mall, Jasola"
+        cells[0] = re.sub(r",\s*", ", ", cells[0]).strip()
+    if len(cells) != 17:
+        issues.append({"source": source, "issue": f"{len(cells)} columns", "sample": cells[:4]})
+        return None
+    def num(i):
+        return _num(cells[i])
+    return {
+        "deployment": (cells[0] or "").strip(),
+        "kitchen": (cells[1] or "").strip(),
+        "item_code": (cells[2] or "").strip(),
+        "item": (cells[3] or "").strip(),
+        "category": (cells[4] or "").strip(),
+        "super_category": (cells[5] or "").strip(),
+        "unit": (cells[6] or "").strip(),
+        "avg_price": num(7),
+        "stock_wastage_qty": num(8),
+        "stock_wastage_amt": num(9),
+        "consumption_qty": num(10),
+        "consumption_amt": num(11),
+        "billing_wastage_qty": num(12),
+        "billing_wastage_amt": num(13),
+        "total_wastage_qty": num(14),
+        "total_wastage_amt": num(15),
+        "wastage_pct": num(16),
+    }
+
+
+def _wastage_month_from_name(name):
+    """2026-04 or 2026-09-01to08 from wastage_{east,north}_*.csv."""
+    match = re.search(r"(20\d{2}-\d{2})(?:-(\d{2})to(\d{2}))?", name)
+    if not match:
+        return "", "", ""
+    month = match.group(1)
+    if match.group(2) and match.group(3):
+        first = f"{month}-{match.group(2)}"
+        last = f"{month}-{match.group(3)}"
+        return month, first, last
+    year, mon = int(month[:4]), int(month[5:7])
+    last_day = monthrange(year, mon)[1]
+    return month, f"{month}-01", f"{month}-{last_day:02d}"
+
+
+def _wastage_city(filename, deployment):
+    if "east" in filename.casefold():
+        return "East", "Kolkata"
+    if "north" in filename.casefold():
+        return "North", "NCR"
+    return _region(deployment), _city_label(_region(deployment))
+
+
+def build_wastage():
+    """Monthly wastage by store and item, 1 Apr–8 Sep. Consumption reports are not loaded."""
+    roots = [
+        _ROOT / "data" / "procurement" / "backfill" / "wastage",
+        Path("/workspace/backfill/procurement/wastage"),
+    ]
+    folder = next((r for r in roots if r.is_dir() and any(r.glob("wastage_*.csv"))), None)
+    if folder is None:
+        print("  no wastage files")
+        return
+    issues = []
+    item_rows = []
+    store_acc = defaultdict(lambda: {
+        "stock_qty": 0.0, "stock_amt": 0.0,
+        "billing_qty": 0.0, "billing_amt": 0.0,
+        "total_qty": 0.0, "total_amt": 0.0,
+        "consumption_amt": 0.0,
+        "items": 0, "kitchens": set(),
+    })
+    month_meta = {}  # month -> (first, last, complete, note)
+    for path in sorted(folder.glob("wastage_*.csv")):
+        month, first, last = _wastage_month_from_name(path.name)
+        if not month:
+            issues.append({"source": path.name, "issue": "cannot parse month from filename"})
+            continue
+        complete = "yes"
+        note = "Calendar month from the PurchaseEasy wastage extract."
+        if "to" in path.name:
+            complete = "no"
+            note = (
+                f"{first} to {last} only (not a full calendar month). "
+                "The rest of September is not in this extract."
+            )
+        prev = month_meta.get(month)
+        if prev:
+            # combine east+north; if either is a partial, the month is partial
+            first = min(first, prev[0])
+            last = max(last, prev[1])
+            if prev[2] == "no" or complete == "no":
+                complete = "no"
+                note = prev[3] if prev[2] == "no" else note
+        month_meta[month] = (first, last, complete, note)
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            reader = csv.reader(handle)
+            header = next(reader, None)
+            for cells in reader:
+                if not cells or not any(c.strip() for c in cells):
+                    continue
+                parsed = _parse_wastage_row(cells, issues, path.name)
+                if not parsed or not parsed["deployment"] or not parsed["item"]:
+                    continue
+                region, city = _wastage_city(path.name, parsed["deployment"])
+                if "event" in parsed["deployment"].casefold() or "cater" in parsed["deployment"].casefold():
+                    region, city = "Events", "Events"
+                item_rows.append({
+                    "month": month,
+                    "city": city,
+                    "region": region,
+                    "store": parsed["deployment"],
+                    "kitchen": parsed["kitchen"],
+                    "item_code": parsed["item_code"],
+                    "item": parsed["item"],
+                    "category": parsed["category"],
+                    "super_category": parsed["super_category"],
+                    "unit": parsed["unit"],
+                    "avg_price": "" if parsed["avg_price"] is None else f"{parsed['avg_price']}",
+                    "stock_wastage_qty": "" if parsed["stock_wastage_qty"] is None else f"{parsed['stock_wastage_qty']}",
+                    "stock_wastage_amt": "" if parsed["stock_wastage_amt"] is None else f"{parsed['stock_wastage_amt']:.2f}",
+                    "billing_wastage_qty": "" if parsed["billing_wastage_qty"] is None else f"{parsed['billing_wastage_qty']}",
+                    "billing_wastage_amt": "" if parsed["billing_wastage_amt"] is None else f"{parsed['billing_wastage_amt']:.2f}",
+                    "total_wastage_qty": "" if parsed["total_wastage_qty"] is None else f"{parsed['total_wastage_qty']}",
+                    "total_wastage_amt": "" if parsed["total_wastage_amt"] is None else f"{parsed['total_wastage_amt']:.2f}",
+                    "wastage_pct": "" if parsed["wastage_pct"] is None else f"{parsed['wastage_pct']}",
+                    # Consumption qty/amt as they appear on the wastage extract, for
+                    # wastage %. The official consumption reports are still being pulled.
+                    "consumption_qty": "" if parsed["consumption_qty"] is None else f"{parsed['consumption_qty']}",
+                    "consumption_amt": "" if parsed["consumption_amt"] is None else f"{parsed['consumption_amt']:.2f}",
+                    "complete": complete,
+                    "first_day": first,
+                    "last_day": last,
+                    "note": note,
+                    "source": path.name,
+                })
+                key = (month, city, parsed["deployment"])
+                acc = store_acc[key]
+                acc["stock_qty"] += parsed["stock_wastage_qty"] or 0.0
+                acc["stock_amt"] += parsed["stock_wastage_amt"] or 0.0
+                acc["billing_qty"] += parsed["billing_wastage_qty"] or 0.0
+                acc["billing_amt"] += parsed["billing_wastage_amt"] or 0.0
+                acc["total_qty"] += parsed["total_wastage_qty"] or 0.0
+                acc["total_amt"] += parsed["total_wastage_amt"] or 0.0
+                acc["consumption_amt"] += parsed["consumption_amt"] or 0.0
+                acc["items"] += 1
+                if parsed["kitchen"]:
+                    acc["kitchens"].add(parsed["kitchen"])
+
+    if issues:
+        print(f"  wastage parse issues: {len(issues)}")
+        for issue in issues[:8]:
+            print("   ", issue)
+    else:
+        print(f"  wastage parse issues: 0")
+
+    write_rows(
+        _HISTORY / "wastage_item_month.csv",
+        [
+            "month", "city", "region", "store", "kitchen", "item_code", "item",
+            "category", "super_category", "unit", "avg_price",
+            "stock_wastage_qty", "stock_wastage_amt",
+            "billing_wastage_qty", "billing_wastage_amt",
+            "total_wastage_qty", "total_wastage_amt", "wastage_pct",
+            "consumption_qty", "consumption_amt",
+            "complete", "first_day", "last_day", "note", "source",
+        ],
+        sorted(item_rows, key=lambda r: (r["month"], r["city"], r["store"], r["item"])),
+    )
+    store_rows = []
+    for (month, city, store), acc in sorted(store_acc.items()):
+        first, last, complete, note = month_meta.get(month, ("", "", "no", ""))
+        store_rows.append({
+            "month": month,
+            "city": city,
+            "store": store,
+            "item_count": acc["items"],
+            "stock_wastage_amt": f"{acc['stock_amt']:.2f}",
+            "billing_wastage_amt": f"{acc['billing_amt']:.2f}",
+            "total_wastage_amt": f"{acc['total_amt']:.2f}",
+            "consumption_amt": f"{acc['consumption_amt']:.2f}",
+            "complete": complete,
+            "first_day": first,
+            "last_day": last,
+            "note": note,
+        })
+    write_rows(
+        _HISTORY / "wastage_store_month.csv",
+        [
+            "month", "city", "store", "item_count",
+            "stock_wastage_amt", "billing_wastage_amt", "total_wastage_amt",
+            "consumption_amt", "complete", "first_day", "last_day", "note",
+        ],
+        store_rows,
+    )
+
+
 def build_coverage():
     window = _months_between(WINDOW_START, WINDOW_END)
     domains = []
@@ -1335,16 +1634,16 @@ def build_coverage():
     add("sales", "Sales by city and store", "Alfred",
         "who pulls Posist Insights daily sales",
         sales_loaded,
-        "Daily store sales start 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
-        all_roles, start="2026-09-04", end="2026-11-12")
+        "April (and any later month in the same sales_YYYY-MM.csv format) is a full calendar month from Alfred's Posist Insights monthly extract: net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. Months not yet in a monthly extract or a daily file would come from Alfred. Daily store sales resume 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
+        all_roles, start="2026-04-01", end="2026-11-12")
     ch_loaded = _loaded_months(_HISTORY / "channel_store_month.csv")
     add("channel", "Sales by channel (Swiggy, Zomato, and others)", "Alfred",
         "who pulls Posist Insights channel sales",
         ch_loaded,
-        "Store-level channel files cover 2–15 Oct and 1–12 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16–31 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month. Calendar September is not loaded.",
-        all_roles, start="2026-10-02", end="2026-11-12")
-    add("procurement", "Procurement purchases and ingredient prices", "Logan",
-        "who pulls the procurement (PurchaseEasy) reports",
+        "April (and any later month in the same channel_YYYY-MM.csv format) is a full calendar month from Alfred's Posist channel extract (source names as in the file; Faridabad included). Months not yet in a monthly extract or a daily file, and calendar September, would come from Alfred. Store-level channel files then cover 2–15 Oct and 1–12 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16–31 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month.",
+        all_roles, start="2026-04-01", end="2026-11-12")
+    add("procurement", "Procurement purchases and ingredient prices", "Procurement",
+        "who pulls the PurchaseEasy reports",
         sorted(set(_loaded_months(_HISTORY / "purchases_item_month.csv") + _loaded_months(_HISTORY / "prices_item_month.csv"))),
         "Purchases and item prices run from 1 Apr 2026. April–August are calendar-month Entry Reports and Purchase Summaries (days with no GRN are days with no invoice, left out not treated as zero). September purchases combine the 1–8 Sep backfill with GRN lines for 9–30 Sep; Delhi has no 1 Sep or 6 Sep entry in the 1–8 pack. October purchases are GRN 1–8 Oct only. Item prices: Apr–Aug from the official Purchase Summary; Sep is a qty-weighted average of 1–8 Sep entries plus 9–30 Sep GRN; October is complete and November is 1–12, from procurement_summary.json. Freight and other invoice charges are kept separate from item totals. The Purchase Summary .xls files are HTML.",
         all_roles,
@@ -1356,7 +1655,7 @@ def build_coverage():
         _loaded_months(_HISTORY / "menu_item_month.csv"),
         "Calendar September and October are loaded. A 14 Oct–12 Nov Friday file is also in data/menu; it is a 30-day window, not a calendar month. November calendar month is not complete. April–August are not loaded.",
         all_roles, start="2026-09-01", end="2026-10-31")
-    add("reelo", "Reelo monthly customers, orders and spend", "Jarvis",
+    add("reelo", "Reelo monthly customers, orders and spend", "Logan",
         "who pulls the Reelo dashboard exports",
         _loaded_months(_HISTORY / "reelo_month.csv"),
         "Monthly customers, orders and average spend for April–October 2026. November is 1–12 only. Campaign metrics are mostly blank.",
@@ -1381,6 +1680,12 @@ def build_coverage():
         _loaded_months(_HISTORY / "hr_month.csv"),
         "April–November 2026 location-level joiner and exit counts. November is 1–12 only. No employee names. Owner only.",
         ["owner"], start="2026-04-01", end="2026-11-12")
+    wastage_loaded = _loaded_months(_HISTORY / "wastage_store_month.csv")
+    add("wastage", "Procurement wastage by store and item", "Procurement",
+        "who pulls the PurchaseEasy wastage reports",
+        wastage_loaded,
+        "1 Apr–8 Sep 2026, item-level by deployment, east (Kolkata) and north (NCR). April–August are calendar months. September is 1–8 Sep only. Stock, billing and total wastage are from the wastage extract. Consumption quantities on those rows are kept for wastage %; the official consumption reports are still being pulled and are not loaded. Base Kitchen (Kolkata) and Warehouse (Delhi) are kept under those names.",
+        all_roles, start="2026-04-01", end="2026-09-08")
     add("famepilot", "Famepilot ticket counts", "Albus",
         "who pulls the Famepilot ticket export",
         _loaded_months(_HISTORY / "famepilot_tickets_month.csv"),
@@ -1408,7 +1713,9 @@ def main():
     (_HISTORY / "extra").mkdir(parents=True, exist_ok=True)
     print("Copying source files")
     copy_channel_files()
+    copy_monthly_posist()
     copy_procurement_backfill()
+    copy_wastage()
     menu_folder = copy_oct_menu()
     print("Building October menu CSV")
     build_oct_menu_csv(menu_folder)
@@ -1425,6 +1732,7 @@ def main():
     build_finance()
     build_hr()
     build_famepilot()
+    build_wastage()
     print("Writing coverage")
     build_coverage()
     print("done")

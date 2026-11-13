@@ -28,9 +28,10 @@ _WINDOW_END = date(2026, 11, 13)
 _OWNERS = {
     "sales": ("Alfred", "who pulls Posist Insights daily sales", "sales"),
     "channel": ("Alfred", "who pulls Posist Insights channel sales", "channel sales"),
-    "procurement": ("Logan", "who pulls the procurement (PurchaseEasy) reports", "procurement figures"),
+    "procurement": ("Procurement", "who pulls the PurchaseEasy reports", "procurement figures"),
     "menu_mix": ("Jarvis", "who pulls the Posist menu-mix extracts", "menu-mix figures"),
-    "reelo": ("Jarvis", "who pulls the Reelo dashboard exports", "Reelo figures"),
+    "reelo": ("Logan", "who pulls the Reelo dashboard exports", "Reelo figures"),
+    "wastage": ("Procurement", "who pulls the PurchaseEasy wastage reports", "wastage figures"),
     "aggregator": ("Sanjoy", "who maintains the brand aggregator workbook", "aggregator figures"),
     "finance": ("Shilajit", "who sends the Grand Economics workbook", "Grand Economics figures"),
     "tally": ("the Accountant", "who sends the daily Tally Day Book packs (via Shilajit)", "Tally figures"),
@@ -46,8 +47,9 @@ _OWNER_ONLY = {
 
 _DOMAIN_WORDS = {
     "sales": ("sale", "sales", "sold", "gross", "revenue", "turnover"),
-    "channel": ("channel", "dine-in", "dine in", "takeaway", "pos sale"),
+    "channel": ("channel", "dine-in", "dine in", "dinein", "takeaway", "takeout", "swiggyonline", "zomatoonline", "ondc", "pos sale"),
     "procurement": ("procurement", "purchase", "grn", "vendor", "ingredient price", "unit price"),
+    "wastage": ("wastage", "waste %", "stock wastage", "billing wastage"),
     "menu_mix": ("menu mix", "menu-mix", "best sell", "item sales", "contribution"),
     "reelo": ("reelo", "loyalty", "repeat customer", "new customer", "phone capture"),
     "aggregator": ("aggregator", "swiggy", "zomato", "offline hour", "ad spend", "impressions"),
@@ -151,6 +153,10 @@ def _month_named(folded):
 
 def _detect_domain(folded):
     """Most specific domain mentioned. Aggregator beats generic sales words."""
+    if ("wastage" in folded or "waste %" in folded or "stock wastage" in folded) and not any(
+        token in folded for token in ("grand economics", "p&l", "p and l", "ebitda")
+    ):
+        return "wastage"
     hits = []
     for domain_id, words in _DOMAIN_WORDS.items():
         for word in words:
@@ -295,10 +301,34 @@ def _answer_sales(year, month, question, role):
         return missing_text("sales", year, month)
     city = _city_from_question((question or "").casefold())
     label = _label(year, month)
-    lines = [f"{label} sales, from Posist daily files (Chattarpur and GK1 out of the sales base; Faridabad out from 23 Oct)."]
-    picked = [row for row in rows if not city or row.get("city") == city]
-    if city and not picked:
+    source = "Posist daily files"
+    if any((row.get("note") or "").startswith("Calendar April") for row in rows) or (year, month) == (2026, 4):
+        source = "Alfred's Posist Insights monthly extract"
+    fb = (
+        "Faridabad is included (it is in the sales base until 22 Oct)"
+        if (year, month) < (2026, 10)
+        else "Faridabad is out of the sales base from 23 Oct"
+    )
+    lines = [
+        f"{label} sales, from {source} "
+        f"(Chattarpur and GK1 out of the sales base; {fb}). "
+        "Net is left blank when the file has none, not treated as zero."
+    ]
+    # Events is its own city row, counted in the network total, out of store comparisons.
+    events = [row for row in rows if (row.get("city") or "").casefold() == "events"]
+    cities = [row for row in rows if (row.get("city") or "").casefold() != "events"]
+    picked = [row for row in cities if not city or row.get("city") == city]
+    if city and city.casefold() == "events":
+        picked = events
+    if city and not picked and city.casefold() != "events":
         return f"{city} {label} sales are not in the loaded daily files. That month would come from Alfred, who pulls Posist Insights daily sales. No figure is invented."
+    network_gross = sum((_dec(r.get("gross")) or 0) for r in rows)
+    # bills: city file has bills_ex_mall. Network bills that match Alfred are the raw sum including mall and Events, from the store file.
+    stores = _filter_month(_read_csv("sales_store_month.csv"), year, month)
+    raw_bills = sum((_dec(r.get("bills")) or 0) for r in stores if r.get("bills") not in (None, ""))
+    if not city:
+        bills_txt = f", {int(raw_bills):,} bills" if raw_bills else ""
+        lines.append(f"Network: {_lakh(network_gross)} gross{bills_txt}.")
     for row in picked:
         note = row.get("note") or ""
         complete = "complete" if row.get("complete") == "yes" else "incomplete"
@@ -309,11 +339,35 @@ def _answer_sales(year, month, question, role):
                 f" That includes Manisquare and Forum sales of {_lakh(_num(row['mall_gross']))}. "
                 "Mall bulk bills and average bill stay out of comparisons; their sales are counted."
             )
+        bills = row.get("bills_ex_mall") or ""
+        bills_txt = f", {int(float(bills)):,} bills excluding mall bulk" if _num(bills) else ""
+        net = row.get("net") or ""
+        net_txt = f" Net {_lakh(_num(net))}." if _num(net) else " Net is blank in the file."
         lines.append(
-            f"{row.get('city')}: {_lakh(_num(row['gross']))} gross, {complete}, {span} "
-            f"({row.get('days_present')} of {row.get('days_in_month')} days).{mall} {note}".strip()
+            f"{row.get('city')}: {_lakh(_num(row['gross']))} gross{bills_txt}, {complete}, {span} "
+            f"({row.get('days_present')} of {row.get('days_in_month')} days).{mall}{net_txt} {note}".strip()
         )
-    lines.append("For a store-level table, use the calendar-month sales answer. No missing day is treated as zero.")
+    if events and not city:
+        ev = events[0]
+        lines.append(
+            f"Events & Catering: {_lakh(_num(ev['gross']))} gross "
+            f"({ev.get('first_day')} to {ev.get('last_day')}), counted in the network total "
+            "and kept as its own row, outside store comparisons."
+        )
+    # A short store table (mall bills as em dash), Events excluded from comparisons.
+    show_stores = [r for r in stores if (not city or r.get("city") == city) and (r.get("city") or "").casefold() != "events"]
+    if show_stores:
+        show_stores = sorted(show_stores, key=lambda r: _num(r.get("gross")) or 0, reverse=True)
+        lines.append("store | city | gross | bills | days")
+        for row in show_stores[:16]:
+            bills = "—" if row.get("mall_bulk") == "yes" else (
+                f"{int(float(row['bills'])):,}" if _num(row.get("bills")) is not None else ""
+            )
+            lines.append(
+                f"{row.get('store')} | {row.get('city')} | {_lakh(_num(row['gross']))} | {bills} | "
+                f"{row.get('days_present')} of {row.get('days_in_month')}"
+            )
+    lines.append("No missing day is treated as zero.")
     return "\n".join(lines)
 
 
@@ -690,6 +744,58 @@ def _answer_famepilot(year, month, question, role):
     return "\n".join(lines)
 
 
+
+def _answer_wastage(year, month, question, role):
+    if not month_loaded("wastage", year, month, role):
+        return missing_text("wastage", year, month)
+    stores = _filter_month(_read_csv("wastage_store_month.csv"), year, month)
+    items = _filter_month(_read_csv("wastage_item_month.csv"), year, month)
+    if not stores and not items:
+        return missing_text("wastage", year, month)
+    city = _city_from_question((question or "").casefold())
+    if city:
+        stores = [r for r in stores if r.get("city") == city]
+        items = [r for r in items if r.get("city") == city]
+        if not stores and not items:
+            return missing_text("wastage", year, month)
+    label = _label(year, month)
+    note = (stores or items)[0].get("note") or ""
+    complete = (stores or items)[0].get("complete")
+    first = (stores or items)[0].get("first_day") or ""
+    last = (stores or items)[0].get("last_day") or ""
+    total = sum((_dec(r.get("total_wastage_amt")) or 0) for r in stores)
+    stock = sum((_dec(r.get("stock_wastage_amt")) or 0) for r in stores)
+    billing = sum((_dec(r.get("billing_wastage_amt")) or 0) for r in stores)
+    lines = [
+        f"{label} wastage, from the PurchaseEasy wastage extracts, {first} to {last}"
+        f"{' (incomplete)' if complete != 'yes' else ' (complete)'}. {note}",
+        f"Total wastage: {_lakh(total)} across {len(stores)} deployments, {len(items)} item rows. "
+        f"Stock wastage {_lakh(stock)}; billing wastage {_lakh(billing)}.",
+        "Consumption reports are still being pulled; consumption figures on these rows "
+        "are only those printed on the wastage extract, used for wastage %.",
+        "city | store | total wastage | stock | billing | items",
+    ]
+    ranked = sorted(stores, key=lambda r: _num(r.get("total_wastage_amt")) or 0, reverse=True)
+    for row in ranked[:12]:
+        lines.append(
+            f"{row.get('city')} | {row.get('store')} | {_lakh(_num(row.get('total_wastage_amt')))} | "
+            f"{_lakh(_num(row.get('stock_wastage_amt')))} | {_lakh(_num(row.get('billing_wastage_amt')))} | "
+            f"{row.get('item_count')}"
+        )
+    if items:
+        lines.append("city | store | item | total wastage qty | amt | %")
+        top = sorted(items, key=lambda r: _num(r.get("total_wastage_amt")) or 0, reverse=True)
+        for row in top[:8]:
+            pct = row.get("wastage_pct") or "blank"
+            lines.append(
+                f"{row.get('city')} | {row.get('store')} | {row.get('item')} | "
+                f"{row.get('total_wastage_qty') or ''} {row.get('unit') or ''} | "
+                f"{_lakh(_num(row.get('total_wastage_amt')))} | {pct}"
+            )
+    lines.append("A store or item that is not in the extract is left out, not treated as zero.")
+    return "\n".join(lines)
+
+
 _ANSWERS = {
     "sales": _answer_sales,
     "channel": _answer_channel,
@@ -701,6 +807,7 @@ _ANSWERS = {
     "tally": _answer_tally,
     "hr": _answer_hr,
     "famepilot": _answer_famepilot,
+    "wastage": _answer_wastage,
 }
 
 
@@ -720,7 +827,7 @@ def lookup(question, role="ops", month=None, domain=None):
             year = int(year_match.group(1)) if year_match else 2026
     if domain is None and month is None:
         return (
-            "Name a month and a domain (sales, channel, procurement, menu mix, Reelo, "
+            "Name a month and a domain (sales, channel, procurement, wastage, menu mix, Reelo, "
             "aggregator, finance, Tally, HR, or Famepilot). No figure is assumed."
         )
     if month is None:
@@ -749,6 +856,19 @@ def lookup(question, role="ops", month=None, domain=None):
         if missing:
             lines.append("Not loaded: " + "; ".join(missing) + ". No figure is invented.")
         return " ".join(lines)
+    # "Swiggy vs Zomato" is aggregator when Sanjoy's workbook is loaded, and
+    # Posist channel when only the channel extract is loaded for that month.
+    if (
+        domain == "aggregator"
+        and not month_loaded("aggregator", year, month, role)
+        and month_loaded("channel", year, month, role)
+        and "sanjoy" not in folded
+        and "aggregator" not in folded
+        and "ad spend" not in folded
+        and "impression" not in folded
+        and "refund" not in folded
+    ):
+        domain = "channel"
     if not _allowed(domain, role):
         return _role_denied(domain)
     handler = _ANSWERS.get(domain)
@@ -811,7 +931,7 @@ def answer(question, data, owner):
         as_of = f"{last} {_MONTH_SHORT[month]} {year}"
     domain = _detect_domain(folded) or "sales"
     kind = "finance" if domain in {"finance", "tally", "hr"} else (
-        "procurement" if domain in {"procurement", "menu_mix"} else "sales"
+        "procurement" if domain in {"procurement", "menu_mix", "wastage"} else "sales"
     )
     return _pack(text, as_of, kind, question, owner, source={"text": text})
 
@@ -826,6 +946,6 @@ def tool_result(arguments, role):
         domain = arguments.get("domain") or None
         if domain:
             domain = str(domain).strip().casefold().replace(" ", "_")
-            aliases = {"menu": "menu_mix", "p&l": "finance", "pnl": "finance", "tickets": "famepilot"}
+            aliases = {"menu": "menu_mix", "p&l": "finance", "pnl": "finance", "tickets": "famepilot", "waste": "wastage"}
             domain = aliases.get(domain, domain)
     return {"text": lookup(question, role, month=month, domain=domain)}

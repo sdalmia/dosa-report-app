@@ -46,7 +46,7 @@ _TOOLS = (
     ("reelo_deep", "Reelo new versus repeat. Stores that are not on Reelo are not zero.", {"owner", "finance", "hr", "ops"}),
     ("posist", "Posist channel gross and voids. Missing slices are named, not filled in.", {"owner", "finance", "hr", "ops"}),
     ("tally", "Tally day book vouchers and spend by P&L line. Owner and finance only.", {"owner", "finance"}),
-    ("month_lookup", "Figures for one calendar month and one domain (sales, channel, procurement, menu mix, Reelo, aggregator, finance, Tally, HR, Famepilot). If that month is not loaded, the tool says so and names who the data would come from. It never estimates.", {"owner", "finance", "hr", "ops"}),
+    ("month_lookup", "Figures for one calendar month and one domain (sales, channel, procurement, wastage, menu mix, Reelo, aggregator, finance, Tally, HR, Famepilot). If that month is not loaded, the tool says so and names who the data would come from. It never estimates.", {"owner", "finance", "hr", "ops"}),
 )
 
 

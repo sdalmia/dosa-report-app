@@ -34,6 +34,8 @@ names are not stored.
 | `tally_company_month.csv` | Tally voucher totals by company and type, owner/finance only |
 | `hr_month.csv` | Joiner and exit counts by location, no names, owner only |
 | `famepilot_tickets_month.csv` | Ticket counts by store and platform, no customer names |
+| `wastage_store_month.csv` | PurchaseEasy wastage by store, 1 Apr–8 Sep 2026 (Sep is 1–8 only) |
+| `wastage_item_month.csv` | Item-level wastage (stock, billing, total, and wastage %). Consumption reports are not loaded |
 | `extra/` | Optional drops from `scripts/load_backfill.py`; the lookup concatenates them |
 
 Regenerate with `python scripts/build_history.py`. Add a later month without

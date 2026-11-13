@@ -13,6 +13,12 @@ Expected drops (any subset):
       columns: store, store_code, date, gross, net, bills, source, pulled_at
       copied to data/posist/daily_sales/
 
+  /workspace/backfill/posist_sales/sales_YYYY-MM.csv
+      same columns, one calendar month in a single file (Alfred's April 2026
+      format; May–August will follow). Copied to data/posist/daily_sales/ and
+      data/posist/monthly/. The date column is used. Net is left blank when
+      the cell is blank, not filled with zero.
+
   /workspace/backfill/posist_sales/sales_store_month.csv   (optional pre-aggregate)
       columns: month, store, region, city, gross, bills, net, days_present,
                days_in_month, complete, mall_bulk, first_day, last_day
@@ -21,6 +27,12 @@ Expected drops (any subset):
   /workspace/backfill/posist_channel/channel_YYYY-MM-DD.csv
       columns: store, store_code, date, source, sales, orders
       copied to data/posist/daily_sales/
+
+  /workspace/backfill/posist_channel/channel_YYYY-MM.csv
+      same columns, one calendar month (Alfred's April 2026 format;
+      May–August will follow). Source names are kept as in the file
+      (April uses DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, ONDC).
+      Copied to data/posist/daily_sales/ and data/posist/monthly/.
 
   /workspace/backfill/posist_channel/channel_store_month.csv
       columns: month, store, region, city, source, sales, orders, days_present,
@@ -39,6 +51,14 @@ Expected drops (any subset):
       Summary Item Wise .xls (HTML). Copied to data/procurement/backfill/
       and picked up by scripts/build_history.py. This is how April–8 Sep
       2026 was loaded.
+
+  /workspace/backfill/procurement/wastage/wastage_{east,north}_YYYY-MM.csv
+  /workspace/backfill/procurement/wastage/wastage_{east,north}_YYYY-MM-DDtoDD.csv
+      17 columns (Deployment Name, Store Kitchen Name, Item Code, Item Name,
+      Category, Super Category, Unit, Average Price, Stock Wastage Qty, Amt,
+      Consumption Qty, Amt, Billing Wastage Qty, Amt, Total Wastage Qty, Amt,
+      Percentage Wastage). Copied to data/procurement/backfill/wastage/ and
+      folded by scripts/build_history.py. Consumption reports are not loaded.
 
   /workspace/backfill/menu_mix/menu_mix_YYYY-MM.csv
       columns: store, item, total_sales, total_orders, contribution_pct,
@@ -118,6 +138,13 @@ def load(src):
         for path in sorted(folder.glob(pattern)):
             _copy(path, dest_dir / path.name)
             copied += 1
+            # Calendar-month files (sales_YYYY-MM.csv / channel_YYYY-MM.csv)
+            # are also kept under data/posist/monthly/.
+            import re as _re
+            if _re.search(r"(?i)_(20\d{2}-\d{2})\.csv$", path.name):
+                monthly = _ROOT / "data" / "posist" / "monthly" / path.name
+                _copy(path, monthly)
+                copied += 1
         # monthly pre-aggregates living in the same domain folder
         for name in _MONTHLY.get(domain, ()):
             path = folder / name
@@ -158,6 +185,15 @@ def load(src):
                 if path.is_file():
                     _copy(path, target / path.name)
                     copied += 1
+
+    # Wastage CSVs (consumption reports in procurement/consumption are left for later).
+    wastage = src / "procurement" / "wastage"
+    if wastage.is_dir():
+        dest = _ROOT / "data" / "procurement" / "backfill" / "wastage"
+        dest.mkdir(parents=True, exist_ok=True)
+        for path in sorted(wastage.glob("wastage_*.csv")):
+            _copy(path, dest / path.name)
+            copied += 1
 
     tally = src / "tally"
     if tally.is_dir():
