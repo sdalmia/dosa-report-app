@@ -1,7 +1,9 @@
 """Food cost for Kolkata (East) and Delhi (North).
 
 Purchases are warehouse GRN. Sales are Posist gross, because net is blank.
-Raw means Food + Beverage. Semi-process is not included.
+Food cost is raw consumption plus semi-processed consumption, divided by that
+gross. Packaging and other consumption are shown separately. Raw-only is not
+called food cost.
 """
 
 import re
@@ -202,7 +204,17 @@ def _consumption_window(bundle, city, region, rows, start, end):
     freight = _sum_dated(bundle["grn_charges"], city, start, end, "amount") if bundle["files"].get("grn_charges") else None
     grn_raw = _workbook_metric(bundle, "grn_value_raw", city)
     consumption = sum_present(row.get("consumption_amt_raw") for row in rows) if rows else None
-    outlets = [row for row in rows if row.get("store_type") == "Outlet"]
+    outlets = [
+        row for row in rows
+        if row.get("store_type") == "Outlet" and not _out_of_comparison(row.get("deployment") or row.get("store"))
+    ]
+    food_raw, food_semi, food_other, food_value, food_total = _parts(outlets)
+    food_gross, _, _ = _region_gross(
+        [row for row in bundle["posist"] if not _out_of_comparison(row.get("store"))],
+        region,
+        start,
+        end,
+    )
     kitchens = [row for row in rows if _is_kitchen(row)]
     warehouses = [row for row in rows if _is_warehouse(row)]
     wastage = _wastage_sum(rows) if rows else None
@@ -219,6 +231,14 @@ def _consumption_window(bundle, city, region, rows, start, end):
         "freight": money_pair(freight),
         "consumption": money_pair(consumption),
         "consumption_pct": pct_pair(percent(consumption, gross)),
+        "food": money_pair(food_value),
+        "food_pct": pct_pair(percent(food_value, food_gross)),
+        "food_raw": money_pair(food_raw),
+        "food_semi": money_pair(food_semi),
+        "packaging": money_pair(food_other),
+        "packaging_pct": pct_pair(percent(food_other, food_gross)),
+        "total_incl_packaging": money_pair(food_total),
+        "total_pct": pct_pair(percent(food_total, food_gross)),
         "outlet_consumption": money_pair(sum_present(row.get("consumption_amt_raw") for row in outlets) if outlets else None),
         "kitchen_consumption": money_pair(sum_present(row.get("consumption_amt_raw") for row in kitchens) if kitchens else None),
         "warehouse_consumption": money_pair(
@@ -298,6 +318,36 @@ def store_key(label):
     return " ".join("".join(cleaned).split())
 
 
+def _parts(rows):
+    """Raw, semi, packaging/other, food (raw+semi), and total including packaging."""
+    raw = sum_present(row.get("consumption_amt_raw") for row in rows) if rows else None
+    semi = sum_present(row.get("consumption_amt_semi") for row in rows) if rows else None
+    other = sum_present(row.get("consumption_amt_other") for row in rows) if rows else None
+    return raw, semi, other, sum_present([raw, semi]), sum_present([raw, semi, other])
+
+
+def _out_of_comparison(name):
+    text = (name or "").casefold()
+    return "faridabad" in text or "chattarpur" in text or "gk1" in text or "gk 1" in text
+
+
+def _sanity(pct):
+    """A result this far from a normal band is not stated as the food cost."""
+    if pct is None:
+        return ""
+    if pct < 15:
+        return (
+            "This looks off, under 15% of gross. Semi-processed items may be missing, "
+            "or gross covers days the consumption file does not. It is not stated as the food cost."
+        )
+    if pct > 45:
+        return (
+            "This looks off, over 45% of gross. Packaging may be inside the food lines, "
+            "or sales in this window are too thin. It is not stated as the food cost."
+        )
+    return ""
+
+
 def _stores(bundle, start, end):
     grouped = {}
     for row in bundle["consumption"]:
@@ -316,20 +366,26 @@ def _stores(bundle, start, end):
     stores = []
     for bucket in grouped.values():
         rows = bucket["rows"]
-        consumption = sum_present(row.get("consumption_amt_raw") for row in rows)
+        raw, semi, other, food, total = _parts(rows)
         wastage = _wastage_sum(rows)
         physical_values = [row.get("physical_gain_loss_amt_raw") for row in rows]
         counted = [value for value in physical_values if value is not None]
         physical = sum_present(counted)
         gross_info = posist_index.get(store_key(bucket["deployment"]))
         gross = gross_info["gross"] if gross_info else None
+        food_pct = percent(food, gross)
+        caution = _sanity(food_pct)
         stores.append(
             {
                 "city": bucket["city"],
                 "region": REGION_FOR_CITY.get(bucket["city"], ""),
                 "name": bucket["deployment"],
                 "key": store_key(bucket["deployment"]),
-                "consumption": money_pair(consumption),
+                "consumption": money_pair(raw),
+                "semi": money_pair(semi),
+                "packaging": money_pair(other),
+                "food": money_pair(food),
+                "total_incl_packaging": money_pair(total),
                 "wastage": money_pair(wastage),
                 "physical": money_pair(physical),
                 "physical_partial": physical is not None and any(value is None for value in physical_values),
@@ -338,11 +394,39 @@ def _stores(bundle, start, end):
                 "gross_matched": gross_info is not None,
                 "gross_blanks": gross_info["blanks"] if gross_info else 0,
                 "posist_name": gross_info["store"] if gross_info else "",
-                "food_cost_pct": pct_pair(percent(consumption, gross)),
+                "food_cost_pct": pct_pair(None if caution else food_pct),
+                "computed_pct": pct_pair(food_pct),
+                "packaging_pct": pct_pair(percent(other, gross)),
+                "total_pct": pct_pair(percent(total, gross)),
+                "sanity": caution,
+                "exclude_compare": _out_of_comparison(bucket["deployment"]),
+                "basis": "raw + semi consumption / Posist gross",
             }
         )
-    stores.sort(key=lambda store: (CITY_ORDER.index(store["city"]) if store["city"] in CITY_ORDER else 99, -(store["consumption"]["value"] or 0)))
+    _attach_city_medians(stores)
+    stores.sort(key=lambda store: (CITY_ORDER.index(store["city"]) if store["city"] in CITY_ORDER else 99, -(store["food"]["value"] or 0)))
     return stores
+
+
+def _attach_city_medians(stores):
+    """Each open store is compared with its own city's median. NCR is not compared with Kolkata."""
+    grouped = {}
+    for store in stores:
+        if store["exclude_compare"] or store["sanity"] or store["food_cost_pct"]["value"] is None:
+            continue
+        grouped.setdefault(store["city"], []).append(store["food_cost_pct"]["value"])
+    medians = {}
+    for city, values in grouped.items():
+        ordered = sorted(values)
+        mid = len(ordered) // 2
+        medians[city] = ordered[mid] if len(ordered) % 2 else (ordered[mid - 1] + ordered[mid]) / 2
+    for store in stores:
+        median = None if store["exclude_compare"] else medians.get(store["city"])
+        gap = None
+        if median is not None and store["food_cost_pct"]["value"] is not None:
+            gap = store["food_cost_pct"]["value"] - median
+        store["city_median"] = pct_pair(median)
+        store["vs_city_median"] = pct_pair(gap)
 
 
 def _posist_index(posist, start, end):

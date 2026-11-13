@@ -33,15 +33,30 @@
       <div class="heading-row">
         <h2>{{ city.region_label }}</h2>
         {% call info() %}
-        <p>The percent is this figure divided by Posist gross for the same dates. Freight is separate and is not in the percent. Raw goods received is food and beverage only, for the consumption window. Tap a figure for the exact rupees.</p>
-        <p>Exact {{ city.week.label }}: gross {{ city.week.gross.text }}, purchases {{ city.week.grn_all.text }}, raw consumption {{ city.week.consumption.text }}, wastage {{ city.week.wastage.text }}.</p>
+        <p>Food cost is outlet raw consumption plus semi-processed consumption, divided by Posist gross for the same dates. Faridabad, Chattarpur, and GK1 are out of that comparison. Packaging is shown separately. Raw consumption on its own is not food cost. Freight is not in the percent. NCR is compared with NCR, not with Kolkata. Tap a figure for the exact rupees.</p>
+        <p>Exact {{ city.week.label }}: gross {{ city.week.gross.text }}, food {{ city.week.food.text }} ({{ city.week.food_pct.text }}), packaging {{ city.week.packaging.text }}, total including packaging {{ city.week.total_incl_packaging.text }} ({{ city.week.total_pct.text }}).</p>
         {% if store_purchase_note %}<p>{{ store_purchase_note }}</p>{% endif %}
         {% endcall %}
       </div>
       <p class="subline">{{ city.week.label }}</p>
       <div class="metrics">
         <div class="metric">
-          <span>Raw consumption</span>
+          <span>Food cost (raw + semi, of gross)</span>
+          {{ pct(city.week.food_pct, 'food-pct', city.slug, 'week') }}
+          {{ money(city.week.food, 'food', city.slug, 'week') }}
+        </div>
+        <div class="metric">
+          <span>Packaging and other</span>
+          {{ pct(city.week.packaging_pct, 'packaging-pct', city.slug, 'week') }}
+          {{ money(city.week.packaging, 'packaging', city.slug, 'week') }}
+        </div>
+        <div class="metric">
+          <span>Total including packaging</span>
+          {{ pct(city.week.total_pct, 'total-pct', city.slug, 'week') }}
+          {{ money(city.week.total_incl_packaging, 'total', city.slug, 'week') }}
+        </div>
+        <div class="metric">
+          <span>Raw consumption, not food cost</span>
           {{ pct(city.week.consumption_pct, 'consumption-pct', city.slug, 'week') }}
           {{ money(city.week.consumption, 'consumption', city.slug, 'week') }}
         </div>
@@ -112,7 +127,7 @@
       <div class="heading-row">
         <h2>Stores</h2>
         {% call info() %}
-        <p>{{ week_label }}. Raw consumption against Posist gross for the same dates.</p>
+        <p>{{ week_label }}. Food cost is raw plus semi-processed consumption, divided by Posist gross. Packaging is separate. A result under 15% or over 45% is flagged instead of stated as fact. Faridabad is out of the city median.</p>
         <p>{{ variance_note }}</p>
         {% endcall %}
       </div>
@@ -121,9 +136,20 @@
         <div class="row-card">
           <b>{{ store.name }}</b>
           <p class="muted">{{ store.city }}{% if store.region %} · {{ store.region }}{% endif %}</p>
-          <p>Raw consumption <span data-field="store-consumption" data-key="{{ store.key }}" data-value="{{ store.consumption.attr }}">{{ store.consumption.text }}</span>
-            · Posist gross <span data-field="store-gross" data-key="{{ store.key }}" data-value="{{ store.gross.attr }}">{{ store.gross.text }}</span>
-            · <span data-field="store-pct" data-key="{{ store.key }}" data-value="{{ store.food_cost_pct.attr }}">{{ store.food_cost_pct.text }}</span></p>
+          <p>Food cost <span data-field="store-pct" data-key="{{ store.key }}" data-value="{{ store.food_cost_pct.attr }}">{{ store.food_cost_pct.text or "not stated" }}</span>
+            of Posist gross <span data-field="store-gross" data-key="{{ store.key }}" data-value="{{ store.gross.attr }}">{{ store.gross.text }}</span>
+            ({{ store.basis }}).</p>
+          <p>Raw <span data-field="store-consumption" data-key="{{ store.key }}" data-value="{{ store.consumption.attr }}">{{ store.consumption.text }}</span>
+            · Semi <span data-field="store-semi" data-key="{{ store.key }}" data-value="{{ store.semi.attr }}">{{ store.semi.text }}</span>
+            · Packaging <span data-field="store-packaging" data-key="{{ store.key }}" data-value="{{ store.packaging.attr }}">{{ store.packaging.text }}</span>
+            ({{ store.packaging_pct.text }})
+            · Total including packaging <span data-field="store-total-pct" data-key="{{ store.key }}" data-value="{{ store.total_pct.attr }}">{{ store.total_pct.text }}</span></p>
+          {% if store.sanity %}<p>{{ store.sanity }} Computed figure {{ store.computed_pct.text }}, not stated as food cost.</p>{% endif %}
+          {% if store.exclude_compare %}
+          <p class="muted">Out of city and network comparisons.</p>
+          {% elif store.city_median.text %}
+          <p class="muted">{{ store.city }} median {{ store.city_median.text }}{% if store.vs_city_median.text %}, this store {{ store.vs_city_median.text }} versus that median{% endif %}. Not compared with the other city.</p>
+          {% endif %}
           <p class="muted">Raw wastage {{ store.wastage.text }}
             {% if store.physical_blank %}· No physical count{% else %}· Raw physical gain or loss {{ store.physical.text }}{% if store.physical_partial %} (counted lines only; another part of the store has no count){% endif %}{% endif %}
           </p>

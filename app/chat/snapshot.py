@@ -432,12 +432,21 @@ def _food_index():
         return {}
     found = {}
     for store in view.get("stores") or []:
-        pct = (store.get("food_cost_pct") or {}).get("value")
-        text = (store.get("food_cost_pct") or {}).get("text") or ""
+        stated = (store.get("food_cost_pct") or {}).get("value")
         found[store.get("key") or ""] = {
             "name": store.get("posist_name") or store.get("name") or "",
-            "pct": pct,
-            "text": text,
+            "pct": stated,
+            "text": (store.get("food_cost_pct") or {}).get("text") or "",
+            "packaging_pct": (store.get("packaging_pct") or {}).get("text") or "",
+            "total_pct": (store.get("total_pct") or {}).get("text") or "",
+            "raw": (store.get("consumption") or {}).get("text") or "",
+            "semi": (store.get("semi") or {}).get("text") or "",
+            "other": (store.get("packaging") or {}).get("text") or "",
+            "gross": (store.get("gross") or {}).get("text") or "",
+            "basis": store.get("basis") or "",
+            "sanity": store.get("sanity") or "",
+            "city_median": (store.get("city_median") or {}).get("text") or "",
+            "exclude_compare": bool(store.get("exclude_compare")),
             "period": view.get("week_label") or view.get("period_label") or "",
         }
     return found
