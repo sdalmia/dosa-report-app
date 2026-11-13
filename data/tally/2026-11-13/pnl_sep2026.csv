@@ -1,0 +1,51 @@
+company,line,amount,pct_of_revenue
+Kolkata,revenue,24537022.62,100.0
+Kolkata,food_cost,6378362.07,25.99
+Kolkata,gross_margin,18158660.55,74.01
+Kolkata,other_income,2429.0,0.01
+Kolkata,staff,6389865.94,26.04
+Kolkata,rent,2947743.7,12.01
+Kolkata,utilities,2035762.48,8.3
+Kolkata,other_opex,5583993.97,22.76
+Kolkata,ebitda,1203723.46,4.91
+Kolkata,interest_below_ebitda,118.0,0.0
+Delhi,revenue,14784222.46,100.0
+Delhi,food_cost,6370920.51,43.09
+Delhi,gross_margin,8413301.95,56.91
+Delhi,other_income,118.0,0.0
+Delhi,staff,4116223.0,27.84
+Delhi,rent,3479306.88,23.53
+Delhi,utilities,1941585.79,13.13
+Delhi,other_opex,2850452.27,19.28
+Delhi,ebitda,-3974147.99,-26.88
+Delhi,interest_below_ebitda,0,0.0
+UP,revenue,2904007.0,100.0
+UP,food_cost,4794.0,0.17
+UP,gross_margin,2899213.0,99.83
+UP,other_income,100.0,0.0
+UP,staff,672999.22,23.17
+UP,rent,749349.24,25.8
+UP,utilities,206358.03,7.11
+UP,other_opex,1013522.18,34.9
+UP,ebitda,257084.33,8.85
+UP,interest_below_ebitda,0,0.0
+Haryana,revenue,6150875.95,100.0
+Haryana,food_cost,6339.0,0.1
+Haryana,gross_margin,6144536.95,99.9
+Haryana,other_income,60.0,0.0
+Haryana,staff,1241913.34,20.19
+Haryana,rent,1070766.5,17.41
+Haryana,utilities,457847.45,7.44
+Haryana,other_opex,1099314.03,17.87
+Haryana,ebitda,2274755.63,36.98
+Haryana,interest_below_ebitda,1296.0,0.02
+Group (4 cos),revenue,48376128.03,100.0
+Group (4 cos),food_cost,12760415.58,26.38
+Group (4 cos),gross_margin,35615712.45,73.62
+Group (4 cos),other_income,2707.0,0.01
+Group (4 cos),staff,12421001.5,25.68
+Group (4 cos),rent,8247166.32,17.05
+Group (4 cos),utilities,4641553.75,9.59
+Group (4 cos),other_opex,10547282.45,21.8
+Group (4 cos),ebitda,-238584.57,-0.49
+Group (4 cos),interest_below_ebitda,1414.0,0.0
