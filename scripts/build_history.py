@@ -551,12 +551,27 @@ def build_channel():
                 "and any other source the file has). Faridabad is included. "
                 "Events & Catering is its own row, outside store comparisons."
             )
-            if month == "2026-04":
-                note += (
+            rounding = {
+                "2026-04": (
                     " Channel sales sum to ₹4,81,10,428.75 against store gross ₹4,81,10,428.87 "
                     "(12 paisa of per-day rounding); both figures are left as in the files. "
                     "Events & Catering is DINEIN on 27–28 Apr only."
-                )
+                ),
+                "2026-06": (
+                    " Channel sales sum to ₹5,03,80,883.78 against store gross ₹5,03,80,883.93 "
+                    "(15 paisa of per-day rounding); both figures are left as in the files."
+                ),
+                "2026-07": (
+                    " Channel sales sum to ₹5,03,12,513.77 against store gross ₹5,03,12,513.50 "
+                    "(27 paisa of per-day rounding); both figures are left as in the files."
+                ),
+                "2026-08": (
+                    " Channel sales sum to ₹5,53,93,885.81 against store gross ₹5,53,93,886.06 "
+                    "(25 paisa of per-day rounding); both figures are left as in the files."
+                ),
+            }
+            if month in rounding:
+                note += rounding[month]
         elif month == "2026-11":
             note = "9 Nov channel file is not on disk; that day is left out, not treated as zero. Through 12 Nov."
         elif month == "2026-10":
@@ -622,7 +637,7 @@ def copy_monthly_posist():
 
 
 def copy_wastage():
-    """Copy 1 Apr–8 Sep wastage CSVs. Consumption reports are left for later."""
+    """Copy 1 Apr–8 Sep wastage CSVs. Consumption reports are parsed separately, not copied."""
     src = Path("/workspace/backfill/procurement/wastage")
     dest = _ROOT / "data" / "procurement" / "backfill" / "wastage"
     if not src.is_dir():
@@ -1459,7 +1474,7 @@ def _wastage_city(filename, deployment):
 
 
 def build_wastage():
-    """Monthly wastage by store and item, 1 Apr–8 Sep. Consumption reports are not loaded."""
+    """Monthly wastage by store and item, 1 Apr–8 Sep. Official consumption is built separately."""
     roots = [
         _ROOT / "data" / "procurement" / "backfill" / "wastage",
         Path("/workspace/backfill/procurement/wastage"),
@@ -1532,7 +1547,7 @@ def build_wastage():
                     "total_wastage_amt": "" if parsed["total_wastage_amt"] is None else f"{parsed['total_wastage_amt']:.2f}",
                     "wastage_pct": "" if parsed["wastage_pct"] is None else f"{parsed['wastage_pct']}",
                     # Consumption qty/amt as they appear on the wastage extract, for
-                    # wastage %. The official consumption reports are still being pulled.
+                    # wastage %. Official consumption for 1 Apr–8 Sep is in consumption_*.csv.
                     "consumption_qty": "" if parsed["consumption_qty"] is None else f"{parsed['consumption_qty']}",
                     "consumption_amt": "" if parsed["consumption_amt"] is None else f"{parsed['consumption_amt']:.2f}",
                     "complete": complete,
@@ -1602,6 +1617,15 @@ def build_wastage():
     )
 
 
+def build_consumption():
+    """Monthly consumption by store and item, 1 Apr–8 Sep. Raw files stay out of the repo."""
+    scripts = Path(__file__).resolve().parent
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    from parse_consumption import build as _build_consumption
+    _build_consumption(_HISTORY, src=Path("/workspace/backfill/procurement/consumption"))
+
+
 def build_coverage():
     window = _months_between(WINDOW_START, WINDOW_END)
     domains = []
@@ -1634,13 +1658,13 @@ def build_coverage():
     add("sales", "Sales by city and store", "Alfred",
         "who pulls Posist Insights daily sales",
         sales_loaded,
-        "April (and any later month in the same sales_YYYY-MM.csv format) is a full calendar month from Alfred's Posist Insights monthly extract: net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. Months not yet in a monthly extract or a daily file would come from Alfred. Daily store sales resume 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
+        "April–August 2026 are full calendar months from Alfred's Posist Insights monthly extracts (sales_YYYY-MM.csv): net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. 1–3 Sep is still coming; daily store sales resume 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
         all_roles, start="2026-04-01", end="2026-11-12")
     ch_loaded = _loaded_months(_HISTORY / "channel_store_month.csv")
     add("channel", "Sales by channel (Swiggy, Zomato, and others)", "Alfred",
         "who pulls Posist Insights channel sales",
         ch_loaded,
-        "April (and any later month in the same channel_YYYY-MM.csv format) is a full calendar month from Alfred's Posist channel extract (source names as in the file; Faridabad included). Months not yet in a monthly extract or a daily file, and calendar September, would come from Alfred. Store-level channel files then cover 2–15 Oct and 1–12 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16–31 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month.",
+        "April–August 2026 are full calendar months from Alfred's Posist channel extracts (channel_YYYY-MM.csv; source names as in the file; Faridabad included). Paisa-level gaps versus store gross are left as in the files. 1–3 Sep is still coming. Store-level channel files then cover 2–15 Oct and 1–12 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16–31 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month.",
         all_roles, start="2026-04-01", end="2026-11-12")
     add("procurement", "Procurement purchases and ingredient prices", "Procurement",
         "who pulls the PurchaseEasy reports",
@@ -1684,7 +1708,13 @@ def build_coverage():
     add("wastage", "Procurement wastage by store and item", "Procurement",
         "who pulls the PurchaseEasy wastage reports",
         wastage_loaded,
-        "1 Apr–8 Sep 2026, item-level by deployment, east (Kolkata) and north (NCR). April–August are calendar months. September is 1–8 Sep only. Stock, billing and total wastage are from the wastage extract. Consumption quantities on those rows are kept for wastage %; the official consumption reports are still being pulled and are not loaded. Base Kitchen (Kolkata) and Warehouse (Delhi) are kept under those names.",
+        "1 Apr–8 Sep 2026, item-level by deployment, east (Kolkata) and north (NCR). April–August are calendar months. September is 1–8 Sep only. Stock, billing and total wastage are from the wastage extract. Consumption quantities on those rows are kept for wastage %. Official consumption for the same window is in the consumption domain. Base Kitchen (Kolkata) and Warehouse (Delhi) are kept under those names.",
+        all_roles, start="2026-04-01", end="2026-09-08")
+    consumption_loaded = _loaded_months(_HISTORY / "consumption_store_month.csv")
+    add("consumption", "Store consumption and food cost", "Procurement",
+        "who pulls the PurchaseEasy consumption reports",
+        consumption_loaded,
+        "1 Apr–8 Sep 2026, monthly aggregates by store and item from PurchaseEasy Consumption Reports (HTML .xls). April–August are calendar months. September is 1–8 Sep only. Raw files are not in the repo. Food cost is (raw + semi-processed consumption) / Posist gross; raw is Food and Beverage; packaging is shown separately. Chattarpur and GK1 Cloud Kitchen are excluded (closed; files were same-size stubs). North FRA (02/0017) has no file for any period. Sec 31 Gurgaon has no April. Events & Catering has no consumption file. Missing store-months answer 'not available' with no figure.",
         all_roles, start="2026-04-01", end="2026-09-08")
     add("famepilot", "Famepilot ticket counts", "Albus",
         "who pulls the Famepilot ticket export",
@@ -1733,6 +1763,8 @@ def main():
     build_hr()
     build_famepilot()
     build_wastage()
+    print("Building consumption aggregates")
+    build_consumption()
     print("Writing coverage")
     build_coverage()
     print("done")

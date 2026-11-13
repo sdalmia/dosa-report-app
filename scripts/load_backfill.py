@@ -15,7 +15,7 @@ Expected drops (any subset):
 
   /workspace/backfill/posist_sales/sales_YYYY-MM.csv
       same columns, one calendar month in a single file (Alfred's April 2026
-      format; May–August will follow). Copied to data/posist/daily_sales/ and
+      format; May–August arrived the same way). Copied to data/posist/daily_sales/ and
       data/posist/monthly/. The date column is used. Net is left blank when
       the cell is blank, not filled with zero.
 
@@ -30,7 +30,7 @@ Expected drops (any subset):
 
   /workspace/backfill/posist_channel/channel_YYYY-MM.csv
       same columns, one calendar month (Alfred's April 2026 format;
-      May–August will follow). Source names are kept as in the file
+      May–August arrived the same way). Source names are kept as in the file
       (April uses DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, ONDC).
       Copied to data/posist/daily_sales/ and data/posist/monthly/.
 
@@ -58,7 +58,17 @@ Expected drops (any subset):
       Category, Super Category, Unit, Average Price, Stock Wastage Qty, Amt,
       Consumption Qty, Amt, Billing Wastage Qty, Amt, Total Wastage Qty, Amt,
       Percentage Wastage). Copied to data/procurement/backfill/wastage/ and
-      folded by scripts/build_history.py. Consumption reports are not loaded.
+      folded by scripts/build_history.py.
+
+  /workspace/backfill/procurement/consumption/consumption_{east,north}_<Outlet>_<YYYY-MM>.xls
+  /workspace/backfill/procurement/consumption/consumption_{east,north}_<Outlet>_YYYY-MM-DDtoDD.xls
+      PurchaseEasy Consumption Reports (HTML underneath). Item-level opening,
+      purchase, stock in/out, consumption, wastage, closing, physical and
+      gain/loss. Parsed by scripts/parse_consumption.py into monthly store and
+      item aggregates; the raw .xls files are not copied into the repo.
+      Food cost is (raw + semi-processed consumption) / Posist gross.
+      Chattarpur and GK1 Cloud Kitchen are excluded. Missing store-months
+      answer "not available" with no figure.
 
   /workspace/backfill/menu_mix/menu_mix_YYYY-MM.csv
       columns: store, item, total_sales, total_orders, contribution_pct,
@@ -76,9 +86,10 @@ Expected drops (any subset):
       .txt Day Books are parsed with scripts/parse_tally_daybooks.py
       and merged the same way. Bank statements are not parsed as vouchers.
 
-  /workspace/backfill/menu_mix/ and /workspace/backfill/posist_sales/
-      still pending from Jarvis and Alfred; this loader already globs them
-      so a later data PR can add the files without a code change.
+  /workspace/backfill/menu_mix/
+      still pending from Jarvis; this loader already globs the files so a
+      later data PR can add them without a code change. Alfred's April–August
+      Posist monthly extracts are already loaded; 1–3 Sep is still coming.
 
 After copying daily files, run scripts/build_history.py to refresh
 data/history/*.csv and data/history/coverage.json. Pre-built monthly
@@ -186,7 +197,8 @@ def load(src):
                     _copy(path, target / path.name)
                     copied += 1
 
-    # Wastage CSVs (consumption reports in procurement/consumption are left for later).
+    # Wastage CSVs. Consumption HTML reports are parsed into aggregates by
+    # scripts/parse_consumption.py; raw .xls files are not copied into the repo.
     wastage = src / "procurement" / "wastage"
     if wastage.is_dir():
         dest = _ROOT / "data" / "procurement" / "backfill" / "wastage"

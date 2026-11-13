@@ -50,18 +50,17 @@ def _ideal_plaza_12_nov():
 
 
 class MissingMonthTests(unittest.TestCase):
-    def test_june_kolkata_sales_says_not_loaded_and_names_alfred(self):
-        question = "Kolkata sales in June 2026"
+    def test_june_menu_mix_says_not_loaded_and_names_jarvis(self):
+        # June sales is now loaded; menu mix for June is still pending from Jarvis.
+        question = "menu mix in June 2026"
         self.assertTrue(use_file_answer(question, "ops"))
         text = lookup(question, "ops")
         self.assertIn("June 2026", text)
-        self.assertIn("not in the loaded daily files", text)
-        self.assertIn("Alfred", text)
+        self.assertIn("not loaded yet", text)
+        self.assertIn("Jarvis", text)
         self.assertIn("No figure is invented", text)
         self.assertNotIn("₹", text)
-        self.assertNotIn("Lakh", text)
         self.assertNotIn("estimate", text.casefold())
-        # The same wording is what the Wizard would return offline.
         reset_snapshot()
         answer = answer_from_data(question, view_for(role="ops"), False)
         self.assertEqual(answer["text"], text)
@@ -87,17 +86,17 @@ class MissingMonthTests(unittest.TestCase):
 
     def test_model_cannot_rewrite_a_missing_month(self):
         def fake_client(messages, model):
-            return ("June 2026 Kolkata sales were about ₹2.5Cr, estimated from October.", None)
+            return ("June 2026 Kolkata menu mix was about ₹2.5Cr, estimated from October.", None)
 
         reset_snapshot()
         result = produce_answer(
-            "Kolkata sales in June 2026",
+            "menu mix in June 2026",
             view_for(role="ops"),
             False,
             client=fake_client,
         )
-        self.assertIn("Alfred", result["text"])
-        self.assertIn("not in the loaded daily files", result["text"])
+        self.assertIn("Jarvis", result["text"])
+        self.assertIn("not loaded yet", result["text"])
         self.assertIn("No figure is invented", result["text"])
         self.assertNotIn("2.5", result["text"])
         self.assertNotIn("estimated", result["text"])
@@ -136,17 +135,17 @@ class MonthLookupToolTests(unittest.TestCase):
         self.assertIn("month_lookup", names)
         self.assertNotIn("finance", names)
         self.assertNotIn("tally", names)
-        result = dispatch("month_lookup", {"question": "Kolkata sales in June 2026"}, "ops")
-        self.assertIn("Alfred", result["text"])
-        self.assertIn("not in the loaded daily files", result["text"])
+        result = dispatch("month_lookup", {"question": "menu mix in June 2026"}, "ops")
+        self.assertIn("Jarvis", result["text"])
+        self.assertIn("not loaded yet", result["text"])
 
     def test_tool_accepts_month_and_domain_arguments(self):
         result = dispatch(
             "month_lookup",
-            {"question": "", "month": "2026-06", "domain": "sales"},
+            {"question": "", "month": "2026-06", "domain": "menu_mix"},
             "ops",
         )
-        self.assertEqual(result["text"], missing_text("sales", 2026, 6))
+        self.assertEqual(result["text"], missing_text("menu_mix", 2026, 6))
 
     def test_ops_cannot_look_up_hr(self):
         result = dispatch(
@@ -257,7 +256,7 @@ class CoverageAndRoleTests(unittest.TestCase):
         notes = json.loads(notes_path.read_text(encoding="utf-8"))
         self.assertEqual(notes.get("issues") or notes.get("parse_issues") or [], [])
 
-    def test_april_sales_match_alfred_and_june_is_still_missing(self):
+    def test_april_sales_match_alfred(self):
         # Alfred: 866 store-days, 30 stores, gross 4,81,10,428.87, bills 92,784. Net blank.
         reset_snapshot()
         calendar = month_sales_answer("total april sales", view_for(role="ops"), False)
@@ -301,12 +300,12 @@ class CoverageAndRoleTests(unittest.TestCase):
         bills = sum(Decimal(row["bills"] or 0) for row in april)
         self.assertEqual(gross, Decimal("48110428.87"))
         self.assertEqual(bills, Decimal("92784"))
-        # June is still not loaded.
-        june = lookup("Kolkata sales in June 2026", "ops")
-        self.assertIn("not in the loaded daily files", june)
-        self.assertIn("Alfred", june)
-        self.assertNotIn("₹", june)
-        self.assertTrue(use_file_answer("Kolkata sales in June 2026", "ops"))
+        # June, July and August match Alfred's totals; 1–3 Sep is still coming.
+        # (Full Jun–Aug checks live in test_june_july_august_sales_match_alfred.)
+        self.assertFalse(use_file_answer("Kolkata sales in June 2026", "ops"))
+        self.assertTrue(month_loaded("sales", 2026, 6, "ops"))
+        self.assertTrue(month_loaded("sales", 2026, 7, "ops"))
+        self.assertTrue(month_loaded("sales", 2026, 8, "ops"))
         # October Kolkata is unchanged.
         october = month_sales_answer("total october sales in Kolkata", view_for(role="ops"), False)["text"]
         self.assertIn("₹316.53L", october)
@@ -340,8 +339,132 @@ class CoverageAndRoleTests(unittest.TestCase):
         self.assertIn("Procurement", oct_w)
         self.assertNotIn("Logan", oct_w)
         self.assertNotIn("₹", oct_w)
-        # Consumption reports were not loaded as a domain.
-        self.assertFalse(month_loaded("consumption", 2026, 4, "ops"))
+        # Official consumption for April is loaded as its own domain.
+        self.assertTrue(month_loaded("consumption", 2026, 4, "ops"))
+
+
+    def test_june_july_august_sales_match_alfred(self):
+        # Alfred: Jun ₹5,03,80,883.93 / 99,254 bills; Jul ₹5,03,12,513.50 / 1,00,561;
+        # Aug ₹5,53,93,886.06 / 1,09,833. Net blank. Faridabad in; Chattarpur and GK1 out.
+        expected = {
+            "june": ("₹503.81L", "99,254", "₹248.21L", "₹254.27L", "₹1.33L", Decimal("50380883.93"), Decimal("99254")),
+            "july": ("₹503.13L", "100,561", "₹255.67L", "₹245.88L", "₹1.58L", Decimal("50312513.50"), Decimal("100561")),
+            "august": ("₹553.94L", "109,833", "₹279.70L", "₹274.18L", "₹0.06L", Decimal("55393886.06"), Decimal("109833")),
+        }
+        channels = {
+            "2026-06": [("DINEIN", "₹316.78L"), ("ZOMATOONLINE", "₹107.55L"), ("SWIGGYONLINE", "₹66.95L"), ("TAKEOUT", "₹12.51L"), ("ONDC", "₹0.02L")],
+            "2026-07": [("DINEIN", "₹312.94L"), ("ZOMATOONLINE", "₹106.15L"), ("SWIGGYONLINE", "₹71.00L"), ("TAKEOUT", "₹13.03L"), ("ONDC", "₹0.01L")],
+            "2026-08": [("DINEIN", "₹338.22L"), ("ZOMATOONLINE", "₹124.36L"), ("SWIGGYONLINE", "₹77.20L"), ("TAKEOUT", "₹14.12L"), ("ONDC", "₹0.04L")],
+        }
+        month_num = {"june": 6, "july": 7, "august": 8}
+        for name, (net_lakh, bills, kol, ncr, events, gross, bill_n) in expected.items():
+            reset_snapshot()
+            text = month_sales_answer(f"total {name} sales", view_for(role="ops"), False)["text"]
+            self.assertIn(net_lakh, text, msg=name)
+            self.assertIn(bills, text, msg=name)
+            self.assertIn(f"Kolkata {kol}", text, msg=name)
+            self.assertIn(f"NCR {ncr}", text, msg=name)
+            self.assertIn("Events & Catering", text, msg=name)
+            self.assertIn(events, text, msg=name)
+            self.assertIn("outside store comparisons", text, msg=name)
+            self.assertIn("Faridabad is included", text, msg=name)
+            self.assertNotIn("Chattarpur", text, msg=name)
+            self.assertNotRegex(text, r"GK1|GK 1", msg=name)
+            self.assertIn("net is not loaded", text.casefold(), msg=name)
+            self.assertNotIn("Network net was ₹0", text, msg=name)
+            mon = f"2026-{month_num[name]:02d}"
+            with (_ROOT / "data" / "history" / "sales_store_month.csv").open(newline="", encoding="utf-8-sig") as handle:
+                rows = [row for row in csv.DictReader(handle) if row["month"] == mon]
+            self.assertTrue(all(row.get("net") == "" for row in rows), f"net must stay blank in {mon}")
+            self.assertFalse(any("chattarpur" in (row.get("store") or "").casefold() for row in rows))
+            self.assertFalse(any("gk1" in (row.get("store") or "").casefold() or "gk 1" in (row.get("store") or "").casefold() for row in rows))
+            self.assertTrue(any("faridabad" in (row.get("store") or "").casefold() for row in rows))
+            loaded_gross = sum(Decimal(row["gross"]) for row in rows)
+            loaded_bills = sum(Decimal(row["bills"] or 0) for row in rows)
+            self.assertEqual(loaded_gross, gross)
+            self.assertEqual(loaded_bills, bill_n)
+            channel = lookup(f"channel split in {name} 2026", "ops")
+            for source, amount in channels[mon]:
+                self.assertIn(f"{source}: {amount}", channel, msg=f"{mon} {source}")
+        # May files are still the committed extracts (already in the branch).
+        self.assertTrue(month_loaded("sales", 2026, 5, "ops"))
+        self.assertTrue((_ROOT / "data" / "posist" / "daily_sales" / "sales_2026-05.csv").is_file())
+        self.assertTrue((_ROOT / "data" / "posist" / "monthly" / "sales_2026-05.csv").is_file())
+        # 1–3 Sep is still coming: those days are named as missing, not filled with zero.
+        reset_snapshot()
+        sep = month_sales_answer("Kolkata sales in September 2026", view_for(role="ops"), False)["text"]
+        self.assertIn("missing 1, 2, 3 Sep", sep)
+        self.assertIn("not a complete calendar month", sep)
+        self.assertNotIn("Chattarpur", sep)
+
+    def test_april_to_september_consumption_and_june_food_cost(self):
+        # 179 store-months: 30 stores × Apr–8 Sep, minus Sec 31 April; Chattarpur and GK1 excluded.
+        self.assertTrue(month_loaded("consumption", 2026, 4, "ops"))
+        self.assertTrue(month_loaded("consumption", 2026, 8, "ops"))
+        self.assertTrue(month_loaded("consumption", 2026, 9, "ops"))
+        self.assertFalse(month_loaded("consumption", 2026, 10, "ops"))
+        with (_ROOT / "data" / "history" / "consumption_store_month.csv").open(newline="", encoding="utf-8-sig") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual(len(rows), 179)
+        self.assertFalse(any("chattarpur" in (r.get("store") or "").casefold() for r in rows))
+        self.assertFalse(any("gk1" in (r.get("store") or "").casefold() for r in rows))
+        april = [r for r in rows if r["month"] == "2026-04"]
+        june = [r for r in rows if r["month"] == "2026-06"]
+        self.assertEqual(len(april), 29)  # no Sec 31
+        self.assertEqual(len(june), 30)
+        self.assertFalse(any("sec 31" in (r.get("store") or "").casefold() for r in april))
+        self.assertTrue(any("sec 31" in (r.get("store") or "").casefold() for r in june))
+        # Raw files stay out of the repo.
+        raw_dir = _ROOT / "data" / "procurement" / "backfill" / "consumption"
+        self.assertFalse(raw_dir.is_dir() and any(raw_dir.glob("*.xls")))
+
+        # Ideal Plaza (Kolkata) and Connaught Place (NCR) June food cost.
+        # Ideal Plaza: raw 3,08,867.74 + semi 3,14,966.25 = 6,23,833.99 / gross 32,59,481.26 = 19.1%.
+        # Packaging 2,00,563.11 = 6.2% of gross.
+        ideal = lookup("Ideal Plaza food cost in June 2026", "ops")
+        self.assertIn("June 2026 consumption", ideal)
+        self.assertIn("Ideal Plaza", ideal)
+        self.assertIn("Food cost 19.1%", ideal)
+        self.assertIn("Packaging is 6.2% of gross", ideal)
+        self.assertIn("shown separately", ideal)
+        self.assertIn("(raw + semi-processed consumption) / Posist gross", ideal)
+        self.assertIn("₹32.59L", ideal)  # gross
+        self.assertIn("₹6.24L", ideal)  # food 623833.99
+        # Connaught Place: raw 4,59,605.10 + semi 5,40,527.96 = 10,00,133.06 / 41,25,156.50 = 24.2%.
+        # Packaging 75,615.03 = 1.8% of gross.
+        cp = lookup("Connaught Place food cost in June 2026", "ops")
+        self.assertIn("Connaught place", cp)
+        self.assertIn("Food cost 24.2%", cp)
+        self.assertIn("Packaging is 1.8% of gross", cp)
+        self.assertIn("₹41.25L", cp)
+        self.assertIn("₹10.00L", cp)
+
+        # Missing store-months: 'not available', no figure.
+        sec31 = lookup("Sec 31 Gurgaon consumption in April 2026", "ops")
+        self.assertIn("not available", sec31.casefold())
+        self.assertIn("No figure is given", sec31)
+        self.assertNotIn("₹", sec31)
+        fra = lookup("North FRA consumption in June 2026", "ops")
+        self.assertIn("not available", fra.casefold())
+        self.assertIn("02/0017", fra)
+        self.assertNotIn("₹", fra)
+        chat = lookup("Chattarpur consumption in June 2026", "ops")
+        self.assertIn("excluded", chat.casefold())
+        self.assertIn("No figure is given", chat)
+        self.assertNotIn("₹", chat)
+        events = lookup("Events & Catering consumption in June 2026", "ops")
+        self.assertIn("not available", events.casefold())
+        self.assertNotIn("₹", events)
+        # October is not loaded; would come from Procurement.
+        oct_c = lookup("food cost in October 2026", "ops")
+        self.assertIn("not loaded", oct_c.casefold())
+        self.assertIn("Procurement", oct_c)
+        self.assertNotIn("₹", oct_c)
+        # September is 1–8 only; food cost % is not stated.
+        sep = lookup("consumption in September 2026", "ops")
+        self.assertIn("2026-09-01 to 2026-09-08", sep)
+        self.assertIn("not a full calendar month", sep)
+        self.assertIn("food-cost percent is not stated", sep.casefold())
 
 
 if __name__ == "__main__":

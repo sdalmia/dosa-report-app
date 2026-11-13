@@ -1,0 +1,626 @@
+{
+  "files_seen": 191,
+  "store_months_loaded": 179,
+  "item_rows_nonzero": 29972,
+  "excluded": [
+    {
+      "file": "consumption_north_Chattarpur020005_2026-04.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-04",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_Chattarpur020005_2026-05.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-05",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_Chattarpur020005_2026-06.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-06",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_Chattarpur020005_2026-07.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-07",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_Chattarpur020005_2026-08.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-08",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_Chattarpur020005_2026-09-01to08.xls",
+      "store": "Dosa Coffee - Chattarpur (02/0005)",
+      "month": "2026-09",
+      "consumption_amt_all": "0",
+      "item_rows": 408,
+      "nonzero_movement_rows": 0,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-04.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-04",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-05.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-05",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-06.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-06",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-07.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-07",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-08.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-08",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    },
+    {
+      "file": "consumption_north_GK1CloudKitchen020002_2026-09-01to08.xls",
+      "store": "Dosa Coffee - GK1 Cloud Kitchen (02/0002)",
+      "month": "2026-09",
+      "consumption_amt_all": "0",
+      "item_rows": 354,
+      "nonzero_movement_rows": 65,
+      "reason": "Closed store, excluded. Chattarpur files are a zero-value item catalogue. GK1 Cloud Kitchen files have leftover opening quantities with zero amounts and zero consumption, identical across the six months."
+    }
+  ],
+  "footer_gaps": [
+    {
+      "file": "consumption_east_CalcuttaSwimingClub0007_2026-04.xls",
+      "item_sum": "40524.67",
+      "footer": "40524.70",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_CalcuttaSwimingClub0007_2026-09-01to08.xls",
+      "item_sum": "13472.43",
+      "footer": "13472.46",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_Forum0003_2026-05.xls",
+      "item_sum": "137111.44",
+      "footer": "137111.38",
+      "gap": "0.06"
+    },
+    {
+      "file": "consumption_east_Forum0003_2026-06.xls",
+      "item_sum": "157187.78",
+      "footer": "157187.75",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_Forum0003_2026-09-01to08.xls",
+      "item_sum": "37839.00",
+      "footer": "37839.03",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_IdealPlaza010001_2026-04.xls",
+      "item_sum": "765339.03",
+      "footer": "765339.09",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_east_IdealPlaza010001_2026-05.xls",
+      "item_sum": "892508.27",
+      "footer": "892508.23",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_east_JameslongSarani010011_2026-04.xls",
+      "item_sum": "351978.99",
+      "footer": "351979.02",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_JameslongSarani010011_2026-05.xls",
+      "item_sum": "403823.13",
+      "footer": "403823.20",
+      "gap": "-0.07"
+    },
+    {
+      "file": "consumption_east_JameslongSarani010011_2026-07.xls",
+      "item_sum": "436947.24",
+      "footer": "436947.20",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_east_JameslongSarani010011_2026-08.xls",
+      "item_sum": "483666.79",
+      "footer": "483666.86",
+      "gap": "-0.07"
+    },
+    {
+      "file": "consumption_east_Kalikapur010014_2026-07.xls",
+      "item_sum": "354122.11",
+      "footer": "354122.15",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_LakeTown0005_2026-04.xls",
+      "item_sum": "352354.34",
+      "footer": "352354.38",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_LakeTown0005_2026-06.xls",
+      "item_sum": "367973.86",
+      "footer": "367973.89",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_LakeTown0005_2026-07.xls",
+      "item_sum": "384642.86",
+      "footer": "384642.83",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_LakeTown0005_2026-08.xls",
+      "item_sum": "408919.64",
+      "footer": "408919.67",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_LakeTown0005_2026-09-01to08.xls",
+      "item_sum": "106608.94",
+      "footer": "106608.98",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_Lakeroad010015_2026-06.xls",
+      "item_sum": "697467.23",
+      "footer": "697467.20",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_Lakeroad010015_2026-08.xls",
+      "item_sum": "783245.88",
+      "footer": "783245.83",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_east_Lakeroad010015_2026-09-01to08.xls",
+      "item_sum": "192507.99",
+      "footer": "192508.05",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_east_Manisquare0004_2026-06.xls",
+      "item_sum": "279438.60",
+      "footer": "279438.64",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_Manisquare0004_2026-07.xls",
+      "item_sum": "308806.67",
+      "footer": "308806.64",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_NewTownCloudKitchen010013_2026-04.xls",
+      "item_sum": "236073.92",
+      "footer": "236073.95",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_NewTownCloudKitchen010013_2026-08.xls",
+      "item_sum": "280627.48",
+      "footer": "280627.51",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_QuestMall010016_2026-05.xls",
+      "item_sum": "219222.74",
+      "footer": "219222.71",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_QuestMall010016_2026-06.xls",
+      "item_sum": "241616.11",
+      "footer": "241616.16",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_east_QuestMall010016_2026-08.xls",
+      "item_sum": "294284.85",
+      "footer": "294284.82",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_RangoliMall010010_2026-07.xls",
+      "item_sum": "280328.53",
+      "footer": "280328.46",
+      "gap": "0.07"
+    },
+    {
+      "file": "consumption_east_RangoliMall010010_2026-09-01to08.xls",
+      "item_sum": "64916.16",
+      "footer": "64916.21",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_east_RosedalePlaza0006_2026-04.xls",
+      "item_sum": "506284.10",
+      "footer": "506284.07",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_east_RosedalePlaza0006_2026-07.xls",
+      "item_sum": "570124.63",
+      "footer": "570124.66",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_RosedalePlaza0006_2026-09-01to08.xls",
+      "item_sum": "145289.87",
+      "footer": "145289.90",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_SaltLake002_2026-04.xls",
+      "item_sum": "573662.71",
+      "footer": "573662.75",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_SaltLake002_2026-06.xls",
+      "item_sum": "580254.17",
+      "footer": "580254.20",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_SaltLake002_2026-08.xls",
+      "item_sum": "665324.24",
+      "footer": "665324.30",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_east_SaltLake002_2026-09-01to08.xls",
+      "item_sum": "163595.96",
+      "footer": "163595.99",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_SaltLakeSec10009_2026-04.xls",
+      "item_sum": "596552.44",
+      "footer": "596552.37",
+      "gap": "0.07"
+    },
+    {
+      "file": "consumption_east_SaltLakeSec10009_2026-07.xls",
+      "item_sum": "636840.07",
+      "footer": "636840.16",
+      "gap": "-0.09"
+    },
+    {
+      "file": "consumption_east_SaltLakeSec10009_2026-08.xls",
+      "item_sum": "693199.40",
+      "footer": "693199.44",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_east_Santoshpur010012_2026-04.xls",
+      "item_sum": "324352.50",
+      "footer": "324352.53",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_east_Santoshpur010012_2026-06.xls",
+      "item_sum": "336488.17",
+      "footer": "336488.23",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_east_Santoshpur010012_2026-09-01to08.xls",
+      "item_sum": "91705.87",
+      "footer": "91705.84",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_ConnaughtPlace_MainKitchen_2026-04.xls",
+      "item_sum": "1096607.31",
+      "footer": "1096607.37",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_north_Connaughtplace020012_2026-05.xls",
+      "item_sum": "1007106.13",
+      "footer": "1007106.17",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_north_Connaughtplace020012_2026-07.xls",
+      "item_sum": "957158.47",
+      "footer": "957158.50",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_north_Connaughtplace020012_2026-08.xls",
+      "item_sum": "1125693.75",
+      "footer": "1125693.71",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_north_Connaughtplace020012_2026-09-01to08.xls",
+      "item_sum": "266543.51",
+      "footer": "266543.46",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_north_GurgaonDLF020009_2026-08.xls",
+      "item_sum": "593785.28",
+      "footer": "593785.23",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_north_GurgaonSec10_2026-05.xls",
+      "item_sum": "320098.34",
+      "footer": "320098.40",
+      "gap": "-0.06"
+    },
+    {
+      "file": "consumption_north_GurgaonSec10_2026-06.xls",
+      "item_sum": "297480.91",
+      "footer": "297480.98",
+      "gap": "-0.07"
+    },
+    {
+      "file": "consumption_north_GurgaonSec10_2026-07.xls",
+      "item_sum": "256446.70",
+      "footer": "256446.73",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_north_GurgaonSec15020010_2026-05.xls",
+      "item_sum": "839332.69",
+      "footer": "839332.64",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_north_GurgaonSec15020010_2026-08.xls",
+      "item_sum": "646399.96",
+      "footer": "646399.91",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_north_GurgaonSec15020010_2026-09-01to08.xls",
+      "item_sum": "127209.98",
+      "footer": "127210.01",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_north_Kalkaji020004_2026-04.xls",
+      "item_sum": "530469.36",
+      "footer": "530469.33",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_Kalkaji020004_2026-06.xls",
+      "item_sum": "550245.36",
+      "footer": "550245.41",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_north_Kalkaji020004_2026-09-01to08.xls",
+      "item_sum": "137974.60",
+      "footer": "137974.56",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_north_ModelTown020013_2026-04.xls",
+      "item_sum": "768193.18",
+      "footer": "768193.23",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_north_ModelTown020013_2026-05.xls",
+      "item_sum": "772130.36",
+      "footer": "772130.28",
+      "gap": "0.08"
+    },
+    {
+      "file": "consumption_north_ModelTown020013_2026-06.xls",
+      "item_sum": "692488.28",
+      "footer": "692488.25",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_ModelTown020013_2026-08.xls",
+      "item_sum": "702205.15",
+      "footer": "702205.23",
+      "gap": "-0.08"
+    },
+    {
+      "file": "consumption_north_ModelTown020013_2026-09-01to08.xls",
+      "item_sum": "151177.97",
+      "footer": "151177.94",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_PacificmallJasola_2026-07.xls",
+      "item_sum": "617595.83",
+      "footer": "617595.87",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_north_PaschimVihar020003_2026-09-01to08.xls",
+      "item_sum": "97860.46",
+      "footer": "97860.37",
+      "gap": "0.09"
+    },
+    {
+      "file": "consumption_north_RohiniSec7020008_2026-07.xls",
+      "item_sum": "733855.84",
+      "footer": "733855.81",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_RohiniSec7020008_2026-08.xls",
+      "item_sum": "848116.79",
+      "footer": "848116.73",
+      "gap": "0.06"
+    },
+    {
+      "file": "consumption_north_RohiniSec7020008_2026-09-01to08.xls",
+      "item_sum": "216547.06",
+      "footer": "216547.02",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_north_Sec143Noida020006_2026-05.xls",
+      "item_sum": "424584.63",
+      "footer": "424584.68",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_north_Sec143Noida020006_2026-06.xls",
+      "item_sum": "349565.64",
+      "footer": "349565.59",
+      "gap": "0.05"
+    },
+    {
+      "file": "consumption_north_Sec143Noida020006_2026-09-01to08.xls",
+      "item_sum": "85945.40",
+      "footer": "85945.36",
+      "gap": "0.04"
+    },
+    {
+      "file": "consumption_north_Sec15Faridabad020007_2026-04.xls",
+      "item_sum": "400758.77",
+      "footer": "400758.74",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_Sec15Faridabad020007_2026-07.xls",
+      "item_sum": "403503.85",
+      "footer": "403503.79",
+      "gap": "0.06"
+    },
+    {
+      "file": "consumption_north_Sec18Noida020001_2026-06.xls",
+      "item_sum": "761858.49",
+      "footer": "761858.52",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_north_Sec18Noida020001_2026-07.xls",
+      "item_sum": "699011.23",
+      "footer": "699011.17",
+      "gap": "0.06"
+    },
+    {
+      "file": "consumption_north_Sec18Noida020001_2026-08.xls",
+      "item_sum": "800812.65",
+      "footer": "800812.62",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_Sec31Gurgaon0016_2026-05.xls",
+      "item_sum": "12654.06",
+      "footer": "12654.11",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_north_Sec31Gurgaon0016_2026-06.xls",
+      "item_sum": "224642.31",
+      "footer": "224642.34",
+      "gap": "-0.03"
+    },
+    {
+      "file": "consumption_north_Sec31Gurgaon0016_2026-08.xls",
+      "item_sum": "363386.66",
+      "footer": "363386.59",
+      "gap": "0.07"
+    },
+    {
+      "file": "consumption_north_Sec31Gurgaon0016_2026-09-01to08.xls",
+      "item_sum": "74665.78",
+      "footer": "74665.83",
+      "gap": "-0.05"
+    },
+    {
+      "file": "consumption_north_ShalimarBagh020015_2026-05.xls",
+      "item_sum": "398424.68",
+      "footer": "398424.65",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_ShalimarBagh020015_2026-06.xls",
+      "item_sum": "370418.71",
+      "footer": "370418.68",
+      "gap": "0.03"
+    },
+    {
+      "file": "consumption_north_ShalimarBagh020015_2026-07.xls",
+      "item_sum": "384523.55",
+      "footer": "384523.59",
+      "gap": "-0.04"
+    },
+    {
+      "file": "consumption_north_ShalimarBagh020015_2026-08.xls",
+      "item_sum": "443885.91",
+      "footer": "443885.96",
+      "gap": "-0.05"
+    }
+  ],
+  "issues": [],
+  "known_gaps": [
+    "North FRA (02/0017) has no file for any period in this drop.",
+    "Sec 31 Gurgaon (02/0016) has no April file (May\u20138 Sep are present).",
+    "Events & Catering has no consumption file.",
+    "consumption_north_ConnaughtPlace_MainKitchen_2026-04.xls is Connaught place (02/0012); later months use Connaughtplace020012. The Deployment Name inside the file is used.",
+    "consumption_east_SaltLake002_*.xls is Salt Lake (002); the Deployment Name inside the file is used.",
+    "Chattarpur and GK1 Cloud Kitchen files are all the same size within each store and were excluded (closed stores). Chattarpur is a zero-value catalogue; GK1 has leftover opening quantities, zero amounts and zero consumption, identical across months."
+  ],
+  "classification": "Raw is the Food and Beverage super-categories. Semi is Semi Process. Packaging is tracked on its own and also included in other. Cleaning, Uniform, Non Food, Fruit and Bakery sit in other. Food cost is (raw + semi) / Posist gross. Packaging is shown separately.",
+  "item_sums_used": "Store totals are the sum of item rows. Footer 'Amount -' consumption amounts can differ by a few paisa of rounding; those gaps are listed and the item sum is kept."
+}

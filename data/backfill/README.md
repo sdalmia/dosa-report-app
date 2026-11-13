@@ -16,12 +16,14 @@ Item Wise `.xls` files (those are HTML). The loader copies them to
 `data/procurement/backfill/` and `scripts/build_history.py` folds them in.
 
 Tally Day Book packs can be dropped as `/workspace/backfill/tally/<company>/<YYYY-MM>/`.
-Menu mix (Jarvis) and Posist sales (Alfred) are still pending; the same loader
-will pick them up when they land.
+Menu mix (Jarvis) is still pending; the same loader will pick it up when it lands.
+Alfred's April–August Posist monthly extracts are already loaded; 1–3 Sep is still coming.
 
 Monthly Posist files (`posist_sales/sales_YYYY-MM.csv` and
 `posist_channel/channel_YYYY-MM.csv`) are Alfred's calendar-month format;
-May–August will arrive the same way. Net is left blank when the cell is blank.
+April–August 2026 are loaded. Net is left blank when the cell is blank. 1–3 Sep is still coming.
 
 Wastage CSVs live at `/workspace/backfill/procurement/wastage/`. Consumption
-reports in `procurement/consumption/` are still being pulled and are not loaded.
+reports in `procurement/consumption/` are parsed into monthly store and item
+aggregates (raw files stay out of the repo). Food cost is (raw + semi) / Posist
+gross. Chattarpur and GK1 are excluded. Missing store-months are 'not available'.

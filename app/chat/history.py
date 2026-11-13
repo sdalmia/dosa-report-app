@@ -32,6 +32,7 @@ _OWNERS = {
     "menu_mix": ("Jarvis", "who pulls the Posist menu-mix extracts", "menu-mix figures"),
     "reelo": ("Logan", "who pulls the Reelo dashboard exports", "Reelo figures"),
     "wastage": ("Procurement", "who pulls the PurchaseEasy wastage reports", "wastage figures"),
+    "consumption": ("Procurement", "who pulls the PurchaseEasy consumption reports", "consumption figures"),
     "aggregator": ("Sanjoy", "who maintains the brand aggregator workbook", "aggregator figures"),
     "finance": ("Shilajit", "who sends the Grand Economics workbook", "Grand Economics figures"),
     "tally": ("the Accountant", "who sends the daily Tally Day Book packs (via Shilajit)", "Tally figures"),
@@ -50,10 +51,11 @@ _DOMAIN_WORDS = {
     "channel": ("channel", "dine-in", "dine in", "dinein", "takeaway", "takeout", "swiggyonline", "zomatoonline", "ondc", "pos sale"),
     "procurement": ("procurement", "purchase", "grn", "vendor", "ingredient price", "unit price"),
     "wastage": ("wastage", "waste %", "stock wastage", "billing wastage"),
+    "consumption": ("consumption", "food cost", "consumption vs recipe", "recipe vs consumption"),
     "menu_mix": ("menu mix", "menu-mix", "best sell", "item sales", "contribution"),
     "reelo": ("reelo", "loyalty", "repeat customer", "new customer", "phone capture"),
     "aggregator": ("aggregator", "swiggy", "zomato", "offline hour", "ad spend", "impressions"),
-    "finance": ("grand economics", "p&l", "p and l", "ebitda", "fnb cost", "food cost", "net revenue"),
+    "finance": ("grand economics", "p&l", "p and l", "ebitda", "fnb cost", "net revenue"),
     "tally": ("tally", "day book", "daybook", "voucher"),
     "hr": ("headcount", "joiners", "exits", "attrition", "hr count"),
     "famepilot": ("famepilot", "ticket"),
@@ -64,6 +66,7 @@ _SKIP_SALES = (
     "audit", "mystery", "licence", "license", "budget", "inventory",
     "recipe", "ebitda", "grand economics", "tally", "day book", "daybook",
     "headcount", "employee", "swiggy", "zomato", "aggregator",
+    "food cost", "consumption",
 )
 
 
@@ -153,10 +156,18 @@ def _month_named(folded):
 
 def _detect_domain(folded):
     """Most specific domain mentioned. Aggregator beats generic sales words."""
+    finance_markers = ("grand economics", "p&l", "p and l", "ebitda", "fnb cost")
     if ("wastage" in folded or "waste %" in folded or "stock wastage" in folded) and not any(
-        token in folded for token in ("grand economics", "p&l", "p and l", "ebitda")
+        token in folded for token in finance_markers
     ):
         return "wastage"
+    if (
+        any(token in folded for token in ("food cost", "consumption", "consumption vs recipe", "recipe vs consumption"))
+        and not any(token in folded for token in finance_markers)
+        and "wastage" not in folded
+        and "waste %" not in folded
+    ):
+        return "consumption"
     hits = []
     for domain_id, words in _DOMAIN_WORDS.items():
         for word in words:
@@ -302,7 +313,7 @@ def _answer_sales(year, month, question, role):
     city = _city_from_question((question or "").casefold())
     label = _label(year, month)
     source = "Posist daily files"
-    if any((row.get("note") or "").startswith("Calendar April") for row in rows) or (year, month) == (2026, 4):
+    if any("monthly extract" in (row.get("note") or "") for row in rows):
         source = "Alfred's Posist Insights monthly extract"
     fb = (
         "Faridabad is included (it is in the sales base until 22 Oct)"
@@ -771,8 +782,8 @@ def _answer_wastage(year, month, question, role):
         f"{' (incomplete)' if complete != 'yes' else ' (complete)'}. {note}",
         f"Total wastage: {_lakh(total)} across {len(stores)} deployments, {len(items)} item rows. "
         f"Stock wastage {_lakh(stock)}; billing wastage {_lakh(billing)}.",
-        "Consumption reports are still being pulled; consumption figures on these rows "
-        "are only those printed on the wastage extract, used for wastage %.",
+        "Consumption figures on these rows are those printed on the wastage extract, used for wastage %. "
+        "Official store consumption for 1 Apr–8 Sep is in the consumption lookup.",
         "city | store | total wastage | stock | billing | items",
     ]
     ranked = sorted(stores, key=lambda r: _num(r.get("total_wastage_amt")) or 0, reverse=True)
@@ -796,6 +807,289 @@ def _answer_wastage(year, month, question, role):
     return "\n".join(lines)
 
 
+def _consumption_store_key(label):
+    from app.procurement.food_cost import store_key
+    return store_key(label)
+
+
+def _pct_one(part, whole):
+    if part is None or whole is None or whole == 0:
+        return None
+    value = (Decimal(str(part)) / Decimal(str(whole)) * Decimal(100)).quantize(Decimal("0.1"))
+    return f"{value}%"
+
+
+def _store_in_question(folded, rows):
+    """The store named in the question, if exactly one matches."""
+    hits = []
+    for row in rows:
+        name = (row.get("store") or "")
+        key = _consumption_store_key(name)
+        folded_name = name.casefold()
+        if key and key in folded:
+            hits.append((len(key), name, row))
+        elif folded_name and folded_name in folded:
+            hits.append((len(folded_name), name, row))
+    if not hits:
+        return None
+    longest = max(h[0] for h in hits)
+    best = [h for h in hits if h[0] == longest]
+    names = {h[1] for h in best}
+    if len(names) == 1:
+        return best[0][2]
+    return None
+
+
+def _consumption_gap_text(folded, year, month, label):
+    """Known missing store-months: 'not available', no figure."""
+    who, how, _ = _OWNERS["consumption"]
+    tail = f"That would come from {who}, {how}. No figure is given."
+    tokens = folded.replace("(", " ").replace(")", " ").replace("-", " ").split()
+    if "02/0017" in folded or "02-0017" in folded or (
+        "fra" in tokens and "faridabad" not in folded
+    ) or "north fra" in folded:
+        return (
+            f"North FRA (02/0017) {label} consumption is not available. "
+            "No file for that deployment was in the drop for any period. " + tail
+        )
+    if "chattarpur" in folded:
+        return (
+            f"Chattarpur is out of the consumption base (closed). "
+            f"The {label} file (and the other months in the drop) was a zero-value item catalogue, "
+            "same size as the other Chattarpur files, and was excluded. No figure is given."
+        )
+    if "gk1" in folded or "gk 1" in folded:
+        return (
+            f"GK1 Cloud Kitchen is out of the consumption base (closed). "
+            f"The {label} file (and the other months in the drop) had leftover opening quantities "
+            "with zero amounts and zero consumption, identical across months, and was excluded. "
+            "No figure is given."
+        )
+    if "event" in folded or "catering" in folded:
+        return (
+            f"Events & Catering {label} consumption is not available. "
+            "No consumption file for that deployment was in the drop. No figure is given."
+        )
+    if (year, month) == (2026, 4) and any(
+        t in folded for t in ("sec 31", "sector 31", "sec31", "gurgaon 31")
+    ):
+        return (
+            f"Sec 31 Gurgaon April 2026 consumption is not available. "
+            "The April file was not in the drop (May–8 Sep are present). No figure is given."
+        )
+    return None
+
+
+def _answer_consumption(year, month, question, role):
+    if not month_loaded("consumption", year, month, role):
+        return missing_text("consumption", year, month)
+    stores = _filter_month(_read_csv("consumption_store_month.csv"), year, month)
+    items = _filter_month(_read_csv("consumption_item_month.csv"), year, month)
+    if not stores:
+        return missing_text("consumption", year, month)
+    folded = (question or "").casefold()
+    label = _label(year, month)
+    gap = _consumption_gap_text(folded, year, month, label)
+    if gap:
+        return gap
+
+    city = _city_from_question(folded)
+    picked_store = _store_in_question(folded, stores)
+    if picked_store:
+        city = ""
+        rows = [picked_store]
+    else:
+        rows = [r for r in stores if not city or r.get("city") == city]
+        if city and not rows:
+            return (
+                f"{city} {label} consumption is not available. No figure is given. "
+                "That would come from Procurement, who pulls the PurchaseEasy consumption reports."
+            )
+
+    first = min(r.get("first_day") or "9999" for r in rows)
+    last = max(r.get("last_day") or "" for r in rows)
+    complete = all(r.get("complete") == "yes" for r in rows)
+    span = f"{first} to {last}"
+    completeness = "complete calendar month" if complete else "incomplete, not a full calendar month"
+    sales = _filter_month(_read_csv("sales_store_month.csv"), year, month)
+    sales_by_key = {}
+    for row in sales:
+        sales_by_key[_consumption_store_key(row.get("store"))] = row
+
+    def food_cost_line(row):
+        raw = _dec(row.get("consumption_amt_raw")) or Decimal(0)
+        semi = _dec(row.get("consumption_amt_semi")) or Decimal(0)
+        food = _dec(row.get("consumption_amt_food")) or (raw + semi)
+        pack = _dec(row.get("consumption_amt_packaging")) or Decimal(0)
+        matched = sales_by_key.get(_consumption_store_key(row.get("store")))
+        gross = _dec(matched.get("gross")) if matched else None
+        pct = _pct_one(food, gross) if complete and gross else None
+        pack_pct = _pct_one(pack, gross) if complete and gross else None
+        bits = [
+            f"raw {_lakh(raw)}",
+            f"semi-processed {_lakh(semi)}",
+            f"food (raw + semi) {_lakh(food)}",
+            f"packaging {_lakh(pack)} (shown separately, not in food cost)",
+        ]
+        if gross is None:
+            bits.append("Posist gross is not available for this store-month, so the food-cost percent is not stated.")
+        elif not complete:
+            bits.append(
+                f"Posist gross {_lakh(gross)}. A food-cost percent is not stated because "
+                f"consumption covers {span}, which is {completeness}, and the sales window may not match."
+            )
+        else:
+            bits.append(f"Posist gross {_lakh(gross)}. Food cost {pct}.")
+            if pack_pct:
+                bits.append(f"Packaging is {pack_pct} of gross.")
+        return " ".join(bits), food, pack, gross, pct
+
+    lines = [
+        f"{label} consumption, from PurchaseEasy Consumption Reports, {span} ({completeness}). "
+        "Food cost is (raw + semi-processed consumption) / Posist gross. "
+        "Raw means the Food and Beverage super-categories. Packaging is shown separately. "
+        "Chattarpur and GK1 Cloud Kitchen are excluded. "
+        "North FRA (02/0017) has no data. Missing store-months are 'not available', with no figure.",
+    ]
+
+    item_hits = []
+    scored = []
+    for it in items:
+        name = (it.get("item") or "").casefold()
+        if len(name) >= 4 and name in folded:
+            if picked_store and it.get("store") != picked_store.get("store"):
+                continue
+            if city and it.get("city") != city:
+                continue
+            scored.append((len(name), it))
+    if scored:
+        longest = max(s[0] for s in scored)
+        item_hits = [s[1] for s in scored if s[0] == longest]
+
+    if picked_store:
+        row = picked_store
+        detail, food, pack, gross, pct = food_cost_line(row)
+        lines.append(f"{row.get('store')} ({row.get('city')}): {detail}")
+    elif not city:
+        raw = sum((_dec(r.get("consumption_amt_raw")) or 0) for r in rows)
+        semi = sum((_dec(r.get("consumption_amt_semi")) or 0) for r in rows)
+        food = sum((_dec(r.get("consumption_amt_food")) or 0) for r in rows)
+        pack = sum((_dec(r.get("consumption_amt_packaging")) or 0) for r in rows)
+        matched_food = Decimal(0)
+        matched_gross = Decimal(0)
+        matched_n = 0
+        for r in rows:
+            s = sales_by_key.get(_consumption_store_key(r.get("store")))
+            if s and _dec(s.get("gross")):
+                matched_food += _dec(r.get("consumption_amt_food")) or 0
+                matched_gross += _dec(s.get("gross"))
+                matched_n += 1
+        lines.append(
+            f"Across {len(rows)} loaded stores: raw {_lakh(raw)}, semi-processed {_lakh(semi)}, "
+            f"food (raw + semi) {_lakh(food)}, packaging {_lakh(pack)} (shown separately)."
+        )
+        if complete and matched_n and matched_gross:
+            lines.append(
+                f"Food cost {_pct_one(matched_food, matched_gross)} "
+                f"across the {matched_n} stores that have both consumption and Posist gross "
+                f"(gross {_lakh(matched_gross)}). Events & Catering consumption is not available."
+            )
+        elif not complete:
+            lines.append(
+                "A food-cost percent is not stated for this window because it is not a full calendar month."
+            )
+        for city_name in ("Kolkata", "NCR"):
+            sub = [r for r in rows if r.get("city") == city_name]
+            if not sub:
+                continue
+            c_food = sum((_dec(r.get("consumption_amt_food")) or 0) for r in sub)
+            c_pack = sum((_dec(r.get("consumption_amt_packaging")) or 0) for r in sub)
+            c_gross = Decimal(0)
+            c_food_m = Decimal(0)
+            c_n = 0
+            for r in sub:
+                s = sales_by_key.get(_consumption_store_key(r.get("store")))
+                if s and _dec(s.get("gross")):
+                    c_gross += _dec(s.get("gross"))
+                    c_food_m += _dec(r.get("consumption_amt_food")) or 0
+                    c_n += 1
+            extra = ""
+            if complete and c_n and c_gross:
+                extra = f" Food cost {_pct_one(c_food_m, c_gross)} on {c_n} stores (gross {_lakh(c_gross)})."
+            lines.append(
+                f"{city_name}: food (raw + semi) {_lakh(c_food)}, packaging {_lakh(c_pack)}, "
+                f"{len(sub)} stores.{extra}"
+            )
+    else:
+        raw = sum((_dec(r.get("consumption_amt_raw")) or 0) for r in rows)
+        semi = sum((_dec(r.get("consumption_amt_semi")) or 0) for r in rows)
+        food = sum((_dec(r.get("consumption_amt_food")) or 0) for r in rows)
+        pack = sum((_dec(r.get("consumption_amt_packaging")) or 0) for r in rows)
+        matched_food = Decimal(0)
+        matched_gross = Decimal(0)
+        matched_n = 0
+        for r in rows:
+            s = sales_by_key.get(_consumption_store_key(r.get("store")))
+            if s and _dec(s.get("gross")):
+                matched_food += _dec(r.get("consumption_amt_food")) or 0
+                matched_gross += _dec(s.get("gross"))
+                matched_n += 1
+        lines.append(
+            f"{city}: raw {_lakh(raw)}, semi-processed {_lakh(semi)}, "
+            f"food (raw + semi) {_lakh(food)}, packaging {_lakh(pack)} (shown separately), "
+            f"{len(rows)} stores."
+        )
+        if complete and matched_n and matched_gross:
+            lines.append(
+                f"Food cost {_pct_one(matched_food, matched_gross)} "
+                f"across the {matched_n} stores with both consumption and Posist gross "
+                f"(gross {_lakh(matched_gross)})."
+            )
+        elif not complete:
+            lines.append(
+                "A food-cost percent is not stated for this window because it is not a full calendar month."
+            )
+
+    show = sorted(rows, key=lambda r: _num(r.get("consumption_amt_food")) or 0, reverse=True)
+    lines.append("store | city | raw | semi | food (raw+semi) | packaging | food cost")
+    for row in show[:16]:
+        _, food, pack, gross, pct = food_cost_line(row)
+        pct_txt = pct or "not stated"
+        lines.append(
+            f"{row.get('store')} | {row.get('city')} | "
+            f"{_lakh(_num(row.get('consumption_amt_raw')))} | "
+            f"{_lakh(_num(row.get('consumption_amt_semi')))} | "
+            f"{_lakh(_num(row.get('consumption_amt_food')))} | "
+            f"{_lakh(_num(row.get('consumption_amt_packaging')))} | {pct_txt}"
+        )
+
+    if item_hits:
+        lines.append("item | store | category | consumption qty | consumption amt | bucket")
+        for it in item_hits[:12]:
+            qty = it.get("consumption_qty") or ""
+            unit = it.get("unit") or ""
+            lines.append(
+                f"{it.get('item')} | {it.get('store')} | {it.get('category')} | "
+                f"{qty} {unit} | {_lakh(_num(it.get('consumption_amt')))} | {it.get('bucket')}"
+            )
+    if "recipe" in folded:
+        lines.append(
+            "A consumption-versus-recipe comparison is not computed for these monthly extracts. "
+            "The figures above are what the Consumption Report shows. No recipe cost is invented."
+        )
+
+    if (year, month) == (2026, 4):
+        lines.append("Sec 31 Gurgaon has no April consumption file; that store-month is not available.")
+    if month == 9 and year == 2026:
+        lines.append(
+            "September consumption is 1–8 Sep only. 1–3 Sep Posist sales are still coming, "
+            "so a full-month food-cost percent is not stated."
+        )
+    lines.append("A store-month that is not in the drop is not available, not treated as zero.")
+    return "\n".join(lines)
+
+
+
 _ANSWERS = {
     "sales": _answer_sales,
     "channel": _answer_channel,
@@ -808,6 +1102,7 @@ _ANSWERS = {
     "hr": _answer_hr,
     "famepilot": _answer_famepilot,
     "wastage": _answer_wastage,
+    "consumption": _answer_consumption,
 }
 
 
@@ -827,7 +1122,7 @@ def lookup(question, role="ops", month=None, domain=None):
             year = int(year_match.group(1)) if year_match else 2026
     if domain is None and month is None:
         return (
-            "Name a month and a domain (sales, channel, procurement, wastage, menu mix, Reelo, "
+            "Name a month and a domain (sales, channel, procurement, wastage, consumption, menu mix, Reelo, "
             "aggregator, finance, Tally, HR, or Famepilot). No figure is assumed."
         )
     if month is None:
@@ -931,7 +1226,7 @@ def answer(question, data, owner):
         as_of = f"{last} {_MONTH_SHORT[month]} {year}"
     domain = _detect_domain(folded) or "sales"
     kind = "finance" if domain in {"finance", "tally", "hr"} else (
-        "procurement" if domain in {"procurement", "menu_mix", "wastage"} else "sales"
+        "procurement" if domain in {"procurement", "menu_mix", "wastage", "consumption"} else "sales"
     )
     return _pack(text, as_of, kind, question, owner, source={"text": text})
 
@@ -946,6 +1241,10 @@ def tool_result(arguments, role):
         domain = arguments.get("domain") or None
         if domain:
             domain = str(domain).strip().casefold().replace(" ", "_")
-            aliases = {"menu": "menu_mix", "p&l": "finance", "pnl": "finance", "tickets": "famepilot", "waste": "wastage"}
+            aliases = {
+                "menu": "menu_mix", "p&l": "finance", "pnl": "finance",
+                "tickets": "famepilot", "waste": "wastage",
+                "food_cost": "consumption", "foodcost": "consumption", "consume": "consumption",
+            }
             domain = aliases.get(domain, domain)
     return {"text": lookup(question, role, month=month, domain=domain)}
