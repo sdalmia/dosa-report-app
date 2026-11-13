@@ -329,46 +329,159 @@ def _asks_fixes(question):
     return any(token in folded for token in ("posist fix", "fix on posist", "what can we fix", "data can we fix"))
 
 
-def _weekly_gaps():
-    path = _ROOT / "data" / "store_health" / "posist_daily.csv"
+def _span(start, end):
+    months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    if start.month == end.month and start.year == end.year:
+        return f"{start.day}–{end.day} {months[start.month - 1]}"
+    if start.year == end.year:
+        return f"{start.day} {months[start.month - 1]}–{end.day} {months[end.month - 1]}"
+    return f"{start.isoformat()}–{end.isoformat()}"
+
+
+def _display_store(name):
+    text = re.sub(r"\s*\([^)]*\)", "", name or "")
+    text = re.sub(r"(?i)^dosa coffee\s*-\s*", "", text).strip()
+    return " ".join(word[:1].upper() + word[1:] if word else "" for word in text.split())
+
+
+def _lakh(value):
+    number = abs(float(value))
+    if number >= 10000000:
+        return f"₹{number / 10000000:.2f}Cr"
+    if number >= 100000:
+        return f"₹{number / 100000:.2f}L"
+    return f"₹{number:,.0f}"
+
+
+def _navratri_days():
+    path = _ROOT / "data" / "posist" / "sales_pred_vs_actual.csv"
+    found = set()
     if not path.is_file():
-        return [], ""
-    by_store = {}
-    regions = {}
+        return found
     with path.open(newline="", encoding="utf-8-sig") as handle:
         for raw in csv.DictReader(handle):
+            blob = " ".join([raw.get("tier") or "", raw.get("drivers") or "", raw.get("notes") or ""]).casefold()
+            if "navratri" not in blob:
+                continue
             day = _day(raw.get("date"))
-            store = raw.get("store") or ""
-            if _skip_day(store, day):
-                continue
-            gross = _num(raw.get("gross"))
-            if gross is None:
-                continue
-            by_store.setdefault(store, []).append((day, gross))
-            regions[store] = raw.get("region") or ""
-    if not by_store:
+            if day:
+                found.add(day)
+    return found
+
+
+def _north(store, region):
+    if (region or "").casefold() in {"north", "ncr", "delhi"}:
+        return True
+    return bool(re.search(r"\(02/", store or ""))
+
+
+def _store_key(name):
+    """Join 'Connaught place (02/0012)' with 'Dosa Coffee - Connaught place (02/0012)'."""
+    return _display_store(name).casefold()
+
+
+def _sales_by_store():
+    """Store gross by day. Dated sales_*.csv files override the cumulative file.
+
+    A sales file counts even when its _DONE marker is absent. 9 Nov is that case.
+    """
+    grouped = {}
+    latest = None
+
+    def put(store, day, gross, region=""):
+        key = _store_key(store)
+        if not key:
+            return
+        bucket = grouped.setdefault(key, {"name": store, "region": "", "days": {}})
+        if "(" in store and "(" not in bucket["name"]:
+            bucket["name"] = store
+        if region and not bucket["region"]:
+            bucket["region"] = region
+        bucket["days"][day] = gross
+
+    daily = _ROOT / "data" / "store_health" / "posist_daily.csv"
+    if daily.is_file():
+        with daily.open(newline="", encoding="utf-8-sig") as handle:
+            for raw in csv.DictReader(handle):
+                day = _day(raw.get("date"))
+                store = (raw.get("store") or "").strip()
+                gross = _num(raw.get("gross"))
+                if day is None or not store or gross is None:
+                    continue
+                put(store, day, gross, raw.get("region") or "")
+    folder = _ROOT / "data" / "posist" / "daily_sales"
+    if folder.is_dir():
+        for path in sorted(folder.glob("sales_*.csv")):
+            stamp = _day(path.stem.replace("sales_", ""))
+            if stamp and (latest is None or stamp > latest):
+                latest = stamp
+            with path.open(newline="", encoding="utf-8-sig") as handle:
+                for raw in csv.DictReader(handle):
+                    day = _day(raw.get("date")) or stamp
+                    store = (raw.get("store") or "").strip()
+                    gross = _num(raw.get("gross"))
+                    if day is None or not store or gross is None:
+                        continue
+                    put(store, day, gross)
+    return grouped, latest
+
+
+def _weekly_gaps():
+    grouped, latest = _sales_by_store()
+    if not grouped or latest is None:
         return [], ""
-    end = max(day for points in by_store.values() for day, _gross in points)
+    end = latest
     recent_start = end - timedelta(days=6)
     prior_end = recent_start - timedelta(days=1)
     prior_start = prior_end - timedelta(days=6)
+    festive = _navratri_days()
+    present = set()
+    for bucket in grouped.values():
+        present.update(bucket["days"])
+    missing = [
+        day for offset in range(7)
+        if (day := recent_start + timedelta(days=offset)) not in present
+    ]
     gaps = []
-    for store, points in by_store.items():
-        recent = [gross for day, gross in points if recent_start <= day <= end]
-        prior = [gross for day, gross in points if prior_start <= day <= prior_end]
-        if len(recent) < 5 or len(prior) < 5:
+    for bucket in grouped.values():
+        store = bucket["name"]
+        region = bucket["region"]
+        points = bucket["days"]
+        recent_sum = 0.0
+        prior_sum = 0.0
+        pairs = 0
+        for offset in range(7):
+            recent_day = recent_start + timedelta(days=offset)
+            prior_day = prior_start + timedelta(days=offset)
+            if recent_day not in points or prior_day not in points:
+                continue
+            if _skip_day(store, recent_day) or _skip_day(store, prior_day):
+                continue
+            if _north(store, region) and (recent_day in festive or prior_day in festive):
+                continue
+            recent_sum += points[recent_day]
+            prior_sum += points[prior_day]
+            pairs += 1
+        if pairs != 7:
             continue
-        gap = sum(recent) - sum(prior)
         gaps.append({
             "store": store,
-            "region": regions.get(store) or "",
-            "recent": sum(recent),
-            "prior": sum(prior),
-            "gap": gap,
-            "days": len(recent),
+            "display": _display_store(store),
+            "region": region,
+            "recent": recent_sum,
+            "prior": prior_sum,
+            "gap": recent_sum - prior_sum,
+            "days": pairs,
         })
-    gaps.sort(key=lambda row: row["gap"])
-    label = f"{prior_start.isoformat()}–{prior_end.isoformat()} versus {recent_start.isoformat()}–{end.isoformat()}"
+    gaps.sort(key=lambda row: abs(row["gap"]), reverse=True)
+    label = f"{_span(recent_start, end)} vs {_span(prior_start, prior_end)}"
+    if missing:
+        names = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        if len({day.month for day in missing}) == 1:
+            left = ", ".join(str(day.day) for day in missing) + f" {names[missing[0].month - 1]}"
+        else:
+            left = ", ".join(f"{day.day} {names[day.month - 1]}" for day in missing)
+        label = f"{label}; {left} not in the file"
     return gaps, label
 
 
@@ -379,13 +492,14 @@ def growth_text():
     lines = [
         "Growth plan from Posist daily gross. Mall bill counts are not used.",
         f"Window: {label}.",
-        "Assumption, stated as an illustration and not a forecast: the 7-day gap times 30/7 is the monthly rupee if that same gap repeated. Navratri is not removed store by store because the daily file has no festive flag. Rosedale from 1 Nov (partly open; closed 10 Nov), Faridabad from 23 Oct, and closed stores are excluded.",
+        "Assumption, stated as an illustration and not a forecast: the paired-day gap times 30/7 is the monthly rupee if that same gap repeated. A day missing from the files is left out of both weeks, not treated as zero. NCR Navratri days are excluded. Rosedale from 1 Nov (partly open; closed 10 Nov), Faridabad from 23 Oct, and closed stores are excluded.",
         "Delivery versus dine-in is not given a rupee here: channel files are gross, and the 24.78% rule needs net.",
-        "store | 7-day gap | illustrated month",
+        "store | paired-day gap | illustrated month",
     ]
     for row in gaps[:5]:
         month = row["gap"] * 30 / 7
-        lines.append(f"{row['store']} | {_inr(row['gap'])} | {_inr(month)}")
+        direction = "down" if row["gap"] < 0 else "up"
+        lines.append(f"{row['display']} | {direction} {_lakh(row['gap'])} | {direction} {_lakh(month)}")
     lines.append("One action each: check the largest drop before adding a discount or a new site. No rent or volume elasticity was assumed.")
     from app.chat.reelo_deep import winback_line
 
@@ -406,6 +520,7 @@ def trend_rows():
             continue
         rows.append({
             "store": row["store"],
+            "display": row["display"],
             "impact": row["gap"],
             "label": label,
             "direction": "down" if row["gap"] < 0 else "up",
@@ -434,7 +549,7 @@ def trends_text():
         )
     for row in rows:
         lines.append(
-            f"{row['store']} {row['direction']} {_inr(row['impact'])} across {row['label']}. "
+            f"{row['display']} {row['direction']} {_lakh(row['impact'])} across {row['label']}. "
             "Likely driver is not assigned without a second series on the same days."
         )
     return "\n".join(lines)
@@ -443,10 +558,13 @@ def trends_text():
 def trend_cards():
     cards = []
     for row in trend_rows()[:3]:
+        direction = "down" if row["impact"] < 0 else "up"
+        window = row["label"]
         cards.append({
-            "kicker": "Trend",
-            "title": f"{row['store'].split('(')[0].strip()} {row['direction']} {_inr(row['impact'])} versus the prior week",
-            "question": "What trends should I know?",
+            "kind": "sales",
+            "title": row["display"],
+            "line": f"Sales {direction} {_lakh(row['impact'])} vs the week before ({window})",
+            "question": f"Why are {row['display']} sales {direction} versus the week before?",
         })
     return cards
 

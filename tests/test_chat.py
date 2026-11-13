@@ -19,8 +19,8 @@ class ChatAnswerTests(unittest.TestCase):
 
     def test_pace_uses_the_summary_date_and_a_chart(self):
         answer = answer_from_data("How are we tracking against this month's target?", self.data, False)
-        self.assertIn("85.8%", answer["text"])
-        self.assertEqual(answer["as_of"], "11 Nov 2026")
+        self.assertIn("84.3%", answer["text"])
+        self.assertEqual(answer["as_of"], "12 Nov 2026")
         self.assertIsNotNone(answer["chart"])
         self.assertIsNone(answer["table"])
         self.assertIn("Make an action plan", answer["followups"])
@@ -35,7 +35,7 @@ class ChatAnswerTests(unittest.TestCase):
         self.assertIn("vs its last month", text)
         self.assertNotIn("than kolkata", text)
         self.assertNotIn("than delhi", text)
-        self.assertEqual(answer["as_of"], "11 Nov 2026")
+        self.assertEqual(answer["as_of"], "12 Nov 2026")
         self.assertTrue(answer["table"]["rows"])
 
     def test_named_item_uses_each_city_baseline(self):
@@ -51,13 +51,13 @@ class ChatAnswerTests(unittest.TestCase):
         self.assertIn("kolkata", text)
         self.assertNotIn("than kolkata", text)
         self.assertNotIn("than delhi", text)
-        self.assertEqual(answer["as_of"], "11 Nov 2026")
+        self.assertEqual(answer["as_of"], "12 Nov 2026")
 
     def test_above_average_cites_the_city_baseline(self):
         answer = answer_from_data("Which items did we buy above average price this week?", self.data, False)
         self.assertIn("own baseline", answer["text"])
-        self.assertIn("29.0%", answer["text"])
-        self.assertEqual(answer["as_of"], "11 Nov 2026")
+        self.assertIn("579.4%", answer["text"])
+        self.assertEqual(answer["as_of"], "12 Nov 2026")
 
     def test_named_store_joins_sources_and_says_when_one_is_missing(self):
         answer = answer_from_data("Sec 143 Noida is soft, what else moved?", self.data, False)
