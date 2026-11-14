@@ -89,7 +89,7 @@ Expected drops (any subset):
   /workspace/backfill/menu_mix/
       still pending from Jarvis; this loader already globs the files so a
       later data PR can add them without a code change. Alfred's April–August
-      Posist monthly extracts are already loaded; 1–3 Sep is still coming.
+      Posist monthly extracts and 1–3 Sep are already loaded.
 
 After copying daily files, run scripts/build_history.py to refresh
 data/history/*.csv and data/history/coverage.json. Pre-built monthly

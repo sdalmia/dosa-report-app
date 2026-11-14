@@ -300,7 +300,7 @@ class CoverageAndRoleTests(unittest.TestCase):
         bills = sum(Decimal(row["bills"] or 0) for row in april)
         self.assertEqual(gross, Decimal("48110428.87"))
         self.assertEqual(bills, Decimal("92784"))
-        # June, July and August match Alfred's totals; 1–3 Sep is still coming.
+        # June, July and August match Alfred's totals; 1–3 Sep is loaded too.
         # (Full Jun–Aug checks live in test_june_july_august_sales_match_alfred.)
         self.assertFalse(use_file_answer("Kolkata sales in June 2026", "ops"))
         self.assertTrue(month_loaded("sales", 2026, 6, "ops"))
@@ -390,11 +390,11 @@ class CoverageAndRoleTests(unittest.TestCase):
         self.assertTrue(month_loaded("sales", 2026, 5, "ops"))
         self.assertTrue((_ROOT / "data" / "posist" / "daily_sales" / "sales_2026-05.csv").is_file())
         self.assertTrue((_ROOT / "data" / "posist" / "monthly" / "sales_2026-05.csv").is_file())
-        # 1–3 Sep is still coming: those days are named as missing, not filled with zero.
+        # 1–3 Sep is loaded, so September is a full calendar month.
         reset_snapshot()
         sep = month_sales_answer("Kolkata sales in September 2026", view_for(role="ops"), False)["text"]
-        self.assertIn("missing 1, 2, 3 Sep", sep)
-        self.assertIn("not a complete calendar month", sep)
+        self.assertNotIn("missing 1, 2, 3 Sep", sep)
+        self.assertIn("full calendar month 1–30 Sep 2026", sep)
         self.assertNotIn("Chattarpur", sep)
 
     def test_april_to_september_consumption_and_june_food_cost(self):
@@ -469,3 +469,65 @@ class CoverageAndRoleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SeptemberAndTabwiseChannelTests(unittest.TestCase):
+    def test_first_three_days_of_september_reconcile_and_complete_the_month(self):
+        path = _ROOT / "data" / "posist" / "daily_sales" / "sales_2026-09.csv"
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual({row["date"] for row in rows}, {"2026-09-01", "2026-09-02", "2026-09-03"})
+        self.assertEqual(sum(Decimal(row["gross"]) for row in rows), Decimal("4256196.99"))
+        self.assertEqual(sum(int(row["bills"]) for row in rows), 8954)
+        self.assertTrue(all(row["net"] == "" for row in rows))
+        with (_ROOT / "data" / "history" / "sales_store_month.csv").open(newline="", encoding="utf-8-sig") as handle:
+            sep = [row for row in csv.DictReader(handle) if row["month"] == "2026-09"]
+        # 30 stores, one row each (no duplicate names from the two sources).
+        self.assertEqual(len(sep), 30)
+        self.assertEqual(sum(Decimal(row["gross"]) for row in sep), Decimal("50772723.19"))
+        self.assertEqual(sum(Decimal(row["bills"]) for row in sep), Decimal("101330"))
+        self.assertTrue(all(row["first_day"] == "2026-09-01" for row in sep))
+        self.assertFalse(any("chattarpur" in row["store"].casefold() or "gk1" in row["store"].casefold() for row in sep))
+        self.assertTrue(any("faridabad" in row["store"].casefold() for row in sep))
+        with (_ROOT / "data" / "history" / "sales_city_month.csv").open(newline="", encoding="utf-8-sig") as handle:
+            cities = {row["city"]: row for row in csv.DictReader(handle) if row["month"] == "2026-09"}
+        self.assertEqual(cities["Kolkata"]["gross"], "25740673.85")
+        self.assertEqual(cities["NCR"]["gross"], "25032049.34")
+        self.assertEqual(cities["Kolkata"]["complete"], "yes")
+        self.assertEqual(cities["NCR"]["complete"], "yes")
+        text = lookup("Kolkata sales in September 2026", "ops")
+        self.assertIn("₹257.41L", text)
+        self.assertNotIn("not on file", text)
+        self.assertNotIn("still coming", coverage_line("ops"))
+
+    def test_tabwise_channel_days_cover_october_to_twelve_november(self):
+        manifest = json.loads((_ROOT / "data" / "posist" / "channel_tabwise_manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(manifest["days"]), 43)
+        self.assertEqual(manifest["days"][0], "2026-10-01")
+        self.assertEqual(manifest["days"][-1], "2026-11-12")
+        self.assertEqual(manifest["duplicate_days"], ["2026-11-11"])
+        self.assertEqual(manifest["duplicate_keys_disagreeing"], 0)
+        folder = _ROOT / "data" / "posist" / "daily_sales"
+        for day in manifest["days"]:
+            with (folder / f"channel_{day}.csv").open(newline="", encoding="utf-8-sig") as handle:
+                rows = list(csv.DictReader(handle))
+            keys = [(row["store"], row["source"]) for row in rows]
+            self.assertEqual(len(keys), len(set(keys)), day)
+            self.assertFalse(any("network" in row["store"].casefold() for row in rows), day)
+            self.assertFalse(any("chattarpur" in row["store"].casefold() for row in rows), day)
+            if day >= "2026-10-23":
+                self.assertFalse(any("faridabad" in row["store"].casefold() for row in rows), day)
+        # ONDC is absent on 1 Oct, not written as zero.
+        with (folder / "channel_2026-10-01.csv").open(newline="", encoding="utf-8-sig") as handle:
+            self.assertNotIn("ONDC", {row["source"] for row in csv.DictReader(handle)})
+        october = lookup("channel split in October 2026", "ops")
+        self.assertIn("DINEIN: ₹333.55L", october)
+        self.assertIn("ZOMATOONLINE: ₹116.29L", october)
+        self.assertIn("2026-10-01 to 2026-10-31", october)
+        with (_ROOT / "data" / "history" / "channel_tabwise_reconciliation.csv").open(newline="", encoding="utf-8-sig") as handle:
+            status = defaultdict(int)
+            for row in csv.DictReader(handle):
+                status[row["status"]] += 1
+        self.assertEqual(status["match"], 1216)
+        self.assertEqual(status["no store gross loaded"], 8)
+        self.assertEqual(status["mismatch"], 32)

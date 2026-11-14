@@ -18,9 +18,10 @@ names are not stored.
 | File | What it holds |
 | --- | --- |
 | `coverage.json` | Window, loaded and missing months, owner, roles, for every domain |
-| `sales_store_month.csv` | Store gross (and bills, net when present) by calendar month |
+| `sales_store_month.csv` | Store gross (and bills, net when present) by calendar month. September joins the 1–3 Sep extract to the 4–30 Sep daily file |
 | `sales_city_month.csv` | Kolkata, NCR, and Events city totals |
-| `channel_store_month.csv` | Channel sales (Swiggy, Zomato, POS, …) by store and month |
+| `channel_store_month.csv` | Channel sales by store and month: Apr–Aug calendar months, 1–3 Sep only, 1 Oct–12 Nov store-level from the tabwise workbooks |
+| `channel_tabwise_reconciliation.csv` | 1 Oct–12 Nov store-day channel total vs loaded store gross (match / mismatch / no store gross loaded) |
 | `purchases_item_month.csv` | Purchases by item, 1 Apr–8 Oct 2026 (Oct is 1–8 only). April–August from Entry Reports; September combines 1–8 Sep backfill with 9–30 Sep GRN |
 | `purchases_vendor_month.csv` | Purchases by vendor (same window) |
 | `purchases_charges_month.csv` | Freight, transport and TCS invoice charges, kept out of item totals |

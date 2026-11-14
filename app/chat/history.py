@@ -315,6 +315,8 @@ def _answer_sales(year, month, question, role):
     source = "Posist daily files"
     if any("monthly extract" in (row.get("note") or "") for row in rows):
         source = "Alfred's Posist Insights monthly extract"
+    elif any("Full calendar September" in (row.get("note") or "") for row in rows):
+        source = "Alfred's Posist Insights extract for 1–3 Sep and Posist daily files for 4–30 Sep"
     fb = (
         "Faridabad is included (it is in the sales base until 22 Oct)"
         if (year, month) < (2026, 10)
@@ -1082,7 +1084,7 @@ def _answer_consumption(year, month, question, role):
         lines.append("Sec 31 Gurgaon has no April consumption file; that store-month is not available.")
     if month == 9 and year == 2026:
         lines.append(
-            "September consumption is 1–8 Sep only. 1–3 Sep Posist sales are still coming, "
+            "September consumption is 1–8 Sep only, while Posist sales cover the full month, "
             "so a full-month food-cost percent is not stated."
         )
     lines.append("A store-month that is not in the drop is not available, not treated as zero.")

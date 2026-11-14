@@ -447,8 +447,8 @@ def packet(question=""):
         status = "complete" if complete else "incomplete"
         if month == 11:
             status = "incomplete; this is November, not October. Month-to-date rows later in this packet are November"
-        if month == 9 and start.year == 2026:
-            status = "incomplete; the daily file starts on 4 Sep, so 1–3 Sep are not on file"
+        if month == 9 and start.year == 2026 and complete:
+            status = "complete; 1–3 Sep from Alfred's Posist Insights extract, 4–30 Sep from the daily file"
         lines.append("")
         lines.append(
             f"{_MONTH_LABEL[month]} {year} ({_span_label(start, end)}, {status})."

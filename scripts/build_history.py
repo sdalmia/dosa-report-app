@@ -191,11 +191,18 @@ def copy_channel_files():
     dest = _ROOT / "data" / "posist" / "daily_sales"
     dest.mkdir(parents=True, exist_ok=True)
     copied = 0
+    # Days loaded from Alfred's tabwise store-by-channel workbooks are not overwritten.
+    tabwise_days = set()
+    manifest = _ROOT / "data" / "posist" / "channel_tabwise_manifest.json"
+    if manifest.is_file():
+        tabwise_days = set(json.loads(manifest.read_text(encoding="utf-8")).get("days") or [])
     if not _BOX_POSIST.is_dir():
         print("  box posist folder not present; skipping channel copy")
         return
     for path in sorted(_BOX_POSIST.glob("channel_*.csv")):
         target = dest / path.name
+        if path.stem.replace("channel_", "") in tabwise_days:
+            continue
         if target.is_file() and target.stat().st_size == path.stat().st_size:
             continue
         shutil.copy2(path, target)
@@ -214,7 +221,7 @@ def copy_channel_files():
         written = 0
         for day, rows in sorted(by_day.items()):
             target = dest / f"channel_{day}.csv"
-            if target.is_file():
+            if target.is_file() or day in tabwise_days:
                 continue
             with target.open("w", newline="", encoding="utf-8") as handle:
                 writer = csv.DictWriter(handle, fieldnames=["store", "store_code", "date", "source", "sales", "orders"])
@@ -478,7 +485,15 @@ def build_sales():
             days_in = monthrange(year, mon)[1]
             note = ""
             monthly = _ROOT / "data" / "posist" / "daily_sales" / f"sales_{month}.csv"
-            if monthly.is_file():
+            if month == "2026-09":
+                note = (
+                    "Full calendar September: 1–3 Sep from Alfred's Posist Insights extract "
+                    "(sales_2026-09.csv, 30 stores × 3 days, ₹42,56,196.99 from 8,954 bills) joined to "
+                    "4–30 Sep from the Posist daily file (posist_daily.csv). The two do not overlap; "
+                    "no day is counted twice. Net is blank for 1–3 Sep (Insights gave only store gross), "
+                    "left blank not treated as zero. Faridabad is included. No Events & Catering row in September."
+                )
+            elif monthly.is_file():
                 note = (
                     f"Calendar {month} from Alfred's Posist Insights monthly extract "
                     f"(sales_{month}.csv). Net is blank (Insights gave only store gross), "
@@ -492,8 +507,6 @@ def build_sales():
                         "Food Truck is missing 11–14 and 25–26 Apr; "
                         "4, 5, 18, 19 and 29 Apr are zero in the file."
                     )
-            elif month == "2026-09":
-                note = "Daily file starts 4 Sep; 1–3 Sep are not on file."
             elif month == "2026-11":
                 note = "Through 12 Nov; the month is not complete."
             city_rows.append({
@@ -544,7 +557,14 @@ def build_channel():
         days_in = monthrange(year, mon)[1]
         note = ""
         monthly = _ROOT / "data" / "posist" / "daily_sales" / f"channel_{month}.csv"
-        if monthly.is_file():
+        if month == "2026-09":
+            note = (
+                "Store channel sales for 1–3 Sep only, from Alfred's Posist channel extract (channel_2026-09.csv; "
+                "₹42,56,197.00 and 8,954 orders against store gross ₹42,56,196.99, 1 paisa of rounding). "
+                "4–30 Sep has no store channel file, so September channel totals are not a full month. "
+                "Sources are named as in the file (DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, ONDC)."
+            )
+        elif monthly.is_file():
             note = (
                 f"Calendar {month} from Alfred's Posist channel extract (channel_{month}.csv). "
                 "Sources are named as in the file (DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, ONDC, "
@@ -573,9 +593,9 @@ def build_channel():
             if month in rounding:
                 note += rounding[month]
         elif month == "2026-11":
-            note = "9 Nov channel file is not on disk; that day is left out, not treated as zero. Through 12 Nov."
+            note = "Store channel sales by day from Alfred's Posist tabwise workbooks (Deployment-wise, Day mode; sources DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, OWNLYONLINE and ONDC as listed). A tab or store not in a day's workbook is left out, not treated as zero. Faridabad is out from 23 Oct. Events & Catering is its own row. Channel totals match store gross within ₹1 on 1,216 store-days; 32 store-days differ (see data/history/channel_tabwise_reconciliation.csv); both are left as in the files. Through 12 Nov; the month is not complete."
         elif month == "2026-10":
-            note = "Store-level channel days are 2–15 Oct (2–8 from a daily extract; 9–15 from dated files). 16–31 Oct files are network totals only (ALL (network) / ALL DEPLOYMENTS). 1 Oct is not on file."
+            note = "Store channel sales by day from Alfred's Posist tabwise workbooks (Deployment-wise, Day mode; sources DINEIN, TAKEOUT, SWIGGYONLINE, ZOMATOONLINE, OWNLYONLINE and ONDC as listed). A tab or store not in a day's workbook is left out, not treated as zero. Faridabad is out from 23 Oct. Events & Catering is its own row. Channel totals match store gross within ₹1 on 1,216 store-days; 32 store-days differ (see data/history/channel_tabwise_reconciliation.csv); both are left as in the files. All 31 days of October are store-level."
         rows.append({
             "month": month,
             "store": store,
@@ -599,6 +619,16 @@ def build_channel():
     )
 
 
+
+
+def load_tabwise_channels():
+    """Store-by-channel daily files for 1 Oct–12 Nov from Alfred's tabwise workbooks."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("parse_tabwise_channels", _ROOT / "scripts" / "parse_tabwise_channels.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.main(["parse_tabwise_channels.py"])
 
 
 def copy_monthly_posist():
@@ -1658,13 +1688,13 @@ def build_coverage():
     add("sales", "Sales by city and store", "Alfred",
         "who pulls Posist Insights daily sales",
         sales_loaded,
-        "April–August 2026 are full calendar months from Alfred's Posist Insights monthly extracts (sales_YYYY-MM.csv): net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. 1–3 Sep is still coming; daily store sales resume 4 Sep 2026. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
+        "April–August 2026 are full calendar months from Alfred's Posist Insights monthly extracts (sales_YYYY-MM.csv): net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. September is a full calendar month: 1–3 Sep from Alfred's Insights extract (sales_2026-09.csv) joined to the 4–30 Sep daily file, with no overlap. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
         all_roles, start="2026-04-01", end="2026-11-12")
     ch_loaded = _loaded_months(_HISTORY / "channel_store_month.csv")
     add("channel", "Sales by channel (Swiggy, Zomato, and others)", "Alfred",
         "who pulls Posist Insights channel sales",
         ch_loaded,
-        "April–August 2026 are full calendar months from Alfred's Posist channel extracts (channel_YYYY-MM.csv; source names as in the file; Faridabad included). Paisa-level gaps versus store gross are left as in the files. 1–3 Sep is still coming. Store-level channel files then cover 2–15 Oct and 1–12 Nov 2026, except 1 Oct and 9 Nov, which are not on disk and are left out (not treated as zero). 16–31 Oct are network-wide totals only (ALL (network) / ALL DEPLOYMENTS), not store-level. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month.",
+        "April–August 2026 are full calendar months from Alfred's Posist channel extracts (channel_YYYY-MM.csv; source names as in the file; Faridabad included). Paisa-level gaps versus store gross are left as in the files. September has store channel sales for 1–3 Sep only (channel_2026-09.csv); 4–30 Sep has no store channel file. 1 Oct–12 Nov 2026 are store-level daily channel files from Alfred's tabwise workbooks (every day present; a tab or store not listed on a day is left out, not zero; Faridabad out from 23 Oct). 32 store-days differ from store gross by more than ₹1 and are listed in channel_tabwise_reconciliation.csv. A 9 Sep–8 Oct 30-day range file is in data/posist; it is not a calendar month.",
         all_roles, start="2026-04-01", end="2026-11-12")
     add("procurement", "Procurement purchases and ingredient prices", "Procurement",
         "who pulls the PurchaseEasy reports",
@@ -1744,6 +1774,7 @@ def main():
     print("Copying source files")
     copy_channel_files()
     copy_monthly_posist()
+    load_tabwise_channels()
     copy_procurement_backfill()
     copy_wastage()
     menu_folder = copy_oct_menu()

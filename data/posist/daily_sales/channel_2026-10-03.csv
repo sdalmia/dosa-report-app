@@ -1,91 +1,103 @@
 store,store_code,date,source,sales,orders
-Dosa Coffee - Forum (0003),0003,2026-10-03,POS,34173.47,69
-Dosa Coffee - Manisquare (0004),0004,2026-10-03,Swiggy,1076.25,5
-Dosa Coffee - Manisquare (0004),0004,2026-10-03,Zomato,7564.91,21
-Dosa Coffee - Manisquare (0004),0004,2026-10-03,POS,79406.6,3
-Dosa Coffee - Lake Town (0005),0005,2026-10-03,POS,32443.21,61
-Dosa Coffee - Lake Town (0005),0005,2026-10-03,Zomato,21403.52,50
-Dosa Coffee - Lake Town (0005),0005,2026-10-03,Swiggy,15216.67,40
-Dosa Coffee - Calcutta Swiming Club (0007),0007,2026-10-03,POS,2604.05,5
-Dosa Coffee - Food Truck - 1 (0008),0008,2026-10-03,,,
-Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,POS,83104.26,128
-Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,Swiggy-Bolt Urgent,1294.68,3
-Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,Zomato,17699.96,52
-Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,Swiggy,10011.87,27
-Dosa Coffee - Salt Lake (002),002,2026-10-03,POS,118982.95,191
-Dosa Coffee - Salt Lake (002),002,2026-10-03,Zomato,11091.58,30
-Dosa Coffee - Salt Lake (002),002,2026-10-03,Swiggy,11684.45,27
-Dosa Coffee - Ideal Plaza (01/0001),01-0001,2026-10-03,POS,55900.31,92
-Dosa Coffee - Ideal Plaza (01/0001),01-0001,2026-10-03,Zomato,41987.26,127
-Dosa Coffee - Ideal Plaza (01/0001),01-0001,2026-10-03,Swiggy,30285.83,69
-Dosa Coffee - Rosedale Plaza(0006),01-0006,2026-10-03,POS,50098.62,122
-Dosa Coffee - Rosedale Plaza(0006),01-0006,2026-10-03,Zomato,22667.15,63
-Dosa Coffee - Rosedale Plaza(0006),01-0006,2026-10-03,Swiggy,18601.96,52
-Dosa Coffee - Rosedale Plaza(0006),01-0006,2026-10-03,MagicPin-Ordering,94.5,1
-Dosa Coffee - Rangoli Mall (01/0010),01-0010,2026-10-03,POS,73750.26,121
-Dosa Coffee - Rangoli Mall (01/0010),01-0010,2026-10-03,Zomato,13854.47,31
-Dosa Coffee - Rangoli Mall (01/0010),01-0010,2026-10-03,Swiggy,4612.21,11
-Dosa Coffee - James long Sarani (01/0011),01-0011,2026-10-03,POS,53093.75,77
-Dosa Coffee - James long Sarani (01/0011),01-0011,2026-10-03,Zomato,26264.35,69
-Dosa Coffee - James long Sarani (01/0011),01-0011,2026-10-03,Swiggy,15837.7,44
-Dosa Coffee - Santoshpur (01/0012),01-0012,2026-10-03,POS,32798.98,56
-Dosa Coffee - Santoshpur (01/0012),01-0012,2026-10-03,Zomato,20378.46,56
-Dosa Coffee - Santoshpur (01/0012),01-0012,2026-10-03,Swiggy,18210.28,39
-Dosa Coffee - New Town - Cloud Kitchen (01/0013),01-0013,2026-10-03,POS,808.5,2
-Dosa Coffee - New Town - Cloud Kitchen (01/0013),01-0013,2026-10-03,Zomato,21993.69,59
-Dosa Coffee - New Town - Cloud Kitchen (01/0013),01-0013,2026-10-03,Swiggy,20700.38,49
-Dosa Coffee - Kalikapur (01/0014),01-0014,2026-10-03,POS,36780.03,53
-Dosa Coffee - Kalikapur (01/0014),01-0014,2026-10-03,Swiggy,13908.43,33
-Dosa Coffee - Kalikapur (01/0014),01-0014,2026-10-03,Zomato,7272.07,21
-Dosa Coffee - Lake road 01/0015,01-0015,2026-10-03,POS,65844.92,88
-Dosa Coffee - Lake road 01/0015,01-0015,2026-10-03,Zomato,25282.27,68
-Dosa Coffee - Lake road 01/0015,01-0015,2026-10-03,Swiggy,18353.62,45
-Dosa Coffee - Quest Mall (01/0016),01-0016,2026-10-03,POS,55913.82,155
-Dosa Coffee - Sec 18 Noida (02/0001),02-0001,2026-10-03,Swiggy,11111.23,30
-Dosa Coffee - Sec 18 Noida (02/0001),02-0001,2026-10-03,POS,43886.29,56
-Dosa Coffee - Sec 18 Noida (02/0001),02-0001,2026-10-03,Swiggy-Bolt Urgent,1597.5,8
-Dosa Coffee - Sec 18 Noida (02/0001),02-0001,2026-10-03,Zomato,17764.01,30
-Dosa Coffee - Paschim Vihar (02/0003),02-0003,2026-10-03,Swiggy-Bolt Urgent,193.5,1
-Dosa Coffee - Paschim Vihar (02/0003),02-0003,2026-10-03,Swiggy,3508.04,9
-Dosa Coffee - Paschim Vihar (02/0003),02-0003,2026-10-03,Zomato,5751.94,12
-Dosa Coffee - Paschim Vihar (02/0003),02-0003,2026-10-03,POS,34887.28,47
-Kalkaji (02/0004),02-0004,2026-10-03,POS,17691.76,27
-Kalkaji (02/0004),02-0004,2026-10-03,Zomato,18052.79,35
-Kalkaji (02/0004),02-0004,2026-10-03,Swiggy,23357.11,53
-Kalkaji (02/0004),02-0004,2026-10-03,Swiggy-Bolt Urgent,1221.01,5
-Dosa Coffee - Sec 143 Noida (02/0006),02-0006,2026-10-03,Swiggy,8688.74,29
-Dosa Coffee - Sec 143 Noida (02/0006),02-0006,2026-10-03,POS,18221.13,22
-Dosa Coffee - Sec 143 Noida (02/0006),02-0006,2026-10-03,Zomato,8893.58,18
-Dosa Coffee - Sec 15 Faridabad (02/0007),02-0007,2026-10-03,Swiggy,5807.92,19
-Dosa Coffee - Sec 15 Faridabad (02/0007),02-0007,2026-10-03,POS,17272.26,23
-Dosa Coffee - Sec 15 Faridabad (02/0007),02-0007,2026-10-03,Zomato,15575.24,31
-Dosa Coffee - Rohini Sec-7 (02/0008),02-0008,2026-10-03,Zomato,12881.22,28
-Dosa Coffee - Rohini Sec-7 (02/0008),02-0008,2026-10-03,Swiggy,29582.38,71
-Dosa Coffee - Rohini Sec-7 (02/0008),02-0008,2026-10-03,POS,43876.58,61
-Dosa Coffee - Rohini Sec-7 (02/0008),02-0008,2026-10-03,Swiggy-Bolt Urgent,2333.63,11
-Gurgaon DLF (02/0009),02-0009,2026-10-03,POS,3080.91,8
-Gurgaon DLF (02/0009),02-0009,2026-10-03,Zomato,15982.39,35
-Gurgaon DLF (02/0009),02-0009,2026-10-03,Swiggy,10281.94,33
-Gurgaon Sec-15 (02/0010),02-0010,2026-10-03,POS,47124.09,70
-Gurgaon Sec-15 (02/0010),02-0010,2026-10-03,Zomato,6641.28,12
-Gurgaon Sec-15 (02/0010),02-0010,2026-10-03,Swiggy,7175.06,19
-Gurgaon Sec-15 (02/0010),02-0010,2026-10-03,Swiggy-Bolt Urgent,159.42,1
-"Dosa Coffee - Pacific mall, Jasola",02-0011,2026-10-03,Zomato,2939.5,8
-"Dosa Coffee - Pacific mall, Jasola",02-0011,2026-10-03,POS,122314.76,184
-"Dosa Coffee - Pacific mall, Jasola",02-0011,2026-10-03,Swiggy,2382.11,7
-"Dosa Coffee - Pacific mall, Jasola",02-0011,2026-10-03,Swiggy-Toing,367.2,2
-Connaught place (02/0012),02-0012,2026-10-03,POS,162703.22,225
-Connaught place (02/0012),02-0012,2026-10-03,Zomato,3309.1,7
-Connaught place (02/0012),02-0012,2026-10-03,Swiggy,3684.14,14
-Dosa Coffee - Model Town (02/0013),02-0013,2026-10-03,POS,46987.39,63
-Dosa Coffee - Model Town (02/0013),02-0013,2026-10-03,Zomato,8456.41,22
-Dosa Coffee - Model Town (02/0013),02-0013,2026-10-03,Swiggy,7454.68,24
-Gurgaon Sec 10 (02/0014),02-0014,2026-10-03,POS,12413.53,20
-Gurgaon Sec 10 (02/0014),02-0014,2026-10-03,Zomato,6623.96,14
-Gurgaon Sec 10 (02/0014),02-0014,2026-10-03,Swiggy,2249.51,8
-Dosa Coffee - Shalimar Bagh (02/0015),02-0015,2026-10-03,Zomato,5359.25,14
-Dosa Coffee - Shalimar Bagh (02/0015),02-0015,2026-10-03,POS,37175.89,54
-Dosa Coffee - Shalimar Bagh (02/0015),02-0015,2026-10-03,Swiggy,6178.56,17
-Sec 31 - Gurgaon (02/0016),02-0016,2026-10-03,POS,29809.92,47
-Sec 31 - Gurgaon (02/0016),02-0016,2026-10-03,Zomato,8015.74,18
-Sec 31 - Gurgaon (02/0016),02-0016,2026-10-03,Swiggy,2877.75,4
+Dosa Coffee - Calcutta Swiming Club (0007),0007,2026-10-03,DINEIN,2604.05,5
+Dosa Coffee - Connaught place (02/0012),02/0012,2026-10-03,DINEIN,161797.68,222
+Dosa Coffee - Connaught place (02/0012),02/0012,2026-10-03,SWIGGYONLINE,3684.14,14
+Dosa Coffee - Connaught place (02/0012),02/0012,2026-10-03,TAKEOUT,905.54,3
+Dosa Coffee - Connaught place (02/0012),02/0012,2026-10-03,ZOMATOONLINE,3309.10,7
+Dosa Coffee - Forum (0003),0003,2026-10-03,DINEIN,34173.47,69
+Dosa Coffee - Gurgaon DLF (02/0009),02/0009,2026-10-03,DINEIN,3080.91,8
+Dosa Coffee - Gurgaon DLF (02/0009),02/0009,2026-10-03,SWIGGYONLINE,10281.94,33
+Dosa Coffee - Gurgaon DLF (02/0009),02/0009,2026-10-03,ZOMATOONLINE,15982.39,35
+Dosa Coffee - Gurgaon Sec 10,,2026-10-03,DINEIN,12413.53,20
+Dosa Coffee - Gurgaon Sec 10,,2026-10-03,SWIGGYONLINE,2249.51,8
+Dosa Coffee - Gurgaon Sec 10,,2026-10-03,ZOMATOONLINE,6623.96,14
+Dosa Coffee - Gurgaon Sec-15 (02/0010),02/0010,2026-10-03,DINEIN,45887.84,68
+Dosa Coffee - Gurgaon Sec-15 (02/0010),02/0010,2026-10-03,SWIGGYONLINE,7334.48,20
+Dosa Coffee - Gurgaon Sec-15 (02/0010),02/0010,2026-10-03,TAKEOUT,1236.25,2
+Dosa Coffee - Gurgaon Sec-15 (02/0010),02/0010,2026-10-03,ZOMATOONLINE,6641.28,12
+Dosa Coffee - Ideal Plaza (01/0001),01/0001,2026-10-03,DINEIN,53059.80,82
+Dosa Coffee - Ideal Plaza (01/0001),01/0001,2026-10-03,SWIGGYONLINE,30285.83,69
+Dosa Coffee - Ideal Plaza (01/0001),01/0001,2026-10-03,TAKEOUT,2840.51,10
+Dosa Coffee - Ideal Plaza (01/0001),01/0001,2026-10-03,ZOMATOONLINE,41987.26,127
+Dosa Coffee - James long Sarani (01/0011),01/0011,2026-10-03,DINEIN,51156.00,69
+Dosa Coffee - James long Sarani (01/0011),01/0011,2026-10-03,SWIGGYONLINE,15837.70,44
+Dosa Coffee - James long Sarani (01/0011),01/0011,2026-10-03,TAKEOUT,1937.75,8
+Dosa Coffee - James long Sarani (01/0011),01/0011,2026-10-03,ZOMATOONLINE,26264.35,69
+Dosa Coffee - Kalikapur (01/0014),01/0014,2026-10-03,DINEIN,35549.53,50
+Dosa Coffee - Kalikapur (01/0014),01/0014,2026-10-03,SWIGGYONLINE,13908.43,33
+Dosa Coffee - Kalikapur (01/0014),01/0014,2026-10-03,TAKEOUT,1230.50,3
+Dosa Coffee - Kalikapur (01/0014),01/0014,2026-10-03,ZOMATOONLINE,7272.07,21
+Dosa Coffee - Kalkaji (02/0004),02/0004,2026-10-03,DINEIN,17029.59,25
+Dosa Coffee - Kalkaji (02/0004),02/0004,2026-10-03,SWIGGYONLINE,24578.11,58
+Dosa Coffee - Kalkaji (02/0004),02/0004,2026-10-03,TAKEOUT,662.17,2
+Dosa Coffee - Kalkaji (02/0004),02/0004,2026-10-03,ZOMATOONLINE,18052.79,35
+Dosa Coffee - Lake Town (0005),0005,2026-10-03,DINEIN,31750.91,58
+Dosa Coffee - Lake Town (0005),0005,2026-10-03,SWIGGYONLINE,15216.67,40
+Dosa Coffee - Lake Town (0005),0005,2026-10-03,TAKEOUT,692.30,3
+Dosa Coffee - Lake Town (0005),0005,2026-10-03,ZOMATOONLINE,21403.52,50
+Dosa Coffee - Lake road 01/0015,01/0015,2026-10-03,DINEIN,64441.92,84
+Dosa Coffee - Lake road 01/0015,01/0015,2026-10-03,SWIGGYONLINE,18353.62,45
+Dosa Coffee - Lake road 01/0015,01/0015,2026-10-03,TAKEOUT,1403.00,4
+Dosa Coffee - Lake road 01/0015,01/0015,2026-10-03,ZOMATOONLINE,25282.27,68
+Dosa Coffee - Manisquare (0004),0004,2026-10-03,DINEIN,79406.60,3
+Dosa Coffee - Manisquare (0004),0004,2026-10-03,SWIGGYONLINE,1076.25,5
+Dosa Coffee - Manisquare (0004),0004,2026-10-03,ZOMATOONLINE,7564.90,21
+Dosa Coffee - Model Town (02/0013),02/0013,2026-10-03,DINEIN,46303.14,61
+Dosa Coffee - Model Town (02/0013),02/0013,2026-10-03,SWIGGYONLINE,7454.68,24
+Dosa Coffee - Model Town (02/0013),02/0013,2026-10-03,TAKEOUT,684.25,2
+Dosa Coffee - Model Town (02/0013),02/0013,2026-10-03,ZOMATOONLINE,8456.41,22
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),01/0013,2026-10-03,DINEIN,808.50,2
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),01/0013,2026-10-03,SWIGGYONLINE,20700.38,49
+Dosa Coffee - New Town - Cloud Kitchen (01/0013),01/0013,2026-10-03,ZOMATOONLINE,21993.69,59
+"Dosa Coffee - Pacific mall, Jasola",,2026-10-03,DINEIN,120211.41,178
+"Dosa Coffee - Pacific mall, Jasola",,2026-10-03,SWIGGYONLINE,2749.31,9
+"Dosa Coffee - Pacific mall, Jasola",,2026-10-03,TAKEOUT,2103.35,6
+"Dosa Coffee - Pacific mall, Jasola",,2026-10-03,ZOMATOONLINE,2939.50,8
+Dosa Coffee - Paschim Vihar (02/0003),02/0003,2026-10-03,DINEIN,33809.64,46
+Dosa Coffee - Paschim Vihar (02/0003),02/0003,2026-10-03,SWIGGYONLINE,3701.54,10
+Dosa Coffee - Paschim Vihar (02/0003),02/0003,2026-10-03,TAKEOUT,1077.64,1
+Dosa Coffee - Paschim Vihar (02/0003),02/0003,2026-10-03,ZOMATOONLINE,5751.94,12
+Dosa Coffee - Quest Mall (01/0016),01/0016,2026-10-03,DINEIN,55913.82,155
+Dosa Coffee - Rangoli Mall (01/0010),01/0010,2026-10-03,DINEIN,71433.01,115
+Dosa Coffee - Rangoli Mall (01/0010),01/0010,2026-10-03,SWIGGYONLINE,4612.21,11
+Dosa Coffee - Rangoli Mall (01/0010),01/0010,2026-10-03,TAKEOUT,2317.25,6
+Dosa Coffee - Rangoli Mall (01/0010),01/0010,2026-10-03,ZOMATOONLINE,13854.47,31
+Dosa Coffee - Rohini Sec-7 (02/0008),02/0008,2026-10-03,DINEIN,41898.58,58
+Dosa Coffee - Rohini Sec-7 (02/0008),02/0008,2026-10-03,SWIGGYONLINE,31916.00,82
+Dosa Coffee - Rohini Sec-7 (02/0008),02/0008,2026-10-03,TAKEOUT,1978.00,3
+Dosa Coffee - Rohini Sec-7 (02/0008),02/0008,2026-10-03,ZOMATOONLINE,12881.22,28
+Dosa Coffee - Rosedale Plaza(0006),0006,2026-10-03,DINEIN,45866.63,110
+Dosa Coffee - Rosedale Plaza(0006),0006,2026-10-03,ONDC,94.50,1
+Dosa Coffee - Rosedale Plaza(0006),0006,2026-10-03,SWIGGYONLINE,18601.96,52
+Dosa Coffee - Rosedale Plaza(0006),0006,2026-10-03,TAKEOUT,4231.99,12
+Dosa Coffee - Rosedale Plaza(0006),0006,2026-10-03,ZOMATOONLINE,22667.15,63
+Dosa Coffee - Salt Lake (002),002,2026-10-03,DINEIN,115745.70,182
+Dosa Coffee - Salt Lake (002),002,2026-10-03,SWIGGYONLINE,11684.45,27
+Dosa Coffee - Salt Lake (002),002,2026-10-03,TAKEOUT,3237.25,9
+Dosa Coffee - Salt Lake (002),002,2026-10-03,ZOMATOONLINE,11091.58,30
+Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,DINEIN,78055.76,114
+Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,SWIGGYONLINE,11306.55,30
+Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,TAKEOUT,5048.50,14
+Dosa Coffee - Salt Lake Sec-1 (0009),0009,2026-10-03,ZOMATOONLINE,17699.96,52
+Dosa Coffee - Santoshpur (01/0012),01/0012,2026-10-03,DINEIN,32074.48,54
+Dosa Coffee - Santoshpur (01/0012),01/0012,2026-10-03,SWIGGYONLINE,18210.28,39
+Dosa Coffee - Santoshpur (01/0012),01/0012,2026-10-03,TAKEOUT,724.50,2
+Dosa Coffee - Santoshpur (01/0012),01/0012,2026-10-03,ZOMATOONLINE,20378.46,56
+Dosa Coffee - Sec 143 Noida (02/0006),02/0006,2026-10-03,DINEIN,17801.38,20
+Dosa Coffee - Sec 143 Noida (02/0006),02/0006,2026-10-03,SWIGGYONLINE,8688.74,29
+Dosa Coffee - Sec 143 Noida (02/0006),02/0006,2026-10-03,TAKEOUT,419.75,2
+Dosa Coffee - Sec 143 Noida (02/0006),02/0006,2026-10-03,ZOMATOONLINE,8893.58,18
+Dosa Coffee - Sec 15 Faridabad (02/0007),02/0007,2026-10-03,DINEIN,17272.26,23
+Dosa Coffee - Sec 15 Faridabad (02/0007),02/0007,2026-10-03,SWIGGYONLINE,5807.91,19
+Dosa Coffee - Sec 15 Faridabad (02/0007),02/0007,2026-10-03,ZOMATOONLINE,15575.24,31
+Dosa Coffee - Sec 18 Noida (02/0001),02/0001,2026-10-03,DINEIN,43886.29,56
+Dosa Coffee - Sec 18 Noida (02/0001),02/0001,2026-10-03,SWIGGYONLINE,12708.73,38
+Dosa Coffee - Sec 18 Noida (02/0001),02/0001,2026-10-03,ZOMATOONLINE,17764.01,30
+Dosa Coffee - Shalimar Bagh (02/0015),02/0015,2026-10-03,DINEIN,34420.21,49
+Dosa Coffee - Shalimar Bagh (02/0015),02/0015,2026-10-03,SWIGGYONLINE,6178.56,17
+Dosa Coffee - Shalimar Bagh (02/0015),02/0015,2026-10-03,TAKEOUT,2755.68,5
+Dosa Coffee - Shalimar Bagh (02/0015),02/0015,2026-10-03,ZOMATOONLINE,5359.25,14
+Sec 31 - Gurgaon (02/0016),02/0016,2026-10-03,DINEIN,28637.92,45
+Sec 31 - Gurgaon (02/0016),02/0016,2026-10-03,SWIGGYONLINE,2877.75,4
+Sec 31 - Gurgaon (02/0016),02/0016,2026-10-03,TAKEOUT,1172.01,2
+Sec 31 - Gurgaon (02/0016),02/0016,2026-10-03,ZOMATOONLINE,8015.74,18
