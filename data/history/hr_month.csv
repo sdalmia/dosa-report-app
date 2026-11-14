@@ -1,0 +1,329 @@
+month,location,joiners,exits,exits_absconded,exits_resigned,exits_company_action,complete,note
+2026-04,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Central Kitchen Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Central Kitchen Kolkata,3,3,0,2,1,yes,Counts only. No names.
+2026-04,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Connaught Place Delhi,3,1,1,0,0,yes,Counts only. No names.
+2026-04,Delhi NCR HO,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Falafel Guys Outlet Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Faridabad,1,0,0,0,0,yes,Counts only. No names.
+2026-04,Forum Mall,0,2,1,1,0,yes,Counts only. No names.
+2026-04,Fresh Aisle CK Kitchen - KOL,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Fresh Aisle CK Kolkata,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Fresh Aisle Cafe Delhi,1,0,0,0,0,yes,Counts only. No names.
+2026-04,Fresh Aisle Delhi CK,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Fresh Aisle Mart Elgin Road,2,0,0,0,0,yes,Counts only. No names.
+2026-04,Gurgaon - DLF,1,0,0,0,0,yes,Counts only. No names.
+2026-04,Gurgaon - Sec 15,2,1,1,0,0,yes,Counts only. No names.
+2026-04,Gurgaon Sec 10,2,3,3,0,0,yes,Counts only. No names.
+2026-04,Gurgaon Sec 31,5,0,0,0,0,yes,Counts only. No names.
+2026-04,Head Office_IP,1,0,0,0,0,yes,Counts only. No names.
+2026-04,Head Office_Kasba,1,1,0,1,0,yes,Counts only. No names.
+2026-04,Ideal Plaza,4,1,1,0,0,yes,Counts only. No names.
+2026-04,James Long Sarani,1,1,1,0,0,yes,Counts only. No names.
+2026-04,Jasola Pacific Mall,1,1,0,1,0,yes,Counts only. No names.
+2026-04,Kalikapur,1,2,1,1,0,yes,Counts only. No names.
+2026-04,Kalkaji,0,1,1,0,0,yes,Counts only. No names.
+2026-04,Lake Road,0,1,1,0,0,yes,Counts only. No names.
+2026-04,Lake Town,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Mani Square Mall,3,2,2,0,0,yes,Counts only. No names.
+2026-04,Model Town,6,3,1,2,0,yes,Counts only. No names.
+2026-04,Noida Sec 143,0,1,1,0,0,yes,Counts only. No names.
+2026-04,Noida Sec 18,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Paschim Vihar,1,2,1,1,0,yes,Counts only. No names.
+2026-04,Quest Mall,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Rangoli Mall,0,1,1,0,0,yes,Counts only. No names.
+2026-04,Rohini Sector 7,1,0,0,0,0,yes,Counts only. No names.
+2026-04,Rosedale Plaza,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Salt Lake Sec 1,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Salt Lake Sec 3,0,1,0,1,0,yes,Counts only. No names.
+2026-04,Santoshpur,0,0,0,0,0,yes,Counts only. No names.
+2026-04,Shalimar Bagh,3,0,0,0,0,yes,Counts only. No names.
+2026-04,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Calcutta Swimming Club,0,1,1,0,0,yes,Counts only. No names.
+2026-05,Central Kitchen Delhi,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Central Kitchen Kolkata,2,0,0,0,0,yes,Counts only. No names.
+2026-05,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Connaught Place Delhi,3,1,1,0,0,yes,Counts only. No names.
+2026-05,Delhi NCR HO,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Falafel Guys Outlet Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Faridabad,3,2,2,0,0,yes,Counts only. No names.
+2026-05,Forum Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Fresh Aisle CK Kitchen - KOL,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Fresh Aisle CK Kolkata,1,2,0,2,0,yes,Counts only. No names.
+2026-05,Fresh Aisle Cafe Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Fresh Aisle Delhi CK,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Fresh Aisle Mart Elgin Road,2,1,1,0,0,yes,Counts only. No names.
+2026-05,Gurgaon - DLF,0,2,1,1,0,yes,Counts only. No names.
+2026-05,Gurgaon - Sec 15,1,1,1,0,0,yes,Counts only. No names.
+2026-05,Gurgaon Sec 10,2,1,1,0,0,yes,Counts only. No names.
+2026-05,Gurgaon Sec 31,3,1,0,1,0,yes,Counts only. No names.
+2026-05,Head Office_IP,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Head Office_Kasba,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Ideal Plaza,0,1,0,1,0,yes,Counts only. No names.
+2026-05,James Long Sarani,2,0,0,0,0,yes,Counts only. No names.
+2026-05,Jasola Pacific Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Kalikapur,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Kalkaji,1,1,0,1,0,yes,Counts only. No names.
+2026-05,Lake Road,2,0,0,0,0,yes,Counts only. No names.
+2026-05,Lake Town,1,1,0,1,0,yes,Counts only. No names.
+2026-05,Mani Square Mall,0,1,1,0,0,yes,Counts only. No names.
+2026-05,Model Town,1,1,1,0,0,yes,Counts only. No names.
+2026-05,Noida Sec 143,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Noida Sec 18,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Paschim Vihar,1,1,1,0,0,yes,Counts only. No names.
+2026-05,Quest Mall,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Rangoli Mall,2,1,1,0,0,yes,Counts only. No names.
+2026-05,Rohini Sector 7,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Rosedale Plaza,1,0,0,0,0,yes,Counts only. No names.
+2026-05,Salt Lake Sec 1,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Salt Lake Sec 3,2,2,2,0,0,yes,Counts only. No names.
+2026-05,Santoshpur,0,0,0,0,0,yes,Counts only. No names.
+2026-05,Shalimar Bagh,1,1,1,0,0,yes,Counts only. No names.
+2026-05,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Central Kitchen Delhi,0,1,1,0,0,yes,Counts only. No names.
+2026-06,Central Kitchen Kolkata,1,1,1,0,0,yes,Counts only. No names.
+2026-06,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Connaught Place Delhi,2,1,1,0,0,yes,Counts only. No names.
+2026-06,Delhi NCR HO,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Falafel Guys Outlet Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Faridabad,1,1,0,1,0,yes,Counts only. No names.
+2026-06,Forum Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Fresh Aisle CK Kitchen - KOL,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Fresh Aisle CK Kolkata,3,0,0,0,0,yes,Counts only. No names.
+2026-06,Fresh Aisle Cafe Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Fresh Aisle Delhi CK,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Fresh Aisle Mart Elgin Road,1,1,0,1,0,yes,Counts only. No names.
+2026-06,Gurgaon - DLF,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Gurgaon - Sec 15,3,2,2,0,0,yes,Counts only. No names.
+2026-06,Gurgaon Sec 10,0,1,0,1,0,yes,Counts only. No names.
+2026-06,Gurgaon Sec 31,1,2,2,0,0,yes,Counts only. No names.
+2026-06,Head Office_IP,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Head Office_Kasba,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Ideal Plaza,3,2,2,0,0,yes,Counts only. No names.
+2026-06,James Long Sarani,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Jasola Pacific Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Kalikapur,0,1,0,0,1,yes,Counts only. No names.
+2026-06,Kalkaji,2,0,0,0,0,yes,Counts only. No names.
+2026-06,Lake Road,2,1,1,0,0,yes,Counts only. No names.
+2026-06,Lake Town,1,1,0,1,0,yes,Counts only. No names.
+2026-06,Mani Square Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Model Town,0,1,0,1,0,yes,Counts only. No names.
+2026-06,Noida Sec 143,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Noida Sec 18,0,2,2,0,0,yes,Counts only. No names.
+2026-06,Paschim Vihar,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Quest Mall,0,0,0,0,0,yes,Counts only. No names.
+2026-06,Rangoli Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Rohini Sector 7,0,1,0,1,0,yes,Counts only. No names.
+2026-06,Rosedale Plaza,0,2,1,0,1,yes,Counts only. No names.
+2026-06,Salt Lake Sec 1,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Salt Lake Sec 3,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Santoshpur,1,0,0,0,0,yes,Counts only. No names.
+2026-06,Shalimar Bagh,1,3,3,0,0,yes,Counts only. No names.
+2026-06,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Central Kitchen Delhi,0,1,1,0,0,yes,Counts only. No names.
+2026-07,Central Kitchen Kolkata,0,1,1,0,0,yes,Counts only. No names.
+2026-07,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Connaught Place Delhi,2,2,2,0,0,yes,Counts only. No names.
+2026-07,Delhi NCR HO,1,0,0,0,0,yes,Counts only. No names.
+2026-07,Falafel Guys Outlet Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Faridabad,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Forum Mall,1,1,0,1,0,yes,Counts only. No names.
+2026-07,Fresh Aisle CK Kitchen - KOL,1,0,0,0,0,yes,Counts only. No names.
+2026-07,Fresh Aisle CK Kolkata,2,2,1,1,0,yes,Counts only. No names.
+2026-07,Fresh Aisle Cafe Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Fresh Aisle Delhi CK,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Fresh Aisle Mart Elgin Road,2,2,2,0,0,yes,Counts only. No names.
+2026-07,Gurgaon - DLF,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Gurgaon - Sec 15,2,1,0,1,0,yes,Counts only. No names.
+2026-07,Gurgaon Sec 10,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Gurgaon Sec 31,4,2,2,0,0,yes,Counts only. No names.
+2026-07,Head Office_IP,1,1,0,1,0,yes,Counts only. No names.
+2026-07,Head Office_Kasba,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Ideal Plaza,1,1,0,1,0,yes,Counts only. No names.
+2026-07,James Long Sarani,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Jasola Pacific Mall,0,2,2,0,0,yes,Counts only. No names.
+2026-07,Kalikapur,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Kalkaji,1,1,0,0,1,yes,Counts only. No names.
+2026-07,Lake Road,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Lake Town,1,0,0,0,0,yes,Counts only. No names.
+2026-07,Mani Square Mall,0,1,1,0,0,yes,Counts only. No names.
+2026-07,Model Town,1,2,1,1,0,yes,Counts only. No names.
+2026-07,Noida Sec 143,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Noida Sec 18,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Paschim Vihar,2,1,1,0,0,yes,Counts only. No names.
+2026-07,Quest Mall,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Rangoli Mall,1,2,2,0,0,yes,Counts only. No names.
+2026-07,Rohini Sector 7,0,2,1,1,0,yes,Counts only. No names.
+2026-07,Rosedale Plaza,0,1,1,0,0,yes,Counts only. No names.
+2026-07,Salt Lake Sec 1,0,0,0,0,0,yes,Counts only. No names.
+2026-07,Salt Lake Sec 3,0,1,0,1,0,yes,Counts only. No names.
+2026-07,Santoshpur,2,1,0,1,0,yes,Counts only. No names.
+2026-07,Shalimar Bagh,3,2,1,0,1,yes,Counts only. No names.
+2026-07,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Central Kitchen Delhi,3,2,2,0,0,yes,Counts only. No names.
+2026-08,Central Kitchen Kolkata,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Connaught Place Delhi,2,4,4,0,0,yes,Counts only. No names.
+2026-08,Delhi NCR HO,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Falafel Guys Outlet Delhi,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Faridabad,1,4,2,2,0,yes,Counts only. No names.
+2026-08,Forum Mall,1,1,1,0,0,yes,Counts only. No names.
+2026-08,Fresh Aisle CK Kitchen - KOL,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Fresh Aisle CK Kolkata,2,0,0,0,0,yes,Counts only. No names.
+2026-08,Fresh Aisle Cafe Delhi,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Fresh Aisle Delhi CK,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Fresh Aisle Mart Elgin Road,3,0,0,0,0,yes,Counts only. No names.
+2026-08,Gurgaon - DLF,0,2,2,0,0,yes,Counts only. No names.
+2026-08,Gurgaon - Sec 15,1,2,2,0,0,yes,Counts only. No names.
+2026-08,Gurgaon Sec 10,3,2,2,0,0,yes,Counts only. No names.
+2026-08,Gurgaon Sec 31,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Head Office_IP,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Head Office_Kasba,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Ideal Plaza,1,1,0,0,1,yes,Counts only. No names.
+2026-08,James Long Sarani,1,2,2,0,0,yes,Counts only. No names.
+2026-08,Jasola Pacific Mall,2,3,1,2,0,yes,Counts only. No names.
+2026-08,Kalikapur,0,1,0,1,0,yes,Counts only. No names.
+2026-08,Kalkaji,0,1,0,1,0,yes,Counts only. No names.
+2026-08,Lake Road,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Lake Town,0,2,2,0,0,yes,Counts only. No names.
+2026-08,Mani Square Mall,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Model Town,2,1,1,0,0,yes,Counts only. No names.
+2026-08,Noida Sec 143,0,0,0,0,0,yes,Counts only. No names.
+2026-08,Noida Sec 18,2,2,0,2,0,yes,Counts only. No names.
+2026-08,Paschim Vihar,1,1,0,0,1,yes,Counts only. No names.
+2026-08,Quest Mall,1,1,1,0,0,yes,Counts only. No names.
+2026-08,Rangoli Mall,3,2,2,0,0,yes,Counts only. No names.
+2026-08,Rohini Sector 7,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Rosedale Plaza,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Salt Lake Sec 1,1,2,1,0,1,yes,Counts only. No names.
+2026-08,Salt Lake Sec 3,1,2,1,0,1,yes,Counts only. No names.
+2026-08,Santoshpur,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Shalimar Bagh,1,0,0,0,0,yes,Counts only. No names.
+2026-08,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Central Kitchen Delhi,1,1,1,0,0,yes,Counts only. No names.
+2026-09,Central Kitchen Kolkata,1,2,1,1,0,yes,Counts only. No names.
+2026-09,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Connaught Place Delhi,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Delhi NCR HO,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Falafel Guys Outlet Delhi,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Faridabad,0,3,2,0,1,yes,Counts only. No names.
+2026-09,Forum Mall,1,1,0,1,0,yes,Counts only. No names.
+2026-09,Fresh Aisle CK Kitchen - KOL,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Fresh Aisle CK Kolkata,2,1,0,1,0,yes,Counts only. No names.
+2026-09,Fresh Aisle Cafe Delhi,2,0,0,0,0,yes,Counts only. No names.
+2026-09,Fresh Aisle Delhi CK,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Fresh Aisle Mart Elgin Road,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Gurgaon - DLF,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Gurgaon - Sec 15,2,2,2,0,0,yes,Counts only. No names.
+2026-09,Gurgaon Sec 10,0,4,1,1,2,yes,Counts only. No names.
+2026-09,Gurgaon Sec 31,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Head Office_IP,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Head Office_Kasba,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Ideal Plaza,2,2,2,0,0,yes,Counts only. No names.
+2026-09,James Long Sarani,2,0,0,0,0,yes,Counts only. No names.
+2026-09,Jasola Pacific Mall,2,2,0,2,0,yes,Counts only. No names.
+2026-09,Kalikapur,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Kalkaji,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Lake Road,0,1,0,1,0,yes,Counts only. No names.
+2026-09,Lake Town,1,0,0,0,0,yes,Counts only. No names.
+2026-09,Mani Square Mall,1,1,1,0,0,yes,Counts only. No names.
+2026-09,Model Town,1,1,1,0,0,yes,Counts only. No names.
+2026-09,Noida Sec 143,3,3,3,0,0,yes,Counts only. No names.
+2026-09,Noida Sec 18,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Paschim Vihar,1,1,0,1,0,yes,Counts only. No names.
+2026-09,Quest Mall,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Rangoli Mall,2,3,2,1,0,yes,Counts only. No names.
+2026-09,Rohini Sector 7,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Rosedale Plaza,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Salt Lake Sec 1,2,1,1,0,0,yes,Counts only. No names.
+2026-09,Salt Lake Sec 3,0,0,0,0,0,yes,Counts only. No names.
+2026-09,Santoshpur,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Shalimar Bagh,0,1,1,0,0,yes,Counts only. No names.
+2026-09,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Calcutta Swimming Club,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Central Kitchen Delhi,2,1,1,0,0,yes,Counts only. No names.
+2026-10,Central Kitchen Kolkata,2,5,5,0,0,yes,Counts only. No names.
+2026-10,Cloud Kitchen New Town,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Connaught Place Delhi,0,3,3,0,0,yes,Counts only. No names.
+2026-10,Delhi NCR HO,0,2,0,1,1,yes,Counts only. No names.
+2026-10,Falafel Guys Outlet Delhi,16,0,0,0,0,yes,Counts only. No names.
+2026-10,Faridabad,0,5,0,5,0,yes,Counts only. No names.
+2026-10,Forum Mall,0,1,1,0,0,yes,Counts only. No names.
+2026-10,Fresh Aisle CK Kitchen - KOL,1,0,0,0,0,yes,Counts only. No names.
+2026-10,Fresh Aisle CK Kolkata,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Fresh Aisle Cafe Delhi,21,1,0,0,1,yes,Counts only. No names.
+2026-10,Fresh Aisle Delhi CK,5,1,0,0,1,yes,Counts only. No names.
+2026-10,Fresh Aisle Mart Elgin Road,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Gurgaon - DLF,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Gurgaon - Sec 15,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Gurgaon Sec 10,1,1,1,0,0,yes,Counts only. No names.
+2026-10,Gurgaon Sec 31,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Head Office_IP,1,1,0,1,0,yes,Counts only. No names.
+2026-10,Head Office_Kasba,0,1,0,1,0,yes,Counts only. No names.
+2026-10,Ideal Plaza,1,0,0,0,0,yes,Counts only. No names.
+2026-10,James Long Sarani,1,1,1,0,0,yes,Counts only. No names.
+2026-10,Jasola Pacific Mall,4,2,1,1,0,yes,Counts only. No names.
+2026-10,Kalikapur,0,1,1,0,0,yes,Counts only. No names.
+2026-10,Kalkaji,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Lake Road,1,0,0,0,0,yes,Counts only. No names.
+2026-10,Lake Town,1,0,0,0,0,yes,Counts only. No names.
+2026-10,Mani Square Mall,1,0,0,0,0,yes,Counts only. No names.
+2026-10,Model Town,1,0,0,0,0,yes,Counts only. No names.
+2026-10,Noida Sec 143,1,1,1,0,0,yes,Counts only. No names.
+2026-10,Noida Sec 18,1,1,1,0,0,yes,Counts only. No names.
+2026-10,Paschim Vihar,0,1,1,0,0,yes,Counts only. No names.
+2026-10,Quest Mall,0,1,0,0,1,yes,Counts only. No names.
+2026-10,Rangoli Mall,1,1,0,1,0,yes,Counts only. No names.
+2026-10,Rohini Sector 7,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Rosedale Plaza,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Salt Lake Sec 1,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Salt Lake Sec 3,2,0,0,0,0,yes,Counts only. No names.
+2026-10,Santoshpur,0,0,0,0,0,yes,Counts only. No names.
+2026-10,Shalimar Bagh,2,0,0,0,0,yes,Counts only. No names.
+2026-10,Technopolis,0,0,0,0,0,yes,Counts only. No names.
+2026-11,Calcutta Swimming Club,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Central Kitchen Delhi,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Central Kitchen Kolkata,2,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Cloud Kitchen New Town,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Connaught Place Delhi,0,1,0,1,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Delhi NCR HO,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Falafel Guys Outlet Delhi,3,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Faridabad,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Forum Mall,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Fresh Aisle CK Kitchen - KOL,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Fresh Aisle CK Kolkata,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Fresh Aisle Cafe Delhi,2,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Fresh Aisle Delhi CK,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Fresh Aisle Mart Elgin Road,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Gurgaon - DLF,0,1,0,1,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Gurgaon - Sec 15,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Gurgaon Sec 10,0,2,2,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Gurgaon Sec 31,2,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Head Office_IP,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Head Office_Kasba,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Ideal Plaza,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,James Long Sarani,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Jasola Pacific Mall,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Kalikapur,2,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Kalkaji,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Lake Road,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Lake Town,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Mani Square Mall,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Model Town,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Noida Sec 143,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Noida Sec 18,0,3,3,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Paschim Vihar,0,1,1,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Quest Mall,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Rangoli Mall,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Rohini Sector 7,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Rosedale Plaza,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Salt Lake Sec 1,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Salt Lake Sec 3,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Santoshpur,1,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Shalimar Bagh,0,1,0,1,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.
+2026-11,Technopolis,0,0,0,0,0,no,November covers 1–12 Nov only. Counts of 0 are real counts. No names.

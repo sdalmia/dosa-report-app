@@ -1,0 +1,320 @@
+{
+  "window_start": "2026-04-01",
+  "window_end": "2026-11-13",
+  "as_of": "2026-11-13",
+  "domains": [
+    {
+      "id": "sales",
+      "label": "Sales by city and store",
+      "owner": "Alfred",
+      "owner_how": "who pulls Posist Insights daily sales",
+      "from": "2026-04-01",
+      "to": "2026-11-12",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [],
+      "notes": "April\u2013August 2026 are full calendar months from Alfred's Posist Insights monthly extracts (sales_YYYY-MM.csv): net is blank, left blank not zero; Faridabad is included; Events & Catering is its own row, outside store comparisons. September is a full calendar month: 1\u20133 Sep from Alfred's Insights extract (sales_2026-09.csv) joined to the 4\u201330 Sep daily file, with no overlap. October is a full calendar month. November is through 12 Nov. Chattarpur and GK1 Cloud Kitchen are out of the sales base; Faridabad is out from 23 Oct. Manisquare and Forum sales are counted; bills and APB stay out of comparisons.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "channel",
+      "label": "Sales by channel (Swiggy, Zomato, and others)",
+      "owner": "Alfred",
+      "owner_how": "who pulls Posist Insights channel sales",
+      "from": "2026-04-01",
+      "to": "2026-11-12",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [],
+      "notes": "April\u2013August 2026 are full calendar months from Alfred's Posist channel extracts (channel_YYYY-MM.csv; source names as in the file; Faridabad included). Paisa-level gaps versus store gross are left as in the files. September has store channel sales for 1\u20133 Sep only (channel_2026-09.csv); 4\u201330 Sep has no store channel file. 1 Oct\u201312 Nov 2026 are store-level daily channel files from Alfred's tabwise workbooks (every day present; a tab or store not listed on a day is left out, not zero; Faridabad out from 23 Oct). 32 store-days differ from store gross by more than \u20b91 and are listed in channel_tabwise_reconciliation.csv. A 9 Sep\u20138 Oct 30-day range file is in data/posist; it is not a calendar month.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "procurement",
+      "label": "Procurement purchases and ingredient prices",
+      "owner": "Procurement",
+      "owner_how": "who pulls the PurchaseEasy reports",
+      "from": "2026-04-01",
+      "to": "2026-11-12",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [],
+      "notes": "Purchases and item prices run from 1 Apr 2026. April\u2013August are calendar-month Entry Reports and Purchase Summaries (days with no GRN are days with no invoice, left out not treated as zero). September purchases combine the 1\u20138 Sep backfill with GRN lines for 9\u201330 Sep; Delhi has no 1 Sep or 6 Sep entry in the 1\u20138 pack. October purchases are GRN 1\u20138 Oct only. Item prices: Apr\u2013Aug from the official Purchase Summary; Sep is a qty-weighted average of 1\u20138 Sep entries plus 9\u201330 Sep GRN; October is complete and November is 1\u201312, from procurement_summary.json. Freight and other invoice charges are kept separate from item totals. The Purchase Summary .xls files are HTML.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "menu_mix",
+      "label": "Menu mix by month",
+      "owner": "Jarvis",
+      "owner_how": "who pulls the Posist menu-mix extracts",
+      "from": "2026-09-01",
+      "to": "2026-10-31",
+      "months_loaded": [
+        "2026-09",
+        "2026-10"
+      ],
+      "months_missing": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-11"
+      ],
+      "notes": "Calendar September and October are loaded. A 14 Oct\u201312 Nov Friday file is also in data/menu; it is a 30-day window, not a calendar month. November calendar month is not complete. April\u2013August are not loaded.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "reelo",
+      "label": "Reelo monthly customers, orders and spend",
+      "owner": "Logan",
+      "owner_how": "who pulls the Reelo dashboard exports",
+      "from": "2026-04",
+      "to": "2026-11",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [],
+      "notes": "Monthly customers, orders and average spend for April\u2013October 2026. November is 1\u201312 only. Campaign metrics are mostly blank.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "aggregator",
+      "label": "Swiggy and Zomato aggregator performance",
+      "owner": "Sanjoy",
+      "owner_how": "who maintains the brand aggregator workbook",
+      "from": "2026-08-01",
+      "to": "2026-10-31",
+      "months_loaded": [
+        "2026-08",
+        "2026-09",
+        "2026-10"
+      ],
+      "months_missing": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-11"
+      ],
+      "notes": "August\u2013October 2026 from Sanjoy's 13 Nov workbook, 26 outlets. Faridabad Sector 15 (DC-09) is left out. Outlet names are mapped only where the store master or the same DC key is clear; unmapped names stay as in the workbook. Zomato actuals are complete. Swiggy impressions, ads and refunds are blank (still pending).",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "finance",
+      "label": "Grand Economics (P&L)",
+      "owner": "Shilajit",
+      "owner_how": "who sends the Grand Economics workbook",
+      "from": "2026-04-01",
+      "to": "2026-09-30",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09"
+      ],
+      "months_missing": [
+        "2026-10",
+        "2026-11"
+      ],
+      "notes": "April\u2013September 2026, both cities, city-level lines from grand_economics_tidy.csv. October and November 2026 are not in the file. Owner and finance only.",
+      "roles": [
+        "owner",
+        "finance"
+      ]
+    },
+    {
+      "id": "tally",
+      "label": "Tally day book",
+      "owner": "the Accountant",
+      "owner_how": "who sends the daily Tally Day Book packs (via Shilajit)",
+      "from": "2026-09-30",
+      "to": "2026-11-11",
+      "months_loaded": [
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08"
+      ],
+      "notes": "Vouchers from 30 Sep through 11 Nov 2026, with gaps. 16\u201327 Oct and 6, 8, 9, 11 Nov were parsed from raw packs on the box for this PR. 7 and 10 Nov are not in the pack. April\u201329 Sep are not loaded. Missing days are left out, not filled with zero. Owner and finance only.",
+      "roles": [
+        "owner",
+        "finance"
+      ]
+    },
+    {
+      "id": "hr",
+      "label": "HR monthly joiners and exits (counts only)",
+      "owner": "the HR Bot",
+      "owner_how": "who pulls the Keka aggregates",
+      "from": "2026-04-01",
+      "to": "2026-11-12",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+        "2026-11"
+      ],
+      "months_missing": [],
+      "notes": "April\u2013November 2026 location-level joiner and exit counts. November is 1\u201312 only. No employee names. Owner only.",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "id": "wastage",
+      "label": "Procurement wastage by store and item",
+      "owner": "Procurement",
+      "owner_how": "who pulls the PurchaseEasy wastage reports",
+      "from": "2026-04-01",
+      "to": "2026-09-08",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09"
+      ],
+      "months_missing": [
+        "2026-10",
+        "2026-11"
+      ],
+      "notes": "1 Apr\u20138 Sep 2026, item-level by deployment, east (Kolkata) and north (NCR). April\u2013August are calendar months. September is 1\u20138 Sep only. Stock, billing and total wastage are from the wastage extract. Consumption quantities on those rows are kept for wastage %. Official consumption for the same window is in the consumption domain. Base Kitchen (Kolkata) and Warehouse (Delhi) are kept under those names.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "consumption",
+      "label": "Store consumption and food cost",
+      "owner": "Procurement",
+      "owner_how": "who pulls the PurchaseEasy consumption reports",
+      "from": "2026-04-01",
+      "to": "2026-09-08",
+      "months_loaded": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-09"
+      ],
+      "months_missing": [
+        "2026-10",
+        "2026-11"
+      ],
+      "notes": "1 Apr\u20138 Sep 2026, monthly aggregates by store and item from PurchaseEasy Consumption Reports (HTML .xls). April\u2013August are calendar months. September is 1\u20138 Sep only. Raw files are not in the repo. Food cost is (raw + semi-processed consumption) / Posist gross; raw is Food and Beverage; packaging is shown separately. Chattarpur and GK1 Cloud Kitchen are excluded (closed; files were same-size stubs). North FRA (02/0017) has no file for any period. Sec 31 Gurgaon has no April. Events & Catering has no consumption file. Missing store-months answer 'not available' with no figure.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    },
+    {
+      "id": "famepilot",
+      "label": "Famepilot ticket counts",
+      "owner": "Albus",
+      "owner_how": "who pulls the Famepilot ticket export",
+      "from": "2026-09-01",
+      "to": "2026-10-09",
+      "months_loaded": [
+        "2026-09",
+        "2026-10"
+      ],
+      "months_missing": [
+        "2026-04",
+        "2026-05",
+        "2026-06",
+        "2026-07",
+        "2026-08",
+        "2026-11"
+      ],
+      "notes": "Ticket counts by store and platform, 1 Sep\u20139 Oct 2026. Customer names are not stored. April\u2013August and 10 Oct onward are not loaded.",
+      "roles": [
+        "owner",
+        "ops",
+        "finance",
+        "hr"
+      ]
+    }
+  ],
+  "rule": "When a month is not loaded, say the data is not loaded yet and name who it would come from. Never estimate."
+}

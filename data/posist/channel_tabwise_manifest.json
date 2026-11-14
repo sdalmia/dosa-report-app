@@ -1,0 +1,398 @@
+{
+  "source_folder": "/workspace/posist_insights/2026-11-13",
+  "source": "Posist Insights, Deployment-wise sales by tab, Day mode (secondpass_daily_tabs_*.xlsx)",
+  "workbooks": 110,
+  "days": [
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03",
+    "2026-10-04",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-10",
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-17",
+    "2026-10-18",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-24",
+    "2026-10-25",
+    "2026-10-26",
+    "2026-10-27",
+    "2026-10-28",
+    "2026-10-29",
+    "2026-10-30",
+    "2026-10-31",
+    "2026-11-01",
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-11-06",
+    "2026-11-07",
+    "2026-11-08",
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11",
+    "2026-11-12"
+  ],
+  "tabs_by_day": {
+    "2026-10-01": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-02": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-03": [
+      "DINEIN",
+      "ONDC",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-04": [
+      "DINEIN",
+      "ONDC",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-05": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-06": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-07": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-08": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-09": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-10": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-11": [
+      "DINEIN",
+      "ONDC",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-12": [
+      "DINEIN",
+      "ONDC",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-13": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-14": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-15": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-16": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-17": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-18": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-19": [
+      "DINEIN",
+      "ONDC",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-20": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-21": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-22": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-23": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-24": [
+      "DINEIN",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-25": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-26": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-27": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-28": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-29": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-30": [
+      "DINEIN",
+      "ONDC",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-10-31": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-01": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-02": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-03": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-04": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-05": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-06": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-07": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-08": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-09": [
+      "DINEIN",
+      "ONDC",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-10": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-11": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ],
+    "2026-11-12": [
+      "DINEIN",
+      "OWNLYONLINE",
+      "SWIGGYONLINE",
+      "TAKEOUT",
+      "ZOMATOONLINE"
+    ]
+  },
+  "stores_by_day": {
+    "2026-10-01": 30,
+    "2026-10-02": 29,
+    "2026-10-03": 29,
+    "2026-10-04": 29,
+    "2026-10-05": 30,
+    "2026-10-06": 30,
+    "2026-10-07": 30,
+    "2026-10-08": 30,
+    "2026-10-09": 29,
+    "2026-10-10": 28,
+    "2026-10-11": 30,
+    "2026-10-12": 30,
+    "2026-10-13": 31,
+    "2026-10-14": 30,
+    "2026-10-15": 30,
+    "2026-10-16": 30,
+    "2026-10-17": 30,
+    "2026-10-18": 30,
+    "2026-10-19": 30,
+    "2026-10-20": 30,
+    "2026-10-21": 30,
+    "2026-10-22": 30,
+    "2026-10-23": 29,
+    "2026-10-24": 28,
+    "2026-10-25": 28,
+    "2026-10-26": 29,
+    "2026-10-27": 29,
+    "2026-10-28": 29,
+    "2026-10-29": 29,
+    "2026-10-30": 30,
+    "2026-10-31": 28,
+    "2026-11-01": 28,
+    "2026-11-02": 29,
+    "2026-11-03": 29,
+    "2026-11-04": 29,
+    "2026-11-05": 29,
+    "2026-11-06": 29,
+    "2026-11-07": 28,
+    "2026-11-08": 29,
+    "2026-11-09": 29,
+    "2026-11-10": 28,
+    "2026-11-11": 27,
+    "2026-11-12": 28
+  },
+  "duplicate_days": [
+    "2026-11-11"
+  ],
+  "duplicate_keys_checked": 101,
+  "duplicate_keys_disagreeing": 0,
+  "zero_cells_not_written": 185,
+  "left_out": [],
+  "rules": "Absent tab or store = not in the file, not zero. Chattarpur and GK1 out; Faridabad out from 23 Oct 2026; Events & Catering kept as its own row."
+}

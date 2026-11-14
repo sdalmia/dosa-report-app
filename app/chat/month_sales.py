@@ -110,11 +110,22 @@ def _region(store, region):
     if text:
         return text
     name = (store or "").casefold()
+    raw = store or ""
     if "event" in name or "cater" in name:
         return "Events"
-    if re.search(r"\(02/", store or "") or "noida" in name or "gurgaon" in name or "faridabad" in name:
+    if (
+        re.search(r"\(02/", raw) or re.search(r"(?<!\d)02/", raw)
+        or any(token in name for token in (
+            "noida", "gurgaon", "faridabad", "connaught", "kalkaji",
+            "rohini", "paschim", "shalimar", "model town", "jasola", "pacific",
+        ))
+    ):
         return "North"
-    if re.search(r"\(01/", store or "") or re.search(r"\(\d{3,4}\)", store or ""):
+    if (
+        re.search(r"\(01/", raw) or re.search(r"(?<!\d)01/", raw)
+        or re.search(r"\(\d{3,4}\)", raw)
+        or "lake road" in name
+    ):
         return "East"
     return ""
 
@@ -273,7 +284,9 @@ def _aggregate(year, month):
     cities = {}
     for bucket in stores.values():
         region = bucket.get("region") or ""
-        if region not in {"East", "North"}:
+        # Events is its own city, counted in the network total, kept out of
+        # Kolkata and NCR store comparisons.
+        if region not in {"East", "North", "Events"}:
             continue
         city = cities.setdefault(region, {
             "region": region,
@@ -434,8 +447,8 @@ def packet(question=""):
         status = "complete" if complete else "incomplete"
         if month == 11:
             status = "incomplete; this is November, not October. Month-to-date rows later in this packet are November"
-        if month == 9 and start.year == 2026:
-            status = "incomplete; the daily file starts on 4 Sep, so 1–3 Sep are not on file"
+        if month == 9 and start.year == 2026 and complete:
+            status = "complete; 1–3 Sep from Alfred's Posist Insights extract, 4–30 Sep from the daily file"
         lines.append("")
         lines.append(
             f"{_MONTH_LABEL[month]} {year} ({_span_label(start, end)}, {status})."
@@ -516,7 +529,7 @@ def answer(question, data, owner):
     if (year, month) not in available:
         label = f"{_MONTH_LABEL[month]} {year}"
         return _pack(
-            f"{label} sales are not in the loaded daily files. No figure is invented.",
+            f"{label} sales are not in the loaded daily files. That month would come from Alfred, who pulls Posist Insights daily sales. No figure is invented.",
             "",
             "sales",
             question,
@@ -533,7 +546,7 @@ def answer(question, data, owner):
         city = cities.get(city_key)
         if not city:
             return _pack(
-                f"{_city_label(city_key)} {label} sales are not in the loaded daily files. No figure is invented.",
+                f"{_city_label(city_key)} {label} sales are not in the loaded daily files. That month would come from Alfred, who pulls Posist Insights daily sales. No figure is invented.",
                 as_of,
                 "sales",
                 question,
@@ -542,10 +555,13 @@ def answer(question, data, owner):
         return _city_answer(question, owner, city, nets.get(city_key) or {}, start, end, label, span, as_of)
 
     network_gross = sum(city["gross"] for city in cities.values())
+    network_bills = sum(city["bills"] for city in cities.values())
     east = cities.get("East")
     north = cities.get("North")
     bits = [
-        f"**Network {label} sales were {_lakh(network_gross)} gross, for the full calendar month {span}.**",
+        f"**Network {label} sales were {_lakh(network_gross)} gross"
+        + (f", {int(round(network_bills)):,} bills" if network_bills else "")
+        + f", for the full calendar month {span}.**",
         "",
     ]
     bullets = []
@@ -557,10 +573,23 @@ def answer(question, data, owner):
                 "Mall bulk bills and average bill stay out of comparisons; their sales are counted."
             )
         bullets.append(f"Kolkata {_lakh(east['gross'])} gross.{mall}")
+    events = cities.get("Events")
     if north:
+        if end < FARIDABAD_CLOSED_FROM:
+            fb = "Faridabad is included (it is in the sales base until 22 Oct)."
+        elif start < FARIDABAD_CLOSED_FROM:
+            fb = "Faridabad is out of the sales base from 23 Oct; 1–22 Oct is included."
+        else:
+            fb = "Faridabad is out of the sales base from 23 Oct."
+        bullets.append(f"NCR {_lakh(north['gross'])} gross. {fb}")
+    if events and events["gross"]:
+        ev_days = sorted(events["days"])
+        ev_span = _span_label(ev_days[0], ev_days[-1]) if ev_days else ""
         bullets.append(
-            f"NCR {_lakh(north['gross'])} gross. Faridabad is out of the sales base from 23 Oct; "
-            "1–22 Oct is included."
+            f"Events & Catering {_lakh(events['gross'])} is counted in the network total "
+            f"and kept as its own row, outside store comparisons"
+            + (f" ({ev_span} only)" if ev_span else "")
+            + "."
         )
     net = nets.get("Network") or {}
     bullets.append(_net_clause(net, start, end, "Network"))
@@ -638,7 +667,12 @@ def _city_answer(question, owner, city, net, start, end, label, span, as_of):
     else:
         bills_note += " Every store in this city has every day of the month on file."
     if "faridabad" in " ".join(row["raw"] for row in city["stores"]).casefold():
-        bills_note += " Faridabad is out of the sales base from 23 Oct; 1–22 Oct is included."
+        if end < FARIDABAD_CLOSED_FROM:
+            bills_note += " Faridabad is included (it is in the sales base until 22 Oct)."
+        elif start < FARIDABAD_CLOSED_FROM:
+            bills_note += " Faridabad is out of the sales base from 23 Oct; 1–22 Oct is included."
+        else:
+            bills_note += " Faridabad is out of the sales base from 23 Oct."
     bullets.append(bills_note)
     bullets.append(_net_clause(net, start, end, city["label"]))
     bullets.append(

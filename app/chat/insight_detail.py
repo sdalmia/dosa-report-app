@@ -37,6 +37,7 @@ _CHANNEL = {
     "ZOMATO": "Zomato",
     "ZOMATOONLINE": "Zomato",
     "OWNLYONLINE": "Other",
+    "ONDC": "Other",
     "RAPIDO": "Other",
     "MAGICPIN-ORDERING": "Other",
 }
@@ -312,11 +313,12 @@ def _channels(store, recent_start, prior_start):
             change = item["this"] - item["prior"]
         rows.append({
             "name": name,
-            "this": _shown(item["this"]) if present_recent else _MISSING,
-            "prior": _shown(item["prior"]) if present_prior else _MISSING,
+            # A channel with no row on a side is absent there, not zero.
+            "this": _shown(item["this"]) if item["this_days"] else _MISSING,
+            "prior": _shown(item["prior"]) if item["prior_days"] else _MISSING,
             "change": _move(change) if change is not None else _MISSING,
-            "this_value": item["this"] if present_recent else None,
-            "prior_value": item["prior"] if present_prior else None,
+            "this_value": item["this"] if item["this_days"] else None,
+            "prior_value": item["prior"] if item["prior_days"] else None,
         })
     note = _channel_note(missing_recent, missing_prior, present_recent, present_prior)
     public = [{key: value for key, value in row.items() if not key.endswith("_value")} for row in rows]
@@ -329,10 +331,11 @@ def _channel_note(missing_recent, missing_prior, present_recent, present_prior):
         parts.append("Store channel sales are in the file for " + _day_list(sorted(present_recent)) + ".")
     if missing_recent:
         parts.append(_day_list(missing_recent) + " has no store channel file.")
+    if present_prior:
+        parts.append("The week before has them for " + _day_list(sorted(present_prior)) + ".")
     if not present_prior:
         parts.append(
-            "The week before has no store channel file, so the change by channel is not shown. "
-            "1–5 Nov in that week are totals for the whole company, not this store."
+            "The week before has no store channel file, so the change by channel is not shown."
         )
     elif missing_prior:
         parts.append("Channel sales are missing for " + _day_list(missing_prior) + " in the week before. Those days are left out, not treated as zero.")

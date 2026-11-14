@@ -32,9 +32,15 @@ class InsightDetailTests(unittest.TestCase):
         peers = " ".join(detail["city"]["peers"]).casefold()
         for name in ("faridabad", "rosedale", "chattarpur", "gk1"):
             self.assertNotIn(name, peers)
-        self.assertIn("9 Nov", detail["about"])
-        self.assertIn("no store channel file", detail["about"].casefold())
-        self.assertTrue(all(row["prior"] == "not in the file" for row in detail["channels"]["rows"]))
+        # The week before (30 Oct–5 Nov) now has store channel sales from the tabwise files.
+        self.assertTrue(detail["channels"]["comparable"])
+        self.assertNotIn("no store channel file", detail["about"].casefold())
+        self.assertIn("30 Oct", detail["channel_note"])
+        self.assertIn("8, 9, 10", detail["channel_note"])
+        prior = {row["name"]: row["prior"] for row in detail["channels"]["rows"]}
+        self.assertEqual(prior["Dine-in and takeaway"], "₹2.03L")
+        self.assertEqual(prior["Zomato"], "₹1.66L")
+        self.assertEqual(prior["Swiggy"], "₹66,108")
         self.assertTrue(detail["days"][0]["this_bills"].isdigit())
 
     def test_licence_sheet_lists_expired_and_expiring(self):

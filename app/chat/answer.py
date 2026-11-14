@@ -159,10 +159,12 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
         result["fallback"] = "mock"
         _log_ask(None, "mock")
         return result
+    from app.chat.history import use_file_answer as history_file_answer
     from app.chat.month_sales import use_file_answer
 
-    if use_file_answer(question, local):
-        # File-backed calendar-month totals. The model does not get to rewrite them.
+    role = data.get("role") or ("owner" if owner else "ops")
+    if history_file_answer(question, role) or use_file_answer(question, local):
+        # File-backed calendar-month totals and history lookups. The model does not get to rewrite them.
         _log_ask("file", None)
         return result
     if not os.environ.get("CHAT_API_KEY", "").strip() and client is None:
