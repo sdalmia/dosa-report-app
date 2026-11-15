@@ -66,9 +66,10 @@ class GrandEconomicsTests(unittest.TestCase):
             if row["city"] == "Kolkata" and row["store"] == "" and row["line"] == "ads" and row["month"] == "2026-09"
         ]
         self.assertEqual(ads[0]["value"], "1066072.11")
-        self.assertFalse(any(row["city"] == "Kolkata" and row["month"] == "2026-10" for row in rows))
+        self.assertTrue(any(row["city"] == "Kolkata" and row["month"] == "2026-10" for row in rows))
         self.assertTrue(any(row["city"] == "NCR" and row["month"] == "2026-09" and row["fy"] == "FY26-27" for row in rows))
-        self.assertFalse(any(row["city"] == "NCR" and row["month"] == "2026-10" for row in rows))
+        self.assertTrue(any(row["city"] == "NCR" and row["month"] == "2026-10" and row["fy"] == "FY26-27" for row in rows))
+        self.assertFalse(any(row["month"] == "2026-11" for row in rows))
         self.assertEqual(self.parser.canonical_line("HO+CK Cost"), "ho_ck_cost")
         self.assertEqual(self.parser.canonical_line("Advertisement Expenses"), "ads")
 
@@ -78,11 +79,13 @@ class GrandEconomicsTests(unittest.TestCase):
         def value(city, store, line, month="2026-09"):
             return sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
                        and r["store"] == store and r["line"] == line and r["month"] == month)
-        self.assertEqual(round(value("Kolkata", "", "ebitda")), 1501233)
-        self.assertEqual(round(value("NCR", "", "ebitda")), -881941)
-        self.assertEqual(round(value("NCR", "Kitchen & central", "fnb_cost")), 761680)
+        self.assertEqual(round(value("Kolkata", "", "ebitda")), 1434435)
+        self.assertEqual(round(value("NCR", "", "ebitda")), -653153)
+        self.assertEqual(round(value("NCR", "Kitchen & central", "fnb_cost")), 385309)
+        self.assertEqual(round(value("Kolkata", "", "ebitda", "2026-10")), 5628553)
+        self.assertEqual(round(value("NCR", "", "ebitda", "2026-10")), 5640165)
         for city in ("Kolkata", "NCR"):
-            for month in ("2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"):
+            for month in ("2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"):
                 below = sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
                             and r["month"] == month and r["line"] == "ebitda" and r["level"] != "city")
                 self.assertAlmostEqual(below, value(city, "", "ebitda", month), delta=1)
@@ -109,17 +112,22 @@ class GrandEconomicsTests(unittest.TestCase):
         html = response.get_data(as_text=True)
         self.assertIn("Loss-making stores", html)
         self.assertIn("Closing 20 Oct", html)
-        self.assertIn("Kolkata is in for Apr–Sep 2026. Later months are not yet in.", html)
-        self.assertIn("NCR is in for Apr–Sep 2026. Later months are not yet in.", html)
-        self.assertIn("Gurgaon Sector 31", html)
-        self.assertIn("Gurgaon Sec - 10", html)
-        self.assertIn("Paschim Vihar", html)
+        self.assertIn("Kolkata is in for Apr–Oct 2026. Later months are not yet in.", html)
+        self.assertIn("NCR is in for Apr–Oct 2026. Later months are not yet in.", html)
+        self.assertIn("Technopolis", html)
+        self.assertIn("Noida Sec - 18", html)
+        self.assertIn("Faridabad Sec15", html)
         self.assertIn("EBITDA after ads and kitchen", html)
-        self.assertIn("₹15L", html)
-        self.assertIn("-₹8.8L", html)
-        self.assertNotIn("To check with Shilajit", html)
+        self.assertIn("₹56.3L", html)
+        self.assertIn("₹56.4L", html)
+        self.assertIn(
+            "Kolkata ads, Oct 2026: the sheet total is ₹9.7L but its rows add up to ₹12.3L. "
+            "If the ₹2.6L left out is a real cost, Kolkata EBITDA is ₹2.6L lower. To check with Shilajit.",
+            html,
+        )
         self.assertLess(html.index("Loss-making stores"), html.index("Key numbers"))
-        self.assertLess(html.index("Key numbers"), html.index("Booked in Oct"))
+        self.assertLess(html.index("Key numbers"), html.index("To check with Shilajit"))
+        self.assertLess(html.index("To check with Shilajit"), html.index("Booked in Oct"))
         self.assertIn("Kolkata ads, Aug 2026: ₹1,54,279. Booked in Oct.", html)
         self.assertIn("Kolkata ads, Sep 2026: ₹2,21,960. Booked in Oct.", html)
         self.assertNotIn("Kitchen &amp; central", html.split("ge-threats", 1)[1].split("ge-cards", 1)[0])
@@ -154,18 +162,18 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertIn("data-list", body)
         self.assertNotIn(".json", body)
 
-        detail = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-09")
+        detail = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-10")
         self.assertEqual(detail.status_code, 200)
         panel = detail.get_data(as_text=True)
-        self.assertIn('id="gurgaon-sector-31-ebitda-2026-09"', panel)
+        self.assertIn('id="gurgaon-sector-31-ebitda-2026-10"', panel)
         self.assertIn("Last year is not in.", panel)
         self.assertNotIn("Ledger detail", panel)
         self.assertIn("<svg", panel)
         self.assertNotIn("chart", panel.lower())
 
-        city = self.client.get("/grand-economics/detail/ncr-city-ebitda-2026-09").get_data(as_text=True)
+        city = self.client.get("/grand-economics/detail/ncr-city-ebitda-2026-10").get_data(as_text=True)
         self.assertIn("Kitchen food not charged to any store", city)
-        self.assertIn("-₹7.6L", city)
+        self.assertIn("-₹3.9L", city)
         self.assertIn("NCR total", city)
 
         missing = self.client.get("/grand-economics/detail/no-such-figure")
@@ -175,17 +183,17 @@ class GrandEconomicsTests(unittest.TestCase):
         self._login(OWNER)
         with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False, encoding="utf-8") as handle:
             handle.write("date,city,store,ledger,voucher,party,amount\n")
-            handle.write("2026-09-04,NCR,Gurgaon Sector 31,Rent,JV,Landlord,1200\n")
-            handle.write("2026-09-04,NCR,Other Store,Rent,JV,Landlord,99\n")
-            handle.write("2026-09-01,Kolkata,,Ads,JV,Agency,500\n")
+            handle.write("2026-10-04,NCR,Gurgaon Sector 31,Rent,JV,Landlord,1200\n")
+            handle.write("2026-10-04,NCR,Other Store,Rent,JV,Landlord,99\n")
+            handle.write("2026-10-01,Kolkata,,Ads,JV,Agency,500\n")
             path = handle.name
         os.environ["TALLY_LEDGER_FILE"] = path
         try:
-            panel = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-09").get_data(as_text=True)
+            panel = self.client.get("/grand-economics/detail/gurgaon-sector-31-ebitda-2026-10").get_data(as_text=True)
             self.assertIn("Ledger detail", panel)
             self.assertIn("Landlord", panel)
             self.assertNotIn("Other Store", panel)
-            city = self.client.get("/grand-economics/detail/kolkata-ads-2026-09").get_data(as_text=True)
+            city = self.client.get("/grand-economics/detail/kolkata-ads-2026-10").get_data(as_text=True)
             self.assertIn("Ledger detail", city)
             self.assertIn("Agency", city)
         finally:
