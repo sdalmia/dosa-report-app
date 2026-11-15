@@ -1,32 +1,32 @@
 {
-  "as_of_date": "2026-11-13",
+  "as_of_date": "2026-11-14",
   "current_month": "2026-11",
-  "completed_actual_days": 13,
-  "mtd_actual_L": 185.29,
-  "mtd_pred_mid_L": 185.0,
-  "mom_net_pct": -13.5,
-  "mom_note": "MoM -13.5% on daily average: Nov 1\u201313 net \u20b9185.29L / 13 vs observed Oct 2\u201331 \u20b9494.04L / 30. Not full-calendar October: 1 Oct net missing.",
-  "actuals_through": "2026-11-13",
-  "mtd_actual_rupees": "18528494.42",
-  "mtd_source_note": "Exact network CSV rupees; daily calendar cells rounded to \u20b9L.",
-  "target_pace_pct": 83.4,
-  "target_pace_note": "Nov 1\u201313 target pace: net \u20b9185.29L / pro-rata \u20b9222.1L. November target \u20b9512.5L.",
+  "completed_actual_days": 14,
+  "mtd_actual_L": 203.57,
+  "mtd_pred_mid_L": 201.5,
+  "mom_net_pct": -11.7,
+  "mom_note": "MoM -11.7% on daily average: Nov 1–14 net ₹203.57L / 14 vs observed Oct 2–31 ₹494.04L / 30. Not full-calendar October: 1 Oct net missing.",
+  "actuals_through": "2026-11-14",
+  "mtd_actual_rupees": "20356587.24",
+  "mtd_source_note": "Exact network CSV rupees; daily calendar cells rounded to ₹L.",
+  "target_pace_pct": 85.1,
+  "target_pace_note": "Nov 1–14 target pace: net ₹203.57L / pro-rata ₹239.2L. November target ₹512.5L.",
   "regional_mtd": {
     "East": {
-      "net_rupees": "9976657.51",
-      "net_L": 99.77,
+      "net_rupees": "11008871.22",
+      "net_L": 110.09,
       "target_L": 257.5,
-      "pro_rata_L": 111.6,
-      "pace_pct": 89.4
+      "pro_rata_L": 120.2,
+      "pace_pct": 91.6
     },
     "North": {
-      "net_rupees": "8551836.91",
-      "net_L": 85.52,
+      "net_rupees": "9347716.01",
+      "net_L": 93.48,
       "target_L": 255.0,
-      "pro_rata_L": 110.5,
-      "pace_pct": 77.4
+      "pro_rata_L": 119.0,
+      "pace_pct": 78.6
     }
   },
   "october_observed_2_to_31_net_L": 494.04,
-  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-13.csv (_DONE present) for 13 Nov; earlier days per prior provenance."
+  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-14.csv (_DONE present) for 14 Nov; earlier days per prior provenance."
 }
