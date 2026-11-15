@@ -23,9 +23,9 @@ FY26-27,Kolkata,,2026-04,repairs,58719.22,city
 FY26-27,Kolkata,,2026-04,misc,157014.64,city
 FY26-27,Kolkata,,2026-04,cam,380861.14,city
 FY26-27,Kolkata,,2026-04,ads,811748.22,city
-FY26-27,Kolkata,,2026-04,ho_ck_cost,4515808.5,city
-FY26-27,Kolkata,,2026-04,opex_total,18283510.86,city
-FY26-27,Kolkata,,2026-04,ebitda,2055417.85,city
+FY26-27,Kolkata,,2026-04,ho_ck_cost,4530558.5,city
+FY26-27,Kolkata,,2026-04,opex_total,18298260.86,city
+FY26-27,Kolkata,,2026-04,ebitda,2040667.85,city
 FY26-27,Kolkata,,2026-05,opening_stock,526715.46,city
 FY26-27,Kolkata,,2026-05,purchases,6109164.43,city
 FY26-27,Kolkata,,2026-05,transferred_out,12778.38,city
@@ -50,9 +50,9 @@ FY26-27,Kolkata,,2026-05,repairs,53248.0,city
 FY26-27,Kolkata,,2026-05,misc,416061.46,city
 FY26-27,Kolkata,,2026-05,cam,381213.14,city
 FY26-27,Kolkata,,2026-05,ads,907161.2,city
-FY26-27,Kolkata,,2026-05,ho_ck_cost,4737028.85,city
-FY26-27,Kolkata,,2026-05,opex_total,20441381.87,city
-FY26-27,Kolkata,,2026-05,ebitda,2106613.5,city
+FY26-27,Kolkata,,2026-05,ho_ck_cost,4724520.85,city
+FY26-27,Kolkata,,2026-05,opex_total,20428873.87,city
+FY26-27,Kolkata,,2026-05,ebitda,2119121.5,city
 FY26-27,Kolkata,,2026-06,opening_stock,493813.25,city
 FY26-27,Kolkata,,2026-06,purchases,6056091.87,city
 FY26-27,Kolkata,,2026-06,transferred_out,7693.46,city
@@ -77,9 +77,9 @@ FY26-27,Kolkata,,2026-06,repairs,228298.0,city
 FY26-27,Kolkata,,2026-06,misc,187253.33,city
 FY26-27,Kolkata,,2026-06,cam,382727.14,city
 FY26-27,Kolkata,,2026-06,ads,470257.39,city
-FY26-27,Kolkata,,2026-06,ho_ck_cost,4747803.55,city
-FY26-27,Kolkata,,2026-06,opex_total,19851975.96,city
-FY26-27,Kolkata,,2026-06,ebitda,1816626.22,city
+FY26-27,Kolkata,,2026-06,ho_ck_cost,4735295.55,city
+FY26-27,Kolkata,,2026-06,opex_total,19839467.96,city
+FY26-27,Kolkata,,2026-06,ebitda,1829134.22,city
 FY26-27,Kolkata,,2026-07,opening_stock,508615.44,city
 FY26-27,Kolkata,,2026-07,purchases,6114107.88,city
 FY26-27,Kolkata,,2026-07,transferred_out,13696.73,city
@@ -104,9 +104,9 @@ FY26-27,Kolkata,,2026-07,repairs,140553.0,city
 FY26-27,Kolkata,,2026-07,misc,443123.53,city
 FY26-27,Kolkata,,2026-07,cam,395255.14,city
 FY26-27,Kolkata,,2026-07,ads,1156117.09,city
-FY26-27,Kolkata,,2026-07,ho_ck_cost,4850901.31,city
-FY26-27,Kolkata,,2026-07,opex_total,21076085.85,city
-FY26-27,Kolkata,,2026-07,ebitda,1100225.84,city
+FY26-27,Kolkata,,2026-07,ho_ck_cost,4838393.31,city
+FY26-27,Kolkata,,2026-07,opex_total,21063577.85,city
+FY26-27,Kolkata,,2026-07,ebitda,1112733.84,city
 FY26-27,Kolkata,,2026-08,opening_stock,427633.73,city
 FY26-27,Kolkata,,2026-08,purchases,6907307.71,city
 FY26-27,Kolkata,,2026-08,transferred_out,12730.2,city
@@ -118,12 +118,12 @@ FY26-27,Kolkata,,2026-08,tax,1332180.74,city
 FY26-27,Kolkata,,2026-08,commission,2501415.97,city
 FY26-27,Kolkata,,2026-08,net_revenue,24142198.75,city
 FY26-27,Kolkata,,2026-08,fnb_cost,6876972.79,city
-FY26-27,Kolkata,,2026-08,electricity,920092.26,city
-FY26-27,Kolkata,,2026-08,telephone,12052.44,city
+FY26-27,Kolkata,,2026-08,electricity,927296.26,city
+FY26-27,Kolkata,,2026-08,telephone,12405.26,city
 FY26-27,Kolkata,,2026-08,gas,603302.5,city
 FY26-27,Kolkata,,2026-08,rent,2473572.0,city
 FY26-27,Kolkata,,2026-08,software,73035.07,city
-FY26-27,Kolkata,,2026-08,salary,3488719.05,city
+FY26-27,Kolkata,,2026-08,salary,3514679.05,city
 FY26-27,Kolkata,,2026-08,amc,130632.0,city
 FY26-27,Kolkata,,2026-08,subscription,50296.36,city
 FY26-27,Kolkata,,2026-08,insurance,25502.66,city
@@ -131,26 +131,26 @@ FY26-27,Kolkata,,2026-08,repairs,542734.0,city
 FY26-27,Kolkata,,2026-08,misc,202752.69,city
 FY26-27,Kolkata,,2026-08,cam,395442.14,city
 FY26-27,Kolkata,,2026-08,ads,727103.47,city
-FY26-27,Kolkata,,2026-08,ho_ck_cost,4793201.98,city
-FY26-27,Kolkata,,2026-08,opex_total,21315411.41,city
-FY26-27,Kolkata,,2026-08,ebitda,2826787.34,city
+FY26-27,Kolkata,,2026-08,ho_ck_cost,4780693.98,city
+FY26-27,Kolkata,,2026-08,opex_total,21336420.23,city
+FY26-27,Kolkata,,2026-08,ebitda,2805778.52,city
 FY26-27,Kolkata,,2026-09,opening_stock,445238.45,city
 FY26-27,Kolkata,,2026-09,purchases,6135736.4,city
 FY26-27,Kolkata,,2026-09,transferred_out,18574.71,city
 FY26-27,Kolkata,,2026-09,wastage,301691.69,city
-FY26-27,Kolkata,,2026-09,closing_stock,450578.72,city
+FY26-27,Kolkata,,2026-09,closing_stock,447160.72,city
 FY26-27,Kolkata,,2026-09,gross_revenue,25745713.12,city
 FY26-27,Kolkata,,2026-09,catering,0.0,city
 FY26-27,Kolkata,,2026-09,tax,1225986.34,city
 FY26-27,Kolkata,,2026-09,commission,2325503.85,city
 FY26-27,Kolkata,,2026-09,net_revenue,22194222.94,city
-FY26-27,Kolkata,,2026-09,fnb_cost,6111821.42,city
-FY26-27,Kolkata,,2026-09,electricity,895687.64,city
-FY26-27,Kolkata,,2026-09,telephone,11849.44,city
+FY26-27,Kolkata,,2026-09,fnb_cost,6115239.42,city
+FY26-27,Kolkata,,2026-09,electricity,892813.64,city
+FY26-27,Kolkata,,2026-09,telephone,12494.08,city
 FY26-27,Kolkata,,2026-09,gas,588948.0,city
-FY26-27,Kolkata,,2026-09,rent,2367592.96,city
+FY26-27,Kolkata,,2026-09,rent,2368412.78,city
 FY26-27,Kolkata,,2026-09,software,73035.07,city
-FY26-27,Kolkata,,2026-09,salary,3541701.0,city
+FY26-27,Kolkata,,2026-09,salary,3567661.0,city
 FY26-27,Kolkata,,2026-09,amc,130632.0,city
 FY26-27,Kolkata,,2026-09,subscription,50296.36,city
 FY26-27,Kolkata,,2026-09,insurance,25502.66,city
@@ -158,9 +158,36 @@ FY26-27,Kolkata,,2026-09,repairs,89813.0,city
 FY26-27,Kolkata,,2026-09,misc,372301.15,city
 FY26-27,Kolkata,,2026-09,cam,395166.14,city
 FY26-27,Kolkata,,2026-09,ads,1066072.11,city
-FY26-27,Kolkata,,2026-09,ho_ck_cost,4972571.13,city
-FY26-27,Kolkata,,2026-09,opex_total,20692990.09,city
-FY26-27,Kolkata,,2026-09,ebitda,1501232.85,city
+FY26-27,Kolkata,,2026-09,ho_ck_cost,5011400.13,city
+FY26-27,Kolkata,,2026-09,opex_total,20759787.55,city
+FY26-27,Kolkata,,2026-09,ebitda,1434435.39,city
+FY26-27,Kolkata,,2026-10,opening_stock,447160.72,city
+FY26-27,Kolkata,,2026-10,purchases,7291765.86,city
+FY26-27,Kolkata,,2026-10,transferred_out,19212.35,city
+FY26-27,Kolkata,,2026-10,wastage,290711.85,city
+FY26-27,Kolkata,,2026-10,closing_stock,456312.0,city
+FY26-27,Kolkata,,2026-10,gross_revenue,31818593.82,city
+FY26-27,Kolkata,,2026-10,catering,0.0,city
+FY26-27,Kolkata,,2026-10,tax,1515171.13,city
+FY26-27,Kolkata,,2026-10,commission,2939844.98,city
+FY26-27,Kolkata,,2026-10,net_revenue,27363577.71,city
+FY26-27,Kolkata,,2026-10,fnb_cost,7263402.23,city
+FY26-27,Kolkata,,2026-10,electricity,894549.0,city
+FY26-27,Kolkata,,2026-10,telephone,11594.08,city
+FY26-27,Kolkata,,2026-10,gas,647956.0,city
+FY26-27,Kolkata,,2026-10,rent,2602900.64,city
+FY26-27,Kolkata,,2026-10,software,73035.07,city
+FY26-27,Kolkata,,2026-10,salary,3594591.0,city
+FY26-27,Kolkata,,2026-10,amc,130632.0,city
+FY26-27,Kolkata,,2026-10,subscription,50296.36,city
+FY26-27,Kolkata,,2026-10,insurance,25627.16,city
+FY26-27,Kolkata,,2026-10,repairs,163850.0,city
+FY26-27,Kolkata,,2026-10,misc,338046.5,city
+FY26-27,Kolkata,,2026-10,cam,395166.14,city
+FY26-27,Kolkata,,2026-10,ads,972237.17,city
+FY26-27,Kolkata,,2026-10,ho_ck_cost,4571141.72,city
+FY26-27,Kolkata,,2026-10,opex_total,21735025.08,city
+FY26-27,Kolkata,,2026-10,ebitda,5628552.62,city
 FY26-27,Kolkata,Ideal Plaza,2026-04,opening_stock,47397.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-04,purchases,732427.58,store
 FY26-27,Kolkata,Ideal Plaza,2026-04,transferred_out,2191.04,store
@@ -184,9 +211,9 @@ FY26-27,Kolkata,Ideal Plaza,2026-04,insurance,1380.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-04,repairs,925.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-04,misc,13971.53,store
 FY26-27,Kolkata,Ideal Plaza,2026-04,cam,13335.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-04,ho_ck_cost,589423.28,store
-FY26-27,Kolkata,Ideal Plaza,2026-04,opex_total,2216023.87,store
-FY26-27,Kolkata,Ideal Plaza,2026-04,ebitda,438702.97,store
+FY26-27,Kolkata,Ideal Plaza,2026-04,ho_ck_cost,591348.51,store
+FY26-27,Kolkata,Ideal Plaza,2026-04,opex_total,2217949.1,store
+FY26-27,Kolkata,Ideal Plaza,2026-04,ebitda,436777.74,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,opening_stock,58327.95,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,purchases,770769.34,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,transferred_out,2089.31,store
@@ -210,9 +237,9 @@ FY26-27,Kolkata,Ideal Plaza,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,repairs,10961.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,misc,48560.03,store
 FY26-27,Kolkata,Ideal Plaza,2026-05,cam,13687.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-05,ho_ck_cost,644243.05,store
-FY26-27,Kolkata,Ideal Plaza,2026-05,opex_total,2409853.73,store
-FY26-27,Kolkata,Ideal Plaza,2026-05,ebitda,656707.57,store
+FY26-27,Kolkata,Ideal Plaza,2026-05,ho_ck_cost,642541.95,store
+FY26-27,Kolkata,Ideal Plaza,2026-05,opex_total,2408152.63,store
+FY26-27,Kolkata,Ideal Plaza,2026-05,ebitda,658408.68,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,opening_stock,52335.8,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,purchases,800355.47,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,transferred_out,1631.31,store
@@ -236,9 +263,9 @@ FY26-27,Kolkata,Ideal Plaza,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,repairs,40209.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,misc,20349.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-06,cam,13645.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-06,ho_ck_cost,601004.65,store
-FY26-27,Kolkata,Ideal Plaza,2026-06,opex_total,2411923.08,store
-FY26-27,Kolkata,Ideal Plaza,2026-06,ebitda,331014.91,store
+FY26-27,Kolkata,Ideal Plaza,2026-06,ho_ck_cost,599421.32,store
+FY26-27,Kolkata,Ideal Plaza,2026-06,opex_total,2410339.75,store
+FY26-27,Kolkata,Ideal Plaza,2026-06,ebitda,332598.25,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,opening_stock,53854.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,purchases,886262.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,transferred_out,2084.0,store
@@ -262,9 +289,9 @@ FY26-27,Kolkata,Ideal Plaza,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,repairs,36728.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,misc,48814.34,store
 FY26-27,Kolkata,Ideal Plaza,2026-07,cam,13926.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-07,ho_ck_cost,640933.15,store
-FY26-27,Kolkata,Ideal Plaza,2026-07,opex_total,2591675.7,store
-FY26-27,Kolkata,Ideal Plaza,2026-07,ebitda,338405.22,store
+FY26-27,Kolkata,Ideal Plaza,2026-07,ho_ck_cost,639280.51,store
+FY26-27,Kolkata,Ideal Plaza,2026-07,opex_total,2590023.06,store
+FY26-27,Kolkata,Ideal Plaza,2026-07,ebitda,340057.86,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,opening_stock,53640.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,purchases,973207.44,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,transferred_out,1703.61,store
@@ -281,16 +308,16 @@ FY26-27,Kolkata,Ideal Plaza,2026-08,telephone,295.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,gas,41963.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,rent,195143.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,software,3761.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-08,salary,490066.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-08,salary,516026.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,amc,12342.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,subscription,8246.47,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,repairs,31373.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,misc,19955.28,store
 FY26-27,Kolkata,Ideal Plaza,2026-08,cam,13704.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-08,ho_ck_cost,640002.37,store
-FY26-27,Kolkata,Ideal Plaza,2026-08,opex_total,2584693.29,store
-FY26-27,Kolkata,Ideal Plaza,2026-08,ebitda,638843.8,store
+FY26-27,Kolkata,Ideal Plaza,2026-08,ho_ck_cost,638332.26,store
+FY26-27,Kolkata,Ideal Plaza,2026-08,opex_total,2608983.18,store
+FY26-27,Kolkata,Ideal Plaza,2026-08,ebitda,614553.9,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,opening_stock,45238.66,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,purchases,847800.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,transferred_out,712.87,store
@@ -307,16 +334,42 @@ FY26-27,Kolkata,Ideal Plaza,2026-09,telephone,295.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,gas,36517.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,rent,195143.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,software,3761.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-09,salary,487966.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-09,salary,513926.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,amc,12342.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,subscription,8246.47,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,repairs,18364.0,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,misc,82504.39,store
 FY26-27,Kolkata,Ideal Plaza,2026-09,cam,13428.0,store
-FY26-27,Kolkata,Ideal Plaza,2026-09,ho_ck_cost,662808.92,store
-FY26-27,Kolkata,Ideal Plaza,2026-09,opex_total,2490326.57,store
-FY26-27,Kolkata,Ideal Plaza,2026-09,ebitda,468007.96,store
+FY26-27,Kolkata,Ideal Plaza,2026-09,ho_ck_cost,667984.55,store
+FY26-27,Kolkata,Ideal Plaza,2026-09,opex_total,2521462.2,store
+FY26-27,Kolkata,Ideal Plaza,2026-09,ebitda,436872.33,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,opening_stock,56345.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,purchases,930523.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,transferred_out,1319.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,wastage,18254.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,closing_stock,52502.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,gross_revenue,3967538.26,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,catering,0.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,tax,188930.39,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,commission,511155.02,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,net_revenue,3267452.85,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,fnb_cost,933047.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,electricity,131013.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,telephone,295.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,gas,51372.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,rent,195143.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,software,3761.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,salary,517243.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,amc,12342.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,subscription,8246.47,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,repairs,44234.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,misc,26842.93,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,cam,13428.0,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,ho_ck_cost,545834.69,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,opex_total,2484500.09,store
+FY26-27,Kolkata,Ideal Plaza,2026-10,ebitda,782952.76,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,opening_stock,35428.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,purchases,562871.61,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,transferred_out,1111.76,store
@@ -339,9 +392,9 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-04,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,repairs,18814.58,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,misc,725.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-04,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-04,ho_ck_cost,520519.36,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-04,opex_total,1828067.17,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-04,ebitda,516320.58,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-04,ho_ck_cost,522219.53,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-04,opex_total,1829767.34,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-04,ebitda,514620.41,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,opening_stock,37509.58,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,purchases,588181.83,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,transferred_out,1179.0,store
@@ -364,9 +417,9 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-05,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,repairs,998.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,misc,40823.94,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-05,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-05,ho_ck_cost,523889.36,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-05,opex_total,1936041.01,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-05,ebitda,557643.36,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-05,ho_ck_cost,522506.04,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-05,opex_total,1934657.69,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-05,ebitda,559026.67,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,opening_stock,34989.66,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,purchases,573470.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,transferred_out,389.0,store
@@ -389,9 +442,9 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-06,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,repairs,42830.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,misc,25835.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-06,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-06,ho_ck_cost,516870.34,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-06,opex_total,1926006.96,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-06,ebitda,432948.63,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-06,ho_ck_cost,515508.65,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-06,opex_total,1924645.27,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-06,ebitda,434310.31,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,opening_stock,36958.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,purchases,568791.8,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,transferred_out,1445.0,store
@@ -414,9 +467,9 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-07,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,repairs,16840.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,misc,36758.98,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-07,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-07,ho_ck_cost,534113.61,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-07,opex_total,1990517.05,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-07,ebitda,451229.18,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-07,ho_ck_cost,532736.41,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-07,opex_total,1989139.85,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-07,ebitda,452606.38,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,opening_stock,30595.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,purchases,623082.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,transferred_out,1421.0,store
@@ -427,7 +480,7 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-08,tax,139848.84,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,commission,174974.15,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,net_revenue,2622002.62,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,fnb_cost,620347.39,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-08,electricity,85413.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-08,electricity,92617.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,telephone,1357.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,gas,0.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,rent,289420.0,store
@@ -439,9 +492,9 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-08,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,repairs,18157.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,misc,22486.69,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-08,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-08,ho_ck_cost,520573.47,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-08,opex_total,1939127.83,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-08,ebitda,682874.79,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-08,ho_ck_cost,519215.02,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-08,opex_total,1944973.38,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-08,ebitda,677029.24,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,opening_stock,31908.61,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,purchases,574798.71,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,transferred_out,1007.31,store
@@ -452,7 +505,7 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-09,tax,129714.32,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,commission,164890.96,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,net_revenue,2429395.4,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,fnb_cost,572656.01,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-09,electricity,92617.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-09,electricity,85413.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,telephone,1357.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,gas,0.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,rent,268255.0,store
@@ -464,9 +517,34 @@ FY26-27,Kolkata,Salt Lake JC -21,2026-09,insurance,747.49,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,repairs,23121.0,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,misc,28794.2,store
 FY26-27,Kolkata,Salt Lake JC -21,2026-09,cam,14160.0,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-09,ho_ck_cost,544301.17,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-09,opex_total,1911126.34,store
-FY26-27,Kolkata,Salt Lake JC -21,2026-09,ebitda,518269.06,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-09,ho_ck_cost,548551.42,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-09,opex_total,1908172.59,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-09,ebitda,521222.81,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,opening_stock,33044.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,purchases,695908.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,transferred_out,834.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,wastage,26183.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,closing_stock,34339.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,gross_revenue,3318136.44,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,tax,158006.5,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,commission,207470.53,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,net_revenue,2952659.41,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,fnb_cost,693779.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,electricity,85000.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,telephone,1357.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,gas,0.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,rent,289740.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,software,3761.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,salary,360595.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,amc,16277.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,subscription,10246.47,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,insurance,802.91,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,repairs,5610.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,misc,73968.92,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,cam,14160.0,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,ho_ck_cost,493247.8,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,opex_total,2048545.1,store
+FY26-27,Kolkata,Salt Lake JC -21,2026-10,ebitda,904114.31,store
 FY26-27,Kolkata,Forum Mall,2026-04,opening_stock,19397.0,store
 FY26-27,Kolkata,Forum Mall,2026-04,purchases,137018.48,store
 FY26-27,Kolkata,Forum Mall,2026-04,transferred_out,1623.62,store
@@ -488,9 +566,9 @@ FY26-27,Kolkata,Forum Mall,2026-04,insurance,805.42,store
 FY26-27,Kolkata,Forum Mall,2026-04,repairs,0.0,store
 FY26-27,Kolkata,Forum Mall,2026-04,misc,5631.17,store
 FY26-27,Kolkata,Forum Mall,2026-04,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-04,ho_ck_cost,143649.66,store
-FY26-27,Kolkata,Forum Mall,2026-04,opex_total,589206.15,store
-FY26-27,Kolkata,Forum Mall,2026-04,ebitda,57783.26,store
+FY26-27,Kolkata,Forum Mall,2026-04,ho_ck_cost,144118.87,store
+FY26-27,Kolkata,Forum Mall,2026-04,opex_total,589675.35,store
+FY26-27,Kolkata,Forum Mall,2026-04,ebitda,57314.06,store
 FY26-27,Kolkata,Forum Mall,2026-05,opening_stock,24657.25,store
 FY26-27,Kolkata,Forum Mall,2026-05,purchases,145617.0,store
 FY26-27,Kolkata,Forum Mall,2026-05,transferred_out,92.49,store
@@ -512,9 +590,9 @@ FY26-27,Kolkata,Forum Mall,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Forum Mall,2026-05,repairs,180.0,store
 FY26-27,Kolkata,Forum Mall,2026-05,misc,8844.17,store
 FY26-27,Kolkata,Forum Mall,2026-05,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-05,ho_ck_cost,150201.25,store
-FY26-27,Kolkata,Forum Mall,2026-05,opex_total,647792.01,store
-FY26-27,Kolkata,Forum Mall,2026-05,ebitda,67157.63,store
+FY26-27,Kolkata,Forum Mall,2026-05,ho_ck_cost,149804.65,store
+FY26-27,Kolkata,Forum Mall,2026-05,opex_total,647395.4,store
+FY26-27,Kolkata,Forum Mall,2026-05,ebitda,67554.24,store
 FY26-27,Kolkata,Forum Mall,2026-06,opening_stock,26834.46,store
 FY26-27,Kolkata,Forum Mall,2026-06,purchases,164453.0,store
 FY26-27,Kolkata,Forum Mall,2026-06,transferred_out,2159.0,store
@@ -536,9 +614,9 @@ FY26-27,Kolkata,Forum Mall,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Forum Mall,2026-06,repairs,0.0,store
 FY26-27,Kolkata,Forum Mall,2026-06,misc,1300.17,store
 FY26-27,Kolkata,Forum Mall,2026-06,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-06,ho_ck_cost,176557.97,store
-FY26-27,Kolkata,Forum Mall,2026-06,opex_total,716517.7,store
-FY26-27,Kolkata,Forum Mall,2026-06,ebitda,89278.98,store
+FY26-27,Kolkata,Forum Mall,2026-06,ho_ck_cost,176092.83,store
+FY26-27,Kolkata,Forum Mall,2026-06,opex_total,716052.56,store
+FY26-27,Kolkata,Forum Mall,2026-06,ebitda,89744.12,store
 FY26-27,Kolkata,Forum Mall,2026-07,opening_stock,28638.0,store
 FY26-27,Kolkata,Forum Mall,2026-07,purchases,153350.25,store
 FY26-27,Kolkata,Forum Mall,2026-07,transferred_out,1353.0,store
@@ -560,9 +638,9 @@ FY26-27,Kolkata,Forum Mall,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Forum Mall,2026-07,repairs,0.0,store
 FY26-27,Kolkata,Forum Mall,2026-07,misc,4798.5,store
 FY26-27,Kolkata,Forum Mall,2026-07,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-07,ho_ck_cost,157310.14,store
-FY26-27,Kolkata,Forum Mall,2026-07,opex_total,679179.07,store
-FY26-27,Kolkata,Forum Mall,2026-07,ebitda,39977.75,store
+FY26-27,Kolkata,Forum Mall,2026-07,ho_ck_cost,156904.52,store
+FY26-27,Kolkata,Forum Mall,2026-07,opex_total,678773.45,store
+FY26-27,Kolkata,Forum Mall,2026-07,ebitda,40383.37,store
 FY26-27,Kolkata,Forum Mall,2026-08,opening_stock,21575.79,store
 FY26-27,Kolkata,Forum Mall,2026-08,purchases,165482.82,store
 FY26-27,Kolkata,Forum Mall,2026-08,transferred_out,733.96,store
@@ -584,9 +662,9 @@ FY26-27,Kolkata,Forum Mall,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Forum Mall,2026-08,repairs,10132.0,store
 FY26-27,Kolkata,Forum Mall,2026-08,misc,6922.08,store
 FY26-27,Kolkata,Forum Mall,2026-08,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-08,ho_ck_cost,137169.3,store
-FY26-27,Kolkata,Forum Mall,2026-08,opex_total,671912.41,store
-FY26-27,Kolkata,Forum Mall,2026-08,ebitda,18976.18,store
+FY26-27,Kolkata,Forum Mall,2026-08,ho_ck_cost,136811.35,store
+FY26-27,Kolkata,Forum Mall,2026-08,opex_total,671554.46,store
+FY26-27,Kolkata,Forum Mall,2026-08,ebitda,19334.13,store
 FY26-27,Kolkata,Forum Mall,2026-09,opening_stock,20884.91,store
 FY26-27,Kolkata,Forum Mall,2026-09,purchases,164119.5,store
 FY26-27,Kolkata,Forum Mall,2026-09,transferred_out,139.5,store
@@ -608,9 +686,33 @@ FY26-27,Kolkata,Forum Mall,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Forum Mall,2026-09,repairs,600.0,store
 FY26-27,Kolkata,Forum Mall,2026-09,misc,8721.17,store
 FY26-27,Kolkata,Forum Mall,2026-09,cam,54280.0,store
-FY26-27,Kolkata,Forum Mall,2026-09,ho_ck_cost,165424.92,store
-FY26-27,Kolkata,Forum Mall,2026-09,opex_total,707921.86,store
-FY26-27,Kolkata,Forum Mall,2026-09,ebitda,30424.06,store
+FY26-27,Kolkata,Forum Mall,2026-09,ho_ck_cost,166716.67,store
+FY26-27,Kolkata,Forum Mall,2026-09,opex_total,709213.6,store
+FY26-27,Kolkata,Forum Mall,2026-09,ebitda,29132.32,store
+FY26-27,Kolkata,Forum Mall,2026-10,opening_stock,22345.43,store
+FY26-27,Kolkata,Forum Mall,2026-10,purchases,175850.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,transferred_out,473.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,wastage,11808.85,store
+FY26-27,Kolkata,Forum Mall,2026-10,closing_stock,21568.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,gross_revenue,832950.06,store
+FY26-27,Kolkata,Forum Mall,2026-10,tax,39664.29,store
+FY26-27,Kolkata,Forum Mall,2026-10,net_revenue,793285.77,store
+FY26-27,Kolkata,Forum Mall,2026-10,fnb_cost,176154.43,store
+FY26-27,Kolkata,Forum Mall,2026-10,electricity,39084.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,telephone,588.82,store
+FY26-27,Kolkata,Forum Mall,2026-10,gas,3122.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,rent,140265.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,software,3343.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,salary,130400.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,amc,6183.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Forum Mall,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,repairs,11400.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,misc,8657.17,store
+FY26-27,Kolkata,Forum Mall,2026-10,cam,54280.0,store
+FY26-27,Kolkata,Forum Mall,2026-10,ho_ck_cost,132520.01,store
+FY26-27,Kolkata,Forum Mall,2026-10,opex_total,709941.9,store
+FY26-27,Kolkata,Forum Mall,2026-10,ebitda,83343.87,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,opening_stock,18285.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,purchases,251524.39,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,transferred_out,582.5,store
@@ -633,9 +735,9 @@ FY26-27,Kolkata,Mani Square Mall,2026-04,insurance,526.68,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,repairs,1782.88,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,misc,633.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-04,cam,38884.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-04,ho_ck_cost,255607.84,store
-FY26-27,Kolkata,Mani Square Mall,2026-04,opex_total,903316.12,store
-FY26-27,Kolkata,Mani Square Mall,2026-04,ebitda,247926.16,store
+FY26-27,Kolkata,Mani Square Mall,2026-04,ho_ck_cost,256442.74,store
+FY26-27,Kolkata,Mani Square Mall,2026-04,opex_total,904151.02,store
+FY26-27,Kolkata,Mani Square Mall,2026-04,ebitda,247091.27,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,opening_stock,25668.79,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,purchases,268950.22,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,transferred_out,460.27,store
@@ -658,9 +760,9 @@ FY26-27,Kolkata,Mani Square Mall,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,repairs,0.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,misc,5765.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-05,cam,38884.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-05,ho_ck_cost,285904.09,store
-FY26-27,Kolkata,Mani Square Mall,2026-05,opex_total,1037895.89,store
-FY26-27,Kolkata,Mani Square Mall,2026-05,ebitda,322991.76,store
+FY26-27,Kolkata,Mani Square Mall,2026-05,ho_ck_cost,285149.17,store
+FY26-27,Kolkata,Mani Square Mall,2026-05,opex_total,1037140.97,store
+FY26-27,Kolkata,Mani Square Mall,2026-05,ebitda,323746.69,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,opening_stock,20001.56,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,purchases,290659.71,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,transferred_out,81.4,store
@@ -683,9 +785,9 @@ FY26-27,Kolkata,Mani Square Mall,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,repairs,5900.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,misc,3979.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-06,cam,40440.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-06,ho_ck_cost,287868.02,store
-FY26-27,Kolkata,Mani Square Mall,2026-06,opex_total,1058846.76,store
-FY26-27,Kolkata,Mani Square Mall,2026-06,ebitda,254960.26,store
+FY26-27,Kolkata,Mani Square Mall,2026-06,ho_ck_cost,287109.64,store
+FY26-27,Kolkata,Mani Square Mall,2026-06,opex_total,1058088.38,store
+FY26-27,Kolkata,Mani Square Mall,2026-06,ebitda,255718.64,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,opening_stock,20509.75,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,purchases,311713.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,transferred_out,46.3,store
@@ -708,9 +810,9 @@ FY26-27,Kolkata,Mani Square Mall,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,repairs,12500.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,misc,10079.33,store
 FY26-27,Kolkata,Mani Square Mall,2026-07,cam,40440.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-07,ho_ck_cost,312821.62,store
-FY26-27,Kolkata,Mani Square Mall,2026-07,opex_total,1133243.02,store
-FY26-27,Kolkata,Mani Square Mall,2026-07,ebitda,296847.85,store
+FY26-27,Kolkata,Mani Square Mall,2026-07,ho_ck_cost,312015.01,store
+FY26-27,Kolkata,Mani Square Mall,2026-07,opex_total,1132436.41,store
+FY26-27,Kolkata,Mani Square Mall,2026-07,ebitda,297654.46,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,opening_stock,19370.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,purchases,352194.31,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,transferred_out,637.97,store
@@ -722,7 +824,7 @@ FY26-27,Kolkata,Mani Square Mall,2026-08,commission,39502.99,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,net_revenue,1618954.6,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,fnb_cost,352284.47,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,electricity,16000.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-08,telephone,500.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-08,telephone,852.82,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,gas,39259.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,rent,265413.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,software,3343.33,store
@@ -733,9 +835,9 @@ FY26-27,Kolkata,Mani Square Mall,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,repairs,10132.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,misc,6254.91,store
 FY26-27,Kolkata,Mani Square Mall,2026-08,cam,40440.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-08,ho_ck_cost,321427.91,store
-FY26-27,Kolkata,Mani Square Mall,2026-08,opex_total,1187712.09,store
-FY26-27,Kolkata,Mani Square Mall,2026-08,ebitda,431242.51,store
+FY26-27,Kolkata,Mani Square Mall,2026-08,ho_ck_cost,320589.13,store
+FY26-27,Kolkata,Mani Square Mall,2026-08,opex_total,1187226.13,store
+FY26-27,Kolkata,Mani Square Mall,2026-08,ebitda,431728.47,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,opening_stock,18641.87,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,purchases,349739.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,transferred_out,0.0,store
@@ -747,7 +849,7 @@ FY26-27,Kolkata,Mani Square Mall,2026-09,commission,36228.31,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,net_revenue,1615568.23,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,fnb_cost,348374.71,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,electricity,17000.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-09,telephone,588.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-09,telephone,941.64,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,gas,41073.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,rent,266481.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,software,3343.33,store
@@ -758,9 +860,34 @@ FY26-27,Kolkata,Mani Square Mall,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,repairs,0.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,misc,10888.0,store
 FY26-27,Kolkata,Mani Square Mall,2026-09,cam,40440.0,store
-FY26-27,Kolkata,Mani Square Mall,2026-09,ho_ck_cost,361964.82,store
-FY26-27,Kolkata,Mani Square Mall,2026-09,opex_total,1218188.78,store
-FY26-27,Kolkata,Mani Square Mall,2026-09,ebitda,397379.45,store
+FY26-27,Kolkata,Mani Square Mall,2026-09,ho_ck_cost,364791.27,store
+FY26-27,Kolkata,Mani Square Mall,2026-09,opex_total,1221368.87,store
+FY26-27,Kolkata,Mani Square Mall,2026-09,ebitda,394199.35,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,opening_stock,20006.16,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,purchases,369502.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,transferred_out,18.35,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,wastage,13923.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,closing_stock,18582.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,gross_revenue,1848673.62,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,tax,88032.08,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,commission,42270.6,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,net_revenue,1718370.94,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,fnb_cost,370907.81,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,electricity,17000.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,telephone,841.64,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,gas,45000.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,rent,283437.86,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,software,3343.33,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,salary,145619.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,amc,2726.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,repairs,6300.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,misc,41760.82,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,cam,40440.0,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,ho_ck_cost,287057.39,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,opex_total,1248378.32,store
+FY26-27,Kolkata,Mani Square Mall,2026-10,ebitda,469992.62,store
 FY26-27,Kolkata,Lake Town,2026-04,opening_stock,26043.0,store
 FY26-27,Kolkata,Lake Town,2026-04,purchases,343088.7,store
 FY26-27,Kolkata,Lake Town,2026-04,transferred_out,580.92,store
@@ -784,9 +911,9 @@ FY26-27,Kolkata,Lake Town,2026-04,insurance,973.34,store
 FY26-27,Kolkata,Lake Town,2026-04,repairs,1200.0,store
 FY26-27,Kolkata,Lake Town,2026-04,misc,6885.42,store
 FY26-27,Kolkata,Lake Town,2026-04,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-04,ho_ck_cost,261094.17,store
-FY26-27,Kolkata,Lake Town,2026-04,opex_total,916872.76,store
-FY26-27,Kolkata,Lake Town,2026-04,ebitda,259079.61,store
+FY26-27,Kolkata,Lake Town,2026-04,ho_ck_cost,261946.98,store
+FY26-27,Kolkata,Lake Town,2026-04,opex_total,917725.57,store
+FY26-27,Kolkata,Lake Town,2026-04,ebitda,258226.79,store
 FY26-27,Kolkata,Lake Town,2026-05,opening_stock,31057.31,store
 FY26-27,Kolkata,Lake Town,2026-05,purchases,361531.99,store
 FY26-27,Kolkata,Lake Town,2026-05,transferred_out,136.61,store
@@ -810,9 +937,9 @@ FY26-27,Kolkata,Lake Town,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Lake Town,2026-05,repairs,3560.0,store
 FY26-27,Kolkata,Lake Town,2026-05,misc,23029.72,store
 FY26-27,Kolkata,Lake Town,2026-05,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-05,ho_ck_cost,267839.0,store
-FY26-27,Kolkata,Lake Town,2026-05,opex_total,1038283.58,store
-FY26-27,Kolkata,Lake Town,2026-05,ebitda,236615.25,store
+FY26-27,Kolkata,Lake Town,2026-05,ho_ck_cost,267131.78,store
+FY26-27,Kolkata,Lake Town,2026-05,opex_total,1037576.36,store
+FY26-27,Kolkata,Lake Town,2026-05,ebitda,237322.48,store
 FY26-27,Kolkata,Lake Town,2026-06,opening_stock,22917.19,store
 FY26-27,Kolkata,Lake Town,2026-06,purchases,371332.0,store
 FY26-27,Kolkata,Lake Town,2026-06,transferred_out,792.0,store
@@ -836,9 +963,9 @@ FY26-27,Kolkata,Lake Town,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Lake Town,2026-06,repairs,11630.0,store
 FY26-27,Kolkata,Lake Town,2026-06,misc,6484.7,store
 FY26-27,Kolkata,Lake Town,2026-06,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-06,ho_ck_cost,265202.38,store
-FY26-27,Kolkata,Lake Town,2026-06,opex_total,1034822.63,store
-FY26-27,Kolkata,Lake Town,2026-06,ebitda,175540.19,store
+FY26-27,Kolkata,Lake Town,2026-06,ho_ck_cost,264503.71,store
+FY26-27,Kolkata,Lake Town,2026-06,opex_total,1034123.96,store
+FY26-27,Kolkata,Lake Town,2026-06,ebitda,176238.86,store
 FY26-27,Kolkata,Lake Town,2026-07,opening_stock,27033.0,store
 FY26-27,Kolkata,Lake Town,2026-07,purchases,367107.0,store
 FY26-27,Kolkata,Lake Town,2026-07,transferred_out,608.0,store
@@ -862,9 +989,9 @@ FY26-27,Kolkata,Lake Town,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Lake Town,2026-07,repairs,5750.0,store
 FY26-27,Kolkata,Lake Town,2026-07,misc,23267.75,store
 FY26-27,Kolkata,Lake Town,2026-07,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-07,ho_ck_cost,264961.01,store
-FY26-27,Kolkata,Lake Town,2026-07,opex_total,1047678.86,store
-FY26-27,Kolkata,Lake Town,2026-07,ebitda,163613.12,store
+FY26-27,Kolkata,Lake Town,2026-07,ho_ck_cost,264277.81,store
+FY26-27,Kolkata,Lake Town,2026-07,opex_total,1046995.66,store
+FY26-27,Kolkata,Lake Town,2026-07,ebitda,164296.32,store
 FY26-27,Kolkata,Lake Town,2026-08,opening_stock,20479.0,store
 FY26-27,Kolkata,Lake Town,2026-08,purchases,396283.79,store
 FY26-27,Kolkata,Lake Town,2026-08,transferred_out,158.0,store
@@ -888,9 +1015,9 @@ FY26-27,Kolkata,Lake Town,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Lake Town,2026-08,repairs,26620.0,store
 FY26-27,Kolkata,Lake Town,2026-08,misc,5099.11,store
 FY26-27,Kolkata,Lake Town,2026-08,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-08,ho_ck_cost,258575.98,store
-FY26-27,Kolkata,Lake Town,2026-08,opex_total,1029991.44,store
-FY26-27,Kolkata,Lake Town,2026-08,ebitda,272393.22,store
+FY26-27,Kolkata,Lake Town,2026-08,ho_ck_cost,257901.22,store
+FY26-27,Kolkata,Lake Town,2026-08,opex_total,1029316.68,store
+FY26-27,Kolkata,Lake Town,2026-08,ebitda,273067.99,store
 FY26-27,Kolkata,Lake Town,2026-09,opening_stock,27380.0,store
 FY26-27,Kolkata,Lake Town,2026-09,purchases,356068.0,store
 FY26-27,Kolkata,Lake Town,2026-09,transferred_out,204.0,store
@@ -902,7 +1029,7 @@ FY26-27,Kolkata,Lake Town,2026-09,tax,71441.23,store
 FY26-27,Kolkata,Lake Town,2026-09,commission,201039.37,store
 FY26-27,Kolkata,Lake Town,2026-09,net_revenue,1227785.14,store
 FY26-27,Kolkata,Lake Town,2026-09,fnb_cost,359573.67,store
-FY26-27,Kolkata,Lake Town,2026-09,electricity,55000.0,store
+FY26-27,Kolkata,Lake Town,2026-09,electricity,57530.0,store
 FY26-27,Kolkata,Lake Town,2026-09,telephone,1295.64,store
 FY26-27,Kolkata,Lake Town,2026-09,gas,53371.0,store
 FY26-27,Kolkata,Lake Town,2026-09,rent,56994.0,store
@@ -914,9 +1041,35 @@ FY26-27,Kolkata,Lake Town,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Lake Town,2026-09,repairs,2600.0,store
 FY26-27,Kolkata,Lake Town,2026-09,misc,11904.29,store
 FY26-27,Kolkata,Lake Town,2026-09,cam,0.0,store
-FY26-27,Kolkata,Lake Town,2026-09,ho_ck_cost,275082.8,store
-FY26-27,Kolkata,Lake Town,2026-09,opex_total,1022950.12,store
-FY26-27,Kolkata,Lake Town,2026-09,ebitda,204835.02,store
+FY26-27,Kolkata,Lake Town,2026-09,ho_ck_cost,277230.82,store
+FY26-27,Kolkata,Lake Town,2026-09,opex_total,1027628.14,store
+FY26-27,Kolkata,Lake Town,2026-09,ebitda,200157.0,store
+FY26-27,Kolkata,Lake Town,2026-10,opening_stock,23670.33,store
+FY26-27,Kolkata,Lake Town,2026-10,purchases,440945.0,store
+FY26-27,Kolkata,Lake Town,2026-10,transferred_out,690.0,store
+FY26-27,Kolkata,Lake Town,2026-10,wastage,10212.0,store
+FY26-27,Kolkata,Lake Town,2026-10,closing_stock,28094.0,store
+FY26-27,Kolkata,Lake Town,2026-10,gross_revenue,1860503.17,store
+FY26-27,Kolkata,Lake Town,2026-10,catering,0.0,store
+FY26-27,Kolkata,Lake Town,2026-10,tax,88595.39,store
+FY26-27,Kolkata,Lake Town,2026-10,commission,243365.42,store
+FY26-27,Kolkata,Lake Town,2026-10,net_revenue,1528542.36,store
+FY26-27,Kolkata,Lake Town,2026-10,fnb_cost,435831.33,store
+FY26-27,Kolkata,Lake Town,2026-10,electricity,58000.0,store
+FY26-27,Kolkata,Lake Town,2026-10,telephone,1295.64,store
+FY26-27,Kolkata,Lake Town,2026-10,gas,48518.0,store
+FY26-27,Kolkata,Lake Town,2026-10,rent,56994.0,store
+FY26-27,Kolkata,Lake Town,2026-10,software,3761.25,store
+FY26-27,Kolkata,Lake Town,2026-10,salary,220548.0,store
+FY26-27,Kolkata,Lake Town,2026-10,amc,8402.0,store
+FY26-27,Kolkata,Lake Town,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Lake Town,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Lake Town,2026-10,repairs,10650.0,store
+FY26-27,Kolkata,Lake Town,2026-10,misc,12150.8,store
+FY26-27,Kolkata,Lake Town,2026-10,cam,0.0,store
+FY26-27,Kolkata,Lake Town,2026-10,ho_ck_cost,255346.13,store
+FY26-27,Kolkata,Lake Town,2026-10,opex_total,1115441.62,store
+FY26-27,Kolkata,Lake Town,2026-10,ebitda,413100.74,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,opening_stock,29064.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,purchases,496389.17,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,transferred_out,1314.93,store
@@ -940,9 +1093,9 @@ FY26-27,Kolkata,Rosedale Plaza,2026-04,insurance,590.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,repairs,580.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,misc,20073.29,store
 FY26-27,Kolkata,Rosedale Plaza,2026-04,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-04,ho_ck_cost,402223.25,store
-FY26-27,Kolkata,Rosedale Plaza,2026-04,opex_total,1609002.69,store
-FY26-27,Kolkata,Rosedale Plaza,2026-04,ebitda,202586.54,store
+FY26-27,Kolkata,Rosedale Plaza,2026-04,ho_ck_cost,403537.03,store
+FY26-27,Kolkata,Rosedale Plaza,2026-04,opex_total,1610316.47,store
+FY26-27,Kolkata,Rosedale Plaza,2026-04,ebitda,201272.75,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,opening_stock,36474.1,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,purchases,515675.19,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,transferred_out,920.64,store
@@ -966,9 +1119,9 @@ FY26-27,Kolkata,Rosedale Plaza,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,repairs,20326.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,misc,23647.52,store
 FY26-27,Kolkata,Rosedale Plaza,2026-05,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-05,ho_ck_cost,409218.38,store
-FY26-27,Kolkata,Rosedale Plaza,2026-05,opex_total,1797073.71,store
-FY26-27,Kolkata,Rosedale Plaza,2026-05,ebitda,150783.16,store
+FY26-27,Kolkata,Rosedale Plaza,2026-05,ho_ck_cost,408137.85,store
+FY26-27,Kolkata,Rosedale Plaza,2026-05,opex_total,1795993.18,store
+FY26-27,Kolkata,Rosedale Plaza,2026-05,ebitda,151863.69,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,opening_stock,30896.92,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,purchases,532402.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,transferred_out,515.0,store
@@ -992,9 +1145,9 @@ FY26-27,Kolkata,Rosedale Plaza,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,repairs,6665.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,misc,18161.5,store
 FY26-27,Kolkata,Rosedale Plaza,2026-06,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-06,ho_ck_cost,405297.21,store
-FY26-27,Kolkata,Rosedale Plaza,2026-06,opex_total,1737160.61,store
-FY26-27,Kolkata,Rosedale Plaza,2026-06,ebitda,112583.99,store
+FY26-27,Kolkata,Rosedale Plaza,2026-06,ho_ck_cost,404229.46,store
+FY26-27,Kolkata,Rosedale Plaza,2026-06,opex_total,1736092.86,store
+FY26-27,Kolkata,Rosedale Plaza,2026-06,ebitda,113651.74,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,opening_stock,33094.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,purchases,521135.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,transferred_out,1599.0,store
@@ -1017,9 +1170,9 @@ FY26-27,Kolkata,Rosedale Plaza,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,repairs,2144.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,misc,33841.28,store
 FY26-27,Kolkata,Rosedale Plaza,2026-07,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-07,ho_ck_cost,416270.97,store
-FY26-27,Kolkata,Rosedale Plaza,2026-07,opex_total,1748703.79,store
-FY26-27,Kolkata,Rosedale Plaza,2026-07,ebitda,154314.66,store
+FY26-27,Kolkata,Rosedale Plaza,2026-07,ho_ck_cost,415197.61,store
+FY26-27,Kolkata,Rosedale Plaza,2026-07,opex_total,1747630.44,store
+FY26-27,Kolkata,Rosedale Plaza,2026-07,ebitda,155388.01,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,opening_stock,22177.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,purchases,590814.52,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,transferred_out,1758.0,store
@@ -1042,9 +1195,9 @@ FY26-27,Kolkata,Rosedale Plaza,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,repairs,16210.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,misc,15891.72,store
 FY26-27,Kolkata,Rosedale Plaza,2026-08,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-08,ho_ck_cost,413402.45,store
-FY26-27,Kolkata,Rosedale Plaza,2026-08,opex_total,1828218.28,store
-FY26-27,Kolkata,Rosedale Plaza,2026-08,ebitda,253989.84,store
+FY26-27,Kolkata,Rosedale Plaza,2026-08,ho_ck_cost,412323.66,store
+FY26-27,Kolkata,Rosedale Plaza,2026-08,opex_total,1827139.49,store
+FY26-27,Kolkata,Rosedale Plaza,2026-08,ebitda,255068.62,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,opening_stock,29999.95,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,purchases,506223.45,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,transferred_out,4868.94,store
@@ -1067,9 +1220,34 @@ FY26-27,Kolkata,Rosedale Plaza,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,repairs,5720.0,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,misc,23424.94,store
 FY26-27,Kolkata,Rosedale Plaza,2026-09,cam,13570.0,store
-FY26-27,Kolkata,Rosedale Plaza,2026-09,ho_ck_cost,405479.32,store
-FY26-27,Kolkata,Rosedale Plaza,2026-09,opex_total,1670255.72,store
-FY26-27,Kolkata,Rosedale Plaza,2026-09,ebitda,139532.05,store
+FY26-27,Kolkata,Rosedale Plaza,2026-09,ho_ck_cost,408645.56,store
+FY26-27,Kolkata,Rosedale Plaza,2026-09,opex_total,1673421.96,store
+FY26-27,Kolkata,Rosedale Plaza,2026-09,ebitda,136365.81,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,opening_stock,27012.18,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,purchases,593687.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,transferred_out,1586.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,wastage,16701.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,closing_stock,25743.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,gross_revenue,2591394.13,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,tax,123399.72,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,commission,330645.95,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,net_revenue,2137348.46,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,fnb_cost,593370.18,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,electricity,32901.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,telephone,352.82,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,gas,85620.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,rent,369636.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,software,3761.25,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,salary,262716.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,amc,9226.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,repairs,1012.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,misc,19023.16,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,cam,13570.0,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,ho_ck_cost,357048.44,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,opex_total,1752181.32,store
+FY26-27,Kolkata,Rosedale Plaza,2026-10,ebitda,385167.14,store
 FY26-27,Kolkata,CSC,2026-04,opening_stock,6073.0,store
 FY26-27,Kolkata,CSC,2026-04,purchases,32309.34,store
 FY26-27,Kolkata,CSC,2026-04,transferred_out,0.0,store
@@ -1091,9 +1269,9 @@ FY26-27,Kolkata,CSC,2026-04,insurance,353.0,store
 FY26-27,Kolkata,CSC,2026-04,repairs,0.0,store
 FY26-27,Kolkata,CSC,2026-04,misc,1817.33,store
 FY26-27,Kolkata,CSC,2026-04,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-04,ho_ck_cost,22252.8,store
-FY26-27,Kolkata,CSC,2026-04,opex_total,105377.45,store
-FY26-27,Kolkata,CSC,2026-04,ebitda,-5152.18,store
+FY26-27,Kolkata,CSC,2026-04,ho_ck_cost,22325.49,store
+FY26-27,Kolkata,CSC,2026-04,opex_total,105450.14,store
+FY26-27,Kolkata,CSC,2026-04,ebitda,-5224.87,store
 FY26-27,Kolkata,CSC,2026-05,opening_stock,5816.17,store
 FY26-27,Kolkata,CSC,2026-05,purchases,43513.82,store
 FY26-27,Kolkata,CSC,2026-05,transferred_out,71.7,store
@@ -1115,9 +1293,9 @@ FY26-27,Kolkata,CSC,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,CSC,2026-05,repairs,0.0,store
 FY26-27,Kolkata,CSC,2026-05,misc,8393.33,store
 FY26-27,Kolkata,CSC,2026-05,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-05,ho_ck_cost,26365.73,store
-FY26-27,Kolkata,CSC,2026-05,opex_total,123308.33,store
-FY26-27,Kolkata,CSC,2026-05,ebitda,2191.07,store
+FY26-27,Kolkata,CSC,2026-05,ho_ck_cost,26296.11,store
+FY26-27,Kolkata,CSC,2026-05,opex_total,123238.71,store
+FY26-27,Kolkata,CSC,2026-05,ebitda,2260.69,store
 FY26-27,Kolkata,CSC,2026-06,opening_stock,8416.17,store
 FY26-27,Kolkata,CSC,2026-06,purchases,44125.0,store
 FY26-27,Kolkata,CSC,2026-06,transferred_out,150.0,store
@@ -1139,9 +1317,9 @@ FY26-27,Kolkata,CSC,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,CSC,2026-06,repairs,0.0,store
 FY26-27,Kolkata,CSC,2026-06,misc,6681.33,store
 FY26-27,Kolkata,CSC,2026-06,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-06,ho_ck_cost,35465.12,store
-FY26-27,Kolkata,CSC,2026-06,opex_total,141921.77,store
-FY26-27,Kolkata,CSC,2026-06,ebitda,19938.23,store
+FY26-27,Kolkata,CSC,2026-06,ho_ck_cost,35371.68,store
+FY26-27,Kolkata,CSC,2026-06,opex_total,141828.34,store
+FY26-27,Kolkata,CSC,2026-06,ebitda,20031.66,store
 FY26-27,Kolkata,CSC,2026-07,opening_stock,7154.0,store
 FY26-27,Kolkata,CSC,2026-07,purchases,38814.0,store
 FY26-27,Kolkata,CSC,2026-07,transferred_out,0.0,store
@@ -1163,9 +1341,9 @@ FY26-27,Kolkata,CSC,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,CSC,2026-07,repairs,0.0,store
 FY26-27,Kolkata,CSC,2026-07,misc,5767.67,store
 FY26-27,Kolkata,CSC,2026-07,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-07,ho_ck_cost,28362.97,store
-FY26-27,Kolkata,CSC,2026-07,opex_total,130764.31,store
-FY26-27,Kolkata,CSC,2026-07,ebitda,-1100.57,store
+FY26-27,Kolkata,CSC,2026-07,ho_ck_cost,28289.83,store
+FY26-27,Kolkata,CSC,2026-07,opex_total,130691.18,store
+FY26-27,Kolkata,CSC,2026-07,ebitda,-1027.44,store
 FY26-27,Kolkata,CSC,2026-08,opening_stock,6599.0,store
 FY26-27,Kolkata,CSC,2026-08,purchases,42941.73,store
 FY26-27,Kolkata,CSC,2026-08,transferred_out,0.0,store
@@ -1187,9 +1365,9 @@ FY26-27,Kolkata,CSC,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,CSC,2026-08,repairs,3410.0,store
 FY26-27,Kolkata,CSC,2026-08,misc,3835.33,store
 FY26-27,Kolkata,CSC,2026-08,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-08,ho_ck_cost,30068.48,store
-FY26-27,Kolkata,CSC,2026-08,opex_total,132920.58,store
-FY26-27,Kolkata,CSC,2026-08,ebitda,18527.09,store
+FY26-27,Kolkata,CSC,2026-08,ho_ck_cost,29990.02,store
+FY26-27,Kolkata,CSC,2026-08,opex_total,132842.11,store
+FY26-27,Kolkata,CSC,2026-08,ebitda,18605.56,store
 FY26-27,Kolkata,CSC,2026-09,opening_stock,6174.65,store
 FY26-27,Kolkata,CSC,2026-09,purchases,38347.91,store
 FY26-27,Kolkata,CSC,2026-09,transferred_out,80.89,store
@@ -1211,9 +1389,33 @@ FY26-27,Kolkata,CSC,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,CSC,2026-09,repairs,120.0,store
 FY26-27,Kolkata,CSC,2026-09,misc,8193.33,store
 FY26-27,Kolkata,CSC,2026-09,cam,0.0,store
-FY26-27,Kolkata,CSC,2026-09,ho_ck_cost,28241.46,store
-FY26-27,Kolkata,CSC,2026-09,opex_total,128471.91,store
-FY26-27,Kolkata,CSC,2026-09,ebitda,-2420.98,store
+FY26-27,Kolkata,CSC,2026-09,ho_ck_cost,28461.99,store
+FY26-27,Kolkata,CSC,2026-09,opex_total,128692.44,store
+FY26-27,Kolkata,CSC,2026-09,ebitda,-2641.51,store
+FY26-27,Kolkata,CSC,2026-10,opening_stock,7033.7,store
+FY26-27,Kolkata,CSC,2026-10,purchases,40144.0,store
+FY26-27,Kolkata,CSC,2026-10,transferred_out,0.0,store
+FY26-27,Kolkata,CSC,2026-10,wastage,786.0,store
+FY26-27,Kolkata,CSC,2026-10,closing_stock,8535.0,store
+FY26-27,Kolkata,CSC,2026-10,gross_revenue,130366.7,store
+FY26-27,Kolkata,CSC,2026-10,tax,6207.94,store
+FY26-27,Kolkata,CSC,2026-10,net_revenue,124158.76,store
+FY26-27,Kolkata,CSC,2026-10,fnb_cost,38642.7,store
+FY26-27,Kolkata,CSC,2026-10,electricity,0.0,store
+FY26-27,Kolkata,CSC,2026-10,telephone,588.82,store
+FY26-27,Kolkata,CSC,2026-10,gas,13000.0,store
+FY26-27,Kolkata,CSC,2026-10,rent,0.0,store
+FY26-27,Kolkata,CSC,2026-10,software,3343.33,store
+FY26-27,Kolkata,CSC,2026-10,salary,34460.0,store
+FY26-27,Kolkata,CSC,2026-10,amc,1650.0,store
+FY26-27,Kolkata,CSC,2026-10,subscription,0.0,store
+FY26-27,Kolkata,CSC,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,CSC,2026-10,repairs,0.0,store
+FY26-27,Kolkata,CSC,2026-10,misc,1616.33,store
+FY26-27,Kolkata,CSC,2026-10,cam,0.0,store
+FY26-27,Kolkata,CSC,2026-10,ho_ck_cost,20740.98,store
+FY26-27,Kolkata,CSC,2026-10,opex_total,115740.16,store
+FY26-27,Kolkata,CSC,2026-10,ebitda,8418.6,store
 FY26-27,Kolkata,Technopolis,2026-04,opening_stock,1603.0,store
 FY26-27,Kolkata,Technopolis,2026-04,purchases,22984.18,store
 FY26-27,Kolkata,Technopolis,2026-04,transferred_out,0.0,store
@@ -1236,9 +1438,9 @@ FY26-27,Kolkata,Technopolis,2026-04,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-04,repairs,0.0,store
 FY26-27,Kolkata,Technopolis,2026-04,misc,288.73,store
 FY26-27,Kolkata,Technopolis,2026-04,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-04,ho_ck_cost,14859.95,store
-FY26-27,Kolkata,Technopolis,2026-04,opex_total,79507.25,store
-FY26-27,Kolkata,Technopolis,2026-04,ebitda,-12578.92,store
+FY26-27,Kolkata,Technopolis,2026-04,ho_ck_cost,14908.49,store
+FY26-27,Kolkata,Technopolis,2026-04,opex_total,79555.79,store
+FY26-27,Kolkata,Technopolis,2026-04,ebitda,-12627.46,store
 FY26-27,Kolkata,Technopolis,2026-05,opening_stock,2918.59,store
 FY26-27,Kolkata,Technopolis,2026-05,purchases,22113.42,store
 FY26-27,Kolkata,Technopolis,2026-05,transferred_out,0.0,store
@@ -1261,9 +1463,9 @@ FY26-27,Kolkata,Technopolis,2026-05,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-05,repairs,0.0,store
 FY26-27,Kolkata,Technopolis,2026-05,misc,7091.43,store
 FY26-27,Kolkata,Technopolis,2026-05,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-05,ho_ck_cost,12627.72,store
-FY26-27,Kolkata,Technopolis,2026-05,opex_total,85732.19,store
-FY26-27,Kolkata,Technopolis,2026-05,ebitda,-25624.94,store
+FY26-27,Kolkata,Technopolis,2026-05,ho_ck_cost,12594.38,store
+FY26-27,Kolkata,Technopolis,2026-05,opex_total,85698.85,store
+FY26-27,Kolkata,Technopolis,2026-05,ebitda,-25591.6,store
 FY26-27,Kolkata,Technopolis,2026-06,opening_stock,1713.61,store
 FY26-27,Kolkata,Technopolis,2026-06,purchases,24161.0,store
 FY26-27,Kolkata,Technopolis,2026-06,transferred_out,0.0,store
@@ -1285,9 +1487,9 @@ FY26-27,Kolkata,Technopolis,2026-06,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-06,repairs,0.0,store
 FY26-27,Kolkata,Technopolis,2026-06,misc,325.17,store
 FY26-27,Kolkata,Technopolis,2026-06,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-06,ho_ck_cost,15742.55,store
-FY26-27,Kolkata,Technopolis,2026-06,opex_total,87250.0,store
-FY26-27,Kolkata,Technopolis,2026-06,ebitda,-15402.22,store
+FY26-27,Kolkata,Technopolis,2026-06,ho_ck_cost,15701.08,store
+FY26-27,Kolkata,Technopolis,2026-06,opex_total,87208.53,store
+FY26-27,Kolkata,Technopolis,2026-06,ebitda,-15360.75,store
 FY26-27,Kolkata,Technopolis,2026-07,opening_stock,1683.0,store
 FY26-27,Kolkata,Technopolis,2026-07,purchases,26674.83,store
 FY26-27,Kolkata,Technopolis,2026-07,transferred_out,124.76,store
@@ -1309,9 +1511,9 @@ FY26-27,Kolkata,Technopolis,2026-07,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-07,repairs,0.0,store
 FY26-27,Kolkata,Technopolis,2026-07,misc,532.06,store
 FY26-27,Kolkata,Technopolis,2026-07,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-07,ho_ck_cost,18430.34,store
-FY26-27,Kolkata,Technopolis,2026-07,opex_total,93474.52,store
-FY26-27,Kolkata,Technopolis,2026-07,ebitda,-9218.65,store
+FY26-27,Kolkata,Technopolis,2026-07,ho_ck_cost,18382.82,store
+FY26-27,Kolkata,Technopolis,2026-07,opex_total,93427.0,store
+FY26-27,Kolkata,Technopolis,2026-07,ebitda,-9171.13,store
 FY26-27,Kolkata,Technopolis,2026-08,opening_stock,1357.94,store
 FY26-27,Kolkata,Technopolis,2026-08,purchases,24641.22,store
 FY26-27,Kolkata,Technopolis,2026-08,transferred_out,0.0,store
@@ -1333,22 +1535,22 @@ FY26-27,Kolkata,Technopolis,2026-08,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-08,repairs,32080.0,store
 FY26-27,Kolkata,Technopolis,2026-08,misc,3520.53,store
 FY26-27,Kolkata,Technopolis,2026-08,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-08,ho_ck_cost,17014.52,store
-FY26-27,Kolkata,Technopolis,2026-08,opex_total,123297.71,store
-FY26-27,Kolkata,Technopolis,2026-08,ebitda,-37599.71,store
+FY26-27,Kolkata,Technopolis,2026-08,ho_ck_cost,16970.12,store
+FY26-27,Kolkata,Technopolis,2026-08,opex_total,123253.31,store
+FY26-27,Kolkata,Technopolis,2026-08,ebitda,-37555.31,store
 FY26-27,Kolkata,Technopolis,2026-09,opening_stock,1999.5,store
 FY26-27,Kolkata,Technopolis,2026-09,purchases,28684.0,store
 FY26-27,Kolkata,Technopolis,2026-09,transferred_out,0.0,store
 FY26-27,Kolkata,Technopolis,2026-09,wastage,889.0,store
-FY26-27,Kolkata,Technopolis,2026-09,closing_stock,6463.0,store
+FY26-27,Kolkata,Technopolis,2026-09,closing_stock,3045.0,store
 FY26-27,Kolkata,Technopolis,2026-09,gross_revenue,96715.26,store
 FY26-27,Kolkata,Technopolis,2026-09,tax,4605.49,store
 FY26-27,Kolkata,Technopolis,2026-09,net_revenue,92109.77,store
-FY26-27,Kolkata,Technopolis,2026-09,fnb_cost,24220.5,store
-FY26-27,Kolkata,Technopolis,2026-09,electricity,5000.0,store
+FY26-27,Kolkata,Technopolis,2026-09,fnb_cost,27638.5,store
+FY26-27,Kolkata,Technopolis,2026-09,electricity,5255.0,store
 FY26-27,Kolkata,Technopolis,2026-09,telephone,588.82,store
 FY26-27,Kolkata,Technopolis,2026-09,gas,2904.0,store
-FY26-27,Kolkata,Technopolis,2026-09,rent,16219.01,store
+FY26-27,Kolkata,Technopolis,2026-09,rent,16303.0,store
 FY26-27,Kolkata,Technopolis,2026-09,software,3343.33,store
 FY26-27,Kolkata,Technopolis,2026-09,salary,19899.0,store
 FY26-27,Kolkata,Technopolis,2026-09,amc,0.0,store
@@ -1357,9 +1559,33 @@ FY26-27,Kolkata,Technopolis,2026-09,insurance,1933.83,store
 FY26-27,Kolkata,Technopolis,2026-09,repairs,0.0,store
 FY26-27,Kolkata,Technopolis,2026-09,misc,6607.65,store
 FY26-27,Kolkata,Technopolis,2026-09,cam,0.0,store
-FY26-27,Kolkata,Technopolis,2026-09,ho_ck_cost,20637.01,store
-FY26-27,Kolkata,Technopolis,2026-09,opex_total,101353.15,store
-FY26-27,Kolkata,Technopolis,2026-09,ebitda,-9243.38,store
+FY26-27,Kolkata,Technopolis,2026-09,ho_ck_cost,20798.16,store
+FY26-27,Kolkata,Technopolis,2026-09,opex_total,105271.29,store
+FY26-27,Kolkata,Technopolis,2026-09,ebitda,-13161.52,store
+FY26-27,Kolkata,Technopolis,2026-10,opening_stock,3045.0,store
+FY26-27,Kolkata,Technopolis,2026-10,purchases,19458.0,store
+FY26-27,Kolkata,Technopolis,2026-10,transferred_out,55.0,store
+FY26-27,Kolkata,Technopolis,2026-10,wastage,1368.0,store
+FY26-27,Kolkata,Technopolis,2026-10,closing_stock,1650.0,store
+FY26-27,Kolkata,Technopolis,2026-10,gross_revenue,72265.06,store
+FY26-27,Kolkata,Technopolis,2026-10,tax,3441.19,store
+FY26-27,Kolkata,Technopolis,2026-10,net_revenue,68823.87,store
+FY26-27,Kolkata,Technopolis,2026-10,fnb_cost,20798.0,store
+FY26-27,Kolkata,Technopolis,2026-10,electricity,5500.0,store
+FY26-27,Kolkata,Technopolis,2026-10,telephone,588.82,store
+FY26-27,Kolkata,Technopolis,2026-10,gas,968.0,store
+FY26-27,Kolkata,Technopolis,2026-10,rent,12181.5,store
+FY26-27,Kolkata,Technopolis,2026-10,software,3343.33,store
+FY26-27,Kolkata,Technopolis,2026-10,salary,19899.0,store
+FY26-27,Kolkata,Technopolis,2026-10,amc,0.0,store
+FY26-27,Kolkata,Technopolis,2026-10,subscription,0.0,store
+FY26-27,Kolkata,Technopolis,2026-10,insurance,1933.83,store
+FY26-27,Kolkata,Technopolis,2026-10,repairs,400.0,store
+FY26-27,Kolkata,Technopolis,2026-10,misc,268.16,store
+FY26-27,Kolkata,Technopolis,2026-10,cam,0.0,store
+FY26-27,Kolkata,Technopolis,2026-10,ho_ck_cost,11497.17,store
+FY26-27,Kolkata,Technopolis,2026-10,opex_total,77377.81,store
+FY26-27,Kolkata,Technopolis,2026-10,ebitda,-8553.94,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,opening_stock,47968.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,purchases,286806.81,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,transferred_out,178.26,store
@@ -1382,9 +1608,9 @@ FY26-27,Kolkata,Forum Rangoli,2026-04,insurance,991.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,repairs,2000.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,misc,6956.71,store
 FY26-27,Kolkata,Forum Rangoli,2026-04,cam,84370.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-04,ho_ck_cost,234641.42,store
-FY26-27,Kolkata,Forum Rangoli,2026-04,opex_total,1044448.67,store
-FY26-27,Kolkata,Forum Rangoli,2026-04,ebitda,12362.11,store
+FY26-27,Kolkata,Forum Rangoli,2026-04,ho_ck_cost,235407.83,store
+FY26-27,Kolkata,Forum Rangoli,2026-04,opex_total,1045215.08,store
+FY26-27,Kolkata,Forum Rangoli,2026-04,ebitda,11595.7,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,opening_stock,45542.3,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,purchases,358998.03,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,transferred_out,0.0,store
@@ -1407,9 +1633,9 @@ FY26-27,Kolkata,Forum Rangoli,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,repairs,1700.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,misc,22647.94,store
 FY26-27,Kolkata,Forum Rangoli,2026-05,cam,84370.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-05,ho_ck_cost,281780.49,store
-FY26-27,Kolkata,Forum Rangoli,2026-05,opex_total,1238471.12,store
-FY26-27,Kolkata,Forum Rangoli,2026-05,ebitda,102788.43,store
+FY26-27,Kolkata,Forum Rangoli,2026-05,ho_ck_cost,281036.46,store
+FY26-27,Kolkata,Forum Rangoli,2026-05,opex_total,1237727.08,store
+FY26-27,Kolkata,Forum Rangoli,2026-05,ebitda,103532.46,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,opening_stock,60523.93,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,purchases,312072.88,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,transferred_out,0.0,store
@@ -1432,9 +1658,9 @@ FY26-27,Kolkata,Forum Rangoli,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,repairs,800.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,misc,7546.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-06,cam,84370.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-06,ho_ck_cost,255668.95,store
-FY26-27,Kolkata,Forum Rangoli,2026-06,opex_total,1164040.05,store
-FY26-27,Kolkata,Forum Rangoli,2026-06,ebitda,2812.94,store
+FY26-27,Kolkata,Forum Rangoli,2026-06,ho_ck_cost,254995.4,store
+FY26-27,Kolkata,Forum Rangoli,2026-06,opex_total,1163366.5,store
+FY26-27,Kolkata,Forum Rangoli,2026-06,ebitda,3486.5,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,opening_stock,44301.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,purchases,311177.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,transferred_out,0.0,store
@@ -1457,9 +1683,9 @@ FY26-27,Kolkata,Forum Rangoli,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,repairs,800.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,misc,50446.81,store
 FY26-27,Kolkata,Forum Rangoli,2026-07,cam,96617.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-07,ho_ck_cost,239187.98,store
-FY26-27,Kolkata,Forum Rangoli,2026-07,opex_total,1167114.62,store
-FY26-27,Kolkata,Forum Rangoli,2026-07,ebitda,-73646.25,store
+FY26-27,Kolkata,Forum Rangoli,2026-07,ho_ck_cost,238571.24,store
+FY26-27,Kolkata,Forum Rangoli,2026-07,opex_total,1166497.88,store
+FY26-27,Kolkata,Forum Rangoli,2026-07,ebitda,-73029.5,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,opening_stock,38073.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,purchases,372050.15,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,transferred_out,0.0,store
@@ -1482,9 +1708,9 @@ FY26-27,Kolkata,Forum Rangoli,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,repairs,255391.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,misc,6669.46,store
 FY26-27,Kolkata,Forum Rangoli,2026-08,cam,97026.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-08,ho_ck_cost,264581.21,store
-FY26-27,Kolkata,Forum Rangoli,2026-08,opex_total,1484076.18,store
-FY26-27,Kolkata,Forum Rangoli,2026-08,ebitda,-151444.65,store
+FY26-27,Kolkata,Forum Rangoli,2026-08,ho_ck_cost,263890.77,store
+FY26-27,Kolkata,Forum Rangoli,2026-08,opex_total,1483385.75,store
+FY26-27,Kolkata,Forum Rangoli,2026-08,ebitda,-150754.21,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,opening_stock,39365.18,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,purchases,329652.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,transferred_out,0.0,store
@@ -1495,10 +1721,10 @@ FY26-27,Kolkata,Forum Rangoli,2026-09,tax,63604.06,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,commission,65547.27,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,net_revenue,1206533.9,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,fnb_cost,325551.23,store
-FY26-27,Kolkata,Forum Rangoli,2026-09,electricity,62000.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-09,electricity,61869.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,telephone,1152.82,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,gas,0.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-09,rent,176121.17,store
+FY26-27,Kolkata,Forum Rangoli,2026-09,rent,176857.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,software,5767.25,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,salary,219397.88,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,amc,6572.0,store
@@ -1507,9 +1733,34 @@ FY26-27,Kolkata,Forum Rangoli,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,repairs,915.0,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,misc,19826.66,store
 FY26-27,Kolkata,Forum Rangoli,2026-09,cam,97026.0,store
-FY26-27,Kolkata,Forum Rangoli,2026-09,ho_ck_cost,270321.5,store
-FY26-27,Kolkata,Forum Rangoli,2026-09,opex_total,1188595.98,store
-FY26-27,Kolkata,Forum Rangoli,2026-09,ebitda,17937.91,store
+FY26-27,Kolkata,Forum Rangoli,2026-09,ho_ck_cost,272432.34,store
+FY26-27,Kolkata,Forum Rangoli,2026-09,opex_total,1191311.65,store
+FY26-27,Kolkata,Forum Rangoli,2026-09,ebitda,15222.24,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,opening_stock,43465.95,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,purchases,412670.72,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,transferred_out,0.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,wastage,19604.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,closing_stock,49922.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,gross_revenue,1746767.78,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,tax,83179.42,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,commission,91252.81,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,net_revenue,1572335.55,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,fnb_cost,406214.67,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,electricity,60000.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,telephone,352.82,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,gas,0.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,rent,230477.2,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,software,5767.25,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,salary,228170.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,amc,6572.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,repairs,0.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,misc,9298.76,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,cam,97026.0,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,ho_ck_cost,262661.88,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,opex_total,1310485.04,store
+FY26-27,Kolkata,Forum Rangoli,2026-10,ebitda,261850.51,store
 FY26-27,Kolkata,Jameslong,2026-04,opening_stock,34826.0,store
 FY26-27,Kolkata,Jameslong,2026-04,purchases,358980.56,store
 FY26-27,Kolkata,Jameslong,2026-04,transferred_out,305.14,store
@@ -1532,9 +1783,9 @@ FY26-27,Kolkata,Jameslong,2026-04,insurance,1078.0,store
 FY26-27,Kolkata,Jameslong,2026-04,repairs,1046.0,store
 FY26-27,Kolkata,Jameslong,2026-04,misc,11363.71,store
 FY26-27,Kolkata,Jameslong,2026-04,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-04,ho_ck_cost,267952.35,store
-FY26-27,Kolkata,Jameslong,2026-04,opex_total,1070724.03,store
-FY26-27,Kolkata,Jameslong,2026-04,ebitda,136117.16,store
+FY26-27,Kolkata,Jameslong,2026-04,ho_ck_cost,268827.56,store
+FY26-27,Kolkata,Jameslong,2026-04,opex_total,1071599.24,store
+FY26-27,Kolkata,Jameslong,2026-04,ebitda,135241.95,store
 FY26-27,Kolkata,Jameslong,2026-05,opening_stock,40407.74,store
 FY26-27,Kolkata,Jameslong,2026-05,purchases,403701.0,store
 FY26-27,Kolkata,Jameslong,2026-05,transferred_out,-232.42,store
@@ -1557,9 +1808,9 @@ FY26-27,Kolkata,Jameslong,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Jameslong,2026-05,repairs,983.0,store
 FY26-27,Kolkata,Jameslong,2026-05,misc,29914.19,store
 FY26-27,Kolkata,Jameslong,2026-05,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-05,ho_ck_cost,289347.87,store
-FY26-27,Kolkata,Jameslong,2026-05,opex_total,1236415.79,store
-FY26-27,Kolkata,Jameslong,2026-05,ebitda,140864.09,store
+FY26-27,Kolkata,Jameslong,2026-05,ho_ck_cost,288583.86,store
+FY26-27,Kolkata,Jameslong,2026-05,opex_total,1235651.78,store
+FY26-27,Kolkata,Jameslong,2026-05,ebitda,141628.1,store
 FY26-27,Kolkata,Jameslong,2026-06,opening_stock,41084.72,store
 FY26-27,Kolkata,Jameslong,2026-06,purchases,398780.0,store
 FY26-27,Kolkata,Jameslong,2026-06,transferred_out,0.0,store
@@ -1582,9 +1833,9 @@ FY26-27,Kolkata,Jameslong,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Jameslong,2026-06,repairs,10416.0,store
 FY26-27,Kolkata,Jameslong,2026-06,misc,9923.9,store
 FY26-27,Kolkata,Jameslong,2026-06,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-06,ho_ck_cost,294231.99,store
-FY26-27,Kolkata,Jameslong,2026-06,opex_total,1233812.06,store
-FY26-27,Kolkata,Jameslong,2026-06,ebitda,109039.62,store
+FY26-27,Kolkata,Jameslong,2026-06,ho_ck_cost,293456.84,store
+FY26-27,Kolkata,Jameslong,2026-06,opex_total,1233036.91,store
+FY26-27,Kolkata,Jameslong,2026-06,ebitda,109814.77,store
 FY26-27,Kolkata,Jameslong,2026-07,opening_stock,44677.69,store
 FY26-27,Kolkata,Jameslong,2026-07,purchases,431006.0,store
 FY26-27,Kolkata,Jameslong,2026-07,transferred_out,617.0,store
@@ -1607,9 +1858,9 @@ FY26-27,Kolkata,Jameslong,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Jameslong,2026-07,repairs,29651.0,store
 FY26-27,Kolkata,Jameslong,2026-07,misc,24999.18,store
 FY26-27,Kolkata,Jameslong,2026-07,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-07,ho_ck_cost,312559.66,store
-FY26-27,Kolkata,Jameslong,2026-07,opex_total,1335581.66,store
-FY26-27,Kolkata,Jameslong,2026-07,ebitda,93311.65,store
+FY26-27,Kolkata,Jameslong,2026-07,ho_ck_cost,311753.73,store
+FY26-27,Kolkata,Jameslong,2026-07,opex_total,1334775.73,store
+FY26-27,Kolkata,Jameslong,2026-07,ebitda,94117.58,store
 FY26-27,Kolkata,Jameslong,2026-08,opening_stock,35601.0,store
 FY26-27,Kolkata,Jameslong,2026-08,purchases,452253.79,store
 FY26-27,Kolkata,Jameslong,2026-08,transferred_out,127.66,store
@@ -1632,9 +1883,9 @@ FY26-27,Kolkata,Jameslong,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Jameslong,2026-08,repairs,17949.0,store
 FY26-27,Kolkata,Jameslong,2026-08,misc,27372.4,store
 FY26-27,Kolkata,Jameslong,2026-08,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-08,ho_ck_cost,314681.07,store
-FY26-27,Kolkata,Jameslong,2026-08,opex_total,1327327.39,store
-FY26-27,Kolkata,Jameslong,2026-08,ebitda,257645.02,store
+FY26-27,Kolkata,Jameslong,2026-08,ho_ck_cost,313859.9,store
+FY26-27,Kolkata,Jameslong,2026-08,opex_total,1326506.22,store
+FY26-27,Kolkata,Jameslong,2026-08,ebitda,258466.19,store
 FY26-27,Kolkata,Jameslong,2026-09,opening_stock,29069.5,store
 FY26-27,Kolkata,Jameslong,2026-09,purchases,436470.58,store
 FY26-27,Kolkata,Jameslong,2026-09,transferred_out,1840.43,store
@@ -1645,7 +1896,7 @@ FY26-27,Kolkata,Jameslong,2026-09,tax,84923.65,store
 FY26-27,Kolkata,Jameslong,2026-09,commission,222517.64,store
 FY26-27,Kolkata,Jameslong,2026-09,net_revenue,1475955.37,store
 FY26-27,Kolkata,Jameslong,2026-09,fnb_cost,434587.65,store
-FY26-27,Kolkata,Jameslong,2026-09,electricity,69000.0,store
+FY26-27,Kolkata,Jameslong,2026-09,electricity,81800.0,store
 FY26-27,Kolkata,Jameslong,2026-09,telephone,352.82,store
 FY26-27,Kolkata,Jameslong,2026-09,gas,61798.0,store
 FY26-27,Kolkata,Jameslong,2026-09,rent,165917.0,store
@@ -1657,9 +1908,34 @@ FY26-27,Kolkata,Jameslong,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Jameslong,2026-09,repairs,4112.0,store
 FY26-27,Kolkata,Jameslong,2026-09,misc,22200.07,store
 FY26-27,Kolkata,Jameslong,2026-09,cam,0.0,store
-FY26-27,Kolkata,Jameslong,2026-09,ho_ck_cost,330684.84,store
-FY26-27,Kolkata,Jameslong,2026-09,opex_total,1326947.85,store
-FY26-27,Kolkata,Jameslong,2026-09,ebitda,149007.52,store
+FY26-27,Kolkata,Jameslong,2026-09,ho_ck_cost,333267.04,store
+FY26-27,Kolkata,Jameslong,2026-09,opex_total,1342330.05,store
+FY26-27,Kolkata,Jameslong,2026-09,ebitda,133625.32,store
+FY26-27,Kolkata,Jameslong,2026-10,opening_stock,29112.0,store
+FY26-27,Kolkata,Jameslong,2026-10,purchases,581454.14,store
+FY26-27,Kolkata,Jameslong,2026-10,transferred_out,726.0,store
+FY26-27,Kolkata,Jameslong,2026-10,wastage,30986.0,store
+FY26-27,Kolkata,Jameslong,2026-10,closing_stock,36503.0,store
+FY26-27,Kolkata,Jameslong,2026-10,gross_revenue,2629967.53,store
+FY26-27,Kolkata,Jameslong,2026-10,tax,125236.55,store
+FY26-27,Kolkata,Jameslong,2026-10,commission,310536.2,store
+FY26-27,Kolkata,Jameslong,2026-10,net_revenue,2194194.78,store
+FY26-27,Kolkata,Jameslong,2026-10,fnb_cost,573337.14,store
+FY26-27,Kolkata,Jameslong,2026-10,electricity,85000.0,store
+FY26-27,Kolkata,Jameslong,2026-10,telephone,352.82,store
+FY26-27,Kolkata,Jameslong,2026-10,gas,71350.0,store
+FY26-27,Kolkata,Jameslong,2026-10,rent,165917.0,store
+FY26-27,Kolkata,Jameslong,2026-10,software,6352.0,store
+FY26-27,Kolkata,Jameslong,2026-10,salary,211285.0,store
+FY26-27,Kolkata,Jameslong,2026-10,amc,9782.0,store
+FY26-27,Kolkata,Jameslong,2026-10,subscription,5246.47,store
+FY26-27,Kolkata,Jameslong,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Jameslong,2026-10,repairs,5497.0,store
+FY26-27,Kolkata,Jameslong,2026-10,misc,14661.9,store
+FY26-27,Kolkata,Jameslong,2026-10,cam,0.0,store
+FY26-27,Kolkata,Jameslong,2026-10,ho_ck_cost,366544.73,store
+FY26-27,Kolkata,Jameslong,2026-10,opex_total,1517024.06,store
+FY26-27,Kolkata,Jameslong,2026-10,ebitda,677170.72,store
 FY26-27,Kolkata,Sector 1,2026-04,opening_stock,42775.0,store
 FY26-27,Kolkata,Sector 1,2026-04,purchases,576251.31,store
 FY26-27,Kolkata,Sector 1,2026-04,transferred_out,2905.24,store
@@ -1682,9 +1958,9 @@ FY26-27,Kolkata,Sector 1,2026-04,insurance,879.0,store
 FY26-27,Kolkata,Sector 1,2026-04,repairs,3315.0,store
 FY26-27,Kolkata,Sector 1,2026-04,misc,17491.34,store
 FY26-27,Kolkata,Sector 1,2026-04,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-04,ho_ck_cost,515429.21,store
-FY26-27,Kolkata,Sector 1,2026-04,opex_total,1836850.38,store
-FY26-27,Kolkata,Sector 1,2026-04,ebitda,484611.63,store
+FY26-27,Kolkata,Sector 1,2026-04,ho_ck_cost,517112.75,store
+FY26-27,Kolkata,Sector 1,2026-04,opex_total,1838533.92,store
+FY26-27,Kolkata,Sector 1,2026-04,ebitda,482928.09,store
 FY26-27,Kolkata,Sector 1,2026-05,opening_stock,49260.08,store
 FY26-27,Kolkata,Sector 1,2026-05,purchases,620133.58,store
 FY26-27,Kolkata,Sector 1,2026-05,transferred_out,1347.91,store
@@ -1707,9 +1983,9 @@ FY26-27,Kolkata,Sector 1,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Sector 1,2026-05,repairs,5400.0,store
 FY26-27,Kolkata,Sector 1,2026-05,misc,27091.6,store
 FY26-27,Kolkata,Sector 1,2026-05,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-05,ho_ck_cost,534132.98,store
-FY26-27,Kolkata,Sector 1,2026-05,opex_total,2043923.86,store
-FY26-27,Kolkata,Sector 1,2026-05,ebitda,498519.59,store
+FY26-27,Kolkata,Sector 1,2026-05,ho_ck_cost,532722.62,store
+FY26-27,Kolkata,Sector 1,2026-05,opex_total,2042513.5,store
+FY26-27,Kolkata,Sector 1,2026-05,ebitda,499929.95,store
 FY26-27,Kolkata,Sector 1,2026-06,opening_stock,45210.94,store
 FY26-27,Kolkata,Sector 1,2026-06,purchases,605345.0,store
 FY26-27,Kolkata,Sector 1,2026-06,transferred_out,98.75,store
@@ -1732,9 +2008,9 @@ FY26-27,Kolkata,Sector 1,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Sector 1,2026-06,repairs,22207.0,store
 FY26-27,Kolkata,Sector 1,2026-06,misc,23140.25,store
 FY26-27,Kolkata,Sector 1,2026-06,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-06,ho_ck_cost,520096.52,store
-FY26-27,Kolkata,Sector 1,2026-06,opex_total,2024229.4,store
-FY26-27,Kolkata,Sector 1,2026-06,ebitda,349450.24,store
+FY26-27,Kolkata,Sector 1,2026-06,ho_ck_cost,518726.34,store
+FY26-27,Kolkata,Sector 1,2026-06,opex_total,2022859.22,store
+FY26-27,Kolkata,Sector 1,2026-06,ebitda,350820.43,store
 FY26-27,Kolkata,Sector 1,2026-07,opening_stock,44903.0,store
 FY26-27,Kolkata,Sector 1,2026-07,purchases,611396.0,store
 FY26-27,Kolkata,Sector 1,2026-07,transferred_out,649.0,store
@@ -1757,9 +2033,9 @@ FY26-27,Kolkata,Sector 1,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Sector 1,2026-07,repairs,8491.0,store
 FY26-27,Kolkata,Sector 1,2026-07,misc,28679.52,store
 FY26-27,Kolkata,Sector 1,2026-07,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-07,ho_ck_cost,532436.42,store
-FY26-27,Kolkata,Sector 1,2026-07,opex_total,2069955.99,store
-FY26-27,Kolkata,Sector 1,2026-07,ebitda,364122.79,store
+FY26-27,Kolkata,Sector 1,2026-07,ho_ck_cost,531063.54,store
+FY26-27,Kolkata,Sector 1,2026-07,opex_total,2068583.11,store
+FY26-27,Kolkata,Sector 1,2026-07,ebitda,365495.67,store
 FY26-27,Kolkata,Sector 1,2026-08,opening_stock,32962.0,store
 FY26-27,Kolkata,Sector 1,2026-08,purchases,674094.52,store
 FY26-27,Kolkata,Sector 1,2026-08,transferred_out,1158.0,store
@@ -1782,9 +2058,9 @@ FY26-27,Kolkata,Sector 1,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Sector 1,2026-08,repairs,41904.0,store
 FY26-27,Kolkata,Sector 1,2026-08,misc,13655.5,store
 FY26-27,Kolkata,Sector 1,2026-08,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-08,ho_ck_cost,532951.02,store
-FY26-27,Kolkata,Sector 1,2026-08,opex_total,2142374.58,store
-FY26-27,Kolkata,Sector 1,2026-08,ebitda,541970.79,store
+FY26-27,Kolkata,Sector 1,2026-08,ho_ck_cost,531560.27,store
+FY26-27,Kolkata,Sector 1,2026-08,opex_total,2140983.83,store
+FY26-27,Kolkata,Sector 1,2026-08,ebitda,543361.54,store
 FY26-27,Kolkata,Sector 1,2026-09,opening_stock,41371.0,store
 FY26-27,Kolkata,Sector 1,2026-09,purchases,591238.98,store
 FY26-27,Kolkata,Sector 1,2026-09,transferred_out,2160.4,store
@@ -1796,7 +2072,7 @@ FY26-27,Kolkata,Sector 1,2026-09,commission,168683.64,store
 FY26-27,Kolkata,Sector 1,2026-09,net_revenue,2306750.55,store
 FY26-27,Kolkata,Sector 1,2026-09,fnb_cost,589181.58,store
 FY26-27,Kolkata,Sector 1,2026-09,electricity,68580.0,store
-FY26-27,Kolkata,Sector 1,2026-09,telephone,647.82,store
+FY26-27,Kolkata,Sector 1,2026-09,telephone,938.82,store
 FY26-27,Kolkata,Sector 1,2026-09,gas,92697.0,store
 FY26-27,Kolkata,Sector 1,2026-09,rent,257830.0,store
 FY26-27,Kolkata,Sector 1,2026-09,software,5767.25,store
@@ -1807,9 +2083,34 @@ FY26-27,Kolkata,Sector 1,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Sector 1,2026-09,repairs,25633.0,store
 FY26-27,Kolkata,Sector 1,2026-09,misc,27117.72,store
 FY26-27,Kolkata,Sector 1,2026-09,cam,0.0,store
-FY26-27,Kolkata,Sector 1,2026-09,ho_ck_cost,516822.83,store
-FY26-27,Kolkata,Sector 1,2026-09,opex_total,2073553.02,store
-FY26-27,Kolkata,Sector 1,2026-09,ebitda,233197.53,store
+FY26-27,Kolkata,Sector 1,2026-09,ho_ck_cost,520858.52,store
+FY26-27,Kolkata,Sector 1,2026-09,opex_total,2077879.71,store
+FY26-27,Kolkata,Sector 1,2026-09,ebitda,228870.85,store
+FY26-27,Kolkata,Sector 1,2026-10,opening_stock,41268.0,store
+FY26-27,Kolkata,Sector 1,2026-10,purchases,738559.0,store
+FY26-27,Kolkata,Sector 1,2026-10,transferred_out,2648.0,store
+FY26-27,Kolkata,Sector 1,2026-10,wastage,31299.0,store
+FY26-27,Kolkata,Sector 1,2026-10,closing_stock,41220.0,store
+FY26-27,Kolkata,Sector 1,2026-10,gross_revenue,3502142.09,store
+FY26-27,Kolkata,Sector 1,2026-10,tax,166768.67,store
+FY26-27,Kolkata,Sector 1,2026-10,commission,226984.65,store
+FY26-27,Kolkata,Sector 1,2026-10,net_revenue,3108388.77,store
+FY26-27,Kolkata,Sector 1,2026-10,fnb_cost,735959.0,store
+FY26-27,Kolkata,Sector 1,2026-10,electricity,63804.0,store
+FY26-27,Kolkata,Sector 1,2026-10,telephone,938.82,store
+FY26-27,Kolkata,Sector 1,2026-10,gas,102744.0,store
+FY26-27,Kolkata,Sector 1,2026-10,rent,257830.0,store
+FY26-27,Kolkata,Sector 1,2026-10,software,5767.25,store
+FY26-27,Kolkata,Sector 1,2026-10,salary,454158.0,store
+FY26-27,Kolkata,Sector 1,2026-10,amc,10672.0,store
+FY26-27,Kolkata,Sector 1,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Sector 1,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Sector 1,2026-10,repairs,36973.0,store
+FY26-27,Kolkata,Sector 1,2026-10,misc,20741.47,store
+FY26-27,Kolkata,Sector 1,2026-10,cam,0.0,store
+FY26-27,Kolkata,Sector 1,2026-10,ho_ck_cost,519262.71,store
+FY26-27,Kolkata,Sector 1,2026-10,opex_total,2212794.72,store
+FY26-27,Kolkata,Sector 1,2026-10,ebitda,895594.05,store
 FY26-27,Kolkata,Chinar Park,2026-04,opening_stock,19436.0,store
 FY26-27,Kolkata,Chinar Park,2026-04,purchases,209773.31,store
 FY26-27,Kolkata,Chinar Park,2026-04,transferred_out,717.04,store
@@ -1832,9 +2133,9 @@ FY26-27,Kolkata,Chinar Park,2026-04,insurance,805.0,store
 FY26-27,Kolkata,Chinar Park,2026-04,repairs,5605.83,store
 FY26-27,Kolkata,Chinar Park,2026-04,misc,1861.17,store
 FY26-27,Kolkata,Chinar Park,2026-04,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-04,ho_ck_cost,137507.69,store
-FY26-27,Kolkata,Chinar Park,2026-04,opex_total,522406.28,store
-FY26-27,Kolkata,Chinar Park,2026-04,ebitda,96920.03,store
+FY26-27,Kolkata,Chinar Park,2026-04,ho_ck_cost,137956.83,store
+FY26-27,Kolkata,Chinar Park,2026-04,opex_total,522855.42,store
+FY26-27,Kolkata,Chinar Park,2026-04,ebitda,96470.89,store
 FY26-27,Kolkata,Chinar Park,2026-05,opening_stock,21020.61,store
 FY26-27,Kolkata,Chinar Park,2026-05,purchases,244982.15,store
 FY26-27,Kolkata,Chinar Park,2026-05,transferred_out,1998.13,store
@@ -1857,9 +2158,9 @@ FY26-27,Kolkata,Chinar Park,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Chinar Park,2026-05,repairs,0.0,store
 FY26-27,Kolkata,Chinar Park,2026-05,misc,36020.03,store
 FY26-27,Kolkata,Chinar Park,2026-05,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-05,ho_ck_cost,142836.13,store
-FY26-27,Kolkata,Chinar Park,2026-05,opex_total,596697.8,store
-FY26-27,Kolkata,Chinar Park,2026-05,ebitda,83194.3,store
+FY26-27,Kolkata,Chinar Park,2026-05,ho_ck_cost,142458.98,store
+FY26-27,Kolkata,Chinar Park,2026-05,opex_total,596320.65,store
+FY26-27,Kolkata,Chinar Park,2026-05,ebitda,83571.45,store
 FY26-27,Kolkata,Chinar Park,2026-06,opening_stock,21614.93,store
 FY26-27,Kolkata,Chinar Park,2026-06,purchases,237356.0,store
 FY26-27,Kolkata,Chinar Park,2026-06,transferred_out,42.68,store
@@ -1882,9 +2183,9 @@ FY26-27,Kolkata,Chinar Park,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Chinar Park,2026-06,repairs,0.0,store
 FY26-27,Kolkata,Chinar Park,2026-06,misc,1861.17,store
 FY26-27,Kolkata,Chinar Park,2026-06,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-06,ho_ck_cost,140993.15,store
-FY26-27,Kolkata,Chinar Park,2026-06,opex_total,551861.1,store
-FY26-27,Kolkata,Chinar Park,2026-06,ebitda,91620.54,store
+FY26-27,Kolkata,Chinar Park,2026-06,ho_ck_cost,140621.7,store
+FY26-27,Kolkata,Chinar Park,2026-06,opex_total,551489.66,store
+FY26-27,Kolkata,Chinar Park,2026-06,ebitda,91991.98,store
 FY26-27,Kolkata,Chinar Park,2026-07,opening_stock,22425.0,store
 FY26-27,Kolkata,Chinar Park,2026-07,purchases,251214.0,store
 FY26-27,Kolkata,Chinar Park,2026-07,transferred_out,696.0,store
@@ -1907,9 +2208,9 @@ FY26-27,Kolkata,Chinar Park,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Chinar Park,2026-07,repairs,297.0,store
 FY26-27,Kolkata,Chinar Park,2026-07,misc,35171.18,store
 FY26-27,Kolkata,Chinar Park,2026-07,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-07,ho_ck_cost,146074.5,store
-FY26-27,Kolkata,Chinar Park,2026-07,opex_total,613899.78,store
-FY26-27,Kolkata,Chinar Park,2026-07,ebitda,53892.33,store
+FY26-27,Kolkata,Chinar Park,2026-07,ho_ck_cost,145697.85,store
+FY26-27,Kolkata,Chinar Park,2026-07,opex_total,613523.13,store
+FY26-27,Kolkata,Chinar Park,2026-07,ebitda,54268.98,store
 FY26-27,Kolkata,Chinar Park,2026-08,opening_stock,18629.0,store
 FY26-27,Kolkata,Chinar Park,2026-08,purchases,267151.0,store
 FY26-27,Kolkata,Chinar Park,2026-08,transferred_out,455.0,store
@@ -1932,9 +2233,9 @@ FY26-27,Kolkata,Chinar Park,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Chinar Park,2026-08,repairs,8850.0,store
 FY26-27,Kolkata,Chinar Park,2026-08,misc,7373.71,store
 FY26-27,Kolkata,Chinar Park,2026-08,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-08,ho_ck_cost,136186.3,store
-FY26-27,Kolkata,Chinar Park,2026-08,opex_total,596164.55,store
-FY26-27,Kolkata,Chinar Park,2026-08,ebitda,89772.9,store
+FY26-27,Kolkata,Chinar Park,2026-08,ho_ck_cost,135830.92,store
+FY26-27,Kolkata,Chinar Park,2026-08,opex_total,595809.16,store
+FY26-27,Kolkata,Chinar Park,2026-08,ebitda,90128.28,store
 FY26-27,Kolkata,Chinar Park,2026-09,opening_stock,20114.0,store
 FY26-27,Kolkata,Chinar Park,2026-09,purchases,229930.0,store
 FY26-27,Kolkata,Chinar Park,2026-09,transferred_out,4218.0,store
@@ -1957,9 +2258,34 @@ FY26-27,Kolkata,Chinar Park,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Chinar Park,2026-09,repairs,0.0,store
 FY26-27,Kolkata,Chinar Park,2026-09,misc,11338.96,store
 FY26-27,Kolkata,Chinar Park,2026-09,cam,0.0,store
-FY26-27,Kolkata,Chinar Park,2026-09,ho_ck_cost,130065.66,store
-FY26-27,Kolkata,Chinar Park,2026-09,opex_total,538896.08,store
-FY26-27,Kolkata,Chinar Park,2026-09,ebitda,41629.81,store
+FY26-27,Kolkata,Chinar Park,2026-09,ho_ck_cost,131081.3,store
+FY26-27,Kolkata,Chinar Park,2026-09,opex_total,539911.71,store
+FY26-27,Kolkata,Chinar Park,2026-09,ebitda,40614.18,store
+FY26-27,Kolkata,Chinar Park,2026-10,opening_stock,22463.08,store
+FY26-27,Kolkata,Chinar Park,2026-10,purchases,285543.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,transferred_out,645.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,wastage,10608.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,closing_stock,18732.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,gross_revenue,1084839.59,store
+FY26-27,Kolkata,Chinar Park,2026-10,tax,51659.03,store
+FY26-27,Kolkata,Chinar Park,2026-10,commission,249260.13,store
+FY26-27,Kolkata,Chinar Park,2026-10,net_revenue,783920.43,store
+FY26-27,Kolkata,Chinar Park,2026-10,fnb_cost,288629.08,store
+FY26-27,Kolkata,Chinar Park,2026-10,electricity,46675.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,telephone,1355.82,store
+FY26-27,Kolkata,Chinar Park,2026-10,gas,0.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,rent,18880.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,software,3761.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,salary,103890.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,amc,3723.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,subscription,838.72,store
+FY26-27,Kolkata,Chinar Park,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,repairs,0.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,misc,7102.17,store
+FY26-27,Kolkata,Chinar Park,2026-10,cam,0.0,store
+FY26-27,Kolkata,Chinar Park,2026-10,ho_ck_cost,130955.51,store
+FY26-27,Kolkata,Chinar Park,2026-10,opex_total,607508.3,store
+FY26-27,Kolkata,Chinar Park,2026-10,ebitda,176412.13,store
 FY26-27,Kolkata,Santoshpur,2026-04,opening_stock,27910.0,store
 FY26-27,Kolkata,Santoshpur,2026-04,purchases,322224.42,store
 FY26-27,Kolkata,Santoshpur,2026-04,transferred_out,527.4,store
@@ -1982,9 +2308,9 @@ FY26-27,Kolkata,Santoshpur,2026-04,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-04,repairs,1680.0,store
 FY26-27,Kolkata,Santoshpur,2026-04,misc,10571.49,store
 FY26-27,Kolkata,Santoshpur,2026-04,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-04,ho_ck_cost,241214.33,store
-FY26-27,Kolkata,Santoshpur,2026-04,opex_total,944159.11,store
-FY26-27,Kolkata,Santoshpur,2026-04,ebitda,142255.68,store
+FY26-27,Kolkata,Santoshpur,2026-04,ho_ck_cost,242002.21,store
+FY26-27,Kolkata,Santoshpur,2026-04,opex_total,944946.99,store
+FY26-27,Kolkata,Santoshpur,2026-04,ebitda,141467.8,store
 FY26-27,Kolkata,Santoshpur,2026-05,opening_stock,40786.52,store
 FY26-27,Kolkata,Santoshpur,2026-05,purchases,327727.76,store
 FY26-27,Kolkata,Santoshpur,2026-05,transferred_out,1039.8,store
@@ -2007,9 +2333,9 @@ FY26-27,Kolkata,Santoshpur,2026-05,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-05,repairs,6933.0,store
 FY26-27,Kolkata,Santoshpur,2026-05,misc,21542.83,store
 FY26-27,Kolkata,Santoshpur,2026-05,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-05,ho_ck_cost,236710.85,store
-FY26-27,Kolkata,Santoshpur,2026-05,opex_total,1035912.99,store
-FY26-27,Kolkata,Santoshpur,2026-05,ebitda,90817.59,store
+FY26-27,Kolkata,Santoshpur,2026-05,ho_ck_cost,236085.83,store
+FY26-27,Kolkata,Santoshpur,2026-05,opex_total,1035287.96,store
+FY26-27,Kolkata,Santoshpur,2026-05,ebitda,91442.61,store
 FY26-27,Kolkata,Santoshpur,2026-06,opening_stock,39038.96,store
 FY26-27,Kolkata,Santoshpur,2026-06,purchases,316548.0,store
 FY26-27,Kolkata,Santoshpur,2026-06,transferred_out,1155.0,store
@@ -2032,9 +2358,9 @@ FY26-27,Kolkata,Santoshpur,2026-06,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-06,repairs,27230.0,store
 FY26-27,Kolkata,Santoshpur,2026-06,misc,9651.43,store
 FY26-27,Kolkata,Santoshpur,2026-06,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-06,ho_ck_cost,236975.25,store
-FY26-27,Kolkata,Santoshpur,2026-06,opex_total,989768.43,store
-FY26-27,Kolkata,Santoshpur,2026-06,ebitda,91767.99,store
+FY26-27,Kolkata,Santoshpur,2026-06,ho_ck_cost,236350.94,store
+FY26-27,Kolkata,Santoshpur,2026-06,opex_total,989144.12,store
+FY26-27,Kolkata,Santoshpur,2026-06,ebitda,92392.29,store
 FY26-27,Kolkata,Santoshpur,2026-07,opening_stock,49439.0,store
 FY26-27,Kolkata,Santoshpur,2026-07,purchases,309819.0,store
 FY26-27,Kolkata,Santoshpur,2026-07,transferred_out,2451.0,store
@@ -2057,9 +2383,9 @@ FY26-27,Kolkata,Santoshpur,2026-07,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-07,repairs,7680.0,store
 FY26-27,Kolkata,Santoshpur,2026-07,misc,22414.12,store
 FY26-27,Kolkata,Santoshpur,2026-07,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-07,ho_ck_cost,246680.48,store
-FY26-27,Kolkata,Santoshpur,2026-07,opex_total,1019093.06,store
-FY26-27,Kolkata,Santoshpur,2026-07,ebitda,108627.91,store
+FY26-27,Kolkata,Santoshpur,2026-07,ho_ck_cost,246044.41,store
+FY26-27,Kolkata,Santoshpur,2026-07,opex_total,1018457.0,store
+FY26-27,Kolkata,Santoshpur,2026-07,ebitda,109263.97,store
 FY26-27,Kolkata,Santoshpur,2026-08,opening_stock,36808.0,store
 FY26-27,Kolkata,Santoshpur,2026-08,purchases,396749.93,store
 FY26-27,Kolkata,Santoshpur,2026-08,transferred_out,1513.0,store
@@ -2082,9 +2408,9 @@ FY26-27,Kolkata,Santoshpur,2026-08,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-08,repairs,16857.0,store
 FY26-27,Kolkata,Santoshpur,2026-08,misc,9254.7,store
 FY26-27,Kolkata,Santoshpur,2026-08,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-08,ho_ck_cost,249778.39,store
-FY26-27,Kolkata,Santoshpur,2026-08,opex_total,1082225.64,store
-FY26-27,Kolkata,Santoshpur,2026-08,ebitda,175847.68,store
+FY26-27,Kolkata,Santoshpur,2026-08,ho_ck_cost,249126.58,store
+FY26-27,Kolkata,Santoshpur,2026-08,opex_total,1081573.83,store
+FY26-27,Kolkata,Santoshpur,2026-08,ebitda,176499.48,store
 FY26-27,Kolkata,Santoshpur,2026-09,opening_stock,42108.0,store
 FY26-27,Kolkata,Santoshpur,2026-09,purchases,325187.15,store
 FY26-27,Kolkata,Santoshpur,2026-09,transferred_out,898.71,store
@@ -2095,7 +2421,7 @@ FY26-27,Kolkata,Santoshpur,2026-09,tax,64049.51,store
 FY26-27,Kolkata,Santoshpur,2026-09,commission,175242.18,store
 FY26-27,Kolkata,Santoshpur,2026-09,net_revenue,1105747.96,store
 FY26-27,Kolkata,Santoshpur,2026-09,fnb_cost,339176.44,store
-FY26-27,Kolkata,Santoshpur,2026-09,electricity,65000.0,store
+FY26-27,Kolkata,Santoshpur,2026-09,electricity,60060.0,store
 FY26-27,Kolkata,Santoshpur,2026-09,telephone,711.15,store
 FY26-27,Kolkata,Santoshpur,2026-09,gas,53371.0,store
 FY26-27,Kolkata,Santoshpur,2026-09,rent,84561.16,store
@@ -2107,9 +2433,34 @@ FY26-27,Kolkata,Santoshpur,2026-09,insurance,747.33,store
 FY26-27,Kolkata,Santoshpur,2026-09,repairs,1950.0,store
 FY26-27,Kolkata,Santoshpur,2026-09,misc,17706.86,store
 FY26-27,Kolkata,Santoshpur,2026-09,cam,0.0,store
-FY26-27,Kolkata,Santoshpur,2026-09,ho_ck_cost,247740.61,store
-FY26-27,Kolkata,Santoshpur,2026-09,opex_total,1019042.03,store
-FY26-27,Kolkata,Santoshpur,2026-09,ebitda,86705.93,store
+FY26-27,Kolkata,Santoshpur,2026-09,ho_ck_cost,249675.13,store
+FY26-27,Kolkata,Santoshpur,2026-09,opex_total,1016036.55,store
+FY26-27,Kolkata,Santoshpur,2026-09,ebitda,89711.41,store
+FY26-27,Kolkata,Santoshpur,2026-10,opening_stock,27220.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,purchases,408029.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,transferred_out,560.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,wastage,16231.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,closing_stock,27256.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,gross_revenue,1750304.1,store
+FY26-27,Kolkata,Santoshpur,2026-10,tax,83347.81,store
+FY26-27,Kolkata,Santoshpur,2026-10,commission,217820.38,store
+FY26-27,Kolkata,Santoshpur,2026-10,net_revenue,1449135.91,store
+FY26-27,Kolkata,Santoshpur,2026-10,fnb_cost,407433.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,electricity,60000.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,telephone,711.15,store
+FY26-27,Kolkata,Santoshpur,2026-10,gas,62788.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,rent,97246.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,software,5767.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,salary,201655.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,amc,11830.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Santoshpur,2026-10,insurance,816.42,store
+FY26-27,Kolkata,Santoshpur,2026-10,repairs,8110.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,misc,14709.97,store
+FY26-27,Kolkata,Santoshpur,2026-10,cam,0.0,store
+FY26-27,Kolkata,Santoshpur,2026-10,ho_ck_cost,242081.12,store
+FY26-27,Kolkata,Santoshpur,2026-10,opex_total,1115394.14,store
+FY26-27,Kolkata,Santoshpur,2026-10,ebitda,333741.78,store
 FY26-27,Kolkata,Kalikapur,2026-04,opening_stock,23040.0,store
 FY26-27,Kolkata,Kalikapur,2026-04,purchases,313579.86,store
 FY26-27,Kolkata,Kalikapur,2026-04,transferred_out,921.61,store
@@ -2132,9 +2483,9 @@ FY26-27,Kolkata,Kalikapur,2026-04,insurance,1160.3,store
 FY26-27,Kolkata,Kalikapur,2026-04,repairs,2846.0,store
 FY26-27,Kolkata,Kalikapur,2026-04,misc,12668.83,store
 FY26-27,Kolkata,Kalikapur,2026-04,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-04,ho_ck_cost,259490.01,store
-FY26-27,Kolkata,Kalikapur,2026-04,opex_total,999136.24,store
-FY26-27,Kolkata,Kalikapur,2026-04,ebitda,169591.09,store
+FY26-27,Kolkata,Kalikapur,2026-04,ho_ck_cost,260337.58,store
+FY26-27,Kolkata,Kalikapur,2026-04,opex_total,999983.82,store
+FY26-27,Kolkata,Kalikapur,2026-04,ebitda,168743.52,store
 FY26-27,Kolkata,Kalikapur,2026-05,opening_stock,24932.46,store
 FY26-27,Kolkata,Kalikapur,2026-05,purchases,244982.0,store
 FY26-27,Kolkata,Kalikapur,2026-05,transferred_out,1998.0,store
@@ -2157,9 +2508,9 @@ FY26-27,Kolkata,Kalikapur,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Kalikapur,2026-05,repairs,0.0,store
 FY26-27,Kolkata,Kalikapur,2026-05,misc,35727.58,store
 FY26-27,Kolkata,Kalikapur,2026-05,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-05,ho_ck_cost,265069.83,store
-FY26-27,Kolkata,Kalikapur,2026-05,opex_total,984103.41,store
-FY26-27,Kolkata,Kalikapur,2026-05,ebitda,277614.32,store
+FY26-27,Kolkata,Kalikapur,2026-05,ho_ck_cost,264369.92,store
+FY26-27,Kolkata,Kalikapur,2026-05,opex_total,983403.5,store
+FY26-27,Kolkata,Kalikapur,2026-05,ebitda,278314.23,store
 FY26-27,Kolkata,Kalikapur,2026-06,opening_stock,21614.93,store
 FY26-27,Kolkata,Kalikapur,2026-06,purchases,332658.81,store
 FY26-27,Kolkata,Kalikapur,2026-06,transferred_out,207.32,store
@@ -2182,9 +2533,9 @@ FY26-27,Kolkata,Kalikapur,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Kalikapur,2026-06,repairs,39658.0,store
 FY26-27,Kolkata,Kalikapur,2026-06,misc,9454.83,store
 FY26-27,Kolkata,Kalikapur,2026-06,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-06,ho_ck_cost,261480.91,store
-FY26-27,Kolkata,Kalikapur,2026-06,opex_total,1077861.54,store
-FY26-27,Kolkata,Kalikapur,2026-06,ebitda,115516.78,store
+FY26-27,Kolkata,Kalikapur,2026-06,ho_ck_cost,260792.04,store
+FY26-27,Kolkata,Kalikapur,2026-06,opex_total,1077172.68,store
+FY26-27,Kolkata,Kalikapur,2026-06,ebitda,116205.64,store
 FY26-27,Kolkata,Kalikapur,2026-07,opening_stock,25343.0,store
 FY26-27,Kolkata,Kalikapur,2026-07,purchases,339375.0,store
 FY26-27,Kolkata,Kalikapur,2026-07,transferred_out,51.67,store
@@ -2207,9 +2558,9 @@ FY26-27,Kolkata,Kalikapur,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Kalikapur,2026-07,repairs,3719.0,store
 FY26-27,Kolkata,Kalikapur,2026-07,misc,17031.23,store
 FY26-27,Kolkata,Kalikapur,2026-07,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-07,ho_ck_cost,260234.45,store
-FY26-27,Kolkata,Kalikapur,2026-07,opex_total,1043716.38,store
-FY26-27,Kolkata,Kalikapur,2026-07,ebitda,145967.73,store
+FY26-27,Kolkata,Kalikapur,2026-07,ho_ck_cost,259563.44,store
+FY26-27,Kolkata,Kalikapur,2026-07,opex_total,1043045.37,store
+FY26-27,Kolkata,Kalikapur,2026-07,ebitda,146638.74,store
 FY26-27,Kolkata,Kalikapur,2026-08,opening_stock,23427.0,store
 FY26-27,Kolkata,Kalikapur,2026-08,purchases,361798.99,store
 FY26-27,Kolkata,Kalikapur,2026-08,transferred_out,839.0,store
@@ -2232,9 +2583,9 @@ FY26-27,Kolkata,Kalikapur,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Kalikapur,2026-08,repairs,23478.0,store
 FY26-27,Kolkata,Kalikapur,2026-08,misc,11549.05,store
 FY26-27,Kolkata,Kalikapur,2026-08,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-08,ho_ck_cost,250694.91,store
-FY26-27,Kolkata,Kalikapur,2026-08,opex_total,1077209.52,store
-FY26-27,Kolkata,Kalikapur,2026-08,ebitda,185480.08,store
+FY26-27,Kolkata,Kalikapur,2026-08,ho_ck_cost,250040.71,store
+FY26-27,Kolkata,Kalikapur,2026-08,opex_total,1076555.32,store
+FY26-27,Kolkata,Kalikapur,2026-08,ebitda,186134.28,store
 FY26-27,Kolkata,Kalikapur,2026-09,opening_stock,25030.9,store
 FY26-27,Kolkata,Kalikapur,2026-09,purchases,349072.71,store
 FY26-27,Kolkata,Kalikapur,2026-09,transferred_out,694.0,store
@@ -2245,7 +2596,7 @@ FY26-27,Kolkata,Kalikapur,2026-09,tax,70931.99,store
 FY26-27,Kolkata,Kalikapur,2026-09,commission,156265.64,store
 FY26-27,Kolkata,Kalikapur,2026-09,net_revenue,1262374.12,store
 FY26-27,Kolkata,Kalikapur,2026-09,fnb_cost,345975.34,store
-FY26-27,Kolkata,Kalikapur,2026-09,electricity,74000.0,store
+FY26-27,Kolkata,Kalikapur,2026-09,electricity,71860.0,store
 FY26-27,Kolkata,Kalikapur,2026-09,telephone,1027.0,store
 FY26-27,Kolkata,Kalikapur,2026-09,gas,0.0,store
 FY26-27,Kolkata,Kalikapur,2026-09,rent,74340.0,store
@@ -2257,9 +2608,34 @@ FY26-27,Kolkata,Kalikapur,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Kalikapur,2026-09,repairs,782.0,store
 FY26-27,Kolkata,Kalikapur,2026-09,misc,17171.98,store
 FY26-27,Kolkata,Kalikapur,2026-09,cam,49560.0,store
-FY26-27,Kolkata,Kalikapur,2026-09,ho_ck_cost,282832.39,store
-FY26-27,Kolkata,Kalikapur,2026-09,opex_total,1066759.18,store
-FY26-27,Kolkata,Kalikapur,2026-09,ebitda,195614.94,store
+FY26-27,Kolkata,Kalikapur,2026-09,ho_ck_cost,285040.92,store
+FY26-27,Kolkata,Kalikapur,2026-09,opex_total,1066827.72,store
+FY26-27,Kolkata,Kalikapur,2026-09,ebitda,195546.4,store
+FY26-27,Kolkata,Kalikapur,2026-10,opening_stock,27434.27,store
+FY26-27,Kolkata,Kalikapur,2026-10,purchases,392810.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,transferred_out,2281.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,wastage,16894.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,closing_stock,28801.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,gross_revenue,1871126.24,store
+FY26-27,Kolkata,Kalikapur,2026-10,tax,89101.25,store
+FY26-27,Kolkata,Kalikapur,2026-10,commission,194055.86,store
+FY26-27,Kolkata,Kalikapur,2026-10,net_revenue,1587969.13,store
+FY26-27,Kolkata,Kalikapur,2026-10,fnb_cost,389162.27,store
+FY26-27,Kolkata,Kalikapur,2026-10,electricity,70000.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,telephone,1027.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,gas,0.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,rent,74340.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,software,7355.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,salary,177580.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,amc,9175.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,subscription,2246.47,store
+FY26-27,Kolkata,Kalikapur,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,repairs,18438.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,misc,20389.95,store
+FY26-27,Kolkata,Kalikapur,2026-10,cam,49560.0,store
+FY26-27,Kolkata,Kalikapur,2026-10,ho_ck_cost,265273.5,store
+FY26-27,Kolkata,Kalikapur,2026-10,opex_total,1086245.19,store
+FY26-27,Kolkata,Kalikapur,2026-10,ebitda,501723.94,store
 FY26-27,Kolkata,Lake Road,2026-04,opening_stock,41653.0,store
 FY26-27,Kolkata,Lake Road,2026-04,purchases,570115.74,store
 FY26-27,Kolkata,Lake Road,2026-04,transferred_out,363.49,store
@@ -2282,9 +2658,9 @@ FY26-27,Kolkata,Lake Road,2026-04,insurance,1126.85,store
 FY26-27,Kolkata,Lake Road,2026-04,repairs,17705.93,store
 FY26-27,Kolkata,Lake Road,2026-04,misc,17611.0,store
 FY26-27,Kolkata,Lake Road,2026-04,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-04,ho_ck_cost,458360.81,store
-FY26-27,Kolkata,Lake Road,2026-04,opex_total,1724827.12,store
-FY26-27,Kolkata,Lake Road,2026-04,ebitda,339602.27,store
+FY26-27,Kolkata,Lake Road,2026-04,ho_ck_cost,459857.95,store
+FY26-27,Kolkata,Lake Road,2026-04,opex_total,1726324.26,store
+FY26-27,Kolkata,Lake Road,2026-04,ebitda,338105.13,store
 FY26-27,Kolkata,Lake Road,2026-05,opening_stock,55859.11,store
 FY26-27,Kolkata,Lake Road,2026-05,purchases,571057.25,store
 FY26-27,Kolkata,Lake Road,2026-05,transferred_out,614.4,store
@@ -2307,9 +2683,9 @@ FY26-27,Kolkata,Lake Road,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Lake Road,2026-05,repairs,2207.0,store
 FY26-27,Kolkata,Lake Road,2026-05,misc,43210.22,store
 FY26-27,Kolkata,Lake Road,2026-05,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-05,ho_ck_cost,473627.54,store
-FY26-27,Kolkata,Lake Road,2026-05,opex_total,1914296.24,store
-FY26-27,Kolkata,Lake Road,2026-05,ebitda,340144.67,store
+FY26-27,Kolkata,Lake Road,2026-05,ho_ck_cost,472376.94,store
+FY26-27,Kolkata,Lake Road,2026-05,opex_total,1913045.64,store
+FY26-27,Kolkata,Lake Road,2026-05,ebitda,341395.27,store
 FY26-27,Kolkata,Lake Road,2026-06,opening_stock,40101.87,store
 FY26-27,Kolkata,Lake Road,2026-06,purchases,618636.0,store
 FY26-27,Kolkata,Lake Road,2026-06,transferred_out,472.0,store
@@ -2332,9 +2708,9 @@ FY26-27,Kolkata,Lake Road,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Lake Road,2026-06,repairs,12779.0,store
 FY26-27,Kolkata,Lake Road,2026-06,misc,24168.73,store
 FY26-27,Kolkata,Lake Road,2026-06,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-06,ho_ck_cost,480585.9,store
-FY26-27,Kolkata,Lake Road,2026-06,opex_total,1935369.89,store
-FY26-27,Kolkata,Lake Road,2026-06,ebitda,257986.37,store
+FY26-27,Kolkata,Lake Road,2026-06,ho_ck_cost,479319.8,store
+FY26-27,Kolkata,Lake Road,2026-06,opex_total,1934103.79,store
+FY26-27,Kolkata,Lake Road,2026-06,ebitda,259252.47,store
 FY26-27,Kolkata,Lake Road,2026-07,opening_stock,39631.0,store
 FY26-27,Kolkata,Lake Road,2026-07,purchases,614060.0,store
 FY26-27,Kolkata,Lake Road,2026-07,transferred_out,915.0,store
@@ -2357,9 +2733,9 @@ FY26-27,Kolkata,Lake Road,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Lake Road,2026-07,repairs,10053.0,store
 FY26-27,Kolkata,Lake Road,2026-07,misc,51182.53,store
 FY26-27,Kolkata,Lake Road,2026-07,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-07,ho_ck_cost,465700.68,store
-FY26-27,Kolkata,Lake Road,2026-07,opex_total,1939640.67,store
-FY26-27,Kolkata,Lake Road,2026-07,ebitda,189349.96,store
+FY26-27,Kolkata,Lake Road,2026-07,ho_ck_cost,464499.88,store
+FY26-27,Kolkata,Lake Road,2026-07,opex_total,1938439.87,store
+FY26-27,Kolkata,Lake Road,2026-07,ebitda,190550.76,store
 FY26-27,Kolkata,Lake Road,2026-08,opening_stock,30712.0,store
 FY26-27,Kolkata,Lake Road,2026-08,purchases,724817.0,store
 FY26-27,Kolkata,Lake Road,2026-08,transferred_out,1495.0,store
@@ -2382,9 +2758,9 @@ FY26-27,Kolkata,Lake Road,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Lake Road,2026-08,repairs,30041.0,store
 FY26-27,Kolkata,Lake Road,2026-08,misc,21500.74,store
 FY26-27,Kolkata,Lake Road,2026-08,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-08,ho_ck_cost,460727.06,store
-FY26-27,Kolkata,Lake Road,2026-08,opex_total,2018636.19,store
-FY26-27,Kolkata,Lake Road,2026-08,ebitda,301934.56,store
+FY26-27,Kolkata,Lake Road,2026-08,ho_ck_cost,459524.78,store
+FY26-27,Kolkata,Lake Road,2026-08,opex_total,2017433.91,store
+FY26-27,Kolkata,Lake Road,2026-08,ebitda,303136.84,store
 FY26-27,Kolkata,Lake Road,2026-09,opening_stock,34650.0,store
 FY26-27,Kolkata,Lake Road,2026-09,purchases,634160.0,store
 FY26-27,Kolkata,Lake Road,2026-09,transferred_out,1574.0,store
@@ -2395,7 +2771,7 @@ FY26-27,Kolkata,Lake Road,2026-09,tax,124672.95,store
 FY26-27,Kolkata,Lake Road,2026-09,commission,248669.92,store
 FY26-27,Kolkata,Lake Road,2026-09,net_revenue,2244789.06,store
 FY26-27,Kolkata,Lake Road,2026-09,fnb_cost,634656.17,store
-FY26-27,Kolkata,Lake Road,2026-09,electricity,105000.0,store
+FY26-27,Kolkata,Lake Road,2026-09,electricity,100637.0,store
 FY26-27,Kolkata,Lake Road,2026-09,telephone,145.67,store
 FY26-27,Kolkata,Lake Road,2026-09,gas,78652.0,store
 FY26-27,Kolkata,Lake Road,2026-09,rent,180000.0,store
@@ -2407,9 +2783,34 @@ FY26-27,Kolkata,Lake Road,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Lake Road,2026-09,repairs,5896.0,store
 FY26-27,Kolkata,Lake Road,2026-09,misc,26126.97,store
 FY26-27,Kolkata,Lake Road,2026-09,cam,5000.0,store
-FY26-27,Kolkata,Lake Road,2026-09,ho_ck_cost,502940.49,store
-FY26-27,Kolkata,Lake Road,2026-09,opex_total,1962295.31,store
-FY26-27,Kolkata,Lake Road,2026-09,ebitda,282493.75,store
+FY26-27,Kolkata,Lake Road,2026-09,ho_ck_cost,506867.77,store
+FY26-27,Kolkata,Lake Road,2026-09,opex_total,1961859.59,store
+FY26-27,Kolkata,Lake Road,2026-09,ebitda,282929.47,store
+FY26-27,Kolkata,Lake Road,2026-10,opening_stock,32579.83,store
+FY26-27,Kolkata,Lake Road,2026-10,purchases,752416.0,store
+FY26-27,Kolkata,Lake Road,2026-10,transferred_out,4100.0,store
+FY26-27,Kolkata,Lake Road,2026-10,wastage,36775.0,store
+FY26-27,Kolkata,Lake Road,2026-10,closing_stock,34757.0,store
+FY26-27,Kolkata,Lake Road,2026-10,gross_revenue,3193209.38,store
+FY26-27,Kolkata,Lake Road,2026-10,tax,152057.59,store
+FY26-27,Kolkata,Lake Road,2026-10,commission,315027.44,store
+FY26-27,Kolkata,Lake Road,2026-10,net_revenue,2726124.35,store
+FY26-27,Kolkata,Lake Road,2026-10,fnb_cost,746138.83,store
+FY26-27,Kolkata,Lake Road,2026-10,electricity,106453.0,store
+FY26-27,Kolkata,Lake Road,2026-10,telephone,145.67,store
+FY26-27,Kolkata,Lake Road,2026-10,gas,88474.0,store
+FY26-27,Kolkata,Lake Road,2026-10,rent,212400.0,store
+FY26-27,Kolkata,Lake Road,2026-10,software,5767.25,store
+FY26-27,Kolkata,Lake Road,2026-10,salary,373784.0,store
+FY26-27,Kolkata,Lake Road,2026-10,amc,10646.0,store
+FY26-27,Kolkata,Lake Road,2026-10,subscription,7746.47,store
+FY26-27,Kolkata,Lake Road,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Lake Road,2026-10,repairs,14746.0,store
+FY26-27,Kolkata,Lake Road,2026-10,misc,27066.41,store
+FY26-27,Kolkata,Lake Road,2026-10,cam,5000.0,store
+FY26-27,Kolkata,Lake Road,2026-10,ho_ck_cost,455404.66,store
+FY26-27,Kolkata,Lake Road,2026-10,opex_total,2055470.29,store
+FY26-27,Kolkata,Lake Road,2026-10,ebitda,670654.06,store
 FY26-27,Kolkata,Quest Mall,2026-04,opening_stock,26431.0,store
 FY26-27,Kolkata,Quest Mall,2026-04,purchases,202555.22,store
 FY26-27,Kolkata,Quest Mall,2026-04,transferred_out,581.61,store
@@ -2433,9 +2834,9 @@ FY26-27,Kolkata,Quest Mall,2026-04,insurance,868.94,store
 FY26-27,Kolkata,Quest Mall,2026-04,repairs,1218.0,store
 FY26-27,Kolkata,Quest Mall,2026-04,misc,18360.92,store
 FY26-27,Kolkata,Quest Mall,2026-04,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-04,ho_ck_cost,180481.15,store
-FY26-27,Kolkata,Quest Mall,2026-04,opex_total,908251.51,store
-FY26-27,Kolkata,Quest Mall,2026-04,ebitda,-95375.31,store
+FY26-27,Kolkata,Quest Mall,2026-04,ho_ck_cost,181070.66,store
+FY26-27,Kolkata,Quest Mall,2026-04,opex_total,908841.02,store
+FY26-27,Kolkata,Quest Mall,2026-04,ebitda,-95964.82,store
 FY26-27,Kolkata,Quest Mall,2026-05,opening_stock,26476.9,store
 FY26-27,Kolkata,Quest Mall,2026-05,purchases,230206.84,store
 FY26-27,Kolkata,Quest Mall,2026-05,transferred_out,232.05,store
@@ -2458,9 +2859,9 @@ FY26-27,Kolkata,Quest Mall,2026-05,insurance,1698.0,store
 FY26-27,Kolkata,Quest Mall,2026-05,repairs,0.0,store
 FY26-27,Kolkata,Quest Mall,2026-05,misc,26442.93,store
 FY26-27,Kolkata,Quest Mall,2026-05,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-05,ho_ck_cost,186175.66,store
-FY26-27,Kolkata,Quest Mall,2026-05,opex_total,997454.58,store
-FY26-27,Kolkata,Quest Mall,2026-05,ebitda,-111268.73,store
+FY26-27,Kolkata,Quest Mall,2026-05,ho_ck_cost,185684.07,store
+FY26-27,Kolkata,Quest Mall,2026-05,opex_total,996962.98,store
+FY26-27,Kolkata,Quest Mall,2026-05,ebitda,-110777.13,store
 FY26-27,Kolkata,Quest Mall,2026-06,opening_stock,26517.6,store
 FY26-27,Kolkata,Quest Mall,2026-06,purchases,258246.0,store
 FY26-27,Kolkata,Quest Mall,2026-06,transferred_out,0.0,store
@@ -2483,9 +2884,9 @@ FY26-27,Kolkata,Quest Mall,2026-06,insurance,1698.0,store
 FY26-27,Kolkata,Quest Mall,2026-06,repairs,3200.0,store
 FY26-27,Kolkata,Quest Mall,2026-06,misc,18391.15,store
 FY26-27,Kolkata,Quest Mall,2026-06,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-06,ho_ck_cost,225948.84,store
-FY26-27,Kolkata,Quest Mall,2026-06,opex_total,1082247.76,store
-FY26-27,Kolkata,Quest Mall,2026-06,ebitda,-51035.03,store
+FY26-27,Kolkata,Quest Mall,2026-06,ho_ck_cost,225353.58,store
+FY26-27,Kolkata,Quest Mall,2026-06,opex_total,1081652.5,store
+FY26-27,Kolkata,Quest Mall,2026-06,ebitda,-50439.77,store
 FY26-27,Kolkata,Quest Mall,2026-07,opening_stock,28972.0,store
 FY26-27,Kolkata,Quest Mall,2026-07,purchases,297086.0,store
 FY26-27,Kolkata,Quest Mall,2026-07,transferred_out,50.0,store
@@ -2508,9 +2909,9 @@ FY26-27,Kolkata,Quest Mall,2026-07,insurance,1698.0,store
 FY26-27,Kolkata,Quest Mall,2026-07,repairs,5900.0,store
 FY26-27,Kolkata,Quest Mall,2026-07,misc,19365.71,store
 FY26-27,Kolkata,Quest Mall,2026-07,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-07,ho_ck_cost,244955.66,store
-FY26-27,Kolkata,Quest Mall,2026-07,opex_total,1152524.24,store
-FY26-27,Kolkata,Quest Mall,2026-07,ebitda,-32688.42,store
+FY26-27,Kolkata,Quest Mall,2026-07,ho_ck_cost,244324.04,store
+FY26-27,Kolkata,Quest Mall,2026-07,opex_total,1151892.63,store
+FY26-27,Kolkata,Quest Mall,2026-07,ebitda,-32056.81,store
 FY26-27,Kolkata,Quest Mall,2026-08,opening_stock,35628.0,store
 FY26-27,Kolkata,Quest Mall,2026-08,purchases,328617.5,store
 FY26-27,Kolkata,Quest Mall,2026-08,transferred_out,0.0,store
@@ -2533,9 +2934,9 @@ FY26-27,Kolkata,Quest Mall,2026-08,insurance,1698.0,store
 FY26-27,Kolkata,Quest Mall,2026-08,repairs,150.0,store
 FY26-27,Kolkata,Quest Mall,2026-08,misc,19474.48,store
 FY26-27,Kolkata,Quest Mall,2026-08,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-08,ho_ck_cost,244293.44,store
-FY26-27,Kolkata,Quest Mall,2026-08,opex_total,1196214.18,store
-FY26-27,Kolkata,Quest Mall,2026-08,ebitda,34232.8,store
+FY26-27,Kolkata,Quest Mall,2026-08,ho_ck_cost,243655.95,store
+FY26-27,Kolkata,Quest Mall,2026-08,opex_total,1195576.69,store
+FY26-27,Kolkata,Quest Mall,2026-08,ebitda,34870.29,store
 FY26-27,Kolkata,Quest Mall,2026-09,opening_stock,31301.72,store
 FY26-27,Kolkata,Quest Mall,2026-09,purchases,294770.41,store
 FY26-27,Kolkata,Quest Mall,2026-09,transferred_out,175.66,store
@@ -2546,7 +2947,7 @@ FY26-27,Kolkata,Quest Mall,2026-09,tax,50708.42,store
 FY26-27,Kolkata,Quest Mall,2026-09,commission,0.0,store
 FY26-27,Kolkata,Quest Mall,2026-09,net_revenue,1014168.4,store
 FY26-27,Kolkata,Quest Mall,2026-09,fnb_cost,294780.68,store
-FY26-27,Kolkata,Quest Mall,2026-09,electricity,30000.0,store
+FY26-27,Kolkata,Quest Mall,2026-09,electricity,30319.0,store
 FY26-27,Kolkata,Quest Mall,2026-09,telephone,801.42,store
 FY26-27,Kolkata,Quest Mall,2026-09,gas,73145.0,store
 FY26-27,Kolkata,Quest Mall,2026-09,rent,167540.62,store
@@ -2558,9 +2959,34 @@ FY26-27,Kolkata,Quest Mall,2026-09,insurance,1698.0,store
 FY26-27,Kolkata,Quest Mall,2026-09,repairs,0.0,store
 FY26-27,Kolkata,Quest Mall,2026-09,misc,24642.96,store
 FY26-27,Kolkata,Quest Mall,2026-09,cam,107702.14,store
-FY26-27,Kolkata,Quest Mall,2026-09,ho_ck_cost,227222.4,store
-FY26-27,Kolkata,Quest Mall,2026-09,opex_total,1095629.08,store
-FY26-27,Kolkata,Quest Mall,2026-09,ebitda,-81460.68,store
+FY26-27,Kolkata,Quest Mall,2026-09,ho_ck_cost,228996.69,store
+FY26-27,Kolkata,Quest Mall,2026-09,opex_total,1097722.38,store
+FY26-27,Kolkata,Quest Mall,2026-09,ebitda,-83553.98,store
+FY26-27,Kolkata,Quest Mall,2026-10,opening_stock,31115.79,store
+FY26-27,Kolkata,Quest Mall,2026-10,purchases,320710.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,transferred_out,0.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,wastage,24254.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,closing_stock,28108.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,gross_revenue,1261100.07,store
+FY26-27,Kolkata,Quest Mall,2026-10,tax,60052.38,store
+FY26-27,Kolkata,Quest Mall,2026-10,commission,0.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,net_revenue,1201047.69,store
+FY26-27,Kolkata,Quest Mall,2026-10,fnb_cost,323717.79,store
+FY26-27,Kolkata,Quest Mall,2026-10,electricity,34119.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,telephone,801.42,store
+FY26-27,Kolkata,Quest Mall,2026-10,gas,75000.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,rent,198413.08,store
+FY26-27,Kolkata,Quest Mall,2026-10,software,4080.83,store
+FY26-27,Kolkata,Quest Mall,2026-10,salary,152589.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,amc,11426.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,subscription,0.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,insurance,1698.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,repairs,480.0,store
+FY26-27,Kolkata,Quest Mall,2026-10,misc,14563.58,store
+FY26-27,Kolkata,Quest Mall,2026-10,cam,107702.14,store
+FY26-27,Kolkata,Quest Mall,2026-10,ho_ck_cost,200637.48,store
+FY26-27,Kolkata,Quest Mall,2026-10,opex_total,1125228.32,store
+FY26-27,Kolkata,Quest Mall,2026-10,ebitda,75819.37,store
 FY26-27,Kolkata,Event Sales,2026-04,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-04,purchases,5276.62,events
 FY26-27,Kolkata,Event Sales,2026-04,transferred_out,0.0,events
@@ -2583,9 +3009,9 @@ FY26-27,Kolkata,Event Sales,2026-04,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-04,repairs,0.0,events
 FY26-27,Kolkata,Event Sales,2026-04,misc,10104.0,events
 FY26-27,Kolkata,Event Sales,2026-04,cam,0.0,events
-FY26-27,Kolkata,Event Sales,2026-04,ho_ck_cost,11101.23,events
-FY26-27,Kolkata,Event Sales,2026-04,opex_total,26481.85,events
-FY26-27,Kolkata,Event Sales,2026-04,ebitda,23517.4,events
+FY26-27,Kolkata,Event Sales,2026-04,ho_ck_cost,11137.49,events
+FY26-27,Kolkata,Event Sales,2026-04,opex_total,26518.11,events
+FY26-27,Kolkata,Event Sales,2026-04,ebitda,23481.14,events
 FY26-27,Kolkata,Event Sales,2026-05,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-05,purchases,18323.01,events
 FY26-27,Kolkata,Event Sales,2026-05,transferred_out,830.49,events
@@ -2608,9 +3034,9 @@ FY26-27,Kolkata,Event Sales,2026-05,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-05,repairs,0.0,events
 FY26-27,Kolkata,Event Sales,2026-05,misc,7309.0,events
 FY26-27,Kolkata,Event Sales,2026-05,cam,0.0,events
-FY26-27,Kolkata,Event Sales,2026-05,ho_ck_cost,7058.91,events
-FY26-27,Kolkata,Event Sales,2026-05,opex_total,38264.43,events
-FY26-27,Kolkata,Event Sales,2026-05,ebitda,-4664.43,events
+FY26-27,Kolkata,Event Sales,2026-05,ho_ck_cost,7040.27,events
+FY26-27,Kolkata,Event Sales,2026-05,opex_total,38245.79,events
+FY26-27,Kolkata,Event Sales,2026-05,ebitda,-4645.79,events
 FY26-27,Kolkata,Event Sales,2026-06,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-06,purchases,52826.0,events
 FY26-27,Kolkata,Event Sales,2026-06,transferred_out,0.0,events
@@ -2633,9 +3059,9 @@ FY26-27,Kolkata,Event Sales,2026-06,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-06,repairs,4774.0,events
 FY26-27,Kolkata,Event Sales,2026-06,misc,0.0,events
 FY26-27,Kolkata,Event Sales,2026-06,cam,0.0,events
-FY26-27,Kolkata,Event Sales,2026-06,ho_ck_cost,27813.8,events
-FY26-27,Kolkata,Event Sales,2026-06,opex_total,85413.8,events
-FY26-27,Kolkata,Event Sales,2026-06,ebitda,41526.2,events
+FY26-27,Kolkata,Event Sales,2026-06,ho_ck_cost,27740.53,events
+FY26-27,Kolkata,Event Sales,2026-06,opex_total,85340.53,events
+FY26-27,Kolkata,Event Sales,2026-06,ebitda,41599.47,events
 FY26-27,Kolkata,Event Sales,2026-07,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-07,purchases,75127.0,events
 FY26-27,Kolkata,Event Sales,2026-07,transferred_out,1007.0,events
@@ -2657,9 +3083,9 @@ FY26-27,Kolkata,Event Sales,2026-07,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-07,repairs,0.0,events
 FY26-27,Kolkata,Event Sales,2026-07,misc,29973.33,events
 FY26-27,Kolkata,Event Sales,2026-07,cam,0.0,events
-FY26-27,Kolkata,Event Sales,2026-07,ho_ck_cost,29867.69,events
-FY26-27,Kolkata,Event Sales,2026-07,opex_total,163206.02,events
-FY26-27,Kolkata,Event Sales,2026-07,ebitda,-26663.32,events
+FY26-27,Kolkata,Event Sales,2026-07,ho_ck_cost,29790.67,events
+FY26-27,Kolkata,Event Sales,2026-07,opex_total,163129.01,events
+FY26-27,Kolkata,Event Sales,2026-07,ebitda,-26586.31,events
 FY26-27,Kolkata,Event Sales,2026-08,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-08,purchases,7148.0,events
 FY26-27,Kolkata,Event Sales,2026-08,transferred_out,730.0,events
@@ -2681,27 +3107,62 @@ FY26-27,Kolkata,Event Sales,2026-08,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-08,repairs,0.0,events
 FY26-27,Kolkata,Event Sales,2026-08,misc,1937.0,events
 FY26-27,Kolkata,Event Sales,2026-08,cam,0.0,events
-FY26-27,Kolkata,Event Sales,2026-08,ho_ck_cost,1074.1,events
-FY26-27,Kolkata,Event Sales,2026-08,opex_total,12227.1,events
-FY26-27,Kolkata,Event Sales,2026-08,ebitda,-6817.1,events
+FY26-27,Kolkata,Event Sales,2026-08,ho_ck_cost,1071.3,events
+FY26-27,Kolkata,Event Sales,2026-08,opex_total,12224.3,events
+FY26-27,Kolkata,Event Sales,2026-08,ebitda,-6814.3,events
 FY26-27,Kolkata,Event Sales,2026-09,opening_stock,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,purchases,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,transferred_out,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,wastage,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,closing_stock,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,gross_revenue,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,tax,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,net_revenue,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,fnb_cost,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,electricity,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,telephone,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,gas,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,rent,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,software,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,salary,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,amc,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,staff_incentives,0.0,events
+FY26-27,Kolkata,Event Sales,2026-09,insurance,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,repairs,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,misc,25131.0,events
+FY26-27,Kolkata,Event Sales,2026-09,cam,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,ho_ck_cost,0.0,events
 FY26-27,Kolkata,Event Sales,2026-09,opex_total,25131.0,events
 FY26-27,Kolkata,Event Sales,2026-09,ebitda,-25131.0,events
+FY26-27,Kolkata,Event Sales,2026-10,opening_stock,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,purchases,47422.0,events
+FY26-27,Kolkata,Event Sales,2026-10,transferred_out,3277.0,events
+FY26-27,Kolkata,Event Sales,2026-10,wastage,4825.0,events
+FY26-27,Kolkata,Event Sales,2026-10,closing_stock,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,gross_revenue,157309.59,events
+FY26-27,Kolkata,Event Sales,2026-10,tax,7490.93,events
+FY26-27,Kolkata,Event Sales,2026-10,net_revenue,149818.66,events
+FY26-27,Kolkata,Event Sales,2026-10,fnb_cost,44145.0,events
+FY26-27,Kolkata,Event Sales,2026-10,electricity,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,telephone,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,gas,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,rent,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,software,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,salary,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,amc,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,staff_incentives,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,insurance,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,repairs,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,misc,25224.0,events
+FY26-27,Kolkata,Event Sales,2026-10,cam,0.0,events
+FY26-27,Kolkata,Event Sales,2026-10,ho_ck_cost,25027.51,events
+FY26-27,Kolkata,Event Sales,2026-10,opex_total,94396.51,events
+FY26-27,Kolkata,Event Sales,2026-10,ebitda,55422.15,events
 FY26-27,Kolkata,Kitchen & central,2026-04,ads,811748.22,central
-FY26-27,Kolkata,Kitchen & central,2026-04,ebitda,-958852.23,central
+FY26-27,Kolkata,Kitchen & central,2026-04,ebitda,-958852.24,central
 FY26-27,Kolkata,Kitchen & central,2026-04,electricity,6496.0,central
 FY26-27,Kolkata,Kitchen & central,2026-04,fnb_cost,140608.0,central
-FY26-27,Kolkata,Kitchen & central,2026-04,opex_total,958852.21,central
+FY26-27,Kolkata,Kitchen & central,2026-04,opex_total,958852.22,central
 FY26-27,Kolkata,Kitchen & central,2026-04,purchases,140608.0,central
 FY26-27,Kolkata,Kitchen & central,2026-05,ads,907161.2,central
 FY26-27,Kolkata,Kitchen & central,2026-05,ebitda,-1279861.19,central
@@ -2709,23 +3170,28 @@ FY26-27,Kolkata,Kitchen & central,2026-05,fnb_cost,372700.0,central
 FY26-27,Kolkata,Kitchen & central,2026-05,opex_total,1279861.2,central
 FY26-27,Kolkata,Kitchen & central,2026-05,purchases,372700.0,central
 FY26-27,Kolkata,Kitchen & central,2026-06,ads,470257.39,central
-FY26-27,Kolkata,Kitchen & central,2026-06,ebitda,-592922.4,central
+FY26-27,Kolkata,Kitchen & central,2026-06,ebitda,-592922.39,central
 FY26-27,Kolkata,Kitchen & central,2026-06,fnb_cost,122665.0,central
-FY26-27,Kolkata,Kitchen & central,2026-06,opex_total,592922.42,central
+FY26-27,Kolkata,Kitchen & central,2026-06,opex_total,592922.4,central
 FY26-27,Kolkata,Kitchen & central,2026-06,purchases,122665.0,central
 FY26-27,Kolkata,Kitchen & central,2026-07,ads,1156117.09,central
-FY26-27,Kolkata,Kitchen & central,2026-07,ebitda,-1156117.1,central
-FY26-27,Kolkata,Kitchen & central,2026-07,opex_total,1156117.11,central
+FY26-27,Kolkata,Kitchen & central,2026-07,ebitda,-1156117.07,central
+FY26-27,Kolkata,Kitchen & central,2026-07,opex_total,1156117.07,central
 FY26-27,Kolkata,Kitchen & central,2026-08,ads,727103.47,central
-FY26-27,Kolkata,Kitchen & central,2026-08,ebitda,-881082.46,central
+FY26-27,Kolkata,Kitchen & central,2026-08,ebitda,-881082.47,central
 FY26-27,Kolkata,Kitchen & central,2026-08,fnb_cost,153979.0,central
-FY26-27,Kolkata,Kitchen & central,2026-08,opex_total,881082.45,central
+FY26-27,Kolkata,Kitchen & central,2026-08,opex_total,881082.48,central
 FY26-27,Kolkata,Kitchen & central,2026-08,purchases,153979.0,central
 FY26-27,Kolkata,Kitchen & central,2026-09,ads,1066072.11,central
-FY26-27,Kolkata,Kitchen & central,2026-09,ebitda,-1145546.1,central
+FY26-27,Kolkata,Kitchen & central,2026-09,ebitda,-1145546.09,central
 FY26-27,Kolkata,Kitchen & central,2026-09,fnb_cost,79474.0,central
-FY26-27,Kolkata,Kitchen & central,2026-09,opex_total,1145546.11,central
+FY26-27,Kolkata,Kitchen & central,2026-09,opex_total,1145546.1,central
 FY26-27,Kolkata,Kitchen & central,2026-09,purchases,79474.0,central
+FY26-27,Kolkata,Kitchen & central,2026-10,ads,972237.17,central
+FY26-27,Kolkata,Kitchen & central,2026-10,ebitda,-1058372.19,central
+FY26-27,Kolkata,Kitchen & central,2026-10,fnb_cost,86135.0,central
+FY26-27,Kolkata,Kitchen & central,2026-10,opex_total,1058372.19,central
+FY26-27,Kolkata,Kitchen & central,2026-10,purchases,86135.0,central
 FY26-27,NCR,,2026-04,opening_stock,871359.0,city
 FY26-27,NCR,,2026-04,purchases,6018343.5,city
 FY26-27,NCR,,2026-04,transferred_out,2618.0,city
@@ -2819,7 +3285,7 @@ FY26-27,NCR,,2026-07,commission,2037896.32,city
 FY26-27,NCR,,2026-07,net_revenue,21346759.81,city
 FY26-27,NCR,,2026-07,fnb_cost,5957277.63,city
 FY26-27,NCR,,2026-07,electricity,1470778.5,city
-FY26-27,NCR,,2026-07,telephone,20214.0,city
+FY26-27,NCR,,2026-07,telephone,19969.5,city
 FY26-27,NCR,,2026-07,gas,762281.0,city
 FY26-27,NCR,,2026-07,rent,4573661.98,city
 FY26-27,NCR,,2026-07,insurance,15296.01,city
@@ -2832,8 +3298,8 @@ FY26-27,NCR,,2026-07,misc,252439.77,city
 FY26-27,NCR,,2026-07,cam,232843.39,city
 FY26-27,NCR,,2026-07,ads,995300.26,city
 FY26-27,NCR,,2026-07,ho_ck_cost,3076047.46,city
-FY26-27,NCR,,2026-07,opex_total,22531464.61,city
-FY26-27,NCR,,2026-07,ebitda,-1184704.8,city
+FY26-27,NCR,,2026-07,opex_total,22531220.11,city
+FY26-27,NCR,,2026-07,ebitda,-1184460.3,city
 FY26-27,NCR,,2026-08,opening_stock,778147.1,city
 FY26-27,NCR,,2026-08,purchases,6400275.66,city
 FY26-27,NCR,,2026-08,transferred_out,0.0,city
@@ -2846,7 +3312,7 @@ FY26-27,NCR,,2026-08,commission,2403319.18,city
 FY26-27,NCR,,2026-08,net_revenue,23604548.9,city
 FY26-27,NCR,,2026-08,fnb_cost,6493135.9,city
 FY26-27,NCR,,2026-08,electricity,1452059.0,city
-FY26-27,NCR,,2026-08,telephone,19923.0,city
+FY26-27,NCR,,2026-08,telephone,20167.5,city
 FY26-27,NCR,,2026-08,gas,933508.37,city
 FY26-27,NCR,,2026-08,rent,4610151.32,city
 FY26-27,NCR,,2026-08,insurance,15296.01,city
@@ -2859,22 +3325,22 @@ FY26-27,NCR,,2026-08,misc,234058.96,city
 FY26-27,NCR,,2026-08,cam,229505.39,city
 FY26-27,NCR,,2026-08,ads,992682.57,city
 FY26-27,NCR,,2026-08,ho_ck_cost,3137963.66,city
-FY26-27,NCR,,2026-08,opex_total,23265187.63,city
-FY26-27,NCR,,2026-08,ebitda,339361.26,city
+FY26-27,NCR,,2026-08,opex_total,23265432.13,city
+FY26-27,NCR,,2026-08,ebitda,339116.76,city
 FY26-27,NCR,,2026-09,opening_stock,746317.86,city
-FY26-27,NCR,,2026-09,purchases,6427854.26,city
+FY26-27,NCR,,2026-09,purchases,6051483.26,city
 FY26-27,NCR,,2026-09,transferred_out,0.0,city
 FY26-27,NCR,,2026-09,wastage,274736.44,city
 FY26-27,NCR,,2026-09,closing_stock,659246.93,city
 FY26-27,NCR,,2026-09,gross_revenue,25031688.78,city
 FY26-27,NCR,,2026-09,catering,0.0,city
 FY26-27,NCR,,2026-09,tax,1191985.18,city
-FY26-27,NCR,,2026-09,commission,2108356.39,city
-FY26-27,NCR,,2026-09,net_revenue,21731347.21,city
-FY26-27,NCR,,2026-09,fnb_cost,6514925.19,city
+FY26-27,NCR,,2026-09,commission,2211329.09,city
+FY26-27,NCR,,2026-09,net_revenue,21628374.51,city
+FY26-27,NCR,,2026-09,fnb_cost,6138554.19,city
 FY26-27,NCR,,2026-09,electricity,1325864.0,city
-FY26-27,NCR,,2026-09,telephone,19923.0,city
-FY26-27,NCR,,2026-09,gas,769678.0,city
+FY26-27,NCR,,2026-09,telephone,20167.5,city
+FY26-27,NCR,,2026-09,gas,788160.55,city
 FY26-27,NCR,,2026-09,rent,4609461.64,city
 FY26-27,NCR,,2026-09,insurance,15296.01,city
 FY26-27,NCR,,2026-09,software,88209.0,city
@@ -2885,9 +3351,36 @@ FY26-27,NCR,,2026-09,repairs,60401.0,city
 FY26-27,NCR,,2026-09,misc,284417.78,city
 FY26-27,NCR,,2026-09,cam,229969.39,city
 FY26-27,NCR,,2026-09,ads,959041.68,city
-FY26-27,NCR,,2026-09,ho_ck_cost,3046664.11,city
-FY26-27,NCR,,2026-09,opex_total,22613288.02,city
-FY26-27,NCR,,2026-09,ebitda,-881940.81,city
+FY26-27,NCR,,2026-09,ho_ck_cost,3072547.11,city
+FY26-27,NCR,,2026-09,opex_total,22281527.07,city
+FY26-27,NCR,,2026-09,ebitda,-653152.56,city
+FY26-27,NCR,,2026-10,opening_stock,711866.16,city
+FY26-27,NCR,,2026-10,purchases,6082505.23,city
+FY26-27,NCR,,2026-10,transferred_out,0.0,city
+FY26-27,NCR,,2026-10,wastage,267663.08,city
+FY26-27,NCR,,2026-10,closing_stock,587074.63,city
+FY26-27,NCR,,2026-10,gross_revenue,23539529.76,city
+FY26-27,NCR,,2026-10,catering,0.0,city
+FY26-27,NCR,,2026-10,tax,1120929.99,city
+FY26-27,NCR,,2026-10,commission,372664.25,city
+FY26-27,NCR,,2026-10,net_revenue,22045935.52,city
+FY26-27,NCR,,2026-10,fnb_cost,6207296.76,city
+FY26-27,NCR,,2026-10,electricity,98866.0,city
+FY26-27,NCR,,2026-10,telephone,5080.5,city
+FY26-27,NCR,,2026-10,gas,78431.0,city
+FY26-27,NCR,,2026-10,rent,4135697.78,city
+FY26-27,NCR,,2026-10,insurance,15296.01,city
+FY26-27,NCR,,2026-10,software,29588.0,city
+FY26-27,NCR,,2026-10,salary,4476186.0,city
+FY26-27,NCR,,2026-10,amc,15340.0,city
+FY26-27,NCR,,2026-10,subscription,6065.67,city
+FY26-27,NCR,,2026-10,repairs,12844.0,city
+FY26-27,NCR,,2026-10,misc,30619.37,city
+FY26-27,NCR,,2026-10,cam,24582.0,city
+FY26-27,NCR,,2026-10,ads,138423.78,city
+FY26-27,NCR,,2026-10,ho_ck_cost,1131453.17,city
+FY26-27,NCR,,2026-10,opex_total,16405770.04,city
+FY26-27,NCR,,2026-10,ebitda,5640165.48,city
 FY26-27,NCR,Noida Sec - 18,2026-04,opening_stock,76058.0,store
 FY26-27,NCR,Noida Sec - 18,2026-04,purchases,445442.0,store
 FY26-27,NCR,Noida Sec - 18,2026-04,transferred_out,0.0,store
@@ -3026,12 +3519,12 @@ FY26-27,NCR,Noida Sec - 18,2026-09,closing_stock,63923.0,store
 FY26-27,NCR,Noida Sec - 18,2026-09,gross_revenue,1939977.9,store
 FY26-27,NCR,Noida Sec - 18,2026-09,catering,0.0,store
 FY26-27,NCR,Noida Sec - 18,2026-09,tax,92379.9,store
-FY26-27,NCR,Noida Sec - 18,2026-09,commission,184031.6,store
-FY26-27,NCR,Noida Sec - 18,2026-09,net_revenue,1663566.4,store
+FY26-27,NCR,Noida Sec - 18,2026-09,commission,244514.86,store
+FY26-27,NCR,Noida Sec - 18,2026-09,net_revenue,1603083.14,store
 FY26-27,NCR,Noida Sec - 18,2026-09,fnb_cost,464198.04,store
 FY26-27,NCR,Noida Sec - 18,2026-09,electricity,65279.0,store
 FY26-27,NCR,Noida Sec - 18,2026-09,telephone,2006.0,store
-FY26-27,NCR,Noida Sec - 18,2026-09,gas,100000.0,store
+FY26-27,NCR,Noida Sec - 18,2026-09,gas,118482.55,store
 FY26-27,NCR,Noida Sec - 18,2026-09,rent,393530.0,store
 FY26-27,NCR,Noida Sec - 18,2026-09,insurance,1123.89,store
 FY26-27,NCR,Noida Sec - 18,2026-09,software,6018.0,store
@@ -3041,9 +3534,35 @@ FY26-27,NCR,Noida Sec - 18,2026-09,subscription,849.67,store
 FY26-27,NCR,Noida Sec - 18,2026-09,repairs,4700.0,store
 FY26-27,NCR,Noida Sec - 18,2026-09,misc,16336.52,store
 FY26-27,NCR,Noida Sec - 18,2026-09,cam,0.0,store
-FY26-27,NCR,Noida Sec - 18,2026-09,ho_ck_cost,233226.59,store
-FY26-27,NCR,Noida Sec - 18,2026-09,opex_total,1704555.71,store
-FY26-27,NCR,Noida Sec - 18,2026-09,ebitda,-40989.3,store
+FY26-27,NCR,Noida Sec - 18,2026-09,ho_ck_cost,227735.49,store
+FY26-27,NCR,Noida Sec - 18,2026-09,opex_total,1717547.16,store
+FY26-27,NCR,Noida Sec - 18,2026-09,ebitda,-114464.01,store
+FY26-27,NCR,Noida Sec - 18,2026-10,opening_stock,63923.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,purchases,638011.09,store
+FY26-27,NCR,Noida Sec - 18,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,wastage,16436.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,closing_stock,65667.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,gross_revenue,1922854.05,store
+FY26-27,NCR,Noida Sec - 18,2026-10,catering,0.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,tax,91564.48,store
+FY26-27,NCR,Noida Sec - 18,2026-10,commission,237881.1,store
+FY26-27,NCR,Noida Sec - 18,2026-10,net_revenue,1593408.47,store
+FY26-27,NCR,Noida Sec - 18,2026-10,fnb_cost,636267.09,store
+FY26-27,NCR,Noida Sec - 18,2026-10,electricity,56521.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,telephone,2006.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,gas,78431.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,rent,393530.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,insurance,1123.89,store
+FY26-27,NCR,Noida Sec - 18,2026-10,software,6018.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,salary,395184.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,amc,7670.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,subscription,849.67,store
+FY26-27,NCR,Noida Sec - 18,2026-10,repairs,0.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,misc,18725.37,store
+FY26-27,NCR,Noida Sec - 18,2026-10,cam,0.0,store
+FY26-27,NCR,Noida Sec - 18,2026-10,ho_ck_cost,87115.51,store
+FY26-27,NCR,Noida Sec - 18,2026-10,opex_total,1683441.53,store
+FY26-27,NCR,Noida Sec - 18,2026-10,ebitda,-90033.06,store
 FY26-27,NCR,Noida Sec -143,2026-04,opening_stock,103840.0,store
 FY26-27,NCR,Noida Sec -143,2026-04,purchases,276138.0,store
 FY26-27,NCR,Noida Sec -143,2026-04,transferred_out,0.0,store
@@ -3130,7 +3649,7 @@ FY26-27,NCR,Noida Sec -143,2026-07,commission,134015.17,store
 FY26-27,NCR,Noida Sec -143,2026-07,net_revenue,909729.82,store
 FY26-27,NCR,Noida Sec -143,2026-07,fnb_cost,303486.0,store
 FY26-27,NCR,Noida Sec -143,2026-07,electricity,45163.0,store
-FY26-27,NCR,Noida Sec -143,2026-07,telephone,1549.0,store
+FY26-27,NCR,Noida Sec -143,2026-07,telephone,1304.5,store
 FY26-27,NCR,Noida Sec -143,2026-07,gas,0.0,store
 FY26-27,NCR,Noida Sec -143,2026-07,rent,158154.96,store
 FY26-27,NCR,Noida Sec -143,2026-07,insurance,1123.88,store
@@ -3142,8 +3661,8 @@ FY26-27,NCR,Noida Sec -143,2026-07,repairs,8056.0,store
 FY26-27,NCR,Noida Sec -143,2026-07,misc,11888.0,store
 FY26-27,NCR,Noida Sec -143,2026-07,cam,32908.0,store
 FY26-27,NCR,Noida Sec -143,2026-07,ho_ck_cost,131091.19,store
-FY26-27,NCR,Noida Sec -143,2026-07,opex_total,958107.91,store
-FY26-27,NCR,Noida Sec -143,2026-07,ebitda,-48378.09,store
+FY26-27,NCR,Noida Sec -143,2026-07,opex_total,957863.41,store
+FY26-27,NCR,Noida Sec -143,2026-07,ebitda,-48133.59,store
 FY26-27,NCR,Noida Sec -143,2026-08,opening_stock,59490.0,store
 FY26-27,NCR,Noida Sec -143,2026-08,purchases,287760.71,store
 FY26-27,NCR,Noida Sec -143,2026-08,transferred_out,0.0,store
@@ -3155,7 +3674,7 @@ FY26-27,NCR,Noida Sec -143,2026-08,commission,144462.44,store
 FY26-27,NCR,Noida Sec -143,2026-08,net_revenue,923892.54,store
 FY26-27,NCR,Noida Sec -143,2026-08,fnb_cost,291706.71,store
 FY26-27,NCR,Noida Sec -143,2026-08,electricity,45145.0,store
-FY26-27,NCR,Noida Sec -143,2026-08,telephone,1060.0,store
+FY26-27,NCR,Noida Sec -143,2026-08,telephone,1304.5,store
 FY26-27,NCR,Noida Sec -143,2026-08,gas,0.0,store
 FY26-27,NCR,Noida Sec -143,2026-08,rent,161730.28,store
 FY26-27,NCR,Noida Sec -143,2026-08,insurance,1123.88,store
@@ -3167,8 +3686,8 @@ FY26-27,NCR,Noida Sec -143,2026-08,repairs,6550.0,store
 FY26-27,NCR,Noida Sec -143,2026-08,misc,5873.55,store
 FY26-27,NCR,Noida Sec -143,2026-08,cam,29570.0,store
 FY26-27,NCR,Noida Sec -143,2026-08,ho_ck_cost,122821.29,store
-FY26-27,NCR,Noida Sec -143,2026-08,opex_total,936764.37,store
-FY26-27,NCR,Noida Sec -143,2026-08,ebitda,-12871.84,store
+FY26-27,NCR,Noida Sec -143,2026-08,opex_total,937008.87,store
+FY26-27,NCR,Noida Sec -143,2026-08,ebitda,-13116.34,store
 FY26-27,NCR,Noida Sec -143,2026-09,opening_stock,55544.0,store
 FY26-27,NCR,Noida Sec -143,2026-09,purchases,276762.4,store
 FY26-27,NCR,Noida Sec -143,2026-09,transferred_out,0.0,store
@@ -3176,11 +3695,11 @@ FY26-27,NCR,Noida Sec -143,2026-09,wastage,25345.0,store
 FY26-27,NCR,Noida Sec -143,2026-09,closing_stock,58058.0,store
 FY26-27,NCR,Noida Sec -143,2026-09,gross_revenue,1109228.4,store
 FY26-27,NCR,Noida Sec -143,2026-09,tax,52820.4,store
-FY26-27,NCR,Noida Sec -143,2026-09,commission,98229.55,store
-FY26-27,NCR,Noida Sec -143,2026-09,net_revenue,958178.45,store
+FY26-27,NCR,Noida Sec -143,2026-09,commission,140718.99,store
+FY26-27,NCR,Noida Sec -143,2026-09,net_revenue,915689.01,store
 FY26-27,NCR,Noida Sec -143,2026-09,fnb_cost,274248.4,store
 FY26-27,NCR,Noida Sec -143,2026-09,electricity,47005.0,store
-FY26-27,NCR,Noida Sec -143,2026-09,telephone,1060.0,store
+FY26-27,NCR,Noida Sec -143,2026-09,telephone,1304.5,store
 FY26-27,NCR,Noida Sec -143,2026-09,gas,0.0,store
 FY26-27,NCR,Noida Sec -143,2026-09,rent,160036.6,store
 FY26-27,NCR,Noida Sec -143,2026-09,insurance,1123.88,store
@@ -3191,160 +3710,34 @@ FY26-27,NCR,Noida Sec -143,2026-09,subscription,849.67,store
 FY26-27,NCR,Noida Sec -143,2026-09,repairs,9885.0,store
 FY26-27,NCR,Noida Sec -143,2026-09,misc,4505.47,store
 FY26-27,NCR,Noida Sec -143,2026-09,cam,30034.0,store
-FY26-27,NCR,Noida Sec -143,2026-09,ho_ck_cost,134333.5,store
-FY26-27,NCR,Noida Sec -143,2026-09,opex_total,926964.51,store
-FY26-27,NCR,Noida Sec -143,2026-09,ebitda,31213.94,store
-FY26-27,NCR,DLF,2026-04,opening_stock,53663.0,store
-FY26-27,NCR,DLF,2026-04,purchases,401116.14,store
-FY26-27,NCR,DLF,2026-04,transferred_out,1412.0,store
-FY26-27,NCR,DLF,2026-04,wastage,15060.0,store
-FY26-27,NCR,DLF,2026-04,closing_stock,69458.96,store
-FY26-27,NCR,DLF,2026-04,gross_revenue,2028994.16,store
-FY26-27,NCR,DLF,2026-04,catering,0.0,store
-FY26-27,NCR,DLF,2026-04,tax,96618.77,store
-FY26-27,NCR,DLF,2026-04,commission,211764.06,store
-FY26-27,NCR,DLF,2026-04,net_revenue,1720611.33,store
-FY26-27,NCR,DLF,2026-04,fnb_cost,383908.18,store
-FY26-27,NCR,DLF,2026-04,electricity,12169.0,store
-FY26-27,NCR,DLF,2026-04,telephone,943.0,store
-FY26-27,NCR,DLF,2026-04,gas,0.0,store
-FY26-27,NCR,DLF,2026-04,rent,139240.0,store
-FY26-27,NCR,DLF,2026-04,insurance,1055.0,store
-FY26-27,NCR,DLF,2026-04,software,4764.0,store
-FY26-27,NCR,DLF,2026-04,salary,271774.0,store
-FY26-27,NCR,DLF,2026-04,amc,7670.0,store
-FY26-27,NCR,DLF,2026-04,subscription,849.58,store
-FY26-27,NCR,DLF,2026-04,repairs,0.0,store
-FY26-27,NCR,DLF,2026-04,misc,7190.88,store
-FY26-27,NCR,DLF,2026-04,cam,40031.5,store
-FY26-27,NCR,DLF,2026-04,ho_ck_cost,262016.17,store
-FY26-27,NCR,DLF,2026-04,opex_total,1131611.31,store
-FY26-27,NCR,DLF,2026-04,ebitda,589000.02,store
-FY26-27,NCR,DLF,2026-05,opening_stock,69458.96,store
-FY26-27,NCR,DLF,2026-05,purchases,410387.41,store
-FY26-27,NCR,DLF,2026-05,transferred_out,255.24,store
-FY26-27,NCR,DLF,2026-05,wastage,36497.57,store
-FY26-27,NCR,DLF,2026-05,closing_stock,67234.11,store
-FY26-27,NCR,DLF,2026-05,gross_revenue,1973507.73,store
-FY26-27,NCR,DLF,2026-05,tax,93976.56,store
-FY26-27,NCR,DLF,2026-05,commission,231060.2,store
-FY26-27,NCR,DLF,2026-05,net_revenue,1648470.97,store
-FY26-27,NCR,DLF,2026-05,fnb_cost,412357.02,store
-FY26-27,NCR,DLF,2026-05,electricity,52002.0,store
-FY26-27,NCR,DLF,2026-05,telephone,943.0,store
-FY26-27,NCR,DLF,2026-05,gas,0.0,store
-FY26-27,NCR,DLF,2026-05,rent,139240.0,store
-FY26-27,NCR,DLF,2026-05,insurance,769.83,store
-FY26-27,NCR,DLF,2026-05,software,4764.0,store
-FY26-27,NCR,DLF,2026-05,salary,278094.15,store
-FY26-27,NCR,DLF,2026-05,amc,7670.0,store
-FY26-27,NCR,DLF,2026-05,subscription,849.58,store
-FY26-27,NCR,DLF,2026-05,repairs,0.0,store
-FY26-27,NCR,DLF,2026-05,misc,10642.17,store
-FY26-27,NCR,DLF,2026-05,cam,40031.5,store
-FY26-27,NCR,DLF,2026-05,ho_ck_cost,239792.89,store
-FY26-27,NCR,DLF,2026-05,opex_total,1187156.14,store
-FY26-27,NCR,DLF,2026-05,ebitda,461314.83,store
-FY26-27,NCR,DLF,2026-06,opening_stock,67234.11,store
-FY26-27,NCR,DLF,2026-06,purchases,421367.0,store
-FY26-27,NCR,DLF,2026-06,transferred_out,0.0,store
-FY26-27,NCR,DLF,2026-06,wastage,11792.0,store
-FY26-27,NCR,DLF,2026-06,closing_stock,70784.0,store
-FY26-27,NCR,DLF,2026-06,gross_revenue,1915140.91,store
-FY26-27,NCR,DLF,2026-06,tax,91197.19,store
-FY26-27,NCR,DLF,2026-06,commission,227181.41,store
-FY26-27,NCR,DLF,2026-06,net_revenue,1596762.31,store
-FY26-27,NCR,DLF,2026-06,fnb_cost,417817.11,store
-FY26-27,NCR,DLF,2026-06,electricity,57418.95,store
-FY26-27,NCR,DLF,2026-06,telephone,943.0,store
-FY26-27,NCR,DLF,2026-06,gas,0.0,store
-FY26-27,NCR,DLF,2026-06,rent,139240.0,store
-FY26-27,NCR,DLF,2026-06,insurance,769.83,store
-FY26-27,NCR,DLF,2026-06,software,4764.0,store
-FY26-27,NCR,DLF,2026-06,salary,252781.64,store
-FY26-27,NCR,DLF,2026-06,amc,7670.0,store
-FY26-27,NCR,DLF,2026-06,subscription,849.58,store
-FY26-27,NCR,DLF,2026-06,repairs,11210.0,store
-FY26-27,NCR,DLF,2026-06,misc,9227.77,store
-FY26-27,NCR,DLF,2026-06,cam,40031.5,store
-FY26-27,NCR,DLF,2026-06,ho_ck_cost,228106.85,store
-FY26-27,NCR,DLF,2026-06,opex_total,1170830.24,store
-FY26-27,NCR,DLF,2026-06,ebitda,425932.07,store
-FY26-27,NCR,DLF,2026-07,opening_stock,70784.0,store
-FY26-27,NCR,DLF,2026-07,purchases,419823.0,store
-FY26-27,NCR,DLF,2026-07,transferred_out,0.0,store
-FY26-27,NCR,DLF,2026-07,wastage,17340.96,store
-FY26-27,NCR,DLF,2026-07,closing_stock,59607.8,store
-FY26-27,NCR,DLF,2026-07,gross_revenue,1998988.83,store
-FY26-27,NCR,DLF,2026-07,tax,95189.94,store
-FY26-27,NCR,DLF,2026-07,commission,220003.52,store
-FY26-27,NCR,DLF,2026-07,net_revenue,1683795.37,store
-FY26-27,NCR,DLF,2026-07,fnb_cost,430999.2,store
-FY26-27,NCR,DLF,2026-07,electricity,64430.0,store
-FY26-27,NCR,DLF,2026-07,telephone,1060.0,store
-FY26-27,NCR,DLF,2026-07,gas,0.0,store
-FY26-27,NCR,DLF,2026-07,rent,139240.0,store
-FY26-27,NCR,DLF,2026-07,insurance,769.83,store
-FY26-27,NCR,DLF,2026-07,software,4764.0,store
-FY26-27,NCR,DLF,2026-07,salary,286272.04,store
-FY26-27,NCR,DLF,2026-07,amc,7670.0,store
-FY26-27,NCR,DLF,2026-07,subscription,845.67,store
-FY26-27,NCR,DLF,2026-07,repairs,0.0,store
-FY26-27,NCR,DLF,2026-07,misc,10698.94,store
-FY26-27,NCR,DLF,2026-07,cam,40031.5,store
-FY26-27,NCR,DLF,2026-07,ho_ck_cost,242633.29,store
-FY26-27,NCR,DLF,2026-07,opex_total,1229414.46,store
-FY26-27,NCR,DLF,2026-07,ebitda,454380.91,store
-FY26-27,NCR,DLF,2026-08,opening_stock,59607.8,store
-FY26-27,NCR,DLF,2026-08,purchases,426942.0,store
-FY26-27,NCR,DLF,2026-08,transferred_out,0.0,store
-FY26-27,NCR,DLF,2026-08,wastage,16120.0,store
-FY26-27,NCR,DLF,2026-08,closing_stock,52984.0,store
-FY26-27,NCR,DLF,2026-08,gross_revenue,1937767.65,store
-FY26-27,NCR,DLF,2026-08,tax,92274.65,store
-FY26-27,NCR,DLF,2026-08,commission,257757.93,store
-FY26-27,NCR,DLF,2026-08,net_revenue,1587735.07,store
-FY26-27,NCR,DLF,2026-08,fnb_cost,433565.8,store
-FY26-27,NCR,DLF,2026-08,electricity,58954.0,store
-FY26-27,NCR,DLF,2026-08,telephone,942.0,store
-FY26-27,NCR,DLF,2026-08,gas,0.0,store
-FY26-27,NCR,DLF,2026-08,rent,139240.0,store
-FY26-27,NCR,DLF,2026-08,insurance,769.83,store
-FY26-27,NCR,DLF,2026-08,software,4764.0,store
-FY26-27,NCR,DLF,2026-08,salary,250215.78,store
-FY26-27,NCR,DLF,2026-08,amc,7670.0,store
-FY26-27,NCR,DLF,2026-08,subscription,845.67,store
-FY26-27,NCR,DLF,2026-08,repairs,0.0,store
-FY26-27,NCR,DLF,2026-08,misc,13507.7,store
-FY26-27,NCR,DLF,2026-08,cam,40031.5,store
-FY26-27,NCR,DLF,2026-08,ho_ck_cost,211071.81,store
-FY26-27,NCR,DLF,2026-08,opex_total,1161578.09,store
-FY26-27,NCR,DLF,2026-08,ebitda,426156.98,store
-FY26-27,NCR,DLF,2026-09,opening_stock,52984.0,store
-FY26-27,NCR,DLF,2026-09,purchases,439629.0,store
-FY26-27,NCR,DLF,2026-09,transferred_out,0.0,store
-FY26-27,NCR,DLF,2026-09,wastage,17661.0,store
-FY26-27,NCR,DLF,2026-09,closing_stock,51744.0,store
-FY26-27,NCR,DLF,2026-09,gross_revenue,2046177.28,store
-FY26-27,NCR,DLF,2026-09,tax,97437.01,store
-FY26-27,NCR,DLF,2026-09,commission,262009.39,store
-FY26-27,NCR,DLF,2026-09,net_revenue,1686730.88,store
-FY26-27,NCR,DLF,2026-09,fnb_cost,440869.0,store
-FY26-27,NCR,DLF,2026-09,electricity,56723.0,store
-FY26-27,NCR,DLF,2026-09,telephone,942.0,store
-FY26-27,NCR,DLF,2026-09,gas,0.0,store
-FY26-27,NCR,DLF,2026-09,rent,139240.0,store
-FY26-27,NCR,DLF,2026-09,insurance,769.83,store
-FY26-27,NCR,DLF,2026-09,software,4764.0,store
-FY26-27,NCR,DLF,2026-09,salary,271666.57,store
-FY26-27,NCR,DLF,2026-09,amc,7670.0,store
-FY26-27,NCR,DLF,2026-09,subscription,845.67,store
-FY26-27,NCR,DLF,2026-09,repairs,15048.0,store
-FY26-27,NCR,DLF,2026-09,misc,8224.58,store
-FY26-27,NCR,DLF,2026-09,cam,40031.5,store
-FY26-27,NCR,DLF,2026-09,ho_ck_cost,236474.18,store
-FY26-27,NCR,DLF,2026-09,opex_total,1223268.32,store
-FY26-27,NCR,DLF,2026-09,ebitda,463462.55,store
+FY26-27,NCR,Noida Sec -143,2026-09,ho_ck_cost,130083.64,store
+FY26-27,NCR,Noida Sec -143,2026-09,opex_total,922959.15,store
+FY26-27,NCR,Noida Sec -143,2026-09,ebitda,-7270.14,store
+FY26-27,NCR,Noida Sec -143,2026-10,opening_stock,58058.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,purchases,263656.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,wastage,21282.65,store
+FY26-27,NCR,Noida Sec -143,2026-10,closing_stock,59542.05,store
+FY26-27,NCR,Noida Sec -143,2026-10,gross_revenue,1030509.9,store
+FY26-27,NCR,Noida Sec -143,2026-10,tax,49071.9,store
+FY26-27,NCR,Noida Sec -143,2026-10,commission,134783.15,store
+FY26-27,NCR,Noida Sec -143,2026-10,net_revenue,846654.84,store
+FY26-27,NCR,Noida Sec -143,2026-10,fnb_cost,262171.95,store
+FY26-27,NCR,Noida Sec -143,2026-10,electricity,42345.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,telephone,1304.5,store
+FY26-27,NCR,Noida Sec -143,2026-10,gas,0.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,rent,148679.3,store
+FY26-27,NCR,Noida Sec -143,2026-10,insurance,1123.88,store
+FY26-27,NCR,Noida Sec -143,2026-10,software,5767.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,salary,253861.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,amc,7670.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,subscription,849.67,store
+FY26-27,NCR,Noida Sec -143,2026-10,repairs,12844.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,misc,5561.33,store
+FY26-27,NCR,Noida Sec -143,2026-10,cam,24582.0,store
+FY26-27,NCR,Noida Sec -143,2026-10,ho_ck_cost,46288.68,store
+FY26-27,NCR,Noida Sec -143,2026-10,opex_total,813048.3,store
+FY26-27,NCR,Noida Sec -143,2026-10,ebitda,33606.55,store
 FY26-27,NCR,Faridabad Sec15,2026-04,opening_stock,58923.0,store
 FY26-27,NCR,Faridabad Sec15,2026-04,purchases,271973.16,store
 FY26-27,NCR,Faridabad Sec15,2026-04,transferred_out,0.0,store
@@ -3467,6 +3860,7 @@ FY26-27,NCR,Faridabad Sec15,2026-08,amc,7670.0,store
 FY26-27,NCR,Faridabad Sec15,2026-08,subscription,845.67,store
 FY26-27,NCR,Faridabad Sec15,2026-08,repairs,900.0,store
 FY26-27,NCR,Faridabad Sec15,2026-08,misc,16621.58,store
+FY26-27,NCR,Faridabad Sec15,2026-08,cam,0.0,store
 FY26-27,NCR,Faridabad Sec15,2026-08,ho_ck_cost,119809.96,store
 FY26-27,NCR,Faridabad Sec15,2026-08,opex_total,1028680.74,store
 FY26-27,NCR,Faridabad Sec15,2026-08,ebitda,-127440.18,store
@@ -3491,160 +3885,25 @@ FY26-27,NCR,Faridabad Sec15,2026-09,amc,7670.0,store
 FY26-27,NCR,Faridabad Sec15,2026-09,subscription,845.67,store
 FY26-27,NCR,Faridabad Sec15,2026-09,repairs,1000.0,store
 FY26-27,NCR,Faridabad Sec15,2026-09,misc,14769.6,store
-FY26-27,NCR,Faridabad Sec15,2026-09,ho_ck_cost,110356.98,store
-FY26-27,NCR,Faridabad Sec15,2026-09,opex_total,846365.38,store
-FY26-27,NCR,Faridabad Sec15,2026-09,ebitda,-59207.43,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,opening_stock,69049.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,purchases,541517.59,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,transferred_out,1206.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,wastage,18484.72,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,closing_stock,77139.91,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,gross_revenue,2202954.01,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,catering,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,tax,104902.57,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,commission,193997.14,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,net_revenue,1904054.29,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,fnb_cost,532220.68,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,electricity,100569.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,telephone,1637.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,gas,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,insurance,1393.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,software,12630.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,salary,343786.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,subscription,849.58,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,repairs,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,misc,124414.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,ho_ck_cost,289951.02,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,opex_total,1662920.28,store
-FY26-27,NCR,Gurgaon Sec-15,2026-04,ebitda,241134.01,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,opening_stock,77139.91,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,purchases,601593.16,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,transferred_out,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,wastage,20828.93,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,closing_stock,64823.23,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,gross_revenue,2596749.37,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,catering,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,tax,123654.73,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,commission,202827.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,net_revenue,2270266.89,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,fnb_cost,613909.84,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,electricity,76603.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,telephone,1177.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,gas,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,insurance,769.83,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,software,6268.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,salary,352271.59,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,subscription,849.58,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,repairs,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,misc,21643.15,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,ho_ck_cost,330241.7,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,opex_total,1659204.45,store
-FY26-27,NCR,Gurgaon Sec-15,2026-05,ebitda,611062.45,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,opening_stock,64823.23,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,purchases,496838.48,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,transferred_out,242.92,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,wastage,18211.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,closing_stock,67658.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,gross_revenue,2059465.67,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,catering,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,tax,98069.79,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,commission,155846.43,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,net_revenue,1805549.45,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,fnb_cost,493760.79,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,electricity,126133.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,telephone,1414.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,gas,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,insurance,769.83,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,software,6268.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,salary,363884.05,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,subscription,849.58,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,repairs,59936.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,misc,22126.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,ho_ck_cost,257933.32,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,opex_total,1588545.32,store
-FY26-27,NCR,Gurgaon Sec-15,2026-06,ebitda,217004.12,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,opening_stock,67658.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,purchases,477775.32,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,transferred_out,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,wastage,17324.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,closing_stock,77230.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,gross_revenue,1907872.54,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,tax,90851.07,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,commission,129399.22,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,net_revenue,1687622.25,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,fnb_cost,468203.32,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,electricity,145388.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,telephone,1414.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,gas,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,insurance,769.83,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,software,6268.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,salary,376229.07,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,subscription,845.67,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,repairs,10420.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,misc,25835.97,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,ho_ck_cost,243184.73,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,opex_total,1534029.34,store
-FY26-27,NCR,Gurgaon Sec-15,2026-07,ebitda,153592.9,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,opening_stock,77230.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,purchases,491685.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,transferred_out,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,wastage,18272.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,closing_stock,74378.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,gross_revenue,2040427.07,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,tax,97163.19,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,commission,157516.76,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,net_revenue,1785747.12,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,fnb_cost,494537.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,electricity,118912.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,telephone,1415.5,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,insurance,769.83,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,software,6268.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,salary,376211.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,subscription,845.67,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,repairs,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,misc,23764.47,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,ho_ck_cost,237395.33,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,opex_total,1515589.54,store
-FY26-27,NCR,Gurgaon Sec-15,2026-08,ebitda,270157.58,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,opening_stock,74378.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,purchases,388720.72,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,transferred_out,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,wastage,16478.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,closing_stock,63965.93,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,gross_revenue,1749901.96,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,tax,83328.66,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,commission,129855.44,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,net_revenue,1536717.85,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,fnb_cost,399132.79,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,electricity,113600.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,telephone,1415.5,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,rent,247800.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,insurance,769.83,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,software,6268.75,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,salary,364340.46,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,amc,7670.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,subscription,845.67,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,repairs,16200.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,misc,20279.11,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,cam,0.0,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,ho_ck_cost,215442.84,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,opex_total,1393764.95,store
-FY26-27,NCR,Gurgaon Sec-15,2026-09,ebitda,142952.91,store
+FY26-27,NCR,Faridabad Sec15,2026-09,cam,0.0,store
+FY26-27,NCR,Faridabad Sec15,2026-09,ho_ck_cost,111824.4,store
+FY26-27,NCR,Faridabad Sec15,2026-09,opex_total,847832.79,store
+FY26-27,NCR,Faridabad Sec15,2026-09,ebitda,-60674.84,store
+FY26-27,NCR,Faridabad Sec15,2026-10,opening_stock,17906.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,purchases,166426.56,store
+FY26-27,NCR,Faridabad Sec15,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,wastage,12079.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,closing_stock,0.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,gross_revenue,600070.88,store
+FY26-27,NCR,Faridabad Sec15,2026-10,tax,28574.8,store
+FY26-27,NCR,Faridabad Sec15,2026-10,net_revenue,571496.08,store
+FY26-27,NCR,Faridabad Sec15,2026-10,fnb_cost,184332.56,store
+FY26-27,NCR,Faridabad Sec15,2026-10,rent,194700.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,insurance,769.83,store
+FY26-27,NCR,Faridabad Sec15,2026-10,salary,161882.0,store
+FY26-27,NCR,Faridabad Sec15,2026-10,ho_ck_cost,31245.08,store
+FY26-27,NCR,Faridabad Sec15,2026-10,opex_total,572929.47,store
+FY26-27,NCR,Faridabad Sec15,2026-10,ebitda,-1433.39,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-04,opening_stock,44644.0,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-04,purchases,197730.0,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-04,transferred_out,0.0,store
@@ -3793,9 +4052,25 @@ FY26-27,NCR,Gurgaon Sec - 10,2026-09,amc,4720.0,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-09,subscription,845.67,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-09,repairs,0.0,store
 FY26-27,NCR,Gurgaon Sec - 10,2026-09,misc,11070.18,store
-FY26-27,NCR,Gurgaon Sec - 10,2026-09,ho_ck_cost,74367.51,store
-FY26-27,NCR,Gurgaon Sec - 10,2026-09,opex_total,707893.7,store
-FY26-27,NCR,Gurgaon Sec - 10,2026-09,ebitda,-177442.65,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-09,ho_ck_cost,75356.37,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-09,opex_total,708882.56,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-09,ebitda,-178431.51,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,opening_stock,25486.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,purchases,177572.62,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,wastage,9279.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,closing_stock,22624.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,gross_revenue,644862.62,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,catering,0.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,tax,30707.74,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,net_revenue,614154.88,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,fnb_cost,180434.62,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,rent,140000.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,salary,151017.0,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,ho_ck_cost,33577.34,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,opex_total,505798.79,store
+FY26-27,NCR,Gurgaon Sec - 10,2026-10,ebitda,108356.09,store
 FY26-27,NCR,Gurgaon Sector 31,2026-04,opening_stock,0.0,store
 FY26-27,NCR,Gurgaon Sector 31,2026-04,purchases,0.0,store
 FY26-27,NCR,Gurgaon Sector 31,2026-04,transferred_out,0.0,store
@@ -3945,9 +4220,359 @@ FY26-27,NCR,Gurgaon Sector 31,2026-09,amc,9865.0,store
 FY26-27,NCR,Gurgaon Sector 31,2026-09,subscription,1152.5,store
 FY26-27,NCR,Gurgaon Sector 31,2026-09,repairs,0.0,store
 FY26-27,NCR,Gurgaon Sector 31,2026-09,misc,10975.09,store
-FY26-27,NCR,Gurgaon Sector 31,2026-09,ho_ck_cost,123489.69,store
-FY26-27,NCR,Gurgaon Sector 31,2026-09,opex_total,1094906.05,store
-FY26-27,NCR,Gurgaon Sector 31,2026-09,ebitda,-214074.69,store
+FY26-27,NCR,Gurgaon Sector 31,2026-09,ho_ck_cost,125131.73,store
+FY26-27,NCR,Gurgaon Sector 31,2026-09,opex_total,1096548.09,store
+FY26-27,NCR,Gurgaon Sector 31,2026-09,ebitda,-215716.73,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,opening_stock,19393.23,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,purchases,269768.0,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,wastage,14723.9,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,closing_stock,23204.98,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,gross_revenue,1041609.59,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,catering,0.0,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,tax,49600.46,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,net_revenue,992009.13,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,fnb_cost,265956.25,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,rent,295000.0,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,salary,246589.0,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,subscription,306.83,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,misc,6332.67,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,ho_ck_cost,54235.55,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,opex_total,868420.3,store
+FY26-27,NCR,Gurgaon Sector 31,2026-10,ebitda,123588.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,opening_stock,69049.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,purchases,541517.59,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,transferred_out,1206.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,wastage,18484.72,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,closing_stock,77139.91,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,gross_revenue,2202954.01,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,catering,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,tax,104902.57,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,commission,193997.14,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,net_revenue,1904054.29,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,fnb_cost,532220.68,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,electricity,100569.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,telephone,1637.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,gas,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,insurance,1393.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,software,12630.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,salary,343786.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,subscription,849.58,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,repairs,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,misc,124414.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,ho_ck_cost,289951.02,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,opex_total,1662920.28,store
+FY26-27,NCR,Gurgaon Sec-15,2026-04,ebitda,241134.01,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,opening_stock,77139.91,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,purchases,601593.16,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,wastage,20828.93,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,closing_stock,64823.23,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,gross_revenue,2596749.37,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,catering,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,tax,123654.73,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,commission,202827.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,net_revenue,2270266.89,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,fnb_cost,613909.84,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,electricity,76603.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,telephone,1177.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,gas,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,salary,352271.59,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,subscription,849.58,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,repairs,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,misc,21643.15,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,ho_ck_cost,330241.7,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,opex_total,1659204.45,store
+FY26-27,NCR,Gurgaon Sec-15,2026-05,ebitda,611062.45,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,opening_stock,64823.23,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,purchases,496838.48,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,transferred_out,242.92,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,wastage,18211.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,closing_stock,67658.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,gross_revenue,2059465.67,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,catering,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,tax,98069.79,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,commission,155846.43,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,net_revenue,1805549.45,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,fnb_cost,493760.79,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,electricity,126133.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,telephone,1414.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,gas,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,salary,363884.05,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,subscription,849.58,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,repairs,59936.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,misc,22126.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,ho_ck_cost,257933.32,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,opex_total,1588545.32,store
+FY26-27,NCR,Gurgaon Sec-15,2026-06,ebitda,217004.12,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,opening_stock,67658.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,purchases,477775.32,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,wastage,17324.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,closing_stock,77230.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,gross_revenue,1907872.54,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,tax,90851.07,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,commission,129399.22,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,net_revenue,1687622.25,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,fnb_cost,468203.32,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,electricity,145388.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,telephone,1414.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,gas,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,salary,376229.07,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,subscription,845.67,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,repairs,10420.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,misc,25835.97,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,ho_ck_cost,243184.73,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,opex_total,1534029.34,store
+FY26-27,NCR,Gurgaon Sec-15,2026-07,ebitda,153592.9,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,opening_stock,77230.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,purchases,491685.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,wastage,18272.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,closing_stock,74378.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,gross_revenue,2040427.07,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,tax,97163.19,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,commission,157516.76,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,net_revenue,1785747.12,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,fnb_cost,494537.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,electricity,118912.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,telephone,1415.5,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,salary,376211.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,subscription,845.67,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,repairs,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,misc,23764.47,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,ho_ck_cost,237395.33,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,opex_total,1515589.54,store
+FY26-27,NCR,Gurgaon Sec-15,2026-08,ebitda,270157.58,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,opening_stock,74378.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,purchases,388720.72,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,wastage,16478.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,closing_stock,63965.93,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,gross_revenue,1749901.96,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,tax,83328.66,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,commission,129855.44,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,net_revenue,1536717.85,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,fnb_cost,399132.79,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,electricity,113600.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,telephone,1415.5,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,salary,364340.46,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,amc,7670.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,subscription,845.67,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,repairs,16200.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,misc,20279.11,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,cam,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,ho_ck_cost,218307.58,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,opex_total,1396629.68,store
+FY26-27,NCR,Gurgaon Sec-15,2026-09,ebitda,140088.17,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,opening_stock,63965.93,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,purchases,424752.49,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,wastage,16162.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,closing_stock,58706.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,gross_revenue,1797074.84,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,tax,85574.99,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,net_revenue,1711499.85,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,fnb_cost,430011.59,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,rent,247800.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,insurance,769.83,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,software,6268.75,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,salary,372904.0,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,ho_ck_cost,93571.86,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,opex_total,1151326.03,store
+FY26-27,NCR,Gurgaon Sec-15,2026-10,ebitda,560173.82,store
+FY26-27,NCR,DLF,2026-04,opening_stock,53663.0,store
+FY26-27,NCR,DLF,2026-04,purchases,401116.14,store
+FY26-27,NCR,DLF,2026-04,transferred_out,1412.0,store
+FY26-27,NCR,DLF,2026-04,wastage,15060.0,store
+FY26-27,NCR,DLF,2026-04,closing_stock,69458.96,store
+FY26-27,NCR,DLF,2026-04,gross_revenue,2028994.16,store
+FY26-27,NCR,DLF,2026-04,catering,0.0,store
+FY26-27,NCR,DLF,2026-04,tax,96618.77,store
+FY26-27,NCR,DLF,2026-04,commission,211764.06,store
+FY26-27,NCR,DLF,2026-04,net_revenue,1720611.33,store
+FY26-27,NCR,DLF,2026-04,fnb_cost,383908.18,store
+FY26-27,NCR,DLF,2026-04,electricity,12169.0,store
+FY26-27,NCR,DLF,2026-04,telephone,943.0,store
+FY26-27,NCR,DLF,2026-04,gas,0.0,store
+FY26-27,NCR,DLF,2026-04,rent,139240.0,store
+FY26-27,NCR,DLF,2026-04,insurance,1055.0,store
+FY26-27,NCR,DLF,2026-04,software,4764.0,store
+FY26-27,NCR,DLF,2026-04,salary,271774.0,store
+FY26-27,NCR,DLF,2026-04,amc,7670.0,store
+FY26-27,NCR,DLF,2026-04,subscription,849.58,store
+FY26-27,NCR,DLF,2026-04,repairs,0.0,store
+FY26-27,NCR,DLF,2026-04,misc,7190.88,store
+FY26-27,NCR,DLF,2026-04,cam,40031.5,store
+FY26-27,NCR,DLF,2026-04,ho_ck_cost,262016.17,store
+FY26-27,NCR,DLF,2026-04,opex_total,1131611.31,store
+FY26-27,NCR,DLF,2026-04,ebitda,589000.02,store
+FY26-27,NCR,DLF,2026-05,opening_stock,69458.96,store
+FY26-27,NCR,DLF,2026-05,purchases,410387.41,store
+FY26-27,NCR,DLF,2026-05,transferred_out,255.24,store
+FY26-27,NCR,DLF,2026-05,wastage,36497.57,store
+FY26-27,NCR,DLF,2026-05,closing_stock,67234.11,store
+FY26-27,NCR,DLF,2026-05,gross_revenue,1973507.73,store
+FY26-27,NCR,DLF,2026-05,tax,93976.56,store
+FY26-27,NCR,DLF,2026-05,commission,231060.2,store
+FY26-27,NCR,DLF,2026-05,net_revenue,1648470.97,store
+FY26-27,NCR,DLF,2026-05,fnb_cost,412357.02,store
+FY26-27,NCR,DLF,2026-05,electricity,52002.0,store
+FY26-27,NCR,DLF,2026-05,telephone,943.0,store
+FY26-27,NCR,DLF,2026-05,gas,0.0,store
+FY26-27,NCR,DLF,2026-05,rent,139240.0,store
+FY26-27,NCR,DLF,2026-05,insurance,769.83,store
+FY26-27,NCR,DLF,2026-05,software,4764.0,store
+FY26-27,NCR,DLF,2026-05,salary,278094.15,store
+FY26-27,NCR,DLF,2026-05,amc,7670.0,store
+FY26-27,NCR,DLF,2026-05,subscription,849.58,store
+FY26-27,NCR,DLF,2026-05,repairs,0.0,store
+FY26-27,NCR,DLF,2026-05,misc,10642.17,store
+FY26-27,NCR,DLF,2026-05,cam,40031.5,store
+FY26-27,NCR,DLF,2026-05,ho_ck_cost,239792.89,store
+FY26-27,NCR,DLF,2026-05,opex_total,1187156.14,store
+FY26-27,NCR,DLF,2026-05,ebitda,461314.83,store
+FY26-27,NCR,DLF,2026-06,opening_stock,67234.11,store
+FY26-27,NCR,DLF,2026-06,purchases,421367.0,store
+FY26-27,NCR,DLF,2026-06,transferred_out,0.0,store
+FY26-27,NCR,DLF,2026-06,wastage,11792.0,store
+FY26-27,NCR,DLF,2026-06,closing_stock,70784.0,store
+FY26-27,NCR,DLF,2026-06,gross_revenue,1915140.91,store
+FY26-27,NCR,DLF,2026-06,tax,91197.19,store
+FY26-27,NCR,DLF,2026-06,commission,227181.41,store
+FY26-27,NCR,DLF,2026-06,net_revenue,1596762.31,store
+FY26-27,NCR,DLF,2026-06,fnb_cost,417817.11,store
+FY26-27,NCR,DLF,2026-06,electricity,57418.95,store
+FY26-27,NCR,DLF,2026-06,telephone,943.0,store
+FY26-27,NCR,DLF,2026-06,gas,0.0,store
+FY26-27,NCR,DLF,2026-06,rent,139240.0,store
+FY26-27,NCR,DLF,2026-06,insurance,769.83,store
+FY26-27,NCR,DLF,2026-06,software,4764.0,store
+FY26-27,NCR,DLF,2026-06,salary,252781.64,store
+FY26-27,NCR,DLF,2026-06,amc,7670.0,store
+FY26-27,NCR,DLF,2026-06,subscription,849.58,store
+FY26-27,NCR,DLF,2026-06,repairs,11210.0,store
+FY26-27,NCR,DLF,2026-06,misc,9227.77,store
+FY26-27,NCR,DLF,2026-06,cam,40031.5,store
+FY26-27,NCR,DLF,2026-06,ho_ck_cost,228106.85,store
+FY26-27,NCR,DLF,2026-06,opex_total,1170830.24,store
+FY26-27,NCR,DLF,2026-06,ebitda,425932.07,store
+FY26-27,NCR,DLF,2026-07,opening_stock,70784.0,store
+FY26-27,NCR,DLF,2026-07,purchases,419823.0,store
+FY26-27,NCR,DLF,2026-07,transferred_out,0.0,store
+FY26-27,NCR,DLF,2026-07,wastage,17340.96,store
+FY26-27,NCR,DLF,2026-07,closing_stock,59607.8,store
+FY26-27,NCR,DLF,2026-07,gross_revenue,1998988.83,store
+FY26-27,NCR,DLF,2026-07,tax,95189.94,store
+FY26-27,NCR,DLF,2026-07,commission,220003.52,store
+FY26-27,NCR,DLF,2026-07,net_revenue,1683795.37,store
+FY26-27,NCR,DLF,2026-07,fnb_cost,430999.2,store
+FY26-27,NCR,DLF,2026-07,electricity,64430.0,store
+FY26-27,NCR,DLF,2026-07,telephone,1060.0,store
+FY26-27,NCR,DLF,2026-07,gas,0.0,store
+FY26-27,NCR,DLF,2026-07,rent,139240.0,store
+FY26-27,NCR,DLF,2026-07,insurance,769.83,store
+FY26-27,NCR,DLF,2026-07,software,4764.0,store
+FY26-27,NCR,DLF,2026-07,salary,286272.04,store
+FY26-27,NCR,DLF,2026-07,amc,7670.0,store
+FY26-27,NCR,DLF,2026-07,subscription,845.67,store
+FY26-27,NCR,DLF,2026-07,repairs,0.0,store
+FY26-27,NCR,DLF,2026-07,misc,10698.94,store
+FY26-27,NCR,DLF,2026-07,cam,40031.5,store
+FY26-27,NCR,DLF,2026-07,ho_ck_cost,242633.29,store
+FY26-27,NCR,DLF,2026-07,opex_total,1229414.46,store
+FY26-27,NCR,DLF,2026-07,ebitda,454380.91,store
+FY26-27,NCR,DLF,2026-08,opening_stock,59607.8,store
+FY26-27,NCR,DLF,2026-08,purchases,426942.0,store
+FY26-27,NCR,DLF,2026-08,transferred_out,0.0,store
+FY26-27,NCR,DLF,2026-08,wastage,16120.0,store
+FY26-27,NCR,DLF,2026-08,closing_stock,52984.0,store
+FY26-27,NCR,DLF,2026-08,gross_revenue,1937767.65,store
+FY26-27,NCR,DLF,2026-08,tax,92274.65,store
+FY26-27,NCR,DLF,2026-08,commission,257757.93,store
+FY26-27,NCR,DLF,2026-08,net_revenue,1587735.07,store
+FY26-27,NCR,DLF,2026-08,fnb_cost,433565.8,store
+FY26-27,NCR,DLF,2026-08,electricity,58954.0,store
+FY26-27,NCR,DLF,2026-08,telephone,942.0,store
+FY26-27,NCR,DLF,2026-08,gas,0.0,store
+FY26-27,NCR,DLF,2026-08,rent,139240.0,store
+FY26-27,NCR,DLF,2026-08,insurance,769.83,store
+FY26-27,NCR,DLF,2026-08,software,4764.0,store
+FY26-27,NCR,DLF,2026-08,salary,250215.78,store
+FY26-27,NCR,DLF,2026-08,amc,7670.0,store
+FY26-27,NCR,DLF,2026-08,subscription,845.67,store
+FY26-27,NCR,DLF,2026-08,repairs,0.0,store
+FY26-27,NCR,DLF,2026-08,misc,13507.7,store
+FY26-27,NCR,DLF,2026-08,cam,40031.5,store
+FY26-27,NCR,DLF,2026-08,ho_ck_cost,211071.81,store
+FY26-27,NCR,DLF,2026-08,opex_total,1161578.09,store
+FY26-27,NCR,DLF,2026-08,ebitda,426156.98,store
+FY26-27,NCR,DLF,2026-09,opening_stock,52984.0,store
+FY26-27,NCR,DLF,2026-09,purchases,439629.0,store
+FY26-27,NCR,DLF,2026-09,transferred_out,0.0,store
+FY26-27,NCR,DLF,2026-09,wastage,17661.0,store
+FY26-27,NCR,DLF,2026-09,closing_stock,51744.0,store
+FY26-27,NCR,DLF,2026-09,gross_revenue,2046177.28,store
+FY26-27,NCR,DLF,2026-09,tax,97437.01,store
+FY26-27,NCR,DLF,2026-09,commission,262009.39,store
+FY26-27,NCR,DLF,2026-09,net_revenue,1686730.88,store
+FY26-27,NCR,DLF,2026-09,fnb_cost,440869.0,store
+FY26-27,NCR,DLF,2026-09,electricity,56723.0,store
+FY26-27,NCR,DLF,2026-09,telephone,942.0,store
+FY26-27,NCR,DLF,2026-09,gas,0.0,store
+FY26-27,NCR,DLF,2026-09,rent,139240.0,store
+FY26-27,NCR,DLF,2026-09,insurance,769.83,store
+FY26-27,NCR,DLF,2026-09,software,4764.0,store
+FY26-27,NCR,DLF,2026-09,salary,271666.57,store
+FY26-27,NCR,DLF,2026-09,amc,7670.0,store
+FY26-27,NCR,DLF,2026-09,subscription,845.67,store
+FY26-27,NCR,DLF,2026-09,repairs,15048.0,store
+FY26-27,NCR,DLF,2026-09,misc,8224.58,store
+FY26-27,NCR,DLF,2026-09,cam,40031.5,store
+FY26-27,NCR,DLF,2026-09,ho_ck_cost,239618.57,store
+FY26-27,NCR,DLF,2026-09,opex_total,1226412.71,store
+FY26-27,NCR,DLF,2026-09,ebitda,460318.16,store
+FY26-27,NCR,DLF,2026-10,opening_stock,51744.0,store
+FY26-27,NCR,DLF,2026-10,purchases,374012.37,store
+FY26-27,NCR,DLF,2026-10,transferred_out,0.0,store
+FY26-27,NCR,DLF,2026-10,wastage,9695.0,store
+FY26-27,NCR,DLF,2026-10,closing_stock,59341.0,store
+FY26-27,NCR,DLF,2026-10,gross_revenue,1768404.43,store
+FY26-27,NCR,DLF,2026-10,tax,84209.73,store
+FY26-27,NCR,DLF,2026-10,net_revenue,1684194.69,store
+FY26-27,NCR,DLF,2026-10,fnb_cost,366415.37,store
+FY26-27,NCR,DLF,2026-10,rent,139240.0,store
+FY26-27,NCR,DLF,2026-10,insurance,769.83,store
+FY26-27,NCR,DLF,2026-10,salary,265221.0,store
+FY26-27,NCR,DLF,2026-10,ho_ck_cost,92079.02,store
+FY26-27,NCR,DLF,2026-10,opex_total,863725.22,store
+FY26-27,NCR,DLF,2026-10,ebitda,820469.47,store
 FY26-27,NCR,Paschim Vihar,2026-04,opening_stock,78348.0,store
 FY26-27,NCR,Paschim Vihar,2026-04,purchases,361478.61,store
 FY26-27,NCR,Paschim Vihar,2026-04,transferred_out,0.0,store
@@ -4098,9 +4723,26 @@ FY26-27,NCR,Paschim Vihar,2026-09,subscription,2299.83,store
 FY26-27,NCR,Paschim Vihar,2026-09,repairs,0.0,store
 FY26-27,NCR,Paschim Vihar,2026-09,misc,22961.36,store
 FY26-27,NCR,Paschim Vihar,2026-09,cam,0.0,store
-FY26-27,NCR,Paschim Vihar,2026-09,ho_ck_cost,147268.98,store
-FY26-27,NCR,Paschim Vihar,2026-09,opex_total,1211491.55,store
-FY26-27,NCR,Paschim Vihar,2026-09,ebitda,-161046.48,store
+FY26-27,NCR,Paschim Vihar,2026-09,ho_ck_cost,149227.21,store
+FY26-27,NCR,Paschim Vihar,2026-09,opex_total,1213449.79,store
+FY26-27,NCR,Paschim Vihar,2026-09,ebitda,-163004.71,store
+FY26-27,NCR,Paschim Vihar,2026-10,opening_stock,68961.0,store
+FY26-27,NCR,Paschim Vihar,2026-10,purchases,305977.44,store
+FY26-27,NCR,Paschim Vihar,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Paschim Vihar,2026-10,wastage,29729.77,store
+FY26-27,NCR,Paschim Vihar,2026-10,closing_stock,12420.0,store
+FY26-27,NCR,Paschim Vihar,2026-10,gross_revenue,1335262.68,store
+FY26-27,NCR,Paschim Vihar,2026-10,tax,63583.94,store
+FY26-27,NCR,Paschim Vihar,2026-10,net_revenue,1271678.74,store
+FY26-27,NCR,Paschim Vihar,2026-10,fnb_cost,362518.44,store
+FY26-27,NCR,Paschim Vihar,2026-10,rent,251044.0,store
+FY26-27,NCR,Paschim Vihar,2026-10,insurance,1424.13,store
+FY26-27,NCR,Paschim Vihar,2026-10,software,5767.25,store
+FY26-27,NCR,Paschim Vihar,2026-10,salary,282364.0,store
+FY26-27,NCR,Paschim Vihar,2026-10,subscription,1353.17,store
+FY26-27,NCR,Paschim Vihar,2026-10,ho_ck_cost,69525.77,store
+FY26-27,NCR,Paschim Vihar,2026-10,opex_total,973996.76,store
+FY26-27,NCR,Paschim Vihar,2026-10,ebitda,297681.98,store
 FY26-27,NCR,Kalkaji,2026-04,opening_stock,64172.0,store
 FY26-27,NCR,Kalkaji,2026-04,purchases,344563.0,store
 FY26-27,NCR,Kalkaji,2026-04,transferred_out,0.0,store
@@ -4251,9 +4893,26 @@ FY26-27,NCR,Kalkaji,2026-09,subscription,2299.83,store
 FY26-27,NCR,Kalkaji,2026-09,repairs,0.0,store
 FY26-27,NCR,Kalkaji,2026-09,misc,13369.43,store
 FY26-27,NCR,Kalkaji,2026-09,cam,0.0,store
-FY26-27,NCR,Kalkaji,2026-09,ho_ck_cost,206876.9,store
-FY26-27,NCR,Kalkaji,2026-09,opex_total,1276043.03,store
-FY26-27,NCR,Kalkaji,2026-09,ebitda,199575.43,store
+FY26-27,NCR,Kalkaji,2026-09,ho_ck_cost,209627.74,store
+FY26-27,NCR,Kalkaji,2026-09,opex_total,1278793.86,store
+FY26-27,NCR,Kalkaji,2026-09,ebitda,196824.59,store
+FY26-27,NCR,Kalkaji,2026-10,opening_stock,64162.0,store
+FY26-27,NCR,Kalkaji,2026-10,purchases,423788.0,store
+FY26-27,NCR,Kalkaji,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Kalkaji,2026-10,wastage,21925.66,store
+FY26-27,NCR,Kalkaji,2026-10,closing_stock,69839.0,store
+FY26-27,NCR,Kalkaji,2026-10,gross_revenue,1805311.27,store
+FY26-27,NCR,Kalkaji,2026-10,tax,85967.2,store
+FY26-27,NCR,Kalkaji,2026-10,net_revenue,1719344.07,store
+FY26-27,NCR,Kalkaji,2026-10,fnb_cost,418111.0,store
+FY26-27,NCR,Kalkaji,2026-10,rent,162840.0,store
+FY26-27,NCR,Kalkaji,2026-10,insurance,1424.13,store
+FY26-27,NCR,Kalkaji,2026-10,salary,311986.0,store
+FY26-27,NCR,Kalkaji,2026-10,subscription,1353.17,store
+FY26-27,NCR,Kalkaji,2026-10,cam,0.0,store
+FY26-27,NCR,Kalkaji,2026-10,ho_ck_cost,94000.72,store
+FY26-27,NCR,Kalkaji,2026-10,opex_total,989715.02,store
+FY26-27,NCR,Kalkaji,2026-10,ebitda,729629.05,store
 FY26-27,NCR,Model Town,2026-04,opening_stock,80928.0,store
 FY26-27,NCR,Model Town,2026-04,purchases,591480.0,store
 FY26-27,NCR,Model Town,2026-04,transferred_out,0.0,store
@@ -4401,9 +5060,25 @@ FY26-27,NCR,Model Town,2026-09,subscription,946.67,store
 FY26-27,NCR,Model Town,2026-09,repairs,0.0,store
 FY26-27,NCR,Model Town,2026-09,misc,11846.4,store
 FY26-27,NCR,Model Town,2026-09,cam,0.0,store
-FY26-27,NCR,Model Town,2026-09,ho_ck_cost,250826.28,store
-FY26-27,NCR,Model Town,2026-09,opex_total,1787289.94,store
-FY26-27,NCR,Model Town,2026-09,ebitda,1812.1,store
+FY26-27,NCR,Model Town,2026-09,ho_ck_cost,254161.51,store
+FY26-27,NCR,Model Town,2026-09,opex_total,1790625.17,store
+FY26-27,NCR,Model Town,2026-09,ebitda,-1523.13,store
+FY26-27,NCR,Model Town,2026-10,opening_stock,77514.0,store
+FY26-27,NCR,Model Town,2026-10,purchases,549016.78,store
+FY26-27,NCR,Model Town,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Model Town,2026-10,wastage,23557.0,store
+FY26-27,NCR,Model Town,2026-10,closing_stock,70405.0,store
+FY26-27,NCR,Model Town,2026-10,gross_revenue,2073628.87,store
+FY26-27,NCR,Model Town,2026-10,tax,98744.23,store
+FY26-27,NCR,Model Town,2026-10,net_revenue,1974884.64,store
+FY26-27,NCR,Model Town,2026-10,fnb_cost,556125.78,store
+FY26-27,NCR,Model Town,2026-10,telephone,1770.0,store
+FY26-27,NCR,Model Town,2026-10,rent,472000.0,store
+FY26-27,NCR,Model Town,2026-10,insurance,1424.13,store
+FY26-27,NCR,Model Town,2026-10,salary,410275.0,store
+FY26-27,NCR,Model Town,2026-10,ho_ck_cost,107971.74,store
+FY26-27,NCR,Model Town,2026-10,opex_total,1549566.66,store
+FY26-27,NCR,Model Town,2026-10,ebitda,425317.98,store
 FY26-27,NCR,CP,2026-04,opening_stock,77223.0,store
 FY26-27,NCR,CP,2026-04,purchases,993279.0,store
 FY26-27,NCR,CP,2026-04,transferred_out,0.0,store
@@ -4557,9 +5232,25 @@ FY26-27,NCR,CP,2026-09,subscription,946.67,store
 FY26-27,NCR,CP,2026-09,repairs,5560.0,store
 FY26-27,NCR,CP,2026-09,misc,68475.02,store
 FY26-27,NCR,CP,2026-09,cam,0.0,store
-FY26-27,NCR,CP,2026-09,ho_ck_cost,516121.24,store
-FY26-27,NCR,CP,2026-09,opex_total,3580422.06,store
-FY26-27,NCR,CP,2026-09,ebitda,100984.68,store
+FY26-27,NCR,CP,2026-09,ho_ck_cost,522984.08,store
+FY26-27,NCR,CP,2026-09,opex_total,3587284.9,store
+FY26-27,NCR,CP,2026-09,ebitda,94121.83,store
+FY26-27,NCR,CP,2026-10,opening_stock,64068.0,store
+FY26-27,NCR,CP,2026-10,purchases,728026.0,store
+FY26-27,NCR,CP,2026-10,transferred_out,0.0,store
+FY26-27,NCR,CP,2026-10,wastage,64198.0,store
+FY26-27,NCR,CP,2026-10,closing_stock,72946.47,store
+FY26-27,NCR,CP,2026-10,gross_revenue,3250683.05,store
+FY26-27,NCR,CP,2026-10,catering,0.0,store
+FY26-27,NCR,CP,2026-10,tax,154794.43,store
+FY26-27,NCR,CP,2026-10,net_revenue,3095888.62,store
+FY26-27,NCR,CP,2026-10,fnb_cost,719147.53,store
+FY26-27,NCR,CP,2026-10,rent,1180000.0,store
+FY26-27,NCR,CP,2026-10,insurance,1424.13,store
+FY26-27,NCR,CP,2026-10,salary,527833.0,store
+FY26-27,NCR,CP,2026-10,ho_ck_cost,169259.76,store
+FY26-27,NCR,CP,2026-10,opex_total,2597664.42,store
+FY26-27,NCR,CP,2026-10,ebitda,498224.2,store
 FY26-27,NCR,Rohini,2026-04,opening_stock,104700.0,store
 FY26-27,NCR,Rohini,2026-04,purchases,526909.0,store
 FY26-27,NCR,Rohini,2026-04,transferred_out,0.0,store
@@ -4707,9 +5398,26 @@ FY26-27,NCR,Rohini,2026-09,subscription,2299.83,store
 FY26-27,NCR,Rohini,2026-09,repairs,7731.0,store
 FY26-27,NCR,Rohini,2026-09,misc,19871.02,store
 FY26-27,NCR,Rohini,2026-09,cam,0.0,store
-FY26-27,NCR,Rohini,2026-09,ho_ck_cost,288271.99,store
-FY26-27,NCR,Rohini,2026-09,opex_total,1688474.06,store
-FY26-27,NCR,Rohini,2026-09,ebitda,367721.96,store
+FY26-27,NCR,Rohini,2026-09,ho_ck_cost,292105.13,store
+FY26-27,NCR,Rohini,2026-09,opex_total,1692307.21,store
+FY26-27,NCR,Rohini,2026-09,ebitda,363888.82,store
+FY26-27,NCR,Rohini,2026-10,opening_stock,75365.0,store
+FY26-27,NCR,Rohini,2026-10,purchases,533413.0,store
+FY26-27,NCR,Rohini,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Rohini,2026-10,wastage,31134.0,store
+FY26-27,NCR,Rohini,2026-10,closing_stock,69194.52,store
+FY26-27,NCR,Rohini,2026-10,gross_revenue,2352314.41,store
+FY26-27,NCR,Rohini,2026-10,tax,112014.97,store
+FY26-27,NCR,Rohini,2026-10,net_revenue,2240299.44,store
+FY26-27,NCR,Rohini,2026-10,fnb_cost,539583.48,store
+FY26-27,NCR,Rohini,2026-10,rent,227664.48,store
+FY26-27,NCR,Rohini,2026-10,insurance,1424.13,store
+FY26-27,NCR,Rohini,2026-10,software,5767.0,store
+FY26-27,NCR,Rohini,2026-10,salary,409023.0,store
+FY26-27,NCR,Rohini,2026-10,subscription,1353.17,store
+FY26-27,NCR,Rohini,2026-10,ho_ck_cost,122482.62,store
+FY26-27,NCR,Rohini,2026-10,opex_total,1307297.88,store
+FY26-27,NCR,Rohini,2026-10,ebitda,933001.56,store
 FY26-27,NCR,Pacific Mall,2026-04,opening_stock,21772.0,store
 FY26-27,NCR,Pacific Mall,2026-04,purchases,505213.0,store
 FY26-27,NCR,Pacific Mall,2026-04,transferred_out,0.0,store
@@ -4857,9 +5565,23 @@ FY26-27,NCR,Pacific Mall,2026-09,subscription,946.67,store
 FY26-27,NCR,Pacific Mall,2026-09,repairs,0.0,store
 FY26-27,NCR,Pacific Mall,2026-09,misc,53126.9,store
 FY26-27,NCR,Pacific Mall,2026-09,cam,159903.89,store
-FY26-27,NCR,Pacific Mall,2026-09,ho_ck_cost,318442.63,store
-FY26-27,NCR,Pacific Mall,2026-09,opex_total,2173391.0,store
-FY26-27,NCR,Pacific Mall,2026-09,ebitda,98007.2,store
+FY26-27,NCR,Pacific Mall,2026-09,ho_ck_cost,322676.95,store
+FY26-27,NCR,Pacific Mall,2026-09,opex_total,2177625.32,store
+FY26-27,NCR,Pacific Mall,2026-09,ebitda,93772.88,store
+FY26-27,NCR,Pacific Mall,2026-10,opening_stock,28094.0,store
+FY26-27,NCR,Pacific Mall,2026-10,purchases,550359.0,store
+FY26-27,NCR,Pacific Mall,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Pacific Mall,2026-10,wastage,21464.0,store
+FY26-27,NCR,Pacific Mall,2026-10,closing_stock,26388.76,store
+FY26-27,NCR,Pacific Mall,2026-10,gross_revenue,2498599.46,store
+FY26-27,NCR,Pacific Mall,2026-10,tax,118980.93,store
+FY26-27,NCR,Pacific Mall,2026-10,net_revenue,2379618.53,store
+FY26-27,NCR,Pacific Mall,2026-10,fnb_cost,552064.24,store
+FY26-27,NCR,Pacific Mall,2026-10,insurance,1424.13,store
+FY26-27,NCR,Pacific Mall,2026-10,salary,388879.0,store
+FY26-27,NCR,Pacific Mall,2026-10,ho_ck_cost,130099.53,store
+FY26-27,NCR,Pacific Mall,2026-10,opex_total,1072466.9,store
+FY26-27,NCR,Pacific Mall,2026-10,ebitda,1307151.63,store
 FY26-27,NCR,Shalimar Bagh,2026-04,opening_stock,38039.0,store
 FY26-27,NCR,Shalimar Bagh,2026-04,purchases,276308.0,store
 FY26-27,NCR,Shalimar Bagh,2026-04,transferred_out,0.0,store
@@ -5007,9 +5729,23 @@ FY26-27,NCR,Shalimar Bagh,2026-09,subscription,946.67,store
 FY26-27,NCR,Shalimar Bagh,2026-09,repairs,277.0,store
 FY26-27,NCR,Shalimar Bagh,2026-09,misc,8607.1,store
 FY26-27,NCR,Shalimar Bagh,2026-09,cam,0.0,store
-FY26-27,NCR,Shalimar Bagh,2026-09,ho_ck_cost,191164.81,store
-FY26-27,NCR,Shalimar Bagh,2026-09,opex_total,1277735.85,store
-FY26-27,NCR,Shalimar Bagh,2026-09,ebitda,85810.88,store
+FY26-27,NCR,Shalimar Bagh,2026-09,ho_ck_cost,193706.72,store
+FY26-27,NCR,Shalimar Bagh,2026-09,opex_total,1280277.76,store
+FY26-27,NCR,Shalimar Bagh,2026-09,ebitda,83268.97,store
+FY26-27,NCR,Shalimar Bagh,2026-10,opening_stock,33226.0,store
+FY26-27,NCR,Shalimar Bagh,2026-10,purchases,349580.88,store
+FY26-27,NCR,Shalimar Bagh,2026-10,transferred_out,0.0,store
+FY26-27,NCR,Shalimar Bagh,2026-10,wastage,22683.54,store
+FY26-27,NCR,Shalimar Bagh,2026-10,closing_stock,39971.0,store
+FY26-27,NCR,Shalimar Bagh,2026-10,gross_revenue,1418343.71,store
+FY26-27,NCR,Shalimar Bagh,2026-10,tax,67540.18,store
+FY26-27,NCR,Shalimar Bagh,2026-10,net_revenue,1350803.53,store
+FY26-27,NCR,Shalimar Bagh,2026-10,fnb_cost,342835.88,store
+FY26-27,NCR,Shalimar Bagh,2026-10,rent,283200.0,store
+FY26-27,NCR,Shalimar Bagh,2026-10,insurance,1424.13,store
+FY26-27,NCR,Shalimar Bagh,2026-10,salary,299168.0,store
+FY26-27,NCR,Shalimar Bagh,2026-10,opex_total,926628.01,store
+FY26-27,NCR,Shalimar Bagh,2026-10,ebitda,424175.52,store
 FY26-27,NCR,Kitchen & central,2026-04,ads,769400.94,central
 FY26-27,NCR,Kitchen & central,2026-04,ebitda,-1054290.12,central
 FY26-27,NCR,Kitchen & central,2026-04,fnb_cost,285196.0,central
@@ -5037,11 +5773,17 @@ FY26-27,NCR,Kitchen & central,2026-08,fnb_cost,61031.0,central
 FY26-27,NCR,Kitchen & central,2026-08,opex_total,1053713.57,central
 FY26-27,NCR,Kitchen & central,2026-08,wastage,-32482.82,central
 FY26-27,NCR,Kitchen & central,2026-09,ads,959041.68,central
-FY26-27,NCR,Kitchen & central,2026-09,ebitda,-1720721.91,central
-FY26-27,NCR,Kitchen & central,2026-09,fnb_cost,761680.23,central
-FY26-27,NCR,Kitchen & central,2026-09,opex_total,1720721.91,central
-FY26-27,NCR,Kitchen & central,2026-09,purchases,709061.0,central
+FY26-27,NCR,Kitchen & central,2026-09,ebitda,-1344350.91,central
+FY26-27,NCR,Kitchen & central,2026-09,fnb_cost,385309.23,central
+FY26-27,NCR,Kitchen & central,2026-09,opex_total,1344350.92,central
+FY26-27,NCR,Kitchen & central,2026-09,purchases,332690.0,central
 FY26-27,NCR,Kitchen & central,2026-09,wastage,-34804.01,central
+FY26-27,NCR,Kitchen & central,2026-10,ads,138423.78,central
+FY26-27,NCR,Kitchen & central,2026-10,ebitda,-529744.75,central
+FY26-27,NCR,Kitchen & central,2026-10,fnb_cost,391320.98,central
+FY26-27,NCR,Kitchen & central,2026-10,opex_total,529744.75,central
+FY26-27,NCR,Kitchen & central,2026-10,purchases,328145.0,central
+FY26-27,NCR,Kitchen & central,2026-10,wastage,-46686.44,central
 FY25-26,Kolkata,,2025-04,opening_stock,481976.41,city
 FY25-26,Kolkata,,2025-04,purchases,4234148.04,city
 FY25-26,Kolkata,,2025-04,transferred_out,9164.38,city
