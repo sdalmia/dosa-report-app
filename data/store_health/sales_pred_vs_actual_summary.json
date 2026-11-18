@@ -1,32 +1,30 @@
 {
- "as_of_date": "2026-11-16",
+ "as_of_date": "2026-11-17",
  "current_month": "2026-11",
- "completed_actual_days": 16,
- "mtd_actual_L": 236.28,
- "mtd_pred_mid_L": 229.5,
- "mom_net_pct": -10.3,
- "mom_note": "MoM -10.3% on daily average: Nov 1–16 net ₹236.28L / 16 = ₹14.77L vs observed Oct 2–31 ₹494.04L / 30 = ₹16.47L. Not full-calendar October: 1 Oct net missing.",
- "actuals_through": "2026-11-16",
- "mtd_actual_rupees": "23627415.77",
- "mtd_source_note": "Exact network CSV rupees; daily calendar cells rounded to ₹L.",
- "target_pace_pct": 86.4,
- "target_pace_note": "Nov 1–16 target pace: net ₹236.28L / pro-rata ₹273.33L. November target ₹512.5L.",
+ "completed_actual_days": 17,
+ "mtd_actual_L": 248.81,
+ "mtd_pred_mid_L": 243.0,
+ "mom_net_pct": -11.1,
+ "mom_note": "MoM -11.1% on daily average: Nov 1\u201317 net \u20b9248.81L / 17 = \u20b914.64L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
+ "actuals_through": "2026-11-17",
+ "mtd_actual_rupees": "24880945.77",
+ "target_pace_pct": 85.7,
+ "target_pace_note": "Nov 1\u201317 target pace: net \u20b9248.81L / pro-rata \u20b9290.42L. November target \u20b9512.5L.",
  "regional_mtd": {
   "East": {
-   "net_rupees": "12789119.81",
-   "net_L": 127.89,
+   "net_rupees": "13431533.61",
+   "net_L": 134.32,
    "target_L": 257.5,
-   "pro_rata_L": 137.33,
-   "pace_pct": 93.1
+   "pro_rata_L": 145.92,
+   "pace_pct": 92.0
   },
   "North": {
-   "net_rupees": "10838295.94",
-   "net_L": 108.38,
+   "net_rupees": "11449412.15",
+   "net_L": 114.49,
    "target_L": 255.0,
-   "pro_rata_L": 136.0,
-   "pace_pct": 79.7
+   "pro_rata_L": 144.5,
+   "pace_pct": 79.2
   }
  },
- "october_observed_2_to_31_net_L": 494.04,
- "provenance": "Alfred Posist Insights daily_sales/network_2026-11-16.csv (_DONE present) for 16 Nov; earlier days per prior provenance."
+ "provenance": "Alfred Posist Insights daily_sales/network_2026-11-17.csv (_DONE present) for 17 Nov; earlier days per prior provenance."
 }
