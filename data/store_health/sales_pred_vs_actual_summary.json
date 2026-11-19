@@ -1,30 +1,30 @@
 {
- "as_of_date": "2026-11-17",
+ "as_of_date": "2026-11-18",
  "current_month": "2026-11",
- "completed_actual_days": 17,
- "mtd_actual_L": 248.81,
- "mtd_pred_mid_L": 243.0,
- "mom_net_pct": -11.1,
- "mom_note": "MoM -11.1% on daily average: Nov 1\u201317 net \u20b9248.81L / 17 = \u20b914.64L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
- "actuals_through": "2026-11-17",
- "mtd_actual_rupees": "24880945.77",
- "target_pace_pct": 85.7,
- "target_pace_note": "Nov 1\u201317 target pace: net \u20b9248.81L / pro-rata \u20b9290.42L. November target \u20b9512.5L.",
+ "completed_actual_days": 18,
+ "mtd_actual_L": 259.93,
+ "mtd_pred_mid_L": 256.5,
+ "mom_net_pct": -12.3,
+ "mom_note": "MoM -12.3% on daily average: Nov 1\u201318 net \u20b9259.93L / 18 = \u20b914.44L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
+ "actuals_through": "2026-11-18",
+ "mtd_actual_rupees": "25992225.00",
+ "target_pace_pct": 84.5,
+ "target_pace_note": "Nov 1\u201318 target pace: net \u20b9259.93L / pro-rata \u20b9307.50L. November target \u20b9512.5L.",
  "regional_mtd": {
   "East": {
-   "net_rupees": "13431533.61",
-   "net_L": 134.32,
+   "net_rupees": "14006236.30",
+   "net_L": 140.06,
    "target_L": 257.5,
-   "pro_rata_L": 145.92,
-   "pace_pct": 92.0
+   "pro_rata_L": 154.5,
+   "pace_pct": 90.7
   },
   "North": {
-   "net_rupees": "11449412.15",
-   "net_L": 114.49,
+   "net_rupees": "11985988.69",
+   "net_L": 119.86,
    "target_L": 255.0,
-   "pro_rata_L": 144.5,
-   "pace_pct": 79.2
+   "pro_rata_L": 153.0,
+   "pace_pct": 78.3
   }
  },
- "provenance": "Alfred Posist Insights daily_sales/network_2026-11-17.csv (_DONE present) for 17 Nov; earlier days per prior provenance."
+ "provenance": "Alfred Posist Insights daily_sales/network_2026-11-18.csv (_DONE present) for 18 Nov; earlier days per prior provenance."
 }
