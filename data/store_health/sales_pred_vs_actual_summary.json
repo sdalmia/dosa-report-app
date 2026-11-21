@@ -1,30 +1,30 @@
 {
- "as_of_date": "2026-11-20",
- "current_month": "2026-11",
- "completed_actual_days": 19,
- "mtd_actual_L": 271.33,
- "mtd_pred_mid_L": 269.5,
- "mom_net_pct": -13.3,
- "mom_note": "MoM -13.3% on daily average: Nov 1\u201319 net \u20b9271.32L / 19 = \u20b914.28L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
- "actuals_through": "2026-11-19",
- "mtd_actual_rupees": "27132027.00",
- "target_pace_pct": 83.6,
- "target_pace_note": "Nov 1\u201319 target pace: net \u20b9271.32L / pro-rata \u20b9324.58L. November target \u20b9512.5L.",
- "regional_mtd": {
-  "East": {
-   "net_rupees": "14565045.24",
-   "net_L": 145.65,
-   "target_L": 257.5,
-   "pro_rata_L": 163.08,
-   "pace_pct": 89.3
+  "as_of_date": "2026-11-20",
+  "current_month": "2026-11",
+  "completed_actual_days": 20,
+  "mtd_actual_L": 282.51,
+  "mtd_pred_mid_L": 283.0,
+  "mom_net_pct": -14.2,
+  "mom_note": "MoM -14.2% on daily average: Nov 1\u201320 net \u20b9282.50L / 20 = \u20b914.12L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
+  "actuals_through": "2026-11-20",
+  "mtd_actual_rupees": "28249621.30",
+  "target_pace_pct": 82.7,
+  "target_pace_note": "Nov 1\u201320 target pace: net \u20b9282.50L / pro-rata \u20b9341.66L. November target \u20b9512.5L.",
+  "regional_mtd": {
+    "East": {
+      "net_rupees": "15063431.45",
+      "net_L": 150.63,
+      "target_L": 257.5,
+      "pro_rata_L": 171.66,
+      "pace_pct": 87.7
+    },
+    "North": {
+      "net_rupees": "13186190.15",
+      "net_L": 131.86,
+      "target_L": 255.0,
+      "pro_rata_L": 170.0,
+      "pace_pct": 77.6
+    }
   },
-  "North": {
-   "net_rupees": "12566982.06",
-   "net_L": 125.67,
-   "target_L": 255.0,
-   "pro_rata_L": 161.5,
-   "pace_pct": 77.8
-  }
- },
- "provenance": "Alfred Posist Insights daily_sales/network_2026-11-19.csv (_DONE present) for 19 Nov; earlier days per prior provenance."
+  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-20.csv (_DONE present) for 20 Nov; earlier days per prior provenance."
 }
