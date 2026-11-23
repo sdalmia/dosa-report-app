@@ -102,6 +102,7 @@ def load_cases(directory, now):
         path
         for path in sorted(directory.glob("tickets*.csv"))
         if not path.name.lower().startswith("tickets_source_detail")
+        and "_to_" not in path.name.lower()
     ]
     if not paths:
         result["warnings"].append(_missing_tickets())

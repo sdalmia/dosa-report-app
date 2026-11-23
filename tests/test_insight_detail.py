@@ -9,11 +9,11 @@ from app.chat.wizard_a import trend_cards
 
 class InsightDetailTests(unittest.TestCase):
     def test_store_sheet_uses_the_full_week_and_leaves_net_blank(self):
-        detail = build_detail("gurgaon-dlf", "owner")
-        card = next(row for row in trend_cards() if "Gurgaon" in row["title"])
-        self.assertEqual(detail["title"], "Gurgaon DLF")
+        detail = build_detail("salt-lake-sec-1", "owner")
+        card = next(row for row in trend_cards() if row["title"] == "Salt Lake Sec-1")
+        self.assertEqual(detail["title"], "Salt Lake Sec-1")
         self.assertEqual(detail["headline"], card["line"])
-        self.assertEqual(detail["window"], "6–12 Nov vs 30 Oct–5 Nov")
+        self.assertEqual(detail["window"], "16–22 Nov vs 9–15 Nov")
         self.assertEqual(len(detail["days"]), 7)
         self.assertEqual(detail["total"]["day"], "Total")
         self.assertEqual(len(detail["chart"]["this_week"]), 7)
@@ -21,20 +21,19 @@ class InsightDetailTests(unittest.TestCase):
         self.assertLessEqual(len(detail["facts"]), 4)
         self.assertTrue(any(line.startswith("Bills ") for line in detail["facts"]))
         self.assertTrue(any(line.startswith("Biggest ") for line in detail["facts"]))
-        self.assertTrue(any(line.startswith("City: other Delhi NCR") for line in detail["facts"]))
+        self.assertTrue(any(line.startswith("City: other Kolkata") for line in detail["facts"]))
         self.assertEqual(detail["about"].count("."), 2)
         self.assertIn("net is blank", detail["about"].casefold())
         self.assertEqual(detail["headline"].count(detail["window"]), 1)
-        self.assertEqual(detail["days"][0]["day"], "Fri 6 Nov")
+        self.assertEqual(detail["days"][0]["day"], "Mon 16 Nov")
         self.assertNotIn("-₹", detail["headline"])
         self.assertNotIn("(02/", detail["share_text"])
-        self.assertEqual(detail["city"]["name"], "Delhi NCR")
+        self.assertEqual(detail["city"]["name"], "Kolkata")
         peers = " ".join(detail["city"]["peers"]).casefold()
         for name in ("faridabad", "rosedale", "chattarpur", "gk1"):
             self.assertNotIn(name, peers)
-        self.assertIn("9 Nov", detail["about"])
-        self.assertIn("no store channel file", detail["about"].casefold())
-        self.assertTrue(all(row["prior"] == "not in the file" for row in detail["channels"]["rows"]))
+        self.assertIn("not treated as zero", detail["about"].casefold())
+        self.assertTrue(all(row["prior"].startswith("₹") for row in detail["channels"]["rows"]))
         self.assertTrue(detail["days"][0]["this_bills"].isdigit())
 
     def test_licence_sheet_lists_expired_and_expiring(self):
@@ -55,15 +54,15 @@ class InsightDetailTests(unittest.TestCase):
         app = create_app()
         app.config["TESTING"] = True
         client = app.test_client()
-        blocked = client.get("/api/chat/insights/gurgaon-dlf/details")
+        blocked = client.get("/api/chat/insights/salt-lake-sec-1/details")
         self.assertEqual(blocked.status_code, 302)
         with client.session_transaction() as sess:
             sess["user"] = {"name": "Siddhant", "email": "siddhant@dalgreenfoods.com"}
             sess["user_email"] = "siddhant@dalgreenfoods.com"
-        page = client.get("/api/chat/insights/gurgaon-dlf/details")
+        page = client.get("/api/chat/insights/salt-lake-sec-1/details")
         self.assertEqual(page.status_code, 200)
         body = page.get_json()
-        self.assertEqual(body["title"], "Gurgaon DLF")
+        self.assertEqual(body["title"], "Salt Lake Sec-1")
         self.assertIn("net is blank", body["about"].casefold())
         self.assertEqual(len(body["days"]), 7)
         self.assertIn("this_gross", body["days"][0])
@@ -72,12 +71,12 @@ class InsightDetailTests(unittest.TestCase):
         self.assertEqual(missing.status_code, 404)
         home = client.get("/dashboard")
         html = home.get_data(as_text=True)
-        self.assertIn('data-id="gurgaon-dlf"', html)
+        self.assertIn('data-id="salt-lake-sec-1"', html)
         self.assertIn('id="insight-sheet"', html)
         opened = client.get("/dashboard?insight=licences")
         text = opened.get_data(as_text=True)
         self.assertIn("9 licences expired, 3 expire in 30 days", text)
-        self.assertIn("227 days overdue", text)
+        self.assertIn("237 days overdue", text)
 
 
 if __name__ == "__main__":

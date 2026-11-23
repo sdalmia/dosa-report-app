@@ -96,7 +96,7 @@ class TicketTests(unittest.TestCase):
         self.assertIn(f"Zomato {zomato}", answer["text"])
         self.assertIn(f"Swiggy {swiggy}", answer["text"])
         self.assertIn(f"{share:.1f}%", answer["text"])
-        self.assertIn("more than 7 days ago", answer["text"])
+        self.assertNotIn("more than 7 days ago", answer["text"])
         self.assertIn("Next:", answer["text"])
         self.assertIn("Make an action plan", answer["followups"])
         by_channel = {row[0]: row for row in answer["table"]["rows"]}
