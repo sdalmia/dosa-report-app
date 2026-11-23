@@ -1,18 +1,31 @@
 """Checks that a figure matches the file it came from.
 
-Nothing here is a remembered total. Network net is read from
-sales_pred_vs_actual.csv. A variance week is counted only when that file
-says so. A Posist day is loaded only when its _DONE marker is present.
+Nothing here is a remembered total. A single day's network net is the
+published actual_net_L. A total across days is the sum of the unrounded
+East and North figures in that file's notes, rounded once at the end.
+A variance week is counted only when that file says so. "Isn't in yet"
+is only for the latest expected day, inside the period that was asked,
+when its _DONE marker is missing. An older day that already has an
+actual in the sales file counts as loaded.
 """
 
 import csv
-from datetime import datetime
-from decimal import Decimal, InvalidOperation
+import re
+from datetime import datetime, time, timedelta
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 _ROOT = Path(__file__).resolve().parents[2]
+_IST = ZoneInfo("Asia/Kolkata")
 _COUNT_HINTS = ("stock_count", "physical_count", "counted", "count_flag", "has_stock_count", "physical")
 _COUNTED_VALUES = {"1", "true", "yes", "y", "counted"}
+# East/Kolkata and North/Delhi-NCR, with the extra decimals the notes keep.
+_PRECISE_NET = re.compile(
+    r"(?:East|Kolkata)\b.{0,80}?(?:₹|Rs\.?\s*)([0-9]+(?:\.[0-9]+)?)L"
+    r".{0,30}?\+\s*(?:North|Delhi-?NCR|NCR)\b.{0,80}?(?:₹|Rs\.?\s*)([0-9]+(?:\.[0-9]+)?)L",
+    re.IGNORECASE,
+)
 
 
 def network_net_rows(path=None):
@@ -36,40 +49,131 @@ def network_net_on(day, path=None):
     return rows.get(str(day)[:10])
 
 
-def network_net_window(start, end, path=None):
-    """Sum of daily actual net between two ISO dates, inclusive.
+def _decimal(value):
+    try:
+        return Decimal(str(value).strip())
+    except (InvalidOperation, AttributeError):
+        return None
 
-    Returns (total Decimal or None, list of missing ISO dates, raw cells).
+
+def _column_amount(row, *hints):
+    for key, value in row.items():
+        token = str(key or "").casefold().replace(" ", "_")
+        if not all(hint in token for hint in hints):
+            continue
+        amount = _decimal(value)
+        if amount is not None:
+            return amount
+    return None
+
+
+def precise_day(row):
+    """Unrounded East, North, and network net for one file row, in lakhs.
+
+    Notes win when they carry the extra decimals. A precise East/North
+    column is the next choice. The published 2-decimal actual is only the
+    fallback for a day whose notes have no split.
     """
-    rows = network_net_rows(path)
+    if not isinstance(row, dict):
+        return None, None, None
+    east = north = None
+    match = _PRECISE_NET.search(str(row.get("notes") or ""))
+    if match:
+        east, north = _decimal(match.group(1)), _decimal(match.group(2))
+    if east is None:
+        east = _column_amount(row, "east", "net") or _column_amount(row, "kolkata", "net")
+    if north is None:
+        north = _column_amount(row, "north", "net") or _column_amount(row, "delhi", "net")
+    if east is not None and north is not None:
+        return east, north, east + north
+    published = _decimal(row.get("actual_net_L") or row.get("actual_net"))
+    return east, north, published
+
+
+def _net_file_rows(path=None):
+    file_path = Path(path) if path else _ROOT / "data" / "posist" / "sales_pred_vs_actual.csv"
+    if not file_path.is_file():
+        return []
+    with file_path.open(newline="", encoding="utf-8-sig") as handle:
+        return list(csv.DictReader(handle))
+
+
+def round_lakh(value):
+    """One rounding, after the sum. Half up, to the paisa of a lakh."""
+    return Decimal(value).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def period_nets(start, end, path=None):
+    """Unrounded sums for a date range, plus the figures rounded once.
+
+    Missing dates are listed and the totals stay None, so a gap is not
+    treated as zero.
+    """
+    empty = {
+        "total": None, "east": None, "north": None,
+        "rounded_total": None, "rounded_east": None, "rounded_north": None,
+        "missing": [], "cells": {},
+    }
     if not start or not end:
-        return None, [], {}
+        return empty
     try:
         first = datetime.strptime(str(start)[:10], "%Y-%m-%d").date()
         last = datetime.strptime(str(end)[:10], "%Y-%m-%d").date()
     except ValueError:
-        return None, [], {}
+        return empty
+    by_day = {}
+    for row in _net_file_rows(path):
+        key = str(row.get("date") or "")[:10]
+        if key:
+            by_day[key] = row
     missing = []
     cells = {}
     total = Decimal("0")
+    east_total = Decimal("0")
+    north_total = Decimal("0")
+    east_days = north_days = 0
     day = first
-    from datetime import timedelta
     while day <= last:
         key = day.isoformat()
-        raw = rows.get(key)
-        if raw is None:
+        row = by_day.get(key)
+        east, north, precise = precise_day(row) if row else (None, None, None)
+        if precise is None:
             missing.append(key)
         else:
-            try:
-                total += Decimal(raw)
-            except InvalidOperation:
-                missing.append(key)
-            else:
-                cells[key] = raw
+            total += precise
+            cells[key] = format(precise, "f")
+            if east is not None:
+                east_total += east
+                east_days += 1
+            if north is not None:
+                north_total += north
+                north_days += 1
         day += timedelta(days=1)
     if missing:
-        return None, missing, cells
-    return total, [], cells
+        empty["missing"] = missing
+        empty["cells"] = cells
+        return empty
+    span_days = (last - first).days + 1
+    return {
+        "total": total,
+        "east": east_total if east_days == span_days else None,
+        "north": north_total if north_days == span_days else None,
+        "rounded_total": round_lakh(total),
+        "rounded_east": round_lakh(east_total) if east_days == span_days else None,
+        "rounded_north": round_lakh(north_total) if north_days == span_days else None,
+        "missing": [],
+        "cells": cells,
+    }
+
+
+def network_net_window(start, end, path=None):
+    """Precise sum of daily net between two ISO dates, inclusive.
+
+    Returns (unrounded total or None, missing ISO dates, precise daily cells).
+    Round the total once, with round_lakh, when it is shown.
+    """
+    found = period_nets(start, end, path)
+    return found["total"], found["missing"], found["cells"]
 
 
 def net_lakh(raw):
@@ -117,34 +221,72 @@ def day_is_loaded(day, root=None):
     return (base / "data" / "posist" / "daily_sales" / f"_DONE_{stamp}").is_file()
 
 
-def day_status(day, root=None):
-    if day_is_loaded(day, root):
-        return ""
-    return f"{str(day)[:10]} isn't in yet."
+def latest_expected_day(now=None):
+    """The newest day a Posist drop should already be in.
 
-
-def drop_pending(day, root=None):
-    """A daily_sales file is present for this day, and the _DONE marker is not.
-
-    Days that never had a daily_sales drop stay on the historical file.
-    A drop without its marker is not a loaded day.
+    Before 08:50 IST the new day has not normally arrived, so the expected
+    day is the one before yesterday. After that, it is yesterday.
     """
-    base = Path(root) if root else _ROOT
-    folder = base / "data" / "posist" / "daily_sales"
-    stamp = str(day)[:10]
-    if not folder.is_dir() or not any(folder.glob("_DONE_*")):
-        return False
-    names = (f"sales_{stamp}.csv", f"network_{stamp}.csv", f"channel_{stamp}.csv")
-    if not any((folder / name).is_file() for name in names):
-        return False
-    return not (folder / f"_DONE_{stamp}").is_file()
+    moment = now or datetime.now(_IST)
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=_IST)
+    else:
+        moment = moment.astimezone(_IST)
+    yesterday = moment.date() - timedelta(days=1)
+    if moment.time() < time(8, 50):
+        return yesterday - timedelta(days=1)
+    return yesterday
 
 
-def quoted_day_net(day, path=None, root=None):
-    """Network net for one date, or a clear 'not in yet' when the drop is partial."""
+def _in_period(day, asked_start, asked_end):
     stamp = str(day)[:10]
-    if drop_pending(stamp, root):
-        return f"{day_status(stamp, root)} No partial number from that day is used."
+    if not asked_start or not asked_end:
+        return True
+    return str(asked_start)[:10] <= stamp <= str(asked_end)[:10]
+
+
+def day_counts_as_loaded(day, root=None, path=None, now=None):
+    """A _DONE marker, or an older day that already has an actual."""
+    if day_is_loaded(day, root):
+        return True
+    stamp = str(day)[:10]
+    if stamp == latest_expected_day(now).isoformat():
+        return False
+    return network_net_on(stamp, path) is not None
+
+
+def day_status(day, root=None, asked_start=None, asked_end=None, now=None):
+    """'Isn't in yet' only for the latest expected day, inside the asked period."""
+    stamp = str(day)[:10]
+    if not _in_period(stamp, asked_start, asked_end):
+        return ""
+    if stamp != latest_expected_day(now).isoformat():
+        return ""
+    if day_is_loaded(stamp, root):
+        return ""
+    return f"{stamp} isn't in yet."
+
+
+def drop_pending(day, root=None, now=None):
+    """The latest expected day is pending only when its _DONE marker is missing.
+
+    An older day is not pending. If the sales file already has its actual,
+    that day counts as loaded.
+    """
+    stamp = str(day)[:10]
+    if day_is_loaded(stamp, root):
+        return False
+    return stamp == latest_expected_day(now).isoformat()
+
+
+def quoted_day_net(day, path=None, root=None, now=None):
+    """One day's published network net, or 'not in yet' for the latest gap."""
+    stamp = str(day)[:10]
+    if not day_counts_as_loaded(stamp, root, path, now):
+        status = day_status(stamp, root=root, now=now)
+        if status:
+            return f"{status} No partial number from that day is used."
+        return ""
     raw = network_net_on(stamp, path)
     if not raw:
         return ""
@@ -242,7 +384,9 @@ def data_footer(data, question=""):
         sources.append("Tally day book")
     if not sources:
         sources.append("loaded files for this question")
-    pending = day_status(latest) if latest else ""
+    asked_end = latest
+    asked_start = str(windows.get("week_start") or latest or "")[:10]
+    pending = day_status(latest, asked_start=asked_start, asked_end=asked_end) if latest else ""
     line = f"Data through {through} | Sources: {', '.join(sources)}."
     if pending:
         line += " " + pending
@@ -254,27 +398,30 @@ def network_net_sentence(data, path=None):
     windows = (data or {}).get("sales_windows") or {}
     start = windows.get("week_start")
     end = windows.get("latest")
-    total, missing, cells = network_net_window(start, end, path)
+    found = period_nets(start, end, path)
+    total, missing, cells = found["total"], found["missing"], found["cells"]
     if not end:
         return ""
-    if drop_pending(end):
-        return f"{day_status(end)} No partial network net is shown."
-    if not day_is_loaded(end):
-        return f"{end} isn't in yet. No partial network net is shown."
+    gap = day_status(end, asked_start=start, asked_end=end)
+    if gap:
+        return f"{gap} No partial network net is shown."
     end_raw = network_net_on(end, path)
-    pending = [day for day in cells if drop_pending(day)]
-    if pending:
-        notes = " ".join(day_status(day) for day in pending)
-        return f"{notes} No partial network net is shown. Store rows are gross, not net."
     if missing or total is None or not end_raw:
         missing_text = ", ".join(missing) if missing else end
         return f"Network net doesn't reconcile for {missing_text}. Store rows stay gross, not net."
     end_text = net_lakh(end_raw)
-    total_text = net_lakh(f"{total:.2f}")
+    total_text = net_lakh(format(found["rounded_total"], "f"))
+    city = ""
+    if found["rounded_east"] is not None and found["rounded_north"] is not None:
+        city = (
+            f" East Rs {format(found['rounded_east'], 'f')} L net, "
+            f"North Rs {format(found['rounded_north'], 'f')} L net, "
+            "each rounded once after its own unrounded daily sum."
+        )
     check = reconcile_note(list(cells.values()), total)
     note = f" {check}." if check else ""
     return (
         f"{end} {end_text}, from sales_pred_vs_actual.csv. "
-        f"{start} to {end} {total_text}, the sum of those daily actual nets.{note} "
+        f"{start} to {end} {total_text}, the unrounded daily nets summed and then rounded once.{city}{note} "
         "Store rows are gross, not net."
     )

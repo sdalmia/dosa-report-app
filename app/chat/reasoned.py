@@ -217,21 +217,45 @@ def _supports(ctx):
     return lines[:4]
 
 
+def _mtd_precise(ctx):
+    """Month-to-date net summed from unrounded daily city figures, rounded once."""
+    from app.chat.correctness import period_nets
+
+    summary = ctx.get("summary") or {}
+    windows = ctx.get("windows") or {}
+    end = str(windows.get("latest") or summary.get("actuals_through") or "")[:10]
+    month = str(summary.get("current_month") or "")[:7]
+    if len(month) != 7 or not end:
+        return None
+    found = period_nets(f"{month}-01", end)
+    if found["rounded_total"] is None:
+        return None
+    return found
+
+
 def _month_point(ctx):
     summary = ctx["summary"] or {}
     pace = summary.get("target_pace_pct")
     if pace is None:
         return ""
+    precise = _mtd_precise(ctx)
+    actual = precise["rounded_total"] if precise else summary.get("mtd_actual_L")
     bits = [f"November pace is {_pct(pace).replace('-', '')}"]
-    if summary.get("mtd_actual_L") is not None:
-        bits[0] += f" on {_lakh(summary.get('mtd_actual_L'))} net"
+    if actual is not None:
+        bits[0] += f" on {_lakh(actual)} net"
     bits[0] += "."
+    city_nets = {}
+    if precise:
+        city_nets = {"East": precise["rounded_east"], "North": precise["rounded_north"]}
     for name, row in (("East", ctx["east"]), ("North", ctx["north"])):
         if row.get("pace_pct") is None:
             continue
         piece = f"{name} is {_pace(row)}"
-        if row.get("net_L") is not None and row.get("pro_rata_L") is not None:
-            piece += f" on {_lakh(row.get('net_L'))} net versus its own pro-rata {_lakh(row.get('pro_rata_L'))}"
+        net = city_nets.get(name)
+        if net is None:
+            net = row.get("net_L")
+        if net is not None and row.get("pro_rata_L") is not None:
+            piece += f" on {_lakh(net)} net versus its own pro-rata {_lakh(row.get('pro_rata_L'))}"
         bits.append(piece + ".")
     mid = summary.get("mtd_pred_mid_L")
     if mid is not None and summary.get("mtd_actual_L") is not None:

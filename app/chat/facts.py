@@ -91,7 +91,14 @@ def _pace(data, question, owner):
     if pace is None:
         return None
     as_of = _as_of(summary.get("as_of_date"))
-    actual = summary.get("mtd_actual_L")
+    from app.chat.correctness import period_nets
+
+    month = str(summary.get("current_month") or "")[:7]
+    end = str(summary.get("actuals_through") or "")[:10]
+    precise = period_nets(f"{month}-01", end) if len(month) == 7 and end else {}
+    actual = precise.get("rounded_total")
+    if actual is None:
+        actual = summary.get("mtd_actual_L")
     east = _region(summary, "East").get("pace_pct")
     north = _region(summary, "North").get("pace_pct")
     bits = [f"November pace is {_pct(pace).replace('-', '')}."]
@@ -118,7 +125,14 @@ def _yesterday(data, question, owner):
     gaps = data.get("forecast") or []
     as_of = _as_of(summary.get("as_of_date") or (gaps[0]["date"] if gaps else ""))
     if not gaps:
-        actual = summary.get("mtd_actual_L")
+        from app.chat.correctness import period_nets
+
+        month = str(summary.get("current_month") or "")[:7]
+        end = str(summary.get("actuals_through") or "")[:10]
+        precise = period_nets(f"{month}-01", end) if len(month) == 7 and end else {}
+        actual = precise.get("rounded_total")
+        if actual is None:
+            actual = summary.get("mtd_actual_L")
         mid = summary.get("mtd_pred_mid_L")
         if actual is None or mid is None:
             return _pack("No forecast comparison is loaded for the latest day.", as_of, "sales", question, owner)

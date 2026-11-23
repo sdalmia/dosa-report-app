@@ -150,13 +150,19 @@ def _sales_files(root):
 
 
 def _pending_note(root, days):
-    from app.chat.correctness import day_status, drop_pending
+    """Only the latest expected day, and only when it sits inside this period."""
+    from app.chat.correctness import day_status
 
+    days = list(days or [])
+    if not days:
+        return ""
+    start, end = min(days), max(days)
     notes = []
-    for day in days or []:
-        if not drop_pending(day, root):
+    for day in days:
+        status = day_status(day, root=root, asked_start=start, asked_end=end)
+        if not status:
             continue
-        line = f"{day_status(day, root)} No partial number from that day is used."
+        line = f"{status} No partial number from that day is used."
         if line not in notes:
             notes.append(line)
     return " ".join(notes)
@@ -209,7 +215,7 @@ def _bill_driver(root):
     recent_days, prior_days, label, by_day = windows
     recent, recent_present = _sum_window(recent_days, by_day)
     prior, prior_present = _sum_window(prior_days, by_day)
-    pending = _pending_note(root, list(recent_days) + list(prior_days))
+    pending = _pending_note(root, recent_days)
     if not recent_present or not prior_present:
         return pending
     best = None

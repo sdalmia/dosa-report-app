@@ -11,6 +11,7 @@ from pathlib import Path
 from app.chat.correctness import (
     channel_exceeds_gross,
     data_footer,
+    day_counts_as_loaded,
     day_is_loaded,
     day_status,
     drop_pending,
@@ -18,9 +19,12 @@ from app.chat.correctness import (
     net_lakh,
     network_net_on,
     network_net_window,
+    period_nets,
+    precise_day,
     provisional_line,
     quoted_day_net,
     reconcile_note,
+    round_lakh,
     variance_basis,
     variance_label,
 )
@@ -50,20 +54,64 @@ class NetworkNetTests(unittest.TestCase):
     def test_16_to_22_nov_and_22_nov_match_the_net_file(self):
         reset_snapshot()
         with NET_FILE.open(newline="", encoding="utf-8-sig") as handle:
-            rows = {row["date"]: row["actual_net_L"].strip() for row in csv.DictReader(handle)}
-        day = rows["2026-11-22"]
-        total = sum(Decimal(rows[f"2026-11-{d:02d}"]) for d in range(16, 23))
+            rows = list(csv.DictReader(handle))
+        by_day = {row["date"]: row for row in rows}
+        day = by_day["2026-11-22"]["actual_net_L"].strip()
         self.assertEqual(network_net_on("2026-11-22"), day)
         summed, missing, _cells = network_net_window("2026-11-16", "2026-11-22")
         self.assertEqual(missing, [])
-        self.assertEqual(summed, total)
+        published = sum(Decimal(by_day[f"2026-11-{d:02d}"]["actual_net_L"]) for d in range(16, 23))
+        self.assertEqual(published, Decimal("95.96"))
+        self.assertEqual(round_lakh(summed), Decimal("95.94"))
+        self.assertNotEqual(round_lakh(summed), published)
+        found = period_nets("2026-11-16", "2026-11-22")
+        self.assertEqual(found["rounded_east"], Decimal("49.37"))
+        self.assertEqual(found["rounded_north"], Decimal("46.58"))
         answer = answer_from_data("how did sales do last week", view_for(role="ops"), False)
         text = answer["text"]
         self.assertIn(net_lakh(day), text)
-        self.assertIn(net_lakh(f"{total:.2f}"), text)
+        self.assertIn(net_lakh("95.94"), text)
+        self.assertNotIn(net_lakh("95.96"), text)
+        self.assertIn("Rs 49.37 L net", text)
+        self.assertIn("Rs 46.58 L net", text)
         self.assertIn("gross, not net", text)
         self.assertIn("sales_pred_vs_actual.csv", text)
         self.assertNotIn("doesn't reconcile", text)
+        self.assertNotIn("isn't in yet", text)
+        from app.chat.report import build_report, render_xlsx
+        report = build_report("how did sales do last week", view_for(role="ops"), False, answer["text"])
+        self.assertIn("Rs 95.94 L network net", report["sales_through"])
+        self.assertNotIn("Rs 95.96 L network net", report["sales_through"])
+        book = render_xlsx(report)
+        from io import BytesIO
+        from openpyxl import load_workbook
+        sheet = load_workbook(BytesIO(book))["Cover"]
+        cover = " ".join(str(cell.value or "") for row in sheet.iter_rows() for cell in row)
+        self.assertIn("Rs 95.94 L network net", cover)
+        self.assertNotIn("Rs 95.96 L network net", cover)
+
+    def test_rounding_happens_only_after_summing(self):
+        folder = Path(tempfile.mkdtemp())
+        path = folder / "sales_pred_vs_actual.csv"
+        path.write_text(
+            "date,actual_net_L,notes\n"
+            "2026-01-01,1.01,East ₹0.505L + North ₹0.500L\n"
+            "2026-01-02,1.01,East ₹0.505L + North ₹0.500L\n",
+            encoding="utf-8",
+        )
+        east, north, total = precise_day({
+            "actual_net_L": "1.01",
+            "notes": "East ₹0.505L + North ₹0.500L",
+        })
+        self.assertEqual(total, Decimal("1.005"))
+        self.assertEqual(round_lakh(east + north), Decimal("1.01"))
+        summed, missing, _cells = network_net_window("2026-01-01", "2026-01-02", path)
+        self.assertEqual(missing, [])
+        self.assertEqual(summed, Decimal("2.010"))
+        self.assertEqual(round_lakh(summed), Decimal("2.01"))
+        rounded_each = round_lakh(Decimal("1.005")) + round_lakh(Decimal("1.005"))
+        self.assertEqual(rounded_each, Decimal("2.02"))
+        self.assertNotEqual(round_lakh(summed), rounded_each)
 
     def test_a_broken_sum_is_labelled(self):
         self.assertEqual(reconcile_note(["10", "5"], "20"), "doesn't reconcile")
@@ -75,22 +123,49 @@ class NetworkNetTests(unittest.TestCase):
 
 
 class LoadMarkerTests(unittest.TestCase):
-    def test_a_day_without_the_done_marker_is_not_in_yet(self):
+    def test_an_old_day_with_an_actual_counts_as_loaded(self):
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+
+        # Afternoon of 24 Nov: the latest expected day is 23 Nov, which has no marker.
+        afternoon = datetime(2026, 11, 24, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
         self.assertTrue(day_is_loaded("2026-11-22"))
-        self.assertEqual(day_status("2026-11-22"), "")
         self.assertFalse(day_is_loaded("2026-11-09"))
-        self.assertIn("isn't in yet", day_status("2026-11-09"))
-        self.assertTrue(drop_pending("2026-11-09"))
-        self.assertFalse(drop_pending("2026-11-22"))
-        partial = quoted_day_net("2026-11-09")
-        self.assertIn("isn't in yet", partial)
-        raw = network_net_on("2026-11-09")
-        if raw:
-            self.assertNotIn(raw, partial)
-        loaded = quoted_day_net("2026-11-22")
-        self.assertIn(net_lakh(network_net_on("2026-11-22")), loaded)
+        self.assertTrue(day_counts_as_loaded("2026-11-09", now=afternoon))
+        self.assertFalse(drop_pending("2026-11-09", now=afternoon))
+        self.assertEqual(day_status("2026-11-09", asked_start="2026-11-16", asked_end="2026-11-22", now=afternoon), "")
+        quoted = quoted_day_net("2026-11-09", now=afternoon)
+        self.assertNotIn("isn't in yet", quoted)
+        self.assertIn(net_lakh(network_net_on("2026-11-09")), quoted)
+        self.assertIn(net_lakh(network_net_on("2026-11-22")), quoted_day_net("2026-11-22", now=afternoon))
+
+    def test_isnt_in_yet_is_only_the_latest_expected_day_inside_the_period(self):
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+
+        afternoon = datetime(2026, 11, 24, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
+        inside = day_status(
+            "2026-11-23",
+            asked_start="2026-11-16",
+            asked_end="2026-11-23",
+            now=afternoon,
+        )
+        self.assertIn("2026-11-23 isn't in yet", inside)
+        outside = day_status(
+            "2026-11-23",
+            asked_start="2026-11-16",
+            asked_end="2026-11-22",
+            now=afternoon,
+        )
+        self.assertEqual(outside, "")
+        self.assertEqual(
+            day_status("2026-11-09", asked_start="2026-11-09", asked_end="2026-11-09", now=afternoon),
+            "",
+        )
+        self.assertTrue(drop_pending("2026-11-23", now=afternoon))
+        self.assertFalse(drop_pending("2026-11-22", now=afternoon))
         from app.chat.lenses import bill_driver
-        self.assertIn("2026-11-09 isn't in yet", bill_driver())
+        self.assertNotIn("2026-11-09 isn't in yet", bill_driver())
 
 
 class FinanceFlagTests(unittest.TestCase):

@@ -100,6 +100,14 @@ def _lakh(value):
     return f"{sign}₹{abs(number) / 100000:.2f}L"
 
 
+def _net_lakh(rupees):
+    """Round a rupee sum to lakhs once, after the days have been added."""
+    from decimal import ROUND_HALF_UP
+    lakhs = (Decimal(rupees) / Decimal(100000)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    sign = "-" if lakhs < 0 else ""
+    return f"{sign}₹{abs(lakhs)}L"
+
+
 def _region(store, region):
     text = (region or "").strip()
     folded = text.casefold()
@@ -190,47 +198,31 @@ def _sales_by_store():
 
 
 def _insights_net():
-    """City net from Insights notes. Network net only from actual_net_L.
+    """City and network net from the unrounded note figures, in rupees.
 
-    A daily_sales drop without its _DONE marker is left out. It is not a loaded day.
+    A multi-day total sums those rupees and is rounded once when it is shown.
+    The latest expected day is left out when its _DONE marker is missing.
+    An older day that already has an actual stays in.
     """
-    from app.chat.correctness import drop_pending
+    from app.chat.correctness import drop_pending, precise_day
 
     days = {}
     path = _ROOT / "data" / "posist" / "sales_pred_vs_actual.csv"
-    pattern = re.compile(r"East ₹([0-9.]+)L \+ North ₹([0-9.]+)L")
-    if path.is_file():
-        with path.open(newline="", encoding="utf-8-sig") as handle:
-            for raw in csv.DictReader(handle):
-                day = _day(raw.get("date"))
-                if day is None or drop_pending(day):
-                    continue
-                row = days.setdefault(day, {"East": None, "North": None, "Network": None})
-                network = _num(raw.get("actual_net_L"))
-                if network is not None:
-                    row["Network"] = network * 100000
-                match = pattern.search(raw.get("notes") or "")
-                if match:
-                    row["East"] = float(Decimal(match.group(1)) * Decimal(100000))
-                    row["North"] = float(Decimal(match.group(2)) * Decimal(100000))
-    folder = _ROOT / "data" / "posist" / "daily_sales"
-    if folder.is_dir():
-        for path in sorted(folder.glob("network_*.csv")):
-            with path.open(newline="", encoding="utf-8-sig") as handle:
-                for raw in csv.DictReader(handle):
-                    day = _day(raw.get("date")) or _day(path.stem.replace("network_", ""))
-                    if day is None or drop_pending(day):
-                        continue
-                    region = (raw.get("region") or "").strip()
-                    net = _num(raw.get("net"))
-                    if net is None:
-                        continue
-                    row = days.setdefault(day, {"East": None, "North": None, "Network": None})
-                    if region in {"East", "North"}:
-                        row[region] = net
-                    elif region in {"Total", "Network", ""} and row.get("Network") is None:
-                        # Network daily net stays on actual_net_L when that cell is present.
-                        row["Network"] = net
+    if not path.is_file():
+        return days
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            day = _day(raw.get("date"))
+            if day is None or drop_pending(day):
+                continue
+            east, north, total = precise_day(raw)
+            row = days.setdefault(day, {"East": None, "North": None, "Network": None})
+            if east is not None:
+                row["East"] = east * Decimal(100000)
+            if north is not None:
+                row["North"] = north * Decimal(100000)
+            if total is not None:
+                row["Network"] = total * Decimal(100000)
     return days
 
 
@@ -336,14 +328,14 @@ def _aggregate(year, month):
 
 def _net_for(year, month, insights):
     start, end = month_span(year, month)
-    sums = {"East": 0.0, "North": 0.0, "Network": 0.0}
+    sums = {"East": Decimal(0), "North": Decimal(0), "Network": Decimal(0)}
     days = {"East": [], "North": [], "Network": []}
     for day, row in insights.items():
         if day < start or day > end:
             continue
         for key in sums:
             if row.get(key) is not None:
-                sums[key] += row[key]
+                sums[key] += Decimal(row[key])
                 days[key].append(day)
     result = {}
     for key in sums:
@@ -396,7 +388,7 @@ def _net_clause(row, start, end, label):
         return f"{label} net is not loaded for this month."
     first, last, count = row["first"], row["last"], row["count"]
     needed = (end - start).days + 1
-    figure = _lakh(row["net"])
+    figure = _net_lakh(row["net"])
     if count >= needed and first == start and last == end:
         return f"{label} net was {figure} for {_span_label(start, end)}."
     missing = []
@@ -434,9 +426,10 @@ def packet(question=""):
         "Store-level net is blank unless a net cell is in the file. "
         "The 24.78% Swiggy/Zomato charge is on net delivery bills only and is not a way to invent store net from gross.",
         "Source for gross and bills: Posist daily sales (posist_daily.csv, with dated sales_*.csv overlays for the same store). "
-        "Source for network daily net: sales_pred_vs_actual.csv actual_net_L only. "
-        "Store rows are gross, not net. A daily_sales day without its _DONE marker is not in yet. "
-        "Source for city net: Posist Insights notes in sales_pred_vs_actual.csv. "
+        "Source for one day's network net: sales_pred_vs_actual.csv actual_net_L. "
+        "A total across days sums the unrounded East and North figures in the notes, then rounds once. "
+        "Store rows are gross, not net. "
+        "Only the latest expected day is called not in yet, and only when its _DONE marker is missing. "
         "Grand Economics has no October 2026.",
     ]
     for year, month in available:
@@ -459,13 +452,13 @@ def packet(question=""):
         day_count = max((city["day_count"] for city in cities.values()), default=0)
         net_row = nets.get("Network") or {}
         net_window = _span_label(net_row["first"], net_row["last"]) if net_row.get("first") else "not loaded"
-        net_fig = _lakh(net_row["net"]) if net_row.get("net") is not None else "not loaded"
+        net_fig = _net_lakh(net_row["net"]) if net_row.get("net") is not None else "not loaded"
         for region in ("East", "North"):
             city = cities.get(region)
             if not city:
                 continue
             n = nets.get(region) or {}
-            n_fig = _lakh(n["net"]) if n.get("net") is not None else "not loaded"
+            n_fig = _net_lakh(n["net"]) if n.get("net") is not None else "not loaded"
             n_win = _span_label(n["first"], n["last"]) if n.get("first") else "not loaded"
             lines.append(
                 f"{city['label']} | {_lakh(city['gross'])} | {int(round(city['bills_ex_mall']))} | "
