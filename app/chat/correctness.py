@@ -393,6 +393,118 @@ def data_footer(data, question=""):
     return line
 
 
+_HIGH_BASE = (
+    ("post-diwali", "Post-Diwali"),
+    ("diwali", "Diwali"),
+    ("govardhan", "Govardhan Puja"),
+    ("bhai dooj", "Bhai Dooj"),
+    ("chhath", "Chhath"),
+    ("navratri", "Navratri"),
+    ("jagaddhatri", "Jagaddhatri Puja"),
+)
+
+
+def _pretty_day(iso):
+    try:
+        day = datetime.strptime(str(iso)[:10], "%Y-%m-%d")
+    except ValueError:
+        return str(iso)[:10]
+    months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    return f"{day.day} {months[day.month - 1]}"
+
+
+def high_base_line(start, end, path=None):
+    """Name a high base only when the prior week's own drivers or notes say so."""
+    rows = []
+    for row in _net_file_rows(path):
+        key = str(row.get("date") or "")[:10]
+        if start and end and str(start)[:10] <= key <= str(end)[:10]:
+            rows.append(row)
+    if not rows:
+        return ""
+    blob = " ".join(
+        " ".join([row.get("tier") or "", row.get("drivers") or "", row.get("notes") or ""])
+        for row in rows
+    ).casefold()
+    found = []
+    for needle, label in _HIGH_BASE:
+        if needle == "diwali" and "post-diwali" in blob:
+            continue
+        if needle in blob and label not in found:
+            found.append(label)
+    festive = any((row.get("tier") or "").casefold() in {"holiday", "festive"} for row in rows)
+    if not found and not festive:
+        return ""
+    names = ", ".join(found) if found else "a holiday or festive tier"
+    return (
+        f"The prior week {_pretty_day(start)}–{_pretty_day(end)} is a high base in the file: {names}. "
+        "Do not read the week-on-week drop as an ordinary store problem."
+    )
+
+
+def forecast_line(start, end, path=None):
+    """This week's network net against the forecast band in the same file."""
+    found = period_nets(start, end, path)
+    if found["rounded_total"] is None:
+        return ""
+    low = high = mid = Decimal("0")
+    seen = 0
+    for row in _net_file_rows(path):
+        key = str(row.get("date") or "")[:10]
+        if not (str(start)[:10] <= key <= str(end)[:10]):
+            continue
+        lo, hi, md = _decimal(row.get("pred_low_L")), _decimal(row.get("pred_high_L")), _decimal(row.get("pred_mid_L"))
+        if lo is None or hi is None or md is None:
+            return ""
+        low += lo
+        high += hi
+        mid += md
+        seen += 1
+    if not seen:
+        return ""
+    actual = found["rounded_total"]
+    low_r, high_r, mid_r = round_lakh(low), round_lakh(high), round_lakh(mid)
+    gap = mid_r - actual
+    direction = "under" if gap > 0 else "over"
+    place = "inside" if low_r <= actual <= high_r else "outside"
+    return (
+        f"Against this week's own forecast, network net Rs {format(actual, 'f')} L "
+        f"is {place} the band Rs {format(low_r, 'f')} L to Rs {format(high_r, 'f')} L "
+        f"and is Rs {format(abs(gap), 'f')} L {direction} the mid Rs {format(mid_r, 'f')} L."
+    )
+
+
+def cover_lines(data, path=None):
+    """Short lines for the report cover. The insight stays above this box."""
+    windows = (data or {}).get("sales_windows") or {}
+    start, end = windows.get("week_start"), windows.get("latest")
+    lines = []
+    if end:
+        lines.append(f"Sales through {_pretty_day(end)}.")
+    if start and end:
+        found = period_nets(start, end, path)
+        if found["rounded_total"] is not None:
+            day = network_net_on(end, path)
+            if day:
+                lines.append(f"{_pretty_day(end)} network net: Rs {day} L.")
+            lines.append(
+                f"{_pretty_day(start)}–{_pretty_day(end)}: Rs {format(found['rounded_total'], 'f')} L network net."
+            )
+            if found["rounded_east"] is not None and found["rounded_north"] is not None:
+                lines.append(f"East net: Rs {format(found['rounded_east'], 'f')} L.")
+                lines.append(f"North net: Rs {format(found['rounded_north'], 'f')} L.")
+        prior_end = datetime.strptime(str(start)[:10], "%Y-%m-%d").date() - timedelta(days=1)
+        prior_start = prior_end - timedelta(days=6)
+        high = high_base_line(prior_start.isoformat(), prior_end.isoformat(), path)
+        forecast = forecast_line(start, end, path)
+        if high:
+            lines.append(high)
+        if forecast:
+            lines.append(forecast)
+    lines.append("Store rows are gross, not net.")
+    return lines
+
+
 def network_net_sentence(data, path=None):
     """Authoritative network net for the loaded sales week and its last day."""
     windows = (data or {}).get("sales_windows") or {}

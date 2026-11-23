@@ -712,5 +712,5 @@ def _parse_long_day(value):
 
 
 def _short(name):
-    text = str(name or "").split("(")[0].strip()
-    return text or "That store"
+    from app.chat.names import clean_store_name
+    return clean_store_name(name)

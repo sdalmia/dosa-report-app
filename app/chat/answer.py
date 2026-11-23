@@ -56,7 +56,7 @@ _SYSTEM = (
     "Each move states the rupee value it could add or save only when that value is a figure in the file or the direct difference of two figures in the file, and it shows both source figures. "
     "Otherwise write 'Value: not sized' and say exactly which data would size it. "
     "Each move names an owner and a timeframe. "
-    "Store moves are owned by Sanjoy / Anup / Vikas. A finance move is owned by Shilajit and only when this role's file includes finance. "
+    "Name one owner. An East or Kolkata store action is owned by Anup. A North or NCR store action is owned by Vikas. A network-wide move is owned by Sanjoy. A complaint or Famepilot move is owned by that store's city lead. Procurement is owned by Procurement. Reelo is owned by Logan. A finance move is owned by Shilajit and only when this role's file includes finance. "
     "If the file does not name an owner, write 'Owner: not named in the file.' "
     "Then one line **Non-obvious insight.** with a second-order effect, a store cluster, or a leading indicator. If the file does not support one, say so. "
     "Label a hypothesis as 'Hypothesis:' and name the test that would confirm it. "

@@ -100,7 +100,7 @@ def _stamp_sales(packed, question, data):
     if line and "Sales through" not in text:
         extra.append(line)
     net = network_net_sentence(data)
-    if net and "network net" not in text.casefold():
+    if net and "from sales_pred_vs_actual.csv" not in text:
         extra.append(net)
     if any(token in folded for token in ("price", "pay", "paneer", "milk", "cheese", "daal", "bought")):
         tracker = tracker_through_line()
@@ -277,6 +277,10 @@ def _week_point(ctx):
         bits.append(
             f"Versus each store's own prior week ({ctx['label']}), East is {_signed_lakh(ctx['east_gap'])} and North is {_signed_lakh(ctx['north_gap'])}."
         )
+        windows = ctx["windows"] or {}
+        note = _week_context(windows.get("week_start"), windows.get("latest"))
+        if note:
+            bits.append(note)
     named = []
     for row in ctx["downs"]:
         named.append(f"{row['display']} {_signed_lakh(row['gap'])}")
@@ -432,10 +436,13 @@ def _flagship_move(ctx):
         return ""
     first, second = downs[0], downs[1]
     window = ctx["label"] or "each store's own prior week"
+    from app.chat.owners import owner_for_stores
+
+    owner = owner_for_stores([first.get("region"), second.get("region")])
     return (
         f"Stand in {first['display']} and {second['display']} and find the lost sales. "
         f"Value: down {_rupee_lakh(abs(first['gap']))} and down {_rupee_lakh(abs(second['gap']))} versus each store's own prior week ({window}). "
-        "Owner: Sanjoy / Anup / Vikas. Timeframe: this week."
+        f"Owner: {owner}. Timeframe: this week."
     )
 
 
@@ -444,10 +451,12 @@ def _north_move(ctx):
     if gap is None:
         return ""
     north = ctx["north"]
+    from app.chat.owners import owner_for
+
     return (
         "Put North back on its own pro-rata. "
         f"Value: {_lakh(gap)} (own pro-rata {_lakh(north.get('pro_rata_L'))} minus own net {_lakh(north.get('net_L'))}). "
-        "Owner: Sanjoy / Anup / Vikas. Timeframe: before this month ends."
+        f"Owner: {owner_for('north')}. Timeframe: before this month ends."
     )
 
 
@@ -462,9 +471,11 @@ def _pacific_move(ctx):
             f"Value: {_rupee_lakh(abs(gap))} of week sales versus its own prior week. "
             "The gain from the audit score and the phone capture is not sized: bills per extra captured phone would size it."
         )
+    from app.chat.owners import owner_for
+
     return (
         f"Walk {sentence['name']} before the next audit visit. {value} "
-        "Owner: Sanjoy / Anup / Vikas. Timeframe: before the next audit visit."
+        f"Owner: {owner_for('store', city='North')}. Timeframe: before the next audit visit."
     )
 
 
@@ -473,10 +484,13 @@ def _ticket_move(ctx):
     if not lead or not lead.get("stale"):
         return ""
     name = _readable_ticket_store(lead.get("store"))
+    from app.chat.owners import owner_for
+
+    city = "North" if any(token in name.casefold() for token in ("rohini", "gurgaon", "noida", "jasola", "pacific", "connaught", "kalkaji", "delhi")) else "East"
     return (
         f"Clear the stale tickets at {name}. "
         f"Value: not sized. Refunds or lost orders on the {lead.get('stale')} stale tickets out of {lead.get('count')} would size it. "
-        "Owner: Sanjoy / Anup / Vikas. Timeframe: this week."
+        f"Owner: {owner_for('complaints', city=city)}. Timeframe: this week."
     )
 
 
@@ -484,11 +498,13 @@ def _buy_move(ctx):
     buy = ctx["buy"]
     if not buy or buy.get("price") is None or buy.get("baseline_avg") is None:
         return ""
+    from app.chat.owners import owner_for
+
     return (
         f"Re-check the {buy.get('city')} {buy.get('item')} buy before the next order. "
         f"Value: not sized. The quantity behind ₹{float(buy.get('price')):.2f} versus its own baseline "
         f"₹{float(buy.get('baseline_avg')):.2f} would size it. "
-        "Owner: Sanjoy / Anup / Vikas. Timeframe: before the next order."
+        f"Owner: {owner_for('procurement')}. Timeframe: before the next order."
     )
 
 
@@ -596,6 +612,22 @@ def _signed_lakh(value):
     if value > 0:
         return f"up {_rupee_lakh(value)}"
     return _rupee_lakh(0)
+
+
+def _week_context(start, end):
+    if not start or not end:
+        return ""
+    try:
+        from datetime import datetime, timedelta
+
+        from app.chat.correctness import forecast_line, high_base_line
+        prior_end = datetime.strptime(str(start)[:10], "%Y-%m-%d").date() - timedelta(days=1)
+        prior_start = prior_end - timedelta(days=6)
+        high = high_base_line(prior_start.isoformat(), prior_end.isoformat())
+        forecast = forecast_line(start, end)
+    except (ValueError, OSError):
+        return ""
+    return " ".join(part for part in (high, forecast) if part)
 
 
 def _plan_gap(row):
@@ -853,5 +885,5 @@ def _trading_week(rows):
 
 
 def _store_name(name):
-    text = str(name or "").split("(")[0].strip()
-    return text or "That store"
+    from app.chat.names import clean_store_name
+    return clean_store_name(name)

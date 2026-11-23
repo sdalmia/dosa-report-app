@@ -81,7 +81,9 @@ class NetworkNetTests(unittest.TestCase):
         from app.chat.report import build_report, render_xlsx
         report = build_report("how did sales do last week", view_for(role="ops"), False, answer["text"])
         self.assertIn("Rs 95.94 L network net", report["sales_through"])
-        self.assertNotIn("Rs 95.96 L network net", report["sales_through"])
+        self.assertNotIn("95.96", report["sales_through"])
+        self.assertIn("Post-Diwali", text)
+        self.assertIn("own forecast", text)
         book = render_xlsx(report)
         from io import BytesIO
         from openpyxl import load_workbook

@@ -337,6 +337,8 @@ def _store_view(question, data, owner):
 
 def actions_from_data(data, owner):
     """Up to five actions. Every why cites a figure already in the snapshot."""
+    from app.chat.owners import owner_for
+
     actions = []
     summary = data.get("summary") or {}
     north = None
@@ -347,7 +349,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": "Look at North stores behind November pace.",
             "why": f"North pace is {_pct(north).replace('-', '')}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("north"),
             "urgency": "high" if float(north) < 85 else "medium",
         })
     movers = data.get("movers") or []
@@ -356,7 +358,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Check the drop at {lead['store'].split('(')[0].strip()}.",
             "why": f"Gross {_pct(lead['pct'])} on {_as_of(lead['date'])}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("store", city=lead.get("region") or lead.get("city")),
             "urgency": "high" if lead["pct"] <= -20 else "medium",
         })
     gaps = data.get("forecast") or []
@@ -365,7 +367,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Compare {row['store'].split('(')[0].strip()} with its forecast.",
             "why": f"{_pct(row['pct'])} versus mid on {_as_of(row['date'])}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("store", city=row.get("region") or row.get("city")),
             "urgency": "high",
         })
     reelo = [row for row in (data.get("reelo") or []) if row.get("phone_capture") is not None]
@@ -376,7 +378,7 @@ def actions_from_data(data, owner):
             actions.append({
                 "what": f"Raise phone capture at {low['store']}.",
                 "why": f"Phone capture is {low['phone_capture']:.2f}%.",
-                "owner": "Sanjoy / Anup / Vikas",
+                "owner": owner_for("reelo"),
                 "urgency": "medium",
             })
     if owner and (data.get("finance") or []):
@@ -384,7 +386,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Review {card['kicker']} profit.",
             "why": f"EBITDA is {card['value']}.",
-            "owner": "Shilajit",
+            "owner": owner_for("finance"),
             "urgency": "medium",
         })
     return actions[:5]

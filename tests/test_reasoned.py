@@ -114,7 +114,10 @@ class ReasonedAnswerTests(unittest.TestCase):
         self.assertIn("Never invent a number", _SYSTEM)
         self.assertIn("Finance, HR, and the inbox", _SYSTEM)
         self.assertIn("Tally", _SYSTEM)
-        self.assertIn("Sanjoy / Anup / Vikas", _SYSTEM)
+        self.assertIn("Anup", _SYSTEM)
+        self.assertIn("Vikas", _SYSTEM)
+        self.assertIn("Sanjoy", _SYSTEM)
+        self.assertNotIn("Sanjoy / Anup / Vikas", _SYSTEM)
         self.assertIn("Shilajit", _SYSTEM)
         self.assertIn("Navratri", _SYSTEM)
         self.assertIn("Chhath", _SYSTEM)
@@ -141,7 +144,9 @@ class ReasonedAnswerTests(unittest.TestCase):
         self.assertIn("**So what**", result["text"])
         self.assertIn("**Moves**", result["text"])
         self.assertIn("**Non-obvious insight.**", result["text"])
-        self.assertIn("Owner: Sanjoy / Anup / Vikas", result["text"])
+        self.assertIn("Owner: Anup", result["text"])
+        self.assertIn("Owner: Vikas", result["text"])
+        self.assertNotIn("Sanjoy / Anup / Vikas", result["text"])
         self.assertIn("Timeframe:", result["text"])
 
 

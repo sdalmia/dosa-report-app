@@ -341,9 +341,8 @@ def _span(start, end):
 
 
 def _display_store(name):
-    text = re.sub(r"\s*\([^)]*\)", "", name or "")
-    text = re.sub(r"(?i)^dosa coffee\s*-\s*", "", text).strip()
-    return " ".join(word[:1].upper() + word[1:] if word else "" for word in text.split())
+    from app.chat.names import clean_store_name
+    return clean_store_name(name)
 
 
 def _lakh(value):

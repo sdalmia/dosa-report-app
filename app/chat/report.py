@@ -28,8 +28,8 @@ def build_report(question, data, owner, answer, generated_by=""):
     from datetime import datetime
     from zoneinfo import ZoneInfo
 
-    from app.chat.correctness import data_footer, network_net_sentence
-    from app.chat.guard import can_see_books, can_see_pl, sales_stamp
+    from app.chat.correctness import cover_lines, data_footer
+    from app.chat.guard import can_see_books, can_see_pl
 
     role = (data or {}).get("role") or ("owner" if owner else "ops")
     see_pl = can_see_pl(role, owner)
@@ -63,7 +63,8 @@ def build_report(question, data, owner, answer, generated_by=""):
     return {
         "title": title,
         "coverage": coverage,
-        "sales_through": " ".join(part for part in (sales_stamp(data), network_net_sentence(data)) if part) or f"Sales through {coverage}.",
+        "sales_through": "\n".join(cover_lines(data)) or f"Sales through {coverage}.",
+        "data_lines": cover_lines(data),
         "footer": data_footer(data, question),
         "generated_by": who,
         "generated_at": moment.strftime("%d %b %Y, %I:%M %p IST").lstrip("0"),
@@ -86,10 +87,12 @@ def render_pdf(report):
     _pdf_line(pdf, report.get("title") or "Dosa Coffee", 16, bold=True)
     _pdf_line(pdf, "Prepared by " + (report.get("generated_by") or "the signed-in login"), 10)
     _pdf_line(pdf, "Prepared at " + (report.get("generated_at") or ""), 10)
-    _pdf_line(pdf, report.get("sales_through") or "", 10)
-    _pdf_line(pdf, "Coverage: " + (report.get("coverage") or "not loaded"), 11)
-    _pdf_line(pdf, report.get("footer") or "", 10)
-    _pdf_line(pdf, report.get("insight") or "", 11)
+    _pdf_line(pdf, report.get("insight") or "", 12, bold=True)
+    pdf.ln(1)
+    _pdf_line(pdf, "Data", 12, bold=True)
+    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
+        _pdf_line(pdf, line, 10)
+    _pdf_line(pdf, "Coverage: " + (report.get("coverage") or "not loaded"), 10)
     pdf.ln(2)
     for table in report.get("tables") or []:
         _pdf_line(pdf, table.get("name") or "Table", 13, bold=True)
@@ -97,7 +100,7 @@ def render_pdf(report):
         columns = table.get("columns") or []
         _pdf_line(pdf, " | ".join(columns), 9, bold=True)
         for row in table.get("rows") or []:
-            _pdf_line(pdf, " | ".join(_cell_text(value) for value in row), 9)
+            _pdf_line(pdf, " | ".join(_pdf_cell(column, value) for column, value in zip(columns, row)), 9)
         pdf.ln(2)
     if report.get("chart") and report["chart"].get("series"):
         _pdf_line(pdf, report["chart"].get("title") or "Chart", 13, bold=True)
@@ -119,9 +122,10 @@ def render_xlsx(report):
     cover.append(["Title", report.get("title") or "Dosa Coffee"])
     cover.append(["Prepared by", report.get("generated_by") or ""])
     cover.append(["Prepared at", report.get("generated_at") or ""])
-    cover.append(["Sales through", report.get("sales_through") or ""])
-    cover.append(["Coverage", report.get("coverage") or "not loaded"])
     cover.append(["Insight", report.get("insight") or ""])
+    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
+        cover.append(["Data", line])
+    cover.append(["Coverage", report.get("coverage") or "not loaded"])
     cover["A1"].font = Font(bold=True)
     tables = report.get("tables") or [{"name": "Report", "coverage": report.get("coverage"), "columns": ["Note"], "rows": [["No table was loaded."]]}]
     for table in tables:
@@ -141,12 +145,26 @@ def render_xlsx(report):
             values = values[: len(columns) - 1]
             values.append(coverage)
             written = []
+            formats = []
             for index, value in enumerate(values):
-                if index in numeric and isinstance(value, (int, float)):
-                    written.append(round(float(value), 2))
+                header = columns[index] if index < len(columns) else ""
+                if isinstance(value, str):
+                    written.append(value)
+                    formats.append(None)
+                elif index in numeric and isinstance(value, (int, float)):
+                    if "bill" in header.casefold():
+                        written.append(int(round(value)))
+                        formats.append("#,##,##0")
+                    else:
+                        written.append(float(value))
+                        formats.append("#,##,##0.00")
                 else:
                     written.append(value if value is not None else "")
+                    formats.append(None)
             sheet.append(written)
+            for index, fmt in enumerate(formats, start=1):
+                if fmt:
+                    sheet.cell(sheet.max_row, index).number_format = fmt
         for column in sheet.columns:
             sheet.column_dimensions[get_column_letter(column[0].column)].width = 22
         sheet.freeze_panes = "A2"
@@ -254,7 +272,7 @@ def _bills_table(data, coverage):
         gross = row.get("gross")
         if gross in (None, 0):
             continue
-        bills = None if row.get("mall_bulk") or _mall(name) else row.get("bills")
+        bills = _bills_cell(row, name)
         rows.append([_short(name), bills, float(gross)])
     rows.sort(key=lambda item: item[2], reverse=True)
     return {
@@ -275,7 +293,7 @@ def _sales_table(data, coverage):
         gross = row.get("gross")
         if gross in (None, 0):
             continue
-        bills = None if row.get("mall_bulk") or _mall(name) else row.get("bills")
+        bills = _bills_cell(row, name)
         rows.append([_short(name), row.get("region") or "", float(gross), bills])
     rows.sort(key=lambda item: item[2], reverse=True)
     return {
@@ -408,7 +426,8 @@ def _chart(data, table):
     for row in (table.get("rows") or [])[:5]:
         if len(row) <= numeric_at or not isinstance(row[numeric_at], (int, float)):
             continue
-        series.append({"label": str(row[0])[:22], "value": float(row[numeric_at])})
+        from app.chat.names import clip_label
+        series.append({"label": clip_label(row[0]), "value": float(row[numeric_at])})
     if not series:
         return None
     return {"title": table.get("name") or "Chart", "series": series}
@@ -434,8 +453,34 @@ def _mall(name):
     return "manisquare" in text or "forum" in text
 
 
+def _bills_cell(row, name):
+    if row.get("mall_bulk") or _mall(name):
+        return "excluded (mall bulk bills)"
+    bills = row.get("bills")
+    if bills in (None, ""):
+        return None
+    return int(round(float(bills)))
+
+
 def _short(name):
-    return str(name or "").split("(")[0].strip() or "That store"
+    from app.chat.names import clean_store_name
+    return clean_store_name(name)
+
+
+def _pdf_cell(column, value):
+    from app.chat.names import bill_count, rs_rupees
+    if value is None:
+        return ""
+    header = (column or "").casefold()
+    if isinstance(value, str):
+        return value
+    if "bill" in header and isinstance(value, (int, float)):
+        return bill_count(value)
+    if "gross" in header and isinstance(value, (int, float)):
+        return rs_rupees(value)
+    if isinstance(value, float):
+        return f"{value:.2f}"
+    return str(value)
 
 
 def _cell_text(value):
@@ -460,7 +505,8 @@ def _bars(pdf, series):
         value = float(item.get("value") or 0)
         pdf.set_x(pdf.l_margin)
         pdf.set_font("DejaVu", "", 9)
-        pdf.cell(55, 6, str(item.get("label") or "")[:22])
+        from app.chat.names import clip_label
+        pdf.cell(70, 6, clip_label(item.get("label") or "", 36))
         width = max(2, abs(value) / peak * 80)
         y = pdf.get_y() + 1
         pdf.set_fill_color(122, 78, 13)
