@@ -736,7 +736,40 @@ def _delivery_answer(question, data, owner):
     return _pack(text, "", "procurement", question, owner, source={"text": text})
 
 
-def answer_from_data(question, data, owner):
+def _week_sales(data, question, owner):
+    """Last 7 sales days versus the 7 before. Not the month-to-date pace."""
+    windows = data.get("sales_windows") or {}
+    week = windows.get("week_rows") or []
+    try:
+        from app.chat.wizard_a import trend_rows
+        trends = trend_rows()
+    except Exception:
+        trends = []
+    if not week and not trends:
+        return None
+    latest = windows.get("latest") or ""
+    start = windows.get("week_start") or ""
+    bits = []
+    if week:
+        from app.chat.reasoned import _rupee_lakh, _trading_week
+        trading = _trading_week(week)
+        gross = sum(float(row.get("gross") or 0) for row in trading)
+        bits.append(
+            f"Last 7 sales days ({start} to {latest}) gross is {_rupee_lakh(gross)} across {len(trading)} open stores."
+        )
+    if trends:
+        lead = trends[0]
+        from app.chat.reasoned import _rupee_lakh
+        bits.append(
+            f"Versus the previous 7 days ({lead.get('label') or 'the week before'}), "
+            f"the largest move is {lead['display']} {lead['direction']} {_rupee_lakh(abs(lead['impact']))}."
+        )
+    if not bits:
+        return None
+    return _pack(" ".join(bits), _as_of(latest), "sales", question, owner, source={"week": week[:8]})
+
+
+def _dispatch(question, data, owner):
     """One short answer. A table or chart is added only when it shows the comparison."""
     text = (question or "").strip()
     folded = text.casefold()
@@ -827,6 +860,13 @@ def answer_from_data(question, data, owner):
         return _wow(data, text, owner)
     if any(word in folded for word in ("yesterday", "forecast", "versus the forecast", "vs forecast")):
         return _yesterday(data, text, owner)
+    if (
+        any(phrase in folded for phrase in ("last week", "past week"))
+        and not any(word in folded for word in ("price", "pay", "paid", "bought", "ticket", "famepilot"))
+    ):
+        week = _week_sales(data, text, owner)
+        if week is not None:
+            return week
     if any(word in folded for word in ("target", "pace", "tracking", "behind")):
         paced = _pace(data, text, owner)
         if paced is not None:
@@ -841,3 +881,10 @@ def answer_from_data(question, data, owner):
         if paced is not None:
             return paced
     return _pack("That data isn't available.", "", "sales", text, owner)
+
+
+def answer_from_data(question, data, owner):
+    """The file answer. Analytic questions also get Why, causes, and next steps."""
+    from app.chat.reasoned import attach
+
+    return attach(_dispatch(question, data, owner), question, data, owner)

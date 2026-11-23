@@ -19,19 +19,27 @@ AI_UNAVAILABLE = "AI unavailable."
 _DEFAULT_URL = "https://api.openai.com/v1/chat/completions"
 _DEFAULT_MODEL = "gpt-4.1"
 _SYSTEM = (
-    "You are Dosa Coffee's sharp analyst for the Command Centre. "
-    "Use only the data packet and the house notes. Never invent a number, a store, or a date. "
+    "You are Dosa Coffee's analyst for the Command Centre. "
+    "Use only the data packet and the house notes. Never invent a number, a store, a date, a channel split, or a daypart. "
     "If the packet does not cover the question, say that in one plain sentence and then answer the closest question the packet does cover. "
-    "Write scannable markdown, under about 150 words unless the user asks for detail. "
+    "For a simple lookup (one price, one licence, one saved note, one payout rule), stay short: the bold answer and the figure, nothing more. "
+    "For an analytic question (how sales did, why a city is behind, which stores need attention, how to increase sales), write about 250 to 450 words in this shape. "
     "Start with one bold sentence that is the direct answer. "
-    "Then at most 3 to 5 short bullets with the key numbers. "
+    "Then a heading **Why**. Give the drivers by store, by city, by channel, and by daypart where the packet has them. "
+    "Compare each figure with that store's or that city's own baseline and with last week. Do not compare one city with the other city's prices. "
+    "If channel or daypart is absent, say it is not in the packet. Do not fill the gap. "
+    "Then a heading **Likely causes**. Use only other series in the packet: complaints and Famepilot tickets, Reelo, procurement prices, and service checks such as the mystery audit. "
+    "If one of those is missing, say so. Do not treat a blank as zero. "
+    "Then a heading **Next steps** with 3 to 5 numbered actions. Each action cites a figure from the packet and names the owner. "
+    "Store actions are owned by Sanjoy / Anup / Vikas. A finance action is owned by Shilajit and only when the packet includes finance for this role. "
+    "If the packet does not name an owner, write 'Owner: not named in the packet.' "
     "Add a compact markdown table only when comparing 3 or more items: at most 6 rows and 4 columns, short headers, units in the header, rupees as ₹1.61 Cr or ₹9.85 L. "
-    "Do not repeat a number in both the bullets and the table. "
+    "Do not repeat a number in both the prose and the table. "
     "Do not leave an empty heading. Do not write filler such as 'performing moderately well'. "
-    "Then a 'Next steps' heading with at most 3 numbered actions, one line each, each tied to a figure in the packet. "
-    "End with one small line, 'Data: ...', stating the dates once, for example 'Data: sales to 8 Nov, pace to 11 Nov'. "
+    "End with one small line, 'Data: ...', stating the dates once. "
     "When a trend helps, add one fenced block exactly like ```chart {\"type\":\"bar\",\"title\":\"\",\"unit\":\"\",\"series\":[{\"label\":\"\",\"value\":0}]} ``` "
     "and use only values that appear in the packet. "
+    "Finance, HR, and the inbox stay out unless this role's packet includes them. "
     "Follow the house notes on closed stores, mall bulk bills, Navratri, and city costs."
 )
 
@@ -65,7 +73,7 @@ def _log_ask(model, fallback):
     log.info("chat ask model_used=%s fallback=%s", model or "none", fallback or "none")
 
 
-def _pull_chart(text, context):
+def _pull_chart(text, allowed):
     """Lift one chart spec out of the reply. Drop it if a number is not in the packet."""
     if not text or "```chart" not in text:
         return text, None
@@ -80,7 +88,6 @@ def _pull_chart(text, context):
         spec = json.loads(raw)
     except json.JSONDecodeError:
         return kept.strip(), None
-    allowed = allowed_numbers(context)
     chart = verify_block(spec, allowed)
     return kept.strip(), chart
 
@@ -95,7 +102,7 @@ def complete_message(messages, model=None, tools=None):
     body = {
         "model": chosen,
         "temperature": 0,
-        "max_tokens": 2000,
+        "max_tokens": 4000,
         "messages": messages,
     }
     if tools:
@@ -133,6 +140,57 @@ def complete_chat(messages, model=None):
     if not text:
         return None, "empty_response"
     return text, None
+
+
+def packet_numbers(context, data):
+    """Every figure the reply is allowed to keep."""
+    import re
+
+    found = allowed_numbers(data)
+    for match in re.finditer(r"\d[\d,]*(?:\.\d+)?", context or ""):
+        try:
+            found.append(float(match.group(0).replace(",", "")))
+        except ValueError:
+            continue
+    return found
+
+
+def _known_figure(number, allowed):
+    for item in allowed:
+        if abs(number - item) <= max(0.51, abs(item) * 0.002):
+            return True
+    for scale in (100000, 10000000):
+        scaled = number * scale
+        for item in allowed:
+            if abs(scaled - item) <= max(1.0, abs(item) * 0.002):
+                return True
+    return False
+
+
+def keep_known_figures(text, allowed):
+    """Drop a model figure that is not in the packet. List numbers stay."""
+    import re
+
+    if not text:
+        return text
+
+    def swap(match):
+        raw = match.group(0)
+        start = match.start()
+        if start == 0 or text[start - 1] in "\n":
+            rest = text[match.end(): match.end() + 2]
+            if raw.isdigit() and int(raw) <= 9 and rest.startswith("."):
+                return raw
+        token = raw.replace("₹", "").replace("%", "").replace(",", "")
+        try:
+            number = float(token)
+        except ValueError:
+            return raw
+        if _known_figure(number, allowed):
+            return raw
+        return "not in the file"
+
+    return re.sub(r"₹?\d[\d,]*(?:\.\d+)?%?", swap, text)
 
 
 def produce_answer(question, data, owner, client=None, when_offline="notice"):
@@ -193,7 +251,9 @@ def produce_answer(question, data, owner, client=None, when_offline="notice"):
         result["fallback"] = error or "empty_response"
         _log_ask(None, result["fallback"])
         return result
-    prose, chart = _pull_chart(text, context)
+    allowed = packet_numbers(context, data)
+    prose, chart = _pull_chart(text, allowed)
+    prose = keep_known_figures(prose, allowed)
     result["text"] = prose
     result["chart"] = chart
     result["table"] = None

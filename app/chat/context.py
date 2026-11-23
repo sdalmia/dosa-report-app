@@ -78,6 +78,7 @@ def build_context(question, data):
         "",
         "Network sales summary:",
         _summary_line(summary),
+        _optional_summary(summary),
         "",
         _month_sales_block(question),
         "",
@@ -86,6 +87,8 @@ def build_context(question, data):
         "",
         "Each store, sum of the last 7 sales days:",
         _sales_table(windows.get("week_rows") or []),
+        "",
+        _daily_block(windows),
         "",
         "Each store, month-to-date (current month only, not a completed month such as October):",
         _sales_table(windows.get("mtd_rows") or []),
@@ -137,10 +140,18 @@ def build_context(question, data):
                     "store": row.get("store"),
                     "phone_capture_pct": _num(row.get("phone_capture"), 2),
                     "repeat_share_pct": _num(row.get("repeat_share"), 2),
+                    "customers": "" if row.get("customers") is None else str(int(row["customers"])),
+                    "new_customers": "" if row.get("new_customers") is None else str(int(row["new_customers"])),
+                    "repeat_customers": "" if row.get("repeat_customers") is None else str(int(row["repeat_customers"])),
+                    "redemption_pct": _num(row.get("redemption"), 2),
+                    "rating": _num(row.get("rating"), 2),
                 }
                 for row in (data.get("reelo") or [])
             ],
-            ["store", "phone_capture_pct", "repeat_share_pct"],
+            [
+                "store", "phone_capture_pct", "repeat_share_pct", "customers",
+                "new_customers", "repeat_customers", "redemption_pct", "rating",
+            ],
         ),
         "",
         _tickets_block(data.get("tickets") or {}),
@@ -246,11 +257,73 @@ def _summary_line(summary):
         bits.append(f"month-to-date net {summary.get('mtd_actual_L')} Lakh")
     if summary.get("mtd_pred_mid_L") is not None:
         bits.append(f"mid forecast {summary.get('mtd_pred_mid_L')} Lakh")
+    if summary.get("actuals_through"):
+        bits.append(f"actuals through {summary.get('actuals_through')}")
+    if summary.get("mom_net_pct") is not None:
+        bits.append(f"month-on-month net {summary.get('mom_net_pct')}%")
     regions = summary.get("regional_mtd") if isinstance(summary.get("regional_mtd"), dict) else {}
     for name, row in regions.items():
-        if isinstance(row, dict) and row.get("pace_pct") is not None:
-            bits.append(f"{name} pace {row.get('pace_pct')}%")
+        if not isinstance(row, dict):
+            continue
+        piece = name
+        if row.get("pace_pct") is not None:
+            piece += f" pace {row.get('pace_pct')}%"
+        if row.get("net_L") is not None:
+            piece += f" net {row.get('net_L')} Lakh"
+        if row.get("pro_rata_L") is not None:
+            piece += f" pro-rata {row.get('pro_rata_L')} Lakh"
+        if row.get("target_L") is not None:
+            piece += f" target {row.get('target_L')} Lakh"
+        bits.append(piece)
+    if summary.get("mom_note"):
+        bits.append(str(summary.get("mom_note")))
+    if summary.get("target_pace_note"):
+        bits.append(str(summary.get("target_pace_note")))
     return "; ".join(bits) if bits else "Summary file is loaded but has no pace figures."
+
+
+_SUMMARY_SHOWN = {
+    "as_of_date", "current_month", "completed_actual_days", "mtd_actual_L", "mtd_pred_mid_L",
+    "mom_net_pct", "mom_note", "actuals_through", "mtd_actual_rupees", "target_pace_pct",
+    "target_pace_note", "regional_mtd", "provenance",
+}
+_OPTIONAL_HINTS = ("forecast", "landing", "range", "band", "point")
+
+
+def _optional_summary(summary):
+    """Point forecast, range, and month-landing fields when a later file adds them."""
+    if not isinstance(summary, dict):
+        return "Point forecast, range, and month landing: not in the summary file."
+    lines = []
+    for key, value in summary.items():
+        if key in _SUMMARY_SHOWN or value in (None, "", [], {}):
+            continue
+        folded = key.casefold()
+        if any(hint in folded for hint in _OPTIONAL_HINTS):
+            lines.append(f"{key}: {value}")
+    if not lines:
+        return "Point forecast, range, and month landing: not in the summary file."
+    return "Extra forecast fields from the summary file:\n" + "\n".join(lines)
+
+
+def _daily_block(windows):
+    dates = windows.get("daily_dates") or []
+    rows = windows.get("daily_rows") or []
+    if not dates or not rows:
+        return "Per-store daily gross: not loaded."
+    header = ["store", "region"] + [date[5:] for date in dates]
+    shaped = []
+    for row in rows:
+        values = row.get("gross") or []
+        shaped.append({
+            "store": row.get("store") or "",
+            "region": row.get("region") or "",
+            **{date[5:]: "" if index >= len(values) or values[index] is None else _inr(values[index]) for index, date in enumerate(dates)},
+        })
+    return (
+        "Per-store daily gross for the last 14 sales dates. A blank cell is a missing day, not zero. Net is not in this grid.\n"
+        + _lines(shaped, header)
+    )
 
 
 def _tickets_block(tickets):
@@ -292,8 +365,25 @@ def _prices_block(pack, question):
     folded = (question or "").casefold()
     lines = [
         f"Procurement summary as_of {pack.get('as_of') or 'unknown'}. Compare a city only with its own last month or its own baseline.",
-        "Bought above each city's own baseline in the last 7 days:",
     ]
+    for note in pack.get("notes") or []:
+        if isinstance(note, str) and note.strip():
+            lines.append(note.strip())
+    yesterday = pack.get("yesterday_grn") if isinstance(pack.get("yesterday_grn"), dict) else {}
+    if yesterday:
+        lines.append("Goods received on the latest buying day, by city. A missing city is not zero.")
+        received = []
+        for city, row in yesterday.items():
+            if not isinstance(row, dict):
+                continue
+            received.append({
+                "city": city,
+                "date": row.get("date") or "",
+                "value": row.get("value") if row.get("value") is not None else "",
+                "lines": row.get("lines") if row.get("lines") is not None else "",
+            })
+        lines.append(_lines(received, ["city", "date", "value", "lines"]))
+    lines.append("Bought above each city's own baseline in the last 7 days:")
     above = []
     for row in pack.get("above_average") or []:
         if not isinstance(row, dict):
