@@ -1,124 +1,120 @@
 {
-  "as_of": "2026-11-21",
-  "generated_at": "2026-11-22T10:12:48+05:30",
+  "as_of": "2026-11-22",
+  "generated_at": "2026-11-23T10:26:11+05:30",
   "yesterday_grn": {
     "Kolkata": {
-      "date": "2026-11-21",
-      "entries": 15,
-      "lines": 40,
-      "value": 321787.43,
+      "date": "2026-11-22",
+      "entries": 5,
+      "lines": 24,
+      "value": 298533.8,
       "top_suppliers": [
         {
-          "name": "Zomato Hyperpure Kolkata",
-          "value": 142302.75
+          "name": "SUFAL COMMERCIAL",
+          "value": 128256.0
         },
         {
-          "name": "KAGAZKAAR RETAIL PACKAGING PVT LTD",
-          "value": 73971.0
-        },
-        {
-          "name": "M/S MAHAR",
-          "value": 59960.0
-        },
-        {
-          "name": "Radha Krishana Enterprise",
-          "value": 21048.6
+          "name": "Nopany Impex Pvt Ltd",
+          "value": 94815.0
         },
         {
           "name": "BAGRODIA SUPERMARKETS PVT LTD",
-          "value": 8695.08
-        }
-      ],
-      "top_items": [
-        {
-          "name": "Ghee",
-          "qty": 67.875,
-          "unit": "Kg",
-          "value": 68250.35
+          "value": 56850.0
         },
         {
-          "name": "Carry Bag - Small (1pkt = 100pc)",
-          "qty": 7500,
-          "unit": "Pc",
-          "value": 50475.0
+          "name": "Radha Krishana Enterprise",
+          "value": 12996.8
         },
         {
-          "name": "Glen Container With Lid - 250ml (1pkt = 50pc)",
-          "qty": 9000,
-          "unit": "Pc",
-          "value": 40860.0
-        },
-        {
-          "name": "Milk - Tetra 1Ltr",
-          "qty": 408,
-          "unit": "Ltr",
-          "value": 32395.08
-        },
-        {
-          "name": "Carry Bag - Large(1pkt = 100pc)",
-          "qty": 2400,
-          "unit": "Pc",
-          "value": 23496.0
-        }
-      ],
-      "source": "entry_report_kolkata_21Nov2026_raw.xlsx"
-    },
-    "Delhi": {
-      "date": "2026-11-21",
-      "entries": 5,
-      "lines": 15,
-      "value": 103457.6,
-      "top_suppliers": [
-        {
-          "name": "Zomato Hyperpure Delhi",
-          "value": 66213.6
-        },
-        {
-          "name": "Shyam Vegetable",
-          "value": 13800.0
-        },
-        {
-          "name": "Javed Dairy",
-          "value": 13514.0
-        },
-        {
-          "name": "South Indian Pan Shop",
-          "value": 9930.0
+          "name": "Adya Dairy",
+          "value": 5616.0
         }
       ],
       "top_items": [
         {
           "name": "White Butter",
-          "qty": 82,
+          "qty": 200,
           "unit": "Kg",
-          "value": 56653.8
+          "value": 128256.0
+        },
+        {
+          "name": "Frozen Shredded Coconut (1 Kg =1 Pkt)",
+          "qty": 420,
+          "unit": "Kg",
+          "value": 94815.0
         },
         {
           "name": "Kashmiri Chili Powder",
-          "qty": 12000,
+          "qty": 50000,
           "unit": "gm",
-          "value": 12600.0
+          "value": 49500.0
         },
         {
-          "name": "Paneer",
-          "qty": 24,
+          "name": "Turmeric Powder",
+          "qty": 15000,
+          "unit": "gm",
+          "value": 5850.0
+        },
+        {
+          "name": "Onion",
+          "qty": 84.7,
           "unit": "Kg",
-          "value": 11040.0
-        },
-        {
-          "name": "Jaggery",
-          "qty": 60,
-          "unit": "Kg",
-          "value": 5400.0
-        },
-        {
-          "name": "Banana Leaf Big (1bundle = 50pc)",
-          "qty": 1500,
-          "unit": "Pc",
-          "value": 3750.0
+          "value": 3133.9
         }
       ],
-      "source": "entry_report_delhi_21Nov2026_raw.xlsx"
+      "source": "entry_report_kolkata_22Nov2026_raw.xlsx"
+    },
+    "Delhi": {
+      "date": "2026-11-22",
+      "entries": 3,
+      "lines": 22,
+      "value": 69889.31,
+      "top_suppliers": [
+        {
+          "name": "MANDI FRESH",
+          "value": 55271.0
+        },
+        {
+          "name": "Shyam Vegetable",
+          "value": 11400.31
+        },
+        {
+          "name": "Javed Dairy",
+          "value": 3218.0
+        }
+      ],
+      "top_items": [
+        {
+          "name": "Onion",
+          "qty": 369,
+          "unit": "Kg",
+          "value": 14760.0
+        },
+        {
+          "name": "Sunflower Refined Oil ( 1pkt = 910 Ml )",
+          "qty": 52.08,
+          "unit": "Ltr",
+          "value": 11400.31
+        },
+        {
+          "name": "Tomato",
+          "qty": 321,
+          "unit": "Kg",
+          "value": 10272.0
+        },
+        {
+          "name": "Raw Potato",
+          "qty": 442,
+          "unit": "Kg",
+          "value": 10166.0
+        },
+        {
+          "name": "Coriander Leaves",
+          "qty": 40,
+          "unit": "Kg",
+          "value": 3400.0
+        }
+      ],
+      "source": "entry_report_delhi_22Nov2026_raw.xlsx"
     }
   },
   "above_average": [
@@ -257,6 +253,20 @@
       "title": "Sec 18 Noida: ₹1.8L Hershey's unit error",
       "detail": "Indent IN-1854 on 2 Oct booked 623 Ltr instead of 623 ml; return booked twice — reverse in Posist",
       "as_of": "2026-10-09"
+    },
+    {
+      "area": "procurement",
+      "severity": "amber",
+      "title": "Kolkata 22 Nov: Frozen Shredded Coconut +6.1% (Nopany 420 Kg, SE-9181), ~₹5,443 extra",
+      "detail": "Nopany Impex Pvt Ltd Frozen Shredded Coconut (1 Kg =1 Pkt) 420 Kg at ₹225.75 vs Kolkata 23 Oct–22 Nov avg ₹212.79 (+6.1%, ~₹5,443 excess), ₹94,815. That is 17.7% of the 2,370 Kg received in the period. Price is above average, unlike the 14 Nov Metro Foods 510 Kg lot at ₹210 (at average). This is a third large lot after Nopany on 9 Nov and Metro on 14 Nov; check cover before more is bought",
+      "as_of": "2026-11-23"
+    },
+    {
+      "area": "procurement",
+      "severity": "amber",
+      "title": "Kolkata 22 Nov: White Butter 200 Kg in one Sufal lot, ₹1,28,256 (SE-9182) — 47% of 30-day qty",
+      "detail": "SUFAL COMMERCIAL White Butter 200 Kg at ₹641.28 = ₹1,28,256 (vendor total ₹1,28,255). Rate is 4.6% below the Kolkata 23 Oct–22 Nov average of ₹671.95 (about ₹6,134 cheaper), so this is a volume flag, not a price flag. 200 Kg is 46.7% of the 428.5 Kg received in the period. Check cover before more is bought",
+      "as_of": "2026-11-23"
     },
     {
       "area": "procurement",
@@ -638,7 +648,7 @@
         "this_month": {
           "month": "2026-11",
           "from": "2026-11-01",
-          "to": "2026-11-21",
+          "to": "2026-11-22",
           "complete_through_as_of": true,
           "days_with_receipts": [
             "2026-11-01",
@@ -661,7 +671,8 @@
             "2026-11-18",
             "2026-11-19",
             "2026-11-20",
-            "2026-11-21"
+            "2026-11-21",
+            "2026-11-22"
           ],
           "days_nil": [],
           "gaps": [],
@@ -679,7 +690,7 @@
         "this_month": {
           "month": "2026-11",
           "from": "2026-11-01",
-          "to": "2026-11-21",
+          "to": "2026-11-22",
           "complete_through_as_of": true,
           "days_with_receipts": [
             "2026-11-01",
@@ -698,7 +709,8 @@
             "2026-11-18",
             "2026-11-19",
             "2026-11-20",
-            "2026-11-21"
+            "2026-11-21",
+            "2026-11-22"
           ],
           "days_nil": [
             "2026-11-02",
@@ -740,14 +752,14 @@
         "item_code": 91,
         "unit": "Ltr",
         "this_month": {
-          "avg_unit_price": 60.03,
-          "qty": 223
+          "avg_unit_price": 60.18,
+          "qty": 242
         },
         "last_month": {
           "avg_unit_price": 59.08,
           "qty": 486
         },
-        "pct_change": 1.6
+        "pct_change": 1.9
       },
       {
         "city": "Delhi",
@@ -857,8 +869,8 @@
         "item_code": 43,
         "unit": "Ltr",
         "this_month": {
-          "avg_unit_price": 220.94,
-          "qty": 1469.712
+          "avg_unit_price": 220.87,
+          "qty": 1521.792
         },
         "last_month": {
           "avg_unit_price": 220.28,
@@ -982,6 +994,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Onion",
+        "item_code": 132,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 39.51,
+          "qty": 3214.5
+        },
+        "last_month": {
+          "avg_unit_price": 40.14,
+          "qty": 4223
+        },
+        "pct_change": -1.6
+      },
+      {
+        "city": "Delhi",
         "item": "Glen Container With Lid - 50ml (1pkt = 50pc)",
         "item_code": 419,
         "unit": "Pc",
@@ -1027,33 +1054,18 @@
       },
       {
         "city": "Delhi",
-        "item": "Onion",
-        "item_code": 132,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 39.44,
-          "qty": 2845.5
-        },
-        "last_month": {
-          "avg_unit_price": 40.14,
-          "qty": 4223
-        },
-        "pct_change": -1.7
-      },
-      {
-        "city": "Delhi",
         "item": "Raw Potato",
         "item_code": 274,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 24.71,
-          "qty": 3340
+          "avg_unit_price": 24.51,
+          "qty": 3782
         },
         "last_month": {
           "avg_unit_price": 25.01,
           "qty": 5526
         },
-        "pct_change": -1.2
+        "pct_change": -2.0
       },
       {
         "city": "Delhi",
@@ -1061,14 +1073,14 @@
         "item_code": 141,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 41.43,
-          "qty": 1966.9
+          "avg_unit_price": 40.11,
+          "qty": 2287.9
         },
         "last_month": {
           "avg_unit_price": 44.0,
           "qty": 3362
         },
-        "pct_change": -5.8
+        "pct_change": -8.8
       },
       {
         "city": "Delhi",
@@ -1267,6 +1279,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Raw Curd",
+        "item_code": 235,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 81.57,
+          "qty": 460
+        },
+        "last_month": {
+          "avg_unit_price": 80.01,
+          "qty": 898
+        },
+        "pct_change": 1.9
+      },
+      {
+        "city": "Delhi",
         "item": "MT-027 105MM (5000ML) Container",
         "item_code": 326,
         "unit": "Pc",
@@ -1279,21 +1306,6 @@
           "qty": 3570
         },
         "pct_change": 0.0
-      },
-      {
-        "city": "Delhi",
-        "item": "Raw Curd",
-        "item_code": 235,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 81.38,
-          "qty": 436
-        },
-        "last_month": {
-          "avg_unit_price": 80.01,
-          "qty": 898
-        },
-        "pct_change": 1.7
       },
       {
         "city": "Delhi",
@@ -1367,14 +1379,29 @@
         "item_code": 115,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 134.44,
-          "qty": 208.892
+          "avg_unit_price": 126.5,
+          "qty": 248.892
         },
         "last_month": {
           "avg_unit_price": 150.37,
           "qty": 447.2
         },
-        "pct_change": -10.6
+        "pct_change": -15.9
+      },
+      {
+        "city": "Delhi",
+        "item": "Ginger",
+        "item_code": 108,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 136.36,
+          "qty": 215.5
+        },
+        "last_month": {
+          "avg_unit_price": 159.23,
+          "qty": 352.85
+        },
+        "pct_change": -14.4
       },
       {
         "city": "Delhi",
@@ -1387,21 +1414,6 @@
           "qty": 40
         },
         "pct_change": null
-      },
-      {
-        "city": "Delhi",
-        "item": "Ginger",
-        "item_code": 108,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 144.66,
-          "qty": 185.5
-        },
-        "last_month": {
-          "avg_unit_price": 159.23,
-          "qty": 352.85
-        },
-        "pct_change": -9.2
       },
       {
         "city": "Delhi",
@@ -1528,6 +1540,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Raw Mango",
+        "item_code": 133,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 151.87,
+          "qty": 123
+        },
+        "last_month": {
+          "avg_unit_price": 150.0,
+          "qty": 178.7
+        },
+        "pct_change": 1.2
+      },
+      {
+        "city": "Delhi",
         "item": "Appalam Papad (1pkt = 47pc)",
         "item_code": 30,
         "unit": "Pc",
@@ -1555,6 +1582,21 @@
           "qty": 87
         },
         "pct_change": 0.9
+      },
+      {
+        "city": "Delhi",
+        "item": "Watermelon",
+        "item_code": 416,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 40.18,
+          "qty": 440
+        },
+        "last_month": {
+          "avg_unit_price": 40.0,
+          "qty": 826
+        },
+        "pct_change": 0.4
       },
       {
         "city": "Delhi",
@@ -1630,36 +1672,6 @@
       },
       {
         "city": "Delhi",
-        "item": "Raw Mango",
-        "item_code": 133,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 152.23,
-          "qty": 103
-        },
-        "last_month": {
-          "avg_unit_price": 150.0,
-          "qty": 178.7
-        },
-        "pct_change": 1.5
-      },
-      {
-        "city": "Delhi",
-        "item": "Watermelon",
-        "item_code": 416,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 40.21,
-          "qty": 380
-        },
-        "last_month": {
-          "avg_unit_price": 40.0,
-          "qty": 826
-        },
-        "pct_change": 0.5
-      },
-      {
-        "city": "Delhi",
         "item": "kitchen Paper Roll",
         "item_code": 361,
         "unit": "Piece",
@@ -1687,6 +1699,21 @@
           "qty": 46500
         },
         "pct_change": 7.7
+      },
+      {
+        "city": "Delhi",
+        "item": "Carrot",
+        "item_code": 107,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 32.46,
+          "qty": 446.9
+        },
+        "last_month": {
+          "avg_unit_price": 32.04,
+          "qty": 688.9
+        },
+        "pct_change": 1.3
       },
       {
         "city": "Delhi",
@@ -1735,21 +1762,6 @@
       },
       {
         "city": "Delhi",
-        "item": "Carrot",
-        "item_code": 107,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 32.52,
-          "qty": 396.9
-        },
-        "last_month": {
-          "avg_unit_price": 32.04,
-          "qty": 688.9
-        },
-        "pct_change": 1.5
-      },
-      {
-        "city": "Delhi",
         "item": "Rubber Hand Gloves (1pkt=100pc)",
         "item_code": 238,
         "unit": "Pc",
@@ -1762,6 +1774,21 @@
           "qty": 3500
         },
         "pct_change": -3.8
+      },
+      {
+        "city": "Delhi",
+        "item": "Lime",
+        "item_code": 124,
+        "unit": "Pc",
+        "this_month": {
+          "avg_unit_price": 2.5,
+          "qty": 5075
+        },
+        "last_month": {
+          "avg_unit_price": 2.92,
+          "qty": 9215
+        },
+        "pct_change": -14.4
       },
       {
         "city": "Delhi",
@@ -1792,21 +1819,6 @@
       },
       {
         "city": "Delhi",
-        "item": "Lime",
-        "item_code": 124,
-        "unit": "Pc",
-        "this_month": {
-          "avg_unit_price": 2.56,
-          "qty": 4475
-        },
-        "last_month": {
-          "avg_unit_price": 2.92,
-          "qty": 9215
-        },
-        "pct_change": -12.3
-      },
-      {
-        "city": "Delhi",
         "item": "Raw Imli",
         "item_code": 20,
         "unit": "Kg",
@@ -1819,6 +1831,21 @@
           "qty": 185
         },
         "pct_change": -21.4
+      },
+      {
+        "city": "Delhi",
+        "item": "Garlic",
+        "item_code": 100,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 125.0,
+          "qty": 81
+        },
+        "last_month": {
+          "avg_unit_price": 125.0,
+          "qty": 136
+        },
+        "pct_change": 0.0
       },
       {
         "city": "Delhi",
@@ -1864,16 +1891,16 @@
       },
       {
         "city": "Delhi",
-        "item": "Garlic",
-        "item_code": 100,
+        "item": "Raw Pumpkin",
+        "item_code": 280,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 125.0,
-          "qty": 71
+          "avg_unit_price": 23.0,
+          "qty": 378
         },
         "last_month": {
-          "avg_unit_price": 125.0,
-          "qty": 136
+          "avg_unit_price": 23.0,
+          "qty": 617.5
         },
         "pct_change": 0.0
       },
@@ -1948,6 +1975,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Raw Lauki",
+        "item_code": 279,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 23.0,
+          "qty": 351
+        },
+        "last_month": {
+          "avg_unit_price": 23.0,
+          "qty": 574.8
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Delhi",
         "item": "Kinley Soda 750ml Pet",
         "item_code": 64,
         "unit": "Pc",
@@ -1958,21 +2000,6 @@
         "last_month": {
           "avg_unit_price": 15.83,
           "qty": 1032
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Delhi",
-        "item": "Raw Pumpkin",
-        "item_code": 280,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 23.0,
-          "qty": 328
-        },
-        "last_month": {
-          "avg_unit_price": 23.0,
-          "qty": 617.5
         },
         "pct_change": 0.0
       },
@@ -2008,18 +2035,18 @@
       },
       {
         "city": "Delhi",
-        "item": "Raw Lauki",
-        "item_code": 279,
+        "item": "Raw Green Chili",
+        "item_code": 116,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 23.0,
-          "qty": 311
+          "avg_unit_price": 40.6,
+          "qty": 173.698
         },
         "last_month": {
-          "avg_unit_price": 23.0,
-          "qty": 574.8
+          "avg_unit_price": 40.16,
+          "qty": 261
         },
-        "pct_change": 0.0
+        "pct_change": 1.1
       },
       {
         "city": "Delhi",
@@ -2080,18 +2107,18 @@
       },
       {
         "city": "Delhi",
-        "item": "Raw Green Chili",
-        "item_code": 116,
+        "item": "Drumstick",
+        "item_code": 149,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 40.71,
-          "qty": 148.698
+          "avg_unit_price": 85.0,
+          "qty": 66
         },
         "last_month": {
-          "avg_unit_price": 40.16,
-          "qty": 261
+          "avg_unit_price": 85.0,
+          "qty": 114
         },
-        "pct_change": 1.4
+        "pct_change": 0.0
       },
       {
         "city": "Delhi",
@@ -2186,21 +2213,6 @@
         "last_month": {
           "avg_unit_price": 2.03,
           "qty": 700
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Delhi",
-        "item": "Drumstick",
-        "item_code": 149,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 85.0,
-          "qty": 58
-        },
-        "last_month": {
-          "avg_unit_price": 85.0,
-          "qty": 114
         },
         "pct_change": 0.0
       },
@@ -2431,6 +2443,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Green Capsicum",
+        "item_code": 99,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 48.0,
+          "qty": 52
+        },
+        "last_month": {
+          "avg_unit_price": 48.0,
+          "qty": 86
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Delhi",
         "item": "Khoa",
         "item_code": 491,
         "unit": "Kg",
@@ -2485,18 +2512,18 @@
       },
       {
         "city": "Delhi",
-        "item": "Green Capsicum",
-        "item_code": 99,
+        "item": "Curry Leaves",
+        "item_code": 131,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 48.0,
-          "qty": 42
+          "avg_unit_price": 37.52,
+          "qty": 53.7
         },
         "last_month": {
-          "avg_unit_price": 48.0,
-          "qty": 86
+          "avg_unit_price": 38.2,
+          "qty": 87.3
         },
-        "pct_change": 0.0
+        "pct_change": -1.8
       },
       {
         "city": "Delhi",
@@ -2527,21 +2554,6 @@
           "qty": 31
         },
         "pct_change": 0.0
-      },
-      {
-        "city": "Delhi",
-        "item": "Curry Leaves",
-        "item_code": 131,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 37.53,
-          "qty": 47.7
-        },
-        "last_month": {
-          "avg_unit_price": 38.2,
-          "qty": 87.3
-        },
-        "pct_change": -1.8
       },
       {
         "city": "Delhi",
@@ -2782,6 +2794,21 @@
       },
       {
         "city": "Delhi",
+        "item": "Mint leaf",
+        "item_code": 451,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 70.61,
+          "qty": 13.1
+        },
+        "last_month": {
+          "avg_unit_price": 70.0,
+          "qty": 25.7
+        },
+        "pct_change": 0.9
+      },
+      {
+        "city": "Delhi",
         "item": "Besan",
         "item_code": 368,
         "unit": "Kg",
@@ -2797,33 +2824,33 @@
       },
       {
         "city": "Delhi",
-        "item": "Mint leaf",
-        "item_code": 451,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 70.66,
-          "qty": 12.1
-        },
-        "last_month": {
-          "avg_unit_price": 70.0,
-          "qty": 25.7
-        },
-        "pct_change": 0.9
-      },
-      {
-        "city": "Delhi",
         "item": "Cucumber",
         "item_code": 123,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 28.22,
-          "qty": 27
+          "avg_unit_price": 27.81,
+          "qty": 31
         },
         "last_month": {
           "avg_unit_price": 25.0,
           "qty": 45
         },
-        "pct_change": 12.9
+        "pct_change": 11.2
+      },
+      {
+        "city": "Delhi",
+        "item": "Beans",
+        "item_code": 237,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 48.0,
+          "qty": 14
+        },
+        "last_month": {
+          "avg_unit_price": 50.88,
+          "qty": 31.25
+        },
+        "pct_change": -5.7
       },
       {
         "city": "Delhi",
@@ -2839,21 +2866,6 @@
           "qty": 60
         },
         "pct_change": 0.0
-      },
-      {
-        "city": "Delhi",
-        "item": "Beans",
-        "item_code": 237,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 48.0,
-          "qty": 13
-        },
-        "last_month": {
-          "avg_unit_price": 50.88,
-          "qty": 31.25
-        },
-        "pct_change": -5.7
       },
       {
         "city": "Delhi",
@@ -3021,7 +3033,7 @@
         "unit": "Ltr",
         "this_month": {
           "avg_unit_price": 62.02,
-          "qty": 320.5
+          "qty": 336.5
         },
         "last_month": {
           "avg_unit_price": 61.99,
@@ -3051,7 +3063,7 @@
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 320.0,
-          "qty": 103
+          "qty": 108
         },
         "last_month": {
           "avg_unit_price": 315.08,
@@ -3095,14 +3107,14 @@
         "item_code": 391,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 698.79,
-          "qty": 228.5
+          "avg_unit_price": 671.95,
+          "qty": 428.5
         },
         "last_month": {
           "avg_unit_price": 674.1,
           "qty": 420
         },
-        "pct_change": 3.7
+        "pct_change": -0.3
       },
       {
         "city": "Kolkata",
@@ -3125,14 +3137,14 @@
         "item_code": 555,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 210.0,
-          "qty": 1470
+          "avg_unit_price": 213.5,
+          "qty": 1890
         },
         "last_month": {
           "avg_unit_price": 212.29,
           "qty": 2290
         },
-        "pct_change": -1.1
+        "pct_change": 0.6
       },
       {
         "city": "Kolkata",
@@ -3357,7 +3369,7 @@
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 18.0,
-          "qty": 3508.8
+          "qty": 3657.8
         },
         "last_month": {
           "avg_unit_price": 18.0,
@@ -3394,6 +3406,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Onion",
+        "item_code": 132,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 37.0,
+          "qty": 1422.1
+        },
+        "last_month": {
+          "avg_unit_price": 41.26,
+          "qty": 2870.1
+        },
+        "pct_change": -10.3
+      },
+      {
+        "city": "Kolkata",
         "item": "Ecolab-Multi Purpose SINK Detergent (1can = 1ltr)",
         "item_code": 146,
         "unit": "Can",
@@ -3424,6 +3451,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Kashmiri Chili Powder",
+        "item_code": 34,
+        "unit": "gm",
+        "this_month": {
+          "avg_unit_price": 0.99,
+          "qty": 51000
+        },
+        "last_month": {
+          "avg_unit_price": 0.93,
+          "qty": 136000
+        },
+        "pct_change": 6.5
+      },
+      {
+        "city": "Kolkata",
         "item": "DC Water - 500ml",
         "item_code": 88,
         "unit": "Pc",
@@ -3439,33 +3481,33 @@
       },
       {
         "city": "Kolkata",
-        "item": "Onion",
-        "item_code": 132,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 37.0,
-          "qty": 1337.4
-        },
-        "last_month": {
-          "avg_unit_price": 41.26,
-          "qty": 2870.1
-        },
-        "pct_change": -10.3
-      },
-      {
-        "city": "Kolkata",
         "item": "Tomato",
         "item_code": 141,
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 40.0,
-          "qty": 1169.8
+          "qty": 1193.6
         },
         "last_month": {
           "avg_unit_price": 40.0,
           "qty": 2275.9
         },
         "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
+        "item": "Raw Curd",
+        "item_code": 235,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 75.6,
+          "qty": 630
+        },
+        "last_month": {
+          "avg_unit_price": 74.7,
+          "qty": 1255
+        },
+        "pct_change": 1.2
       },
       {
         "city": "Kolkata",
@@ -3481,21 +3523,6 @@
           "qty": 850
         },
         "pct_change": 0.1
-      },
-      {
-        "city": "Kolkata",
-        "item": "Raw Curd",
-        "item_code": 235,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 75.6,
-          "qty": 590
-        },
-        "last_month": {
-          "avg_unit_price": 74.7,
-          "qty": 1255
-        },
-        "pct_change": 1.2
       },
       {
         "city": "Kolkata",
@@ -3526,6 +3553,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Ginger",
+        "item_code": 108,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 132.0,
+          "qty": 275.2
+        },
+        "last_month": {
+          "avg_unit_price": 132.0,
+          "qty": 523.8
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
         "item": "Paper Napkin (1pkt = 100pc)",
         "item_code": 97,
         "unit": "Pc",
@@ -3536,21 +3578,6 @@
         "last_month": {
           "avg_unit_price": 0.24,
           "qty": 318000
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
-        "item": "Ginger",
-        "item_code": 108,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 132.0,
-          "qty": 269.5
-        },
-        "last_month": {
-          "avg_unit_price": 132.0,
-          "qty": 523.8
         },
         "pct_change": 0.0
       },
@@ -3934,6 +3961,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Lime",
+        "item_code": 124,
+        "unit": "Pc",
+        "this_month": {
+          "avg_unit_price": 3.5,
+          "qty": 4597
+        },
+        "last_month": {
+          "avg_unit_price": 3.5,
+          "qty": 11050
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
         "item": "Refined Flour (Maida)",
         "item_code": 44,
         "unit": "Kg",
@@ -3946,21 +3988,6 @@
           "qty": 275
         },
         "pct_change": 3.3
-      },
-      {
-        "city": "Kolkata",
-        "item": "Lime",
-        "item_code": 124,
-        "unit": "Pc",
-        "this_month": {
-          "avg_unit_price": 3.5,
-          "qty": 4497
-        },
-        "last_month": {
-          "avg_unit_price": 3.5,
-          "qty": 11050
-        },
-        "pct_change": 0.0
       },
       {
         "city": "Kolkata",
@@ -3988,6 +4015,21 @@
         },
         "last_month": null,
         "pct_change": null
+      },
+      {
+        "city": "Kolkata",
+        "item": "Carrot",
+        "item_code": 107,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 41.0,
+          "qty": 354.3
+        },
+        "last_month": {
+          "avg_unit_price": 41.0,
+          "qty": 729.2
+        },
+        "pct_change": 0.0
       },
       {
         "city": "Kolkata",
@@ -4021,31 +4063,31 @@
       },
       {
         "city": "Kolkata",
-        "item": "Carrot",
-        "item_code": 107,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 41.0,
-          "qty": 336.3
-        },
-        "last_month": {
-          "avg_unit_price": 41.0,
-          "qty": 729.2
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
         "item": "Raw Green Chili",
         "item_code": 116,
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 75.0,
-          "qty": 180.7
+          "qty": 185.5
         },
         "last_month": {
           "avg_unit_price": 75.0,
           "qty": 350.7
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
+        "item": "Raw Lauki",
+        "item_code": 279,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 25.0,
+          "qty": 554.8
+        },
+        "last_month": {
+          "avg_unit_price": 25.0,
+          "qty": 988.7
         },
         "pct_change": 0.0
       },
@@ -4078,16 +4120,16 @@
       },
       {
         "city": "Kolkata",
-        "item": "Raw Lauki",
-        "item_code": 279,
+        "item": "Coriander Leaves",
+        "item_code": 115,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 25.0,
-          "qty": 506.5
+          "avg_unit_price": 100.0,
+          "qty": 121.9
         },
         "last_month": {
-          "avg_unit_price": 25.0,
-          "qty": 988.7
+          "avg_unit_price": 100.0,
+          "qty": 231.8
         },
         "pct_change": 0.0
       },
@@ -4117,21 +4159,6 @@
       },
       {
         "city": "Kolkata",
-        "item": "Coriander Leaves",
-        "item_code": 115,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 100.0,
-          "qty": 117.9
-        },
-        "last_month": {
-          "avg_unit_price": 100.0,
-          "qty": 231.8
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
         "item": "Whole Heeng",
         "item_code": 62,
         "unit": "Kg",
@@ -4153,6 +4180,21 @@
           "qty": 30
         },
         "pct_change": null
+      },
+      {
+        "city": "Kolkata",
+        "item": "Raw Mango",
+        "item_code": 133,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 85.0,
+          "qty": 134.3
+        },
+        "last_month": {
+          "avg_unit_price": 85.0,
+          "qty": 216.4
+        },
+        "pct_change": 0.0
       },
       {
         "city": "Kolkata",
@@ -4190,21 +4232,6 @@
         "last_month": {
           "avg_unit_price": 3.83,
           "qty": 2350
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
-        "item": "Raw Mango",
-        "item_code": 133,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 85.0,
-          "qty": 124.3
-        },
-        "last_month": {
-          "avg_unit_price": 85.0,
-          "qty": 216.4
         },
         "pct_change": 0.0
       },
@@ -4257,7 +4284,7 @@
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 140.0,
-          "qty": 68
+          "qty": 69
         },
         "last_month": {
           "avg_unit_price": 140.0,
@@ -4294,6 +4321,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Raw Pumpkin",
+        "item_code": 280,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 27.0,
+          "qty": 337.7
+        },
+        "last_month": {
+          "avg_unit_price": 27.0,
+          "qty": 735.6
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
         "item": "Apron Full",
         "item_code": 176,
         "unit": "Pc",
@@ -4316,21 +4358,6 @@
         "last_month": {
           "avg_unit_price": 4.36,
           "qty": 2000
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
-        "item": "Raw Pumpkin",
-        "item_code": 280,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 27.0,
-          "qty": 320.2
-        },
-        "last_month": {
-          "avg_unit_price": 27.0,
-          "qty": 735.6
         },
         "pct_change": 0.0
       },
@@ -4444,6 +4471,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Drumstick",
+        "item_code": 149,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 90.0,
+          "qty": 73.6
+        },
+        "last_month": {
+          "avg_unit_price": 90.0,
+          "qty": 122.5
+        },
+        "pct_change": 0.0
+      },
+      {
+        "city": "Kolkata",
         "item": "MT 026(2500ML) 52MM CANTAINER",
         "item_code": 393,
         "unit": "Pc",
@@ -4468,21 +4510,6 @@
           "qty": 34510
         },
         "pct_change": null
-      },
-      {
-        "city": "Kolkata",
-        "item": "Drumstick",
-        "item_code": 149,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 90.0,
-          "qty": 71.1
-        },
-        "last_month": {
-          "avg_unit_price": 90.0,
-          "qty": 122.5
-        },
-        "pct_change": 0.0
       },
       {
         "city": "Kolkata",
@@ -4513,6 +4540,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Turmeric Powder",
+        "item_code": 25,
+        "unit": "gm",
+        "this_month": {
+          "avg_unit_price": 0.39,
+          "qty": 16000
+        },
+        "last_month": {
+          "avg_unit_price": 0.33,
+          "qty": 50000
+        },
+        "pct_change": 18.2
+      },
+      {
+        "city": "Kolkata",
         "item": "Whole Cumin",
         "item_code": 32,
         "unit": "Kg",
@@ -4525,18 +4567,6 @@
           "qty": 14
         },
         "pct_change": 32.3
-      },
-      {
-        "city": "Kolkata",
-        "item": "Dry Red Chili",
-        "item_code": 40,
-        "unit": "gm",
-        "this_month": null,
-        "last_month": {
-          "avg_unit_price": 0.28,
-          "qty": 20000
-        },
-        "pct_change": null
       },
       {
         "city": "Kolkata",
@@ -4681,6 +4711,21 @@
       },
       {
         "city": "Kolkata",
+        "item": "Beans",
+        "item_code": 237,
+        "unit": "Kg",
+        "this_month": {
+          "avg_unit_price": 76.08,
+          "qty": 51.85
+        },
+        "last_month": {
+          "avg_unit_price": 78.98,
+          "qty": 92.35
+        },
+        "pct_change": -3.7
+      },
+      {
+        "city": "Kolkata",
         "item": "Mustard Seed",
         "item_code": 27,
         "unit": "Kg",
@@ -4705,18 +4750,18 @@
       },
       {
         "city": "Kolkata",
-        "item": "Beans",
-        "item_code": 237,
+        "item": "Curry Leaves",
+        "item_code": 131,
         "unit": "Kg",
         "this_month": {
-          "avg_unit_price": 76.19,
-          "qty": 47.35
+          "avg_unit_price": 72.0,
+          "qty": 49.7
         },
         "last_month": {
-          "avg_unit_price": 78.98,
-          "qty": 92.35
+          "avg_unit_price": 72.0,
+          "qty": 83.8
         },
-        "pct_change": -3.5
+        "pct_change": 0.0
       },
       {
         "city": "Kolkata",
@@ -4732,27 +4777,12 @@
       },
       {
         "city": "Kolkata",
-        "item": "Curry Leaves",
-        "item_code": 131,
-        "unit": "Kg",
-        "this_month": {
-          "avg_unit_price": 72.0,
-          "qty": 47.2
-        },
-        "last_month": {
-          "avg_unit_price": 72.0,
-          "qty": 83.8
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
         "item": "Mint leaf",
         "item_code": 451,
         "unit": "Kg",
         "this_month": {
           "avg_unit_price": 180.0,
-          "qty": 17.9
+          "qty": 19.1
         },
         "last_month": {
           "avg_unit_price": 180.0,
@@ -4921,6 +4951,21 @@
         },
         "last_month": null,
         "pct_change": null
+      },
+      {
+        "city": "Kolkata",
+        "item": "Dry Red Chili",
+        "item_code": 40,
+        "unit": "gm",
+        "this_month": {
+          "avg_unit_price": 0.3,
+          "qty": 5000
+        },
+        "last_month": {
+          "avg_unit_price": 0.28,
+          "qty": 20000
+        },
+        "pct_change": 7.1
       },
       {
         "city": "Kolkata",
@@ -5179,21 +5224,6 @@
       },
       {
         "city": "Kolkata",
-        "item": "Kashmiri Chili Powder",
-        "item_code": 34,
-        "unit": "gm",
-        "this_month": {
-          "avg_unit_price": 0.95,
-          "qty": 1000
-        },
-        "last_month": {
-          "avg_unit_price": 0.93,
-          "qty": 136000
-        },
-        "pct_change": 2.2
-      },
-      {
-        "city": "Kolkata",
         "item": "Check Cloth",
         "item_code": 153,
         "unit": "Pc",
@@ -5362,21 +5392,6 @@
       },
       {
         "city": "Kolkata",
-        "item": "Turmeric Powder",
-        "item_code": 25,
-        "unit": "gm",
-        "this_month": {
-          "avg_unit_price": 0.33,
-          "qty": 1000
-        },
-        "last_month": {
-          "avg_unit_price": 0.33,
-          "qty": 50000
-        },
-        "pct_change": 0.0
-      },
-      {
-        "city": "Kolkata",
         "item": "Dry Mop",
         "item_code": 375,
         "unit": "Pc",
@@ -5445,10 +5460,10 @@
   },
   "notes": [
     "Delhi costs run higher than Kolkata on purpose; compare each city only to its own baseline.",
-    "as_of is the latest goods-received date covered (2026-11-21), not necessarily calendar today.",
+    "as_of is the latest goods-received date covered (2026-11-22), not necessarily calendar today.",
     "yesterday_grn values are line totals (qty × unit price), before entry-level discounts and rounding.",
-    "this_month average unit prices are quantity-weighted from per-day command-upload lines through 2026-11-21. last_month uses a full calendar-month Purchase Summary Item Wise when one exists; otherwise the days actually on file, with gaps listed in coverage.",
+    "this_month average unit prices are quantity-weighted from per-day command-upload lines through 2026-11-22. last_month uses a full calendar-month Purchase Summary Item Wise when one exists; otherwise the days actually on file, with gaps listed in coverage.",
     "above_average lists items flagged more than 10% above the own-city period average in the last 7 days.",
-    "Latest digest: daily_procurement_digest_22Nov2026.txt."
+    "Latest digest: daily_procurement_digest_23Nov2026.txt."
   ]
 }

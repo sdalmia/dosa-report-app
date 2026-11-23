@@ -1,30 +1,30 @@
 {
-  "as_of_date": "2026-11-21",
+  "as_of_date": "2026-11-23",
   "current_month": "2026-11",
-  "completed_actual_days": 21,
-  "mtd_actual_L": 299.8,
-  "mtd_pred_mid_L": 299.5,
-  "mom_net_pct": -13.3,
-  "mom_note": "MoM -13.3% on daily average: Nov 1–21 net ₹299.80L / 21 = ₹14.28L vs observed Oct 2–31 ₹494.04L / 30 = ₹16.47L. Not full-calendar October: 1 Oct net missing.",
-  "actuals_through": "2026-11-21",
-  "mtd_actual_rupees": "29980458.66",
-  "target_pace_pct": 83.6,
-  "target_pace_note": "Nov 1–21 target pace: net ₹299.80L / pro-rata ₹358.75L. November target ₹512.5L.",
+  "completed_actual_days": 22,
+  "mtd_actual_L": 320.3,
+  "mtd_pred_mid_L": 317.5,
+  "mom_net_pct": -11.6,
+  "mom_note": "MoM -11.6% on daily average: Nov 1–22 net ₹320.30L / 22 = ₹14.56L vs observed Oct 2–31 ₹494.04L / 30 = ₹16.47L. Not full-calendar October: 1 Oct net missing.",
+  "actuals_through": "2026-11-22",
+  "mtd_actual_rupees": "32030327.83",
+  "target_pace_pct": 85.2,
+  "target_pace_note": "Nov 1–22 target pace: net ₹320.30L / pro-rata ₹375.83L. November target ₹512.5L.",
   "regional_mtd": {
     "East": {
-      "net_rupees": "15970750.76",
-      "net_L": 159.71,
+      "net_rupees": "17081374.90",
+      "net_L": 170.81,
       "target_L": 257.5,
-      "pro_rata_L": 180.25,
-      "pace_pct": 88.6
+      "pro_rata_L": 188.83,
+      "pace_pct": 90.5
     },
     "North": {
-      "net_rupees": "14009708.21",
-      "net_L": 140.1,
+      "net_rupees": "14948952.93",
+      "net_L": 149.49,
       "target_L": 255.0,
-      "pro_rata_L": 178.5,
-      "pace_pct": 78.5
+      "pro_rata_L": 187.0,
+      "pace_pct": 79.9
     }
   },
-  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-21.csv (_DONE present) for 21 Nov."
+  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-22.csv (_DONE present) for 22 Nov."
 }
