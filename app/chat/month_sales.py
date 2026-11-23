@@ -170,8 +170,12 @@ def _sales_by_store():
                 )
     folder = _ROOT / "data" / "posist" / "daily_sales"
     if folder.is_dir():
+        from app.chat.correctness import drop_pending
+
         for path in sorted(folder.glob("sales_*.csv")):
             stamp = _day(path.stem.replace("sales_", ""))
+            if stamp is not None and drop_pending(stamp):
+                continue
             with path.open(newline="", encoding="utf-8-sig") as handle:
                 for raw in csv.DictReader(handle):
                     put(
@@ -186,7 +190,12 @@ def _sales_by_store():
 
 
 def _insights_net():
-    """City and network net by day, from Posist Insights notes and network CSV files."""
+    """City net from Insights notes. Network net only from actual_net_L.
+
+    A daily_sales drop without its _DONE marker is left out. It is not a loaded day.
+    """
+    from app.chat.correctness import drop_pending
+
     days = {}
     path = _ROOT / "data" / "posist" / "sales_pred_vs_actual.csv"
     pattern = re.compile(r"East ₹([0-9.]+)L \+ North ₹([0-9.]+)L")
@@ -194,7 +203,7 @@ def _insights_net():
         with path.open(newline="", encoding="utf-8-sig") as handle:
             for raw in csv.DictReader(handle):
                 day = _day(raw.get("date"))
-                if day is None:
+                if day is None or drop_pending(day):
                     continue
                 row = days.setdefault(day, {"East": None, "North": None, "Network": None})
                 network = _num(raw.get("actual_net_L"))
@@ -210,7 +219,7 @@ def _insights_net():
             with path.open(newline="", encoding="utf-8-sig") as handle:
                 for raw in csv.DictReader(handle):
                     day = _day(raw.get("date")) or _day(path.stem.replace("network_", ""))
-                    if day is None:
+                    if day is None or drop_pending(day):
                         continue
                     region = (raw.get("region") or "").strip()
                     net = _num(raw.get("net"))
@@ -219,7 +228,8 @@ def _insights_net():
                     row = days.setdefault(day, {"East": None, "North": None, "Network": None})
                     if region in {"East", "North"}:
                         row[region] = net
-                    elif region in {"Total", "Network", ""}:
+                    elif region in {"Total", "Network", ""} and row.get("Network") is None:
+                        # Network daily net stays on actual_net_L when that cell is present.
                         row["Network"] = net
     return days
 
@@ -424,7 +434,9 @@ def packet(question=""):
         "Store-level net is blank unless a net cell is in the file. "
         "The 24.78% Swiggy/Zomato charge is on net delivery bills only and is not a way to invent store net from gross.",
         "Source for gross and bills: Posist daily sales (posist_daily.csv, with dated sales_*.csv overlays for the same store). "
-        "Source for city net: Posist Insights notes in sales_pred_vs_actual.csv, and network_*.csv where those files exist. "
+        "Source for network daily net: sales_pred_vs_actual.csv actual_net_L only. "
+        "Store rows are gross, not net. A daily_sales day without its _DONE marker is not in yet. "
+        "Source for city net: Posist Insights notes in sales_pred_vs_actual.csv. "
         "Grand Economics has no October 2026.",
     ]
     for year, month in available:

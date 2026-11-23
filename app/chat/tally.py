@@ -107,7 +107,7 @@ def coverage_line(rows):
     return (
         "Coverage: "
         + ", ".join(bits)
-        + f". Last date in the file is {last.strftime('%-d %b %Y')}. Nothing after that date. "
+        + f". Books run through {last.strftime('%-d %b %Y')}. Nothing after that date. "
         "A day with no rows is missing, not zero."
     )
 
@@ -189,7 +189,9 @@ def _party(row):
 
 
 def answer(question, role):
-    if role not in {"owner", "finance"}:
+    from app.chat.guard import can_see_books
+
+    if not can_see_books(role, role == "owner"):
         return {"text": "Tally is not included for this role.", "table": None, "as_of": ""}
     rows = load_vouchers()
     if not rows:

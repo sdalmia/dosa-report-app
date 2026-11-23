@@ -184,8 +184,14 @@ def _profit(data, question, owner):
     parts = []
     for card in cards[:2]:
         parts.append(f"{card['kicker']} {card['value']}")
+    from app.chat.correctness import provisional_line
+
+    note = provisional_line(data.get("role") or "", owner)
+    body = "Latest EBITDA: " + ". ".join(parts) + "."
+    if note:
+        body += " " + note
     return _pack(
-        "Latest EBITDA: " + ". ".join(parts) + ".",
+        body,
         cards[0]["kicker"],
         "finance",
         question,
@@ -548,9 +554,12 @@ def _tracker_line(folded):
         return None
     latest = rows[0]
     day = latest.date.isoformat() if latest.date else ""
+    from app.chat.correctness import tracker_through_line
+
     text = (
         f"{latest.ingredient_name} was {_rupee(latest.unit_price)} "
-        f"on {_as_of(day)} in the ingredient tracker."
+        f"on {_as_of(day)} in the ingredient tracker. "
+        f"{tracker_through_line()}"
     )
     return text, {
         "tracker": [{
@@ -727,7 +736,9 @@ def _delivery_answer(question, data, owner):
             "That illustration is the rule, not a store bill. "
             "Contribution is that realisation minus food cost (raw + semi) minus packaging."
         )
-    if (data.get("role") in {"owner", "finance"} or owner) and "margin" in (question or "").casefold():
+    from app.chat.guard import can_see_pl
+
+    if can_see_pl(data.get("role") or "", owner) and "margin" in (question or "").casefold():
         lines.append(
             "Grand Economics has a booked commission line for some months. "
             "That is not a Swiggy or Zomato payout file, so it is not used as the gap versus 24.78%."
@@ -775,6 +786,10 @@ def _dispatch(question, data, owner):
     folded = text.casefold()
     if not text:
         return _pack("Ask a question.", "", "sales", text, owner)
+    from app.chat.guard import asks_for_guest_list, guest_refusal
+
+    if asks_for_guest_list(text):
+        return _pack(guest_refusal(), "", "reelo", text, owner)
     if _asks_delivery_economics(text):
         return _delivery_answer(text, data, owner)
     from app.chat.licences import allowed as _licence_role
@@ -846,7 +861,10 @@ def _dispatch(question, data, owner):
             return answered
     if store_answer is not None:
         return store_answer
-    see_finance = (data.get("role") in {"owner", "finance"}) or (data.get("role") is None and owner)
+    from app.chat.guard import can_see_pl
+
+    role = data.get("role") or ("owner" if owner else "ops")
+    see_finance = can_see_pl(role, owner)
     if any(word in folded for word in ("profit", "ebitda", "tally", "bank payment", "salary")):
         if "phone" not in folded:
             return _profit(data, text, see_finance)
@@ -884,7 +902,7 @@ def _dispatch(question, data, owner):
 
 
 def answer_from_data(question, data, owner):
-    """The file answer. Analytic questions also get Why, causes, and next steps."""
+    """The file answer. Analytic questions get the partner note. A short lookup can get one Worth noting line."""
     from app.chat.reasoned import attach
 
     return attach(_dispatch(question, data, owner), question, data, owner)

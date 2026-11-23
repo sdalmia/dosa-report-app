@@ -1353,6 +1353,25 @@ body.cc-sheet-open { overflow: hidden; }
   100% { background-position: -100% 0; }
 }
 
+.cc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.cc-act {
+  min-height: 40px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line, rgba(0, 0, 0, 0.12));
+  background: var(--surface, #fff);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.cc-act:hover { background: var(--surface-2); }
+@media (max-width: 640px) {
+  .cc-act { flex: 1 1 calc(50% - 8px); }
+}
+
 .cc-follow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .cc-follow .cc-chip {
   min-height: 36px;

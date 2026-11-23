@@ -75,10 +75,11 @@ class ChatAnswerTests(unittest.TestCase):
         self.assertNotIn("EBITDA", answer["text"])
         self.assertEqual(ops["finance"], [])
 
-    def test_finance_role_can_see_profit(self):
+    def test_finance_role_does_not_see_profit_unless_listed(self):
         finance = view_for(role="finance")
         answer = answer_from_data("What's each company's profit this month?", finance, False)
-        self.assertIn("EBITDA", answer["text"])
+        self.assertNotIn("EBITDA", answer["text"])
+        self.assertIn("only on the owner login", answer["text"])
         self.assertEqual(finance["dossiers"][next(iter(finance["dossiers"]))]["hr"], None)
 
     def test_a_made_up_chart_number_is_dropped(self):
@@ -159,14 +160,18 @@ class BotApiTests(unittest.TestCase):
         self.assertTrue(all(row["why"] and row["owner"] and row["urgency"] for row in actions))
         self.assertNotIn("Shilajit", " ".join(row["owner"] for row in actions))
 
-    def test_finance_key_can_read_profit(self):
+    def test_finance_key_can_read_profit_when_the_role_is_listed(self):
         who = authenticate("Bearer " + self.finance)
         self.assertEqual(who["role"], "finance")
-        response = self.client.post(
-            "/api/ask",
-            json={"question": "What's each company's profit this month?"},
-            headers={"Authorization": "Bearer " + self.finance},
-        )
+        os.environ["WIZARD_PL_ROLES"] = "owner,finance"
+        try:
+            response = self.client.post(
+                "/api/ask",
+                json={"question": "What's each company's profit this month?"},
+                headers={"Authorization": "Bearer " + self.finance},
+            )
+        finally:
+            os.environ.pop("WIZARD_PL_ROLES", None)
         self.assertIn("EBITDA", response.get_json()["answer"])
 
 
