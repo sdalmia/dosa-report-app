@@ -56,6 +56,7 @@ SALES_DATA_LINE = {
     date(2026, 11, 3): "4 Nov 2026, 3:58 pm IST (sales through 3 Nov)",
     date(2026, 11, 8): "9 Nov 2026, 11:34 am IST (sales through 8 Nov)",
     date(2026, 11, 15): "16 Nov 2026, 10:32 am IST (sales through 15 Nov)",
+    date(2026, 11, 22): "23 Nov 2026, 10:35 am IST (sales through 22 Nov)",
 }
 # File arrived 5 Nov 2026, 05:12 UTC. October has no one-pager brand row.
 AUDIT_UPDATED = {(2026, 10): "5 Nov 2026, 10:42 am IST"}

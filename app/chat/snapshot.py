@@ -41,7 +41,8 @@ def _stamp():
         _ROOT / "data" / "store_health" / "mystery_audit.csv",
         _ROOT / "data" / "famepilot" / "tickets.csv",
         _ROOT / "data" / "famepilot" / "tickets_source_detail.csv",
-        _ROOT / "data" / "famepilot" / "weekly_summary_2026-11-16.csv",
+        _ROOT / "data" / "famepilot" / "tickets_2026-11-16_to_22.csv",
+        _ROOT / "data" / "famepilot" / "weekly_summary_2026-11-23.csv",
         _ROOT / "data" / "store_health" / "keka.csv",
         _ROOT / "data" / "reelo" / "reelo_storewise_latest.csv",
         _ROOT / "data" / "finance" / "grand_economics" / "summary.json",
@@ -350,7 +351,7 @@ def _tickets():
         "as_of": newest_day.isoformat() if newest_day else "",
         "age_days": age_days,
         "older_than_7": age_days is not None and age_days > 7,
-        "coverage": "1 Sep to 9 Oct, and 2 to 15 Nov. 10 Oct to 1 Nov is not loaded.",
+        "coverage": "1 Sep–9 Oct, and 2–22 Nov. 10 Oct–1 Nov is not loaded.",
         "weekly": _weekly_ticket_rows(),
         "all": pack(cases),
         "stores": stores,
@@ -358,7 +359,7 @@ def _tickets():
 
 
 def _weekly_ticket_rows():
-    path = _ROOT / "data" / "famepilot" / "weekly_summary_2026-11-16.csv"
+    path = _ROOT / "data" / "famepilot" / "weekly_summary_2026-11-23.csv"
     if not path.is_file():
         return []
     import csv

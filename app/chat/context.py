@@ -259,12 +259,12 @@ def _tickets_block(tickets):
     lines = [
         f"Famepilot tickets. Newest ticket date: {tickets.get('as_of') or 'unknown'}."
         + (" This is more than 7 days old." if tickets.get("older_than_7") else ""),
-        "Coverage is 1 Sep to 9 Oct, and 2 to 15 Nov. 10 Oct to 1 Nov is not loaded.",
+        "Coverage is 1 Sep–9 Oct, and 2–22 Nov. 10 Oct–1 Nov is not loaded.",
         "Stale means the ticket keyword is Stale. Share is a percent of that store's tickets.",
     ]
     weekly = tickets.get("weekly") or []
     if weekly:
-        lines.append("Weekly counts, copied from the 16 Nov summary:")
+        lines.append("Weekly counts, copied from the 23 Nov summary:")
         for row in weekly:
             stale = row.get("stale") or "blank"
             lines.append(
