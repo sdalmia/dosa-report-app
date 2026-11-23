@@ -1,32 +1,30 @@
 {
-  "as_of_date": "2026-11-15",
+  "as_of_date": "2026-11-23",
   "current_month": "2026-11",
-  "completed_actual_days": 15,
-  "mtd_actual_L": 224.36,
-  "mtd_pred_mid_L": 216.0,
-  "mom_net_pct": -9.2,
-  "mom_note": "MoM -9.2% on daily average: Nov 1\u201315 net \u20b9224.36L / 15 = \u20b914.96L vs observed Oct 2\u201331 \u20b9494.04L / 30 = \u20b916.47L. Not full-calendar October: 1 Oct net missing.",
-  "actuals_through": "2026-11-15",
-  "mtd_actual_rupees": "22435833.32",
-  "mtd_source_note": "Exact network CSV rupees; daily calendar cells rounded to \u20b9L.",
-  "target_pace_pct": 87.6,
-  "target_pace_note": "Nov 1\u201315 target pace: net \u20b9224.36L / pro-rata \u20b9256.25L. November target \u20b9512.5L.",
+  "completed_actual_days": 22,
+  "mtd_actual_L": 320.3,
+  "mtd_pred_mid_L": 317.5,
+  "mom_net_pct": -11.6,
+  "mom_note": "MoM -11.6% on daily average: Nov 1–22 net ₹320.30L / 22 = ₹14.56L vs observed Oct 2–31 ₹494.04L / 30 = ₹16.47L. Not full-calendar October: 1 Oct net missing.",
+  "actuals_through": "2026-11-22",
+  "mtd_actual_rupees": "32030327.83",
+  "target_pace_pct": 85.2,
+  "target_pace_note": "Nov 1–22 target pace: net ₹320.30L / pro-rata ₹375.83L. November target ₹512.5L.",
   "regional_mtd": {
     "East": {
-      "net_rupees": "12144683.24",
-      "net_L": 121.45,
+      "net_rupees": "17081374.90",
+      "net_L": 170.81,
       "target_L": 257.5,
-      "pro_rata_L": 128.75,
-      "pace_pct": 94.3
+      "pro_rata_L": 188.83,
+      "pace_pct": 90.5
     },
     "North": {
-      "net_rupees": "10291150.06",
-      "net_L": 102.91,
+      "net_rupees": "14948952.93",
+      "net_L": 149.49,
       "target_L": 255.0,
-      "pro_rata_L": 127.5,
-      "pace_pct": 80.7
+      "pro_rata_L": 187.0,
+      "pace_pct": 79.9
     }
   },
-  "october_observed_2_to_31_net_L": 494.04,
-  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-15.csv (_DONE present) for 15 Nov; earlier days per prior provenance."
+  "provenance": "Alfred Posist Insights daily_sales/network_2026-11-22.csv (_DONE present) for 22 Nov."
 }
