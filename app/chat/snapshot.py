@@ -239,6 +239,22 @@ def _store_windows(feeds):
     latest_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
     week_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
     mtd_rows.sort(key=lambda row: row["gross"] or 0, reverse=True)
+    daily_dates = [latest - timedelta(days=offset) for offset in range(13, -1, -1)]
+    daily_rows = []
+    for store, series in grouped.items():
+        by_day = {day: row for day, row in series}
+        values = []
+        for day in daily_dates:
+            row = by_day.get(day)
+            gross = None if row is None else row.get("gross")
+            values.append(None if gross is None else round(float(gross), 2))
+        if any(value is not None for value in values):
+            daily_rows.append({
+                "store": store,
+                "region": regions.get(store) or "",
+                "gross": values,
+            })
+    daily_rows.sort(key=lambda row: row["store"].casefold())
     return {
         "latest": latest.isoformat(),
         "week_start": week_start.isoformat(),
@@ -246,6 +262,8 @@ def _store_windows(feeds):
         "latest_rows": latest_rows,
         "week_rows": week_rows,
         "mtd_rows": mtd_rows,
+        "daily_dates": [day.isoformat() for day in daily_dates],
+        "daily_rows": daily_rows,
     }
 
 
