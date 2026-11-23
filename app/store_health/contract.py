@@ -190,6 +190,7 @@ ALLOWED_STATUS = {
     "provisional",
     "closed",
     "awaiting_alfred_drop",
+    "awaiting_network_band",
 }
 
 
@@ -393,7 +394,7 @@ def load_calendar(directory=None):
                                 "Expected pending, actual, actual_provisional_eod, "
                                 "share_of_network_band, not_on_deployment_report, "
                                 "actual_gross_filled, actual_gross_filled_provisional, provisional, closed, "
-                                "or awaiting_alfred_drop.",
+                                "awaiting_alfred_drop, or awaiting_network_band.",
                             )
                     else:
                         parsed[field] = text

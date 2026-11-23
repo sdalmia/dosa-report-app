@@ -1,0 +1,39 @@
+window,split,key,tickets,stale
+2026-11-16_to_22,store,01/0014_Dosa Coffee_Kalikapur,4,4
+2026-11-16_to_22,store,02/2003_Dosa Coffee_Paschim Vihar,2,2
+2026-11-16_to_22,store,02/0001 / Dosa Coffee-Noida Sec18,2,1
+2026-11-16_to_22,store,02/0011_Dosa Coffee - Pacific Jasola,1,1
+2026-11-16_to_22,store,01/0013 / Dosa Coffee-New Town Cloud Kitchen,1,0
+2026-11-16_to_22,store,01/0011_Dosa Coffee_Jameslong Behala,1,0
+2026-11-16_to_22,store,01/0001/ Dosa Coffee - Ideal Plaza,1,0
+2026-11-16_to_22,store,02/0013_Dosa Coffee - Model Town,1,0
+2026-11-16_to_22,store,02/2008/ Dosa Coffee_Rohini Sec-7,1,0
+2026-11-16_to_22,channel,zomato,5,0
+2026-11-16_to_22,channel,swiggy,8,7
+2026-11-16_to_22,channel,other,1,1
+2026-11-16_to_22,total,all,14,8
+2026-11-09_to_15,store,02/2008/ Dosa Coffee_Rohini Sec-7,3,3
+2026-11-09_to_15,store,01/0011_Dosa Coffee_Jameslong Behala,2,2
+2026-11-09_to_15,store,01/2012_Dosa Coffee- Santoshpur,1,1
+2026-11-09_to_15,store,02/0012_Dosa Coffee - Connaught Place,1,1
+2026-11-09_to_15,store,01/0009 / Dosa Coffee - Saltlake - Sec1,1,1
+2026-11-09_to_15,store,02/0010/Dosa Coffee- Gurgaon Sec-15,1,1
+2026-11-09_to_15,store,01/0013 / Dosa Coffee-New Town Cloud Kitchen,2,0
+2026-11-09_to_15,store,02/0013_Dosa Coffee - Model Town,1,0
+2026-11-09_to_15,channel,zomato,5,4
+2026-11-09_to_15,channel,swiggy,6,4
+2026-11-09_to_15,channel,other,1,1
+2026-11-09_to_15,total,all,12,9
+2026-11-02_to_08,store,02/0001 / Dosa Coffee-Noida Sec18,3,2
+2026-11-02_to_08,store,02/0009_Dosa Coffee - Gurgaon DLF,2,2
+2026-11-02_to_08,store,01/0013 / Dosa Coffee-New Town Cloud Kitchen,2,1
+2026-11-02_to_08,store,01/0011_Dosa Coffee_Jameslong Behala,1,1
+2026-11-02_to_08,store,02/2008/ Dosa Coffee_Rohini Sec-7,1,1
+2026-11-02_to_08,store,02/2003_Dosa Coffee_Paschim Vihar,1,1
+2026-11-02_to_08,store,02/0013_Dosa Coffee - Model Town,1,0
+2026-11-02_to_08,channel,zomato,8,5
+2026-11-02_to_08,channel,swiggy,3,3
+2026-11-02_to_08,channel,other,0,0
+2026-11-02_to_08,total,all,11,8
+2026-09-01_to_10-09_baseline,total,all,81,48
+2026-09-01_to_10-09_baseline,channel,zomato+swiggy,78,

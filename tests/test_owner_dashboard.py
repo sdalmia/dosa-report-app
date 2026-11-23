@@ -208,9 +208,9 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = page(self.client, "/board")
-        self.assertEqual(view["window_subtitle"], "10 Oct – 8 Nov · vs last Sunday")
+        self.assertEqual(view["window_subtitle"], "24 Oct – 22 Nov · vs last Sunday")
         self.assertIn("Gross", html)
-        self.assertIn("10 Oct – 8 Nov · vs last Sunday", html)
+        self.assertIn("24 Oct – 22 Nov · vs last Sunday", html)
         self.assertIn("The report was likely pulled before close.", html)
         self.assertNotIn("Protest-affected", html)
         self.assertNotIn("Status unknown", html)
@@ -218,10 +218,14 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertNotIn("39281", html)
         bill_alerts = " ".join(alert["text"] for alert in view["alerts"] if alert["kind"] == "Bills")
         self.assertIn(
-            "Connaught place (02/0012): bills -60.28% versus the same weekday last week.",
+            "Gurgaon Sec 10 (02/0014): bills -20.51% versus the same weekday last week.",
             bill_alerts,
         )
-        self.assertEqual(bill_alerts.count(": bills "), 13)
+        self.assertIn(
+            "Pacific mall, Jasola (02/0011): bills -16.89% versus the same weekday last week.",
+            bill_alerts,
+        )
+        self.assertEqual(bill_alerts.count(": bills "), 2)
         self.assertNotIn("Rosedale", bill_alerts)
         self.assertNotIn("Food Truck", bill_alerts)
         self.assertNotIn("Faridabad", bill_alerts)
@@ -239,7 +243,7 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertIn("See all stores", html)
         self.assertIn("See procurement", html)
         self.assertIn("₹20,90,655.02", html)
-        self.assertIn("15 Nov 2026", html)
+        self.assertIn("22 Nov 2026", html)
         self.assertLessEqual(html.count('class="league-row"'), 10)
         self.assertLessEqual(html.count('class="alert-row"'), 5)
         self.assertEqual(html.count('<article class="tile">'), min(3, len(view["procurement"])))

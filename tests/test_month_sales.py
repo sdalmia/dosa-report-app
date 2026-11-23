@@ -197,8 +197,8 @@ class MonthSalesTests(unittest.TestCase):
         ))
         # Existing pace answer for this month is unchanged.
         pace = answer_from_data("How are we tracking against this month's target?", self.ops, False)
-        self.assertIn("84.3%", pace["text"])
-        self.assertEqual(pace["as_of"], "12 Nov 2026")
+        self.assertIn("85.2%", pace["text"])
+        self.assertEqual(pace["as_of"], "23 Nov 2026")
 
     def test_prompt_with_month_sales_stays_under_the_token_cap(self):
         text = build_context(

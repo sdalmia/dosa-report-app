@@ -23,13 +23,13 @@ class InsightCardTests(unittest.TestCase):
         self.assertNotIn("Dosa Coffee", first["title"])
         self.assertEqual(
             first["line"],
-            "Sales down ₹1.76L vs the week before (6–12 Nov vs 30 Oct–5 Nov)",
+            "Sales down ₹2.07L vs the week before (16–22 Nov vs 9–15 Nov)",
         )
-        self.assertEqual(first["title"], "Gurgaon DLF")
+        self.assertEqual(first["title"], "Salt Lake Sec-1")
         self.assertNotIn("not in the file", first["line"])
         self.assertTrue(first["question"].startswith("Why are "))
         gaps, label = _weekly_gaps()
-        self.assertEqual(label, "6–12 Nov vs 30 Oct–5 Nov")
+        self.assertEqual(label, "16–22 Nov vs 9–15 Nov")
         self.assertTrue(all(row["days"] == 7 for row in gaps))
         connaught = next(row for row in gaps if row["display"] == "Connaught Place")
         self.assertEqual(connaught["days"], 7)
@@ -39,7 +39,7 @@ class InsightCardTests(unittest.TestCase):
 
     def test_growth_uses_the_same_window(self):
         text = growth_text()
-        self.assertIn("6–12 Nov vs 30 Oct–5 Nov", text)
+        self.assertIn("16–22 Nov vs 9–15 Nov", text)
         self.assertNotIn("not in the file", text)
         self.assertNotIn("2026-11-02–2026-11-08", text)
         self.assertIn("down ₹", text)
@@ -60,8 +60,8 @@ class InsightCardTests(unittest.TestCase):
         html = client.get("/dashboard").get_data(as_text=True)
         self.assertIn('class="cc-today"', html)
         self.assertIn('class="cc-insight"', html)
-        self.assertIn("Why are Gurgaon DLF sales down versus the week before?", html)
-        self.assertIn("Why are Connaught Place sales down versus the week before?", html)
+        self.assertIn("Why are Salt Lake Sec-1 sales down versus the week before?", html)
+        self.assertIn("Why are Ideal Plaza sales down versus the week before?", html)
         self.assertIn("9 licences expired, 3 expire in 30 days", html)
         self.assertNotIn("not in the file", html)
         self.assertNotIn("Trend Connaught", html)

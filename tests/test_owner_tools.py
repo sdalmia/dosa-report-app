@@ -384,8 +384,8 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertTrue(forum["mall_bills"])
         self.assertIsNone(forum["apb"]["value"])
         self.assertIsNone(forum["bills_change_pct"]["value"])
-        self.assertLessEqual(len(payload["worst_vs_mid"]), 5)
-        self.assertGreater(len(payload["worst_vs_mid"]), 0)
+        self.assertEqual(payload["worst_vs_mid"], [])
+        self.assertEqual(payload["worst_vs_mid_empty"], "No store has both sales and a forecast for this day.")
         variances = [item["variance_pct"]["value"] for item in payload["worst_vs_mid"]]
         self.assertEqual(variances, sorted(variances))
         week = [item["variance_pct"]["value"] for item in payload["worst_vs_last_week"]]
@@ -415,7 +415,7 @@ class ShippedOwnerTests(unittest.TestCase):
         email = self.client.get("/brief/email").get_data(as_text=True)
         self.assertNotIn("Nothing is sent", email)
         self.assertIn("Gross sales", email)
-        self.assertEqual(payload["as_of"], "2026-11-08")
+        self.assertEqual(payload["as_of"], "2026-11-22")
         from datetime import date
         from app.store_health.day_notes import badge_for
 
@@ -437,13 +437,13 @@ class ShippedOwnerTests(unittest.TestCase):
         self.assertIn("Left out", fame)
         self.assertNotIn("Score 0.0", fame)
         connaught = scorecard.split('data-store="Connaught place (02/0012)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("85 bills on Sun 8 Nov 2026 vs 214 on Sun 1 Nov 2026.", connaught)
+        self.assertIn("252 bills on Sun 22 Nov 2026 vs 243 on Sun 15 Nov 2026.", connaught)
         self.assertNotIn("left out of the bill comparison", connaught)
         dlf = scorecard.split('data-store="Gurgaon DLF (02/0009)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("121 bills on Sun 8 Nov 2026 vs 119 on Sun 1 Nov 2026.", dlf)
+        self.assertIn("118 bills on Sun 22 Nov 2026 vs 110 on Sun 15 Nov 2026.", dlf)
         self.assertNotIn("left out of the bill comparison", dlf)
         truck = scorecard.split('data-store="Dosa Coffee - Food Truck - 1 (0008)"', 1)[1].split("</article>", 1)[0]
-        self.assertIn("Sun 8 Nov 2026 has no bills figure.", truck)
+        self.assertIn("Sun 22 Nov 2026 has no bills figure.", truck)
         feeds = load_feeds()
         for label in (
             "Gurgaon DLF (02/0009)",

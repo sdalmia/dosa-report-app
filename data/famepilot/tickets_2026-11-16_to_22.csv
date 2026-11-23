@@ -1,0 +1,15 @@
+date_time,store,platform,rating,keyword,type,message_id,week
+2026-11-16 11:07,01/0013 / Dosa Coffee-New Town Cloud Kitchen,zomato,1,raw,review,1a1e67b63d321013,2026-11-16_to_22
+2026-11-16 16:48,01/0011_Dosa Coffee_Jameslong Behala,swiggy,1,"poisoning,pain",review,1a1e568f159d0242,2026-11-16_to_22
+2026-11-17 14:22,02/2003_Dosa Coffee_Paschim Vihar,swiggy,,Stale,complaint,1a1e8d7f7906eab4,2026-11-16_to_22
+2026-11-17 14:34,02/2003_Dosa Coffee_Paschim Vihar,swiggy,1,Stale,review,1a1ea8f50480b09f,2026-11-16_to_22
+2026-11-17 14:36,01/0014_Dosa Coffee_Kalikapur,swiggy,,Stale,complaint,1a1e9b3c7540ffda,2026-11-16_to_22
+2026-11-18 07:00,01/0001/ Dosa Coffee - Ideal Plaza,zomato,1,cockroach,review,1a1f0c80ac6f16db,2026-11-16_to_22
+2026-11-18 11:14,02/0001 / Dosa Coffee-Noida Sec18,swiggy,,Stale,complaint,1a1edfe0166d41c0,2026-11-16_to_22
+2026-11-18 20:00,02/0001 / Dosa Coffee-Noida Sec18,zomato,1,infection,review,1a1f0c811fde48b3,2026-11-16_to_22
+2026-11-19 20:04,01/0014_Dosa Coffee_Kalikapur,swiggy,,Stale,complaint,1a1f4dc46bd3a9ba,2026-11-16_to_22
+2026-11-19 21:59,02/0011_Dosa Coffee - Pacific Jasola,google,1,Stale,review,1a1f549998275e62,2026-11-16_to_22
+2026-11-21 14:06,01/0014_Dosa Coffee_Kalikapur,swiggy,,Stale,complaint,1a1fd7139c24e7c0,2026-11-16_to_22
+2026-11-21 14:12,02/0013_Dosa Coffee - Model Town,zomato,1,rotten,review,1a2003b371c575d8,2026-11-16_to_22
+2026-11-21 22:12,02/2008/ Dosa Coffee_Rohini Sec-7,zomato,1,hair,review,1a2003b3154b037f,2026-11-16_to_22
+2026-11-22 12:36,01/0014_Dosa Coffee_Kalikapur,swiggy,,"Stale,paper",complaint,1a20297aaf25b9b1,2026-11-16_to_22
