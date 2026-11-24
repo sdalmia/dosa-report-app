@@ -253,9 +253,25 @@ def api_ask():
 @login_required
 def chat_export():
     from app.chat.extras import pdf_bytes, png_bytes, workbook_bytes
+    from app.chat.report import asks_for_file, build_report, render_pdf, render_xlsx
 
     payload = request.get_json(silent=True) or {}
     kind = str(payload.get("format") or "pdf")
+    question = str(payload.get("question") or "")
+    if payload.get("rebuild") and asks_for_file(question):
+        from app.chat.snapshot import view_for
+        email = signed_in_email()
+        data = view_for(email)
+        report = build_report(question, data, is_owner(email), "", generated_by=email or "")
+        if kind == "xlsx":
+            body = render_xlsx(report)
+            mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            name = "wizard.xlsx"
+        else:
+            body = render_pdf(report)
+            mime = "application/pdf"
+            name = "wizard.pdf"
+        return Response(body, mimetype=mime, headers={"Content-Disposition": f"attachment; filename={name}"})
     title = str(payload.get("title") or "Dosa Coffee Wizard")[:120]
     columns = payload.get("columns") or ["Line"]
     rows = payload.get("rows") or [[str(payload.get("text") or "")[:2000]]]

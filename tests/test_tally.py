@@ -1,4 +1,4 @@
-"""Tally day book answers stay on the owner and finance roles."""
+"""Tally day book answers stay on the owner login."""
 
 import unittest
 
@@ -26,8 +26,13 @@ class TallyTests(unittest.TestCase):
         self.assertIsNotNone(answer["table"])
         self.assertLessEqual(len(answer["table"]["rows"]), 10)
 
-    def test_kolkata_october_top_payment_is_the_epf_line(self):
+    def test_finance_role_does_not_see_the_day_book(self):
         answer = answer_from_data("Top 10 payments in Kolkata in October", view_for(role="finance"), False)
+        self.assertIn("not included", answer["text"].casefold())
+        self.assertNotIn("1,337,943", answer["text"])
+
+    def test_kolkata_october_top_payment_is_the_epf_line(self):
+        answer = answer_from_data("Top 10 payments in Kolkata in October", view_for(role="owner"), True)
         self.assertIn("₹1,337,943.00", answer["text"])
         self.assertIn("EPF", answer["text"])
         self.assertEqual(len(answer["table"]["rows"]), 10)

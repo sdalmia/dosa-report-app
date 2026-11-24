@@ -4,6 +4,17 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+
+def resolve_database_uri(url=None):
+    """Read the database URL when the app is created, not only at import."""
+    raw = url if url is not None else os.getenv("DATABASE_URL", "sqlite:///app.db")
+    for prefix in ("postgres://", "postgresql://", "postgresql+psycopg://"):
+        if raw.startswith(prefix):
+            raw = "postgresql+psycopg2://" + raw[len(prefix):]
+            break
+    return raw
+
+
 class Config:
     # Production stays off Flask debug. OAuth libraries log tokens at DEBUG.
     DEBUG = False
@@ -13,15 +24,11 @@ class Config:
     UPLOAD_FOLDER = 'uploads'
     OUTPUT_FOLDER = 'outputs'
 
-    # Database
-    _db_url = os.getenv("DATABASE_URL", "sqlite:///app.db")
-    # Pin the psycopg2 driver explicitly (newer SQLAlchemy defaults to psycopg 3).
-    for _prefix in ("postgres://", "postgresql://", "postgresql+psycopg://"):
-        if _db_url.startswith(_prefix):
-            _db_url = "postgresql+psycopg2://" + _db_url[len(_prefix):]
-            break
-    SQLALCHEMY_DATABASE_URI = _db_url
-    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True} if _db_url.startswith("postgresql") else {}
+    # Database. create_app reads this again so a test database set later is the one used.
+    SQLALCHEMY_DATABASE_URI = resolve_database_uri()
+    SQLALCHEMY_ENGINE_OPTIONS = (
+        {"pool_pre_ping": True} if str(SQLALCHEMY_DATABASE_URI).startswith("postgresql") else {}
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Mail Settings

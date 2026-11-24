@@ -80,7 +80,9 @@ def _pack(text, as_of, topic, question, owner, table=None, chart=None, calendar=
 
 
 def finance_text(question, role):
-    if role not in {"owner", "finance"}:
+    from app.chat.guard import can_see_pl
+
+    if not can_see_pl(role, role == "owner"):
         return "Finance: not included for this role."
     path = _ROOT / "data" / "finance" / "grand_economics" / "grand_economics_tidy.csv"
     if not path.is_file():
@@ -339,9 +341,8 @@ def _span(start, end):
 
 
 def _display_store(name):
-    text = re.sub(r"\s*\([^)]*\)", "", name or "")
-    text = re.sub(r"(?i)^dosa coffee\s*-\s*", "", text).strip()
-    return " ".join(word[:1].upper() + word[1:] if word else "" for word in text.split())
+    from app.chat.names import clean_store_name
+    return clean_store_name(name)
 
 
 def _lakh(value):

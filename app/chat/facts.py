@@ -91,7 +91,14 @@ def _pace(data, question, owner):
     if pace is None:
         return None
     as_of = _as_of(summary.get("as_of_date"))
-    actual = summary.get("mtd_actual_L")
+    from app.chat.correctness import period_nets
+
+    month = str(summary.get("current_month") or "")[:7]
+    end = str(summary.get("actuals_through") or "")[:10]
+    precise = period_nets(f"{month}-01", end) if len(month) == 7 and end else {}
+    actual = precise.get("rounded_total")
+    if actual is None:
+        actual = summary.get("mtd_actual_L")
     east = _region(summary, "East").get("pace_pct")
     north = _region(summary, "North").get("pace_pct")
     bits = [f"November pace is {_pct(pace).replace('-', '')}."]
@@ -118,7 +125,14 @@ def _yesterday(data, question, owner):
     gaps = data.get("forecast") or []
     as_of = _as_of(summary.get("as_of_date") or (gaps[0]["date"] if gaps else ""))
     if not gaps:
-        actual = summary.get("mtd_actual_L")
+        from app.chat.correctness import period_nets
+
+        month = str(summary.get("current_month") or "")[:7]
+        end = str(summary.get("actuals_through") or "")[:10]
+        precise = period_nets(f"{month}-01", end) if len(month) == 7 and end else {}
+        actual = precise.get("rounded_total")
+        if actual is None:
+            actual = summary.get("mtd_actual_L")
         mid = summary.get("mtd_pred_mid_L")
         if actual is None or mid is None:
             return _pack("No forecast comparison is loaded for the latest day.", as_of, "sales", question, owner)
@@ -184,8 +198,14 @@ def _profit(data, question, owner):
     parts = []
     for card in cards[:2]:
         parts.append(f"{card['kicker']} {card['value']}")
+    from app.chat.correctness import provisional_line
+
+    note = provisional_line(data.get("role") or "", owner)
+    body = "Latest EBITDA: " + ". ".join(parts) + "."
+    if note:
+        body += " " + note
     return _pack(
-        "Latest EBITDA: " + ". ".join(parts) + ".",
+        body,
         cards[0]["kicker"],
         "finance",
         question,
@@ -317,6 +337,8 @@ def _store_view(question, data, owner):
 
 def actions_from_data(data, owner):
     """Up to five actions. Every why cites a figure already in the snapshot."""
+    from app.chat.owners import owner_for
+
     actions = []
     summary = data.get("summary") or {}
     north = None
@@ -327,7 +349,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": "Look at North stores behind November pace.",
             "why": f"North pace is {_pct(north).replace('-', '')}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("north"),
             "urgency": "high" if float(north) < 85 else "medium",
         })
     movers = data.get("movers") or []
@@ -336,7 +358,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Check the drop at {lead['store'].split('(')[0].strip()}.",
             "why": f"Gross {_pct(lead['pct'])} on {_as_of(lead['date'])}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("store", city=lead.get("region") or lead.get("city")),
             "urgency": "high" if lead["pct"] <= -20 else "medium",
         })
     gaps = data.get("forecast") or []
@@ -345,7 +367,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Compare {row['store'].split('(')[0].strip()} with its forecast.",
             "why": f"{_pct(row['pct'])} versus mid on {_as_of(row['date'])}.",
-            "owner": "Sanjoy / Anup / Vikas",
+            "owner": owner_for("store", city=row.get("region") or row.get("city")),
             "urgency": "high",
         })
     reelo = [row for row in (data.get("reelo") or []) if row.get("phone_capture") is not None]
@@ -356,7 +378,7 @@ def actions_from_data(data, owner):
             actions.append({
                 "what": f"Raise phone capture at {low['store']}.",
                 "why": f"Phone capture is {low['phone_capture']:.2f}%.",
-                "owner": "Sanjoy / Anup / Vikas",
+                "owner": owner_for("reelo"),
                 "urgency": "medium",
             })
     if owner and (data.get("finance") or []):
@@ -364,7 +386,7 @@ def actions_from_data(data, owner):
         actions.append({
             "what": f"Review {card['kicker']} profit.",
             "why": f"EBITDA is {card['value']}.",
-            "owner": "Shilajit",
+            "owner": owner_for("finance"),
             "urgency": "medium",
         })
     return actions[:5]
@@ -548,9 +570,12 @@ def _tracker_line(folded):
         return None
     latest = rows[0]
     day = latest.date.isoformat() if latest.date else ""
+    from app.chat.correctness import tracker_through_line
+
     text = (
         f"{latest.ingredient_name} was {_rupee(latest.unit_price)} "
-        f"on {_as_of(day)} in the ingredient tracker."
+        f"on {_as_of(day)} in the ingredient tracker. "
+        f"{tracker_through_line()}"
     )
     return text, {
         "tracker": [{
@@ -727,7 +752,9 @@ def _delivery_answer(question, data, owner):
             "That illustration is the rule, not a store bill. "
             "Contribution is that realisation minus food cost (raw + semi) minus packaging."
         )
-    if (data.get("role") in {"owner", "finance"} or owner) and "margin" in (question or "").casefold():
+    from app.chat.guard import can_see_pl
+
+    if can_see_pl(data.get("role") or "", owner) and "margin" in (question or "").casefold():
         lines.append(
             "Grand Economics has a booked commission line for some months. "
             "That is not a Swiggy or Zomato payout file, so it is not used as the gap versus 24.78%."
@@ -775,6 +802,10 @@ def _dispatch(question, data, owner):
     folded = text.casefold()
     if not text:
         return _pack("Ask a question.", "", "sales", text, owner)
+    from app.chat.guard import asks_for_guest_list, guest_refusal
+
+    if asks_for_guest_list(text):
+        return _pack(guest_refusal(), "", "reelo", text, owner)
     if _asks_delivery_economics(text):
         return _delivery_answer(text, data, owner)
     from app.chat.licences import allowed as _licence_role
@@ -846,7 +877,10 @@ def _dispatch(question, data, owner):
             return answered
     if store_answer is not None:
         return store_answer
-    see_finance = (data.get("role") in {"owner", "finance"}) or (data.get("role") is None and owner)
+    from app.chat.guard import can_see_pl
+
+    role = data.get("role") or ("owner" if owner else "ops")
+    see_finance = can_see_pl(role, owner)
     if any(word in folded for word in ("profit", "ebitda", "tally", "bank payment", "salary")):
         if "phone" not in folded:
             return _profit(data, text, see_finance)
@@ -884,7 +918,7 @@ def _dispatch(question, data, owner):
 
 
 def answer_from_data(question, data, owner):
-    """The file answer. Analytic questions also get Why, causes, and next steps."""
+    """The file answer. Analytic questions get the partner note. A short lookup can get one Worth noting line."""
     from app.chat.reasoned import attach
 
     return attach(_dispatch(question, data, owner), question, data, owner)

@@ -139,9 +139,11 @@
   }
 
   function actions(payload, source) {
+    var pdfLabel = payload.report ? "PDF" : "Download PDF";
+    var excelLabel = payload.report ? "Excel" : "Download Excel";
     var row = '<div class="cc-actions">'
-      + '<button type="button" class="cc-act" data-act="pdf">Download PDF</button>';
-    if (payload.table) row += '<button type="button" class="cc-act" data-act="xlsx">Download Excel</button>';
+      + '<button type="button" class="cc-act" data-act="pdf">' + pdfLabel + "</button>"
+      + '<button type="button" class="cc-act" data-act="xlsx">' + excelLabel + "</button>";
     if (payload.chart || payload.calendar) row += '<button type="button" class="cc-act" data-act="png">Download image</button>';
     row += '<button type="button" class="cc-act" data-act="share">Share</button>';
     row += '<button type="button" class="cc-act" data-act="thread">Download conversation</button>';
@@ -197,6 +199,20 @@
         } else if (navigator.clipboard) {
           navigator.clipboard.writeText(url);
         }
+      }).catch(function () {});
+      return;
+    }
+    if ((kind === "pdf" || kind === "xlsx") && turn && turn.dataset.report === "1") {
+      fetch("/api/chat/export", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ format: kind, question: question, rebuild: true })
+      }).then(function (response) { return response.blob(); }).then(function (blob) {
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = kind === "xlsx" ? "wizard.xlsx" : "wizard.pdf";
+        link.click();
       }).catch(function () {});
       return;
     }
@@ -298,6 +314,7 @@
             }
             if (payload.done) {
               bot.classList.remove("is-streaming");
+              if (payload.report) bot.dataset.report = "1";
               var source = payload.markdown || spoken;
               if (window.renderMarkdown) answer.innerHTML = window.renderMarkdown(source);
               var extra = "";

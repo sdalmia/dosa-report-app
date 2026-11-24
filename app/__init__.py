@@ -38,6 +38,12 @@ def create_app():
 
     app = Flask(__name__, static_folder="../static")
     app.config.from_object(Config)
+    from .config import resolve_database_uri
+    uri = resolve_database_uri()
+    app.config["SQLALCHEMY_DATABASE_URI"] = uri
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = (
+        {"pool_pre_ping": True} if uri.startswith("postgresql") else {}
+    )
 
     # ✅ Add upload/output folder configs with absolute paths
     # app.config["UPLOAD_FOLDER"] = os.path.join(BASE_DIR, "..", "uploads")

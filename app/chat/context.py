@@ -160,7 +160,9 @@ def build_context(question, data):
         "",
         _food_block(data),
     ]
-    if role in {"owner", "finance"} and data.get("finance"):
+    from app.chat.guard import can_see_pl
+
+    if can_see_pl(role, role == "owner") and data.get("finance"):
         parts.extend(["", "Finance (this role may see it):", _lines(data.get("finance") or [], ["kicker", "label", "value"])])
     else:
         parts.extend(["", "Finance: not included for this role."])
@@ -205,6 +207,11 @@ def build_context(question, data):
                 parts.append(f"- {note.body}")
     if extra:
         parts.extend(["", extra])
+    from app.chat.lenses import lens_text
+
+    lenses = lens_text(role)
+    if lenses:
+        parts.extend(["", lenses])
     parts.append("")
     parts.append(
         "If a figure the question needs is not in this packet, say so plainly and answer the closest question this packet can support."
