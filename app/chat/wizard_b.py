@@ -519,7 +519,7 @@ def try_answer(question, data, owner):
     if _asks_training(question):
         return _pack(frontlyne_text(role), "3 Oct 2026", "sales", question, owner)
     if _asks_reelo_deep(question):
-        return _pack(reelo_text(), "13 Oct to 12 Nov 2026", "reelo", question, owner)
+        return _pack(reelo_text(), "24 Oct to 22 Nov 2026", "reelo", question, owner)
     if _asks_posist(question):
         return _pack(posist_text(question), "", "sales", question, owner)
     return None

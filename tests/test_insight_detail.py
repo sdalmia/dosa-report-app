@@ -1,6 +1,7 @@
 """Insight card details use the files and do not invent a blank net."""
 
 import unittest
+from datetime import date
 
 from app import create_app
 from app.chat.insight_detail import build_detail
@@ -13,7 +14,7 @@ class InsightDetailTests(unittest.TestCase):
         card = next(row for row in trend_cards() if row["title"] == "Salt Lake Sec-1")
         self.assertEqual(detail["title"], "Salt Lake Sec-1")
         self.assertEqual(detail["headline"], card["line"])
-        self.assertEqual(detail["window"], "16–22 Nov vs 9–15 Nov")
+        self.assertEqual(detail["window"], "17–23 Nov vs 10–16 Nov")
         self.assertEqual(len(detail["days"]), 7)
         self.assertEqual(detail["total"]["day"], "Total")
         self.assertEqual(len(detail["chart"]["this_week"]), 7)
@@ -25,7 +26,7 @@ class InsightDetailTests(unittest.TestCase):
         self.assertEqual(detail["about"].count("."), 2)
         self.assertIn("net is blank", detail["about"].casefold())
         self.assertEqual(detail["headline"].count(detail["window"]), 1)
-        self.assertEqual(detail["days"][0]["day"], "Mon 16 Nov")
+        self.assertEqual(detail["days"][0]["day"], "Tue 17 Nov")
         self.assertNotIn("-₹", detail["headline"])
         self.assertNotIn("(02/", detail["share_text"])
         self.assertEqual(detail["city"]["name"], "Kolkata")
@@ -76,7 +77,8 @@ class InsightDetailTests(unittest.TestCase):
         opened = client.get("/dashboard?insight=licences")
         text = opened.get_data(as_text=True)
         self.assertIn("9 licences expired, 3 expire in 30 days", text)
-        self.assertIn("237 days overdue", text)
+        overdue = (date.today() - date(2026, 3, 31)).days
+        self.assertIn(f"{overdue} days overdue", text)
 
 
 if __name__ == "__main__":

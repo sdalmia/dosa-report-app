@@ -51,7 +51,8 @@ class ReasonedAnswerTests(unittest.TestCase):
                 self.assertIn("Value:", line, question)
                 self.assertIn("Owner:", line, question)
                 self.assertIn("Timeframe:", line, question)
-            self.assertTrue(any("not sized" in line.casefold() for line in numbered), question)
+            self.assertFalse(any("not sized" in line.casefold() for line in numbered), question)
+            self.assertTrue(any("Rs " in line for line in numbered), question)
             self.assertRegex(text, r"1\. .+Owner: ")
 
     def test_a_price_lookup_stays_short(self):
@@ -144,7 +145,7 @@ class ReasonedAnswerTests(unittest.TestCase):
         self.assertIn("**So what**", result["text"])
         self.assertIn("**Moves**", result["text"])
         self.assertIn("**Non-obvious insight.**", result["text"])
-        self.assertIn("Owner: Anup", result["text"])
+        self.assertIn("Owner: Logan", result["text"])
         self.assertIn("Owner: Vikas", result["text"])
         self.assertNotIn("Sanjoy / Anup / Vikas", result["text"])
         self.assertIn("Timeframe:", result["text"])

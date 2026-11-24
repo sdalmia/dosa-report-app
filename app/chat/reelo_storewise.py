@@ -8,7 +8,7 @@ are left out on purpose and are not treated as gaps.
 import csv
 from pathlib import Path
 
-PERIOD = "13 Oct to 12 Nov 2026"
+PERIOD = "24 Oct to 22 Nov 2026"
 FILENAME = "reelo_storewise_latest.csv"
 
 

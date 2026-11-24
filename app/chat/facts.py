@@ -806,6 +806,13 @@ def _dispatch(question, data, owner):
 
     if asks_for_guest_list(text):
         return _pack(guest_refusal(), "", "reelo", text, owner)
+    if "real problem" in folded and any(word in folded for word in ("delhi", "ncr", "north")):
+        from app.chat.guard import can_see_pl
+        from app.chat.sizing import delhi_text
+
+        role = data.get("role") or ("owner" if owner else "ops")
+        body = delhi_text(can_see_pl(role, owner))
+        return _pack(body, "17-23 Nov 2026", "sales", text, owner, source={"text": body})
     if _asks_delivery_economics(text):
         return _delivery_answer(text, data, owner)
     from app.chat.licences import allowed as _licence_role

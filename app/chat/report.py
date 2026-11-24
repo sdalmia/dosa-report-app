@@ -56,6 +56,10 @@ def build_report(question, data, owner, answer, generated_by=""):
         tables.append(_bills_table(data, coverage))
     else:
         tables.append(_sales_table(data, coverage))
+    if kind == "sales":
+        moves = _moves_table(data, owner)
+        if moves:
+            tables.append(moves)
     steps = _steps(answer, data, owner and see_pl)
     chart = _chart(data, tables[-1] if kind in {"finance", "people", "inbox", "tally"} and len(tables) > 1 else tables[0])
     moment = datetime.now(ZoneInfo("Asia/Kolkata"))
@@ -379,6 +383,30 @@ def _private_table(name, allowed, coverage, label):
         "coverage": coverage,
         "columns": ["Note"],
         "rows": [[note]],
+    }
+
+
+def _moves_table(data, owner):
+    from app.chat.guard import can_see_pl
+    from app.chat.sizing import move_lines
+
+    role = (data or {}).get("role") or ("owner" if owner else "ops")
+    lines = move_lines(can_see_pl(role, owner))
+    if not lines:
+        return None
+    rows = []
+    for line in lines:
+        value = ""
+        how = ""
+        if "Value:" in line and "How sized:" in line:
+            value = line.split("Value:", 1)[1].split("How sized:", 1)[0].strip()
+            how = line.split("How sized:", 1)[1].split("Owner:", 1)[0].strip()
+        rows.append([line.split(". ", 1)[0][:80], value, how])
+    return {
+        "name": "Moves",
+        "coverage": "17-23 Nov 2026 against 20 Oct-2 Nov 2026",
+        "columns": ["Move", "Value", "How sized"],
+        "rows": rows,
     }
 
 

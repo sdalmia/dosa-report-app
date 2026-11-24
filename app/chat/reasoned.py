@@ -118,6 +118,12 @@ def _footer(packed, question, data):
     text = packed.get("text") or ""
     if line and "Data through" not in text:
         packed["text"] = text.rstrip() + "\n\n" + line
+    from app.chat.sizing import freshness, repair_directions
+
+    packed["text"] = repair_directions(packed.get("text") or "")
+    fresh = freshness()
+    if fresh and "Reelo through" not in (packed.get("text") or ""):
+        packed["text"] = (packed.get("text") or "").rstrip() + "\n\n" + fresh
     return packed
 
 
@@ -400,6 +406,13 @@ def _so_what(question, ctx):
 
 
 def _moves(question, data, owner, ctx):
+    from app.chat.guard import can_see_pl
+    from app.chat.sizing import move_lines
+
+    role = (data or {}).get("role") or ("owner" if owner else "ops")
+    sized = move_lines(can_see_pl(role, owner))
+    if sized:
+        return "\n".join(f"{index}. {line}" for index, line in enumerate(sized, start=1))
     folded = " ".join((question or "").casefold().split())
     catalog = []
     flagship = _flagship_move(ctx)
@@ -554,8 +567,8 @@ def _missing(ctx):
     else:
         missing.append("Store-level pred versus actual is not loaded, so no store forecast gap is stated.")
     missing.append(
-        "Dine-in versus delivery sales are not loaded, so the 24.78% Swiggy and Zomato take "
-        "(21% commission plus 18% GST on that commission) is not applied. "
+        "The 24.78% Swiggy and Zomato take (21% commission plus 18% GST on that commission) "
+        "applies only to delivery rupees that were actually added. "
         "A Famepilot channel is complaints, not sales."
     )
     return " ".join(missing)
