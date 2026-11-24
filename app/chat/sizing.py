@@ -432,11 +432,9 @@ def _delivery_line():
         f"delivery rupees a day changed {_signed_pct(delivery_change, base_delivery)}. "
     )
     if delivery_change <= 0:
-        text += "Delivery rupees did not rise, so the higher share is not extra commission. "
-        loss = abs(dine_change) * Decimal(30)
         text += (
-            f"Value: {rs_rupees(loss)} gross a month of dine-in given up, "
-            f"{rs_rupees(loss * _ESTIMATED)} estimated Posist net. "
+            "No added commission; the share rose because dine-in fell. "
+            "Value: already inside the four-store dine-in walk above, not a commission figure. "
         )
     else:
         extra = delivery_change * _PAISE * Decimal(30)
@@ -445,10 +443,10 @@ def _delivery_line():
             f"{rs_rupees(extra * _ESTIMATED)} estimated Posist net. "
         )
     text += (
-        "How sized: the change in channel rupees per day, not the share on its own. "
-        "October channel days on file are 11-13 Oct only, so 10-31 Oct is not stated. "
-        "The 24.78% take is applied only to delivery rupees that were actually added. "
-        f"Owner: {owner_for('north')}. Timeframe: this week."
+        "How sized: dine-in plus takeaway against Swiggy and Zomato, per day, on the same 20 Oct-2 Nov baseline as the rest. "
+        "The 24.78% take applies only to delivery rupees that were actually added. "
+        + _tabwise_contrast("Sec 18")
+        + f"Owner: {owner_for('north')}. Timeframe: this week."
     )
     return text
 
@@ -468,10 +466,9 @@ def _signed_pct(change, base):
 
 
 def _channel_change(needle):
-    """Per-day dine-in and delivery for the recent week versus the prior tabwise days."""
-    # Tabwise covers 12-23 Nov. Use 12-16 as the only prior block that is fully on file.
-    prior = _tabwise_block(needle, date(2026, 11, 12), date(2026, 11, 16))
-    recent = _tabwise_block(needle, *_RECENT)
+    """Per-day dine-in and delivery, 20 Oct-2 Nov against 17-23 Nov."""
+    prior = _insight_block(needle, *_BASE)
+    recent = _channel_csv_block(needle, *_RECENT)
     if not prior or not recent:
         return None
     base_dine, base_del, base_n = prior
@@ -487,8 +484,129 @@ def _channel_change(needle):
         rec_del - base_del,
         base_dine,
         base_del,
-        f"tabwise {base_n} days 12-16 Nov against {rec_n} days 17-23 Nov",
+        f"{base_n} days 20 Oct-2 Nov from the second-pass channel tabs against {rec_n} days 17-23 Nov from the channel files",
     )
+
+
+def _tabwise_contrast(needle):
+    """Say why the short 12-16 Nov window does not match the shared baseline."""
+    prior = _tabwise_block(needle, date(2026, 11, 12), date(2026, 11, 16))
+    recent = _tabwise_block(needle, *_RECENT)
+    if not prior or not recent:
+        return ""
+    base_dine, base_del, base_n = prior
+    rec_dine, rec_del, _rec_n = recent
+    base_tot = base_dine + base_del
+    rec_tot = rec_dine + rec_del
+    if not base_tot or not rec_tot or not base_del:
+        return ""
+    return (
+        f"The {base_n}-day tabwise window of 12-16 Nov, which is not this baseline, "
+        f"had delivery at {base_del / base_tot * 100:.1f}% then {rec_del / rec_tot * 100:.1f}%, "
+        f"with delivery rupees {_signed_pct(rec_del - base_del, base_del)}. "
+        "That week sits just after Chhath, so it is not 20 Oct-2 Nov. "
+    )
+
+
+_INSIGHT = {}
+
+
+def _insight_block(needle, start, end):
+    """Dine-in plus takeaway, and Swiggy plus Zomato, from the second-pass daily tabs."""
+    days = _insight_days(needle)
+    return _average_block(days, start, end)
+
+
+def _insight_days(needle):
+    if needle in _INSIGHT:
+        return _INSIGHT[needle]
+    folder = _ROOT / "data" / "posist_insights" / "2026-11-13"
+    found = {}
+    _INSIGHT[needle] = found
+    if not folder.is_dir():
+        return found
+    try:
+        import openpyxl
+    except ImportError:
+        return found
+    kinds = {"dinein": "dine", "takeout": "dine", "swiggyonline": "del", "zomatoonline": "del"}
+    token = needle.casefold()
+    for path in folder.glob("secondpass_daily_tabs_*.xlsx"):
+        parts = path.stem.split("_")
+        kind = parts[3] if len(parts) > 3 else ""
+        side = kinds.get(kind)
+        if side is None:
+            continue
+        book = openpyxl.load_workbook(path, read_only=True, data_only=True)
+        table = list(book.active.iter_rows(values_only=True))
+        book.close()
+        if not table:
+            continue
+        columns = []
+        for index, header in enumerate(table[0]):
+            text = str(header or "")
+            match = re.search(r"(\d{1,2})-(\d{1,2})-(\d{4})", text)
+            if match and "Sales" in text and "Change" not in text:
+                columns.append((index, date(int(match.group(3)), int(match.group(2)), int(match.group(1)))))
+        for row in table[1:]:
+            if not row or not row[0] or token not in str(row[0]).casefold():
+                continue
+            for index, day in columns:
+                value = row[index] if index < len(row) else None
+                if value in (None, ""):
+                    continue
+                cell = found.setdefault(day, {"dine": Decimal(0), "del": Decimal(0), "seen": set()})
+                slot = (day, side, kind)
+                if slot in cell["seen"]:
+                    continue
+                cell["seen"].add(slot)
+                cell[side] += Decimal(str(value))
+    _INSIGHT[needle] = found
+    return found
+
+
+def _channel_csv_block(needle, start, end):
+    folder = _ROOT / "data" / "posist" / "daily_sales"
+    if not folder.is_dir():
+        return None
+    token = needle.casefold()
+    days = {}
+    for path in folder.glob("channel_*.csv"):
+        try:
+            day = date.fromisoformat(path.stem.replace("channel_", ""))
+        except ValueError:
+            continue
+        if day < start or day > end:
+            continue
+        with path.open(encoding="utf-8-sig", newline="") as handle:
+            for row in csv.DictReader(handle):
+                name = (row.get("store") or "")
+                if token not in name.casefold():
+                    continue
+                amount = _dec(row.get("sales"))
+                if amount is None:
+                    continue
+                source = (row.get("source") or "").upper()
+                side = "del" if any(word in source for word in ("SWIGGY", "ZOMATO", "RAPIDO")) else "dine"
+                cell = days.setdefault(day, {"dine": Decimal(0), "del": Decimal(0)})
+                cell[side] += amount
+    return _average_block(days, start, end)
+
+
+def _average_block(days, start, end):
+    dine = delivery = Decimal(0)
+    count = 0
+    day = start
+    while day <= end:
+        found = days.get(day)
+        if found and found["dine"] and found["del"]:
+            dine += found["dine"]
+            delivery += found["del"]
+            count += 1
+        day += timedelta(days=1)
+    if not count:
+        return None
+    return dine / Decimal(count), delivery / Decimal(count), count
 
 
 def _tabwise_block(needle, start, end):
@@ -708,10 +826,9 @@ def delhi_text(see_finance=False):
             up_bits.append(f"{row['name']} {(row['recent_per_day']/row['base_per_day']-1)*100:+.1f}%")
     if up_bits:
         lines.append("Up on the same window, so not a problem list: " + "; ".join(up_bits) + ".")
-    lines.append(
-        "Year-on-year hourly files (*_vs_2025) are not in this drop, so a 2025 comparison is not stated. "
-        "The loader swaps the year columns on those files, because the export writes them backwards. source_* files are left as labelled."
-    )
+    yoy = year_on_year_line()
+    if yoy:
+        lines.append(yoy)
     if see_finance:
         lines.append(buying_line())
         cities = {row["city"]: row for row in city_economics() if row.get("month") == "2026-10"}
@@ -759,18 +876,119 @@ def freshness():
     return f"Sales through {latest}. Reelo through {PERIOD}. Tickets through {tickets or 'not loaded'}."
 
 
+def year_on_year_line():
+    """Like-for-like NCR, 1 Oct-12 Nov, from the source files (those labels are correct)."""
+    folder = _ROOT / "data" / "posist_insights" / "2026-11-13"
+    if not folder.is_dir():
+        return ""
+    dine_old = dine_new = del_old = del_new = Decimal(0)
+    stores = 0
+    left_out = []
+    named = {}
+    for path in sorted(folder.glob("source_*_vs_2025.csv")):
+        if not _ncr_source(path.name):
+            continue
+        old, new, dine = _source_totals(path)
+        if old is None:
+            continue
+        if not old:
+            left_out.append(_source_label(path.name))
+            continue
+        stores += 1
+        dine_old += dine[0]
+        dine_new += dine[1]
+        del_old += (old - dine[0])
+        del_new += (new - dine[1])
+        for token, label in (
+            ("sec_18_noida", "Sec 18 Noida"),
+            ("sec_143_noida", "Sec 143 Noida"),
+            ("gurgaon_sec_15", "Gurgaon Sec-15"),
+        ):
+            if token in path.name:
+                named[label] = _whole_pct(dine[1], dine[0])
+    if not stores or not dine_old or not del_old:
+        return ""
+    bits = [f"{label} {named[label]}" for label in ("Sec 18 Noida", "Sec 143 Noida", "Gurgaon Sec-15") if label in named]
+    skipped = ""
+    if left_out:
+        skipped = " Stores with no 2025 sales are left out: " + ", ".join(left_out) + "."
+    return (
+        f"Like-for-like NCR, 1 Oct-12 Nov against the same dates in 2025: dine-in {_whole_pct(dine_new, dine_old)}, "
+        f"delivery {_whole_pct(del_new, del_old)}.{skipped} "
+        "Dine-in at the three stores that carry this year's drop: " + ", ".join(bits) + ". "
+        "Read from source_* files, which are labelled correctly. "
+        "The hourly *_vs_2025 export writes the year columns backwards, and the loader swaps those two columns."
+    )
+
+
+def _ncr_source(name):
+    folded = name.casefold()
+    blocked = ("faridabad", "chattarpur", "gk1", "demo", "not_in_use", "events", "food_truck", "fra", "aggregate")
+    if any(token in folded for token in blocked):
+        return False
+    if re.search(r"_02_\d{4}", folded):
+        return True
+    return any(token in folded for token in (
+        "gurgaon", "noida", "jasola", "paschim", "rohini", "kalkaji", "shalimar", "model_town", "connaught", "pacific",
+    ))
+
+
+def _source_label(name):
+    folded = name.casefold()
+    if "sec_10" in folded:
+        return "Gurgaon Sec 10"
+    if "shalimar" in folded:
+        return "Shalimar Bagh"
+    if "sec_31" in folded:
+        return "Sec 31"
+    if "jasola" in folded:
+        return "Pacific Jasola"
+    return name.split("_2026")[0].replace("source_", "").replace("_", " ")
+
+
+def _source_totals(path):
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        rows = list(csv.reader(handle))
+    if len(rows) < 2 or len(rows[0]) < 3:
+        return None, None, None
+    old = new = Decimal(0)
+    dine = [Decimal(0), Decimal(0)]
+    for row in rows[1:]:
+        if len(row) < 3:
+            continue
+        left, right = _dec(row[1]), _dec(row[2])
+        if left is None or right is None:
+            continue
+        old += left
+        new += right
+        if row[0].strip().upper() == "POS":
+            dine[0] += left
+            dine[1] += right
+    return old, new, dine
+
+
+def _whole_pct(new, old):
+    if not old:
+        return "n/a"
+    value = ((Decimal(new) / Decimal(old) - 1) * 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    sign = "+" if value > 0 else ""
+    return f"{sign}{value}%"
+
+
 def load_hourly_compare(path):
-    """Read a year comparison. *_vs_2025 files have the year columns swapped. source_* files do not."""
+    """Read a year comparison. Hourly *_vs_2025 files have the year columns swapped. source_* files do not."""
     file_path = Path(path)
     text = file_path.read_text(encoding="utf-8-sig")
     sample = text.splitlines()[0] if text else ""
     delimiter = "\t" if "\t" in sample else ","
     rows = list(csv.DictReader(text.splitlines(), delimiter=delimiter))
     name = file_path.name.casefold()
-    if "_vs_2025" in name and not name.startswith("source_"):
+    if "_vs_2025" in name and "hourly" in name and not name.startswith("source_"):
         for row in rows:
-            if "2025" in row and "2026" in row:
-                row["2025"], row["2026"] = row["2026"], row["2025"]
+            left = next((key for key in row if key and "2025" in key), None)
+            right = next((key for key in row if key and "2026" in key), None)
+            if left and right:
+                row[left], row[right] = row[right], row[left]
     return rows
 
 

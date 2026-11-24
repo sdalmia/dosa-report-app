@@ -135,6 +135,24 @@ class YearColumnTests(unittest.TestCase):
         rows = load_hourly_compare(source)
         self.assertEqual(rows[0]["2026"], "100")
         self.assertEqual(rows[0]["2025"], "200")
+        long = folder / "hourly_store_vs_2025.csv"
+        long.write_text(
+            '"Category","1 October 2025 - 12 November 2025","1 October 2026 - 12 November 2026"\n'
+            '"POS",10,30\n',
+            encoding="utf-8",
+        )
+        rows = load_hourly_compare(long)
+        self.assertEqual(rows[0]["1 October 2025 - 12 November 2025"], "30")
+        self.assertEqual(rows[0]["1 October 2026 - 12 November 2026"], "10")
+        labelled = folder / "source_store_vs_2025.csv"
+        labelled.write_text(
+            '"Category","1 October 2025 - 12 November 2025","1 October 2026 - 12 November 2026"\n'
+            '"POS",10,30\n',
+            encoding="utf-8",
+        )
+        rows = load_hourly_compare(labelled)
+        self.assertEqual(rows[0]["1 October 2025 - 12 November 2025"], "10")
+        self.assertEqual(rows[0]["1 October 2026 - 12 November 2026"], "30")
 
 
 class DelhiAnswerTests(unittest.TestCase):
@@ -159,6 +177,16 @@ class DelhiAnswerTests(unittest.TestCase):
         self.assertIn("44.55%", text)
         self.assertIn("both the bill count and the average bill", text)
         self.assertIn("Sec 18 Noida", text)
+        self.assertIn("51.3%", text)
+        self.assertIn("57.0%", text)
+        self.assertIn("No added commission", text)
+        self.assertIn("-2.1%", text)
+        self.assertIn("dine-in +9%", text)
+        self.assertIn("delivery +74%", text)
+        self.assertIn("Sec 18 Noida -12%", text)
+        self.assertIn("Sec 143 Noida -10%", text)
+        self.assertIn("Gurgaon Sec-15 -14%", text)
+        self.assertNotIn("not in this drop", text)
         self.assertIn("not a problem list", text)
         self.assertIn("Sales through", text)
         self.assertIn("Reelo through", text)
