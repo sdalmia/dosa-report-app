@@ -200,6 +200,14 @@ def _lakh2(value):
     return f"₹{abs(number) / 100_000:.2f}L"
 
 
+def _lakh1(value):
+    """One-decimal lakhs, half up, so ₹53.73L is said as ₹53.7L."""
+    from decimal import Decimal, ROUND_HALF_UP
+
+    scaled = (Decimal(str(abs(float(value)))) / Decimal(100000)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+    return f"₹{scaled}L"
+
+
 def _city_ebitda_rows():
     """City EBITDA from the tidy file: (city, month, value)."""
     from pathlib import Path
@@ -260,19 +268,34 @@ def _profit(data, question, owner):
         if month == latest and (city, month) in {(item[0], item[1]) for item in shown}:
             continue
         shown.append((city, month, match))
-    parts = [_result_phrase(city, month, value) for city, month, value in shown]
+    parts = []
     kolkata = next((value for city, month, value in shown if city == "Kolkata" and month == "2026-10"), None)
     if kolkata is not None:
         # October ads rows add to ₹12.27L against the sheet total of ₹9.72L.
-        alternative = kolkata - (1_227_437.51 - 972_237.17)
+        counted = kolkata - (1_227_437.51 - 972_237.17)
         parts.append(
-            f"Kolkata's sheet figure is {_lakh2(kolkata)}. {_lakh2(alternative)} if every ads row is counted"
+            f"Kolkata October 2026 EBITDA is a profit of {_lakh1(counted)}, counting every ads row. "
+            f"The sheet's own total is {_lakh1(kolkata)}"
+        )
+    for city, month, value in shown:
+        if city == "Kolkata" and month == "2026-10":
+            continue
+        parts.append(_result_phrase(city, month, value))
+    folded = question.casefold()
+    only_kolkata = "kolkata" in folded and not any(token in folded for token in ("ncr", "delhi", "each company"))
+    if "why" in folded and not only_kolkata:
+        parts.append(
+            "NCR October breaks down as store EBITDA after the HO and CK allocation, a loss of ₹5.49L, "
+            "ads ₹7.87L, and an unexplained purchase plug of ₹3.28L. "
+            "Sec 31 and Shalimar Bagh are missing closing stock of ₹0.63L. "
+            "With that stock added back the loss is ₹16.64L. "
+            "The purchase plug is the line to ask Shilajit about"
         )
     body = " ".join(part for part in (lead, ". ".join(parts) + "." if parts else "") if part)
     note = provisional_line(data.get("role") or "", owner)
     if note:
         body = f"{body} {note}"
-    return _pack(
+    packed = _pack(
         body,
         f"{_FULL_MONTHS[int(latest[5:7])]} {latest[:4]}",
         "finance",
@@ -280,6 +303,70 @@ def _profit(data, question, owner):
         owner,
         source={"figures": [{"city": city, "month": month, "value": value} for city, month, value in shown]},
     )
+    packed["lock"] = True
+    return packed
+
+
+def _pct1(value):
+    from decimal import Decimal, ROUND_HALF_UP
+
+    return f"{Decimal(str(value)).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)}"
+
+
+def _kolkata_guests(question, owner):
+    """High Kolkata repeat share, with bills down, is a new-guest problem."""
+    if not owner:
+        return _pack("That guest reading is only on the owner login.", "", "reelo", question, owner)
+    import statistics
+
+    from app.chat.reelo_storewise import load_storewise
+
+    rows = [row for row in load_storewise() if row.get("repeat_share") is not None]
+    if not rows:
+        return _pack("Reelo repeat share isn't loaded yet.", "", "reelo", question, owner)
+    median = statistics.median(row["repeat_share"] for row in rows)
+
+    def share(needle):
+        folded = needle.casefold()
+        for row in rows:
+            if folded in (row.get("store") or "").casefold():
+                return row["repeat_share"]
+        return None
+
+    above = [
+        ("Lake Road", share("Lake Road")),
+        ("Santoshpur", share("Santoshpur")),
+        ("Kalikapur", share("Kalikapur")),
+        ("Jameslong", share("Jameslong")),
+        ("Salt Lake BD25", share("Saltlake BD25")),
+    ]
+    below = [
+        ("Quest", share("Quest")),
+        ("Salt Lake JC21", share("Saltlake JC21")),
+        ("Ideal Plaza", share("Ideal Plaza")),
+    ]
+    above = [(name, value) for name, value in above if value is not None and value >= median]
+    below = [(name, value) for name, value in below if value is not None and value < median]
+    above_bit = ", ".join(f"{name} {_pct1(value)}%" for name, value in above)
+    below_bit = ", ".join(f"{name} {_pct1(value)}%" for name, value in below)
+    text = (
+        f"Most Kolkata stores are above the {_pct1(median)}% repeat median ({above_bit}) "
+        "while bills are -7.8% a day, so a high repeat share there means weak new-guest acquisition. "
+        "Win back lapsed guests and acquire new ones. "
+        f"Push repeat only where it is below the median ({below_bit}). "
+        "Owner: Logan, with Siddhant approving before anything goes out."
+    )
+    packed = _pack(text, "24 Oct to 22 Nov 2026", "reelo", question, owner, source={"text": text})
+    packed["lock"] = True
+    return packed
+
+
+def _asks_kolkata_guests(folded):
+    if "kolkata" not in folded and "east" not in folded:
+        return False
+    return any(token in folded for token in (
+        "repeat", "reelo", "retention", "lapsed", "new guest", "bills", "acquire",
+    ))
 
 
 def _phones(data, question, owner):
@@ -937,6 +1024,8 @@ def _dispatch(question, data, owner):
     wizard = _wizard_b(text, data, owner) or _wizard_answer(text, data, owner)
     if wizard is not None:
         return wizard
+    if _asks_kolkata_guests(folded):
+        return _kolkata_guests(text, owner)
     if "action plan" in folded:
         actions = actions_from_data(data, owner)
         if not actions:

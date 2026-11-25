@@ -8,6 +8,10 @@
     <span>Command</span>
     {% endif %}
   </a>
+  <form class="cc-search cc-search-desktop" role="search">
+    <input class="cc-search-input" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
+    <div class="cc-search-results" hidden></div>
+  </form>
   <span class="cc-header-spacer"></span>
   {% if session.get('user') %}
     <span class="cc-hello">Hi, {{ session['user']['name'].split(' ')[0] }}</span>

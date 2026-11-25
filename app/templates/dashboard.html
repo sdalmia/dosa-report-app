@@ -71,10 +71,8 @@
       <a href="{{ url_for('main.flags_page') }}">See all</a>
     {% endif %}
   </div>
-  {% if flag_state == "missing" %}
-    <p class="empty">No flags to show</p>
-  {% elif not flags %}
-    <p class="empty">No flags to show</p>
+  {% if flag_state == "missing" or not flags %}
+    <p class="all-clear"><span class="all-clear-chip">All clear</span></p>
   {% else %}
     <div class="flag-row" data-list>
       {% for flag in flags %}
@@ -88,14 +86,13 @@
 </section>
 
 {% if window_note %}
-<details class="info-note">
+<details class="info-note cc-window-note">
   <summary aria-label="About this window">About this window</summary>
   <p>{{ window_note }}</p>
 </details>
 {% endif %}
-{% if window_subtitle %}<p class="window-sub">{{ window_subtitle }}</p>{% endif %}
 
-<section class="cc-section" id="alerts" aria-labelledby="alerts-title">
+<section class="cc-section cc-attention" id="alerts" aria-labelledby="alerts-title">
   <div class="section-head">
     <h2 id="alerts-title">Needs attention</h2>
     {% if alerts|length > 5 %}
@@ -105,7 +102,7 @@
   {% if not alerts %}
     <p class="empty">Nothing needs attention</p>
   {% else %}
-    <div class="alert-list" data-list>
+    <div class="alert-list">
       {% for alert in alerts[:5] %}
         <article class="attention-card alert-row">
           <span class="attention-icon" aria-hidden="true">{% if alert.kind == 'Rating' %}★{% else %}!{% endif %}</span>

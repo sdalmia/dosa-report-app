@@ -15,7 +15,6 @@ def _model_note():
         return "The November location model is not on file.", ""
     payload = json.loads(_MODEL.read_text(encoding="utf-8"))
     version = payload.get("version") or "v2026-11"
-    spearman = payload.get("spearman")
     misses = [row for row in payload.get("backtest") or [] if row.get("miss")]
     misses.sort(key=lambda row: -float(row.get("decile_gap") or 0))
     names = [public_name(row.get("store")) for row in misses[:3]]
@@ -23,8 +22,7 @@ def _model_note():
     named = ", ".join(names[:-1]) + (" and " + names[-1] if len(names) > 1 else (names[0] if names else ""))
     note = (
         f"Model {version} is proposed, not approved, so a new pin still uses the prior weights. "
-        f"On {payload.get('n') or 27} open stores the rank match is {spearman}. "
-        "A typical leave-one-out miss is about a fifth of the ranking."
+        "Model accuracy: moderate; treat as a shortlist."
     )
     if named:
         note += f" {named} are the big misses."
@@ -41,23 +39,33 @@ def _why(row):
 
 
 def _map(rows):
-    points = [row for row in rows if row.get("lat") is not None and row.get("lon") is not None]
-    if len(points) < 2:
-        return ""
-    lats = [row["lat"] for row in points]
-    lons = [row["lon"] for row in points]
-    lat_span = max(lats) - min(lats) or 1
-    lon_span = max(lons) - min(lons) or 1
-    bits = []
-    for row in points:
-        x = 8 + (row["lon"] - min(lons)) / lon_span * 84
-        y = 8 + (max(lats) - row["lat"]) / lat_span * 84
-        bits.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2"><title>{row["area"]}</title></circle>')
-    return (
-        '<svg class="loc-map" viewBox="0 0 100 100" role="img" aria-label="Candidate areas">'
-        + "".join(bits)
-        + "</svg>"
-    )
+    """Two labelled outlines. Pins are numbered in the same order as the list."""
+    ncr = {"lat": (28.25, 28.95), "lon": (76.70, 77.55), "ox": 8, "oy": 18, "w": 78, "h": 70}
+    kol = {"lat": (22.40, 22.70), "lon": (88.20, 88.55), "ox": 112, "oy": 28, "w": 76, "h": 52}
+    bits = [
+        '<svg class="loc-map" viewBox="0 0 200 100" role="img" aria-label="Delhi NCR and Kolkata candidate areas">',
+        '<path class="loc-land" d="M18 24 L62 16 L84 34 L78 62 L48 78 L16 64 Z"/>',
+        '<path class="loc-land" d="M124 36 L168 30 L186 48 L176 72 L132 76 L118 54 Z"/>',
+        '<text class="loc-label" x="28" y="14">Delhi NCR</text>',
+        '<text class="loc-label" x="124" y="24">Kolkata</text>',
+    ]
+    for index, row in enumerate(rows, start=1):
+        lat, lon = row.get("lat"), row.get("lon")
+        city = (row.get("city") or "").casefold()
+        box = kol if "kolkata" in city or (isinstance(lat, (int, float)) and lat < 26) else ncr
+        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            continue
+        lat0, lat1 = box["lat"]
+        lon0, lon1 = box["lon"]
+        x = box["ox"] + (min(max(lon, lon0), lon1) - lon0) / (lon1 - lon0) * box["w"]
+        y = box["oy"] + (lat1 - min(max(lat, lat0), lat1)) / (lat1 - lat0) * box["h"]
+        bits.append(
+            f'<g class="loc-pin"><circle cx="{x:.1f}" cy="{y:.1f}" r="7"></circle>'
+            f'<text x="{x:.1f}" y="{y + 2.4:.1f}">{index}</text>'
+            f"<title>{index}. {row['area']}</title></g>"
+        )
+    bits.append("</svg>")
+    return "".join(bits)
 
 
 def location_home():

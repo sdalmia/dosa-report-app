@@ -701,6 +701,10 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
     if view_filters.get("cc_city"):
         region = city_region(view_filters) or region
     start, end = _window_bounds(feeds)
+    if end is not None and not (view_filters.get("cc_range") or ""):
+        month_start = end.replace(day=1)
+        earliest = min((day for (_store, day) in feeds.get("posist") or {}), default=month_start)
+        start = month_start if month_start >= earliest else earliest
     start, end = resolve_bounds(view_filters, start, end)
     regions = []
     compare_label = ""
@@ -759,7 +763,7 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "reputation": _reputation(feeds, stores),
         "reelo": _reelo(feeds),
         "alerts": _alerts(feeds, stores, end),
-        "quality_note": quality_note_for(feeds),
+        "quality_note": quality_note_for(feeds) if start and end and start <= date(2026, 10, 10) <= end else "",
         "day_badges": _day_badges(feeds, end),
         "rosedale_note": "Rosedale Plaza is partly open." if any(
             "rosedale" in str(name).casefold() for name, _day in (feeds.get("posist") or {})

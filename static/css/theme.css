@@ -1762,6 +1762,30 @@ html[data-theme="dark"] .chg-down { background: rgba(255, 139, 139, 0.16); }
 }
 .delta-chip.is-down { background: rgba(159, 18, 57, 0.12); color: var(--down); }
 .delta-chip.is-up { background: rgba(22, 101, 52, 0.12); color: var(--up); }
+.kpi-card.is-hero .delta-chip { background: #fff7ed; color: #1f1a14; }
+.kpi-card.is-hero .delta-chip.is-down { background: #ffe4e6; color: #9f1239; }
+.kpi-card.is-hero .delta-chip.is-up { background: #dcfce7; color: #166534; }
+.all-clear { margin: 0; }
+.all-clear-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+}
+.cc-home .cc-window-note { display: block; width: 100%; margin: 8px 0 0; }
+.cc-home .cc-window-note summary { display: flex; width: 100%; justify-content: flex-start; }
+.cc-home .cc-attention { display: block; width: 100%; clear: both; margin-top: 20px; }
+.cc-home .cc-attention .section-head { display: flex; width: 100%; }
+.cc-home .alert-list { display: grid; width: 100%; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.cc-header .cc-search-desktop { display: block; flex: 1 1 160px; max-width: 280px; margin: 0; }
+@media (max-width: 720px) {
+  .cc-header .cc-search-desktop { flex-basis: 96px; max-width: 140px; }
+  .cc-header .cc-search-input { min-height: 36px; padding: 0 12px; }
+}
 .cc-pills {
   display: flex;
   flex-wrap: wrap;
@@ -1834,6 +1858,9 @@ html[data-theme="dark"] .chg-down { background: rgba(255, 139, 139, 0.16); }
 .loc-layout { display: grid; grid-template-columns: minmax(180px, 280px) 1fr; gap: 16px; align-items: start; }
 .loc-map { width: 100%; height: auto; background: linear-gradient(180deg, #fffdf8, #f3ecdf); border-radius: 20px; border: 1px solid var(--line); }
 .loc-map circle { fill: #7a4e0d; }
+.loc-land { fill: #f3e6cf; stroke: #7a4e0d; stroke-width: 1.2; }
+.loc-label { fill: #6b542c; font-size: 7px; font-weight: 700; }
+.loc-pin text { fill: #fffdf8; font-size: 8px; font-weight: 700; text-anchor: middle; }
 .loc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .score-bar, .bar-chart span { display: block; height: 8px; margin-top: 8px; border-radius: 999px; background: linear-gradient(90deg, #e4b15a, #7a4e0d); width: var(--w); max-width: 100%; }
 .bar-chart span { height: 28px; display: flex; align-items: center; padding: 0 10px; color: #1f1a14; font-size: 0.78rem; font-weight: 700; }

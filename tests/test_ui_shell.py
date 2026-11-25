@@ -52,6 +52,10 @@ class ShellTests(unittest.TestCase):
         self.assertIn("Top score", html)
         self.assertIn("v2026-11", html)
         self.assertIn("proposed", html.casefold())
+        self.assertIn("Model accuracy: moderate; treat as a shortlist", html)
+        self.assertNotIn("leave-one-out", html.casefold())
+        self.assertNotIn("rank match", html.casefold())
+        self.assertIn("loc-pin", html)
         self.assertNotIn("Faridabad", html)
         self.assertNotIn(".csv", html)
 

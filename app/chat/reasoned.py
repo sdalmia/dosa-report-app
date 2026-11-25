@@ -68,6 +68,8 @@ def attach(packed, question, data, owner):
     """Shape the file answer. A role refusal stays as it is."""
     if not packed:
         return packed
+    if packed.get("lock"):
+        return _footer(packed, question, data)
     text = packed.get("text") or ""
     folded = text.casefold()
     if "not included for this role" in folded or "only on the owner login" in folded:

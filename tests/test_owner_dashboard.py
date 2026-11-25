@@ -174,7 +174,8 @@ class FlagAccessTests(unittest.TestCase):
         self.assertEqual(payload.status_code, 200)
         self.assertEqual(payload.get_json()["flags"], [])
         self.assertNotIn('class="flag-card', page.get_data(as_text=True))
-        self.assertIn("No flags to show", page.get_data(as_text=True))
+        self.assertIn("All clear", page.get_data(as_text=True))
+        self.assertNotIn("No flags to show", page.get_data(as_text=True))
 
 
 class OwnerDashboardTests(unittest.TestCase):
@@ -208,10 +209,11 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = page(self.client, "/board")
-        self.assertEqual(view["window_subtitle"], "24 Oct – 22 Nov · vs last Sunday")
+        self.assertEqual(view["window_subtitle"], "1 Nov – 22 Nov · vs last Sunday")
         self.assertIn("Gross", html)
-        self.assertIn("24 Oct – 22 Nov · vs last Sunday", html)
-        self.assertIn("The report was likely pulled before close.", html)
+        self.assertIn("1 Nov – 22 Nov", html)
+        self.assertNotIn("24 Oct – 22 Nov", html)
+        self.assertNotIn("The report was likely pulled before close.", html)
         self.assertNotIn("Protest-affected", html)
         self.assertNotIn("Status unknown", html)
         self.assertNotIn("57907", html)
