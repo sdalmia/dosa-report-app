@@ -20,6 +20,9 @@ def _rupee_lakh(value):
 def is_analytic(question):
     """A partner note is added for a sales or attention question, not for a lookup."""
     folded = " ".join((question or "").casefold().split())
+    from app.chat.daily_review import section_id
+    if section_id(folded):
+        return False
     if any(token in folded for token in (
         "what did we pay", "pay for", "paid for", "licence", "license",
         "remember", "inbox", "important email", "predicted for", "what can we fix",

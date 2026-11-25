@@ -29,3 +29,32 @@ store_code,month,target_gross,target_net,includes_aggregators,daily_split,target
 02/0007,2026-10,,1200000,yes,,540000,660000,Faridabad,Del-Oct 26,Closes 20 Oct 2026; monthly budget as given
 02/0014,2026-10,,1000000,yes,,550000,450000,Gurgaon Sec-10,Del-Oct 26,
 02/0016,2026-10,,1500000,yes,,1050000,450000,Gurgaon Sec-31,Del-Oct 26,
+01/0001,2026-11,,3500000,yes,,,,IP,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 393750; dine-in/aggregator split not given in Nov sheet
+002,2026-11,,2600000,yes,,,,JC 21,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 162500; dine-in/aggregator split not given in Nov sheet
+0003,2026-11,,800000,no,,,,Forum,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 0; dine-in/aggregator split not given in Nov sheet
+0004,2026-11,,1700000,yes,,,,Mani Square,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 42500; dine-in/aggregator split not given in Nov sheet
+0007,2026-11,,150000,no,,,,CSC,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 0; dine-in/aggregator split not given in Nov sheet
+0005,2026-11,,1500000,yes,,,,Laketown,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 187500; dine-in/aggregator split not given in Nov sheet
+0006,2026-11,,2200000,yes,,,,Rosedale,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 247500; dine-in/aggregator split not given in Nov sheet
+0008,2026-11,,100000,no,,,,Food Truck,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 0; dine-in/aggregator split not given in Nov sheet
+0009,2026-11,,2500000,yes,,,,BD 25,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 150000; dine-in/aggregator split not given in Nov sheet
+01/0010,2026-11,,1400000,yes,,,,Rangoli,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 70000; dine-in/aggregator split not given in Nov sheet
+01/0011,2026-11,,1800000,yes,,,,Jameslong,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 225000; dine-in/aggregator split not given in Nov sheet
+01/0012,2026-11,,1400000,yes,,,,Santoshpur,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 175000; dine-in/aggregator split not given in Nov sheet
+01/0014,2026-11,,1500000,yes,,,,Kalikapur,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 168750; dine-in/aggregator split not given in Nov sheet
+01/0013,2026-11,,800000,yes,,,,Cloud Kitchen,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 190000; dine-in/aggregator split not given in Nov sheet
+01/0015,2026-11,,2600000,yes,,,,Lake Road,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 227500; dine-in/aggregator split not given in Nov sheet
+01/0016,2026-11,,1200000,no,,,,Quest,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 0; dine-in/aggregator split not given in Nov sheet
+02/0001,2026-11,,2400000,yes,,,,Noida 18,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 300000; dine-in/aggregator split not given in Nov sheet
+02/0006,2026-11,,1100000,yes,,,,Noida 143,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 137500; dine-in/aggregator split not given in Nov sheet
+02/0003,2026-11,,1350000,yes,,,,Paschim Vihar,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 135000; dine-in/aggregator split not given in Nov sheet
+02/0004,2026-11,,1650000,yes,,,,Kalkaji,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 226875; dine-in/aggregator split not given in Nov sheet
+02/0008,2026-11,,2400000,yes,,,,Rohini,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 240000; dine-in/aggregator split not given in Nov sheet
+02/0011,2026-11,,2500000,yes,,,,Pacific Jasola,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 62500; dine-in/aggregator split not given in Nov sheet
+02/0012,2026-11,,4000000,yes,,,,CP,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 50000; dine-in/aggregator split not given in Nov sheet
+02/0013,2026-11,,2300000,yes,,,,Model Town,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 201250; dine-in/aggregator split not given in Nov sheet
+02/0015,2026-11,,1400000,yes,,,,Shalimar Bagh,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 87500; dine-in/aggregator split not given in Nov sheet
+02/0009,2026-11,,1900000,yes,,,,DLF-Epitome,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 237500; dine-in/aggregator split not given in Nov sheet
+02/0010,2026-11,,2000000,yes,,,,Gurgaon Sec-15,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 150000; dine-in/aggregator split not given in Nov sheet
+02/0014,2026-11,,1000000,yes,,,,Gurgaon Sec-10,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 112500; dine-in/aggregator split not given in Nov sheet
+02/0016,2026-11,,1500000,yes,,,,Gurgaon Sec-31,Monthly Input Nov-26,Net revenue incl. commission (same basis as Oct); budget commission 112500; dine-in/aggregator split not given in Nov sheet

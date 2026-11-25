@@ -162,10 +162,13 @@ def build_board(posist, today, targets=None, store_label="", city=""):
         return empty
     rows = list(targets) if targets is not None else load_targets()
     months = {row["month"] for row in rows}
-    month = _active_month(today, months)
+    pace, as_of = load_pace()
+    pace_month = f"{as_of.year:04d}-{as_of.month:02d}" if as_of else ""
+    # The pace file is a dated gross snapshot. Keep the board on that month
+    # when November targets are also in the file.
+    month = pace_month if pace_month in months else _active_month(today, months)
     if not month:
         return empty
-    pace, as_of = load_pace()
     start = _month_start(month)
     region = CITY_REGION.get((city or "").strip(), "")
     if city and not region:

@@ -806,6 +806,12 @@ def _dispatch(question, data, owner):
 
     if asks_for_guest_list(text):
         return _pack(guest_refusal(), "", "reelo", text, owner)
+    from app.chat.daily_review import answer_text, section_id
+    if section_id(text):
+        from app.chat.guard import can_see_pl
+        role = data.get("role") or ("owner" if owner else "ops")
+        body = answer_text(text, can_see_pl(role, owner), role in {"owner", "hr"})
+        return _pack(body, "", "sales", text, owner, source={"text": body})
     if "real problem" in folded and any(word in folded for word in ("delhi", "ncr", "north")):
         from app.chat.guard import can_see_pl
         from app.chat.sizing import delhi_text

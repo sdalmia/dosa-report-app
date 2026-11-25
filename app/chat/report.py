@@ -35,6 +35,25 @@ def build_report(question, data, owner, answer, generated_by=""):
     see_pl = can_see_pl(role, owner)
     see_books = can_see_books(role, owner)
     see_people = role in {"owner", "hr"}
+    from app.chat.daily_review import report_tables, section_id
+    if section_id(question):
+        tables = report_tables(question, see_pl, see_people)
+        moment = datetime.now(ZoneInfo("Asia/Kolkata"))
+        who = generated_by or ("owner login" if role == "owner" else f"{role} login")
+        coverage = tables[0]["coverage"] if tables else "not loaded"
+        return {
+            "title": "Daily review",
+            "coverage": coverage,
+            "sales_through": coverage,
+            "data_lines": [table["coverage"] for table in tables],
+            "footer": "",
+            "generated_by": who,
+            "generated_at": moment.strftime("%d %b %Y, %I:%M %p IST").lstrip("0"),
+            "insight": (answer or "").split("\n", 1)[0][:240],
+            "tables": tables,
+            "steps": _steps(answer, data, owner and see_pl),
+            "chart": None,
+        }
     kind = _kind(question)
     coverage = _coverage(data, kind)
     title = _title(question, kind)
