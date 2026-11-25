@@ -8,6 +8,9 @@
     <p class="cc-kicker">Home</p>
     <h1>{% if window_subtitle %}{{ window_subtitle.split('·')[0] }}{% else %}This window{% endif %}</h1>
     {% if latest_drop %}<p class="cc-hero-note">{{ latest_drop }}</p>{% endif %}
+    {% if window_subtitle and '·' in window_subtitle %}
+    <p class="cc-hero-note">{{ window_subtitle.split('·', 1)[1].strip() }}</p>
+    {% endif %}
     {% if rosedale_note %}<p class="cc-hero-note">{{ rosedale_note }}</p>{% endif %}
     {% if quality_note %}<p class="cc-hero-note" data-field="data_quality">{{ quality_note }}</p>{% endif %}
   </div>

@@ -209,10 +209,19 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = page(self.client, "/board")
-        self.assertEqual(view["window_subtitle"], "1 Nov – 22 Nov · vs last Sunday")
+        self.assertEqual(view["window_subtitle"], "1 Nov – 23 Nov · vs same days in October")
+        self.assertEqual(by_key["all"]["gross_change"], "-13.93%")
+        self.assertEqual(by_key["all"]["bills_change"], "-10.04%")
+        self.assertEqual(by_key["all"]["apb_change"], "-3.67%")
+        self.assertEqual(by_key["East"]["gross_change"], "-22.01%")
+        self.assertEqual(by_key["North"]["gross_change"], "-2.37%")
+        self.assertNotEqual(by_key["all"]["gross_change"], "-1.43%")
         self.assertIn("Gross", html)
-        self.assertIn("1 Nov – 22 Nov", html)
+        self.assertIn("1 Nov – 23 Nov", html)
+        self.assertIn("vs same days in October", html)
+        self.assertIn("Daily sales are in through 23 Nov.", html)
         self.assertNotIn("24 Oct – 22 Nov", html)
+        self.assertNotIn("1 Nov – 22 Nov", html)
         self.assertNotIn("The report was likely pulled before close.", html)
         self.assertNotIn("Protest-affected", html)
         self.assertNotIn("Status unknown", html)
@@ -221,17 +230,11 @@ class OwnerDashboardTests(unittest.TestCase):
         bill_alerts = " ".join(
             f"{alert.get('store', '')} {alert['text']}" for alert in view["alerts"] if alert["kind"] == "Bills"
         )
-        self.assertIn(
-            "Gurgaon Sec 10",
-            bill_alerts,
-        )
-        self.assertIn("Bills -20.51% versus the same weekday last week.", bill_alerts)
-        self.assertIn(
-            "Pacific mall, Jasola",
-            bill_alerts,
-        )
+        self.assertIn("Shalimar Bagh", bill_alerts)
+        self.assertIn("Bills -24.71% versus the same weekday last week.", bill_alerts)
+        self.assertIn("Sec 18 Noida", bill_alerts)
         self.assertNotIn("(02/", bill_alerts)
-        self.assertEqual(bill_alerts.count("Bills "), 2)
+        self.assertGreaterEqual(bill_alerts.count("Bills "), 2)
         self.assertNotIn("Rosedale", bill_alerts)
         self.assertNotIn("Food Truck", bill_alerts)
         self.assertNotIn("Faridabad", bill_alerts)

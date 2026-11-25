@@ -4,6 +4,8 @@ Nothing here invents a number. A missing cell stays blank and the page says
 no data. Gross is Posist gross. APB is summed gross divided by summed bills.
 """
 
+import calendar
+import csv
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -88,7 +90,94 @@ def _named_rows(feeds, start, end, region=None, store=None):
     return found
 
 
-def _region_block(feeds, region, start, end, compare_day, store=None, label=None):
+def _prior_span(start, end):
+    """The comparison window. A month-to-date range uses the same days last month."""
+    if start.day == 1 and (start.year, start.month) == (end.year, end.month):
+        year = start.year if start.month > 1 else start.year - 1
+        month = start.month - 1 if start.month > 1 else 12
+        last = calendar.monthrange(year, month)[1]
+        prev_start = date(year, month, 1)
+        prev_end = date(year, month, min(end.day, last))
+        return prev_start, prev_end, f"vs same days in {prev_start.strftime('%B')}"
+    span = (end - start).days
+    prev_end = start - timedelta(days=1)
+    prev_start = prev_end - timedelta(days=span)
+    return prev_start, prev_end, f"vs the previous {span + 1} days"
+
+
+def _extend_with_daily_sales(feeds):
+    """Add store days from the daily sales files that the rolled-up file does not have yet."""
+    from app.store_master import posist_code
+
+    posist = dict(feeds.get("posist") or {})
+    latest = max((day for (_name, day) in posist), default=None)
+    by_code = {}
+    for (name, _day), row in posist.items():
+        region = row.get("region") or ""
+        code = posist_code(name, region)
+        if not code:
+            continue
+        tail = code.split("/")[-1]
+        for key in {code, tail, tail.lstrip("0") or "0"}:
+            by_code.setdefault(key, (name, region))
+    folder = Path(__file__).resolve().parents[1] / "data" / "posist" / "daily_sales"
+    if not folder.is_dir():
+        return feeds
+    for path in sorted(folder.glob("sales_*.csv")):
+        try:
+            file_day = date.fromisoformat(path.stem.replace("sales_", ""))
+        except ValueError:
+            continue
+        if latest is not None and file_day <= latest:
+            continue
+        with path.open(encoding="utf-8-sig", newline="") as handle:
+            for raw in csv.DictReader(handle):
+                code = (raw.get("store_code") or "").strip()
+                label = (raw.get("store") or "").strip()
+                day = _parse_day(raw.get("date")) or file_day
+                if latest is not None and day <= latest:
+                    continue
+                tail = code.split("/")[-1]
+                known = by_code.get(code) or by_code.get(tail) or by_code.get(tail.lstrip("0") or "0")
+                name = known[0] if known else label
+                region = (known[1] if known else "") or (
+                    "North" if code.startswith("02/") else "East" if code.startswith("01/") or code[:1].isdigit() else ""
+                )
+                if not name or (name, day) in posist:
+                    continue
+                posist[(name, day)] = {
+                    "store": name,
+                    "date": day,
+                    "gross": _number(raw.get("gross")),
+                    "bills": _number(raw.get("bills")),
+                    "region": region or None,
+                    "notes": "",
+                    "source": "daily-sales",
+                }
+    copied = dict(feeds)
+    copied["posist"] = posist
+    return copied
+
+
+def _number(value):
+    text = str(value or "").strip().replace(",", "")
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _parse_day(value):
+    text = str(value or "").strip()
+    try:
+        return date.fromisoformat(text[:10])
+    except ValueError:
+        return None
+
+
+def _region_block(feeds, region, start, end, compare_day, store=None, label=None, compare_start=None):
     named = _named_rows(feeds, start, end, region, store)
     comparable = [(name, row) for name, row in named if not is_mall_food_court(name)]
     window_rows = [row for _name, row in named]
@@ -97,20 +186,33 @@ def _region_block(feeds, region, start, end, compare_day, store=None, label=None
     bills = _metric(comparable_rows, "bills", "count")
     comparable_gross = _metric(comparable_rows, "gross", "money")
     apb = _window_apb(comparable_gross, bills)
-    latest = _named_rows(feeds, end, end, region, store)
-    prior = _named_rows(feeds, compare_day, compare_day, region, store)
-    latest_gross = _metric(_wow_rows(latest, end, compare_day), "gross", "money")
-    prior_gross = _metric(_wow_rows(prior, end, compare_day), "gross", "money")
-    latest_bills = _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "bills", "count")
-    prior_bills = _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "bills", "count")
-    latest_apb = _window_apb(
-        _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "gross", "money"),
-        latest_bills,
-    )
-    prior_apb = _window_apb(
-        _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "gross", "money"),
-        prior_bills,
-    )
+    if compare_start is not None:
+        prior_named = _named_rows(feeds, compare_start, compare_day, region, store)
+        prior_comp = [(name, row) for name, row in prior_named if not is_mall_food_court(name)]
+        latest_gross = gross
+        prior_gross = _metric([row for _name, row in prior_named], "gross", "money")
+        latest_bills = bills
+        prior_bills = _metric([row for _name, row in prior_comp], "bills", "count")
+        latest_apb = apb
+        prior_apb = _window_apb(
+            _metric([row for _name, row in prior_comp], "gross", "money"),
+            prior_bills,
+        )
+    else:
+        latest = _named_rows(feeds, end, end, region, store)
+        prior = _named_rows(feeds, compare_day, compare_day, region, store)
+        latest_gross = _metric(_wow_rows(latest, end, compare_day), "gross", "money")
+        prior_gross = _metric(_wow_rows(prior, end, compare_day), "gross", "money")
+        latest_bills = _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "bills", "count")
+        prior_bills = _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "bills", "count")
+        latest_apb = _window_apb(
+            _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "gross", "money"),
+            latest_bills,
+        )
+        prior_apb = _window_apb(
+            _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "gross", "money"),
+            prior_bills,
+        )
     return {
         "key": region or "all",
         "label": label or region or "All",
@@ -667,21 +769,23 @@ def _alerts(feeds, stores, end):
     return alerts
 
 
-def _window_copy(start, end, days_in_window, feeds=None):
+def _window_copy(start, end, days_in_window, feeds=None, compare_label=""):
     if start is None or end is None:
         return "", ""
-    compare = end - timedelta(days=7)
     left = f"{start.day} {start.strftime('%b')}"
     right = f"{end.day} {end.strftime('%b')}"
     if start.year != end.year:
         left = f"{left} {start.year}"
         right = f"{right} {end.year}"
-    subtitle = f"{left} – {right} · vs last {end.strftime('%A')}"
+    subtitle = f"{left} – {right}"
+    if compare_label:
+        subtitle = f"{subtitle} · {compare_label}"
     note = (
         f"{days_in_window} days in the window. "
-        f"Change versus {compare.strftime('%A')} {compare.day} {compare.strftime('%b')}. "
-        "Calculated. Gross divided by bills. A blank day is left out."
+        f"{compare_label[:1].upper()}{compare_label[1:]}." if compare_label else
+        f"{days_in_window} days in the window."
     )
+    note += " Calculated. Gross divided by bills. A blank day is left out."
     if feeds and _window_has_mall(feeds):
         note += f" {MALL_BILL_NOTE}. Those bills and APB are left out of rankings and comparisons."
     return subtitle, note
@@ -695,7 +799,7 @@ def _window_has_mall(feeds):
 
 
 def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, procurement_dir=None, view_filters=None):
-    feeds = feeds if feeds is not None else load_feeds()
+    feeds = _extend_with_daily_sales(feeds if feeds is not None else load_feeds())
     today = today or business_today()
     view_filters = view_filters or {}
     if view_filters.get("cc_city"):
@@ -719,13 +823,16 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
                 break
     if start is not None and end is not None:
         window_label = f"{format_date(start)} through {format_date(end)}"
+        compare_start, compare_end, compare_phrase = _prior_span(start, end)
         compare_day = end - timedelta(days=7)
         compare_label = f"{format_date(end)} vs {format_date(compare_day)}"
         city_name = {"East": "Kolkata", "North": "Delhi NCR"}.get(region, "")
         names = (region,) if region else (None, "East", "North")
         for name in names:
             label = city_name if name == region and city_name else None
-            regions.append(_region_block(feeds, name, start, end, compare_day, chosen, label))
+            regions.append(_region_block(
+                feeds, name, start, end, compare_end, chosen, label, compare_start=compare_start,
+            ))
     if chosen is not None:
         stores = [chosen]
     league = _league(feeds, stores, start, end, region, low_only) if start else []
@@ -735,7 +842,10 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
     days_in_window = 0
     if start and end:
         days_in_window = sum(1 for offset in range((end - start).days + 1) if _rows_on(feeds, start + timedelta(days=offset)))
-    subtitle, window_note = _window_copy(start, end, days_in_window, feeds)
+    compare_phrase = ""
+    if start and end:
+        _cs, _ce, compare_phrase = _prior_span(start, end)
+    subtitle, window_note = _window_copy(start, end, days_in_window, feeds, compare_phrase)
     if len(league) > 10:
         league_top, league_bottom = league[:5], league[-5:]
     else:
@@ -768,7 +878,9 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "rosedale_note": "Rosedale Plaza is partly open." if any(
             "rosedale" in str(name).casefold() for name, _day in (feeds.get("posist") or {})
         ) else "",
-        "latest_drop": _latest_drop(end),
+        "latest_drop": (
+            f"Daily sales are in through {end.day} {end.strftime('%b')}." if end else ""
+        ),
         "procurement": procurement_tiles(procurement_dir),
         "today": today,
     }
