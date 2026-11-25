@@ -4,7 +4,9 @@ Nothing here invents a number. A missing cell stays blank and the page says
 no data. Gross is Posist gross. APB is summed gross divided by summed bills.
 """
 
-from datetime import timedelta
+import calendar
+import csv
+from datetime import date, timedelta
 from pathlib import Path
 
 from markupsafe import Markup
@@ -88,7 +90,94 @@ def _named_rows(feeds, start, end, region=None, store=None):
     return found
 
 
-def _region_block(feeds, region, start, end, compare_day, store=None, label=None):
+def _prior_span(start, end):
+    """The comparison window. A month-to-date range uses the same days last month."""
+    if start.day == 1 and (start.year, start.month) == (end.year, end.month):
+        year = start.year if start.month > 1 else start.year - 1
+        month = start.month - 1 if start.month > 1 else 12
+        last = calendar.monthrange(year, month)[1]
+        prev_start = date(year, month, 1)
+        prev_end = date(year, month, min(end.day, last))
+        return prev_start, prev_end, f"vs same days in {prev_start.strftime('%B')}"
+    span = (end - start).days
+    prev_end = start - timedelta(days=1)
+    prev_start = prev_end - timedelta(days=span)
+    return prev_start, prev_end, f"vs the previous {span + 1} days"
+
+
+def _extend_with_daily_sales(feeds):
+    """Add store days from the daily sales files that the rolled-up file does not have yet."""
+    from app.store_master import posist_code
+
+    posist = dict(feeds.get("posist") or {})
+    latest = max((day for (_name, day) in posist), default=None)
+    by_code = {}
+    for (name, _day), row in posist.items():
+        region = row.get("region") or ""
+        code = posist_code(name, region)
+        if not code:
+            continue
+        tail = code.split("/")[-1]
+        for key in {code, tail, tail.lstrip("0") or "0"}:
+            by_code.setdefault(key, (name, region))
+    folder = Path(__file__).resolve().parents[1] / "data" / "posist" / "daily_sales"
+    if not folder.is_dir():
+        return feeds
+    for path in sorted(folder.glob("sales_*.csv")):
+        try:
+            file_day = date.fromisoformat(path.stem.replace("sales_", ""))
+        except ValueError:
+            continue
+        if latest is not None and file_day <= latest:
+            continue
+        with path.open(encoding="utf-8-sig", newline="") as handle:
+            for raw in csv.DictReader(handle):
+                code = (raw.get("store_code") or "").strip()
+                label = (raw.get("store") or "").strip()
+                day = _parse_day(raw.get("date")) or file_day
+                if latest is not None and day <= latest:
+                    continue
+                tail = code.split("/")[-1]
+                known = by_code.get(code) or by_code.get(tail) or by_code.get(tail.lstrip("0") or "0")
+                name = known[0] if known else label
+                region = (known[1] if known else "") or (
+                    "North" if code.startswith("02/") else "East" if code.startswith("01/") or code[:1].isdigit() else ""
+                )
+                if not name or (name, day) in posist:
+                    continue
+                posist[(name, day)] = {
+                    "store": name,
+                    "date": day,
+                    "gross": _number(raw.get("gross")),
+                    "bills": _number(raw.get("bills")),
+                    "region": region or None,
+                    "notes": "",
+                    "source": "daily-sales",
+                }
+    copied = dict(feeds)
+    copied["posist"] = posist
+    return copied
+
+
+def _number(value):
+    text = str(value or "").strip().replace(",", "")
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def _parse_day(value):
+    text = str(value or "").strip()
+    try:
+        return date.fromisoformat(text[:10])
+    except ValueError:
+        return None
+
+
+def _region_block(feeds, region, start, end, compare_day, store=None, label=None, compare_start=None):
     named = _named_rows(feeds, start, end, region, store)
     comparable = [(name, row) for name, row in named if not is_mall_food_court(name)]
     window_rows = [row for _name, row in named]
@@ -97,20 +186,33 @@ def _region_block(feeds, region, start, end, compare_day, store=None, label=None
     bills = _metric(comparable_rows, "bills", "count")
     comparable_gross = _metric(comparable_rows, "gross", "money")
     apb = _window_apb(comparable_gross, bills)
-    latest = _named_rows(feeds, end, end, region, store)
-    prior = _named_rows(feeds, compare_day, compare_day, region, store)
-    latest_gross = _metric(_wow_rows(latest, end, compare_day), "gross", "money")
-    prior_gross = _metric(_wow_rows(prior, end, compare_day), "gross", "money")
-    latest_bills = _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "bills", "count")
-    prior_bills = _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "bills", "count")
-    latest_apb = _window_apb(
-        _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "gross", "money"),
-        latest_bills,
-    )
-    prior_apb = _window_apb(
-        _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "gross", "money"),
-        prior_bills,
-    )
+    if compare_start is not None:
+        prior_named = _named_rows(feeds, compare_start, compare_day, region, store)
+        prior_comp = [(name, row) for name, row in prior_named if not is_mall_food_court(name)]
+        latest_gross = gross
+        prior_gross = _metric([row for _name, row in prior_named], "gross", "money")
+        latest_bills = bills
+        prior_bills = _metric([row for _name, row in prior_comp], "bills", "count")
+        latest_apb = apb
+        prior_apb = _window_apb(
+            _metric([row for _name, row in prior_comp], "gross", "money"),
+            prior_bills,
+        )
+    else:
+        latest = _named_rows(feeds, end, end, region, store)
+        prior = _named_rows(feeds, compare_day, compare_day, region, store)
+        latest_gross = _metric(_wow_rows(latest, end, compare_day), "gross", "money")
+        prior_gross = _metric(_wow_rows(prior, end, compare_day), "gross", "money")
+        latest_bills = _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "bills", "count")
+        prior_bills = _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "bills", "count")
+        latest_apb = _window_apb(
+            _metric(_wow_rows(latest, end, compare_day, skip_mall=True), "gross", "money"),
+            latest_bills,
+        )
+        prior_apb = _window_apb(
+            _metric(_wow_rows(prior, end, compare_day, skip_mall=True), "gross", "money"),
+            prior_bills,
+        )
     return {
         "key": region or "all",
         "label": label or region or "All",
@@ -322,7 +424,7 @@ def _chart(feeds, directory, start, end):
             if last_band is None or day > last_band:
                 last_band = day
     if not dates:
-        return {"points": [], "source": band_note, "last_band": "", "svg": ""}
+        return {"points": [], "source": band_note, "last_band": "", "svg": "", "spark": ""}
     first, final = min(dates), max(dates)
     points = []
     cursor = first
@@ -342,7 +444,24 @@ def _chart(feeds, directory, start, end):
         "source": band_note,
         "last_band": format_date(last_band) if last_band else "",
         "svg": Markup(_svg(points)),
+        "spark": _spark(points),
     }
+
+
+def _spark(points):
+    """A small polyline of the loaded daily gross. Empty when there is no series."""
+    values = [point["gross"] for point in points if point.get("gross") is not None]
+    if len(values) < 2:
+        return ""
+    low, high = min(values), max(values)
+    span = high - low or 1
+    coords = []
+    last = len(values) - 1
+    for index, value in enumerate(values):
+        x = 2 + (96 * index / last)
+        y = 24 - ((value - low) / span) * 20
+        coords.append(f"{x:.1f},{y:.1f}")
+    return " ".join(coords)
 
 
 def _svg(points):
@@ -495,11 +614,15 @@ def _reputation(feeds, stores):
             have_reviews = True
         if rating is None or reviews is None or reviews <= 0:
             continue
+        from app.owner_names import hidden_store, public_name
+
         weighted_sum += rating * reviews
         weight += reviews
+        if hidden_store(label):
+            continue
         store = by_label.get(label)
         rated.append({
-            "label": label,
+            "label": public_name(label),
             "id": store.id if store else "",
             "rating": f"{rating:.2f}",
             "reviews": format_count(reviews),
@@ -550,6 +673,20 @@ def _partially_operational(row):
     return "partially operational" in str((row or {}).get("notes") or "").casefold()
 
 
+def _latest_drop(end):
+    folder = Path(__file__).resolve().parents[1] / "data" / "posist" / "daily_sales"
+    marks = sorted(folder.glob("_DONE_*"))
+    if not marks or end is None:
+        return ""
+    try:
+        closed = date.fromisoformat(marks[-1].name.replace("_DONE_", ""))
+    except ValueError:
+        return ""
+    if closed <= end:
+        return ""
+    return f"Daily sales are in through {closed.day} {closed.strftime('%b')}."
+
+
 def _day_badges(feeds, end):
     """Notes for the latest day, plus a close the file marks with no separate note."""
     if end is None:
@@ -567,17 +704,24 @@ def _day_badges(feeds, end):
         if day == end and name not in labels and (is_closed_sales_row(row) or store_closed_on(name, end)):
             found.append({"label": name, "badge": "Closed", "iso": end.isoformat()})
             labels.add(name)
-    if store_closed_on("Sec 15 Faridabad (02/0007)", end) and "Sec 15 Faridabad (02/0007)" not in labels:
-        found.append({
-            "label": "Sec 15 Faridabad (02/0007)",
-            "badge": "Closed",
-            "iso": end.isoformat(),
-        })
-    found.sort(key=lambda item: item["label"].casefold())
-    return found
+    from app.owner_names import hidden_store
+
+    kept = []
+    for item in found:
+        if hidden_store(item.get("label")):
+            continue
+        if "rosedale" in str(item.get("label") or "").casefold():
+            continue
+        if str(item.get("badge") or "").casefold() == "partially operational":
+            continue
+        kept.append(item)
+    kept.sort(key=lambda item: item["label"].casefold())
+    return kept
 
 
 def _alerts(feeds, stores, end):
+    from app.owner_names import hidden_store, public_name
+
     alerts = []
     compare = end - timedelta(days=7) if end else None
     for store in stores:
@@ -600,10 +744,11 @@ def _alerts(feeds, stores, end):
         latest_bills = latest.get("bills") if latest else None
         prior_bills = prior.get("bills") if prior else None
         change = _change(latest_bills, prior_bills)
-        if change is not None and change <= LOW_BILL_DROP:
+        if change is not None and change <= LOW_BILL_DROP and not hidden_store(store.label):
             alerts.append({
                 "kind": "Bills",
-                "text": f"{store.label}: bills {format_pct(change)} versus the same weekday last week.",
+                "store": public_name(store.label),
+                "text": f"Bills {format_pct(change)} versus the same weekday last week.",
                 "href": store.id,
             })
     for label, rows in (feeds.get("famepilot_by_store") or {}).items():
@@ -612,30 +757,35 @@ def _alerts(feeds, stores, end):
         rating, reviews = _rating(_one_row(rows))
         if rating is None or rating >= LOW_RATING:
             continue
+        if hidden_store(label):
+            continue
         review_bit = f" from {format_count(reviews)} reviews" if reviews is not None else ""
         alerts.append({
             "kind": "Rating",
-            "text": f"{label}: public rating {rating:.2f}{review_bit}.",
+            "store": public_name(label),
+            "text": f"Public rating {rating:.2f}{review_bit}.",
             "href": "",
         })
     return alerts
 
 
-def _window_copy(start, end, days_in_window, feeds=None):
+def _window_copy(start, end, days_in_window, feeds=None, compare_label=""):
     if start is None or end is None:
         return "", ""
-    compare = end - timedelta(days=7)
     left = f"{start.day} {start.strftime('%b')}"
     right = f"{end.day} {end.strftime('%b')}"
     if start.year != end.year:
         left = f"{left} {start.year}"
         right = f"{right} {end.year}"
-    subtitle = f"{left} – {right} · vs last {end.strftime('%A')}"
+    subtitle = f"{left} – {right}"
+    if compare_label:
+        subtitle = f"{subtitle} · {compare_label}"
     note = (
         f"{days_in_window} days in the window. "
-        f"Change versus {compare.strftime('%A')} {compare.day} {compare.strftime('%b')}. "
-        "Calculated. Gross divided by bills. A blank day is left out."
+        f"{compare_label[:1].upper()}{compare_label[1:]}." if compare_label else
+        f"{days_in_window} days in the window."
     )
+    note += " Calculated. Gross divided by bills. A blank day is left out."
     if feeds and _window_has_mall(feeds):
         note += f" {MALL_BILL_NOTE}. Those bills and APB are left out of rankings and comparisons."
     return subtitle, note
@@ -649,12 +799,16 @@ def _window_has_mall(feeds):
 
 
 def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, procurement_dir=None, view_filters=None):
-    feeds = feeds if feeds is not None else load_feeds()
+    feeds = _extend_with_daily_sales(feeds if feeds is not None else load_feeds())
     today = today or business_today()
     view_filters = view_filters or {}
     if view_filters.get("cc_city"):
         region = city_region(view_filters) or region
     start, end = _window_bounds(feeds)
+    if end is not None and not (view_filters.get("cc_range") or ""):
+        month_start = end.replace(day=1)
+        earliest = min((day for (_store, day) in feeds.get("posist") or {}), default=month_start)
+        start = month_start if month_start >= earliest else earliest
     start, end = resolve_bounds(view_filters, start, end)
     regions = []
     compare_label = ""
@@ -669,23 +823,29 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
                 break
     if start is not None and end is not None:
         window_label = f"{format_date(start)} through {format_date(end)}"
+        compare_start, compare_end, compare_phrase = _prior_span(start, end)
         compare_day = end - timedelta(days=7)
         compare_label = f"{format_date(end)} vs {format_date(compare_day)}"
         city_name = {"East": "Kolkata", "North": "Delhi NCR"}.get(region, "")
         names = (region,) if region else (None, "East", "North")
         for name in names:
             label = city_name if name == region and city_name else None
-            regions.append(_region_block(feeds, name, start, end, compare_day, chosen, label))
+            regions.append(_region_block(
+                feeds, name, start, end, compare_end, chosen, label, compare_start=compare_start,
+            ))
     if chosen is not None:
         stores = [chosen]
     league = _league(feeds, stores, start, end, region, low_only) if start else []
     chart = _chart(feeds, feeds.get("directory") or data_directory(), start, end) if start else {
-        "points": [], "source": "", "last_band": "", "svg": "",
+        "points": [], "source": "", "last_band": "", "svg": "", "spark": "",
     }
     days_in_window = 0
     if start and end:
         days_in_window = sum(1 for offset in range((end - start).days + 1) if _rows_on(feeds, start + timedelta(days=offset)))
-    subtitle, window_note = _window_copy(start, end, days_in_window, feeds)
+    compare_phrase = ""
+    if start and end:
+        _cs, _ce, compare_phrase = _prior_span(start, end)
+    subtitle, window_note = _window_copy(start, end, days_in_window, feeds, compare_phrase)
     if len(league) > 10:
         league_top, league_bottom = league[:5], league[-5:]
     else:
@@ -713,8 +873,14 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "reputation": _reputation(feeds, stores),
         "reelo": _reelo(feeds),
         "alerts": _alerts(feeds, stores, end),
-        "quality_note": quality_note_for(feeds),
+        "quality_note": quality_note_for(feeds) if start and end and start <= date(2026, 10, 10) <= end else "",
         "day_badges": _day_badges(feeds, end),
+        "rosedale_note": "Rosedale Plaza is partly open." if any(
+            "rosedale" in str(name).casefold() for name, _day in (feeds.get("posist") or {})
+        ) else "",
+        "latest_drop": (
+            f"Daily sales are in through {end.day} {end.strftime('%b')}." if end else ""
+        ),
         "procurement": procurement_tiles(procurement_dir),
         "today": today,
     }

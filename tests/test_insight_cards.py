@@ -67,7 +67,7 @@ class InsightCardTests(unittest.TestCase):
         self.assertNotIn("Trend Connaught", html)
         self.assertNotIn("-₹", html)
         self.assertLessEqual(html.count('class="cc-insight"'), 3)
-        self.assertIn("Answers aren't connected yet.", html)
+        self.assertNotIn("Answers aren't connected yet.", html)
 
     def test_a_model_key_hides_the_not_connected_line(self):
         app = create_app()

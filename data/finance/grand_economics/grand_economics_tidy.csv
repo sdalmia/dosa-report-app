@@ -3353,7 +3353,7 @@ FY26-27,NCR,,2026-09,cam,229969.39,city
 FY26-27,NCR,,2026-09,ads,959041.68,city
 FY26-27,NCR,,2026-09,ho_ck_cost,3072547.11,city
 FY26-27,NCR,,2026-09,opex_total,22281527.07,city
-FY26-27,NCR,,2026-09,ebitda,-653152.56,city
+FY26-27,NCR,,2026-09,ebitda,-959000.0,city
 FY26-27,NCR,,2026-10,opening_stock,711866.16,city
 FY26-27,NCR,,2026-10,purchases,6082505.23,city
 FY26-27,NCR,,2026-10,transferred_out,0.0,city
@@ -3380,7 +3380,9 @@ FY26-27,NCR,,2026-10,cam,24582.0,city
 FY26-27,NCR,,2026-10,ads,138423.78,city
 FY26-27,NCR,,2026-10,ho_ck_cost,1131453.17,city
 FY26-27,NCR,,2026-10,opex_total,16405770.04,city
-FY26-27,NCR,,2026-10,ebitda,5640165.48,city
+FY26-27,NCR,,2026-10,ebitda,-1727516.0,city
+FY26-27,NCR,,2026-09,unbooked_cost,305847.44,city
+FY26-27,NCR,,2026-10,unbooked_cost,7367681.48,city
 FY26-27,NCR,Noida Sec - 18,2026-04,opening_stock,76058.0,store
 FY26-27,NCR,Noida Sec - 18,2026-04,purchases,445442.0,store
 FY26-27,NCR,Noida Sec - 18,2026-04,transferred_out,0.0,store
@@ -5773,16 +5775,18 @@ FY26-27,NCR,Kitchen & central,2026-08,fnb_cost,61031.0,central
 FY26-27,NCR,Kitchen & central,2026-08,opex_total,1053713.57,central
 FY26-27,NCR,Kitchen & central,2026-08,wastage,-32482.82,central
 FY26-27,NCR,Kitchen & central,2026-09,ads,959041.68,central
-FY26-27,NCR,Kitchen & central,2026-09,ebitda,-1344350.91,central
+FY26-27,NCR,Kitchen & central,2026-09,ebitda,-1650198.35,central
 FY26-27,NCR,Kitchen & central,2026-09,fnb_cost,385309.23,central
 FY26-27,NCR,Kitchen & central,2026-09,opex_total,1344350.92,central
 FY26-27,NCR,Kitchen & central,2026-09,purchases,332690.0,central
+FY26-27,NCR,Kitchen & central,2026-09,unbooked_cost,305847.44,central
 FY26-27,NCR,Kitchen & central,2026-09,wastage,-34804.01,central
 FY26-27,NCR,Kitchen & central,2026-10,ads,138423.78,central
-FY26-27,NCR,Kitchen & central,2026-10,ebitda,-529744.75,central
+FY26-27,NCR,Kitchen & central,2026-10,ebitda,-7897426.23,central
 FY26-27,NCR,Kitchen & central,2026-10,fnb_cost,391320.98,central
 FY26-27,NCR,Kitchen & central,2026-10,opex_total,529744.75,central
 FY26-27,NCR,Kitchen & central,2026-10,purchases,328145.0,central
+FY26-27,NCR,Kitchen & central,2026-10,unbooked_cost,7367681.48,central
 FY26-27,NCR,Kitchen & central,2026-10,wastage,-46686.44,central
 FY25-26,Kolkata,,2025-04,opening_stock,481976.41,city
 FY25-26,Kolkata,,2025-04,purchases,4234148.04,city

@@ -482,7 +482,7 @@ class StoreHealthTests(unittest.TestCase):
         html = self.get("/dashboard")
         self.assertNotIn(">Store Health<", html)
         self.assertNotIn("Scorecard", html)
-        self.assertNotIn("Procurement", html)
+        self.assertIn(">Procurement</span>", html)
         self.get("/upload")
         self.get("/ingredient-tracker/")
         self.get("/ingredient-tracker/upload")

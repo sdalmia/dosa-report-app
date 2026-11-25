@@ -148,7 +148,7 @@ class UploadHistoryTests(unittest.TestCase):
         home = self.client.get("/dashboard")
         self.assertEqual(home.status_code, 200)
         html = home.get_data(as_text=True)
-        self.assertNotIn(">Procurement<", html)
+        self.assertIn(">Procurement</span>", html)
         self.assertNotIn(">Food cost<", html)
         self.assertIn("/ingredient-tracker/upload", html)
         upload = self.client.get("/ingredient-tracker/upload")

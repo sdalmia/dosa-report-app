@@ -80,16 +80,39 @@ class GrandEconomicsTests(unittest.TestCase):
             return sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
                        and r["store"] == store and r["line"] == line and r["month"] == month)
         self.assertEqual(round(value("Kolkata", "", "ebitda")), 1434435)
-        self.assertEqual(round(value("NCR", "", "ebitda")), -653153)
+        self.assertEqual(round(value("NCR", "", "ebitda")), -959000)
         self.assertEqual(round(value("NCR", "Kitchen & central", "fnb_cost")), 385309)
         self.assertEqual(round(value("Kolkata", "", "ebitda", "2026-10")), 5628553)
-        self.assertEqual(round(value("NCR", "", "ebitda", "2026-10")), 5640165)
+        self.assertEqual(round(value("NCR", "", "ebitda", "2026-10")), -1727516)
         for city in ("Kolkata", "NCR"):
             for month in ("2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"):
                 below = sum(float(r["value"]) for r in rows if r["fy"] == "FY26-27" and r["city"] == city
                             and r["month"] == month and r["line"] == "ebitda" and r["level"] != "city")
                 self.assertAlmostEqual(below, value(city, "", "ebitda", month), delta=1)
         self.assertFalse(any(r["store"] == "Event Sales" and r["level"] == "store" for r in rows))
+
+    def test_ncr_summary_cell_is_not_read_as_a_profit(self):
+        """The Summary EBITDA cell is a profit. The published city result is the accountant's loss."""
+        ncr, _checks, _notes = self.parser.read_workbook(GE / "ncr_fy26_27.xlsx", "NCR", "FY26-27")
+        kol, kol_checks, _notes = self.parser.read_workbook(GE / "kolkata_fy26_27.xlsx", "Kolkata", "FY26-27")
+
+        def city_ebitda(rows, month):
+            return next(
+                row[5] for row in rows
+                if row[2] == "" and row[3] == month and row[4] == "ebitda" and row[6] == "city"
+            )
+
+        october = city_ebitda(ncr, "2026-10")
+        september = city_ebitda(ncr, "2026-09")
+        self.assertEqual(round(october / 100000, 2), -17.28)
+        self.assertEqual(round(september / 100000, 2), -9.59)
+        self.assertLess(october, 0)
+        self.assertLess(september, 0)
+        sheet = city_ebitda(kol, "2026-10")
+        self.assertEqual(round(sheet / 100000, 2), 56.29)
+        gap = next(item for item in kol_checks if item["month"] == "2026-10" and item["line"] == "ads")
+        alternative = sheet - (gap["rows_total"] - gap["sheet_total"])
+        self.assertEqual(round(alternative / 100000, 2), 53.73)
 
     def test_owner_gate_and_light_first_paint(self):
         anon = self.client.get("/grand-economics")
@@ -118,8 +141,11 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertIn("Noida Sec - 18", html)
         self.assertIn("Faridabad Sec15", html)
         self.assertIn("EBITDA after ads and kitchen", html)
-        self.assertIn("₹56.3L", html)
-        self.assertIn("₹56.4L", html)
+        self.assertIn("₹56.29L", html)
+        self.assertIn("-₹17.28L", html)
+        self.assertIn("Loss.", html)
+        self.assertIn("₹53.73L if every ads row is counted.", html)
+        self.assertNotIn("₹56.4L", html)
         self.assertIn(
             "Kolkata ads, Oct 2026: the sheet total is ₹9.7L but its rows add up to ₹12.3L. "
             "If the ₹2.6L left out is a real cost, Kolkata EBITDA is ₹2.6L lower. To check with Shilajit.",
@@ -143,7 +169,7 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertNotRegex(body, r"\b(blank|null|anchor|fragment)\b")
         drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
         self.assertNotIn("Grand economics", drawer)
-        self.assertNotIn('class="cc-bottom"', html)
+        self.assertIn('class="cc-bottom"', html)
         self.assertLess(len(gzip.compress(response.data)), 100_000)
         found = self.client.get("/search.json").get_json()
         self.assertNotIn("/grand-economics", [row["href"] for row in found["results"]])

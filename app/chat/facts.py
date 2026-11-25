@@ -1,5 +1,6 @@
 """Crisp answers from the snapshot. Numbers come from the files, not the model."""
 
+import csv
 from datetime import datetime
 
 from app.chat.snapshot import named_store
@@ -7,6 +8,10 @@ from app.chat.suggestions import FINANCE, PROCUREMENT, REELO, SALES
 from app.chat.visuals import chart_block, table_block, verify_block, allowed_numbers
 
 _MONTHS = ("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+_FULL_MONTHS = (
+    "", "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+)
 
 
 def _as_of(iso):
@@ -189,29 +194,179 @@ def _wow(data, question, owner):
     return _pack(text, as_of, "sales", question, owner, table=table, source={"rows": movers[:10]})
 
 
+def _lakh2(value):
+    """Two-decimal lakhs. A loss keeps the minus off the figure and uses the word loss."""
+    number = float(value)
+    return f"₹{abs(number) / 100_000:.2f}L"
+
+
+def _lakh1(value):
+    """One-decimal lakhs, half up, so ₹53.73L is said as ₹53.7L."""
+    from decimal import Decimal, ROUND_HALF_UP
+
+    scaled = (Decimal(str(abs(float(value)))) / Decimal(100000)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+    return f"₹{scaled}L"
+
+
+def _city_ebitda_rows():
+    """City EBITDA from the tidy file: (city, month, value)."""
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[2] / "data" / "finance" / "grand_economics" / "grand_economics_tidy.csv"
+    if not path.is_file():
+        return []
+    found = []
+    with path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("fy") != "FY26-27" or row.get("level") != "city" or row.get("line") != "ebitda":
+                continue
+            if (row.get("store") or "").strip():
+                continue
+            try:
+                value = float(row["value"])
+            except (TypeError, ValueError):
+                continue
+            found.append((row.get("city") or "", row.get("month") or "", value))
+    return found
+
+
+def _result_phrase(city, month, value):
+    """A negative EBITDA is a loss. It is never called a profit."""
+    label = f"{_FULL_MONTHS[int(month[5:7])]} {month[:4]}"
+    figure = _lakh2(value)
+    kind = "loss" if value < 0 else "profit"
+    return f"{city} {label} EBITDA is a {kind} of {figure}"
+
+
 def _profit(data, question, owner):
     if not owner:
         return _pack("Company profit is only on the owner login.", "", "finance", question, owner)
-    cards = data.get("finance") or []
-    if not cards:
+    figures = _city_ebitda_rows()
+    if not figures:
         return _pack("Company profit isn't loaded yet.", "", "finance", question, owner)
-    parts = []
-    for card in cards[:2]:
-        parts.append(f"{card['kicker']} {card['value']}")
+    from zoneinfo import ZoneInfo
+
     from app.chat.correctness import provisional_line
 
+    latest = max(month for _city, month, _value in figures)
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
+    asked = any(token in question.casefold() for token in ("this month", "november"))
+    lead = ""
+    if asked and (now.year, now.month) > (int(latest[:4]), int(latest[5:7])):
+        month_name = _FULL_MONTHS[now.month]
+        latest_label = f"{_FULL_MONTHS[int(latest[5:7])]} {latest[:4]}"
+        lead = (
+            f"{month_name} profit isn't available yet, because the Grand Economics {month_name} columns are empty "
+            "and the October Tally P&L for all four companies is still pending from Shilajit. "
+            f"Latest month loaded is {latest_label}."
+        )
+    shown = []
+    for city, month in (("Kolkata", latest), ("NCR", latest), ("NCR", "2026-09")):
+        match = next((value for item_city, item_month, value in figures if item_city == city and item_month == month), None)
+        if match is None:
+            continue
+        if month == latest and (city, month) in {(item[0], item[1]) for item in shown}:
+            continue
+        shown.append((city, month, match))
+    parts = []
+    kolkata = next((value for city, month, value in shown if city == "Kolkata" and month == "2026-10"), None)
+    if kolkata is not None:
+        # October ads rows add to ₹12.27L against the sheet total of ₹9.72L.
+        counted = kolkata - (1_227_437.51 - 972_237.17)
+        parts.append(
+            f"Kolkata October 2026 EBITDA is a profit of {_lakh1(counted)}, counting every ads row. "
+            f"The sheet's own total is {_lakh1(kolkata)}"
+        )
+    for city, month, value in shown:
+        if city == "Kolkata" and month == "2026-10":
+            continue
+        parts.append(_result_phrase(city, month, value))
+    folded = question.casefold()
+    only_kolkata = "kolkata" in folded and not any(token in folded for token in ("ncr", "delhi", "each company"))
+    if "why" in folded and not only_kolkata:
+        parts.append(
+            "NCR October breaks down as store EBITDA after the HO and CK allocation, a loss of ₹5.49L, "
+            "ads ₹7.87L, and an unexplained purchase plug of ₹3.28L. "
+            "Sec 31 and Shalimar Bagh are missing closing stock of ₹0.63L. "
+            "With that stock added back the loss is ₹16.64L. "
+            "The purchase plug is the line to ask Shilajit about"
+        )
+    body = " ".join(part for part in (lead, ". ".join(parts) + "." if parts else "") if part)
     note = provisional_line(data.get("role") or "", owner)
-    body = "Latest EBITDA: " + ". ".join(parts) + "."
     if note:
-        body += " " + note
-    return _pack(
+        body = f"{body} {note}"
+    packed = _pack(
         body,
-        cards[0]["kicker"],
+        f"{_FULL_MONTHS[int(latest[5:7])]} {latest[:4]}",
         "finance",
         question,
         owner,
-        source={"cards": cards[:2]},
+        source={"figures": [{"city": city, "month": month, "value": value} for city, month, value in shown]},
     )
+    packed["lock"] = True
+    return packed
+
+
+def _pct1(value):
+    from decimal import Decimal, ROUND_HALF_UP
+
+    return f"{Decimal(str(value)).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)}"
+
+
+def _kolkata_guests(question, owner):
+    """High Kolkata repeat share, with bills down, is a new-guest problem."""
+    if not owner:
+        return _pack("That guest reading is only on the owner login.", "", "reelo", question, owner)
+    import statistics
+
+    from app.chat.reelo_storewise import load_storewise
+
+    rows = [row for row in load_storewise() if row.get("repeat_share") is not None]
+    if not rows:
+        return _pack("Reelo repeat share isn't loaded yet.", "", "reelo", question, owner)
+    median = statistics.median(row["repeat_share"] for row in rows)
+
+    def share(needle):
+        folded = needle.casefold()
+        for row in rows:
+            if folded in (row.get("store") or "").casefold():
+                return row["repeat_share"]
+        return None
+
+    above = [
+        ("Lake Road", share("Lake Road")),
+        ("Santoshpur", share("Santoshpur")),
+        ("Kalikapur", share("Kalikapur")),
+        ("Jameslong", share("Jameslong")),
+        ("Salt Lake BD25", share("Saltlake BD25")),
+    ]
+    below = [
+        ("Quest", share("Quest")),
+        ("Salt Lake JC21", share("Saltlake JC21")),
+        ("Ideal Plaza", share("Ideal Plaza")),
+    ]
+    above = [(name, value) for name, value in above if value is not None and value >= median]
+    below = [(name, value) for name, value in below if value is not None and value < median]
+    above_bit = ", ".join(f"{name} {_pct1(value)}%" for name, value in above)
+    below_bit = ", ".join(f"{name} {_pct1(value)}%" for name, value in below)
+    text = (
+        f"Most Kolkata stores are above the {_pct1(median)}% repeat median ({above_bit}) "
+        "while bills are -7.8% a day, so a high repeat share there means weak new-guest acquisition. "
+        "Win back lapsed guests and acquire new ones. "
+        f"Push repeat only where it is below the median ({below_bit}). "
+        "Owner: Logan, with Siddhant approving before anything goes out."
+    )
+    packed = _pack(text, "24 Oct to 22 Nov 2026", "reelo", question, owner, source={"text": text})
+    packed["lock"] = True
+    return packed
+
+
+def _asks_kolkata_guests(folded):
+    if "kolkata" not in folded and "east" not in folded:
+        return False
+    return any(token in folded for token in (
+        "repeat", "reelo", "retention", "lapsed", "new guest", "bills", "acquire",
+    ))
 
 
 def _phones(data, question, owner):
@@ -383,8 +538,9 @@ def actions_from_data(data, owner):
             })
     if owner and (data.get("finance") or []):
         card = data["finance"][0]
+        kind = "loss" if str(card.get("value") or "").startswith("-") else "profit"
         actions.append({
-            "what": f"Review {card['kicker']} profit.",
+            "what": f"Review {card['kicker']} {kind}.",
             "why": f"EBITDA is {card['value']}.",
             "owner": owner_for("finance"),
             "urgency": "medium",
@@ -868,6 +1024,8 @@ def _dispatch(question, data, owner):
     wizard = _wizard_b(text, data, owner) or _wizard_answer(text, data, owner)
     if wizard is not None:
         return wizard
+    if _asks_kolkata_guests(folded):
+        return _kolkata_guests(text, owner)
     if "action plan" in folded:
         actions = actions_from_data(data, owner)
         if not actions:

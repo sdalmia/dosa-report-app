@@ -5,7 +5,7 @@
 
 {% block ops %}
 <header class="ops-head">
-  <p class="eyebrow">Command Centre</p>
+  <p class="eyebrow">Reviews</p>
   <h1>Tickets</h1>
   <p class="lede">Emergency-keyword alerts. Age is hours since the customer’s post when that time is known, otherwise hours since the alert.</p>
   <p>On file: 1 Sep–9 Oct, and 2–22 Nov. 10 Oct–1 Nov is not loaded.</p>
@@ -20,6 +20,12 @@
   <section>
     <p data-note="open">{{ view.open_note }}</p>
     <p>{{ view.counts.cases }} cases across {{ view.counts.stores }} stores. Over 24 hours: {{ view.counts.over_24 }}. Within 24 hours: {{ view.counts.within_24 }}.</p>
+    {% if view.counts.cases %}
+    <div class="bar-chart" aria-hidden="true">
+      <span style="--w: {{ (100 * view.counts.over_24 / view.counts.cases)|round }}%">Over 24 hours</span>
+      <span style="--w: {{ (100 * view.counts.within_24 / view.counts.cases)|round }}%">Within 24 hours</span>
+    </div>
+    {% endif %}
     {% if view.rating_note %}<p>{{ view.rating_note }}</p>{% endif %}
     <details class="info">
       <summary>How age is counted</summary>

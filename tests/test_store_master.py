@@ -215,7 +215,7 @@ class StoreMasterTests(unittest.TestCase):
         self.assertNotIn(NOT_ON_REELO, html)
         self.assertIn("Store Master", html)
         self.assertIn('name="cc_store"', html)
-        self.assertNotIn('class="cc-bottom"', html)
+        self.assertIn('class="cc-bottom"', html)
         drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
         self.assertNotIn('href="/store-master"', drawer)
         self.assertNotIn('href="/data-gaps"', drawer)

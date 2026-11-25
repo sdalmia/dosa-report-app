@@ -174,7 +174,8 @@ class FlagAccessTests(unittest.TestCase):
         self.assertEqual(payload.status_code, 200)
         self.assertEqual(payload.get_json()["flags"], [])
         self.assertNotIn('class="flag-card', page.get_data(as_text=True))
-        self.assertIn("No flags to show", page.get_data(as_text=True))
+        self.assertIn("All clear", page.get_data(as_text=True))
+        self.assertNotIn("No flags to show", page.get_data(as_text=True))
 
 
 class OwnerDashboardTests(unittest.TestCase):
@@ -208,30 +209,39 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertTrue(by_key["East"]["gross_change"])
         self.assertNotEqual(by_key["all"]["gross"], "₹0")
         html = page(self.client, "/board")
-        self.assertEqual(view["window_subtitle"], "24 Oct – 22 Nov · vs last Sunday")
+        self.assertEqual(view["window_subtitle"], "1 Nov – 23 Nov · vs same days in October")
+        self.assertEqual(by_key["all"]["gross_change"], "-13.93%")
+        self.assertEqual(by_key["all"]["bills_change"], "-10.04%")
+        self.assertEqual(by_key["all"]["apb_change"], "-3.67%")
+        self.assertEqual(by_key["East"]["gross_change"], "-22.01%")
+        self.assertEqual(by_key["North"]["gross_change"], "-2.37%")
+        self.assertNotEqual(by_key["all"]["gross_change"], "-1.43%")
         self.assertIn("Gross", html)
-        self.assertIn("24 Oct – 22 Nov · vs last Sunday", html)
-        self.assertIn("The report was likely pulled before close.", html)
+        self.assertIn("1 Nov – 23 Nov", html)
+        self.assertIn("vs same days in October", html)
+        self.assertIn("Daily sales are in through 23 Nov.", html)
+        self.assertNotIn("24 Oct – 22 Nov", html)
+        self.assertNotIn("1 Nov – 22 Nov", html)
+        self.assertNotIn("The report was likely pulled before close.", html)
         self.assertNotIn("Protest-affected", html)
         self.assertNotIn("Status unknown", html)
         self.assertNotIn("57907", html)
         self.assertNotIn("39281", html)
-        bill_alerts = " ".join(alert["text"] for alert in view["alerts"] if alert["kind"] == "Bills")
-        self.assertIn(
-            "Gurgaon Sec 10 (02/0014): bills -20.51% versus the same weekday last week.",
-            bill_alerts,
+        bill_alerts = " ".join(
+            f"{alert.get('store', '')} {alert['text']}" for alert in view["alerts"] if alert["kind"] == "Bills"
         )
-        self.assertIn(
-            "Pacific mall, Jasola (02/0011): bills -16.89% versus the same weekday last week.",
-            bill_alerts,
-        )
-        self.assertEqual(bill_alerts.count(": bills "), 2)
+        self.assertIn("Shalimar Bagh", bill_alerts)
+        self.assertIn("Bills -24.71% versus the same weekday last week.", bill_alerts)
+        self.assertIn("Sec 18 Noida", bill_alerts)
+        self.assertNotIn("(02/", bill_alerts)
+        self.assertGreaterEqual(bill_alerts.count("Bills "), 2)
         self.assertNotIn("Rosedale", bill_alerts)
         self.assertNotIn("Food Truck", bill_alerts)
         self.assertNotIn("Faridabad", bill_alerts)
         self.assertNotIn("Manisquare", bill_alerts)
-        self.assertIn("Dosa Coffee - Rosedale Plaza(0006) · Partially operational", html)
-        self.assertIn("Sec 15 Faridabad (02/0007) · Closed", html)
+        self.assertIn("Rosedale Plaza is partly open.", html)
+        self.assertNotIn("Sec 15 Faridabad", html)
+        self.assertNotIn("Partially operational", html)
         self.assertNotIn("Dosa Coffee - Food Truck - 1 (0008) · Closed", html)
         self.assertIn("Calculated. Gross divided by bills.", html)
         self.assertNotIn("posist_daily", html)

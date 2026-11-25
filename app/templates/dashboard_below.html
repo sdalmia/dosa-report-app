@@ -65,19 +65,19 @@
     <p class="empty">No data</p>
   {% else %}
     <div class="league-list" data-list>
-      {% for store in league_top %}
+      {% for store in league_top if public_name(store.label) %}
         <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
           <span class="rank">{{ store.rank }}</span>
-          <strong>{{ store.label }}{% if store.day_badge %} <span class="day-badge" data-field="day_badge">{{ store.day_badge }}</span>{% endif %}</strong>
+          <strong>{{ public_name(store.label) }}</strong>
           <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
         </a>
       {% endfor %}
       {% if league_bottom %}
         <p class="league-split">Bottom</p>
-        {% for store in league_bottom %}
+        {% for store in league_bottom if public_name(store.label) %}
           <a class="league-row" href="{{ url_for('store_health.page', store_id=store.id) }}">
             <span class="rank">{{ store.rank }}</span>
-            <strong>{{ store.label }}{% if store.day_badge %} <span class="day-badge" data-field="day_badge">{{ store.day_badge }}</span>{% endif %}</strong>
+            <strong>{{ public_name(store.label) }}</strong>
             <span class="league-meta"{% if store.gross_exact %} title="{{ store.gross_exact }}"{% endif %}>{% if store.gross %}{{ store.gross }}{% else %}no data{% endif %}</span>
           </a>
         {% endfor %}

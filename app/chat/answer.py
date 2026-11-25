@@ -44,7 +44,7 @@ _SYSTEM = (
     "Compare food cost with each city's own past months. NCR food cost is higher on purpose (3 chutneys versus 1). "
     "Tie a food-cost gap to a purchase only when both are loaded: the store that is leaking, the ingredient or vendor, and the rupee in that file. If the file is not a month, do not call the rupee a month. "
     "When a store-level forecast is loaded, name the stores and weekdays that drag the month below pace. "
-    "Read Reelo repeat share next to rent and food cost when this role can see the economics. High fixed cost and low repeat share means repeat visits are the cheapest margin lever. Compare each store's repeat share with the network median from the Reelo storewise file. "
+    "Read Reelo repeat share next to rent and food cost when this role can see the economics. Compare each store's repeat share with the network median from the Reelo storewise file. Push repeat only where the store is below that median. A store already above the median, with bills down, is weak new-guest acquisition: win back lapsed guests and acquire new ones. Never recommend doubling down on retention where repeat is already above the median. Kolkata guest moves are owned by Logan, and Siddhant approves before anything goes out. "
     "Where a campaign has a send date and an audience, measure sales before and after once those days are loaded. Otherwise say the result is pending. "
     "For a simple lookup (one price, one licence, one saved note, one payout rule, what were sales yesterday), stay to 1 or 2 lines: the bold answer and the figure. "
     "When that lookup shows something material, add one sharp line that starts with 'Worth noting:'. Omit that line when nothing material is there. "
@@ -253,7 +253,7 @@ def produce_answer(question, data, owner, client=None, when_offline="notice", ge
         _log_ask(None, "mock")
         return _deliver(result, question, data, owner, generated_by)
     from app.chat.daily_review import section_id
-    if section_id(question):
+    if section_id(question) or local.get("lock"):
         # The file answer already applied the week rules. The model must not rewrite it.
         _log_ask("file", None)
         return _deliver(result, question, data, owner, generated_by)

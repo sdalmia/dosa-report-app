@@ -147,6 +147,44 @@ def canonical_line(label):
     return None
 
 
+# Accountant check of the workbooks saved 18 Nov 2026. The NCR Summary row
+# "Store Level EBITDA" is net minus the cost column as booked. October leaves
+# commission, power, gas, ads and HO only partly booked, so that cell is a
+# profit of about ₹56.4L. The corrected city results are a loss.
+_NCR_CITY_EBITDA = {
+    "2026-09": -959_000.0,     # ₹9.59L loss
+    "2026-10": -1_727_516.0,   # ₹17.28L loss
+}
+
+
+def _correct_ncr_city(city, city_rows):
+    """Replace the NCR Summary EBITDA cell for Sep and Oct with the accountant's loss.
+
+    The difference is kept as ``unbooked_cost`` so net minus costs still equals EBITDA.
+    Store sheets are left as booked. Kolkata is not adjusted: its Summary cell is the
+    sheet figure (₹56.29L in October).
+    """
+    if city != "NCR":
+        return city_rows
+    index = {}
+    for position, row in enumerate(city_rows):
+        index[(row[3], row[4])] = position
+    for month, target in _NCR_CITY_EBITDA.items():
+        ebitda_at = index.get((month, "ebitda"))
+        if ebitda_at is None:
+            continue
+        current = city_rows[ebitda_at][5]
+        delta = round(current - target, 2)
+        city_rows[ebitda_at] = (
+            *city_rows[ebitda_at][:5], round(target, 2), city_rows[ebitda_at][6],
+        )
+        if abs(delta) < 1:
+            continue
+        sample = city_rows[ebitda_at]
+        city_rows.append((sample[0], sample[1], "", month, "unbooked_cost", delta, "city"))
+    return city_rows
+
+
 def as_number(value):
     """A real number, or None. Blank, text, and sheet errors are None."""
     if isinstance(value, bool) or value is None:
@@ -259,6 +297,7 @@ def read_workbook(path, city, fy):
             if value is None:
                 continue
             city_rows.append((fy, city, "", month, line, round(value, 2), "city"))
+    city_rows = _correct_ncr_city(city, city_rows)
 
     store_rows = []
     ads_check = {}
@@ -312,7 +351,7 @@ def read_workbook(path, city, fy):
     # 3. Checks: EBITDA = net revenue minus costs on every row group; ads rows vs total.
     cost_lines = ("fnb_cost", "electricity", "telephone", "gas", "rent", "software", "salary",
                   "staff_incentives", "amc", "subscription", "insurance", "repairs", "misc",
-                  "cam", "ads", "ho_ck_cost")
+                  "cam", "ads", "ho_ck_cost", "unbooked_cost")
     groups = defaultdict(dict)
     for r in city_rows + store_rows + central_rows:
         groups[(r[2], r[3])][r[4]] = r[5]
@@ -377,6 +416,15 @@ def _fmt_rupee_full(value):
         grouped = ",".join(reversed(parts)) + "," + tail
     sign = "-" if float(value) < 0 else ""
     return f"{sign}₹{grouped}"
+
+
+def _fmt_lakh2(value):
+    """Lakhs to two decimals, so ₹17.28L and ₹56.29L stay distinct from a one-decimal round."""
+    if value is None:
+        return "not yet in"
+    number = float(value)
+    sign = "-" if number < 0 else ""
+    return f"{sign}₹{abs(number) / 100_000:.2f}L"
 
 
 def _fmt_rupee(value):
@@ -520,7 +568,9 @@ def _store_metric(cells, kind):
 def _format_metric(kind, value):
     if value is None:
         return "not yet in"
-    if kind in {"ebitda", "ads", "city-ebitda"}:
+    if kind == "city-ebitda":
+        return _fmt_lakh2(value)
+    if kind in {"ebitda", "ads"}:
         return _fmt_rupee(value)
     return _fmt_pct(value)
 
@@ -708,6 +758,20 @@ def build_views(rows, checks=()):
                 note = "City total. " + note
             if kind == "city-ebitda":
                 note = "From the city summary. " + note
+                if current is not None and current < 0:
+                    note = "Loss. " + note
+                if city == "Kolkata" and month == "2026-10" and current is not None:
+                    gap = next(
+                        (item for item in checks
+                         if item.get("city") == "Kolkata" and item.get("month") == "2026-10" and item.get("line") == "ads"),
+                        None,
+                    )
+                    if gap:
+                        alternative = current - (gap["rows_total"] - gap["sheet_total"])
+                        note += (
+                            f". Sheet figure {_fmt_lakh2(current)}. "
+                            f"{_fmt_lakh2(alternative)} if every ads row is counted."
+                        )
             cards.append({
                 "id": anchor,
                 "kicker": f"{city} · {month_label}",
