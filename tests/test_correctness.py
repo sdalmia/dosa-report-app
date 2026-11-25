@@ -182,12 +182,26 @@ class FinanceFlagTests(unittest.TestCase):
         with (ROOT / "data" / "flags" / "accountant.csv").open(newline="", encoding="utf-8-sig") as handle:
             title = next(csv.DictReader(handle))["title"]
         owner = answer_from_data("What's each company's profit this month?", view_for(role="owner"), True)
-        self.assertIn("Provisional:", owner["text"])
-        self.assertIn(title, owner["text"])
+        text = owner["text"]
+        self.assertIn("Provisional:", text)
+        self.assertIn(title, text)
+        self.assertIn("November profit isn't available yet", text)
+        self.assertIn("Grand Economics November columns are empty", text)
+        self.assertIn("October Tally P&L for all four companies is still pending from Shilajit", text)
+        self.assertIn("Latest month loaded is October 2026", text)
+        self.assertIn("loss of ₹17.28L", text)
+        self.assertIn("loss of ₹9.59L", text)
+        self.assertIn("profit of ₹56.29L", text)
+        self.assertIn("₹53.73L if every ads row is counted", text)
+        self.assertNotIn("profit of ₹17", text)
+        self.assertNotIn("profit of ₹9", text)
+        self.assertNotIn("₹56.4L", text)
+        self.assertNotIn("food cost gap", text.casefold())
         ops = answer_from_data("What's each company's profit this month?", view_for(role="ops"), False)
         self.assertNotIn("Provisional:", ops["text"])
         self.assertNotIn(title, ops["text"])
         self.assertNotIn("EBITDA", ops["text"])
+        self.assertNotIn("17.28", ops["text"])
 
     def test_tally_states_the_last_day_the_books_run_through(self):
         answer = answer_from_data("What did we pay in Delhi on 2 Nov?", view_for(role="owner"), True)
