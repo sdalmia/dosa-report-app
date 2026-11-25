@@ -66,16 +66,26 @@ def _infer_area(text):
 
 def _infer_place(text):
     folded = (text or "").casefold()
+    hits = []
     for name in _PLACES:
-        if name.casefold() in folded:
-            return name
-    if any(word in folded for word in ("ncr", "delhi", "north")):
-        return "NCR"
-    if any(word in folded for word in ("kolkata", "east")):
-        return "Kolkata"
-    if "network" in folded:
-        return "Network"
-    return ""
+        at = folded.find(name.casefold())
+        if at >= 0:
+            hits.append((at, name))
+    for token, label in (
+        ("ncr", "NCR"),
+        ("delhi", "NCR"),
+        ("north", "NCR"),
+        ("kolkata", "Kolkata"),
+        ("east", "Kolkata"),
+        ("network", "Network"),
+    ):
+        match = re.search(rf"\b{token}\b", folded)
+        if match:
+            hits.append((match.start(), label))
+    if not hits:
+        return ""
+    hits.sort(key=lambda item: item[0])
+    return hits[0][1]
 
 
 def _opening(answer):
@@ -103,20 +113,23 @@ def _dates_in(text, as_of):
 
 def _metric_in(text):
     money = re.search(r"(₹[\d,.]+\s*(?:Cr|L)?)", text or "")
-    if not money:
-        return "", ""
-    window = (text or "")[max(0, money.start() - 48):money.start()].casefold()
-    if "net" in window:
-        metric = "Net sales"
-    elif "gross" in window:
-        metric = "Gross"
-    elif "bill" in window:
-        metric = "Bills"
-    elif "sales" in window:
-        metric = "Sales"
-    else:
-        metric = "Figure"
-    return metric, money.group(1).strip()
+    if money:
+        window = (text or "")[max(0, money.start() - 48):money.start()].casefold()
+        if "net" in window:
+            metric = "Net sales"
+        elif "gross" in window:
+            metric = "Gross"
+        elif "bill" in window:
+            metric = "Bills"
+        elif "sales" in window:
+            metric = "Sales"
+        else:
+            metric = "Figure"
+        return metric, money.group(1).strip()
+    percent = re.search(r"([+-]?\d+(?:\.\d+)?%)", text or "")
+    if percent and "sales" in (text or "").casefold():
+        return "Sales", percent.group(1)
+    return "", ""
 
 
 def prefill(question, answer, as_of="", topic=""):

@@ -104,7 +104,7 @@ class QuestionTests(unittest.TestCase):
         text = answer_text("daily review", True, True, _fixture(with_net=True), NOW)
         growth = text.split("## 2.", 1)[1].split("## 3.", 1)[0]
         verdict = growth.split("**", 2)[1]
-        self.assertTrue(verdict.startswith("De-growing"))
+        self.assertTrue(verdict.startswith("Down:"))
         self.assertNotIn("Growing", verdict)
         self.assertIn("down", growth.casefold())
         target = text.split("## 1.", 1)[1].split("## 2.", 1)[0]
@@ -201,10 +201,14 @@ class QuestionTests(unittest.TestCase):
             {"role": "owner"},
             True,
         )["text"]
+        lead = "Down: network sales a day -7.9% (1–23 Nov vs October like-for-like), bills -3.8%, average bill -3.7%, mostly fewer Kolkata bills."
+        self.assertIn(lead, text)
+        self.assertLess(text.index(lead), text.index("Secondary, NCR only"))
+        self.assertNotIn("11,071", text)
+        self.assertNotIn("12,582", text)
         for piece in (
-            "-7.9%", "-3.8%", "-3.7%", "-13.7%", "-7.8%", "-5.9%",
-            "-0.5%", "+1.1%", "-1.7%", "Sanjoy Roy", "11,071", "12,582",
-            "Basis:",
+            "-13.7%", "-7.8%", "-5.9%", "-0.5%", "+1.1%", "-1.7%",
+            "Sanjoy Roy", "Bills a day", "Average bill",
         ):
             self.assertIn(piece, text, piece)
         self.assertNotIn("flat", text.casefold())

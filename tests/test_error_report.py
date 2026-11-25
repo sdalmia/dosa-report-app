@@ -60,17 +60,17 @@ class ErrorReportTests(unittest.TestCase):
             growth,
         )
         self.assertEqual(guessed["area"], "Sales")
-        self.assertEqual(guessed["place"], "NCR")
-        self.assertEqual(guessed["dates"], "17 Nov–23 Nov 2026")
-        self.assertEqual(guessed["metric"], "Gross")
-        self.assertEqual(guessed["value"], "₹7.22 L")
+        self.assertEqual(guessed["place"], "Network")
+        self.assertEqual(guessed["dates"], "1 Nov–23 Nov 2026")
+        self.assertEqual(guessed["metric"], "Sales")
+        self.assertEqual(guessed["value"], "-7.9%")
         flat = " ".join(growth.replace("|", " ").replace("#", " ").replace("*", " ").split())
         shown = prefill(
             "Are we growing or de-growing in sales, transactions and APC, and why?",
             flat,
         )
-        self.assertEqual(shown["place"], "NCR")
-        self.assertEqual(shown["value"], "₹7.22 L")
+        self.assertEqual(shown["place"], "Network")
+        self.assertEqual(shown["value"], "-7.9%")
 
     def test_body_repeats_the_fields_and_redacts_for_a_non_owner(self):
         sent = {}
