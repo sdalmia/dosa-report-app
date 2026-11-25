@@ -35,25 +35,48 @@ def build_report(question, data, owner, answer, generated_by=""):
     see_pl = can_see_pl(role, owner)
     see_books = can_see_books(role, owner)
     see_people = role in {"owner", "hr"}
-    from app.chat.daily_review import report_tables, section_id
+    from app.chat.daily_review import build as build_review, section_id
     if section_id(question):
-        tables = report_tables(question, see_pl, see_people)
+        built = build_review(Path(__file__).resolve().parents[2], see_pl, see_people)
+        tables = []
+        kpis = []
+        for section in built["sections"]:
+            rows = section.get("full_rows") or section["rows"]
+            if not rows and not section.get("verdict"):
+                continue
+            tables.append({
+                "name": section["title"],
+                "coverage": section["coverage"],
+                "columns": section["columns"],
+                "rows": rows or [[section["verdict"]]],
+                "footnote": section.get("footnote") or "",
+            })
+            if len(kpis) < 4 and section.get("kpi"):
+                kpis.append(section["kpi"])
         moment = datetime.now(ZoneInfo("Asia/Kolkata"))
         who = generated_by or ("owner login" if role == "owner" else f"{role} login")
-        coverage = tables[0]["coverage"] if tables else "not loaded"
+        day = built.get("day")
+        coverage = (
+            f"{day.strftime('%-d %b %Y')}. Week comparisons are 17–23 Nov against 20 Oct–2 Nov."
+            if day else (built.get("note") or "not loaded")
+        )
         return {
             "title": "Daily review",
             "coverage": coverage,
-            "sales_through": coverage,
-            "data_lines": [table["coverage"] for table in tables],
+            "sales_through": built.get("note") or coverage,
+            "data_lines": [built.get("note") or coverage],
             "footer": "",
             "generated_by": who,
             "generated_at": moment.strftime("%d %b %Y, %I:%M %p IST").lstrip("0"),
-            "insight": (answer or "").split("\n", 1)[0][:240],
+            "insight": kpis[0]["value"] if kpis else "Daily review",
             "tables": tables,
             "steps": _steps(answer, data, owner and see_pl),
             "chart": None,
+            "kpis": kpis,
+            "owner_only": bool(see_pl),
         }
+    if _delhi_question(question):
+        return _delhi_bundle(data, owner, see_pl, generated_by, answer)
     kind = _kind(question)
     coverage = _coverage(data, kind)
     title = _title(question, kind)
@@ -95,125 +118,96 @@ def build_report(question, data, owner, answer, generated_by=""):
         "tables": tables,
         "steps": steps,
         "chart": chart,
+        "owner_only": bool(see_pl and kind in {"finance", "people"}),
     }
 
 
 def render_pdf(report):
-    from fpdf import FPDF
-
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=16)
-    pdf.add_page()
-    pdf.add_font("DejaVu", "", str(_FONT))
-    if _FONT_BOLD.is_file():
-        pdf.add_font("DejaVu", "B", str(_FONT_BOLD))
-    _pdf_line(pdf, report.get("title") or "Dosa Coffee", 16, bold=True)
-    _pdf_line(pdf, "Prepared by " + (report.get("generated_by") or "the signed-in login"), 10)
-    _pdf_line(pdf, "Prepared at " + (report.get("generated_at") or ""), 10)
-    _pdf_line(pdf, report.get("insight") or "", 12, bold=True)
-    pdf.ln(1)
-    _pdf_line(pdf, "Data", 12, bold=True)
-    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
-        _pdf_line(pdf, line, 10)
-    _pdf_line(pdf, "Coverage: " + (report.get("coverage") or "not loaded"), 10)
-    pdf.ln(2)
-    for table in report.get("tables") or []:
-        _pdf_line(pdf, table.get("name") or "Table", 13, bold=True)
-        _pdf_line(pdf, "Coverage: " + (table.get("coverage") or "not loaded"), 10)
-        columns = table.get("columns") or []
-        _pdf_line(pdf, " | ".join(columns), 9, bold=True)
-        for row in table.get("rows") or []:
-            _pdf_line(pdf, " | ".join(_pdf_cell(column, value) for column, value in zip(columns, row)), 9)
-        pdf.ln(2)
-    if report.get("chart") and report["chart"].get("series"):
-        _pdf_line(pdf, report["chart"].get("title") or "Chart", 13, bold=True)
-        _bars(pdf, report["chart"]["series"])
-    _pdf_line(pdf, "Next steps", 13, bold=True)
-    for step in report.get("steps") or ["No next step is backed by a loaded figure."]:
-        _pdf_line(pdf, step, 10)
-    return bytes(pdf.output())
+    from app.chat.pdf_layout import render_pdf as _render
+    return _render(report)
 
 
 def render_xlsx(report):
-    from openpyxl import Workbook
-    from openpyxl.styles import Font
-    from openpyxl.utils import get_column_letter
+    from app.chat.pdf_layout import render_xlsx as _render
+    return _render(report)
 
-    book = Workbook()
-    cover = book.active
-    cover.title = "Cover"
-    cover.append(["Title", report.get("title") or "Dosa Coffee"])
-    cover.append(["Prepared by", report.get("generated_by") or ""])
-    cover.append(["Prepared at", report.get("generated_at") or ""])
-    cover.append(["Insight", report.get("insight") or ""])
-    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
-        cover.append(["Data", line])
-    cover.append(["Coverage", report.get("coverage") or "not loaded"])
-    cover["A1"].font = Font(bold=True)
-    tables = report.get("tables") or [{"name": "Report", "coverage": report.get("coverage"), "columns": ["Note"], "rows": [["No table was loaded."]]}]
-    for table in tables:
-        sheet = book.create_sheet(_sheet_name(table.get("name")))
-        columns = list(table.get("columns") or ["Note"])
-        if "Coverage" not in columns:
-            columns.append("Coverage")
-        sheet.append(columns)
-        for cell in sheet[1]:
-            cell.font = Font(bold=True)
-        coverage = table.get("coverage") or "not loaded"
-        numeric = set(table.get("numeric") or [])
-        for row in table.get("rows") or []:
-            values = list(row)
-            if len(values) < len(columns) - 1:
-                values.extend([None] * (len(columns) - 1 - len(values)))
-            values = values[: len(columns) - 1]
-            values.append(coverage)
-            written = []
-            formats = []
-            for index, value in enumerate(values):
-                header = columns[index] if index < len(columns) else ""
-                if isinstance(value, str):
-                    written.append(value)
-                    formats.append(None)
-                elif index in numeric and isinstance(value, (int, float)):
-                    if "bill" in header.casefold():
-                        written.append(int(round(value)))
-                        formats.append("#,##,##0")
-                    else:
-                        written.append(float(value))
-                        formats.append("#,##,##0.00")
-                else:
-                    written.append(value if value is not None else "")
-                    formats.append(None)
-            sheet.append(written)
-            for index, fmt in enumerate(formats, start=1):
-                if fmt:
-                    sheet.cell(sheet.max_row, index).number_format = fmt
-        for column in sheet.columns:
-            sheet.column_dimensions[get_column_letter(column[0].column)].width = 22
-        sheet.freeze_panes = "A2"
-        if sheet.dimensions:
-            sheet.auto_filter.ref = sheet.dimensions
-    steps = book.create_sheet("Next steps")
-    steps.append(["Step", "Coverage"])
-    steps["A1"].font = Font(bold=True)
-    steps["B1"].font = Font(bold=True)
-    for step in report.get("steps") or ["No next step is backed by a loaded figure."]:
-        steps.append([step, report.get("coverage") or "not loaded"])
-    if report.get("chart") and report["chart"].get("series"):
-        chart = book.create_sheet("Chart")
-        chart.append(["Label", "Value", "Coverage"])
-        for cell in chart[1]:
-            cell.font = Font(bold=True)
-        for item in report["chart"]["series"]:
-            value = item.get("value")
-            chart.append([
-                item.get("label") or "",
-                round(float(value), 2) if isinstance(value, (int, float)) else "",
-                report.get("coverage") or "not loaded",
-            ])
-    handle = BytesIO()
-    book.save(handle)
-    return handle.getvalue()
+
+def _delhi_question(question):
+    folded = " ".join((question or "").casefold().split())
+    return "real problem" in folded and any(word in folded for word in ("delhi", "ncr", "north"))
+
+
+def _delhi_bundle(data, owner, see_pl, generated_by, answer):
+    """NCR only, on the same windows as the Delhi answer."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from app.chat.pdf_layout import rupee
+    from app.chat.sizing import ncr_window, store_rates
+
+    base, recent, bill_effect, apb_effect, _driver = ncr_window()
+    change = recent["gross_per_day"] / base["gross_per_day"] - 1
+    stores = store_rates()
+    downs = [row for row in stores if not row["up"]]
+    focus = downs[:4]
+    total_drop = recent["gross_per_day"] - base["gross_per_day"]
+    share = abs(sum(row["gap_per_day"] for row in focus) / total_drop) * 100 if total_drop else 0
+    coverage = "17-23 Nov 2026 against 20 Oct-2 Nov 2026"
+    rows = []
+    for row in stores:
+        name = row["name"]
+        if "rosedale" in name.casefold():
+            name = f"{name} (partly open)"
+        pct = (row["recent_per_day"] / row["base_per_day"] - 1) * 100 if row["base_per_day"] else 0
+        rows.append([
+            name,
+            rupee(row["base_per_day"]),
+            rupee(row["recent_per_day"]),
+            rupee(row["gap_per_day"]),
+            f"{pct:+.1f}%",
+            f"{row['recent_bills']:.0f}",
+            rupee(row["recent_apb"]),
+        ])
+    tone = "red" if change < 0 else "green"
+    kpis = [
+        {"label": "NCR per day", "value": rupee(recent["gross_per_day"]), "delta": f"{change * 100:+.1f}% vs 20 Oct-2 Nov", "tone": tone},
+        {"label": "Bills effect", "value": rupee(bill_effect), "delta": "per day", "tone": "red" if bill_effect < 0 else "green"},
+        {"label": "APB effect", "value": rupee(apb_effect), "delta": "per day", "tone": "red" if apb_effect < 0 else "green"},
+        {"label": "Four stores", "value": f"{share:.0f}%", "delta": "of the daily drop", "tone": "red"},
+    ]
+    table = {
+        "name": "NCR per day",
+        "coverage": coverage,
+        "columns": ["Store", "Baseline / day", "17-23 Nov / day", "Change / day", "Change %", "Bills / day", "APB"],
+        "rows": rows,
+        "numeric_headers": [1, 2, 3, 4, 5, 6],
+    }
+    moment = datetime.now(ZoneInfo("Asia/Kolkata"))
+    role = (data or {}).get("role") or ("owner" if owner else "ops")
+    who = generated_by or ("owner login" if role == "owner" else f"{role} login")
+    chart = {
+        "title": "Per-day change",
+        "series": [{"label": row["name"], "value": float(row["gap_per_day"])} for row in stores[:5]],
+    }
+    tables = [table]
+    moves = _moves_table(data, owner)
+    if moves:
+        tables.append(moves)
+    return {
+        "title": "Delhi",
+        "coverage": coverage,
+        "sales_through": coverage,
+        "data_lines": [coverage],
+        "footer": "",
+        "generated_by": who,
+        "generated_at": moment.strftime("%d %b %Y, %I:%M %p").lstrip("0"),
+        "insight": f"NCR per day {rupee(recent['gross_per_day'])} ({change * 100:+.1f}%)",
+        "tables": tables,
+        "steps": _steps(answer, data, owner and see_pl),
+        "chart": chart,
+        "kpis": kpis,
+        "owner_only": bool(see_pl),
+    }
 
 
 def _kind(question):
@@ -317,13 +311,17 @@ def _sales_table(data, coverage):
         if gross in (None, 0):
             continue
         bills = _bills_cell(row, name)
+        if bills == "excluded (mall bulk bills)":
+            bills = "†"
         rows.append([_short(name), row.get("region") or "", float(gross), bills])
     rows.sort(key=lambda item: item[2], reverse=True)
     return {
         "name": "Store performance",
         "coverage": coverage,
-        "columns": ["Store", "City", "Gross (Rs)", "Bills"],
+        "columns": ["Store", "City", "Gross", "Bills"],
         "numeric": [2, 3],
+        "numeric_headers": [2, 3],
+        "footnote": "† excluded (mall bulk bills)." if any(row[3] == "†" for row in rows) else "",
         "rows": rows or [["No open store is loaded", "", None, None]],
     }
 
@@ -405,6 +403,19 @@ def _private_table(name, allowed, coverage, label):
     }
 
 
+def _clip(text, limit):
+    words = str(text or "").split()
+    if not words:
+        return ""
+    kept = []
+    for word in words:
+        trial = " ".join(kept + [word])
+        if len(trial) > limit:
+            break
+        kept.append(word)
+    return " ".join(kept) or words[0][:limit]
+
+
 def _moves_table(data, owner):
     from app.chat.guard import can_see_pl
     from app.chat.sizing import move_lines
@@ -420,7 +431,7 @@ def _moves_table(data, owner):
         if "Value:" in line and "How sized:" in line:
             value = line.split("Value:", 1)[1].split("How sized:", 1)[0].strip()
             how = line.split("How sized:", 1)[1].split("Owner:", 1)[0].strip()
-        rows.append([line.split(". ", 1)[0][:80], value, how])
+        rows.append([_clip(line.split(". ", 1)[0], 90), _clip(value, 80), _clip(how, 160)])
     return {
         "name": "Moves",
         "coverage": "17-23 Nov 2026 against 20 Oct-2 Nov 2026",
@@ -462,7 +473,7 @@ def _chart(data, table):
     series = []
     columns = table.get("columns") or []
     numeric_at = None
-    for label in ("Gross (Rs)", "Gross rupees"):
+    for label in ("Gross (Rs)", "Gross rupees", "Gross"):
         if label in columns:
             numeric_at = columns.index(label)
             break

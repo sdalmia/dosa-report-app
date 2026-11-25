@@ -50,7 +50,7 @@ class ReportFileTests(unittest.TestCase):
         self.assertTrue(pdf.startswith(b"%PDF"))
         pdf_text = "\n".join(page.extract_text() or "" for page in PdfReader(BytesIO(pdf)).pages)
         self.assertIn("Store performance", pdf_text)
-        self.assertIn("Coverage", pdf_text)
+        self.assertIn("Covered", pdf_text)
         self.assertIn("Next steps", pdf_text)
         self.assertNotIn("EBITDA", pdf_text)
         book = load_workbook(BytesIO(render_xlsx(report)))
@@ -98,15 +98,16 @@ class FormatTests(unittest.TestCase):
         report = build_report("make me a PDF of last week's store performance", data, False, "East gave up the week.")
         mall = [row for row in report["tables"][0]["rows"] if "mani" in str(row[0]).casefold() or str(row[0]).casefold() == "forum"]
         self.assertTrue(mall)
-        self.assertTrue(all(row[3] == "excluded (mall bulk bills)" for row in mall))
+        self.assertTrue(all(row[3] == "†" for row in mall))
+        self.assertIn("excluded (mall bulk bills)", report["tables"][0]["footnote"])
         pdf = "\n".join(page.extract_text() or "" for page in PdfReader(BytesIO(render_pdf(report))).pages)
-        self.assertIn("Data", pdf)
-        self.assertIn("Rs ", pdf)
+        self.assertIn("Dosa Coffee", pdf)
+        self.assertIn("₹", pdf)
         self.assertIn("excluded (mall bulk bills)", pdf)
         self.assertNotRegex(pdf, r"\d{6}\.\d{2}")
         book = load_workbook(BytesIO(render_xlsx(report)))
         sheet = book["Store performance"]
-        self.assertEqual(sheet["C2"].number_format, "#,##,##0.00")
+        self.assertEqual(sheet["C2"].number_format, '"₹"#,##,##0.00')
         self.assertIsInstance(sheet["C2"].value, float)
         bills = sheet["D2"].value
         if isinstance(bills, str):

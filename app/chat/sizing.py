@@ -198,6 +198,8 @@ def store_rates():
             "base_per_day": base_day,
             "recent_per_day": rec_day,
             "gap_per_day": rec_day - base_day,
+            "base_bills": base_bills,
+            "recent_bills": rec_bills,
             "base_apb": base_apb,
             "recent_apb": rec_apb,
             "bills_change": (rec_bills / base_bills - 1) if base_bills else None,

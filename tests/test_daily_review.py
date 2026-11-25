@@ -120,8 +120,7 @@ class QuestionTests(unittest.TestCase):
         path.write_text(path.read_text(encoding="utf-8").replace("2026-11-23,700,900,8", "2026-11-23,700,,8"), encoding="utf-8")
         real = build(root, True, False, NOW)
         row = next(section for section in real["sections"] if section["id"] == "target")
-        joined = " ".join(" ".join(item) for item in row["full_rows"])
-        self.assertIn("estimated net", joined)
+        self.assertIn("estimated from gross", row["footnote"].casefold())
         self.assertNotIn("90% of gross", row["why"])
 
     def test_a_drift_above_half_a_point_is_flagged(self):
