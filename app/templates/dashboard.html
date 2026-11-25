@@ -54,6 +54,9 @@
         <article class="kpi-card">
           <h3>{{ title }}</h3>
           <p class="kpi-value"{% if regions[0][key ~ '_exact'] %} title="{{ regions[0][key ~ '_exact'] }}"{% endif %}>{% if regions[0][key] %}{{ regions[0][key] }}{% else %}no data{% endif %}</p>
+          {% if key == "gross" and chart.spark %}
+          <svg class="kpi-spark" viewBox="0 0 100 28" aria-hidden="true"><polyline points="{{ chart.spark }}"></polyline></svg>
+          {% endif %}
           <div class="kpi-chips">
             {% for region in regions %}
               <span>{{ region.label }} <b class="{% if region[key ~ '_change'].startswith('-') %}chg-down{% elif region[key ~ '_change'].startswith('+') %}chg-up{% endif %}">{% if region[key ~ '_change'] %}{{ region[key ~ '_change'] }}{% else %}–{% endif %}</b></span>

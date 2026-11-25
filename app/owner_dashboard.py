@@ -322,7 +322,7 @@ def _chart(feeds, directory, start, end):
             if last_band is None or day > last_band:
                 last_band = day
     if not dates:
-        return {"points": [], "source": band_note, "last_band": "", "svg": ""}
+        return {"points": [], "source": band_note, "last_band": "", "svg": "", "spark": ""}
     first, final = min(dates), max(dates)
     points = []
     cursor = first
@@ -342,7 +342,24 @@ def _chart(feeds, directory, start, end):
         "source": band_note,
         "last_band": format_date(last_band) if last_band else "",
         "svg": Markup(_svg(points)),
+        "spark": _spark(points),
     }
+
+
+def _spark(points):
+    """A small polyline of the loaded daily gross. Empty when there is no series."""
+    values = [point["gross"] for point in points if point.get("gross") is not None]
+    if len(values) < 2:
+        return ""
+    low, high = min(values), max(values)
+    span = high - low or 1
+    coords = []
+    last = len(values) - 1
+    for index, value in enumerate(values):
+        x = 2 + (96 * index / last)
+        y = 24 - ((value - low) / span) * 20
+        coords.append(f"{x:.1f},{y:.1f}")
+    return " ".join(coords)
 
 
 def _svg(points):
@@ -680,7 +697,7 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         stores = [chosen]
     league = _league(feeds, stores, start, end, region, low_only) if start else []
     chart = _chart(feeds, feeds.get("directory") or data_directory(), start, end) if start else {
-        "points": [], "source": "", "last_band": "", "svg": "",
+        "points": [], "source": "", "last_band": "", "svg": "", "spark": "",
     }
     days_in_window = 0
     if start and end:

@@ -64,12 +64,28 @@ html[data-theme="dark"] {
 
 html { font-size: 16px; }
 
+@font-face {
+  font-family: Inter;
+  src: url("../fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  src: url("../fonts/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  line-height: 1.4;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  line-height: 1.45;
+  letter-spacing: -0.011em;
   overflow-x: hidden;
 }
 
@@ -1586,9 +1602,128 @@ body:has(.cc-insights) .cc-header .cc-icon-btn {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: calc(64px + env(safe-area-inset-bottom));
     z-index: 24;
-    padding: 8px 12px calc(10px + env(safe-area-inset-bottom));
+    padding: 8px 12px 10px;
     background: var(--bg);
   }
 }
+
+.cc-side {
+  display: none;
+}
+.cc-side-mark {
+  margin: 8px 12px 16px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.cc-side a, .cc-bottom a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.cc-side a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.cc-side a[aria-current="page"], .cc-bottom a[aria-current="page"] {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.cc-side a:hover { background: var(--surface-2); color: var(--text); }
+.cc-side a:focus-visible, .cc-bottom a:focus-visible, .cc-act:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (min-width: 960px) {
+  .cc-side {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    z-index: 40;
+    padding: 20px 12px;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+  }
+  .cc-header, .cc-main { margin-left: 220px; }
+  .cc-main { width: auto; max-width: 1080px; }
+  .cc-bottom { display: none; }
+  body:has(.cc-bottom) { padding-bottom: 0; }
+}
+
+.kpi-card, .tile, .panel, .day-card, .league-row, .alert-row, .target-row, .login-card, .cc-turn-body {
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(20, 16, 12, 0.04), 0 10px 28px rgba(20, 16, 12, 0.05);
+}
+.cc-home .cc-section { margin-bottom: 32px; }
+.cc-home .section-head { margin-bottom: 8px; }
+.cc-home .kpi-grid, .cc-home .tile-grid { gap: 16px; }
+.cc-home .kpi-card, .cc-home .tile, .cc-home .alert-row, .cc-home .target-row { padding: 16px; }
+.cc-home .kpi-value { font-size: 1.75rem; letter-spacing: -0.03em; }
+.kpi-value, .stat-row b, .cc-num, table td {
+  font-variant-numeric: tabular-nums;
+}
+.kpi-chips b, .chg-up, .chg-down {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.chg-up { background: rgba(22, 101, 52, 0.12); color: var(--up); }
+.chg-down { background: rgba(159, 18, 57, 0.1); color: var(--down); }
+.kpi-spark { display: block; width: 100%; height: 28px; margin-top: 8px; }
+.kpi-spark polyline { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+table { border-collapse: separate; border-spacing: 0; }
+.cc-answer .cc-mini tbody tr:nth-child(even),
+table.table tbody tr:nth-child(even) { background: transparent; }
+thead th {
+  position: sticky;
+  top: 56px;
+  background: var(--surface);
+  z-index: 1;
+}
+.cc-act {
+  border-radius: 999px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.lazy-bar { border-radius: 8px; }
+
+@media (max-width: 959px) {
+  .cc-chat-form {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: 1;
+    padding: 8px 0 0;
+    background: transparent;
+  }
+  .cc-chat.is-chatting .cc-chat-form {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    z-index: 35;
+    padding: 8px 12px;
+    background: var(--bg);
+  }
+  .cc-chat { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .cc-chat.is-chatting { padding-bottom: calc(180px + env(safe-area-inset-bottom)); }
+}
+html[data-theme="dark"] .cc-side { background: var(--surface); }
+html[data-theme="dark"] .chg-up { background: rgba(125, 222, 166, 0.16); }
+html[data-theme="dark"] .chg-down { background: rgba(255, 139, 139, 0.16); }
