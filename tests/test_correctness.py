@@ -89,8 +89,8 @@ class NetworkNetTests(unittest.TestCase):
         from openpyxl import load_workbook
         sheet = load_workbook(BytesIO(book))["Cover"]
         cover = " ".join(str(cell.value or "") for row in sheet.iter_rows() for cell in row)
-        self.assertIn("Rs 95.94 L network net", cover)
-        self.assertNotIn("Rs 95.96 L network net", cover)
+        self.assertIn("₹95.94 L network net", cover)
+        self.assertNotIn("₹95.96 L network net", cover)
 
     def test_rounding_happens_only_after_summing(self):
         folder = Path(tempfile.mkdtemp())

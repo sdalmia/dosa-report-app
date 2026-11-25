@@ -35,28 +35,57 @@ def build_report(question, data, owner, answer, generated_by=""):
     see_pl = can_see_pl(role, owner)
     see_books = can_see_books(role, owner)
     see_people = role in {"owner", "hr"}
-    from app.chat.daily_review import report_tables, section_id
+    from app.chat.daily_review import build as build_review, section_id
     if section_id(question):
-        tables = report_tables(question, see_pl, see_people)
+        built = build_review(Path(__file__).resolve().parents[2], see_pl, see_people)
+        tables = []
+        kpis = []
+        for section in built["sections"]:
+            rows = section.get("full_rows") or section["rows"]
+            if not rows and not section.get("verdict"):
+                continue
+            tables.append({
+                "name": section["title"],
+                "coverage": section["coverage"],
+                "columns": section["columns"],
+                "rows": rows or [[section["verdict"]]],
+            })
+            tone = "ink"
+            verdict = section.get("verdict") or ""
+            head = verdict.split(":", 1)[0].casefold()
+            if head.startswith("behind") or head.startswith("de-growing"):
+                tone = "red"
+            elif head.startswith("ahead") or head.startswith("growing"):
+                tone = "green"
+            if len(kpis) < 4:
+                sentence = verdict.split(". ")[0].strip()
+                if len(sentence) > 78:
+                    sentence = sentence[:75].rsplit(" ", 1)[0] + "…"
+                kpis.append({"label": section["title"].split(". ", 1)[-1], "value": sentence, "tone": tone})
         moment = datetime.now(ZoneInfo("Asia/Kolkata"))
         who = generated_by or ("owner login" if role == "owner" else f"{role} login")
-        coverage = tables[0]["coverage"] if tables else "not loaded"
+        day = built.get("day")
+        coverage = day.strftime("%-d %b %Y") if day else (built.get("note") or "not loaded")
         return {
             "title": "Daily review",
             "coverage": coverage,
-            "sales_through": coverage,
-            "data_lines": [table["coverage"] for table in tables],
+            "sales_through": built.get("note") or coverage,
+            "data_lines": [built.get("note") or coverage],
             "footer": "",
             "generated_by": who,
             "generated_at": moment.strftime("%d %b %Y, %I:%M %p IST").lstrip("0"),
-            "insight": (answer or "").split("\n", 1)[0][:240],
+            "insight": kpis[0]["value"] if kpis else "Daily review",
             "tables": tables,
             "steps": _steps(answer, data, owner and see_pl),
             "chart": None,
+            "kpis": kpis,
+            "owner_only": bool(see_pl),
         }
     kind = _kind(question)
     coverage = _coverage(data, kind)
     title = _title(question, kind)
+    if "real problem" in (question or "").casefold() and "delhi" in (question or "").casefold():
+        title = "Delhi"
     tables = []
     if kind in {"finance", "people", "inbox", "tally"} and not _allowed(kind, see_pl, see_people, see_books):
         tables.append(_refusal_table(kind, coverage))
@@ -95,125 +124,18 @@ def build_report(question, data, owner, answer, generated_by=""):
         "tables": tables,
         "steps": steps,
         "chart": chart,
+        "owner_only": bool(see_pl and kind in {"finance", "people"}),
     }
 
 
 def render_pdf(report):
-    from fpdf import FPDF
-
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=16)
-    pdf.add_page()
-    pdf.add_font("DejaVu", "", str(_FONT))
-    if _FONT_BOLD.is_file():
-        pdf.add_font("DejaVu", "B", str(_FONT_BOLD))
-    _pdf_line(pdf, report.get("title") or "Dosa Coffee", 16, bold=True)
-    _pdf_line(pdf, "Prepared by " + (report.get("generated_by") or "the signed-in login"), 10)
-    _pdf_line(pdf, "Prepared at " + (report.get("generated_at") or ""), 10)
-    _pdf_line(pdf, report.get("insight") or "", 12, bold=True)
-    pdf.ln(1)
-    _pdf_line(pdf, "Data", 12, bold=True)
-    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
-        _pdf_line(pdf, line, 10)
-    _pdf_line(pdf, "Coverage: " + (report.get("coverage") or "not loaded"), 10)
-    pdf.ln(2)
-    for table in report.get("tables") or []:
-        _pdf_line(pdf, table.get("name") or "Table", 13, bold=True)
-        _pdf_line(pdf, "Coverage: " + (table.get("coverage") or "not loaded"), 10)
-        columns = table.get("columns") or []
-        _pdf_line(pdf, " | ".join(columns), 9, bold=True)
-        for row in table.get("rows") or []:
-            _pdf_line(pdf, " | ".join(_pdf_cell(column, value) for column, value in zip(columns, row)), 9)
-        pdf.ln(2)
-    if report.get("chart") and report["chart"].get("series"):
-        _pdf_line(pdf, report["chart"].get("title") or "Chart", 13, bold=True)
-        _bars(pdf, report["chart"]["series"])
-    _pdf_line(pdf, "Next steps", 13, bold=True)
-    for step in report.get("steps") or ["No next step is backed by a loaded figure."]:
-        _pdf_line(pdf, step, 10)
-    return bytes(pdf.output())
+    from app.chat.pdf_layout import render_pdf as _render
+    return _render(report)
 
 
 def render_xlsx(report):
-    from openpyxl import Workbook
-    from openpyxl.styles import Font
-    from openpyxl.utils import get_column_letter
-
-    book = Workbook()
-    cover = book.active
-    cover.title = "Cover"
-    cover.append(["Title", report.get("title") or "Dosa Coffee"])
-    cover.append(["Prepared by", report.get("generated_by") or ""])
-    cover.append(["Prepared at", report.get("generated_at") or ""])
-    cover.append(["Insight", report.get("insight") or ""])
-    for line in report.get("data_lines") or [report.get("sales_through") or ""]:
-        cover.append(["Data", line])
-    cover.append(["Coverage", report.get("coverage") or "not loaded"])
-    cover["A1"].font = Font(bold=True)
-    tables = report.get("tables") or [{"name": "Report", "coverage": report.get("coverage"), "columns": ["Note"], "rows": [["No table was loaded."]]}]
-    for table in tables:
-        sheet = book.create_sheet(_sheet_name(table.get("name")))
-        columns = list(table.get("columns") or ["Note"])
-        if "Coverage" not in columns:
-            columns.append("Coverage")
-        sheet.append(columns)
-        for cell in sheet[1]:
-            cell.font = Font(bold=True)
-        coverage = table.get("coverage") or "not loaded"
-        numeric = set(table.get("numeric") or [])
-        for row in table.get("rows") or []:
-            values = list(row)
-            if len(values) < len(columns) - 1:
-                values.extend([None] * (len(columns) - 1 - len(values)))
-            values = values[: len(columns) - 1]
-            values.append(coverage)
-            written = []
-            formats = []
-            for index, value in enumerate(values):
-                header = columns[index] if index < len(columns) else ""
-                if isinstance(value, str):
-                    written.append(value)
-                    formats.append(None)
-                elif index in numeric and isinstance(value, (int, float)):
-                    if "bill" in header.casefold():
-                        written.append(int(round(value)))
-                        formats.append("#,##,##0")
-                    else:
-                        written.append(float(value))
-                        formats.append("#,##,##0.00")
-                else:
-                    written.append(value if value is not None else "")
-                    formats.append(None)
-            sheet.append(written)
-            for index, fmt in enumerate(formats, start=1):
-                if fmt:
-                    sheet.cell(sheet.max_row, index).number_format = fmt
-        for column in sheet.columns:
-            sheet.column_dimensions[get_column_letter(column[0].column)].width = 22
-        sheet.freeze_panes = "A2"
-        if sheet.dimensions:
-            sheet.auto_filter.ref = sheet.dimensions
-    steps = book.create_sheet("Next steps")
-    steps.append(["Step", "Coverage"])
-    steps["A1"].font = Font(bold=True)
-    steps["B1"].font = Font(bold=True)
-    for step in report.get("steps") or ["No next step is backed by a loaded figure."]:
-        steps.append([step, report.get("coverage") or "not loaded"])
-    if report.get("chart") and report["chart"].get("series"):
-        chart = book.create_sheet("Chart")
-        chart.append(["Label", "Value", "Coverage"])
-        for cell in chart[1]:
-            cell.font = Font(bold=True)
-        for item in report["chart"]["series"]:
-            value = item.get("value")
-            chart.append([
-                item.get("label") or "",
-                round(float(value), 2) if isinstance(value, (int, float)) else "",
-                report.get("coverage") or "not loaded",
-            ])
-    handle = BytesIO()
-    book.save(handle)
-    return handle.getvalue()
+    from app.chat.pdf_layout import render_xlsx as _render
+    return _render(report)
 
 
 def _kind(question):
