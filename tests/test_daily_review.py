@@ -193,6 +193,26 @@ class QuestionTests(unittest.TestCase):
         self.assertEqual(report["title"], "Daily review")
         self.assertGreaterEqual(len(report["tables"]), 10)
 
+    def test_growth_question_uses_tonys_like_for_like(self):
+        from app.chat.lenses import range_status
+
+        text = answer_from_data(
+            "Are we growing or de-growing in sales, transactions and APC, and why?",
+            {"role": "owner"},
+            True,
+        )["text"]
+        for piece in (
+            "-7.9%", "-3.8%", "-3.7%", "-13.7%", "-7.8%", "-5.9%",
+            "-0.5%", "+1.1%", "-1.7%", "Sanjoy Roy", "11,071", "12,582",
+            "Basis:",
+        ):
+            self.assertIn(piece, text, piece)
+        self.assertNotIn("flat", text.casefold())
+        for banned in ("31.3", "57.5", "not sized", "Vikas", "38.1", "70,103", "107,499", "3,186", "3,468"):
+            self.assertNotIn(banned, text)
+        self.assertEqual(range_status(168000, 107000, 140000), "beating")
+        self.assertEqual(range_status(90000, 107000, 140000), "miss")
+
 
 if __name__ == "__main__":
     unittest.main()

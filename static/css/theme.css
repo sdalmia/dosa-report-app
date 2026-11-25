@@ -1353,6 +1353,9 @@ body.cc-sheet-open { overflow: hidden; }
   100% { background-position: -100% 0; }
 }
 
+.cc-error-box { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; text-align: left; }
+.cc-error-box label, .cc-error-box input, .cc-error-box select, .cc-error-box textarea { width: 100%; font: inherit; }
+.cc-error-box textarea { min-height: 64px; }
 .cc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .cc-act {
   min-height: 40px;

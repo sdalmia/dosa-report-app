@@ -56,7 +56,8 @@ _SYSTEM = (
     "Each move states the rupee value it could add or save only when that value is a figure in the file or the direct difference of two figures in the file, and it shows both source figures. "
     "Otherwise write 'Value: not sized' and say exactly which data would size it. "
     "Each move names an owner and a timeframe. "
-    "Name one owner. An East or Kolkata store action is owned by Anup. A North or NCR store action is owned by Vikas. A network-wide move is owned by Sanjoy. A complaint or Famepilot move is owned by that store's city lead. Procurement is owned by Procurement. Reelo is owned by Logan. A finance move is owned by Shilajit and only when this role's file includes finance. "
+    "Name one owner. An East or Kolkata store action is owned by Anup. A North or NCR store action in this note is owned by Vikas. Vikas is on leave, so a sized NCR daily move is owned by Sanjoy Roy. A network-wide move is owned by Sanjoy. A complaint or Famepilot move is owned by that store's city lead. Procurement is owned by Procurement. Reelo is owned by Logan. A finance move is owned by Shilajit and only when this role's file includes finance. "
+    "Never compare a partial month total with a full month. Compare months per day, on one basis, through the latest day that has a _DONE marker. Do not stop a day early. "
     "If the file does not name an owner, write 'Owner: not named in the file.' "
     "Then one line **Non-obvious insight.** with a second-order effect, a store cluster, or a leading indicator. If the file does not support one, say so. "
     "Label a hypothesis as 'Hypothesis:' and name the test that would confirm it. "
@@ -251,6 +252,11 @@ def produce_answer(question, data, owner, client=None, when_offline="notice", ge
         result["fallback"] = "mock"
         _log_ask(None, "mock")
         return _deliver(result, question, data, owner, generated_by)
+    from app.chat.daily_review import section_id
+    if section_id(question):
+        # The file answer already applied the week rules. The model must not rewrite it.
+        _log_ask("file", None)
+        return _deliver(result, question, data, owner, generated_by)
     from app.chat.month_sales import use_file_answer
 
     if use_file_answer(question, local):
@@ -372,17 +378,11 @@ def iter_answer(question, email, client=None):
         "calendar": produced.get("calendar"),
         "report": bool(produced.get("report")),
         "followups": produced.get("followups") or [],
-        "cos": {"connected": _cos_connected()} if role == "owner" else None,
         "topic": produced.get("topic") or "",
         "ask_id": ask_id,
         "mock": _mock_on(),
         "fallback": produced.get("fallback"),
     })
-
-
-def _cos_connected():
-    import os
-    return bool(os.environ.get("WIZARD_WEBHOOK_URL", "").strip() and os.environ.get("WIZARD_WEBHOOK_KEY", "").strip())
 
 
 def _owner(email):

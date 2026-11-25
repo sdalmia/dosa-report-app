@@ -54,6 +54,8 @@ def section_id(question):
     for name, phrases in checks:
         if any(phrase in folded for phrase in phrases):
             return name
+    if any(phrase in folded for phrase in ("month-on-month", "month on month", "are we growing", "transactions and apc")):
+        return "growth"
     return ""
 
 
@@ -133,6 +135,11 @@ def resolve_day(root, now=None):
         f"This review is the latest closed day, {latest.isoformat()}."
     )
     return latest, note
+
+
+def spoken(day):
+    months = ("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    return f"{day.day} {months[day.month]} {day.year}"
 
 
 def money(value):
@@ -540,10 +547,23 @@ def _growth(root, day, sales):
     gross_change = latest["gross"] - base["per_gross"]
     bill_effect = (latest["bills"] - base["per_bills"]) * base["apc"]
     apc_effect = latest["bills"] * (latest["apc"] - base["apc"])
-    verdict = (
-        f"{_way(gross_change, 'Growing', 'De-growing')}: {day.isoformat()} gross {money(latest['gross'])} "
-        f"versus the 20 Oct-2 Nov per day {money(base['per_gross'])} ({_pct(gross_change / base['per_gross'])})."
-    )
+    week_north = _north_block(sales, *_WEEK)
+    base_north = _north_block(sales, *_BASE)
+    if week_north and base_north:
+        week_gap = week_north["per_gross"] - base_north["per_gross"]
+        week_bills = (week_north["per_bills"] - base_north["per_bills"]) * base_north["apc"]
+        week_apb = week_north["per_bills"] * (week_north["apc"] - base_north["apc"])
+        verdict = (
+            f"{_way(week_gap, 'Growing', 'De-growing')} on the clean week: "
+            f"NCR per-day gross {money(week_north['per_gross'])} on 17-23 Nov versus "
+            f"{money(base_north['per_gross'])} on 20 Oct-2 Nov ({_pct(week_gap / base_north['per_gross'])}). "
+            f"Both the bill count ({money(week_bills)} a day) and the average bill ({money(week_apb)} a day)."
+        )
+    else:
+        verdict = (
+            f"{_way(gross_change, 'Growing', 'De-growing')}: {spoken(day)} gross {money(latest['gross'])} "
+            f"versus the 20 Oct-2 Nov per day {money(base['per_gross'])} ({_pct(gross_change / base['per_gross'])})."
+        )
     rows = [[
         "Network ex malls",
         money(gross_change),
@@ -592,15 +612,56 @@ def _growth(root, day, sales):
         "columns": ["Store", "Gross vs own baseline", "Bills effect", "APC effect", "Bills", "APC"],
         "rows": rows,
         "why": (
-            "Gross change splits into a bills effect and an APC effect against the store's own 20 Oct-2 Nov per day. "
-            "Manisquare and Forum bills and APC are left out; their gross still sits in the sales total. "
-            "Rosedale is partly open and is not listed."
+            "The lead comparison is the full week, 17-23 Nov against 20 Oct-2 Nov, per day, not a partial month against a full month. "
+            "On that NCR window the driver is both the bill count and the average bill. "
+            + _tony_lfl(day)
+            + " Gross change on a single day splits into a bills effect and an APC effect against each store's own baseline. "
+            "Manisquare and Forum bills and APC stay out of that store split. "
+            "Rosedale is partly open and is not listed as a problem."
             + week_line + " " + reason + " " + yoy
         ),
-        "action": "Walk the stores whose bills effect and APC effect are both down.",
-        "owner": _NCR,
+        "action": "Walk the NCR stores whose bills and average bill are both down.",
+        "owner": "Sanjoy Roy",
         "coverage": f"sales_{day.isoformat()}.csv; baseline 20 Oct-2 Nov; brief coverage is the file date or not on file",
     }
+
+
+def _tony_lfl(day):
+    """Tony's like-for-like. Not Alfred's network-net total, and November is not called flat."""
+    end = spoken(day) if day else "23 Nov 2026"
+    return (
+        f"Basis: gross per day, 9 Oct to {end}, Faridabad and Rosedale out, "
+        "mall bulk bills out of both sales and bills. "
+        "November is down: network sales a day -7.9%, bills a day -3.8%, average bill -3.7%. "
+        "Most of that is fewer bills in Kolkata, plus a softer average bill everywhere. "
+        "Kolkata is -13.7% sales, -7.8% bills and -5.9% average bill "
+        "(Durga Puja lifted October; Cyclone Akvan rain 19-21 Nov; Jagaddhatri immersion; "
+        "New Town Cloud Kitchen power cut). "
+        "NCR sales are -0.5% (about -3% once Navratri days are left out), bills +1.1%, average bill -1.7%. "
+        "NCR pace near 79% is a target above its October run-rate, not a fall in NCR sales. "
+    )
+
+
+def _north_block(sales, start, end):
+    """NCR per day, malls out, same split as the Delhi week."""
+    gross = bills = Decimal(0)
+    days = set()
+    for code, series in sales.items():
+        sample = next(iter(series.values()))
+        if not str(code).startswith("02") or _closed(sample["name"], code) or _mall(sample["name"]):
+            continue
+        day = start
+        while day <= end:
+            row = series.get(day)
+            if row:
+                gross += row["gross"]
+                bills += row["bills"]
+                days.add(day)
+            day += timedelta(days=1)
+    if not days or not bills:
+        return None
+    count = Decimal(len(days))
+    return {"per_gross": gross / count, "per_bills": bills / count, "apc": gross / bills}
 
 
 def _pool(sales, start, end, malls):
