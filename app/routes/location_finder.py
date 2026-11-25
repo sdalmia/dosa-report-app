@@ -371,6 +371,17 @@ def _with_logos(places):
 # -----------------------------
 # Main route
 # -----------------------------
+@location_finder_bp.route("/locations")
+def locations_home():
+    from flask import redirect, session
+
+    if "user" not in session:
+        return redirect(url_for("google.login"))
+    from app.location_board import location_home
+
+    return render_template("locations.html", **location_home())
+
+
 @location_finder_bp.route('/location-finder', methods=['GET', 'POST'])
 def location_finder():
     if request.method == 'POST':

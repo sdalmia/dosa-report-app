@@ -22,6 +22,7 @@
   <a href="{{ url_for('store_health.page') }}" {% if request.path.startswith('/store-health') %}aria-current="page"{% endif %}><i class="bi bi-graph-up" aria-hidden="true"></i><span>Sales</span></a>
   <a href="{{ url_for('menu_ops.tickets') }}" {% if request.path.startswith('/tickets') %}aria-current="page"{% endif %}><i class="bi bi-chat-square-text" aria-hidden="true"></i><span>Reviews</span></a>
   <a href="{{ url_for('main.procurement_page') }}" {% if request.path.startswith('/procurement') or request.path.startswith('/food-cost') or request.path.startswith('/vendors') %}aria-current="page"{% endif %}><i class="bi bi-basket" aria-hidden="true"></i><span>Procurement</span></a>
+  <a href="{{ url_for('location_finder.locations_home') }}" {% if request.path.startswith('/locations') %}aria-current="page"{% endif %}><i class="bi bi-geo-alt" aria-hidden="true"></i><span>Location</span></a>
   <a href="{{ url_for('main.dashboard') }}" {% if request.path.startswith('/dashboard') %}aria-current="page"{% endif %}><i class="bi bi-stars" aria-hidden="true"></i><span>Wizard</span></a>
 </nav>
 <nav class="cc-bottom" aria-label="Primary">
@@ -30,6 +31,12 @@
   <a href="{{ url_for('menu_ops.tickets') }}" {% if request.path.startswith('/tickets') %}aria-current="page"{% endif %}><i class="bi bi-chat-square-text" aria-hidden="true"></i><span>Reviews</span></a>
   <a href="{{ url_for('main.procurement_page') }}" {% if request.path.startswith('/procurement') or request.path.startswith('/food-cost') or request.path.startswith('/vendors') %}aria-current="page"{% endif %}><i class="bi bi-basket" aria-hidden="true"></i><span>Procurement</span></a>
   <a href="{{ url_for('main.dashboard') }}" {% if request.path.startswith('/dashboard') %}aria-current="page"{% endif %}><i class="bi bi-stars" aria-hidden="true"></i><span>Wizard</span></a>
+  <details class="cc-more">
+    <summary><i class="bi bi-grid" aria-hidden="true"></i><span>More</span></summary>
+    <div class="cc-more-panel">
+      <a href="{{ url_for('location_finder.locations_home') }}">Location</a>
+    </div>
+  </details>
 </nav>
 <nav class="cc-drawer" id="nav-drawer" aria-label="Account">
   <h2>Account</h2>

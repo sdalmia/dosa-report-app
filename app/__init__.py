@@ -91,7 +91,9 @@ def create_app():
         from app.access import is_owner
         from app.fragments import with_qs
 
-        return {"is_owner": is_owner, "with_qs": with_qs}
+        from app.owner_names import public_name
+
+        return {"is_owner": is_owner, "with_qs": with_qs, "public_name": public_name}
 
     @app.url_defaults
     def static_version(endpoint, values):

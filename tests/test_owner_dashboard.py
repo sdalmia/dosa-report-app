@@ -216,22 +216,27 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertNotIn("Status unknown", html)
         self.assertNotIn("57907", html)
         self.assertNotIn("39281", html)
-        bill_alerts = " ".join(alert["text"] for alert in view["alerts"] if alert["kind"] == "Bills")
-        self.assertIn(
-            "Gurgaon Sec 10 (02/0014): bills -20.51% versus the same weekday last week.",
-            bill_alerts,
+        bill_alerts = " ".join(
+            f"{alert.get('store', '')} {alert['text']}" for alert in view["alerts"] if alert["kind"] == "Bills"
         )
         self.assertIn(
-            "Pacific mall, Jasola (02/0011): bills -16.89% versus the same weekday last week.",
+            "Gurgaon Sec 10",
             bill_alerts,
         )
-        self.assertEqual(bill_alerts.count(": bills "), 2)
+        self.assertIn("Bills -20.51% versus the same weekday last week.", bill_alerts)
+        self.assertIn(
+            "Pacific mall, Jasola",
+            bill_alerts,
+        )
+        self.assertNotIn("(02/", bill_alerts)
+        self.assertEqual(bill_alerts.count("Bills "), 2)
         self.assertNotIn("Rosedale", bill_alerts)
         self.assertNotIn("Food Truck", bill_alerts)
         self.assertNotIn("Faridabad", bill_alerts)
         self.assertNotIn("Manisquare", bill_alerts)
-        self.assertIn("Dosa Coffee - Rosedale Plaza(0006) · Partially operational", html)
-        self.assertIn("Sec 15 Faridabad (02/0007) · Closed", html)
+        self.assertIn("Rosedale Plaza is partly open.", html)
+        self.assertNotIn("Sec 15 Faridabad", html)
+        self.assertNotIn("Partially operational", html)
         self.assertNotIn("Dosa Coffee - Food Truck - 1 (0008) · Closed", html)
         self.assertIn("Calculated. Gross divided by bills.", html)
         self.assertNotIn("posist_daily", html)

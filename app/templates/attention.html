@@ -16,7 +16,13 @@
   {% else %}
     <div class="alert-list" data-list>
       {% for alert in alerts %}
-        <article class="alert-row"><strong>{{ alert.kind }}.</strong> {{ alert.text }}</article>
+        <article class="attention-card alert-row">
+          <span class="attention-icon" aria-hidden="true">{% if alert.kind == 'Rating' %}★{% else %}!{% endif %}</span>
+          <div>
+            <strong>{{ alert.store or alert.kind }}</strong>
+            <p>{{ alert.text }}</p>
+          </div>
+        </article>
       {% endfor %}
     </div>
   {% endif %}

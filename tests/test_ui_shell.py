@@ -40,10 +40,20 @@ class ShellTests(unittest.TestCase):
             html = page.get_data(as_text=True)
             self.assertIn('class="cc-side"', html, path)
             self.assertIn('class="cc-bottom"', html, path)
-            for label in ("Home", "Sales", "Reviews", "Procurement", "Wizard"):
+            for label in ("Home", "Sales", "Reviews", "Procurement", "Wizard", "Location"):
                 self.assertIn(f">{label}</span>", html, path)
+            self.assertIn("/locations", html, path)
             self.assertNotIn(".csv", html, path)
             self.assertNotIn("data-theme=\"dark\"", html.split("<body", 1)[0], path)
+
+    def test_location_leads_with_the_top_area(self):
+        html = self.client.get("/locations").get_data(as_text=True)
+        self.assertEqual(self.client.get("/locations").status_code, 200)
+        self.assertIn("Top score", html)
+        self.assertIn("v2026-11", html)
+        self.assertIn("proposed", html.casefold())
+        self.assertNotIn("Faridabad", html)
+        self.assertNotIn(".csv", html)
 
     def test_home_puts_the_numbers_in_cards(self):
         html = self.client.get("/board").get_data(as_text=True)

@@ -567,6 +567,27 @@ def dashboard_targets():
             city=(filters.get("cc_city") or "").strip(),
         ),
     )
+    from app.owner_names import hidden_store, public_name
+
+    board = dict(board)
+    days = [day for (_store, day) in feeds["posist"]]
+    latest = max(days) if days else None
+    if latest and latest.month >= 11 and "October" in (board.get("period") or ""):
+        board["period"] = f"November 2026, through {latest.day} Nov"
+        board["pace"] = ""
+        board["network"] = ""
+        board["note"] = "November targets. The October pace snapshot is not this month."
+    kept = []
+    for row in board.get("rows") or []:
+        if hidden_store(row.get("store")) or hidden_store(row.get("name")):
+            continue
+        row = dict(row)
+        row["name"] = public_name(row.get("store") or row.get("name"))
+        row["tag"] = ""
+        if "month " in (row.get("line") or "") and "October" not in (board.get("period") or ""):
+            row["line"] = "Month target " + row["line"].split("month ", 1)[1]
+        kept.append(row)
+    board["rows"] = kept
     return html_fragment(render_template("_targets.html", board=board, frame="home"))
 
 

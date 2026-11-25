@@ -4,7 +4,7 @@ Nothing here invents a number. A missing cell stays blank and the page says
 no data. Gross is Posist gross. APB is summed gross divided by summed bills.
 """
 
-from datetime import timedelta
+from datetime import date, timedelta
 from pathlib import Path
 
 from markupsafe import Markup
@@ -512,11 +512,15 @@ def _reputation(feeds, stores):
             have_reviews = True
         if rating is None or reviews is None or reviews <= 0:
             continue
+        from app.owner_names import hidden_store, public_name
+
         weighted_sum += rating * reviews
         weight += reviews
+        if hidden_store(label):
+            continue
         store = by_label.get(label)
         rated.append({
-            "label": label,
+            "label": public_name(label),
             "id": store.id if store else "",
             "rating": f"{rating:.2f}",
             "reviews": format_count(reviews),
@@ -567,6 +571,20 @@ def _partially_operational(row):
     return "partially operational" in str((row or {}).get("notes") or "").casefold()
 
 
+def _latest_drop(end):
+    folder = Path(__file__).resolve().parents[1] / "data" / "posist" / "daily_sales"
+    marks = sorted(folder.glob("_DONE_*"))
+    if not marks or end is None:
+        return ""
+    try:
+        closed = date.fromisoformat(marks[-1].name.replace("_DONE_", ""))
+    except ValueError:
+        return ""
+    if closed <= end:
+        return ""
+    return f"Daily sales are in through {closed.day} {closed.strftime('%b')}."
+
+
 def _day_badges(feeds, end):
     """Notes for the latest day, plus a close the file marks with no separate note."""
     if end is None:
@@ -584,17 +602,24 @@ def _day_badges(feeds, end):
         if day == end and name not in labels and (is_closed_sales_row(row) or store_closed_on(name, end)):
             found.append({"label": name, "badge": "Closed", "iso": end.isoformat()})
             labels.add(name)
-    if store_closed_on("Sec 15 Faridabad (02/0007)", end) and "Sec 15 Faridabad (02/0007)" not in labels:
-        found.append({
-            "label": "Sec 15 Faridabad (02/0007)",
-            "badge": "Closed",
-            "iso": end.isoformat(),
-        })
-    found.sort(key=lambda item: item["label"].casefold())
-    return found
+    from app.owner_names import hidden_store
+
+    kept = []
+    for item in found:
+        if hidden_store(item.get("label")):
+            continue
+        if "rosedale" in str(item.get("label") or "").casefold():
+            continue
+        if str(item.get("badge") or "").casefold() == "partially operational":
+            continue
+        kept.append(item)
+    kept.sort(key=lambda item: item["label"].casefold())
+    return kept
 
 
 def _alerts(feeds, stores, end):
+    from app.owner_names import hidden_store, public_name
+
     alerts = []
     compare = end - timedelta(days=7) if end else None
     for store in stores:
@@ -617,10 +642,11 @@ def _alerts(feeds, stores, end):
         latest_bills = latest.get("bills") if latest else None
         prior_bills = prior.get("bills") if prior else None
         change = _change(latest_bills, prior_bills)
-        if change is not None and change <= LOW_BILL_DROP:
+        if change is not None and change <= LOW_BILL_DROP and not hidden_store(store.label):
             alerts.append({
                 "kind": "Bills",
-                "text": f"{store.label}: bills {format_pct(change)} versus the same weekday last week.",
+                "store": public_name(store.label),
+                "text": f"Bills {format_pct(change)} versus the same weekday last week.",
                 "href": store.id,
             })
     for label, rows in (feeds.get("famepilot_by_store") or {}).items():
@@ -629,10 +655,13 @@ def _alerts(feeds, stores, end):
         rating, reviews = _rating(_one_row(rows))
         if rating is None or rating >= LOW_RATING:
             continue
+        if hidden_store(label):
+            continue
         review_bit = f" from {format_count(reviews)} reviews" if reviews is not None else ""
         alerts.append({
             "kind": "Rating",
-            "text": f"{label}: public rating {rating:.2f}{review_bit}.",
+            "store": public_name(label),
+            "text": f"Public rating {rating:.2f}{review_bit}.",
             "href": "",
         })
     return alerts
@@ -732,6 +761,10 @@ def build_owner_dashboard(feeds=None, today=None, region="", low_only=False, pro
         "alerts": _alerts(feeds, stores, end),
         "quality_note": quality_note_for(feeds),
         "day_badges": _day_badges(feeds, end),
+        "rosedale_note": "Rosedale Plaza is partly open." if any(
+            "rosedale" in str(name).casefold() for name, _day in (feeds.get("posist") or {})
+        ) else "",
+        "latest_drop": _latest_drop(end),
         "procurement": procurement_tiles(procurement_dir),
         "today": today,
     }

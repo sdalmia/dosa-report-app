@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Location - Dosa Coffee{% endblock %}
+{% block content %}
+<section class="cc-hero" aria-label="Location">
+  <p class="cc-kicker">Location</p>
+  <h1>{% if lead %}{{ lead.area }}{% else %}No candidate areas{% endif %}</h1>
+  <p class="cc-hero-note">{{ note }}</p>
+  <div class="cc-hero-grid">
+    <article class="kpi-card is-hero">
+      <h3>Top score</h3>
+      <p class="kpi-value">{% if lead %}{{ "%.1f"|format(lead.score) }}{% else %}–{% endif %}</p>
+      <p class="kpi-note">{% if lead %}{{ lead.city }}{% endif %}</p>
+    </article>
+    <article class="kpi-card">
+      <h3>Areas scored</h3>
+      <p class="kpi-value">{{ count }}</p>
+      <p class="kpi-note">{{ version }}</p>
+    </article>
+  </div>
+</section>
+<section class="cc-section">
+  <div class="section-head"><h2>Where to look</h2></div>
+  <div class="loc-layout">
+    {% if map %}{{ map|safe }}{% endif %}
+    <ol class="loc-list">
+      {% for row in rows %}
+      <li class="attention-card">
+        <span class="attention-icon" aria-hidden="true">{{ loop.index }}</span>
+        <div>
+          <strong>{{ row.area }}</strong>
+          <p>{{ row.city }} · {{ "%.1f"|format(row.score) }}</p>
+          <p class="kpi-note">{{ row.why }}</p>
+          <span class="score-bar" style="--w: {{ [row.score * 6, 100]|min }}%"></span>
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endblock %}

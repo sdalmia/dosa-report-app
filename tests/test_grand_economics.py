@@ -143,7 +143,7 @@ class GrandEconomicsTests(unittest.TestCase):
         self.assertNotRegex(body, r"\b(blank|null|anchor|fragment)\b")
         drawer = html.split('id="nav-drawer"', 1)[1].split("</nav>", 1)[0]
         self.assertNotIn("Grand economics", drawer)
-        self.assertNotIn('class="cc-bottom"', html)
+        self.assertIn('class="cc-bottom"', html)
         self.assertLess(len(gzip.compress(response.data)), 100_000)
         found = self.client.get("/search.json").get_json()
         self.assertNotIn("/grand-economics", [row["href"] for row in found["results"]])
