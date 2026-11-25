@@ -98,7 +98,8 @@ class FormatTests(unittest.TestCase):
         report = build_report("make me a PDF of last week's store performance", data, False, "East gave up the week.")
         mall = [row for row in report["tables"][0]["rows"] if "mani" in str(row[0]).casefold() or str(row[0]).casefold() == "forum"]
         self.assertTrue(mall)
-        self.assertTrue(all(row[3] == "excluded (mall bulk bills)" for row in mall))
+        self.assertTrue(all(row[3] == "†" for row in mall))
+        self.assertIn("excluded (mall bulk bills)", report["tables"][0]["footnote"])
         pdf = "\n".join(page.extract_text() or "" for page in PdfReader(BytesIO(render_pdf(report))).pages)
         self.assertIn("Dosa Coffee", pdf)
         self.assertIn("₹", pdf)

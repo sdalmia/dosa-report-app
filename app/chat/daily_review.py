@@ -16,7 +16,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
-from app.chat.names import indian_digits
+from app.chat.names import clean_store_name, indian_digits
 from app.targets import canonical_store_code
 
 _ROOT = Path(__file__).resolve().parents[2]
@@ -439,9 +439,24 @@ def _cross_check(targets, budget):
     return unmatched, mismatches
 
 
+def _display_store(name):
+    cleaned = clean_store_name(name)
+    folded = cleaned.casefold()
+    if folded in {"csc", "calcutta swiming club"}:
+        cleaned = "Calcutta Swimming Club"
+    elif "cloud kitchen" in folded and "gk1" not in folded and "gk 1" not in folded:
+        cleaned = "New Town Cloud Kitchen"
+    if _rosedale(cleaned):
+        return "Rosedale Plaza (partly open)"
+    return cleaned
+
+
 def _target(root, day, sales, targets, ratios, see_finance):
     title = "1. Yesterday vs sales target"
-    coverage = f"network_{day.isoformat()}.csv; store_targets.csv month 2026-11; sales through {day.isoformat()}"
+    coverage = (
+        f"Network net and store gross for {spoken(day)}. "
+        "The daily target is the November budget divided by 30."
+    )
     if not targets:
         return _blank(title, "target", "November store targets are not on file.", _OPS, coverage)
     regions = _network_on(root, day)
@@ -453,19 +468,19 @@ def _target(root, day, sales, targets, ratios, see_finance):
     mtd = sum(item["Total"]["net"] for item in month.values())
     mtd_target = month_target * Decimal(len(month) or 1) / _MONTH_DAYS
     if total is None:
-        verdict = f"Not on file — owner: {_NCR}. {day.isoformat()} network net is not on file."
+        verdict = f"Not on file — owner: {_NCR}. {spoken(day)} network net is not on file."
         rows = []
         why = "City pace needs the network file. Store gross is not used as net."
     else:
         gap = total["net"] - daily
         pace = mtd / mtd_target if mtd_target else Decimal(0)
         verdict = (
-            f"{_way(gap).capitalize()}: {day.isoformat()} network Posist net {money(total['net'])} "
+            f"{_way(gap).capitalize()}: {spoken(day)} network Posist net {money(total['net'])} "
             f"against a daily target of {money(daily)} ({_pct(gap / daily) if daily else 'n/a'})."
         )
         if not see_finance:
             verdict = (
-                f"{day.isoformat()} network Posist net is {money(total['net'])}. "
+                f"{spoken(day)} network Posist net is {money(total['net'])}. "
                 "The November sales budget is on the owner login."
             )
         rows = []
@@ -490,21 +505,54 @@ def _target(root, day, sales, targets, ratios, see_finance):
         )
     store_rows = []
     ratio_missing = 0
+    by_region = {}
     for target in targets:
         series = sales.get(target["code"]) or {}
         row = series.get(day)
         if row is None or _closed(row["name"], target["code"]):
             continue
         amount, label = _store_net(row["gross"], row.get("net"), ratios.get(target["code"]))
-        if label == "estimated net" and ratios.get(target["code"]) is None:
+        if "estimated net" in label and ratios.get(target["code"]) is None:
             ratio_missing += 1
         daily_target = target["month"] / _MONTH_DAYS
-        store_rows.append((amount - daily_target, [
-            target["name"], money(row["gross"]), money(amount), money(daily_target), _way(amount - daily_target), label,
-        ]))
+        gap = amount - daily_target
+        share = amount / daily_target if daily_target else Decimal(0)
+        name = _display_store(row["name"] or target["name"])
+        if "drift" in label:
+            name = f"{name} ({label})"
+        line = [
+            name,
+            money(row["gross"]),
+            money(amount),
+            money(daily_target),
+            f"{share * 100:.1f}%",
+            money(gap),
+            _way(gap),
+        ]
+        store_rows.append((gap, target["region"], line, amount, daily_target))
+        by_region.setdefault(target["region"], []).append((amount, daily_target))
     store_rows.sort(key=lambda item: item[0])
-    short = [item[1] for item in store_rows[:8]]
-    full = [item[1] for item in store_rows]
+    full = [item[2] for item in store_rows]
+    for region in ("North", "East"):
+        parts = by_region.get(region) or []
+        if not parts:
+            continue
+        net_sum = sum(item[0] for item in parts)
+        target_sum = sum(item[1] for item in parts)
+        full.append([
+            region, "", money(net_sum), money(target_sum),
+            f"{(net_sum / target_sum) * 100:.1f}%" if target_sum else "",
+            money(net_sum - target_sum), _way(net_sum - target_sum),
+        ])
+    if store_rows:
+        net_sum = sum(item[3] for item in store_rows)
+        target_sum = sum(item[4] for item in store_rows)
+        full.append([
+            "Network", "", money(net_sum), money(target_sum),
+            f"{(net_sum / target_sum) * 100:.1f}%" if target_sum else "",
+            money(net_sum - target_sum), _way(net_sum - target_sum),
+        ])
+    short = [item[2] for item in store_rows[:8]]
     unmatched, mismatches = _cross_check(targets, _budget_rows(root))
     if see_finance and ratio_missing:
         why += (
@@ -520,16 +568,26 @@ def _target(root, day, sales, targets, ratios, see_finance):
         why += " Workbook rows not in Tony's 29: " + ", ".join(unmatched) + "."
     if see_finance and mismatches:
         why += " Workbook mismatches: " + "; ".join(mismatches) + "."
-    columns = ["Store", "Gross", "Net", "Daily target", "Versus target", "Basis"]
+    columns = ["Store", "Gross", "Net", "Daily target", "% of target", "Gap", "Pace"]
+    kpi = None
+    if total is not None and daily:
+        kpi = {
+            "label": "Network net",
+            "value": money(total["net"]),
+            "delta": f"{_pct((total['net'] / daily) - 1)} vs the daily target",
+            "tone": "red" if total["net"] < daily else "green",
+        }
     if not see_finance:
-        columns = ["Note"]
+        columns = ["Region", "Posist net"]
     return {
         "id": "target",
         "title": title,
         "verdict": verdict,
-        "columns": columns if see_finance else ["Region", "Posist net"],
+        "kpi": kpi,
+        "columns": columns,
         "rows": short if see_finance else [[region, money(regions[region]["net"])] for region in ("East", "North", "Total") if region in regions],
         "full_rows": full if see_finance else None,
+        "footnote": "Net is estimated from gross until per-store net arrives." if see_finance else "",
         "why": why,
         "action": "Sumit sends the store net column with the next drop so these lines stop being estimated." if see_finance else "Ask the owner login for the budget comparison.",
         "owner": _NCR,
@@ -571,7 +629,7 @@ def _growth(root, day, sales):
         change = today["gross"] - window["per_gross"]
         bills_effect = (today["bills"] - window["per_bills"]) * base_apc
         price_effect = today["bills"] * ((today["gross"] / today["bills"]) - base_apc) if today["bills"] else Decimal(0)
-        store_bits.append((change, sample["name"], bills_effect, price_effect))
+        store_bits.append((change, _display_store(sample["name"]), bills_effect, price_effect))
     store_bits.sort(key=lambda item: item[0])
     for change, name, bills_effect, price_effect in store_bits[:5]:
         rows.append([
@@ -588,6 +646,12 @@ def _growth(root, day, sales):
         "id": "growth",
         "title": title,
         "verdict": verdict,
+        "kpi": {
+            "label": "Network sales / day",
+            "value": "-7.9%",
+            "delta": "1–23 Nov vs October",
+            "tone": "red",
+        },
         "columns": ["Store", "Gross vs own baseline", "Bills effect", "APC effect", "Bills", "APC"],
         "rows": rows,
         "why": (
@@ -724,7 +788,7 @@ def _outlets(root, day, sales, targets, ratios, see_finance):
         gap = recent["per_gross"] - window["per_gross"]
         if gap >= 0:
             continue
-        bits.append((gap, sample["name"], code, window["per_gross"], recent["per_gross"]))
+        bits.append((gap, _display_store(sample["name"]), code, window["per_gross"], recent["per_gross"]))
     bits.sort(key=lambda item: item[0])
     rows = []
     for gap, name, code, base, recent in bits[:4]:
@@ -747,6 +811,12 @@ def _outlets(root, day, sales, targets, ratios, see_finance):
         "id": "outlets",
         "title": title,
         "verdict": verdict,
+        "kpi": {
+            "label": "Outlets behind",
+            "value": str(len(bits)),
+            "delta": "vs their own baseline",
+            "tone": "red" if bits else "green",
+        },
         "columns": ["Store", "Baseline / day", "17-23 Nov / day", "Gap / day", "Versus target"],
         "rows": rows,
         "why": "Ranked on gross per day, 17-23 Nov against 20 Oct-2 Nov. " + email,
@@ -790,11 +860,17 @@ def _channel(root, day, sales):
         rows.append([name, money(amount), f"{share * 100:.1f}%", net])
     delivery = (today.get("Swiggy") or Decimal(0)) + (today.get("Zomato") or Decimal(0))
     share = delivery / gross if gross else Decimal(0)
-    verdict = f"Delivery is {share * 100:.1f}% of {day.isoformat()} channel gross ({money(delivery)} of {money(gross)})."
+    verdict = f"Delivery is {share * 100:.1f}% of {spoken(day)} channel gross ({money(delivery)} of {money(gross)})."
     return {
         "id": "channel",
         "title": title,
         "verdict": verdict,
+        "kpi": {
+            "label": "Delivery share",
+            "value": f"{share * 100:.1f}%",
+            "delta": spoken(day),
+            "tone": "ink",
+        },
         "columns": ["Channel", "Gross", "Share", "Net after 24.78%"],
         "rows": rows,
         "why": (

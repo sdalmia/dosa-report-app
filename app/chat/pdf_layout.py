@@ -35,8 +35,22 @@ def plain(text):
     cleaned = re.sub(r"\(Rs\)", "", cleaned)
     cleaned = re.sub(r"\bRs\s+", "₹", cleaned)
     cleaned = re.sub(r"(?:\s*[;,]\s*){2,}", "; ", cleaned)
+    cleaned = _spoken_dates(cleaned)
     cleaned = cleaned.strip(" ;,")
     return " ".join(cleaned.split())
+
+
+def _spoken_dates(text):
+    months = ("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+    def repl(match):
+        month = int(match.group(2))
+        day = int(match.group(3))
+        if not 1 <= month <= 12:
+            return match.group(0)
+        return f"{day} {months[month]} {match.group(1)}"
+
+    return re.sub(r"\b(20\d{2})-(\d{2})-(\d{2})\b", repl, text)
 
 
 def fit_widths(headers, rows, width):
@@ -96,10 +110,12 @@ def render_pdf(report):
             self.set_font(self._face, "", 8)
             covered = plain(report.get("coverage") or report.get("sales_through") or "Covered period not loaded")
             when = plain(report.get("generated_at") or "")
+            if when.endswith(" IST"):
+                when = when[:-4]
             self.set_xy(_MARGIN, 13)
-            self.cell(0, 4, f"Covered {covered}"[:110], new_x="LMARGIN", new_y="NEXT")
+            self.cell(0, 4, f"Covered {covered}"[:120], new_x="LMARGIN", new_y="NEXT")
             self.set_xy(_MARGIN, 17)
-            self.cell(0, 4, f"Prepared {when} IST".strip())
+            self.cell(0, 4, f"Prepared {when} IST".strip() if when else "")
             self.set_text_color(*_INK)
             self.set_y(28)
 
@@ -117,14 +133,20 @@ def render_pdf(report):
     _kpis(pdf, report)
     _threats(pdf, report)
     if report.get("chart") and report["chart"].get("series"):
-        _heading(pdf, plain(report["chart"].get("title") or "Chart"), 13)
+        chart_title = plain(report["chart"].get("title") or "Chart")
+        names = {plain(table.get("name") or "") for table in report.get("tables") or []}
+        if chart_title in names:
+            chart_title = "Largest stores"
+        _heading(pdf, chart_title, 13)
         _bars(pdf, report["chart"]["series"])
     for table in report.get("tables") or []:
         rows = [row for row in (table.get("rows") or []) if any(cell not in (None, "") for cell in row)]
         if not rows:
             continue
         _heading(pdf, plain(table.get("name") or "Detail"), 13)
-        _table(pdf, table.get("columns") or ["Note"], rows)
+        _table(pdf, table.get("columns") or ["Note"], rows, table.get("numeric_headers"))
+        if table.get("footnote"):
+            _body(pdf, plain(table["footnote"]), 8)
     steps = [plain(step) for step in (report.get("steps") or []) if plain(step)]
     if steps:
         _heading(pdf, "Next steps", 13)
@@ -274,16 +296,26 @@ def _kpis(pdf, report):
         pdf.set_fill_color(*_PAPER)
         pdf.set_draw_color(*_LINE)
         pdf.rect(x, y, width, 26, style="FD")
-        pdf.set_xy(x + 2, y + 1.5)
-        pdf.set_font(pdf._face, "", 7)
+        pdf.set_xy(x + 2, y + 2)
+        pdf.set_font(pdf._face, "", 8)
         pdf.set_text_color(*_MUTED)
-        pdf.cell(width - 4, 3.5, plain(card.get("label") or "")[:28])
-        pdf.set_xy(x + 2, y + 6)
-        pdf.set_font(pdf._face, "B", 7.5)
+        pdf.cell(width - 4, 4, plain(card.get("label") or ""), align="L")
+        pdf.set_xy(x + 2, y + 7)
         pdf.set_text_color(*colors.get(card.get("tone") or "ink", _INK))
-        pdf.multi_cell(width - 4, 3.3, plain(str(card.get("value") or "")))
-    pdf.set_y(y + 30)
+        _fit_cell(pdf, width - 4, 7, plain(str(card.get("value") or "")), 14, bold=True)
+        pdf.set_xy(x + 2, y + 15)
+        pdf.set_text_color(*colors.get(card.get("tone") or "ink", _INK))
+        _fit_cell(pdf, width - 4, 4, plain(str(card.get("delta") or "")), 8, bold=False)
+    pdf.set_y(y + 28)
     pdf.set_text_color(*_INK)
+
+
+def _fit_cell(pdf, width, height, text, size, bold):
+    pdf.set_font(pdf._face, "B" if bold else "", size)
+    while size > 7 and text and pdf.get_string_width(text) > width:
+        size -= 0.5
+        pdf.set_font(pdf._face, "B" if bold else "", size)
+    pdf.cell(width, height, text, align="L")
 
 
 def _threats(pdf, report):
@@ -310,7 +342,7 @@ def _heading(pdf, text, size):
     pdf.set_x(_MARGIN)
     pdf.set_font(pdf._face, "B", size)
     pdf.set_text_color(*_INK)
-    pdf.multi_cell(_CONTENT, size * 0.5, text)
+    pdf.multi_cell(_CONTENT, size * 0.5, text, align="L")
     pdf.ln(1)
 
 
@@ -318,7 +350,7 @@ def _body(pdf, text, size):
     pdf.set_x(_MARGIN)
     pdf.set_font(pdf._face, "", size)
     pdf.set_text_color(*_INK)
-    pdf.multi_cell(_CONTENT, size * 0.5, text)
+    pdf.multi_cell(_CONTENT, size * 0.5, text, align="L")
 
 
 def _bars(pdf, series):
@@ -346,56 +378,148 @@ def _bars(pdf, series):
         pdf.ln(7)
 
 
-def _table(pdf, headers, rows):
+def _table(pdf, headers, rows, numeric_headers=None):
     shown = []
     for row in rows:
         shown.append([_cell(header, value) for header, value in zip(headers, list(row) + [""] * len(headers))])
-    widths = fit_widths([plain(header) for header in headers], shown, _CONTENT)
-    _header_row(pdf, headers, widths)
+    widths = _measured_widths(pdf, [plain(header) for header in headers], shown)
+    numeric = set(numeric_headers or [])
+    if not numeric:
+        numeric = {index for index, header in enumerate(headers) if _header_is_numeric(header)}
+    _header_row(pdf, headers, widths, numeric)
     for index, row in enumerate(shown):
         height = _row_height(pdf, row, widths)
         if pdf.get_y() + height > 275:
             pdf.add_page()
-            _header_row(pdf, headers, widths)
+            _header_row(pdf, headers, widths, numeric)
         y = pdf.get_y()
-        pdf.set_fill_color(*( _ZEBRA if index % 2 else (255, 255, 255)))
+        bold = str(row[0]).casefold() in {"north", "east", "network"}
+        pdf.set_fill_color(*(_HEAD if bold else (_ZEBRA if index % 2 else (255, 255, 255))))
         x = _MARGIN
         pdf.rect(x, y, sum(widths), height, style="F")
-        for text, width in zip(row, widths):
+        for column, (text, width) in enumerate(zip(row, widths)):
+            if text.casefold() in {"behind", "ahead", "up", "down"}:
+                _chip(pdf, x, y, width, height, text)
+                x += width
+                continue
             size = 9
-            pdf.set_font(pdf._face, "", size)
-            while size > 6.5 and pdf.get_string_width(text or "") > width - 2:
+            pdf.set_font(pdf._face, "B" if bold else "", size)
+            while size > 6.5 and pdf.get_string_width(text or "") > max(width - 2, 4):
                 size -= 0.5
-                pdf.set_font(pdf._face, "", size)
+                pdf.set_font(pdf._face, "B" if bold else "", size)
+            inner = max(width - 2, 4)
             pdf.set_xy(x + 1, y + 1)
             pdf.set_text_color(*_tone(text))
-            align = "R" if _numeric(text) else "L"
-            pdf.multi_cell(width - 2, 4.2, text, align=align)
+            align = "R" if column in numeric or _numeric(text) else "L"
+            if align == "R":
+                pdf.cell(inner, max(height - 2, 4.2), text, align="R")
+            else:
+                try:
+                    pdf.multi_cell(inner, 4.2, text, align="L")
+                except Exception:
+                    pdf.set_xy(x + 1, y + 1)
+                    pdf.cell(inner, max(height - 2, 4.2), text[:18], align="L")
             x += width
         pdf.set_y(y + height)
 
 
-def _header_row(pdf, headers, widths):
+def _measured_widths(pdf, headers, rows):
+    """Fit the table. A number column stays wide enough for its whole value."""
+    size = 8
+    minimums = [8] * max(len(headers), 1)
+    while size >= 6:
+        pdf.set_font(pdf._face, "", size)
+        minimums = []
+        for index, header in enumerate(headers):
+            texts = [str(header or "")]
+            for row in rows:
+                if index < len(row) and row[index] not in (None, ""):
+                    texts.append(str(row[index]))
+            numeric = _header_is_numeric(header)
+            if numeric:
+                need = max(pdf.get_string_width(text) for text in texts) + 4
+            else:
+                words = []
+                for text in texts:
+                    words.extend(text.split() or [text])
+                need = max(pdf.get_string_width(word) for word in words) + 4
+            minimums.append(max(need, 8))
+        if sum(minimums) <= _CONTENT:
+            break
+        size -= 0.5
+    if sum(minimums) > _CONTENT:
+        scale = _CONTENT / sum(minimums)
+        return [item * scale for item in minimums]
+    extra = _CONTENT - sum(minimums)
+    text_indexes = [index for index, header in enumerate(headers) if not _header_is_numeric(header)]
+    widths = list(minimums)
+    if text_indexes and extra:
+        share = extra / len(text_indexes)
+        for index in text_indexes:
+            widths[index] += share
+    elif extra and widths:
+        widths[0] += extra
+    return widths
+
+
+def _header_is_numeric(header):
+    folded = plain(header).casefold()
+    return any(token in folded for token in ("gross", "net", "target", "gap", "bill", "apb", "change", "%", "percent", "day"))
+
+
+def _header_row(pdf, headers, widths, numeric):
     pdf.set_x(_MARGIN)
     pdf.set_fill_color(*_HEAD)
-    pdf.set_font(pdf._face, "B", 9)
+    pdf.set_font(pdf._face, "B", 8)
     pdf.set_text_color(*_INK)
     y = pdf.get_y()
     x = _MARGIN
-    pdf.rect(x, y, sum(widths), 7, style="F")
-    for header, width in zip(headers, widths):
-        pdf.set_xy(x + 1, y + 1)
-        pdf.cell(width - 2, 5, plain(header)[:32])
+    pdf.rect(x, y, sum(widths), 8, style="F")
+    for index, (header, width) in enumerate(zip(headers, widths)):
+        pdf.set_xy(x + 1, y + 1.5)
+        pdf.cell(max(width - 2, 4), 5, plain(header), align="R" if index in numeric else "L")
         x += width
-    pdf.set_y(y + 7)
+    pdf.set_y(y + 8)
+
+
+def _chip(pdf, x, y, width, height, text):
+    tone = _RED if text.casefold() in {"behind", "down"} else _GREEN
+    label = text.lower()
+    pdf.set_font(pdf._face, "B", 7)
+    chip_w = min(width - 2, pdf.get_string_width(label) + 4)
+    chip_x = x + width - chip_w - 1
+    chip_y = y + max(1, (height - 4.5) / 2)
+    pdf.set_fill_color(*tone)
+    pdf.rect(chip_x, chip_y, chip_w, 4.5, style="F")
+    pdf.set_xy(chip_x, chip_y + 0.4)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(chip_w, 3.6, label, align="C")
+
+
+def _wrap_count(pdf, text, width):
+    """How many lines a cell needs. A long token is allowed to shrink rather than overflow."""
+    words = str(text or "").split() or [""]
+    usable = max(width - 2, 8)
+    pdf.set_font(pdf._face, "", 8)
+    lines = 1
+    current = ""
+    for word in words:
+        trial = (current + " " + word).strip()
+        if pdf.get_string_width(trial) <= usable or not current:
+            current = trial
+        else:
+            lines += 1
+            current = word
+    return lines
 
 
 def _row_height(pdf, row, widths):
-    height = 7
-    pdf.set_font(pdf._face, "", 9)
+    height = 8
     for text, width in zip(row, widths):
-        lines = pdf.multi_cell(width - 2, 4.2, text or " ", dry_run=True, output="LINES")
-        height = max(height, 2 + 4.2 * max(len(lines), 1))
+        if not text or _numeric(text):
+            continue
+        lines = _wrap_count(pdf, text, width)
+        height = max(height, 3 + 4.4 * lines)
     return height
 
 
@@ -415,8 +539,10 @@ def _cell(header, value):
 
 
 def _numeric(text):
-    token = (text or "").strip()
-    return bool(token) and token[0] in "-+₹0123456789"
+    token = " ".join((text or "").split())
+    if not token or len(token) > 18:
+        return False
+    return bool(re.fullmatch(r"[+-]?₹?[\d,]+(?:\.\d+)?(?:\s*(?:Cr|L|%))?", token))
 
 
 def _tone(text):

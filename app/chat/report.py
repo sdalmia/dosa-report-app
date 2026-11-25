@@ -49,23 +49,17 @@ def build_report(question, data, owner, answer, generated_by=""):
                 "coverage": section["coverage"],
                 "columns": section["columns"],
                 "rows": rows or [[section["verdict"]]],
+                "footnote": section.get("footnote") or "",
             })
-            tone = "ink"
-            verdict = section.get("verdict") or ""
-            head = verdict.split(":", 1)[0].casefold()
-            if head.startswith("behind") or head.startswith("de-growing"):
-                tone = "red"
-            elif head.startswith("ahead") or head.startswith("growing"):
-                tone = "green"
-            if len(kpis) < 4:
-                sentence = verdict.split(". ")[0].strip()
-                if len(sentence) > 78:
-                    sentence = sentence[:75].rsplit(" ", 1)[0] + "…"
-                kpis.append({"label": section["title"].split(". ", 1)[-1], "value": sentence, "tone": tone})
+            if len(kpis) < 4 and section.get("kpi"):
+                kpis.append(section["kpi"])
         moment = datetime.now(ZoneInfo("Asia/Kolkata"))
         who = generated_by or ("owner login" if role == "owner" else f"{role} login")
         day = built.get("day")
-        coverage = day.strftime("%-d %b %Y") if day else (built.get("note") or "not loaded")
+        coverage = (
+            f"{day.strftime('%-d %b %Y')}. Week comparisons are 17–23 Nov against 20 Oct–2 Nov."
+            if day else (built.get("note") or "not loaded")
+        )
         return {
             "title": "Daily review",
             "coverage": coverage,
@@ -81,11 +75,11 @@ def build_report(question, data, owner, answer, generated_by=""):
             "kpis": kpis,
             "owner_only": bool(see_pl),
         }
+    if _delhi_question(question):
+        return _delhi_bundle(data, owner, see_pl, generated_by, answer)
     kind = _kind(question)
     coverage = _coverage(data, kind)
     title = _title(question, kind)
-    if "real problem" in (question or "").casefold() and "delhi" in (question or "").casefold():
-        title = "Delhi"
     tables = []
     if kind in {"finance", "people", "inbox", "tally"} and not _allowed(kind, see_pl, see_people, see_books):
         tables.append(_refusal_table(kind, coverage))
@@ -136,6 +130,84 @@ def render_pdf(report):
 def render_xlsx(report):
     from app.chat.pdf_layout import render_xlsx as _render
     return _render(report)
+
+
+def _delhi_question(question):
+    folded = " ".join((question or "").casefold().split())
+    return "real problem" in folded and any(word in folded for word in ("delhi", "ncr", "north"))
+
+
+def _delhi_bundle(data, owner, see_pl, generated_by, answer):
+    """NCR only, on the same windows as the Delhi answer."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from app.chat.pdf_layout import rupee
+    from app.chat.sizing import ncr_window, store_rates
+
+    base, recent, bill_effect, apb_effect, _driver = ncr_window()
+    change = recent["gross_per_day"] / base["gross_per_day"] - 1
+    stores = store_rates()
+    downs = [row for row in stores if not row["up"]]
+    focus = downs[:4]
+    total_drop = recent["gross_per_day"] - base["gross_per_day"]
+    share = abs(sum(row["gap_per_day"] for row in focus) / total_drop) * 100 if total_drop else 0
+    coverage = "17-23 Nov 2026 against 20 Oct-2 Nov 2026"
+    rows = []
+    for row in stores:
+        name = row["name"]
+        if "rosedale" in name.casefold():
+            name = f"{name} (partly open)"
+        pct = (row["recent_per_day"] / row["base_per_day"] - 1) * 100 if row["base_per_day"] else 0
+        rows.append([
+            name,
+            rupee(row["base_per_day"]),
+            rupee(row["recent_per_day"]),
+            rupee(row["gap_per_day"]),
+            f"{pct:+.1f}%",
+            f"{row['recent_bills']:.0f}",
+            rupee(row["recent_apb"]),
+        ])
+    tone = "red" if change < 0 else "green"
+    kpis = [
+        {"label": "NCR per day", "value": rupee(recent["gross_per_day"]), "delta": f"{change * 100:+.1f}% vs 20 Oct-2 Nov", "tone": tone},
+        {"label": "Bills effect", "value": rupee(bill_effect), "delta": "per day", "tone": "red" if bill_effect < 0 else "green"},
+        {"label": "APB effect", "value": rupee(apb_effect), "delta": "per day", "tone": "red" if apb_effect < 0 else "green"},
+        {"label": "Four stores", "value": f"{share:.0f}%", "delta": "of the daily drop", "tone": "red"},
+    ]
+    table = {
+        "name": "NCR per day",
+        "coverage": coverage,
+        "columns": ["Store", "Baseline / day", "17-23 Nov / day", "Change / day", "Change %", "Bills / day", "APB"],
+        "rows": rows,
+        "numeric_headers": [1, 2, 3, 4, 5, 6],
+    }
+    moment = datetime.now(ZoneInfo("Asia/Kolkata"))
+    role = (data or {}).get("role") or ("owner" if owner else "ops")
+    who = generated_by or ("owner login" if role == "owner" else f"{role} login")
+    chart = {
+        "title": "Per-day change",
+        "series": [{"label": row["name"], "value": float(row["gap_per_day"])} for row in stores[:5]],
+    }
+    tables = [table]
+    moves = _moves_table(data, owner)
+    if moves:
+        tables.append(moves)
+    return {
+        "title": "Delhi",
+        "coverage": coverage,
+        "sales_through": coverage,
+        "data_lines": [coverage],
+        "footer": "",
+        "generated_by": who,
+        "generated_at": moment.strftime("%d %b %Y, %I:%M %p").lstrip("0"),
+        "insight": f"NCR per day {rupee(recent['gross_per_day'])} ({change * 100:+.1f}%)",
+        "tables": tables,
+        "steps": _steps(answer, data, owner and see_pl),
+        "chart": chart,
+        "kpis": kpis,
+        "owner_only": bool(see_pl),
+    }
 
 
 def _kind(question):
@@ -239,13 +311,17 @@ def _sales_table(data, coverage):
         if gross in (None, 0):
             continue
         bills = _bills_cell(row, name)
+        if bills == "excluded (mall bulk bills)":
+            bills = "†"
         rows.append([_short(name), row.get("region") or "", float(gross), bills])
     rows.sort(key=lambda item: item[2], reverse=True)
     return {
         "name": "Store performance",
         "coverage": coverage,
-        "columns": ["Store", "City", "Gross (Rs)", "Bills"],
+        "columns": ["Store", "City", "Gross", "Bills"],
         "numeric": [2, 3],
+        "numeric_headers": [2, 3],
+        "footnote": "† excluded (mall bulk bills)." if any(row[3] == "†" for row in rows) else "",
         "rows": rows or [["No open store is loaded", "", None, None]],
     }
 
@@ -327,6 +403,19 @@ def _private_table(name, allowed, coverage, label):
     }
 
 
+def _clip(text, limit):
+    words = str(text or "").split()
+    if not words:
+        return ""
+    kept = []
+    for word in words:
+        trial = " ".join(kept + [word])
+        if len(trial) > limit:
+            break
+        kept.append(word)
+    return " ".join(kept) or words[0][:limit]
+
+
 def _moves_table(data, owner):
     from app.chat.guard import can_see_pl
     from app.chat.sizing import move_lines
@@ -342,7 +431,7 @@ def _moves_table(data, owner):
         if "Value:" in line and "How sized:" in line:
             value = line.split("Value:", 1)[1].split("How sized:", 1)[0].strip()
             how = line.split("How sized:", 1)[1].split("Owner:", 1)[0].strip()
-        rows.append([line.split(". ", 1)[0][:80], value, how])
+        rows.append([_clip(line.split(". ", 1)[0], 90), _clip(value, 80), _clip(how, 160)])
     return {
         "name": "Moves",
         "coverage": "17-23 Nov 2026 against 20 Oct-2 Nov 2026",
@@ -384,7 +473,7 @@ def _chart(data, table):
     series = []
     columns = table.get("columns") or []
     numeric_at = None
-    for label in ("Gross (Rs)", "Gross rupees"):
+    for label in ("Gross (Rs)", "Gross rupees", "Gross"):
         if label in columns:
             numeric_at = columns.index(label)
             break
