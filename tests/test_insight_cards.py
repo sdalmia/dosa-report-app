@@ -23,13 +23,13 @@ class InsightCardTests(unittest.TestCase):
         self.assertNotIn("Dosa Coffee", first["title"])
         self.assertEqual(
             first["line"],
-            "Sales down ₹2.07L vs the week before (16–22 Nov vs 9–15 Nov)",
+            "Sales down ₹2.10L vs the week before (17–23 Nov vs 10–16 Nov)",
         )
-        self.assertEqual(first["title"], "Salt Lake Sec-1")
+        self.assertEqual(first["title"], "Ideal Plaza")
         self.assertNotIn("not in the file", first["line"])
         self.assertTrue(first["question"].startswith("Why are "))
         gaps, label = _weekly_gaps()
-        self.assertEqual(label, "16–22 Nov vs 9–15 Nov")
+        self.assertEqual(label, "17–23 Nov vs 10–16 Nov")
         self.assertTrue(all(row["days"] == 7 for row in gaps))
         connaught = next(row for row in gaps if row["display"] == "Connaught Place")
         self.assertEqual(connaught["days"], 7)
@@ -39,7 +39,7 @@ class InsightCardTests(unittest.TestCase):
 
     def test_growth_uses_the_same_window(self):
         text = growth_text()
-        self.assertIn("16–22 Nov vs 9–15 Nov", text)
+        self.assertIn("17–23 Nov vs 10–16 Nov", text)
         self.assertNotIn("not in the file", text)
         self.assertNotIn("2026-11-02–2026-11-08", text)
         self.assertIn("down ₹", text)

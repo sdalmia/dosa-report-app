@@ -243,7 +243,7 @@ class OwnerDashboardTests(unittest.TestCase):
         self.assertIn("See all stores", html)
         self.assertIn("See procurement", html)
         self.assertIn("₹20,90,655.02", html)
-        self.assertIn("22 Nov 2026", html)
+        self.assertIn("31 Dec 2026", html)
         self.assertLessEqual(html.count('class="league-row"'), 10)
         self.assertLessEqual(html.count('class="alert-row"'), 5)
         self.assertEqual(html.count('<article class="tile">'), min(3, len(view["procurement"])))

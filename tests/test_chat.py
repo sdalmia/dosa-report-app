@@ -62,7 +62,7 @@ class ChatAnswerTests(unittest.TestCase):
     def test_named_store_joins_sources_and_says_when_one_is_missing(self):
         answer = answer_from_data("Sec 143 Noida is soft, what else moved?", self.data, False)
         self.assertIn("Sec 143 Noida", answer["text"])
-        self.assertIn("78.25%", answer["text"])
+        self.assertIn("77.71%", answer["text"])
         self.assertIn("Forecast has no row", answer["text"])
         self.assertIn("Reviews have no row", answer["text"])
         self.assertNotIn("Staff lead", answer["text"])

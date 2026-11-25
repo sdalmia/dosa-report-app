@@ -1,0 +1,6 @@
+store,store_code,date,source,sales,orders
+ALL (network),,2026-10-16,POS,1166583.66,1735
+ALL (network),,2026-10-16,ZOMATO,389955.79,1113
+ALL (network),,2026-10-16,SWIGGY,319321.57,910
+ALL (network),,2026-10-16,SWIGGY-BOLT URGENT,6496.59,26
+ALL (network),,2026-10-16,SWIGGY-TOING,1993.95,7
