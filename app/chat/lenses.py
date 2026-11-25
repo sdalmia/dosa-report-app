@@ -347,10 +347,25 @@ def _channel_totals(files, days):
     return found
 
 
+def range_status(actual, low, high):
+    """A store above its range is beating it. Only a figure under the low end is a miss."""
+    if actual is None or low is None or high is None:
+        return "unknown"
+    if actual > high:
+        return "beating"
+    if actual < low:
+        return "miss"
+    return "inside"
+
+
 def _range_watch(root):
-    path = root / "data" / "store_health" / "sales_pred_vs_actual.csv"
-    optional = _latest(root / "data" / "forecast", "*")
-    source = optional if optional and optional.suffix.lower() == ".csv" else path
+    optional = _latest(root / "data" / "forecast", "*.csv")
+    if not optional or not optional.is_file():
+        return (
+            "Per-store forecasts are not published. "
+            "Each store is compared with its own baseline, not a forecast range."
+        )
+    source = optional
     if not source or not source.is_file():
         return "Forecast range: not loaded."
     by_store = {}
@@ -367,7 +382,8 @@ def _range_watch(root):
         by_store.setdefault(store, []).append({
             "day": day,
             "weekday": row.get("weekday") or day.strftime("%A"),
-            "outside": actual < low or actual > high,
+            "outside": range_status(actual, low, high) == "miss",
+            "beating": range_status(actual, low, high) == "beating",
             "seasonal": seasonal,
         })
     misses = []

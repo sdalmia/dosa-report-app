@@ -129,8 +129,10 @@ class LoadMarkerTests(unittest.TestCase):
         from datetime import datetime
         from zoneinfo import ZoneInfo
 
-        # Afternoon of 24 Nov: the latest expected day is 23 Nov, which has no marker.
-        afternoon = datetime(2026, 11, 24, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
+        # Afternoon of 25 Nov: 23 Nov has its marker. 24 Nov has not landed.
+        afternoon = datetime(2026, 11, 25, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
+        self.assertTrue(day_is_loaded("2026-11-23"))
+        self.assertFalse(day_is_loaded("2026-11-24"))
         self.assertTrue(day_is_loaded("2026-11-22"))
         self.assertFalse(day_is_loaded("2026-11-09"))
         self.assertTrue(day_counts_as_loaded("2026-11-09", now=afternoon))
@@ -145,18 +147,19 @@ class LoadMarkerTests(unittest.TestCase):
         from datetime import datetime
         from zoneinfo import ZoneInfo
 
-        afternoon = datetime(2026, 11, 24, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
+        afternoon = datetime(2026, 11, 25, 15, 0, tzinfo=ZoneInfo("Asia/Kolkata"))
         inside = day_status(
-            "2026-11-23",
+            "2026-11-24",
             asked_start="2026-11-16",
-            asked_end="2026-11-23",
+            asked_end="2026-11-24",
             now=afternoon,
         )
-        self.assertIn("2026-11-23 isn't in yet", inside)
+        self.assertIn("2026-11-24 isn't in yet", inside)
+        self.assertEqual(day_status("2026-11-23", asked_start="2026-11-16", asked_end="2026-11-23", now=afternoon), "")
         outside = day_status(
-            "2026-11-23",
+            "2026-11-24",
             asked_start="2026-11-16",
-            asked_end="2026-11-22",
+            asked_end="2026-11-23",
             now=afternoon,
         )
         self.assertEqual(outside, "")
@@ -164,7 +167,8 @@ class LoadMarkerTests(unittest.TestCase):
             day_status("2026-11-09", asked_start="2026-11-09", asked_end="2026-11-09", now=afternoon),
             "",
         )
-        self.assertTrue(drop_pending("2026-11-23", now=afternoon))
+        self.assertTrue(drop_pending("2026-11-24", now=afternoon))
+        self.assertFalse(drop_pending("2026-11-23", now=afternoon))
         self.assertFalse(drop_pending("2026-11-22", now=afternoon))
         from app.chat.lenses import bill_driver
         self.assertNotIn("2026-11-09 isn't in yet", bill_driver())

@@ -147,12 +147,90 @@
     if (payload.chart || payload.calendar) row += '<button type="button" class="cc-act" data-act="png">Download image</button>';
     row += '<button type="button" class="cc-act" data-act="share">Share</button>';
     row += '<button type="button" class="cc-act" data-act="thread">Download conversation</button>';
-    if (payload.cos) {
-      var label = payload.cos.connected ? "Send to Chief of Staff" : "Send to Chief of Staff isn't connected yet";
-      row += '<button type="button" class="cc-act" data-act="cos">' + label + "</button>";
-    }
+    row += '<button type="button" class="cc-act" data-act="error">Report an error</button>';
     row += "</div>";
     return row;
+  }
+
+  function transcript() {
+    var turns = [];
+    log.querySelectorAll(".cc-turn").forEach(function (node) {
+      var body = node.querySelector(".cc-answer, p");
+      turns.push({
+        role: node.classList.contains("user") ? "user" : "wizard",
+        text: body ? body.textContent : ""
+      });
+    });
+    return turns;
+  }
+
+  function openErrorBox(turn, question, answer) {
+    var host = turn.querySelector(".cc-turn-body") || turn;
+    var existing = host.querySelector(".cc-error-box");
+    if (existing) {
+      existing.hidden = false;
+      return;
+    }
+    var box = document.createElement("form");
+    box.className = "cc-error-box";
+    box.innerHTML = ""
+      + '<p class="cc-error-title">Report an error</p>'
+      + '<label>Area<select name="area"></select></label>'
+      + '<label>Store or Network/City<input name="place" required></label>'
+      + '<label>Date range<input name="dates" required></label>'
+      + '<label>Metric<input name="metric" required></label>'
+      + '<label>Disputed value<input name="value" required></label>'
+      + '<label>What looks wrong?<textarea name="note" required></textarea></label>'
+      + '<label>What should it be?<textarea name="correction"></textarea></label>'
+      + '<p class="cc-error-status" role="status"></p>'
+      + '<button type="submit">Send report</button>';
+    var areas = ["Sales", "Forecast", "Reviews", "Procurement", "Marketing", "Reelo", "Other"];
+    var select = box.querySelector("[name=area]");
+    areas.forEach(function (name) {
+      var option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      select.appendChild(option);
+    });
+    fetch("/api/chat/error-report/context", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: question, answer: answer })
+    }).then(function (response) { return response.json(); }).then(function (body) {
+      ["area", "place", "dates", "metric", "value"].forEach(function (key) {
+        var field = box.querySelector("[name=" + key + "]");
+        if (field && body[key]) field.value = body[key];
+      });
+    }).catch(function () {});
+    box.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var status = box.querySelector(".cc-error-status");
+      fetch("/api/chat/error-report", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          area: box.querySelector("[name=area]").value,
+          place: box.querySelector("[name=place]").value,
+          dates: box.querySelector("[name=dates]").value,
+          metric: box.querySelector("[name=metric]").value,
+          value: box.querySelector("[name=value]").value,
+          note: box.querySelector("[name=note]").value,
+          correction: box.querySelector("[name=correction]").value,
+          question: question,
+          answer: answer,
+          page: location.pathname,
+          turns: transcript()
+        })
+      }).then(function (response) { return response.json().then(function (body) { return { ok: response.ok, body: body }; }); })
+        .then(function (result) {
+          status.textContent = result.ok ? "Sent." : (result.body.error || "Couldn't send, try again");
+        }).catch(function () {
+          status.textContent = "Couldn't send, try again";
+        });
+    });
+    host.appendChild(box);
   }
 
   function postFile(kind, question, answer, table, chart) {
@@ -225,17 +303,8 @@
       postFile("pdf", "Conversation", "", { columns: ["Who", "Text"], rows: turns }, null);
       return;
     }
-    if (kind === "cos") {
-      var requestText = window.prompt("Request for Chief of Staff", question);
-      if (!requestText) return;
-      fetch("/api/chat/cos", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ request: requestText, excerpt: answer.slice(0, 400) })
-      }).then(function (response) { return response.json(); }).then(function (body) {
-        act.textContent = body.connected ? ("Sent: " + (body.status || "")) : "Send to Chief of Staff isn't connected yet";
-      }).catch(function () {});
+    if (kind === "error") {
+      openErrorBox(turn, question, answer);
       return;
     }
     postFile(kind, question, answer, null, null);
@@ -433,7 +502,8 @@
       + "<button type=\"button\" data-sheet-act=\"pdf\">PDF</button>"
       + "<button type=\"button\" data-sheet-act=\"xlsx\">Excel</button>"
       + image
-      + "<button type=\"button\" data-sheet-act=\"share\">Share</button>";
+      + "<button type=\"button\" data-sheet-act=\"share\">Share</button>"
+      + "<button type=\"button\" data-sheet-act=\"error\">Report an error</button>";
   }
 
   function chartSvg(chart) {
@@ -514,6 +584,10 @@
     if (act && sheetDetail) {
       var kind = act.getAttribute("data-sheet-act");
       var file = sheetDetail.download || {};
+      if (kind === "error") {
+        openErrorBox(sheetBody, sheetDetail.question || sheetDetail.title || "", sheetDetail.share_text || "");
+        return;
+      }
       if (kind === "share") {
         var days = window.prompt("Link expires in how many days? 1, 7, or 30", "7");
         fetch("/api/chat/share", {

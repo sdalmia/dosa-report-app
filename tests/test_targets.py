@@ -18,7 +18,7 @@ TODAY = date(2026, 10, 14)
 
 class TargetBoardTests(unittest.TestCase):
     def test_tony_file_maps_thirty_stores_and_skips_events(self):
-        rows = load_targets()
+        rows = [row for row in load_targets() if row["month"] == "2026-10"]
         self.assertEqual(len(rows), 30)
         self.assertEqual(sum(row["target_net"] for row in rows), 56725000)
         self.assertTrue(all(row["mapped"] for row in rows))

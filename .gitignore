@@ -1,4 +1,5 @@
 .env
+data/chat/error_reports.jsonl
 flask_session/
 flask_session_dir/
 __pycache__/

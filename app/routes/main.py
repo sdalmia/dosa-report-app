@@ -358,6 +358,27 @@ def chat_share_revoke(token):
     return jsonify({"ok": True})
 
 
+@main_bp.route("/api/chat/error-report/context", methods=["POST"])
+@login_required
+def chat_error_context():
+    from app.chat.error_report import prefill
+
+    payload = request.get_json(silent=True) or {}
+    return jsonify(prefill(payload.get("question"), payload.get("answer"), payload.get("as_of"), payload.get("topic")))
+
+
+@main_bp.route("/api/chat/error-report", methods=["POST"])
+@login_required
+def chat_error_report():
+    from app.chat.error_report import submit_report
+
+    payload = request.get_json(silent=True) or {}
+    email = signed_in_email()
+    result = submit_report(payload, email, is_owner(email))
+    status = 200 if result.get("ok") else 503 if result.get("error") == "Couldn't send, try again" else 400
+    return jsonify(result), status
+
+
 @main_bp.route("/api/chat/cos", methods=["POST"])
 @login_required
 def chat_cos():
