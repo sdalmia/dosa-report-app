@@ -142,6 +142,38 @@ class QuestionTests(unittest.TestCase):
         lifted = answer_text("what marketing is planned", False, False, _fixture(lift=True), NOW)
         self.assertIn("0.04", lifted)
 
+    def test_tony_lift_sits_beside_reelo_and_spend_stays_with_the_owner(self):
+        root = _fixture()
+        _write(
+            root / "data" / "marketing" / "marketing_lift.csv",
+            "activity,scope,posist,comparison,reelo_attributed_inr,verdict,note\n"
+            "Reelo Sunday,Network,-3.5% versus flanking Sundays,,370000,no measurable lift yet,messaged guests\n"
+            "Meta ads,Five outlets,+0.6% versus 20-31 Oct,Other NCR -1.2%,,within noise,agency may have run October too\n",
+        )
+        _write(
+            root / "data" / "marketing" / "marketing_activities.csv",
+            "record_type,month,activity_name,type,stores_or_city,channel,start_date,end_date,budget_inr,actual_spend_or_attributed_inr,owner,status,expected_or_notes,sales_impact,source,source_date_ist\n"
+            "budget,2026-11,November total,budget_total,Brand,,2026-11-01,2026-11-30,1760400,,Sanjoy,budget,Subhra approved; Siddhant approval requested,,mail,2026-11-24\n"
+            "budget,2026-10,October total,budget_total,Brand,,2026-10-01,2026-10-31,1815000,,Sanjoy,budget,,,mail,2026-11-24\n"
+            "budget,2026-11,Aggregators,ad,All,Swiggy,2026-11-01,2026-11-30,1300000,,Sanjoy,budget,October budget ₹12.00L,,mail,2026-11-24\n"
+            "activity,2026-11,Cold Coffee reel,shoot,Brand,social,,,,,Nikita,in_progress,target 2 Nov,,sheet,2026-11-24\n",
+        )
+        owner = answer_text("what marketing is planned", True, False, root, NOW)
+        ops = answer_text("what marketing is planned", False, False, root, NOW)
+        self.assertIn("No measurable lift yet", owner)
+        self.assertIn("within noise", owner)
+        self.assertIn("Reelo-attributed, not measured lift", owner)
+        self.assertIn("₹3.70 L", owner)
+        self.assertIn("₹17.60 L", owner)
+        self.assertIn("₹18.15 L", owner)
+        self.assertIn("27 Nov", owner)
+        self.assertIn("ROAS", owner)
+        self.assertIn("Siddhant", owner)
+        self.assertNotIn("₹17.60 L", ops)
+        self.assertNotIn("₹13.00 L", ops)
+        self.assertIn("within noise", ops)
+        self.assertIn("Reelo-attributed, not measured lift", ops)
+
     def test_november_targets_match_tony_and_the_workbook(self):
         built = build(ROOT, True, True, datetime(2026, 11, 25, 11, 0, tzinfo=ZoneInfo("Asia/Kolkata")))
         target = next(section for section in built["sections"] if section["id"] == "target")

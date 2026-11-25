@@ -10,6 +10,7 @@ ratio is flagged.
 """
 
 import csv
+import re
 import statistics
 from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_HALF_UP
@@ -97,7 +98,7 @@ def build(root, see_finance=False, see_hr=False, now=None):
         _growth(root, day, sales),
         _outlets(root, day, sales, targets, ratios, see_finance),
         _channel(root, day, sales),
-        _marketing(root, day),
+        _marketing(root, day, see_finance),
         _reelo(root),
         _quality(root),
         _cost(root, sales, see_finance),
@@ -778,29 +779,174 @@ def _channel_day(root, day):
     return found
 
 
-def _marketing(root, day):
+def _marketing(root, day, see_finance=False):
     title = "5. Marketing"
+    lifts = _marketing_lift(root)
+    activities = _marketing_activities(root)
     plans = _marketing_plans(root)
-    if plans["status"] == "lift":
-        verdict = f"Ahead or behind is the lift column: {plans['summary']}"
-        why = "Lift is read from the marketing_plans file and is not estimated."
+    rows = []
+    full = []
+    if lifts:
+        verdict = "No measurable lift yet."
+        if any(row["verdict"].casefold() == "within noise" for row in lifts):
+            verdict = "No measurable lift yet. One comparison is within noise."
+        for row in lifts:
+            attributed = "—"
+            if row["reelo"]:
+                attributed = f"{money(row['reelo'])} Reelo-attributed, not measured lift"
+            rows.append([row["activity"], row["posist"] or "—", attributed, row["verdict"]])
+        full.extend(rows)
+    elif plans["status"] == "lift":
+        verdict = f"Lift is on file: {plans['summary']}"
+        rows = plans["rows"]
+        full = list(rows)
     else:
         verdict = "Impact not measured yet."
-        why = plans["summary"]
-    learn = Path(root) / "data" / "reelo" / "learnings.md"
-    if learn.is_file() and "30 Nov" in learn.read_text(encoding="utf-8"):
-        why += " The 13 Nov thank-you is measured on 30 Nov, so it is not a result yet."
+        rows = plans["rows"]
+        full = list(rows)
+    why = []
+    if activities and see_finance:
+        why.append(_budget_sentence(activities))
+        for head in activities["heads"]:
+            october = head["october"]
+            full.append([
+                head["name"],
+                money(head["november"]),
+                money(october) + " October" if october is not None else "October not on this row",
+                "budget, not a measured lift",
+            ])
+    elif activities:
+        why.append("Marketing spend is on the owner login.")
+    for item in (activities or {}).get("activities") or []:
+        if item["month"] != "2026-11":
+            continue
+        when = item["start"] or "date not on the row"
+        full.append([item["name"], when, item["where"], _status_label(item["status"])])
+    if not lifts:
+        why.append(plans["summary"])
+    why.append(
+        "No dated store and channel plan is on file. Asked of Sanjoy and Nikita, due 27 Nov. "
+        "Aggregator Ads ROAS is not on file. "
+        "Siddhant's approval of the November budget is not on file. "
+        "Every other activity needs an exact go-live date per store."
+    )
+    if not activities and not lifts:
+        why = [plans["summary"], "Ads ROAS is not on file."]
     return {
         "id": "marketing",
         "title": title,
         "verdict": verdict,
-        "columns": ["Activity", "Store", "Channel", "Lift"],
-        "rows": plans["rows"],
-        "why": why + " Ads are not on file.",
-        "action": "Logan adds the lift column when the 30 Nov result is in.",
-        "owner": _LOYALTY,
-        "coverage": plans["coverage"],
+        "columns": ["Item", "Posist gross", "Reelo-attributed", "Verdict"],
+        "rows": rows[:8] or full[:8],
+        "full_rows": full or rows,
+        "why": " ".join(why),
+        "action": "Sanjoy and Nikita send the store, channel and go-live date by 27 Nov.",
+        "owner": "Sanjoy Roy / Nikita Mittal",
+        "coverage": "marketing activity file through 24 Nov; Tony's lift file versus Posist gross",
     }
+
+
+def _status_label(value):
+    text = (value or "").replace("_", " ").strip()
+    return text[:1].upper() + text[1:] if text else "Not on file"
+
+
+def _marketing_lift(root):
+    path = Path(root) / "data" / "marketing" / "marketing_lift.csv"
+    if not path.is_file():
+        return []
+    found = []
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        for raw in csv.DictReader(handle):
+            found.append({
+                "activity": (raw.get("activity") or "").strip(),
+                "posist": " ".join(
+                    part for part in (
+                        (raw.get("posist") or "").strip(),
+                        (raw.get("comparison") or "").strip(),
+                        (raw.get("note") or "").strip(),
+                    ) if part
+                ),
+                "reelo": _dec(raw.get("reelo_attributed_inr")),
+                "verdict": (raw.get("verdict") or "").strip(),
+            })
+    return [row for row in found if row["activity"]]
+
+
+def _head_name(name):
+    text = (name or "").split("–")[0].split("(")[0].strip()
+    if len(text) <= 42:
+        return text
+    return text[:42].rsplit(" ", 1)[0]
+
+
+def _october_from_note(note):
+    folded = note or ""
+    if "nil in october" in folded.casefold():
+        return Decimal(0)
+    match = re.search(r"October budget ₹\s*([\d,.]+)\s*L\b", folded, re.I)
+    if match:
+        return (Decimal(match.group(1).replace(",", "")) * Decimal(100000)).quantize(Decimal("1"))
+    match = re.search(r"October budget ₹\s*([\d,]+)", folded, re.I)
+    if match:
+        return Decimal(match.group(1).replace(",", ""))
+    return None
+
+
+def _marketing_activities(root):
+    path = Path(root) / "data" / "marketing" / "marketing_activities.csv"
+    if not path.is_file():
+        return None
+    heads = []
+    activities = []
+    november = october = None
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        for raw in csv.DictReader(handle):
+            kind = (raw.get("record_type") or "").strip()
+            month = (raw.get("month") or "").strip()
+            amount = _dec(raw.get("budget_inr"))
+            name = (raw.get("activity_name") or "").strip()
+            if kind == "budget" and month == "2026-11" and (raw.get("type") or "") == "budget_total":
+                november = amount
+                continue
+            if kind == "budget" and month == "2026-10" and (raw.get("type") or "") == "budget_total":
+                october = amount
+                continue
+            if kind == "budget" and month == "2026-11":
+                heads.append({
+                    "name": _head_name(name),
+                    "november": amount or Decimal(0),
+                    "october": _october_from_note(raw.get("expected_or_notes") or ""),
+                })
+                continue
+            if kind == "activity":
+                activities.append({
+                    "month": month,
+                    "name": name[:64],
+                    "start": (raw.get("start_date") or "").strip(),
+                    "where": (raw.get("stores_or_city") or "").strip()[:40],
+                    "status": (raw.get("status") or "").strip(),
+                })
+    return {"november": november, "october": october, "heads": heads, "activities": activities}
+
+
+def _budget_sentence(activities):
+    november = activities.get("november")
+    october = activities.get("october")
+    if november is None:
+        return "The November marketing budget total is not on file."
+    text = f"November marketing budget {money(november)}"
+    if october is not None:
+        text += f" versus October {money(october)}"
+    bits = []
+    for head in activities["heads"]:
+        if head["october"] is None:
+            bits.append(f"{head['name']} {money(head['november'])}")
+        else:
+            bits.append(f"{head['name']} {money(head['november'])} against October {money(head['october'])}")
+    if bits:
+        text += ". By head: " + "; ".join(bits) + "."
+    return text
 
 
 def _marketing_plans(root):
